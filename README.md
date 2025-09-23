@@ -1,5 +1,5 @@
 # SAE-S3
-Mintonette Cup 
+Mintonette World Cup 
 
 ### Lancer le script de connection ssh
 
