@@ -1,8 +1,12 @@
 <template>
-  <HomeView></HomeView>
+  <NavView></NavView>
 </template>
 
 <script setup>
-import HomeView from "@/components/HomeView.vue";
+import NavView from "@/components/NavView.vue";
+
+
 </script>
+
+
 <style scoped></style>
