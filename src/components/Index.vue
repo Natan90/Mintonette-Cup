@@ -1,15 +1,21 @@
 <template>
   <div>
-    <!-- Navbar -->
     <NavView :style="{ top: navbar }" class="navbar" />
 
-    <!-- Contenu -->
+
+
     <div class="image">
       <img src="../images/PhotoFond.webp" alt="">
       <div class="texteImage">
         Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs !<br>
         changer l'image ( pas les bonnes couleurs )
       </div>
+    </div>
+
+    <div class="route">
+      <router-link to="/">Home</router-link><br>
+      <router-link to="/Prestataire">Prestataire</router-link>
+
     </div>
 <!--PROBLEME CAR IL Y A UNE SORTE DE DEUXIEME BARRE DE NAV QUI RESTE EN DESSOUS FAUT VOIR CA QUAND TU REMONTE TROP VITE -->
     <p>Bonjour</p><p>Bonjour</p>
