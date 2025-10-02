@@ -14,7 +14,7 @@
 
     <div class="route">
       <router-link to="/">Home</router-link><br>
-      <router-link to="/Prestataire">Prestataire</router-link>
+      <router-link to="/Prestataire">Prestataire(mode public)</router-link>
 
     </div>
 <!--PROBLEME CAR IL Y A UNE SORTE DE DEUXIEME BARRE DE NAV QUI RESTE EN DESSOUS FAUT VOIR CA QUAND TU REMONTE TROP VITE -->
