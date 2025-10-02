@@ -60,12 +60,23 @@
 
 <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">
-      <p>Hover moi </p>
-      <div class="TuasHover">
-        <p> Bravo tu as hover ça Chef ! </p>
-      </div>
+      <p>
+        <span id="title">Titre du prestataire</span>
+        <br>
+        <span id="descri">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </span>
+      </p>
+<!--      <div class="TuasHover">-->
+<!--        <p>-->
+<!--        </p>-->
+<!--      </div>-->
     </div>
+    <p>Bonjour</p>
+    <p>Bonjour</p>
+    <p>Bonjour</p>
+    <p>Bonjour</p>
   </div>
+
 </template>
 
 <script setup>
@@ -126,16 +137,23 @@ onBeforeUnmount(() => {
   border: solid black 1px;
   border-radius: 10px;
   padding: 5px 10px;
-  max-width: 70px;
-}
-.hover p:hover {
-  max-width: 500px;
+  max-width: 60%;
+  margin: 50px;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.TuasHover {
-  display: none;
+.hover p:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
-.hover:hover .TuasHover {
-  display: block;
+
+.hover p:hover #title {
+  font-size: 1.3em;
+  font-weight: bold;
+  transition: font-size 0.3s ease;
+}
+#descri {
+  font-size: 0.7em;
 }
 </style>
