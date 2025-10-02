@@ -14,7 +14,7 @@
 
     <div class="route">
       <router-link to="/">Home</router-link><br>
-      <router-link to="/Prestataire">Prestataire</router-link>
+      <router-link to="/Prestataire">Prestataire(mode public)</router-link>
 
     </div>
     <p>Bonjour</p>
