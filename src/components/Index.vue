@@ -17,8 +17,6 @@
       <router-link to="/Prestataire">Prestataire</router-link>
 
     </div>
-<!--PROBLEME CAR IL Y A UNE SORTE DE DEUXIEME BARRE DE NAV QUI RESTE EN DESSOUS FAUT VOIR CA QUAND TU REMONTE TROP VITE -->
-    <p>Bonjour</p><p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
@@ -35,30 +33,13 @@
     <p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
+    <div class="prestataire">
+      <img src="../images/burger.png" alt="burger" id="span_burger">
+      <span class="titre-presta">Prestataire 1</span>
+    </div>
 
-<!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
+
+    <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">
       <p>
         <span id="title">Titre du prestataire</span>
@@ -103,6 +84,15 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
+:root {
+  /* Couleurs */
+  --primary-color: #00167a;
+  --baniere-color-food: #b71c1c;
+
+  /* Transitions */
+  --transition-fast: 0.3s ease;
+}
+
 .navbar {
   position: fixed;
   left: 0;
@@ -132,6 +122,36 @@ onBeforeUnmount(() => {
   padding: 5px 10px;
   background: rgba(255, 255, 255, 0.4);
 }
+.prestataire {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px;
+  border-radius: 50%;
+}
+
+.prestataire img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.prestataire img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background-color: var(--baniere-color-food);
+}
+
+.titre-presta {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--primary-color);
+}
 
 .hover p {
   border: solid black 1px;
@@ -139,8 +159,10 @@ onBeforeUnmount(() => {
   padding: 5px 10px;
   max-width: 60%;
   margin: 50px;
+  cursor: pointer;
 
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--transition-fast),
+  box-shadow var(--transition-fast);
 }
 
 .hover p:hover {
@@ -156,4 +178,7 @@ onBeforeUnmount(() => {
 #descri {
   font-size: 0.7em;
 }
+
 </style>
+
+
