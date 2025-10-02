@@ -1,5 +1,5 @@
 <template>
-  <Index></Index>
+  <router-view />
 
 </template>
 
