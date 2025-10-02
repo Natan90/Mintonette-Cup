@@ -69,7 +69,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 const navbar = ref("0px");
 
 const handleScroll = () => {
-  if (window.scrollY > 300) {
+  if (window.scrollY > 500) {
     navbar.value = "-100px";
   } else {
     navbar.value = "0px";

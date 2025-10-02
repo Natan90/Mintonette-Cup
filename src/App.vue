@@ -1,5 +1,5 @@
 <template>
-  <NavView></NavView>
+<!--  <NavView></NavView>-->
   <Index></Index>
 
 </template>
