@@ -29,22 +29,36 @@
   <br><br><br><br><br>
   <div class="SuiteTexte">
     <h2>Services du prestataire </h2>
-    <div class="servicePrestataire">
-      <div id="servicePrestataire1">
-       <p>commander</p>
-       <img src="../images/CommanderRepas.jpg" alt="Commander">
-      </div >
-      <div id="servicePrestataire2">
-      <p>reserver table</p>
-       <img src="../images/ReserverTablejpg.jpg" alt="Réserver">
+    <div class="Service">
+
+  <span v-for="(elt, index) in photo" :key="index">
+      <span :id="'id' + index" class="Photo">
+        <p>{{ texte[index].name}}</p>
+       <img :src="elt.chemin"  alt="Photo">
+      </span>
+    </span>
+
+
+
+
       </div >
     </div>
-  </div>
 </template>
 
 
 <script setup>
 import NavView from "@/components/NavView.vue";
+import { ref } from "vue"
+
+const photo = [
+  { chemin: new URL('../images/CommanderRepas.jpg', import.meta.url).href },
+  { chemin: new URL('../images/ReserverTable.jpg', import.meta.url).href }
+
+]
+const texte = [
+  {name: "Commander repas"},
+  {name: "Réserver table"},
+]
 </script>
 
 
@@ -54,17 +68,34 @@ import NavView from "@/components/NavView.vue";
 body::-webkit-scrollbar {
   display: none;
 }
-.servicePrestataire{
+
+.Service{
   display: flex;
   text-align: center;
+  gap: 15px;
+
 }
 
 
 [id^="servicePrestataire"] {
-  width: 750px;
+  padding : 25px;
   font-size: 25px;
+
+}
+.link{
+  text-decoration: none;
+  color: black;
+
 }
 
+.Service :hover{
+  -webkit-transition: all 1s ease;
+  -webkit-transform:scale(1.05);
+}
+.servicePrestataire1, .servicePrestataire2{
+  border: solid 1px black ;
+  border-radius: 15px;
+}
 .SuiteTexte{
   margin-left: 35px;
 }
@@ -88,8 +119,7 @@ body::-webkit-scrollbar {
 }
 
 .btnLink:hover {
-
-  background: #00167a;
+  background: var(--primary-color);
   color: white;
 }
 .Titre{
