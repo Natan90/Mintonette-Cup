@@ -6,7 +6,7 @@ import NavView from "@/components/NavView.vue";
   <NavView/>
   <div class="routeurLink">
     <router-link to="/" class="btnLink">Home</router-link>
-    <router-link to="/Prestataire" class="btnLink">Prestataire (mode public)</router-link>
+    <router-link to="/PrestatairePublic" class="btnLink">Prestataire (mode public)</router-link>
   </div>
   <br><br>
   <div class="Titre">

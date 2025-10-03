@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '@/components/Index.vue'
-import Prestataire from '@/components/Prestataire.vue'
+import PrestatairePublic from '@/components/PrestatairePublic.vue'
 
 const routes = [
     { path: '/', name: 'Home', component: Index },
-    { path: '/Prestataire', name: 'Prestataire', component: Prestataire }
+    { path: '/PrestatairePublic', name: 'PrestatairePublic', component: PrestatairePublic }
 ]
 
 const router = createRouter({
