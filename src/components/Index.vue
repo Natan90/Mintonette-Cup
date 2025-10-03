@@ -33,11 +33,6 @@
     <p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
-    <div class="prestataire">
-      <img src="../images/burger.png" alt="burger" id="span_burger">
-      <span class="titre-presta">Prestataire 1</span>
-    </div>
-
 
     <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">
@@ -121,36 +116,6 @@ onBeforeUnmount(() => {
   border-radius: 10px;
   padding: 5px 10px;
   background: rgba(255, 255, 255, 0.4);
-}
-.prestataire {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin: 20px;
-  border-radius: 50%;
-}
-
-.prestataire img {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-
-  cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
-}
-
-.prestataire img:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  background-color: var(--baniere-color-food);
-}
-
-.titre-presta {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: var(--primary-color);
 }
 
 .hover p {
