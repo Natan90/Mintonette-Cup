@@ -80,4 +80,12 @@ function selectArticle(id: number) {
 #photo_presta {
   width: 500px;
 }
+
+.article_title {
+  cursor: pointer;
+}
+
+#id:hover {
+
+}
 </style>
