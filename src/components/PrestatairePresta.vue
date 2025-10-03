@@ -8,7 +8,7 @@
   <div>
     <span v-for="(elt, index) in article" :key="index">
       <span :id="'id' + index" @click="selectArticle(index)" class="article_title">
-        {{ elt.nom }} &nbsp;&nbsp;
+        {{ elt.nom }}
       </span>
     </span>
 
@@ -82,10 +82,11 @@ function selectArticle(id: number) {
 }
 
 .article_title {
+  padding: 0px 20px;
   cursor: pointer;
 }
 
-#id:hover {
-
+[id^="id"]:hover {
+  background-color: yellow;
 }
 </style>
