@@ -5,7 +5,7 @@
 
 
     <div class="image">
-      <img src="../images/PhotoFond.webp" alt="">
+      <img src="../images/PhotoFond.png" alt="">
       <div class="texteImage">
         Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs !<br>
         changer l'image ( pas les bonnes couleurs )
@@ -79,6 +79,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
+body::-webkit-scrollbar {
+  display: none;
+}
 :root {
   /* Couleurs */
   --primary-color: #00167a;

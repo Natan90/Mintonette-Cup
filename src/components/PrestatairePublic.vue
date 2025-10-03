@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import NavView from "@/components/NavView.vue";
-</script>
-
 <template>
   <NavView/>
   <div class="routeurLink">
@@ -30,9 +26,51 @@ import NavView from "@/components/NavView.vue";
       </div>
     </div>
   </div>
+  <br><br><br><br><br>
+  <div class="SuiteTexte">
+    <h2>Services du prestataire </h2>
+    <div class="servicePrestataire">
+      <div id="servicePrestataire1">
+       <p>commander</p>
+       <img src="../images/CommanderRepas.jpg" alt="Commander">
+      </div >
+      <div id="servicePrestataire2">
+      <p>reserver table</p>
+       <img src="../images/ReserverTablejpg.jpg" alt="Réserver">
+      </div >
+    </div>
+  </div>
 </template>
 
+
+<script setup>
+import NavView from "@/components/NavView.vue";
+</script>
+
+
+
+
 <style>
+body::-webkit-scrollbar {
+  display: none;
+}
+.servicePrestataire{
+  display: flex;
+  text-align: center;
+}
+.servicePrestataire :hover{
+  tran
+}
+
+[id^="servicePrestataire"] {
+  width: 750px;
+  font-size: 25px;
+
+}
+
+.SuiteTexte{
+  margin-left: 35px;
+}
 .routeurLink {
   display: flex;
   justify-content: center;
@@ -63,11 +101,10 @@ import NavView from "@/components/NavView.vue";
 .route {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 100px;
 }
 .ConteneurTexte {
   max-width: 800px;
-  word-wrap: break-word;
   margin-left: 35px;
   line-height: 1.5;
   text-align: justify;
