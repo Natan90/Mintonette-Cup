@@ -24,7 +24,7 @@
     </div>
 
     <div class="ConteneurImageBurger">
-      <img src="../images/PhotoFond.webp" alt="photo_fond" id="photo_presta">
+      <img src="../images/PhotoFond.png" alt="photo_fond" id="photo_presta">
     </div>
   </div>
 <br>
