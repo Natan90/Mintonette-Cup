@@ -58,14 +58,11 @@ body::-webkit-scrollbar {
   display: flex;
   text-align: center;
 }
-.servicePrestataire :hover{
-  tran
-}
+
 
 [id^="servicePrestataire"] {
   width: 750px;
   font-size: 25px;
-
 }
 
 .SuiteTexte{
