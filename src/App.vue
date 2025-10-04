@@ -1,6 +1,5 @@
 <template>
   <router-view />
-  <Footer></Footer>
 </template>
 
 <script setup>

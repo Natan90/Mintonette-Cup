@@ -16,32 +16,17 @@
   </div>
 
   <div class="route">
-    <div class="ConteneurTexte">
-      <span>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-        industry's standard dummy text ever since the 1500s...
-      </span>
-    </div>
 
-    <div class="ConteneurImageBurger">
-      <img src="../images/PhotoFond.png" alt="photo_fond" id="photo_presta">
-    </div>
   </div>
-<br>
-    <Editor
-        v-model="content"
-        api-key="no-api-key"
-    :init="{
-    height: 500,
-    width: 1000,
-    menubar: false,
-    plugins: 'lists link image code',
-    toolbar: 'undo redo | bold italic underline | bullist numlist | code'
-    }"
-    />
+  <br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br>
 
-    <h3>Prévisualisation :</h3>
-    <div v-html="content"></div>
+
+
+
+
 
   <Footer></Footer>
 </template>
@@ -58,10 +43,10 @@ const content = ref('')
 const selectedItem = ref(0)
 
 const article = [
-  { "nom": "Article 1" },
-  { "nom": "Article 2" },
-  { "nom": "Article 3" },
-  { "nom": "Article 4" }
+  { "nom": "Articles favoris" },
+  { "nom": "Nos suggestions" },
+  { "nom": "Nouveautés" },
+  { "nom": "Bon plan" }
 ]
 
 const descriArticle = [

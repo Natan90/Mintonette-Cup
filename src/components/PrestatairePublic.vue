@@ -2,7 +2,6 @@
   <NavView/>
   <div class="routeurLink">
     <router-link to="/" class="btnLink">Home</router-link>
-    <router-link to="/PrestatairePublic" class="btnLink">Prestataire (mode public)</router-link>
   </div>
   <br><br>
   <div class="Titre">
@@ -22,7 +21,7 @@
     </div>
     <div class="ConteneurImageBurger">
       <div class="imageBurger">
-        <img src="../images/burger.jpg" alt="Burger">
+        <img src="../images/burgerImage.png" alt="Burger">
       </div>
     </div>
   </div>
@@ -33,8 +32,10 @@
 
   <span v-for="(elt, index) in photo" :key="index">
       <span :id="'id' + index" class="Photo">
+            <router-link :to = "elt.link">
         <p>{{ texte[index].name}}</p>
        <img :src="elt.chemin"  alt="Photo">
+              </router-link>
       </span>
     </span>
 
@@ -43,16 +44,19 @@
 
       </div >
     </div>
+  <Footer></Footer>
+
 </template>
 
 
 <script setup>
 import NavView from "@/components/NavView.vue";
 import { ref } from "vue"
+import Footer from "@/components/Footer.vue";
 
 const photo = [
-  { chemin: new URL('../images/CommanderRepas.jpg', import.meta.url).href },
-  { chemin: new URL('../images/ReserverTable.jpg', import.meta.url).href }
+  { chemin: new URL('../images/Commander.jpg', import.meta.url).href, link:"/Commander" },
+  { chemin: new URL('../images/Reserver.jpg', import.meta.url).href, link:"/Reserver" }
 
 ]
 const texte = [
@@ -73,6 +77,7 @@ body::-webkit-scrollbar {
   display: flex;
   text-align: center;
   gap: 15px;
+  border: solid black 1px;
 
 }
 
