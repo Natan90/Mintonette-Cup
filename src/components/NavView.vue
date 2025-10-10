@@ -1,6 +1,8 @@
 <template>
     <nav class="barre-nav">
-      <img src="../images/logo.png" alt="logo" id="logo">
+      <router-link to="/">
+        <img src="../images/logo.png" alt="logo" id="logo">
+      </router-link>
       <div class="log">
         <span>
           <img src="../images/france.png" alt="france" class="drapeau"> /
