@@ -8,7 +8,7 @@
           <img src="../images/france.png" alt="france" class="drapeau"> /
           <img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau">
         </span>
-        <span><strong>Se connecter / S'identifier</strong></span>
+        <span><strong><router-link to="/">Se connecter</router-link> / <router-link to="/Inscription_utilisateur">S'identifier</router-link></strong></span>
       </div>
     </nav>
 
