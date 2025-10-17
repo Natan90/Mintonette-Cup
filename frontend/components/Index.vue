@@ -2,26 +2,30 @@
   <div>
     <NavView :style="{ top: navbar }" class="navbar" />
 
-
-
     <div class="image">
-      <img src="../images/PhotoFond.png" alt="">
+      <img src="../images/PhotoFond.png" alt="" />
       <div class="texteImage">
-        Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs !<br>
+        Montpellier accueille la Mintonette Cup, le tournoi mondial de
+        volley-ball qui rassemble les meilleurs joueurs !<br />
         changer l'image ( pas les bonnes couleurs )
       </div>
     </div>
 
     <div class="routeurLink">
-      <router-link to="/" class="btnLink">Home</router-link><br>
-      <router-link to="/PrestatairePublic" class="btnLink">Prestataire(mode public)</router-link>
-      <router-link to="/PrestatairePresta" class="btnLink">Prestataire (mode presta)</router-link>
-
+      <router-link to="/" class="btnLink">Home</router-link><br />
+      <router-link to="/PrestatairePublic" class="btnLink"
+        >Prestataire(mode public)</router-link
+      >
+      <router-link to="/PrestatairePresta" class="btnLink"
+        >Prestataire (mode presta)</router-link
+      >
     </div>
     <p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
+
+    <Map></Map>
     <p>Bonjour</p>
     <p>Bonjour</p>
     <p>Bonjour</p>
@@ -39,8 +43,15 @@
     <div class="hover">
       <p>
         <span id="title">Titre du prestataire</span>
-        <br>
-        <span id="descri">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <br />
+        <span id="descri"
+          >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
         </span>
       </p>
     </div>
@@ -50,13 +61,13 @@
     <p>Bonjour</p>
   </div>
   <Footer></Footer>
-
 </template>
 
 <script setup>
 import NavView from "@/components/NavView.vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Footer from "@/components/Footer.vue";
+import Map from "@/components/Map.vue";
 
 const navbar = ref("0px");
 
@@ -129,7 +140,7 @@ body::-webkit-scrollbar {
   cursor: pointer;
 
   transition: transform var(--transition-fast),
-  box-shadow var(--transition-fast);
+    box-shadow var(--transition-fast);
 }
 
 .hover p:hover {
@@ -145,7 +156,4 @@ body::-webkit-scrollbar {
 #descri {
   font-size: 0.7em;
 }
-
 </style>
-
-
