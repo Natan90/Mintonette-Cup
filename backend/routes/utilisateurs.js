@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Liste des utilisateurs
-router.get('/utilisateurs', (req, res) => {
+router.get('/show', (req, res) => {
   const db = req.db;
   db.all('SELECT * FROM Utilisateur', (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -12,7 +12,7 @@ router.get('/utilisateurs', (req, res) => {
 });
 
 // Inscription d’un utilisateur
-router.post('/inscription_utilisateur', (req, res) => {
+router.post('/inscription', (req, res) => {
   const db = req.db;
   const { nom, prenom, login, mdp, mail, date_naissance, sexe } = req.body;
 

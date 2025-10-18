@@ -18,9 +18,9 @@ console.log("Chemin de la DB :", dbPath);
 // Ouvre la base de données
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) {
-    console.error("❌ Impossible d'ouvrir la DB :", err.message);
+    console.error("Impossible d'ouvrir la DB :", err.message);
   } else {
-    console.log("✅ Base de données ouverte avec succès !");
+    console.log("Base de données ouverte avec succès !");
   }
 });
 
@@ -31,20 +31,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/', utilisateursRoutes);
+app.use('/utilisateurs', utilisateursRoutes);
 
 // Lancement du serveur
 app.listen(port, () => {
-  console.log(`🚀 Serveur backend lancé sur http://localhost:${port}`);
-
-  // 🔹 Vérification des routes
-  if (app._router) {
-    const routes = app._router.stack
-      .filter(r => r.route)          // garde seulement les routes montées
-      .map(r => r.route.path);       // récupère le chemin
-    console.log("✅ Routes chargées :", routes);
-  } else {
-    console.log("⚠️ _router non défini, aucune route à afficher");
-  }
+  console.log(`Serveur lancé sur http://localhost:${port}`);
 });
 

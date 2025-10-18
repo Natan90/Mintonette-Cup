@@ -1,4 +1,5 @@
 <template>
+    <router-link to="/">Retourner à l'accueil</router-link>
   <div>
     <label>Nom</label><br>
     <input placeholder="Saisissez votre nom" v-model="nom_utilisateur" /><br><br>

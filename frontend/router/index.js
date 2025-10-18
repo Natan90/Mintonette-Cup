@@ -14,7 +14,7 @@ const routes = [
     { path: '/Commander' , name: 'Commander', component: Commander },
     { path: '/Reserver' , name: 'Reserver', component: Reserver },
     { path: '/Utilisateur', name: 'Utilisateur', component: Utilisateur },
-    { path: '/Inscription_utilisateur', name: 'Inscription_utilisateur', component: InscriptionUser }
+    { path: '/utilisateurs/inscription', name: 'Inscription_utilisateur', component: InscriptionUser }
 
 ]
 
