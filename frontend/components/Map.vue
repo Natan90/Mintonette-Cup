@@ -1,6 +1,8 @@
 <template>
   <!-- Balise vide pour insérer la map -->
   <div class="map" id="map"></div>
+  <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
+  <div class="hoverName" id="hoverName"></div>
 </template>
 
 <script setup>
@@ -103,12 +105,62 @@ onMounted(() => {
     });
   });
 
+  //Style quand on hover
+  const hoverStyle = new Style({
+    stroke: new Stroke({ color: "#ffffff", width: 2 }),
+    fill: new Fill({ color: "rgba(0,22,122,0.3)" }),
+  });
+  //Couleur par defaut
+  const defaultStyle = new Style({
+    stroke: new Stroke({ color: "#00167a", width: 2 }),
+    fill: new Fill({ color: "rgba(0,22,122,0.5)" }),
+  });
+  featuresList.forEach((f) => f.setStyle(defaultStyle));
+
   //Tu récupère la source qui contient les features (ici features)
   const sourceVecteur = new VectorSource({ features: featuresList });
   //Pour afficher la source sur la carte
   const coucheVecteur = new VectorLayer({ source: sourceVecteur });
   //Pour ajouter la couche à la map
   map.addLayer(coucheVecteur);
+
+  //Pour le nom avec le hover
+  let lastFeature = null;
+  const label = document.getElementById("hoverName");
+  //Dès que la souris bouge on check
+  map.on("pointermove", (event) => {
+    //Directement dans OpenLayer: parcours les features trouvé sous le pixel de la souris et les renvoie (featureTrouvee)
+    const searchFeature = map.forEachFeatureAtPixel(
+      event.pixel,
+      (featureFound) => featureFound
+    );
+    const mapElement = document.getElementById("map");
+
+    //Si la feature survolée change
+    if (searchFeature !== lastFeature) {
+      //Si on quitte un ancien terrain → on remet son style normal
+      if (lastFeature) {
+        lastFeature.setStyle(defaultStyle);
+      }
+    }
+    //Si featureCherchee est trouvée, pointeur avec le nom en hover sinon rien
+    if (searchFeature) {
+      //Récupération du nom
+      const name = searchFeature.get("name");
+      const pixel = event.originalEvent;
+      label.style.display = "block";
+      label.style.left = pixel.pageX + 10 + "px";
+      label.style.top = pixel.pageY - 25 + "px";
+      label.innerText = name;
+      mapElement.style.cursor = "pointer";
+      searchFeature.setStyle(hoverStyle);
+    } else {
+      mapElement.style.cursor = "default";
+      label.style.display = "none";
+      searchFeature.setStyle(defaultStyle);
+    }
+    lastFeature = searchFeature;
+  });
 });
 </script>
 
@@ -116,9 +168,24 @@ onMounted(() => {
 body::-webkit-scrollbar {
   display: none;
 }
+/* Taille de la map sur la page */
 .map {
   height: 800px;
   width: 900px;
   margin-left: 150px;
+  border: 2px solid #00167a;
+  border-radius: 8px;
+}
+
+.hoverName {
+  z-index: 9999;
+  position: absolute;
+  background-color: #00167a; /* couleur principale */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 </style>
