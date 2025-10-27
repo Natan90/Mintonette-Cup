@@ -20,24 +20,8 @@
         >Prestataire (mode presta)</router-link
       >
     </div>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
 
     <Map></Map>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
 
     <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">

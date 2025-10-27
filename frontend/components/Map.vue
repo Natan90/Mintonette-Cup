@@ -47,7 +47,7 @@ onMounted(() => {
     layers: [mapLayer],
     view: new View({
       projection,
-      center: [200, 150],
+      center: [500, 400],
       zoom: 1,
       maxZoom: 5,
       minZoom: 0.5,
@@ -157,7 +157,6 @@ onMounted(() => {
     } else {
       mapElement.style.cursor = "default";
       label.style.display = "none";
-      searchFeature.setStyle(defaultStyle);
     }
     lastFeature = searchFeature;
   });
@@ -170,9 +169,9 @@ body::-webkit-scrollbar {
 }
 /* Taille de la map sur la page */
 .map {
-  height: 800px;
-  width: 900px;
-  margin-left: 150px;
+  height: 500px;
+  width: 700px;
+  margin: 0 auto;
   border: 2px solid #00167a;
   border-radius: 8px;
 }
