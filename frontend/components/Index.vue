@@ -21,7 +21,7 @@
       >
     </div>
 
-    <Map></Map>
+    <Map> </Map>
 
     <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">
@@ -39,10 +39,6 @@
         </span>
       </p>
     </div>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
-    <p>Bonjour</p>
   </div>
   <Footer></Footer>
 </template>

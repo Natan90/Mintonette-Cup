@@ -1,4 +1,9 @@
 <template>
+  <div class="button">
+    <!-- Bouton pour changer la map  -->
+    <button @click="changeMap('prestataires')">prestataires</button>
+    <button @click="changeMap('terrains')">terrains</button>
+  </div>
   <!-- Balise vide pour insérer la map -->
   <div class="map" id="map"></div>
   <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
@@ -21,15 +26,89 @@ import Projection from "ol/proj/Projection.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 
-onMounted(() => {
-  //MinX, minY, maxX, maxY
-  const tailleMap = [0, 0, 1000, 800];
-  //Création d'une nouvelle projection
-  const projection = new Projection({
-    code: "MintonetteMap",
-    units: "pixels",
-    extent: tailleMap,
+let map;
+let coucheVecteur = null;
+let hoverStyle = null;
+let defaultStyle = null;
+let lastFeature = null;
+let label = null;
+const tailleMap = [0, 0, 1000, 800];
+const projection = new Projection({
+  code: "MintonetteMap",
+  units: "pixels",
+  extent: tailleMap,
+});
+
+// Définitions des zones ( faut le changer )
+const landLocations = [
+  {
+    name: "terrain 1",
+    coord: [
+      [700, 200],
+      [780, 200],
+      [780, 280],
+      [700, 280],
+      [700, 200],
+    ],
+  },
+  {
+    name: "terrain 2",
+    coord: [
+      [800, 200],
+      [880, 200],
+      [880, 280],
+      [800, 280],
+      [800, 200],
+    ],
+  },
+  {
+    name: "terrain 3",
+    coord: [
+      [700, 300],
+      [780, 300],
+      [780, 380],
+      [700, 380],
+      [700, 300],
+    ],
+  },
+  {
+    name: "terrain 4",
+    coord: [
+      [800, 300],
+      [880, 300],
+      [880, 380],
+      [800, 380],
+      [800, 300],
+    ],
+  },
+];
+
+const serviceLocation = [
+  {
+    name: "Espace Prestataire",
+    coord: [
+      [400, 100],
+      [600, 100],
+      [600, 300],
+      [400, 300],
+      [400, 100],
+    ],
+  },
+];
+
+//Pour créer les zones sur les maps
+function features(location) {
+  return location.map((location) => {
+    const feature = new Feature({
+      geometry: new Polygon([location.coord]),
+      name: location.name,
+    });
+    return feature;
   });
+}
+
+onMounted(() => {
+  //Création d'une nouvelle projection
   addProjection(projection);
 
   //Création d'une "couche" en gros ce qu'on l'on va afficher (une image fixe) sur la projection qu'on vient de créer avec les bonnes dimensions
@@ -41,7 +120,7 @@ onMounted(() => {
     }),
   });
 
-  const map = new Map({
+  map = new Map({
     //Envoie la map que l'on créer sur l'id 'map' qu'on a mit dans le template
     target: "map",
     layers: [mapLayer],
@@ -54,64 +133,16 @@ onMounted(() => {
     }),
   });
 
-  //On met les coordonnées des zones que l'on souhaite créer dans ce tableau lieu
-  const lieu = [
-    {
-      name: "terrain 1",
-      coord: [
-        [700, 200],
-        [780, 200],
-        [780, 280],
-        [700, 280],
-        [700, 200],
-      ],
-    },
-    {
-      name: "terrain 2",
-      coord: [
-        [800, 200],
-        [880, 200],
-        [880, 280],
-        [800, 280],
-        [800, 200],
-      ],
-    },
-    {
-      name: "terrain 3",
-      coord: [
-        [700, 300],
-        [780, 300],
-        [780, 380],
-        [700, 380],
-        [700, 300],
-      ],
-    },
-    {
-      name: "terrain 4",
-      coord: [
-        [800, 300],
-        [880, 300],
-        [880, 380],
-        [800, 380],
-        [800, 300],
-      ],
-    },
-  ];
-
-  const featuresList = lieu.map((lieu) => {
-    return new Feature({
-      geometry: new Polygon([lieu.coord]),
-      name: lieu.name,
-    });
-  });
+  //On ajoute les tableaux des coordonnées qu'on a créés avant
+  const featuresList = features(landLocations);
 
   //Style quand on hover
-  const hoverStyle = new Style({
+  hoverStyle = new Style({
     stroke: new Stroke({ color: "#ffffff", width: 2 }),
     fill: new Fill({ color: "rgba(0,22,122,0.3)" }),
   });
-  //Couleur par defaut
-  const defaultStyle = new Style({
+  //style par defaut
+  defaultStyle = new Style({
     stroke: new Stroke({ color: "#00167a", width: 2 }),
     fill: new Fill({ color: "rgba(0,22,122,0.5)" }),
   });
@@ -120,13 +151,13 @@ onMounted(() => {
   //Tu récupère la source qui contient les features (ici features)
   const sourceVecteur = new VectorSource({ features: featuresList });
   //Pour afficher la source sur la carte
-  const coucheVecteur = new VectorLayer({ source: sourceVecteur });
+  coucheVecteur = new VectorLayer({ source: sourceVecteur });
   //Pour ajouter la couche à la map
   map.addLayer(coucheVecteur);
 
   //Pour le nom avec le hover
-  let lastFeature = null;
-  const label = document.getElementById("hoverName");
+  lastFeature = null;
+  label = document.getElementById("hoverName");
   //Dès que la souris bouge on check
   map.on("pointermove", (event) => {
     //Directement dans OpenLayer: parcours les features trouvé sous le pixel de la souris et les renvoie (featureTrouvee)
@@ -161,6 +192,49 @@ onMounted(() => {
     lastFeature = searchFeature;
   });
 });
+
+function changeMap(type) {
+  //Si pas map ca sert à rien
+  if (!map) return;
+  //Permet de supprimer la couche de "zones"
+  if (coucheVecteur) {
+    map.removeLayer(coucheVecteur);
+    coucheVecteur = null;
+  }
+  
+  //Supprime la couche d'image ( à l'index 0 donc la première )
+  const oldImageLayer = map.getLayers().item(0);
+  if (oldImageLayer) map.removeLayer(oldImageLayer);
+
+  // Changer l’image selon le bouton
+  let imageUrl = "/ImageManif.png";
+  if (type === "prestataires") {
+    imageUrl = "/crepe.jpg";
+  }
+
+  const newImageLayer = new ImageLayer({
+    source: new ImageStatic({
+      url: imageUrl,
+      projection: projection,
+      imageExtent: tailleMap,
+    }),
+  });
+  //Comme la map est faite de plusieurs couche, ici on change la couche '0' soit la première qui correspond à l'image
+  map.getLayers().insertAt(0, newImageLayer);
+
+  // Recrée et réaffiche les zones selon le type sélectionné
+  let zone = landLocations;
+  if (type === "prestataires") {
+    zone = serviceLocation;
+  }
+
+  const featuresList = features(zone);
+  featuresList.forEach((f) => f.setStyle(defaultStyle));
+
+  const sourceVecteur = new VectorSource({ features: featuresList });
+  coucheVecteur = new VectorLayer({ source: sourceVecteur });
+  map.addLayer(coucheVecteur);
+}
 </script>
 
 <style>
@@ -177,9 +251,10 @@ body::-webkit-scrollbar {
 }
 
 .hoverName {
+  /* Important pour que ca s'affiche bien */
   z-index: 9999;
   position: absolute;
-  background-color: #00167a; /* couleur principale */
+  background-color: #00167a;
   color: white;
   padding: 5px 10px;
   border-radius: 6px;
