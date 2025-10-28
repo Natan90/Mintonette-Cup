@@ -25,6 +25,7 @@ import { addProjection } from "ol/proj.js";
 import Projection from "ol/proj/Projection.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
+import DragPan from "ol/interaction/DragPan.js";
 
 let map;
 let coucheVecteur = null;
@@ -39,46 +40,88 @@ const projection = new Projection({
   extent: tailleMap,
 });
 
-// Définitions des zones ( faut le changer )
+
+// Définitions des zones ( possibilité de faire un planning avec les différentes équipes qui jouent dans la journée)
 const landLocations = [
   {
     name: "terrain 1",
     coord: [
-      [700, 200],
-      [780, 200],
-      [780, 280],
-      [700, 280],
-      [700, 200],
+      [222, 375],
+      [480, 375],
+      [480, 517],
+      [228, 517],
+      [222, 375],
     ],
   },
   {
     name: "terrain 2",
     coord: [
-      [800, 200],
-      [880, 200],
-      [880, 280],
-      [800, 280],
-      [800, 200],
+      [525, 375],
+      [775, 375],
+      [771, 517],
+      [525, 517],
+      [525, 375],
     ],
   },
   {
     name: "terrain 3",
     coord: [
-      [700, 300],
-      [780, 300],
-      [780, 380],
-      [700, 380],
-      [700, 300],
+      [210, 180],
+      [478, 180],
+      [478, 340],
+      [220, 340],
+      [210, 180],
     ],
   },
   {
     name: "terrain 4",
     coord: [
-      [800, 300],
-      [880, 300],
-      [880, 380],
-      [800, 380],
-      [800, 300],
+      [525, 180],
+      [783, 180],
+      [775, 339],
+      [525, 340],
+      [525, 180],
+    ],
+  },
+  //changer les coords des gradins et voir si c'est possible de changer la couleur (jaune)
+  {
+    name: "gradin 1 (VIP)",
+    coord: [
+      [0, 0],
+      [1, 1],
+      [11, 11],
+      [1, 1],
+      [1, 1],
+    ],
+  },
+  {
+    name: "gradin 2",
+    coord: [
+      [525, 180],
+      [783, 180],
+      [775, 339],
+      [525, 340],
+      [525, 180],
+    ],
+  },
+  {
+    name: "gradin 3",
+    coord: [
+      [525, 180],
+      [783, 180],
+      [775, 339],
+      [525, 340],
+      [525, 180],
+    ],
+  },
+  {
+    name: "gradin 4",
+    coord: [
+      [525, 180],
+      [783, 180],
+      [775, 339],
+      [525, 340],
+      [525, 180],
     ],
   },
 ];
@@ -114,7 +157,7 @@ onMounted(() => {
   //Création d'une "couche" en gros ce qu'on l'on va afficher (une image fixe) sur la projection qu'on vient de créer avec les bonnes dimensions
   const mapLayer = new ImageLayer({
     source: new ImageStatic({
-      url: "/ImageManif.png",
+      url: "/mapTerrain.png",
       projection: projection,
       imageExtent: tailleMap,
     }),
@@ -128,8 +171,8 @@ onMounted(() => {
       projection,
       center: [500, 400],
       zoom: 1,
-      maxZoom: 5,
-      minZoom: 0.5,
+      maxZoom: 4,
+      minZoom: 1,
     }),
   });
 
@@ -201,13 +244,13 @@ function changeMap(type) {
     map.removeLayer(coucheVecteur);
     coucheVecteur = null;
   }
-  
+
   //Supprime la couche d'image ( à l'index 0 donc la première )
   const oldImageLayer = map.getLayers().item(0);
   if (oldImageLayer) map.removeLayer(oldImageLayer);
 
   // Changer l’image selon le bouton
-  let imageUrl = "/ImageManif.png";
+  let imageUrl = "/mapTerrain.png";
   if (type === "prestataires") {
     imageUrl = "/crepe.jpg";
   }
@@ -243,8 +286,8 @@ body::-webkit-scrollbar {
 }
 /* Taille de la map sur la page */
 .map {
-  height: 500px;
-  width: 700px;
+  height: 420px;
+  width: 520px;
   margin: 0 auto;
   border: 2px solid #00167a;
   border-radius: 8px;
@@ -256,7 +299,6 @@ body::-webkit-scrollbar {
   position: absolute;
   background-color: #00167a;
   color: white;
-  padding: 5px 10px;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
