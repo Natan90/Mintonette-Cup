@@ -11,7 +11,6 @@
 </template>
 
 <script setup>
-// Tous les imports pour OpenLayers et pour faire les carrés des hovers
 import { onMounted } from "vue";
 import "ol/ol.css";
 import Map from "ol/Map.js";
@@ -31,6 +30,8 @@ let map;
 let coucheVecteur = null;
 let hoverStyle = null;
 let defaultStyle = null;
+let standStyle;
+let standHoverStyle;
 let lastFeature = null;
 let label = null;
 const tailleMap = [0, 0, 1000, 800];
@@ -40,11 +41,11 @@ const projection = new Projection({
   extent: tailleMap,
 });
 
-
 // Définitions des zones ( possibilité de faire un planning avec les différentes équipes qui jouent dans la journée)
 const landLocations = [
   {
-    name: "terrain 1",
+    type: "court",
+    name: "Terrain 1",
     coord: [
       [222, 375],
       [480, 375],
@@ -54,7 +55,8 @@ const landLocations = [
     ],
   },
   {
-    name: "terrain 2",
+    type: "court",
+    name: "Terrain 2",
     coord: [
       [525, 375],
       [775, 375],
@@ -64,7 +66,8 @@ const landLocations = [
     ],
   },
   {
-    name: "terrain 3",
+    type: "court",
+    name: "Terrain 3",
     coord: [
       [210, 180],
       [478, 180],
@@ -74,7 +77,8 @@ const landLocations = [
     ],
   },
   {
-    name: "terrain 4",
+    type: "court",
+    name: "Terrain 4",
     coord: [
       [525, 180],
       [783, 180],
@@ -83,47 +87,51 @@ const landLocations = [
       [525, 180],
     ],
   },
-  //changer les coords des gradins et voir si c'est possible de changer la couleur (jaune)
-//   {
-//     name: "gradin 1 (VIP)",
-//     coord: [
-//       [0, 0],
-//       [1, 1],
-//       [11, 11],
-//       [1, 1],
-//       [1, 1],
-//     ],
-//   },
-//   {
-//     name: "gradin 2",
-//     coord: [
-//       [525, 180],
-//       [783, 180],
-//       [775, 339],
-//       [525, 340],
-//       [525, 180],
-//     ],
-//   },
-//   {
-//     name: "gradin 3",
-//     coord: [
-//       [525, 180],
-//       [783, 180],
-//       [775, 339],
-//       [525, 340],
-//       [525, 180],
-//     ],
-//   },
-//   {
-//     name: "gradin 4",
-//     coord: [
-//       [525, 180],
-//       [783, 180],
-//       [775, 339],
-//       [525, 340],
-//       [525, 180],
-//     ],
-//   },
+  // changer les coords des gradins et voir si c'est possible de changer la couleur (jaune)
+  {
+    type: "stand",
+    name: "Gradin 1 (VIP)",
+    coord: [
+      [700, 700],
+      [0, 0],
+      [11, 11],
+      [1, 1],
+      [1, 1],
+    ],
+  },
+  {
+    type: "stand",
+    name: "Gradin 2",
+    coord: [
+      [0, 0],
+      [100, 0],
+      [200, 200],
+      [0, 0],
+      [0, 0],
+    ],
+  },
+  {
+    type: "stand",
+    name: "Gradin 3",
+    coord: [
+      [400, 0],
+      [600, 0],
+      [600, 200],
+      [400, 200],
+      [400, 0],
+    ],
+  },
+  {
+    type: "stand",
+    name: "Gradin 4",
+    coord: [
+      [600, 0],
+      [800, 0],
+      [800, 400],
+      [600, 400],
+      [600, 0],
+    ],
+  },
 ];
 
 const serviceLocation = [
@@ -145,6 +153,7 @@ function features(location) {
     const feature = new Feature({
       geometry: new Polygon([location.coord]),
       name: location.name,
+      type: location.type,
     });
     return feature;
   });
@@ -189,7 +198,20 @@ onMounted(() => {
     stroke: new Stroke({ color: "#00167a", width: 2 }),
     fill: new Fill({ color: "rgba(0,22,122,0.5)" }),
   });
-  featuresList.forEach((f) => f.setStyle(defaultStyle));
+  //Style de base pour les gradins
+  standStyle = new Style({
+    stroke: new Stroke({ color: "#ffff00", width: 2 }),
+    fill: new Fill({ color: "rgba(255,255,0,0.5)" }),
+  });
+  //Style pour les gradins en hover
+  standHoverStyle = new Style({
+    stroke: new Stroke({ color: "#ffff00", width: 2 }),
+    fill: new Fill({ color: "rgba(255,255,0,0.3)" }),
+  });
+  featuresList.forEach((f) => {
+    if (f.get("type") === "stand") f.setStyle(standStyle);
+    else f.setStyle(defaultStyle);
+  });
 
   //Tu récupère la source qui contient les features (ici features)
   const sourceVecteur = new VectorSource({ features: featuresList });
@@ -214,12 +236,15 @@ onMounted(() => {
     if (searchFeature !== lastFeature) {
       //Si on quitte un ancien terrain → on remet son style normal
       if (lastFeature) {
-        lastFeature.setStyle(defaultStyle);
+        if (lastFeature.get("type") === "stand")
+          lastFeature.setStyle(standStyle);
+        else lastFeature.setStyle(defaultStyle);
       }
     }
-    //Si featureCherchee est trouvée, pointeur avec le nom en hover sinon rien
+    //Si featureCherchee est trouvée, on applique tous le style ici car ca dépend si c'est gradins ou terrains
     if (searchFeature) {
-      //Récupération du nom
+      //Récupération du nom et du type
+      const type = searchFeature.get("type");
       const name = searchFeature.get("name");
       const pixel = event.originalEvent;
       label.style.display = "block";
@@ -227,7 +252,16 @@ onMounted(() => {
       label.style.top = pixel.pageY - 25 + "px";
       label.innerText = name;
       mapElement.style.cursor = "pointer";
-      searchFeature.setStyle(hoverStyle);
+      label.style.fontSize = "14px";
+      if (searchFeature.get("type") === "stand") {
+        searchFeature.setStyle(standHoverStyle);
+        label.style.backgroundColor = "#ffff00";
+        label.style.color = "black";
+      } else {
+        searchFeature.setStyle(hoverStyle);
+        label.style.backgroundColor = "#00167a";
+        label.style.color = "white";
+      }
     } else {
       mapElement.style.cursor = "default";
       label.style.display = "none";
@@ -272,7 +306,10 @@ function changeMap(type) {
   }
 
   const featuresList = features(zone);
-  featuresList.forEach((f) => f.setStyle(defaultStyle));
+  featuresList.forEach((f) => {
+    if (f.get("type") === "stand") f.setStyle(standStyle);
+    else f.setStyle(defaultStyle);
+  });
 
   const sourceVecteur = new VectorSource({ features: featuresList });
   coucheVecteur = new VectorLayer({ source: sourceVecteur });
@@ -297,11 +334,7 @@ body::-webkit-scrollbar {
   /* Important pour que ca s'affiche bien */
   z-index: 9999;
   position: absolute;
-  background-color: #00167a;
-  color: white;
+  padding: 4px;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 </style>
