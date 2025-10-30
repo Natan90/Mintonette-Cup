@@ -5,9 +5,7 @@
     <div class="image">
       <img src="../images/PhotoFond.png" alt="" />
       <div class="texteImage">
-        Montpellier accueille la Mintonette Cup, le tournoi mondial de
-        volley-ball qui rassemble les meilleurs joueurs !<br />
-        changer l'image ( pas les bonnes couleurs )
+        {{ $t('mintonetteCup.title') }}
       </div>
     </div>
 

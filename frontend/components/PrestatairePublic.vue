@@ -5,18 +5,12 @@
   </div>
   <br><br>
   <div class="Titre">
-    <h1>Stand de Burger </h1>
+    <h1>{{ $t('burgerStand.title') }}</h1>
   </div>
   <div class="route">
     <div class="ConteneurTexte">
-      <p>
-        Bonne nouvelle ! Le stand de burgers sera bel et bien présent lors de la Mintonette Cup.
-        Vous pourrez y retrouver un large choix pour satisfaire toutes les envies : des burgers classiques savoureux,
-        des recettes plus gourmandes, mais aussi des options végétariennes pour que chacun puisse en profiter.
-        <br><br>
-        Que vous soyez un amateur de viande ou adepte d’alternatives plus légères,
-        tout le monde sera chaleureusement accueilli. C’est l’occasion idéale de partager
-        un moment convivial autour d’un bon repas tout en profitant de l’événement !
+      <p style="white-space: pre-line">
+        {{ $t('burgerStand.description') }}
       </p>
     </div>
     <div class="ConteneurImageBurger">
@@ -27,21 +21,17 @@
   </div>
   <br><br><br><br><br>
   <div class="SuiteTexte">
-    <h2>Services du prestataire </h2>
+    <h2>{{ $t('services.title') }}</h2>
     <div class="Service">
 
   <span v-for="(elt, index) in photo" :key="index">
       <span :id="'id' + index" class="Photo">
             <router-link :to = "elt.link">
-        <p>{{ texte[index].name}}</p>
+        <p>{{ $t(`services.actions.${index}`) }}</p>
        <img :src="elt.chemin"  alt="Photo">
               </router-link>
       </span>
     </span>
-
-
-
-
       </div >
     </div>
   <Footer></Footer>
@@ -58,10 +48,6 @@ const photo = [
   { chemin: new URL('../images/Commander.jpg', import.meta.url).href, link:"/Commander" },
   { chemin: new URL('../images/Reserver.jpg', import.meta.url).href, link:"/Reserver" }
 
-]
-const texte = [
-  {name: "Commander repas"},
-  {name: "Réserver table"},
 ]
 </script>
 

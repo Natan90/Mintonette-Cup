@@ -5,8 +5,8 @@
       </router-link>
       <div class="log">
         <span>
-          <img src="../images/france.png" alt="france" class="drapeau"> /
-          <img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau">
+          <button @click="changeLanguage('fr')"><img src="../images/france.png" alt="france" class="drapeau"></button> / 
+          <button @click="changeLanguage('en')"><img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau"></button>
         </span>
         <span><strong><router-link to="/">Se connecter</router-link> / <router-link to="/utilisateurs/inscription">S'identifier</router-link></strong></span>
       </div>
@@ -16,6 +16,20 @@
 </template>
 
 
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
+
+function changeLanguage(lang) {
+  locale.value = lang
+  localStorage.setItem('lang', lang)
+}
+
+const savedLang = localStorage.getItem('lang')
+if (savedLang) locale.value = savedLang
+
+</script>
 
 
 <style>
@@ -51,6 +65,3 @@ body{
 }
 
 </style>
-
-<script setup>
-</script>
