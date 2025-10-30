@@ -1,8 +1,9 @@
 <template>
   <div class="button">
     <!-- Bouton pour changer la map  -->
-    <button @click="changeMap('prestataires')">prestataires</button>
-    <button @click="changeMap('terrains')">terrains</button>
+    <button @click="changeMap('prestataires')">Prestataires</button>
+    <button @click="changeMap('terrains')">Terrains</button>
+    Attendre le code de Mathis pour avoir les bonnes coord et chnager la deuxieme image qui est pas folle
   </div>
   <!-- Balise vide pour insérer la map -->
   <div class="map" id="map"></div>
@@ -286,7 +287,7 @@ function changeMap(type) {
   // Changer l’image selon le bouton
   let imageUrl = "/mapTerrain.png";
   if (type === "prestataires") {
-    imageUrl = "/crepe.jpg";
+    imageUrl = "/MapPresta.png";
   }
 
   const newImageLayer = new ImageLayer({
