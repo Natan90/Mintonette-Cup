@@ -1,45 +1,44 @@
 <template>
-    <router-link to="/">Retourner à l'accueil</router-link>
+  <router-link to="/">{{ $t('homeLink') }}</router-link>
   <div>
-    <label>Nom</label><br>
-    <input placeholder="Saisissez votre nom" v-model="nom_utilisateur" /><br><br>
+    <label>{{ $t('user.nom') }}</label><br>
+    <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" /><br><br>
 
-    <label>Prénom</label><br>
-    <input placeholder="Saisissez votre prénom" v-model="prenom_utilisateur" /><br><br>
+    <label>{{ $t('user.prenom') }}</label><br>
+    <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur" /><br><br>
 
-    <label>Login</label><br>
-    <input placeholder="Saisissez votre login" v-model="login_utilisateur" /><br><br>
+    <label>{{ $t('user.login') }}</label><br>
+    <input :placeholder="$t('user.login')" v-model="login_utilisateur" /><br><br>
 
-    <label>Mot de passe</label><br>
-    <input type="password" placeholder="Saisissez votre mot de passe" v-model="mdp_utilisateur" /><br><br>
+    <label>{{ $t('user.mdp') }}</label><br>
+    <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur" /><br><br>
 
-    <label>Mail</label><br>
-    <input type="email" placeholder="Saisissez votre email" v-model="mail_utilisateur" /><br><br>
+    <label>{{ $t('user.mail') }}</label><br>
+    <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur" /><br><br>
 
-    <label>Date de naissance</label><br>
+    <label>{{ $t('user.dateNaissance') }}</label><br>
     <input type="date" v-model="date_naiss_utilisateur" /><br><br>
 
-    <label>Sexe</label><br>
-    <input type="radio" id="homme" value="Homme" v-model="sexe_utilisateur" name="sexe" />
-    <label for="homme">Homme</label>
+    <label>{{ $t('user.sexe') }}</label><br>
+    
+    <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.homme')" :value="$t('user.typeSexe.homme')" name="sexe">
+    <label :for="$t('user.typeSexe.homme')">{{ $t('user.typeSexe.homme') }}</label><br></br>
 
-    <input type="radio" id="femme" value="Femme" v-model="sexe_utilisateur" name="sexe" />
-    <label for="femme">Femme</label>
+    <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.femme')" :value="$t('user.typeSexe.femme')" name="sexe">
+    <label :for="$t('user.typeSexe.femme')">{{ $t('user.typeSexe.femme') }}</label><br></br>
 
-    <input type="radio" id="autre" value="Autre" v-model="sexe_utilisateur" name="sexe" />
-    <label for="autre">Autre</label>
-    <br><br>
+    <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.autre')" :value="$t('user.typeSexe.autre')" name="sexe">
+    <label :for="$t('user.typeSexe.autre')">{{ $t('user.typeSexe.autre') }}</label>
 
-    <!-- IMPORTANT : type="button" pour ne pas recharger la page -->
-    <button type="button" @click="getValues">Submit</button>
 
-    <!-- Message de succès ou d'erreur -->
+    <br>
+    <button type="button" @click="getValues">{{ $t('user.buttonInscirption') }}</button>
     <p v-if="message">{{ message }}</p>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import axios from "axios";
 
 const nom_utilisateur = ref("");
@@ -52,14 +51,13 @@ const sexe_utilisateur = ref("");
 const message = ref("");
 
 async function getValues() {
-  // Vérification rapide avant envoi
   if (!nom_utilisateur.value || !prenom_utilisateur.value || !login_utilisateur.value || !mdp_utilisateur.value || !mail_utilisateur.value) {
     message.value = "Veuillez remplir tous les champs obligatoires.";
     return;
   }
 
   try {
-    const res = await axios.post('http://localhost:3000/inscription_utilisateur', {
+    const res = await axios.post('http://localhost:3000/utilisateur/inscription', {
       nom: nom_utilisateur.value,
       prenom: prenom_utilisateur.value,
       login: login_utilisateur.value,
@@ -76,6 +74,7 @@ async function getValues() {
 }
 </script>
 
+
 <style scoped>
 input {
   margin-bottom: 10px;
@@ -87,6 +86,6 @@ button {
 p {
   margin-top: 15px;
   font-weight: bold;
-  color: green;
+  color: red;
 }
 </style>

@@ -17,7 +17,7 @@ const utilisateurs = ref([]);
 
 onMounted(async () => {
   try {
-    const res = await axios.get("http://localhost:3000/utilisateurs");
+    const res = await axios.get("http://localhost:3000/utilisateur/show");
     utilisateurs.value = res.data; // récupère tous les champs
   } catch (err) {
     console.error("Erreur fetch utilisateurs:", err);

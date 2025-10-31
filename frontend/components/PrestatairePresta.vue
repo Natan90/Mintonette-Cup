@@ -5,6 +5,10 @@
     <router-link to="/" class="btnLink">Home</router-link>
   </div>
 
+  <div v-if="utilisateur">
+    {{ utilisateur.prenom_utilisateur }} {{ utilisateur.nom_utilisateur }}
+  </div>
+
   <div>
     <span v-for="(elt, index) in article" :key="index">
       <span :id="'id' + index" @click="selectArticle(index)" class="article_title">
@@ -27,28 +31,26 @@
       <img src="../images/PhotoFond.png" alt="photo_fond" id="photo_presta">
     </div>
   </div>
-<br>
-    <Editor
-        v-model="content"
-        api-key="no-api-key"
-    :init="{
+  <br>
+  <Editor v-model="content" api-key="no-api-key" :init="{
     height: 500,
     width: 1000,
     menubar: false,
     plugins: 'lists link image code',
     toolbar: 'undo redo | bold italic underline | bullist numlist | code'
-    }"
-    />
+  }" />
 
-    <h3>Prévisualisation :</h3>
-    <div v-html="content"></div>
+  <h3>Prévisualisation :</h3>
+  <div v-html="content"></div>
 
   <Footer></Footer>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, watch } from "vue"
+import axios from "axios";
 import Editor from '@tinymce/tinymce-vue'
+import { useUserStore } from '@/stores/user';
 
 
 import NavView from "@/components/NavView.vue"
@@ -75,6 +77,23 @@ function selectArticle(id: number) {
   if (id >= article.length) return
   selectedItem.value = id
 }
+
+const userStore = useUserStore();
+const utilisateur = ref(null);
+
+// Regarde la valeur de userId si elle change, si c'est le cas on appelle de nouveau utilisateur/show/:id
+watch(() => userStore.userId, async (newId) => {
+    if (!newId) return; 
+    try {
+      const res = await axios.get(`http://localhost:3000/utilisateur/show/${newId}`);   // Récupère les données de l'utilisateur avec l'id correspondant
+      console.log("Utilisateur récupéré:", res.data);
+      utilisateur.value = res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  { immediate: true } 
+);
 </script>
 
 <style scoped>

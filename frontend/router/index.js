@@ -7,6 +7,7 @@ import Reserver from "@/components/Reserver.vue";
 import Utilisateur from '@/components/Utilisateur.vue';
 import InscriptionUser from '@/components/InscriptionUser.vue';
 import PresentationMintonette from '@/components/PresentationMintonette.vue';
+import ConnexionUser from '@/components/ConnexionUser.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: Index },
@@ -15,7 +16,8 @@ const routes = [
     { path: '/Commander', name: 'Commander', component: Commander },
     { path: '/Reserver', name: 'Reserver', component: Reserver },
     { path: '/Utilisateur', name: 'Utilisateur', component: Utilisateur },
-    { path: '/utilisateurs/inscription', name: 'Inscription_utilisateur', component: InscriptionUser },
+    { path: '/utilisateur/inscription', name: 'Inscription_utilisateur', component: InscriptionUser },
+    { path: '/utilisateur/connexion', name: 'Connexion_utilisateur', component: ConnexionUser },
     { path: '/Presentation_Mintonette_Cup', name: 'Presentation_Mintonette_Cup', component: PresentationMintonette }
 ]
 

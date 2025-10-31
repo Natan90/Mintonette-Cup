@@ -5,8 +5,8 @@ import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
 
-import fr from './locales/fr.json'
-import en from './locales/en.json'
+import fr from './langues/fr.json'
+import en from './langues/en.json'
 
 // Configuration i18n
 const messages = { fr, en }
