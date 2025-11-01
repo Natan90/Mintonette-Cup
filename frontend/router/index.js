@@ -8,6 +8,7 @@ import Utilisateur from '@/components/Utilisateur.vue';
 import InscriptionUser from '@/components/InscriptionUser.vue';
 import PresentationMintonette from '@/components/PresentationMintonette.vue';
 import ConnexionUser from '@/components/ConnexionUser.vue';
+import prestataireTest from '@/components/prestataireTest.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: Index },
@@ -18,7 +19,8 @@ const routes = [
     { path: '/Utilisateur', name: 'Utilisateur', component: Utilisateur },
     { path: '/utilisateur/inscription', name: 'Inscription_utilisateur', component: InscriptionUser },
     { path: '/utilisateur/connexion', name: 'Connexion_utilisateur', component: ConnexionUser },
-    { path: '/Presentation_Mintonette_Cup', name: 'Presentation_Mintonette_Cup', component: PresentationMintonette }
+    { path: '/Presentation_Mintonette_Cup', name: 'Presentation_Mintonette_Cup', component: PresentationMintonette },
+    { path: '/prestataireTest', name: 'prestataireTest', component: prestataireTest }
 ]
 
 const router = createRouter({

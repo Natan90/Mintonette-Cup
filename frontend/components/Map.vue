@@ -3,7 +3,8 @@
     <!-- Bouton pour changer la map  -->
     <button @click="changeMap('prestataires')">Prestataires</button>
     <button @click="changeMap('terrains')">Terrains</button>
-    Attendre le code de Mathis pour avoir les bonnes coord et chnager la deuxieme image qui est pas folle
+    Attendre le code de Mathis pour avoir les bonnes coord et chnager la
+    deuxieme image qui est pas folle
   </div>
   <!-- Balise vide pour insérer la map -->
   <div class="map" id="map"></div>
@@ -26,6 +27,7 @@ import Projection from "ol/proj/Projection.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import DragPan from "ol/interaction/DragPan.js";
+import router from "@/router";
 
 let map;
 let coucheVecteur = null;
@@ -145,6 +147,7 @@ const serviceLocation = [
       [400, 300],
       [400, 100],
     ],
+    url: "../prestataireTest",
   },
 ];
 
@@ -155,6 +158,7 @@ function features(location) {
       geometry: new Polygon([location.coord]),
       name: location.name,
       type: location.type,
+      url: location.url,
     });
     return feature;
   });
@@ -181,7 +185,7 @@ onMounted(() => {
       projection,
       center: [500, 400],
       zoom: 1,
-      maxZoom: 4,
+      maxZoom: 1,
       minZoom: 1,
     }),
   });
@@ -269,7 +273,20 @@ onMounted(() => {
     }
     lastFeature = searchFeature;
   });
+  //On capture tous les clicks et tu regarde si tu est dans un feature ( zone ) 
+  map.on("click", (event) => {
+  const clickedFeature = map.forEachFeatureAtPixel(
+    event.pixel,
+    (featureFound) => featureFound
+  );
+  //Si tu y ai tu redirige sur l'URL de la page
+  if (clickedFeature) {
+    const url = clickedFeature.get("url");
+    if (url) router.push(url);
+  }
 });
+});
+
 
 function changeMap(type) {
   //Si pas map ca sert à rien
