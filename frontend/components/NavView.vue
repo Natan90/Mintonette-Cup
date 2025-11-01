@@ -8,7 +8,8 @@
           <button @click="changeLanguage('fr')"><img src="../images/france.png" alt="france" class="drapeau"></button> / 
           <button @click="changeLanguage('en')"><img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau"></button>
         </span>
-        <span><strong><router-link to="/utilisateur/connexion">Se connecter</router-link> / <router-link to="/utilisateur/inscription">S'identifier</router-link></strong></span>
+        <span v-if="!userStore.isConnected"><strong><router-link to="/utilisateur/connexion">Se connecter</router-link> / <router-link to="/utilisateur/inscription">S'identifier</router-link></strong></span>
+        <span v-else>Mon profil / Se déconnecter (menu burger)</span>
       </div>
     </nav>
 
@@ -20,6 +21,9 @@
 import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
 
 function changeLanguage(lang) {
   locale.value = lang
