@@ -139,7 +139,7 @@ const landLocations = [
 
 const serviceLocation = [
   {
-    name: "Espace Prestataire",
+    name: "Stand de Burger",
     coord: [
       [400, 100],
       [600, 100],
@@ -147,7 +147,7 @@ const serviceLocation = [
       [400, 300],
       [400, 100],
     ],
-    url: "../prestataireTest",
+    url: "../PrestatairePublic",
   },
 ];
 
