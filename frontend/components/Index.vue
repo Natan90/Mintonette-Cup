@@ -38,6 +38,9 @@
       </p>
     </div>
   </div>
+   <router-link to="/PolygoneCreation" class="btnLink"
+        >Truc de Mathis pour les polygones</router-link
+      >
   <Footer></Footer>
 </template>
 

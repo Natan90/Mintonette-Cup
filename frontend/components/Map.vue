@@ -95,11 +95,11 @@ const landLocations = [
     type: "stand",
     name: "Gradin 1 (VIP)",
     coord: [
-      [700, 700],
-      [0, 0],
-      [11, 11],
-      [1, 1],
-      [1, 1],
+      [214421.9746264061, 5832112.979270176],
+      [214424.58089633187, 5831955.836612322],
+      [214664.357146232, 5831954.100212657],
+      [214657.40711739956, 5832122.529359044],
+      [214421.9746264061, 5832112.979270176],
     ],
   },
   {
@@ -273,20 +273,19 @@ onMounted(() => {
     }
     lastFeature = searchFeature;
   });
-  //On capture tous les clicks et tu regarde si tu est dans un feature ( zone ) 
+  //On capture tous les clicks et tu regarde si tu est dans un feature ( zone )
   map.on("click", (event) => {
-  const clickedFeature = map.forEachFeatureAtPixel(
-    event.pixel,
-    (featureFound) => featureFound
-  );
-  //Si tu y ai tu redirige sur l'URL de la page
-  if (clickedFeature) {
-    const url = clickedFeature.get("url");
-    if (url) router.push(url);
-  }
+    const clickedFeature = map.forEachFeatureAtPixel(
+      event.pixel,
+      (featureFound) => featureFound
+    );
+    //Si tu y ai tu redirige sur l'URL de la page
+    if (clickedFeature) {
+      const url = clickedFeature.get("url");
+      if (url) router.push(url);
+    }
+  });
 });
-});
-
 
 function changeMap(type) {
   //Si pas map ca sert à rien
