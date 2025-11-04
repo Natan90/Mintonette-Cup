@@ -1,0 +1,30 @@
+{
+  "mintonetteCup": {
+    "title": "Montpellier hosts the Mintonette Cup, the world volleyball tournament that brings together the best players! \nchange the image (wrong colors)"
+  },
+  "user": {
+    "nom": "Last name",
+    "prenom": "First name",
+    "login": "Username",
+    "mdp": "Password",
+    "mail": "Email",
+    "dateNaissance": "Date of birth",
+    "sexe": "Gender",
+    "typeSexe": {
+      "homme": "Male",
+      "femme": "Female",
+      "autre": "Other"
+    },
+    "buttonInscirption": "Sign up",
+    "buttonConnexion": "Log in"
+  },
+  "burgerStand": {
+    "title": "Burger Stand",
+    "description": "Good news! The burger stand will indeed be present during the Mintonette Cup.\nYou’ll find a wide selection to satisfy every craving: delicious classic burgers,\nmore indulgent recipes, and even vegetarian options so everyone can enjoy.\n\nWhether you’re a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It’s the perfect occasion to share a friendly moment over a good meal while enjoying the event!"
+  },
+  "services": {
+    "title": "Service provider options",
+    "actions": ["Order meal", "Book table"]
+  },
+  "homeLink": "Home"
+}

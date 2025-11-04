@@ -1,0 +1,30 @@
+{
+  "mintonetteCup": {
+    "title": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \nchanger l'image ( pas les bonnes couleurs ) "
+  },
+  "user": {
+    "nom": "Nom",
+    "prenom": "Prénom",
+    "login": "Nom d'utilisateur",
+    "mdp": "Mot de passe",
+    "mail": "Mail",
+    "dateNaissance": "Date de naissance",
+    "sexe": "Sexe",
+    "typeSexe": {
+      "homme": "Homme",
+    "femme": "Femme",
+    "autre": "Autre"
+    },
+    "buttonInscirption": "S'incrire",
+    "buttonConnexion": "Se connecter"
+  },
+  "burgerStand": {
+    "title": "Stand de Burger",
+    "description": "Bonne nouvelle ! Le stand de burgers sera bel et bien présent lors de la Mintonette Cup.\nVous pourrez y retrouver un large choix pour satisfaire toutes les envies : des burgers classiques savoureux,\ndes recettes plus gourmandes, mais aussi des options végétariennes pour que chacun puisse en profiter.\n\n Que vous soyez un amateur de viande ou adepte d’alternatives plus légères, tout le monde sera chaleureusement accueilli. C’est l’occasion idéale de partager un moment convivial autour d’un bon repas tout en profitant de l’événement !"
+  },
+  "services": {
+    "title": "Services du prestataire",
+    "actions": ["Commander repas", "Réserver table"]
+  },
+  "homeLink": "Accueil"
+}
