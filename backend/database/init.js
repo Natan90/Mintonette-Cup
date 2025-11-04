@@ -322,7 +322,7 @@ db.serialize(() => {
     FOREIGN KEY(id_stade) REFERENCES Stade(id_stade)
   )`);
 
-  // INSERT initial
+  
   db.run(`INSERT INTO Utilisateur 
     (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, date_naissance_utilisateur, sexe_utilisateur)
     VALUES

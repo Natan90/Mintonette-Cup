@@ -15,15 +15,17 @@
       "femme": "Female",
       "autre": "Other"
     },
+    "connexion": "Login",
+    "inscription": "Sign up",
     "buttonInscirption": "Sign up",
     "buttonConnexion": "Log in"
   },
   "burgerStand": {
     "title": "Burger Stand",
-    "description": "Good news! The burger stand will indeed be present during the Mintonette Cup.\nYou’ll find a wide selection to satisfy every craving: delicious classic burgers,\nmore indulgent recipes, and even vegetarian options so everyone can enjoy.\n\nWhether you’re a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It’s the perfect occasion to share a friendly moment over a good meal while enjoying the event!"
+    "description": "Good news! The burger stand will indeed be present during the Mintonette Cup.\nYou’ll find a wide selection to satisfy every craving: delicious classic burgers,\nmore indulgent recipes, as well as vegetarian options so everyone can enjoy.\n\nWhether you’re a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It’s the perfect occasion to share a friendly moment over a good meal while enjoying the event!"
   },
   "services": {
-    "title": "Service provider options",
+    "title": "Provider Services",
     "actions": ["Order meal", "Book table"]
   },
   "homeLink": "Home"
