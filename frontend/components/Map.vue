@@ -25,7 +25,6 @@ import { addProjection } from "ol/proj.js";
 import Projection from "ol/proj/Projection.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
-import DragPan from "ol/interaction/DragPan.js";
 import router from "@/router";
 
 let map;
@@ -91,7 +90,8 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Gradin 1 (VIP)",
+    name: "Tribune Nord (VIP)",
+    image: "/GradinNord.png",
     coord: [
       [132.5845215002734, 732.9238507783072],
       [167.24812135453584, 672.6067166865045],
@@ -117,7 +117,8 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Gradin 2",
+    name: "Tribune Est",
+    image: "/GradinEst.png",
     coord: [
       [1000.0183533690831, 563.7368703178712],
       [845.7201416903512, 532.6818601683672],
@@ -140,7 +141,8 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Gradin 3",
+    name: "Tribune Sud",
+    image: "/GradinSud.png",
     coord: [
       [1.3940538722077065, 127.19543376205678],
       [119.24098613019876, 210.46032043704224],
@@ -177,7 +179,8 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Gradin 4",
+    name: "Tribune Ouest",
+    image: "/GradinOuest.png",
     coord: [
       [1.2260519895663151, 571.3909687696703],
       [144.1661909878266, 531.0974317682259],
@@ -196,6 +199,7 @@ const landLocations = [
   },
 ];
 
+//Prestataires
 const serviceLocation = [
   {
     name: "Stand de Burger",
@@ -218,6 +222,7 @@ function features(location) {
       name: location.name,
       type: location.type,
       url: location.url,
+      image: location.image,
     });
     return feature;
   });
@@ -227,7 +232,7 @@ onMounted(() => {
   //Création d'une nouvelle projection
   addProjection(projection);
 
-  //Création d'une "couche" en gros ce qu'on l'on va afficher (une image fixe) sur la projection qu'on vient de créer avec les bonnes dimensions
+  //Création d'une "couche" en gros ce qu'on l'on va afficher (une image fixe)
   const mapLayer = new ImageLayer({
     source: new ImageStatic({
       url: "/mapTerrain.png",
@@ -237,78 +242,66 @@ onMounted(() => {
   });
 
   map = new Map({
-    //Envoie la map que l'on créer sur l'id 'map' qu'on a mit dans le template
     target: "map",
     layers: [mapLayer],
     view: new View({
       projection,
       center: [500, 400],
-      minZoom: 1, //C'est de la ou ca commence ( plus c'est petit plus l'image est loin )
-      maxZoom: 2, //OK
-      zoom: 1, //C'est le zoom de base
+      minZoom: 1,
+      maxZoom: 2,
+      zoom: 1,
     }),
   });
 
-  //On ajoute les tableaux des coordonnées qu'on a créés avant
+  //On ajoute les tableaux des coordonnées
   const featuresList = features(landLocations);
 
-  //Style quand on hover
+  //Style hover et normal
   hoverStyle = new Style({
     stroke: new Stroke({ color: "#ffffff", width: 2 }),
     fill: new Fill({ color: "rgba(0,22,122,0.3)" }),
   });
-  //style par defaut
   defaultStyle = new Style({
     stroke: new Stroke({ color: "#00167a", width: 2 }),
     fill: new Fill({ color: "rgba(0,22,122,0.5)" }),
   });
-  //Style de base pour les gradins
   standStyle = new Style({
     stroke: new Stroke({ color: "#ffff00", width: 2 }),
     fill: new Fill({ color: "rgba(255,255,0,0.5)" }),
   });
-  //Style pour les gradins en hover
   standHoverStyle = new Style({
     stroke: new Stroke({ color: "#ffff00", width: 2 }),
     fill: new Fill({ color: "rgba(255,255,0,0.3)" }),
   });
+
   featuresList.forEach((f) => {
     if (f.get("type") === "stand") f.setStyle(standStyle);
     else f.setStyle(defaultStyle);
   });
 
-  //Tu récupère la source qui contient les features (ici features)
   const sourceVecteur = new VectorSource({ features: featuresList });
-  //Pour afficher la source sur la carte
   coucheVecteur = new VectorLayer({ source: sourceVecteur });
-  //Pour ajouter la couche à la map
   map.addLayer(coucheVecteur);
 
-  //Pour le nom avec le hover
+  // Hover name
   lastFeature = null;
   label = document.getElementById("hoverName");
-  //Dès que la souris bouge on check
   map.on("pointermove", (event) => {
-    //Directement dans OpenLayer: parcours les features trouvé sous le pixel de la souris et les renvoie (featureTrouvee)
     const searchFeature = map.forEachFeatureAtPixel(
       event.pixel,
       (featureFound) => featureFound
     );
     const mapElement = document.getElementById("map");
 
-    //Si la feature survolée change
     if (searchFeature !== lastFeature) {
-      //Si on quitte un ancien terrain → on remet son style normal
       if (lastFeature) {
         if (lastFeature.get("type") === "stand")
           lastFeature.setStyle(standStyle);
         else lastFeature.setStyle(defaultStyle);
       }
     }
-    //Si featureCherchee est trouvée, on applique tous le style ici car ca dépend si c'est gradins ou terrains
+
     if (searchFeature) {
-      //Récupération du nom et du type
-      const type = searchFeature.get("type");
       const name = searchFeature.get("name");
       const pixel = event.originalEvent;
       label.style.display = "block";
@@ -332,39 +325,49 @@ onMounted(() => {
     }
     lastFeature = searchFeature;
   });
-  //On capture tous les clicks et tu regarde si tu est dans un feature ( zone )
+
+  // Gestion du clic
   map.on("click", (event) => {
     const clickedFeature = map.forEachFeatureAtPixel(
       event.pixel,
       (featureFound) => featureFound
     );
-    //Si tu y ai tu redirige sur l'URL de la page
-    if (clickedFeature) {
+    if (!clickedFeature) return;
+
+    const type = clickedFeature.get("type");
+
+    if (type === "stand") {
+      // Récupère l'image du gradin
+      const image = clickedFeature.get("image");
+      const geometry = clickedFeature.getGeometry();
+      // Appelle changeMap avec cette image
+      changeMap("stand", image);
+    } else {
+      //Si c’est un terrain ou prestataire → redirection
       const url = clickedFeature.get("url");
       if (url) router.push(url);
     }
   });
 });
-
-function changeMap(type) {
-  //Si pas map ca sert à rien
+function changeMap(type, image = null) {
   if (!map) return;
-  //Permet de supprimer la couche de "zones"
+
+  // Supprime la couche de zones
   if (coucheVecteur) {
     map.removeLayer(coucheVecteur);
     coucheVecteur = null;
   }
 
-  //Supprime la couche d'image ( à l'index 0 donc la première )
+  // Supprime la couche d'image actuelle
   const oldImageLayer = map.getLayers().item(0);
   if (oldImageLayer) map.removeLayer(oldImageLayer);
 
-  // Changer l’image selon le bouton
+  // Définit l'image à afficher
   let imageUrl = "/mapTerrain.png";
-  if (type === "prestataires") {
-    imageUrl = "/MapPresta.png";
-  }
+  if (type === "prestataires") imageUrl = "/MapPresta.png";
+  if (type === "stand" && image) imageUrl = image; // image spécifique au gradin
 
+  // Ajoute la nouvelle image
   const newImageLayer = new ImageLayer({
     source: new ImageStatic({
       url: imageUrl,
@@ -372,20 +375,25 @@ function changeMap(type) {
       imageExtent: tailleMap,
     }),
   });
-  //Comme la map est faite de plusieurs couche, ici on change la couche '0' soit la première qui correspond à l'image
   map.getLayers().insertAt(0, newImageLayer);
 
-  // Recrée et réaffiche les zones selon le type sélectionné
-  let zone = landLocations;
-  if (type === "prestataires") {
-    zone = serviceLocation;
-  }
+  if (type === "terrains" || type === "prestataires") {
+    // Détermine quelle liste de zones utiliser
+    let zone = landLocations;
+    if (type === "prestataires") zone = serviceLocation;
+    // if (type === "")  ICI IL FAUT QUE SI CEST LA ZONE GRADIN NORD JAFFICHE LES BONS POLYGONES 
+    // Crée les polygones pour chaque zone
+    const featuresList = features(zone);
+    featuresList.forEach((f) => {
+      if (f.get("type") === "stand") f.setStyle(standStyle);
+      else f.setStyle(defaultStyle);
+    });
 
-  const featuresList = features(zone);
-  featuresList.forEach((f) => {
-    if (f.get("type") === "stand") f.setStyle(standStyle);
-    else f.setStyle(defaultStyle);
-  });
+    // Crée la couche vectorielle contenant les polygones
+    const sourceVecteur = new VectorSource({ features: featuresList });
+    coucheVecteur = new VectorLayer({ source: sourceVecteur });
+    map.addLayer(coucheVecteur);
+  }
 
   const sourceVecteur = new VectorSource({ features: featuresList });
   coucheVecteur = new VectorLayer({ source: sourceVecteur });
@@ -407,7 +415,6 @@ body::-webkit-scrollbar {
 }
 
 .hoverName {
-  /* Important pour que ca s'affiche bien */
   z-index: 9999;
   position: absolute;
   padding: 4px;
