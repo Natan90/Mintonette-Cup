@@ -214,6 +214,32 @@ const serviceLocation = [
   },
 ];
 
+// // Gradin du nord (VIP)
+// const NorthStand = [
+//   {
+//     type: "court",
+//     name: "PrixCher",
+//     url: "../PrixCher",
+//     coord: [
+//       [222, 375],
+//       [480, 375],
+//       [480, 517],
+//       [228, 517],
+//       [222, 375],
+//     ],
+//     type: "court",
+//     name: "PrixPasCher",
+//     url: "../PrixPasCher",
+//     coord: [
+//       [222, 375],
+//       [480, 375],
+//       [480, 517],
+//       [228, 517],
+//       [222, 375],
+//     ],
+//   },
+// ];
+
 //Pour créer les zones sur les maps
 function features(location) {
   return location.map((location) => {
@@ -339,7 +365,6 @@ onMounted(() => {
     if (type === "stand") {
       // Récupère l'image du gradin
       const image = clickedFeature.get("image");
-      const geometry = clickedFeature.getGeometry();
       // Appelle changeMap avec cette image
       changeMap("stand", image);
     } else {
@@ -381,7 +406,8 @@ function changeMap(type, image = null) {
     // Détermine quelle liste de zones utiliser
     let zone = landLocations;
     if (type === "prestataires") zone = serviceLocation;
-    // if (type === "")  ICI IL FAUT QUE SI CEST LA ZONE GRADIN NORD JAFFICHE LES BONS POLYGONES 
+    // if (type === "stand"){}
+    //  ICI IL FAUT QUE SI CEST LA ZONE GRADIN NORD JAFFICHE LES BONS POLYGONES 
     // Crée les polygones pour chaque zone
     const featuresList = features(zone);
     featuresList.forEach((f) => {
