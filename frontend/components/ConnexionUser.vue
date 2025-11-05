@@ -1,7 +1,7 @@
 <template>
-    <router-link to="/">{{ $t('homeLink') }}</router-link>
     <div class="container">
         <div class="content">
+            <p class="title">{{ $t('user.connexion') }}</p>
             <div class="item">
                 <label>{{ $t('user.login') }}</label><br>
                 <input :placeholder="$t('user.login')" v-model="login_utilisateur" />
@@ -10,18 +10,23 @@
             <div class="item">
                 <label>{{ $t('user.mdp') }}</label><br>
                 <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur" />
+                <!-- Faire un oeil pour montrer le mot de passe -->
             </div>
 
             <div class="mdp_oublie">
                 <button id="button_mdp_oublie"><u>Mot de passe oublié</u></button>
             </div>
+
+            <!-- Bouton Se connecter -->
             <div class="item">
-                <button type="button" @click="getValues" id="button_message">{{ $t('user.buttonConnexion') }}</button>
+                <button @click="getValues" class="button_message button_connexion">{{ $t('user.buttonConnexion') }}</button>
                 <p v-if="message" id="message">{{ message }}</p>
             </div>
+            <div class="item">
+                <router-link to="/" class="button_message button_cancel">Annuler</router-link>
+            </div>
+
         </div>
-
-
     </div>
 </template>
 
@@ -41,6 +46,7 @@ const userId = ref(0);
 const router = useRouter();
 const userStore = useUserStore();
 
+
 async function getValues() {
     if (!login_utilisateur.value || !mdp_utilisateur.value) {
         message.value = "Veuillez remplir tous les champs obligatoires.";
@@ -52,13 +58,13 @@ async function getValues() {
             login: login_utilisateur.value,
             mdp: mdp_utilisateur.value,
         });
-        userStore.setUser(res.data.utilisateur.id_utilisateur);
+        userStore.setUser(res.data.user.id);
         userId.value = userStore.userId;
-        message.value = `Utilisateur connecté avec l'ID : ${userId.value}`;          // Id de l'utilisateur connecté
+        message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
         connexion.value = true;
 
         if (connexion.value) {
-            await new Promise(resolve => setTimeout(resolve, 1000));        // Pause de 1 seconde pour pouvoir faire une animation de chargement (ou ne pas retourner à l'accueil direct)
+            await new Promise(resolve => setTimeout(resolve, 1000));
             router.push('/');
         }
     } catch (err) {
@@ -68,10 +74,9 @@ async function getValues() {
 }
 </script>
 
-
 <style scoped>
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .container {
@@ -79,98 +84,122 @@ async function getValues() {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    height: 80vh;
+    gap: 20px;
+    height: 100vh;
 }
 
 .content {
     background-color: #ffffff;
-    padding: 40px 50px;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    border: 1px solid #ddd;
+    padding: 15px 50px 40px 50px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #eee;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
     width: 500px;
-    max-width: 90vh;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .content:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+    font-size: 2em;
+    font-weight: 700;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 25px;
 }
 
 .item {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 label {
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     color: #333;
+    font-size: 15px;
 }
 
 input {
     display: block;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 14px;
     width: 100%;
-    transition: border-color 0.2s ease;
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 input:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
 }
 
 .mdp_oublie {
-    padding-bottom: 10px;
+    text-align: right;
+    margin-bottom: 15px;
 }
 
 #button_mdp_oublie {
     border: none;
     background-color: transparent;
-    font-size: 0.8em;
-    
+    font-size: 0.85em;
+    color: #007bff;
     cursor: pointer;
+    transition: color 0.25s ease, text-decoration 0.25s ease;
 }
 
 #button_mdp_oublie:hover {
-    
+    text-decoration: underline;
+    color: #0056b3;
 }
 
-#button_message {
+.button_message {
     display: block;
-    background-color: #007bff;
-    color: #fff;
     border: none;
     border-radius: 6px;
     padding: 10px 15px;
     font-size: 15px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    transition: transform 0.1s ease, background-color 0.3s ease;
     width: 100%;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
 }
 
-#button_message:hover {
+.button_connexion {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+}
+
+.button_connexion:hover {
     background-color: #0056b3;
 }
 
-#button_message:active {
-    transform: scale(0.98);
+.button_cancel {
+    background: linear-gradient(90deg, #e03e3e, #c53030);
+}
+
+.button_cancel:hover {
+    background-color: #c53030;
+}
+
+.button_message:active {
+    transform: translateY(1px);
 }
 
 #message {
-    margin-top: 15px;
+    margin-top: 12px;
     font-weight: 600;
     color: red;
     text-align: center;
+    font-size: 15px;
 }
 </style>
