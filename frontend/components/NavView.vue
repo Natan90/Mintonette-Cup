@@ -8,7 +8,7 @@
           <button @click="changeLanguage('fr')"><img src="../images/france.png" alt="france" class="drapeau"></button> / 
           <button @click="changeLanguage('en')"><img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau"></button>
         </span>
-        <span v-if="!userStore.isConnected"><strong><router-link to="/utilisateur/connexion">Se connecter</router-link> / <router-link to="/utilisateur/inscription">S'inscrire</router-link></strong></span>
+        <span v-if="!userStore.isConnected"><strong><router-link to="/utilisateur/connexion">{{ $t('user.buttonConnexion') }}</router-link> / <router-link to="/utilisateur/inscription">{{ $t('user.buttonInscription') }}</router-link></strong></span>
         <span v-else>Mon profil / Se déconnecter (menu burger)</span>
       </div>
     </nav>
