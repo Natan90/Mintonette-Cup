@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 
 const pool = require("./database/db");
-const ensureDatabase = require("./database/initDb");
 const authRoutes = require("./routes/authRoutes");
 const utilisateursRoutes = require("./routes/utilisateurs");
 
@@ -41,13 +40,7 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-
-ensureDatabase().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Serveur lancé sur http://localhost:${PORT}`);
-  });
-}).catch((err) => {
-  console.error("Impossible de vérifier/créer la base :", err);
-  process.exit(1);
-})
-
+// Lancement du serveur
+app.listen(PORT, () => {
+  console.log(`Serveur lancé sur http://localhost:${PORT}`);
+});
