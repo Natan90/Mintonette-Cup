@@ -58,9 +58,9 @@ async function getValues() {
             login: login_utilisateur.value,
             mdp: mdp_utilisateur.value,
         });
-        userStore.setUser(res.data.utilisateur.id_utilisateur);
+        userStore.setUser(res.data.user.id);
         userId.value = userStore.userId;
-        message.value = `Utilisateur connecté avec l'ID : ${userId.value}`;
+        message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
         connexion.value = true;
 
         if (connexion.value) {
