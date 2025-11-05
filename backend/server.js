@@ -1,10 +1,13 @@
 const express = require("express");
-const pool = require("./database/db");
-const authRoutes = require("./routes/authRoutes");
 const cors = require("cors");
 
-const swaggerUi = require("swagger-ui-express");
+const pool = require("./database/db");
+const ensureDatabase = require("./database/initDb");
+const authRoutes = require("./routes/authRoutes");
 const utilisateursRoutes = require("./routes/utilisateurs");
+
+const swaggerUi = require("swagger-ui-express");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,7 +41,13 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// Lancement du serveur
-app.listen(PORT, () => {
-  console.log(`Serveur lancé sur http://localhost:${PORT}`);
-});
+
+ensureDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Serveur lancé sur http://localhost:${PORT}`);
+  });
+}).catch((err) => {
+  console.error("Impossible de vérifier/créer la base :", err);
+  process.exit(1);
+})
+
