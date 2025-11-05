@@ -16,88 +16,99 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import 'ol/ol.css'
-import Map from 'ol/Map.js'
-import View from 'ol/View.js'
-import TileLayer from 'ol/layer/Tile.js'
-import OSM from 'ol/source/OSM.js'
-import VectorSource from 'ol/source/Vector.js'
-import VectorLayer from 'ol/layer/Vector.js'
-import { Draw } from 'ol/interaction.js'
-import { fromLonLat, toLonLat } from 'ol/proj.js'
-import { XYZ } from 'ol/source'
+import { ref, onMounted } from "vue";
+import "ol/ol.css";
+import Map from "ol/Map.js";
+import View from "ol/View.js";
+import VectorSource from "ol/source/Vector.js";
+import VectorLayer from "ol/layer/Vector.js";
+import { Draw } from "ol/interaction.js";
+import ImageLayer from "ol/layer/Image.js";
+import ImageStatic from "ol/source/ImageStatic.js";
+import { getCenter } from "ol/extent.js";
+import { Projection, addProjection } from "ol/proj.js"; // ✅ bonne importation
 
-const mapContainer = ref(null)
-const polygonCoords = ref(null)
-const drawing = ref(false)
-const lastPolygon = ref(null)
+const mapContainer = ref(null);
+const polygonCoords = ref(null);
+const drawing = ref(false);
+const lastPolygon = ref(null);
 
-let map, vectorSource, drawInteraction
+let map, vectorSource, drawInteraction;
 
 onMounted(() => {
-  vectorSource = new VectorSource()
+  // Définir la taille de ton image (pixels)
+  const tailleMap = [0, 0, 1000, 800];
 
+  // ✅ Créer une projection pixel personnalisée
+  const projection = new Projection({
+    code: "ImagePixels",
+    units: "pixels",
+    extent: tailleMap,
+  });
+
+  addProjection(projection);
+
+  // ✅ Calque d’image (ton fond)
+  const imageLayer = new ImageLayer({
+    source: new ImageStatic({
+      url: "/mapTerrain.png", // ton image
+      projection: projection,
+      imageExtent: tailleMap,
+    }),
+  });
+
+  // ✅ Calque vectoriel pour le dessin
+  vectorSource = new VectorSource();
   const vectorLayer = new VectorLayer({
     source: vectorSource,
-  })
+  });
 
+  // ✅ Création de la carte
   map = new Map({
     target: mapContainer.value,
-    layers: [
-      new TileLayer({
-        source: new XYZ({
-          attributions: '© Esri & contributors',
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        }),
-      }),
-      vectorLayer,
-    ],
+    layers: [imageLayer, vectorLayer],
     view: new View({
-      center: fromLonLat([1.9272389314090705, 46.32110510154363]), // France
-      zoom: 17,
+      projection: projection,
+      center: getCenter(tailleMap),
+      zoom: 2,
+      maxZoom: 8,
     }),
-  })
-})
+  });
+});
 
-// Lancer le dessin
 function startDrawing(type) {
-  stopDrawing()
-  drawing.value = true
+  stopDrawing();
+  drawing.value = true;
   drawInteraction = new Draw({
     source: vectorSource,
     type,
-  })
-  map.addInteraction(drawInteraction)
+  });
+  map.addInteraction(drawInteraction);
 
-  drawInteraction.on('drawend', (event) => {
-    lastPolygon.value = event.feature
-    drawing.value = false
-  })
+  drawInteraction.on("drawend", (event) => {
+    lastPolygon.value = event.feature;
+    drawing.value = false;
+  });
 }
 
-// Stopper le dessin
 function stopDrawing() {
   if (drawInteraction) {
-    map.removeInteraction(drawInteraction)
-    drawInteraction = null
-    drawing.value = false
+    map.removeInteraction(drawInteraction);
+    drawInteraction = null;
+    drawing.value = false;
   }
 }
 
-// Récupérer les coordonnées
 function getPolygonCoords() {
-  if (!lastPolygon.value) return
-
-  const geom = lastPolygon.value.getGeometry()
-  const coords = geom.getCoordinates()[0]
-
-  polygonCoords.value = JSON.stringify(coords, null, 2)
+  if (!lastPolygon.value) return;
+  const geom = lastPolygon.value.getGeometry();
+  const coords = geom.getCoordinates()[0];
+  polygonCoords.value = JSON.stringify(coords, null, 2);
 }
 </script>
 
 <style>
-#app {
+# {
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -127,9 +138,7 @@ function getPolygonCoords() {
   cursor: not-allowed;
 }
 
-.map {
-  flex: 1;
-}
+
 
 .coords {
   background: #f9f9f9;
