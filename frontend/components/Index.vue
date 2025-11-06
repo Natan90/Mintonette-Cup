@@ -3,7 +3,7 @@
     <NavView :style="{ top: navbar }" class="navbar" />
 
     <div class="image">
-      <img src="../images/PhotoFond.png" alt="" />
+      <img src="../images/test.png" alt="" />
       <div class="texteImage">
         {{ $t('mintonetteCup.title') }}
       </div>
