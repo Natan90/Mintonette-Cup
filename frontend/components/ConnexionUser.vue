@@ -193,7 +193,7 @@ async function getValues() {
 
 .left-card {
     width: 35%;
-    background: white;
+    background: #fffaf1;
     border-radius: 18px;
     padding: 40px 50px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
@@ -213,9 +213,11 @@ async function getValues() {
 }
 
 .title {
-    font-size: 2em;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-size: 2.2em;
     font-weight: 700;
-    color: #007bff;
+    color: #1E90FF;
     text-align: center;
     margin-bottom: 25px;
 }
@@ -247,6 +249,7 @@ async function getValues() {
 }
 
 input {
+    background-color: transparent;
     display: block;
     width: 100%;
     padding: 12px 14px 0px 0px;
@@ -303,23 +306,39 @@ input::placeholder {
 }
 
 .button_connexion {
-    background: linear-gradient(90deg, #007bff, #0056b3);
+    background: linear-gradient(90deg, #1E90FF, #007bff);
+    background-size: 200% 100%;
+    transition: all 0.3s;
 }
 
 .button_connexion:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
 .button_cancel {
-    background: linear-gradient(90deg, #e03e3e, #c53030);
+    background: #fffaf1;
+    color: #1E90FF;
+    border: 2px solid #1E90FF;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
 }
 
 .button_cancel:hover {
-    background-color: #c53030;
+    background: #e0e7ff;
+    border-color: #1E90FF;
+    color: #1E90FF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(30,144,255,0.25);
 }
 
 .button_message:active {
     transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(30,144,255,0.2);
 }
 
 #message {
@@ -356,16 +375,16 @@ input::placeholder {
   border: none;
   padding: 12px 25px;
   border-radius: 8px;
-  color: white;
+  color: black;
+  background: #fffaf1;
   font-weight: 600;
   font-size: 1em;
   cursor: pointer;
   margin-top: 20px;
-  transition: transform 0.2s ease, opacity 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .button_register:hover {
-  opacity: 0.9;
   transform: translateY(-2px);
 }
 
