@@ -5,10 +5,9 @@ import PrestatairePresta from "@/components/PrestatairePresta.vue";
 import Commander from "@/components/Commander.vue";
 import Reserver from "@/components/Reserver.vue";
 import Utilisateur from "@/components/Utilisateur.vue";
-import InscriptionUser from "@/components/InscriptionUser.vue";
 import PresentationMintonette from "@/components/PresentationMintonette.vue";
-import ConnexionUser from "@/components/ConnexionUser.vue";
 import PolygonCreation from "@/components/PolygonCreation.vue";
+import LogPage from "@/components/LogPage.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Index },
@@ -28,12 +27,12 @@ const routes = [
   {
     path: "/utilisateur/inscription",
     name: "Inscription_utilisateur",
-    component: InscriptionUser,
+    component: LogPage,
   },
   {
     path: "/utilisateur/connexion",
     name: "Connexion_utilisateur",
-    component: ConnexionUser,
+    component: LogPage,
   },
   {
     path: "/Presentation_Mintonette_Cup",
