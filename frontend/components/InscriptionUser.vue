@@ -1,5 +1,3 @@
-ça ne marche pas là
-quand je change la taille de container_right l'espace entre les boutons radios et leur label change
 <template>
   <router-link to="/">{{ $t('homeLink') }}</router-link>
   <div class="container">
@@ -180,7 +178,7 @@ function changeOther(name) {
 }
 
 .separator {
-  width: 1px;
+  width: 2px;
   background-color: #ccc;
   margin: 0 20px;
 }

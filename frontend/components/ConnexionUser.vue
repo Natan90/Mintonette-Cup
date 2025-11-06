@@ -2,14 +2,14 @@
     <div class="container">
         <div class="content">
             <p class="title">{{ $t('user.connexion') }}</p>
-            <div class="item">
-                <label>{{ $t('user.login') }}</label><br>
+            <div class="item input_item">
                 <input :placeholder="$t('user.login')" v-model="login_utilisateur" />
+                <hr></hr>
             </div>
 
-            <div class="item">
-                <label>{{ $t('user.mdp') }}</label><br>
+            <div class="item input_item">
                 <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur" />
+                <hr></hr>
                 <!-- Faire un oeil pour montrer le mot de passe -->
             </div>
 
@@ -17,9 +17,8 @@
                 <button id="button_mdp_oublie"><u>Mot de passe oublié</u></button>
             </div>
 
-            <!-- Bouton Se connecter -->
             <div class="item">
-                <button @click="getValues" class="button_message button_connexion">{{ $t('user.buttonConnexion') }}</button>
+                <button @click="getValues" class="button_message button_connexion">{{ $t('user.buttonConnexion')}}</button>
                 <p v-if="message" id="message">{{ message }}</p>
             </div>
             <div class="item">
@@ -82,7 +81,8 @@ async function getValues() {
 .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    padding-left: 300px;
     justify-content: center;
     gap: 20px;
     height: 100vh;
@@ -114,32 +114,52 @@ async function getValues() {
 }
 
 .item {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin-bottom: 18px;
 }
 
-label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #333;
-    font-size: 15px;
+.item hr {
+  height: 3px;
+  border: none;
+  border-radius: 3px;
+  background: linear-gradient(to right, #1E90FF, #00C853);
+  margin: 5px 0 0 0;
+  padding: 0;
+  
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.7s ease;
+  opacity: 0.5;
+}
+
+.item input:focus + hr {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 input {
     display: block;
     width: 100%;
-    padding: 12px 14px;
+    padding: 12px 14px 0px 0px;
     font-size: 15px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: none;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.input_item {
+    height: 50px;
 }
 
 input:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+input::placeholder {
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 .mdp_oublie {
