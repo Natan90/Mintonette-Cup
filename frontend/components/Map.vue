@@ -26,6 +26,7 @@ import Projection from "ol/proj/Projection.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import router from "@/router";
+import { defaults as defaultInteractions } from "ol/interaction.js";
 
 let map;
 let coucheVecteur = null;
@@ -215,7 +216,6 @@ const serviceLocation = [
 ];
 
 // Gradin du nord (VIP)
-// 🟩 NORTH STAND
 const NorthStand = [
   {
     type: "stand",
@@ -462,8 +462,16 @@ onMounted(() => {
       projection,
       center: [500, 400],
       minZoom: 1,
-      maxZoom: 2,
+      maxZoom: 1,
       zoom: 1,
+    }),
+    interactions: defaultInteractions({
+      //Enleve tous 
+      dragPan: false, //Déplacement
+      mouseWheelZoom: false, // Zoom molette
+      doubleClickZoom: false, // Désactive le zoom double clic
+      pinchZoom: false, // Désactive le zoom tactile
+      keyboard: false,
     }),
   });
 
@@ -480,12 +488,12 @@ onMounted(() => {
     fill: new Fill({ color: "rgba(0,22,122,0.5)" }),
   });
   standStyle = new Style({
-    stroke: new Stroke({ color: "#ffff00", width: 2 }),
-    fill: new Fill({ color: "rgba(255,255,0,0.5)" }),
+    stroke: new Stroke({ color: "#000000", width: 2 }),
+    fill: new Fill({ color: "rgba(0,0,0,0.3)" }),
   });
   standHoverStyle = new Style({
-    stroke: new Stroke({ color: "#ffff00", width: 2 }),
-    fill: new Fill({ color: "rgba(255,255,0,0.3)" }),
+    stroke: new Stroke({ color: "#000000", width: 2 }),
+    fill: new Fill({ color: "rgba(0,0,0,0.5)" }),
   });
 
   featuresList.forEach((f) => {
@@ -526,8 +534,8 @@ onMounted(() => {
       label.style.fontSize = "14px";
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
-        label.style.backgroundColor = "#ffff00";
-        label.style.color = "black";
+        label.style.backgroundColor = "#000000";
+        label.style.color = "white";
       } else {
         searchFeature.setStyle(hoverStyle);
         label.style.backgroundColor = "#00167a";
