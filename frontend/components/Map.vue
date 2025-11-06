@@ -702,14 +702,12 @@ onMounted(() => {
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
         label.style.backgroundColor = "#000000";
-        label.style.color = "white";
       } else if (searchFeature.get("type") === "service") {
         searchFeature.setStyle(providerHoverStyle);
         label.style.backgroundColor = "#1F5E00";
       } else {
         searchFeature.setStyle(hoverStyle);
         label.style.backgroundColor = "#00167a";
-        label.style.color = "white";
       }
     } else {
       mapElement.style.cursor = "default";
@@ -849,7 +847,7 @@ body::-webkit-scrollbar {
   background: #fff;
   border-radius: 6px;
   font-size: 13px;
-  color: #00167a;
+  color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 </style>
