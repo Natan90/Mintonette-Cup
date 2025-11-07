@@ -1,5 +1,5 @@
 <template>
-    <nav class="barre-nav">
+    <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
       <router-link to="/">
         <img src="../images/logo.png" alt="logo" id="logo">
       </router-link>
@@ -31,8 +31,19 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 import { useUserStore } from '@/stores/user';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const userStore = useUserStore();
+const isInIndex = ref(route.path === '/');
+
+watch(
+  () => route.path,
+  (newPath) => {
+    isInIndex.value = newPath === '/'
+  }
+)
 
 function changeLanguage(lang) {
   locale.value = lang
@@ -63,6 +74,13 @@ body{
   font-size: 1.2em;
   width: 100%;
 }
+
+.barre-nav.blueBar {
+  background: none;
+  background-color: #00167a;
+  
+}
+
 #logo{
   height: 100px;
 }

@@ -13,6 +13,8 @@
 
     <Map> </Map>
 
+    <TableauMatchs></TableauMatchs>
+
     <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">
       <p>
@@ -41,6 +43,7 @@ import NavView from "@/components/NavView.vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
+import TableauMatchs from "./TableauMatchs.vue";
 
 const navbar = ref("0px");
 
