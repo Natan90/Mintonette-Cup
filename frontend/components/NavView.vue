@@ -3,7 +3,16 @@
       <router-link to="/">
         <img src="../images/logo.png" alt="logo" id="logo">
       </router-link>
-      <div class="log">
+<!--       <div class="log"> -->
+            <div class="routeurLink">
+      <router-link to="/" class="btnLink">Home</router-link><br />
+      <router-link to="/PrestatairePublic" class="btnLink"
+        >Prestataire(mode public)</router-link
+      >
+      <router-link to="/PrestatairePresta" class="btnLink"
+        >Prestataire (mode presta)</router-link
+      >
+  <!--   </div> -->
         <span>
           <button @click="changeLanguage('fr')"><img src="../images/france.png" alt="france" class="drapeau"></button> / 
           <button @click="changeLanguage('en')"><img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau"></button>

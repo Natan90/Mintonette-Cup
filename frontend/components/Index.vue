@@ -9,15 +9,7 @@
       </div>
     </div>
 
-    <div class="routeurLink">
-      <router-link to="/" class="btnLink">Home</router-link><br />
-      <router-link to="/PrestatairePublic" class="btnLink"
-        >Prestataire(mode public)</router-link
-      >
-      <router-link to="/PrestatairePresta" class="btnLink"
-        >Prestataire (mode presta)</router-link
-      >
-    </div>
+
 
     <Map> </Map>
 
