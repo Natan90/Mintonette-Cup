@@ -17,7 +17,7 @@
           <button @click="changeLanguage('fr')"><img src="../images/france.png" alt="france" class="drapeau"></button> / 
           <button @click="changeLanguage('en')"><img src="../images/grande-bretagne.png" alt="grande-bretagne" class="drapeau"></button>
         </span>
-        <span v-if="!userStore.isConnected"><strong><router-link to="/utilisateur/connexion">Se connecter</router-link> / <router-link to="/utilisateur/inscription">S'inscrire</router-link></strong></span>
+        <span v-if="!userStore.isConnected"><strong><router-link to="/utilisateur/connexion">{{ $t('user.buttonConnexion') }}</router-link> / <router-link to="/utilisateur/inscription">{{ $t('user.buttonInscription') }}</router-link></strong></span>
         <span v-else>Mon profil / Se déconnecter (menu burger)</span>
       </div>
     </nav>
@@ -56,9 +56,9 @@ body{
 <style scoped>
 .barre-nav{
   padding: 0;
-  background-color: #00167a;
+  background: linear-gradient(to bottom, #000000, transparent);
   display: flex;
-  justify-content: space-between; /*space-around*/
+  justify-content: space-between;
   color: white;
   font-size: 1.2em;
   width: 100%;

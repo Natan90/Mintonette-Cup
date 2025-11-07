@@ -36,10 +36,8 @@ const lastPolygon = ref(null);
 let map, vectorSource, drawInteraction;
 
 onMounted(() => {
-  // Définir la taille de ton image (pixels)
   const tailleMap = [0, 0, 1000, 800];
 
-  // ✅ Créer une projection pixel personnalisée
   const projection = new Projection({
     code: "ImagePixels",
     units: "pixels",
@@ -48,22 +46,19 @@ onMounted(() => {
 
   addProjection(projection);
 
-  // ✅ Calque d’image (ton fond)
   const imageLayer = new ImageLayer({
     source: new ImageStatic({
-      url: "/mapTerrain.png", // ton image
+      url: "/MapPresta.png", // ton image
       projection: projection,
       imageExtent: tailleMap,
     }),
   });
 
-  // ✅ Calque vectoriel pour le dessin
   vectorSource = new VectorSource();
   const vectorLayer = new VectorLayer({
     source: vectorSource,
   });
 
-  // ✅ Création de la carte
   map = new Map({
     target: mapContainer.value,
     layers: [imageLayer, vectorLayer],

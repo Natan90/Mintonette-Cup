@@ -1,6 +1,14 @@
 {
   "mintonetteCup": {
-    "title": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \nchanger l'image ( pas les bonnes couleurs ) "
+    "title": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \n"
+  },
+  "pageLog": {
+    "mdpOublie": "Mot de passe oublié ?",
+    "annuler": "Annuler",
+    "titreRejoindre": "Rejoignez-nous !",
+    "texteRejoindre": "Vous n’avez pas encore de compte ? Inscrivez-vous et commencez votre voyage avec nous dès aujourd’hui.",
+    "titreConnecter": "Heureux de vous revoir !",
+    "texteConnecter": "Déjà inscrit ? Connectez-vous ici."
   },
   "user": {
     "nom": "Nom",
@@ -15,7 +23,9 @@
     "femme": "Femme",
     "autre": "Autre"
     },
-    "buttonInscirption": "S'incrire",
+    "connexion": "Connexion",
+    "inscription": "Inscription",
+    "buttonInscription": "S'incrire",
     "buttonConnexion": "Se connecter"
   },
   "burgerStand": {

@@ -1,10 +1,24 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-
-const dbPath = path.resolve(__dirname, 'mintonette_cup.sqlite');
-const db = new sqlite3.Database(dbPath);
-
-console.log('Chemin de la DB :', dbPath);
+const { Pool } = require("pg");
+require("dotenv").config();
 
 
-module.exports = db;
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: Number(process.env.DB_PORT) || 5432,
+});
+
+
+pool.on("connect", () => {
+  console.log("Connecté à PostgreSQL");
+});
+
+
+pool.on("error", (err) => {
+  console.error("Erreur PostgreSQL:", err);
+});
+
+
+module.exports = pool;
