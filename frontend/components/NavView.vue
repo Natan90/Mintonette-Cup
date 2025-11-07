@@ -5,11 +5,11 @@
       </router-link>
 <!--       <div class="log"> -->
             <div class="routeurLink">
-      <router-link to="/" class="btnLink">Home</router-link><br />
-      <router-link to="/PrestatairePublic" class="btnLink"
+      <router-link to="/" class="">Home</router-link><br />
+      <router-link to="/PrestatairePublic" class=""
         >Prestataire(mode public)</router-link
       >
-      <router-link to="/PrestatairePresta" class="btnLink"
+      <router-link to="/PrestatairePresta" class=""
         >Prestataire (mode presta)</router-link
       >
   <!--   </div> -->
