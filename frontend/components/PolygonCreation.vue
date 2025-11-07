@@ -48,7 +48,7 @@ onMounted(() => {
 
   const imageLayer = new ImageLayer({
     source: new ImageStatic({
-      url: "/MapPresta.png", // ton image
+      url: "/MapTout.jpeg", // ton image
       projection: projection,
       imageExtent: tailleMap,
     }),
