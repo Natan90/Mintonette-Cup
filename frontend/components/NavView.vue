@@ -47,9 +47,9 @@ body{
 <style scoped>
 .barre-nav{
   padding: 0;
-  background-color: #00167a;
+  background: linear-gradient(to bottom, #000000, transparent);
   display: flex;
-  justify-content: space-between; /*space-around*/
+  justify-content: space-between;
   color: white;
   font-size: 1.2em;
   width: 100%;
