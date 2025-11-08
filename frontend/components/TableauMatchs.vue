@@ -5,7 +5,7 @@
                 <div class="match_group">
                     <div class="match">
                         <div class="equipe">test</div>
-                        <div class="equipe">test</div>
+                        <div class="equipe">test </div>
                     </div>
                     <div class="match">
                         <div class="equipe">test</div>
@@ -19,7 +19,7 @@
                         <div class="equipe">test</div>
                     </div>
                     <div class="match">
-                        <div class="equipe">test</div>
+                        <div class="equipe">test </div>
                         <div class="equipe">test</div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
 
                 <div class="match_group">
                     <div class="match">
-                        <div class="equipe">test</div>
+                        <div class="equipe">test </div>
                         <div class="equipe">test</div>
                     </div>
                     <div class="match">

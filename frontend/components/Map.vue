@@ -8,7 +8,6 @@
     @click="goBack">
     Retour
   </button>
-  <pre>{{ currentMapType }}</pre>
   <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
   <div class="hoverName" id="hoverName"></div>
 </template>
