@@ -915,10 +915,16 @@ onMounted(() => {
       changeMap("stand", image);
     } else if (type === "generalZone") {
       const image = clickedFeature.get("image");
-      changeMap("generalZone", image);
+
+      // Déterminer le type réel de la zone en fonction de l'image
+      if (image === "/mapTerrain.png") {
+        currentMapType.value = "terrains";
+      } else {
+        currentMapType.value = "prestataires";
+      }
+      changeMap(currentMapType.value, image);
     } else {
       //Si c’est un terrain ou prestataire → redirection
-      currentMapType.value = "terrain";
       const url = clickedFeature.get("url");
       if (url) router.push(url);
     }
@@ -943,6 +949,7 @@ function changeMap(type, image = null) {
   if (type === "prestataires") imageUrl = "/MapPresta.png";
   if (type === "stand" && image) imageUrl = image;
   if (type === "generalZone" && image) imageUrl = image;
+  if (type === "terrains") imageUrl = "/mapTerrain.png";
 
   // Ajoute la nouvelle image
   const newImageLayer = new ImageLayer({
@@ -995,13 +1002,18 @@ function changeMap(type, image = null) {
 }
 
 function goBack() {
-  if (currentMapType.value === "stand") {
-    changeMap("terrains", "/mapTerrain.png");
-  } else if (
-    currentMapType.value === "terrains" ||
-    currentMapType.value === "prestataires"
-  ) {
-    changeMap("generalZone", "/MapTout.jpeg");
+  switch (currentMapType.value) {
+    case "stand":
+      changeMap("terrains", "/mapTerrain.png");
+      break;
+    case "terrains":
+      changeMap("generalZone", "/MapTout.jpeg");
+      break;
+    case "prestataires":
+      changeMap("generalZone", "/MapTout.jpeg");
+      break;
+    default:
+      break;
   }
 }
 </script>
