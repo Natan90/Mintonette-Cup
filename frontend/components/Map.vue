@@ -2,7 +2,13 @@
   <div class="button"></div>
   <!-- Balise vide pour insérer la map -->
   <div class="map" id="map"></div>
-  <button class="SwitchButton" @click="changeMap('generalZone')">Retour</button>
+  <button
+    v-if="currentMapType !== 'generalZone'"
+    class="SwitchButton"
+    @click="goBack">
+    Retour
+  </button>
+  <pre>{{ currentMapType }}</pre>
   <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
   <div class="hoverName" id="hoverName"></div>
 </template>
@@ -23,13 +29,17 @@ import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import router from "@/router";
 import { defaults as defaultInteractions } from "ol/interaction.js";
+import { ref } from "vue";
 
 let map;
+const currentMapType = ref("generalZone");
 let coucheVecteur = null;
 let hoverStyle = null;
 let defaultStyle = null;
 let providerStyle = null;
 let providerHoverStyle = null;
+let generalStyle = null;
+let generalHoverStyle = null;
 let standStyle;
 let standHoverStyle;
 let lastFeature = null;
@@ -814,12 +824,19 @@ onMounted(() => {
     stroke: new Stroke({ color: "#2E8B00", width: 2 }),
     fill: new Fill({ color: "rgba(68,172,16,0.7)" }),
   });
+  generalStyle = new Style({
+    stroke: new Stroke({ color: "#CC3300", width: 2 }),
+    fill: new Fill({ color: "rgba(204,51,0,0.4)" }),
+  });
+  generalHoverStyle = new Style({
+    stroke: new Stroke({ color: "#FF6600", width: 2 }),
+    fill: new Fill({ color: "rgba(255,102,0,0.6)" }),
+  });
 
   featuresList.forEach((f) => {
     if (f.get("type") === "stand") f.setStyle(standStyle);
     else if (f.get("type") === "service") f.setStyle(providerStyle);
-    else if (f.get("type") === "generalZone")
-      f.setStyle(standStyle); //ICI CRÉER UNE NOUVELLE COULEUR
+    else if (f.get("type") === "generalZone") f.setStyle(generalStyle);
     else f.setStyle(defaultStyle);
   });
 
@@ -845,8 +862,7 @@ onMounted(() => {
         else if (lastFeature.get("type") === "service")
           lastFeature.setStyle(providerStyle);
         else if (lastFeature.get("type") === "generalZone")
-          //ICI AUSSI FAUT METTRE LA COUELEUR
-          lastFeature.setStyle(standStyle);
+          lastFeature.setStyle(generalStyle);
         else lastFeature.setStyle(defaultStyle);
       }
     }
@@ -855,17 +871,21 @@ onMounted(() => {
       const name = searchFeature.get("name");
       const pixel = event.originalEvent;
       label.style.display = "block";
-      label.style.left = pixel.pageX + 10 + "px";
+      label.style.left = pixel.pageX + 8 + "px";
       label.style.top = pixel.pageY - 25 + "px";
       label.innerText = name;
       mapElement.style.cursor = "pointer";
-      label.style.fontSize = "14px";
+      label.style.fontSize = "12px";
+      label.style.padding = "2px 6px";
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
         label.style.backgroundColor = "#000000";
       } else if (searchFeature.get("type") === "service") {
         searchFeature.setStyle(providerHoverStyle);
         label.style.backgroundColor = "#1F5E00";
+      } else if (searchFeature.get("type") === "generalZone") {
+        searchFeature.setStyle(generalHoverStyle);
+        label.style.backgroundColor = "#FF6600";
       } else {
         searchFeature.setStyle(hoverStyle);
         label.style.backgroundColor = "#00167a";
@@ -890,6 +910,7 @@ onMounted(() => {
     if (type === "stand") {
       // Récupère l'image du gradin
       const image = clickedFeature.get("image");
+      currentMapType.value = "stand";
       // Appelle changeMap avec cette image
       changeMap("stand", image);
     } else if (type === "generalZone") {
@@ -897,6 +918,7 @@ onMounted(() => {
       changeMap("generalZone", image);
     } else {
       //Si c’est un terrain ou prestataire → redirection
+      currentMapType.value = "terrain";
       const url = clickedFeature.get("url");
       if (url) router.push(url);
     }
@@ -904,6 +926,7 @@ onMounted(() => {
 });
 function changeMap(type, image = null) {
   if (!map) return;
+  currentMapType.value = type; //Pour mémoriser le type de carte actif
 
   // Supprime la couche de zones
   if (coucheVecteur) {
@@ -918,7 +941,7 @@ function changeMap(type, image = null) {
   // Définit l'image à afficher
   let imageUrl = "/MapTout.jpeg";
   if (type === "prestataires") imageUrl = "/MapPresta.png";
-  if (type === "stand" && image) imageUrl = image; // image spécifique au gradin
+  if (type === "stand" && image) imageUrl = image;
   if (type === "generalZone" && image) imageUrl = image;
 
   // Ajoute la nouvelle image
@@ -932,27 +955,26 @@ function changeMap(type, image = null) {
   map.getLayers().insertAt(0, newImageLayer);
 
   // Détermine quelle liste de zones afficher
-let zone = [];
+  let zone = [];
 
-if (type === "generalZone") {
-  if (!image || image === "/MapTout.jpeg") {
-    zone = generalMap; 
-  } else if (image === "/mapTerrain.png") {
+  if (type === "generalZone") {
+    if (!image || image === "/MapTout.jpeg") {
+      zone = generalMap;
+    } else if (image === "/mapTerrain.png") {
+      zone = landLocations;
+    } else if (image === "/MapPresta.png") {
+      zone = serviceLocation;
+    }
+  } else if (type === "terrains") {
     zone = landLocations;
-  } else if (image === "/MapPresta.png") {
+  } else if (type === "prestataires") {
     zone = serviceLocation;
+  } else if (type === "stand") {
+    if (image === "/GradinNord.png") zone = NorthStand;
+    else if (image === "/GradinEst.png") zone = EstStand;
+    else if (image === "/GradinSud.png") zone = SouthStand;
+    else if (image === "/GradinOuest.png") zone = WestStand;
   }
-} else if (type === "terrains") {
-  zone = landLocations;
-} else if (type === "prestataires") {
-  zone = serviceLocation;
-} else if (type === "stand") {
-  if (image === "/GradinNord.png") zone = NorthStand;
-  else if (image === "/GradinEst.png") zone = EstStand;
-  else if (image === "/GradinSud.png") zone = SouthStand;
-  else if (image === "/GradinOuest.png") zone = WestStand;
-}
-
 
   // Si aucune zone à afficher, on s'arrête ici
   if (zone.length === 0) return;
@@ -962,6 +984,7 @@ if (type === "generalZone") {
   featuresList.forEach((f) => {
     if (f.get("type") === "stand") f.setStyle(standStyle);
     else if (f.get("type") === "service") f.setStyle(providerStyle);
+    else if (f.get("type") === "generalZone") f.setStyle(generalStyle);
     else f.setStyle(defaultStyle);
   });
 
@@ -969,6 +992,17 @@ if (type === "generalZone") {
   const sourceVecteur = new VectorSource({ features: featuresList });
   coucheVecteur = new VectorLayer({ source: sourceVecteur });
   map.addLayer(coucheVecteur);
+}
+
+function goBack() {
+  if (currentMapType.value === "stand") {
+    changeMap("terrains", "/mapTerrain.png");
+  } else if (
+    currentMapType.value === "terrains" ||
+    currentMapType.value === "prestataires"
+  ) {
+    changeMap("generalZone", "/MapTout.jpeg");
+  }
 }
 </script>
 
