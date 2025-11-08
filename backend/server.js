@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const pool = require("./database/db");
 const authRoutes = require("./routes/authRoutes");
+const paysRoutes = require("./routes/equipes/equipes");
 const utilisateursRoutes = require("./routes/utilisateurs");
 
 const swaggerUi = require("swagger-ui-express");
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/utilisateur", authRoutes);
+app.use("/pays", paysRoutes);
 
 // Swagger
 const swaggerSpec = require('./swagger');

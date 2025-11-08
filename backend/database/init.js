@@ -1,4 +1,4 @@
-const pool = require("./db"); 
+const pool = require("./db");
 
 (async () => {
   try {
@@ -27,11 +27,12 @@ const pool = require("./db");
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
 
-      CREATE TABLE IF NOT EXISTS Club(
-        id_club SERIAL PRIMARY KEY,
-        nom_club VARCHAR(50),
+      CREATE TABLE IF NOT EXISTS Pays(
+        id_pays SERIAL PRIMARY KEY,
+        nom_pays VARCHAR(50),
         couleur_maillot VARCHAR(50),
         nom_mascotte VARCHAR(50),
+        qualifie BOOLEAN,
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
 
@@ -39,7 +40,7 @@ const pool = require("./db");
         id_equipe SERIAL PRIMARY KEY,
         sexe_equipe VARCHAR(50),
         nb_joueurs INTEGER,
-        id_club INTEGER NOT NULL REFERENCES Club(id_club)
+        id_pays INTEGER NOT NULL REFERENCES Pays(id_pays)
       );
 
       CREATE TABLE IF NOT EXISTS Joueur(
@@ -50,6 +51,21 @@ const pool = require("./db");
         date_naissance_joueur DATE,
         numero_joueur INTEGER,
         id_equipe INTEGER NOT NULL REFERENCES Equipe(id_equipe)
+      );
+
+      CREATE TABLE IF NOT EXISTS ClassementPoule (
+        id_classement SERIAL PRIMARY KEY,
+        id_equipe INTEGER NOT NULL REFERENCES Equipe(id_equipe),
+        poule CHAR(1) NOT NULL,
+        matchs_joues INTEGER,
+        victoires INTEGER,
+        defaites INTEGER,
+        points INTEGER,
+        sets_gagnes INTEGER,
+        sets_perdus INTEGER,
+        points_pour INTEGER,
+        points_contre INTEGER,
+        qualifie BOOLEAN DEFAULT FALSE
       );
 
       CREATE TABLE IF NOT EXISTS Aliment(
@@ -315,9 +331,165 @@ const pool = require("./db");
         ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', '2005-09-30', 'M'),
         ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', '2001-04-20', 'F'),
         ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '1997-02-13', 'M')
-      ON CONFLICT DO NOTHING;
     `;
     await pool.query(insertUsers);
+
+    const insertPays = `
+    INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES
+    ('France', 'Bleu / Blanc', 'José le portemanteau', true, 1),
+    ('Allemagne', 'Noir / Rouge', 'Adler', true, 1),
+    ('Argentine', 'Bleu ciel / Blanc', 'El Cóndor', true, 1),
+    ('Italie', 'Bleu (Azzurro)', 'Il Leone Azzurro', true, 1),
+    ('Canada', 'Rouge / Blanc', 'Maple Leaf', true, 1),
+    ('Bulgarie', 'Vert / Blanc', 'Le Lion Vert', true, 1),
+    ('Brésil', 'Jaune / Vert', 'Curupira', true, 1),
+    ('Cuba', 'Rouge / Bleu', 'Le Taureau Cubain', true, 1),
+    ('États-Unis', 'Bleu marine / Rouge', 'Stars & Stripes Eagle', true, 1),
+    ('Slovénie', 'Bleu‑clair / Blanc', 'Le Lynx Slovène', true, 1),
+    ('Iran', 'Vert / Blanc', 'Le Lion Perse', true, 1),
+    ('Ukraine', 'Bleu / Jaune', 'L’Ourson Bleu‑Jaune', true, 1),
+    ('Chine', 'Rouge / Jaune', 'Le Dragon Rouge', true, 1),
+    ('Japon', 'Blanc / Rouge', 'Le Samouraï Rouge', true, 1),
+    ('Pologne', 'Blanc / Rouge', 'La Bête Blanche', true, 1),
+    ('Serbie', 'Bleu / Rouge', 'Le Faucon Serbe', true, 1),
+    ('Pays‑Bas', 'Orange', 'Le Lion Orange', true, 1),
+    ('Turquie', 'Rouge / Blanc', 'Le Croissant Rouge', false, 1),
+    ('Belgique', 'Noir / Jaune', 'Le Tricolore', false, 1),
+    ('Espagne', 'Rouge / Jaune', 'Le Taureau Furia', false, 1),
+    ('Angleterre', 'Blanc / Bleu', 'Le Lion Britannique', false, 1),
+    ('Thaïlande', 'Bleu / Rouge', 'Le Garuda Bleu', false, 1),
+    ('Kazakhstan', 'Bleu ciel / Jaune', 'L’Aigle d’Or', false, 1),
+    ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
+    ('Australie', 'Vert / Or', 'Le Kangourou Vert', false, 1),
+    ('Paraguay', 'Rouge / Blanc', 'Le Guarani Rouge', false, 1),
+    ('Uruguay', 'Bleu ciel / Blanc', 'Le Carrousel Bleu', false, 1),
+    ('Afrique du Sud', 'Vert / Or', 'Le Springbok Jaune‑Vert', false, 1),
+    ('Maroc', 'Rouge / Vert', 'Le Lion de l’Atlas', false, 1),
+    ('Arabie Saoudite', 'Vert / Blanc', 'Le Faucon Saoudien', false, 1),
+    ('Tunisie', 'Rouge / Blanc', 'Le Scorpion Rouge', false, 1),
+    ('Saint‑Marin', 'Bleu / Blanc', 'Le Gardien du Roc', false, 1);
+    `;
+
+    await pool.query(insertPays);
+
+    const insertEquipes = `
+    INSERT INTO Equipe (sexe_equipe, nb_joueurs, id_pays) VALUES
+    ('Homme', 12, 1),  -- France
+    ('Homme', 12, 2),  -- Allemagne
+    ('Homme', 12, 3),  -- Argentine
+    ('Homme', 12, 4),  -- Italie
+    ('Homme', 12, 5),  -- Canada
+    ('Homme', 12, 6),  -- Bulgarie
+    ('Homme', 12, 7),  -- Brésil
+    ('Homme', 12, 8),  -- Cuba
+    ('Homme', 12, 9),  -- États-Unis
+    ('Homme', 12, 10), -- Slovénie
+    ('Homme', 12, 11), -- Iran
+    ('Homme', 12, 12), -- Ukraine
+    ('Homme', 12, 13), -- Chine
+    ('Homme', 12, 14), -- Japon
+    ('Homme', 12, 15), -- Pologne
+    ('Homme', 12, 16), -- Serbie
+    ('Homme', 12, 17), -- Pays-Bas
+    ('Homme', 12, 18), -- Turquie
+    ('Homme', 12, 19), -- Belgique
+    ('Homme', 12, 20), -- Espagne
+    ('Homme', 12, 21), -- Angleterre
+    ('Homme', 12, 22), -- Thaïlande
+    ('Homme', 12, 23), -- Kazakhstan
+    ('Homme', 12, 24), -- Corée du Sud
+    ('Homme', 12, 25), -- Australie
+    ('Homme', 12, 26), -- Paraguay
+    ('Homme', 12, 27), -- Uruguay
+    ('Homme', 12, 28), -- Afrique du Sud
+    ('Homme', 12, 29), -- Maroc
+    ('Homme', 12, 30), -- Arabie Saoudite
+    ('Homme', 12, 31), -- Tunisie
+    ('Homme', 12, 32), -- Saint Marin
+    ('Femme', 12, 1),  -- France
+    ('Femme', 12, 2),  -- Allemagne
+    ('Femme', 12, 3),  -- Argentine
+    ('Femme', 12, 4),  -- Italie
+    ('Femme', 12, 5),  -- Canada
+    ('Femme', 12, 6),  -- Bulgarie
+    ('Femme', 12, 7),  -- Brésil
+    ('Femme', 12, 8),  -- Cuba
+    ('Femme', 12, 9),  -- États-Unis
+    ('Femme', 12, 10), -- Slovénie
+    ('Femme', 12, 11), -- Iran
+    ('Femme', 12, 12), -- Ukraine
+    ('Femme', 12, 13), -- Chine
+    ('Femme', 12, 14), -- Japon
+    ('Femme', 12, 15), -- Pologne
+    ('Femme', 12, 16), -- Serbie
+    ('Femme', 12, 17), -- Pays-Bas
+    ('Femme', 12, 18), -- Turquie
+    ('Femme', 12, 19), -- Belgique
+    ('Femme', 12, 20), -- Espagne
+    ('Femme', 12, 21), -- Angleterre
+    ('Femme', 12, 22), -- Thaïlande
+    ('Femme', 12, 23), -- Kazakhstan
+    ('Femme', 12, 24), -- Corée du Sud
+    ('Femme', 12, 25), -- Australie
+    ('Femme', 12, 26), -- Paraguay
+    ('Femme', 12, 27), -- Uruguay
+    ('Femme', 12, 28), -- Afrique du Sud
+    ('Femme', 12, 29), -- Maroc
+    ('Femme', 12, 30), -- Arabie Saoudite
+    ('Femme', 12, 31), -- Tunisie
+    ('Femme', 12, 32); -- Saint Marin
+    `;
+
+    await pool.query(insertEquipes);
+
+
+    const insertClassementPoule = `
+    INSERT INTO ClassementPoule
+    (id_equipe, poule, matchs_joues, victoires, defaites, points, sets_gagnes, sets_perdus, points_pour, points_contre, qualifie)
+    VALUES
+    -- Poule A
+    (1, 'A', 6, 4, 2, 10, 14, 6, 300, 240, TRUE),
+    (2, 'A', 6, 3, 3, 6, 10, 12, 280, 290, TRUE),
+    (23, 'A', 6, 2, 4, 2, 4, 16, 220, 300, FALSE),
+    (26, 'A', 6, 1, 5, -2, 2, 12, 200, 260, FALSE),
+    -- Poule B
+    (14, 'B', 6, 4, 2, 10, 18, 4, 320, 240, TRUE),
+    (8, 'B', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
+    (29, 'B', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
+    (32, 'B', 6, 0, 6, -6, 4, 14, 240, 320, FALSE),
+    -- Poule C
+    (7, 'C', 6, 6, 0, 18, 16, 2, 310, 230, TRUE),
+    (16, 'C', 6, 4, 2, 10, 12, 6, 290, 250, TRUE),
+    (19, 'C', 6, 2, 4, 2, 8, 14, 260, 280, FALSE),
+    (31, 'C', 6, 0, 6, -6, 4, 14, 240, 310, FALSE),
+    -- Poule D
+    (3, 'D', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
+    (6, 'D', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
+    (17, 'D', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
+    (25, 'D', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
+    -- Poule E
+    (4, 'E', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
+    (12, 'E', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
+    (22, 'E', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
+    (28, 'E', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
+    -- Poule F
+    (10, 'F', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
+    (18, 'F', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
+    (21, 'F', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
+    (27, 'F', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
+    -- Poule G
+    (15, 'G', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
+    (9, 'G', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
+    (13, 'G', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
+    (30, 'G', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
+    -- Poule H
+    (5, 'H', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
+    (11, 'H', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
+    (20, 'H', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
+    (24, 'H', 6, 0, 6, -6, 4, 16, 240, 320, FALSE);
+    `;
+
+    await pool.query(insertClassementPoule);
 
     console.log("Base PostgreSQL Mintonette Cup initialisée !");
   } catch (err) {
