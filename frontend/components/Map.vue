@@ -1020,6 +1020,7 @@ body::-webkit-scrollbar {
 }
 
 .hoverName {
+  display: none;
   z-index: 9999;
   position: absolute;
   padding: 6px 10px;
