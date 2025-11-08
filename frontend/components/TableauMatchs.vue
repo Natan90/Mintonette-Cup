@@ -107,8 +107,6 @@ onMounted(async () => {
 
 
 
-
-
 <style>
 :root {
     /* Coordonnées à laquelle commencent les barres */
@@ -116,7 +114,7 @@ onMounted(async () => {
     --horizontalVal: -50px;
 
     /* Le gap entre les deux matchs du round4  */
-    --gapBetweenRound4Matchs: 130px;
+    --gapBetweenRound4Matchs: 70px;
     /* Le padding en hauteur entre les deux matchs du round4 */
     --paddingBottomRound4Matchs: 50px;
     /* La taille de la barre horizontale qui reçoitle gagnant du round8 */
@@ -129,7 +127,7 @@ onMounted(async () => {
     --horizontalBarHeightWidth: 2px;
 
     /* Calcul de la hauteur de la barre verticale */
-    --heightVerticalBarRound4: calc(100% + var(--gapBetweenRound4Matchs) + var(--paddingBottomRound4Matchs) + var(--widthHorizontalBar));
+    --heightVerticalBarRound4: calc(100% + var(--gapBetweenRound4Matchs) + var(--paddingBottomRound4Matchs) + var(--widthHorizontalBar) + 20px);
 
     /* Calcul de la hauteur des matchs du round2 */
     --heightVerticalMatchsRound2: calc(var(var(--heightVerticalBarRound4) - 100%));
@@ -181,7 +179,7 @@ onMounted(async () => {
 }
 
 .round8 {
-    justify-content: space-between;
+    justify-content: space-evenly;
     height: 100%;
 }
 
@@ -206,7 +204,7 @@ onMounted(async () => {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
 }
 
@@ -227,11 +225,9 @@ onMounted(async () => {
     width: 90px;
     margin: 0px 10px;
     padding: 8px 5px;
-    /* Padding vertical fixe */
     border-left: 2px solid var(--barColor);
     border-right: 2px solid var(--barColor);
     line-height: 1.4em;
-    /* Hauteur de ligne fixe */
 }
 
 .equipe:first-child {
@@ -242,7 +238,8 @@ onMounted(async () => {
     border-bottom: 2px solid var(--barColor);
 }
 
-.round8 .match {
+.round8 .match:first-child,
+.round8 .match:nth-child(2) {
     margin-bottom: 40px;
 }
 
@@ -254,12 +251,23 @@ onMounted(async () => {
 .round8 .match_group::before {
     content: '';
     position: absolute;
-    top: var(--verticalVal);
-    bottom: calc(30px + 1px);
+    
     width: 2px;
     background-color: var(--barColor);
 }
 
+.round8 .match_group:first-child::before, 
+.round8 .match_group:nth-child(3):before {
+    top: var(--verticalVal);
+    bottom: 0;
+}
+
+.round8 .match_group:nth-child(2):before,
+.round8 .match_group:nth-child(4):before {
+    top: 0;
+    bottom: var(--verticalVal);
+    transform: translateY(-45%);
+}
 
 .bracket_left .round8 .match_group::before {
     right: var(--horizontalVal);
@@ -336,5 +344,14 @@ onMounted(async () => {
     height: var(--heightVerticalBarRound4);
     width: var(--widthHorizontalBar);
     background-color: var(--barColor);
+}
+
+.bracket_left .round4 .match_group:nth-child(2),
+.bracket_right .round4 .match_group:nth-child(2) {
+    transform: translateY(-5px);
+}
+
+.round8 .match_group:nth-child(4) {
+    /* transform: translateY(-15px); */
 }
 </style>
