@@ -585,7 +585,7 @@ const WestStand = [
 //Prestataires  #########################################################################################################""
 const serviceLocation = [
   {
-    name: "Stand de Burger",
+    name: "Presta 1",
     type: "service",
     coord: [
       [117.77873110791089, 309.03570203971947],
