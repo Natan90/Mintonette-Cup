@@ -193,6 +193,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 1",
+    url: "../Terrains/terrain_1",
     coord: [
       [222, 375],
       [480, 375],
@@ -204,6 +205,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 2",
+    url: "../Terrains/terrain_2",
     coord: [
       [525, 375],
       [775, 375],
@@ -215,6 +217,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 3",
+    url: "../Terrains/terrain_3",
     coord: [
       [210, 180],
       [478, 180],
@@ -226,6 +229,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 4",
+    url: "../Terrains/terrain_4",
     coord: [
       [525, 180],
       [783, 180],
@@ -754,6 +758,8 @@ onMounted(() => {
   map = new Map({
     target: "map",
     layers: [mapLayer],
+    controls: [], //Enlève le bouton plus et moins
+    interactions: [], // Enlève le zoom, dezoom, drag, mouvement...
     view: new View({
       projection,
       center: [500, 400],
@@ -761,14 +767,7 @@ onMounted(() => {
       maxZoom: 1,
       zoom: 1,
     }),
-    interactions: defaultInteractions({
-      //Enleve tous
-      dragPan: false, //Déplacement
-      mouseWheelZoom: false, // Zoom molette
-      doubleClickZoom: false, // Désactive le zoom double clic
-      pinchZoom: false, // Désactive le zoom tactile
-      keyboard: false,
-    }),
+
   });
 
   //On ajoute les tableaux des coordonnées
