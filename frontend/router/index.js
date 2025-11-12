@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Index from "@/components/Index.vue";
-import PrestatairePublic from "@/components/PrestatairePublic.vue";
-import PrestatairePresta from "@/components/PrestatairePresta.vue";
-import Commander from "@/components/Commander.vue";
-import Reserver from "@/components/Reserver.vue";
+import Index from "@/views/Index.vue";
+import PrestatairePublic from "@/views/PrestatairePublic.vue";
+import PrestatairePresta from "@/views/PrestatairePresta.vue";
+import Commander from "@/views/Commander.vue";
+import Reserver from "@/views/Reserver.vue";
 import Utilisateur from "@/components/Utilisateur.vue";
-import PresentationMintonette from "@/components/PresentationMintonette.vue";
-import PolygonCreation from "@/components/PolygonCreation.vue";
+import PresentationMintonette from "@/views/PresentationMintonette.vue";
+import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
-import terrain1 from "@/components/Terrains/terrain1.vue";
-import terrain2 from "@/components/Terrains/terrain2.vue";
-import terrain3 from "@/components/Terrains/terrain3.vue";
-import terrain4 from "@/components/Terrains/terrain4.vue";
+import terrain1 from "@/views/Terrains/terrain1.vue";
+import terrain2 from "@/views/Terrains/terrain2.vue";
+import terrain3 from "@/views/Terrains/terrain3.vue";
+import terrain4 from "@/views/Terrains/terrain4.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Index },

@@ -43,7 +43,7 @@ import NavView from "@/components/NavView.vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
-import TableauMatchs from "./TableauMatchs.vue";
+import TableauMatchs from "../views/TableauMatchs.vue";
 
 const navbar = ref("0px");
 
