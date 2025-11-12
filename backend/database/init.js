@@ -36,6 +36,7 @@ const pool = require("./db");
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
 
+
       CREATE TABLE IF NOT EXISTS Equipe(
         id_equipe SERIAL PRIMARY KEY,
         sexe_equipe VARCHAR(50),
