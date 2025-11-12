@@ -81,29 +81,24 @@
                         <div class="item_radio">
                             <div class="radio_group">
                                 <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.homme')"
-                                    :value="$t('user.typeSexe.homme')" name="sexe" @click="changeOther('homme')">
+                                    :value="$t('user.typeSexe.homme')" name="sexe">
                                 <label :for="$t('user.typeSexe.homme')">{{ $t('user.typeSexe.homme') }}</label>
                             </div>
 
 
                             <div class="radio_group">
                                 <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.femme')"
-                                    :value="$t('user.typeSexe.femme')" name="sexe" @click="changeOther('femme')">
+                                    :value="$t('user.typeSexe.femme')" name="sexe">
                                 <label :for="$t('user.typeSexe.femme')">{{ $t('user.typeSexe.femme') }}</label>
                             </div>
 
 
                             <div class="radio_group">
                                 <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.autre')"
-                                    :value="$t('user.typeSexe.autre')" name="sexe" @click="changeOther('autre')">
+                                    :value="$t('user.typeSexe.autre')" name="sexe">
                                 <label :for="$t('user.typeSexe.autre')">{{ $t('user.typeSexe.autre') }}</label>
                             </div>
 
-                        </div>
-                        <div v-if="isOther" class="item">
-                            <label></label>
-                            <input v-model="autre_sexe_utilisateur" :placeholder="$t('user.typeSexe.autre')"></input>
-                            <hr />
                         </div>
                     </div>
 
@@ -165,7 +160,6 @@ const userId = ref(0);
 const router = useRouter();
 const userStore = useUserStore();
 
-const isOther = ref(false);
 
 
 const valueTexts = computed(() => {
@@ -238,14 +232,6 @@ async function getValuesInscription() {
     }
 }
 
-function changeOther(name) {
-  if (name != 'autre') {
-    isOther.value = false;
-  }
-  else {
-    isOther.value = true;
-  }
-}
 
 function moveCard() {
     showRegister.value = !showRegister.value;
