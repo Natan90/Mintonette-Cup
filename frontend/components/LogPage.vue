@@ -187,8 +187,8 @@ async function getValuesConnexion() {
 
     try {
         const res = await axios.post('http://localhost:3000/utilisateur/connexion', {
-            login: login_utilisateur.value,
-            mdp: mdp_utilisateur.value,
+            login: login_utilisateur_connexion.value,
+            mdp: mdp_utilisateur_connexion.value,
         });
         userStore.setUser(res.data.user.id);
         userId.value = userStore.userId;
