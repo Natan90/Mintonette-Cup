@@ -77,6 +77,12 @@ const pool = require("./db");
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
 
+      CREATE TABLE IF NOT EXISTS Prestataire(
+        id_prestataire SERIAL PRIMARY KEY,
+        nom_prestataire VARCHAR(50),
+        type_prestataire VARCHAR(50)
+      );
+
 
       CREATE TABLE IF NOT EXISTS Equipe(
         id_equipe SERIAL PRIMARY KEY,
@@ -375,6 +381,18 @@ const pool = require("./db");
         ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '1997-02-13', 'M')
     `;
     await pool.query(insertUsers);
+
+    const insertPrestataire = `
+    INSERT INTO Prestataire (nom_prestataire, type_prestataire) VALUES
+      ('FoodExpress', 'Restauration'),
+      ('AnimEvent', 'Animation'),
+      ('SecurePlus', 'Sécurité'),
+      ('SportMerch', 'Boutique'),
+      ('LogiTrans', 'Logistique'),
+      ('TechLight', 'Technique');
+    `;
+    await pool.query(insertPrestataire);
+
 
     const insertPays = `
     INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES

@@ -5,6 +5,7 @@ const router = express.Router();
 const pool = require("./database/db");
 const authRoutes = require("./routes/authRoutes");
 const paysRoutes = require("./routes/equipes/equipes");
+const prestataireRoutes = require("./routes/prestataire/prestataire");
 const utilisateursRoutes = require("./routes/utilisateurs");
 
 const swaggerUi = require("swagger-ui-express");
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/utilisateur", authRoutes);
 app.use("/pays", paysRoutes);
+app.use("/prestataire", prestataireRoutes);
 
 // Swagger
 const swaggerSpec = require("./swagger");

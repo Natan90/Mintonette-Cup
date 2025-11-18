@@ -12,6 +12,7 @@ import terrain1 from "@/views/Terrains/terrain1.vue";
 import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
 import terrain4 from "@/views/Terrains/terrain4.vue";
+import AddPrestataire from "@/views/AddPrestataire.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Index },
@@ -25,6 +26,12 @@ const routes = [
     name: "PrestatairePresta",
     component: PrestatairePresta,
   },
+  {
+    path: "/Prestataire/Add",
+    name: "AddPrtestataire",
+    component: AddPrestataire
+  },
+
   { path: "/Commander", name: "Commander", component: Commander },
   { path: "/Reserver", name: "Reserver", component: Reserver },
   { path: "/Utilisateur", name: "Utilisateur", component: Utilisateur },
