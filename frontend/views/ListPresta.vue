@@ -1,13 +1,14 @@
-<template lang="">
+<template>
     <div>
-        
+        fdbdfb
     </div>
 </template>
-<script>
-export default {
-    
-}
+
+
+<script setup>
 </script>
-<style lang="">
+
+
+<style scoped>
     
 </style>

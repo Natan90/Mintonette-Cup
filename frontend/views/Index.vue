@@ -20,8 +20,7 @@
       <p>
         <span id="title">Titre du prestataire</span>
         <br />
-        <span id="descri"
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        <span id="descri">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
           aliquip ex ea commodo consequat. Duis aute irure dolor in
@@ -32,9 +31,16 @@
       </p>
     </div>
   </div>
-   <router-link to="/PolygoneCreation" class="btnLink"
-        >Truc de Mathis pour les polygones</router-link
-      >
+  <router-link to="/PolygoneCreation" class="btnLink">Truc de Mathis pour les polygones</router-link>
+  <br /><br />
+
+  <div class="presta_formulaire">
+    <ListPresta></ListPresta>
+    <Formulaire></Formulaire>
+  </div>
+
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
   <Footer></Footer>
 </template>
 
@@ -44,6 +50,8 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
+import ListPresta from "./ListPresta.vue";
+import Formulaire from "./Formulaire.vue";
 
 const navbar = ref("0px");
 
@@ -68,6 +76,7 @@ onBeforeUnmount(() => {
 body::-webkit-scrollbar {
   display: none;
 }
+
 :root {
   /* Couleurs */
   --primary-color: #00167a;
@@ -129,7 +138,15 @@ body::-webkit-scrollbar {
   font-weight: bold;
   transition: font-size 0.3s ease;
 }
+
 #descri {
   font-size: 0.7em;
+}
+
+.presta_formulaire {
+  background: linear-gradient(135deg, var(--colorGradientBlue), var(--colorGradientGreen));
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 </style>
