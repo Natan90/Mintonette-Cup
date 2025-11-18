@@ -242,7 +242,7 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Nord (VIP)",
-    image: "/GradinNord.png",
+      url: "/Gradins/GradinNord",
     coord: [
       [132.5845215002734, 732.9238507783072],
       [167.24812135453584, 672.6067166865045],
@@ -879,6 +879,12 @@ onMounted(() => {
     );
     if (!clickedFeature) return;
 
+    const featureUrl = clickedFeature.get("url");
+    if (featureUrl) {
+      router.push(featureUrl);
+      return;
+    }
+
     const type = clickedFeature.get("type");
 
     if (type === "stand") {
@@ -898,7 +904,7 @@ onMounted(() => {
       }
       changeMap(currentMapType.value, image);
     } else {
-      //Si c’est un terrain ou prestataire → redirection
+      //Si c’est un terrain ou prestataire → redirection (fallback)
       const url = clickedFeature.get("url");
       if (url) router.push(url);
     }
