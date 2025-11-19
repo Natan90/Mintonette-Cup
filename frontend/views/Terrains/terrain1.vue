@@ -32,7 +32,7 @@ import NavView from "@/components/NavView.vue";
   width: 75%;
   aspect-ratio: 16/9;
   margin: auto;
-  background-image: url("../../images/TerrainUnique.png");
+  background-image: url("../../images/TerrainSans.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

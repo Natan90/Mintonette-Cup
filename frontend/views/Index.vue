@@ -5,33 +5,58 @@
     <div class="image">
       <img src="../images/test.png" alt="" />
       <div class="texteImage">
-        {{ $t('mintonetteCup.title') }}
+        {{ $t("mintonetteCup.title") }}
       </div>
     </div>
 
-
-
     <Map> </Map>
 
-    <TableauMatchs></TableauMatchs>
+    <!-- <TableauMatchs></TableauMatchs> -->
 
     <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
     <div class="hover">
       <p>
-        <span id="title">Titre du prestataire</span>
+        <span id="title">Nombre de pratiquants</span>
         <br />
-        <span id="descri">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+        <span id="descri"
+          >Dans le monde, on estime à environ 760 millions le nombre de
+          personnes pratiquant le volley-ball, qu’il s’agisse de loisirs, de
+          pratique scolaire ou de haut niveau. Ce chiffre fait du volley-ball
+          l’un des sports collectifs les plus populaires au monde, juste
+          derrière le football.
         </span>
       </p>
     </div>
+    <div class="hover">
+      <p>
+        <span id="title">Présence internationale</span>
+        <br />
+        <span id="descri"
+          >Le volley-ball est aujourd’hui représenté dans plus de 200 pays à
+          travers divers clubs, compétitions et fédérations nationales. La
+          Fédération Internationale de Volley-ball (FIVB) regroupe plus de 220
+          fédérations membres, montrant l’ampleur mondiale du sport et son
+          implantation dans toutes les régions du globe.
+        </span>
+      </p>
+    </div>
+    <div class="hover">
+      <p>
+        <span id="title">23,6 millions</span>
+        <br />
+        <span id="descri"
+          >C’est le pic d’audience enregistré pour un match de volley-ball en
+          2024, preuve de l’intérêt croissant du public pour ce sport. Les
+          compétitions internationales, en particulier, attirent des millions de
+          téléspectateurs et contribuent à renforcer la visibilité du volley sur
+          la scène sportive mondiale.</span
+        >
+      </p>
+    </div>
   </div>
-  <router-link to="/PolygoneCreation" class="btnLink">Truc de Mathis pour les polygones</router-link>
+  <router-link to="/PolygoneCreation" class="btnLink"
+    >Truc de Mathis pour les polygones</router-link
+  >
   <br /><br />
 
   <div class="presta_formulaire">
@@ -144,7 +169,11 @@ body::-webkit-scrollbar {
 }
 
 .presta_formulaire {
-  background: linear-gradient(135deg, var(--colorGradientBlue), var(--colorGradientGreen));
+  background: linear-gradient(
+    135deg,
+    var(--colorGradientBlue),
+    var(--colorGradientGreen)
+  );
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
