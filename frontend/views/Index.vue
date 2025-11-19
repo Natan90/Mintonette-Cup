@@ -40,6 +40,7 @@
         </span>
       </p>
     </div>
+    
     <div class="hover">
       <p>
         <span id="title">23,6 millions</span>
@@ -53,6 +54,28 @@
         >
       </p>
     </div>
+
+        <div class="hover">
+      <p>
+        <span id="title">La Mintonette Cup</span>
+        <br />
+        <span id="descri"
+          >La Mintonette Cup, désormais accueillie à Montpellier, connaît un essor remarquable et s’impose comme l’un des rendez-vous majeurs du volley amateur dans le Sud de la France. L’édition précédente a rassemblé près de 15 000 spectateurs sur trois jours, portée par l’attractivité des installations montpelliéraines et la forte culture volley de la ville, notamment grâce à la présence d’un club professionnel très suivi.</span
+        >
+      </p>
+    </div>
+
+            <div class="hover">
+      <p>
+        <span id="title">Les réseaux sociaux n’ont pas été en reste</span>
+        <br />
+        <span id="descri"
+          > La couverture numérique de la Mintonette Cup a généré 1,2 million d’impressions et plus de 150 000 interactions, alimentées par des vidéos courtes, des moments forts des matchs et des interviews exclusives. Forts de cette dynamique, les organisateurs visent pour la prochaine édition de dépasser les 300 000 visionnages en ligne, consolidant ainsi la réputation de la Mintonette Cup comme un événement incontournable à Montpellier.</span
+        >
+      </p>
+    </div>
+
+
   </div>
   <router-link to="/PolygoneCreation" class="btnLink"
     >Truc de Mathis pour les polygones</router-link
@@ -141,12 +164,13 @@ body::-webkit-scrollbar {
   background: rgba(255, 255, 255, 0.4);
 }
 
+
 .hover p {
   border: solid black 1px;
   border-radius: 10px;
   padding: 5px 10px;
   max-width: 60%;
-  margin: 50px;
+  margin: 15px 20%;
   cursor: pointer;
 
   transition: transform var(--transition-fast),
