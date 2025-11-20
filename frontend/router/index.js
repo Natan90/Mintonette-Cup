@@ -15,7 +15,7 @@ import terrain4 from "@/views/Terrains/terrain4.vue";
 import AddPrestataire from "@/views/AddPrestataire.vue";
 import Gradin_nord from "@/components/gradins/GradinNord.vue";
 import GradinNord from "@/components/gradins/GradinNord.vue";
-import countUp from "@/views/countUp.vue";
+import countUp from "@/components/countUp.vue";
 
 
 const routes = [
