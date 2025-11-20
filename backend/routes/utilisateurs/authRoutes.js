@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../database/db");
+const pool = require("../../database/db");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require('uuid');
 
@@ -51,7 +51,9 @@ router.post("/inscription", async (req, res) => {
 
     res.status(201).json({
       message: "Utilisateur créé avec succès",
-      id: newUser.id_utilisateur,
+      user: {
+        id: newUser.id_utilisateur,
+      }
     });
   } catch (err) {
     await client.query("ROLLBACK");
