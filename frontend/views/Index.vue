@@ -5,7 +5,8 @@
     <div class="image">
       <img src="../images/test.png" alt="" />
       <div class="texteImage">
-        {{ $t("mintonetteCup.title") }}
+      Mintonette Cup
+        <!-- {{ $t("mintonetteCup.title") }} -->
       </div>
     </div>
 
@@ -16,51 +17,7 @@
     <section class="infos">
       <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
 
-      <countUp :from="0" :to="50" :duration="6" class="count-up-text" />
-
-      <div class="hover">
-        <p>
-          <span class="title">Nombre de pratiquants</span>
-          <br />
-          <span class="descri"
-            >Dans le monde, on estime à environ <strong>760 millions</strong> le
-            nombre de personnes pratiquant le volley-ball, qu’il s’agisse de
-            loisirs, de pratique scolaire ou de haut niveau. Ce chiffre fait du
-            volley-ball l’un des sports collectifs les plus populaires au monde,
-            juste derrière le football.
-          </span>
-        </p>
-      </div>
-      <div class="hover">
-        <p>
-          <span class="title">Présence internationale</span>
-          <br />
-          <span class="descri"
-            >Le volley-ball est aujourd’hui représenté dans
-            <strong>plus de 200 pays</strong> à travers divers clubs,
-            compétitions et fédérations nationales. La Fédération Internationale
-            de Volley-ball (FIVB) regroupe
-            <strong>plus de 220 fédérations membres</strong>, montrant l’ampleur
-            mondiale du sport et son implantation dans toutes les régions du
-            globe.
-          </span>
-        </p>
-      </div>
-
-      <div class="hover">
-        <p>
-          <span class="title">23,6 millions</span>
-          <br />
-          <span class="descri"
-            >C’est le pic d’audience enregistré pour un match de volley-ball en
-            2024, preuve de l’intérêt croissant du public pour ce sport. Les
-            compétitions internationales, en particulier, attirent
-            <strong>des millions de téléspectateurs</strong> et contribuent à
-            renforcer la visibilité du volley sur la
-            <strong>scène sportive mondiale</strong>.</span
-          >
-        </p>
-      </div>
+<!-- #########################################################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
 
       <div class="hover">
         <p>
@@ -75,6 +32,51 @@
             l’attractivité des installations montpelliéraines et la forte
             culture volley de la ville, notamment grâce à la présence du
             <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.</span
+          >
+        </p>
+      </div>
+
+      <div class="hover">
+        <p>
+          <span class="title"><countUp :from="0" :to="760" :duration="2" class="count-up-text" /> millions</span>
+          <br />
+          <span class="descri"
+            >C'est le nombre  de personnes pratiquants le volley-ball, qu’il s’agisse de
+            loisirs, de pratique scolaire ou à haut niveau. Ce chiffre fait du
+            volley-ball l’un des sports collectifs les plus populaires au monde,
+            juste derrière le football.
+          </span>
+        </p>
+      </div>
+
+      
+      <div class="hover">
+        <p>
+          <span class="title"><countUp :from="0" :to="200" :duration="2" class="count-up-text" /></span>
+          <br />
+          <span class="descri"
+            >C'est le nombre de pays oû le volley-ball est aujourd’hui représenté
+             à travers divers clubs,
+            compétitions et fédérations nationales. La Fédération Internationale
+            de Volley-ball (FIVB) regroupe
+            <strong>plus de 220 fédérations membres</strong>, montrant l’ampleur
+            mondiale du sport et son implantation dans toutes les régions du
+            globe.
+          </span>
+        </p>
+      </div>
+
+      <div class="hover">
+        <p>
+          <span class="title"><countUp :from="0" :to="24" :duration="2" class="count-up-text" /> millions</span>
+          <br />
+          <span class="descri"
+            >C’est le pic d’audience enregistré pour un match de volley-ball en
+            2024, preuve de l’intérêt croissant du public pour ce sport. Les
+            compétitions internationales, en particulier, attirent
+            <strong>des millions de téléspectateurs</strong> et contribuent à
+            renforcer la visibilité du volley sur la
+            <strong>scène sportive mondiale</strong>.</span
           >
         </p>
       </div>
@@ -121,7 +123,7 @@ import Map from "@/components/Map.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
-import CountUp from "./countUp.vue";
+import CountUp from "./../components/countUp.vue";
 
 const navbar = ref("0px");
 
@@ -155,7 +157,9 @@ body::-webkit-scrollbar {
   /* Transitions */
   --transition-fast: 0.3s ease;
 }
+</style>
 
+<style scoped>
 .navbar {
   position: fixed;
   left: 0;
@@ -173,18 +177,16 @@ body::-webkit-scrollbar {
 
 .texteImage {
   z-index: 1;
-  font-size: 25px;
+  font-size: 5em;
   text-align: center;
   position: absolute;
-  top: 50%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  border: solid black 1px;
   border-radius: 10px;
   padding: 5px 10px;
-  /* background: rgba(255, 255, 255, 0.4); */
-  background-color: rgb(0, 0, 0, 0.8);
+  font-family: 'Meie Script';
 }
 
 .infos {
