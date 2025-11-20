@@ -15,6 +15,7 @@ import terrain4 from "@/views/Terrains/terrain4.vue";
 import AddPrestataire from "@/views/AddPrestataire.vue";
 import Gradin_nord from "@/components/gradins/GradinNord.vue";
 import GradinNord from "@/components/gradins/GradinNord.vue";
+import countUp from "@/views/countUp.vue";
 
 
 const routes = [
@@ -32,7 +33,7 @@ const routes = [
   {
     path: "/Prestataire/Add",
     name: "AddPrtestataire",
-    component: AddPrestataire
+    component: AddPrestataire,
   },
 
   { path: "/Commander", name: "Commander", component: Commander },
@@ -82,7 +83,12 @@ const routes = [
     path: "/Gradins/GradinNord",
     name: "Gradin Nord",
     component: GradinNord,
-  }
+  },
+  {
+    path: "/countUp",
+    name: "countUp",
+    component: countUp,
+  },
 ];
 
 const router = createRouter({
