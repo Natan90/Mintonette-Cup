@@ -1,13 +1,16 @@
 <template>
   <div class="button"></div>
   <!-- Balise vide pour insérer la map -->
-  <div class="map" id="map"></div>
-  <button
-    v-if="currentMapType !== 'generalZone'"
-    class="SwitchButton"
-    @click="goBack">
-    Retour
-  </button>
+  <div class="mapContainer">
+    <div class="map" id="map">
+      <button
+        v-if="currentMapType !== 'generalZone'"
+        class="SwitchButton"
+        @click="goBack">
+        Retour
+      </button>
+    </div>
+  </div>
   <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
   <div class="hoverName" id="hoverName"></div>
 </template>
@@ -242,7 +245,7 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Nord (VIP)",
-      url: "/Gradins/GradinNord",
+    url: "/Gradins/GradinNord",
     coord: [
       [132.5845215002734, 732.9238507783072],
       [167.24812135453584, 672.6067166865045],
@@ -767,7 +770,6 @@ onMounted(() => {
       maxZoom: 1,
       zoom: 1,
     }),
-
   });
 
   //On ajoute les tableaux des coordonnées
@@ -1017,8 +1019,12 @@ body::-webkit-scrollbar {
 }
 
 .SwitchButton {
+  z-index: 1000;
+  position: absolute;
   cursor: pointer;
   padding: 8px 16px;
+  margin-top: 5px;
+  margin-left: 5px;
   border: none;
   border-radius: 8px;
   background: #e0e7ff;
@@ -1055,5 +1061,10 @@ body::-webkit-scrollbar {
   font-size: 13px;
   color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.map-container {
+  position: relative;
+  width: 520px;
+  margin: 0 auto;
 }
 </style>

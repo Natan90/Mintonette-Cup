@@ -155,6 +155,7 @@ const sexe_utilisateur = ref("");
 
 const message = ref("");
 const connexion = ref(false);
+const inscription = ref(false);
 const userId = ref(0);
 
 const router = useRouter();
@@ -225,7 +226,18 @@ async function getValuesInscription() {
             date_naissance: date_naiss_utilisateur.value,
             sexe: sexe_utilisateur.value,
         });
-        message.value = `Utilisateur créé avec l'ID : ${res.data.id}`;
+        if (res.data && res.data.user) {
+            userStore.setUser(res.data.user.id);
+            message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
+            inscription.value = true;
+        } else {
+            message.value = res.data?.message || "Inscription réussie mais impossible de récupérer l'ID utilisateur.";
+        }
+
+        if (inscription.value) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            router.push('/');
+        }
     } catch (err) {
         message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;
         console.error(err);

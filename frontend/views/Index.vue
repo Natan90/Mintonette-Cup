@@ -3,7 +3,7 @@
     <NavView :style="{ top: navbar }" class="navbar" />
 
     <div class="image">
-      <img src="../images/test.png" alt="" />
+      <img src="../images/photo_fond.png" alt="" />
       <div class="texteImage">
       Mintonette Cup
         <!-- {{ $t("mintonetteCup.title") }} -->
@@ -108,10 +108,10 @@
     </section>
 
   </div>
-  <router-link to="/PolygoneCreation" class="btnLink"
-    >Truc de Mathis pour les polygones</router-link
+  <!-- <router-link to="/PolygoneCreation" class="btnLink"
+    >Truc pour les polygones</router-link
   >
-  <br /><br />
+  <br /><br /> -->
 
   <div class="presta_formulaire">
     <ListPresta></ListPresta>
