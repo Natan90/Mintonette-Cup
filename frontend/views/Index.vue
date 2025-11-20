@@ -41,7 +41,7 @@
 
       <div class="bloc">
           <span class="title"><countUp :from="0" :to="760" :duration="2" class="count-up-text" /> millions</span>
-          <img class="illustration" src="./../images/test.png" />
+          <img class="illustration" src="./../images/photo_fond.png" />
           <span class="descri">
             C'est le nombre  de personnes pratiquants le volley-ball, qu’il s’agisse de
             loisirs, de pratique scolaire ou à haut niveau. Ce chiffre fait du
