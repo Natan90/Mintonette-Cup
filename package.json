@@ -13,11 +13,6 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^6.3.0",
     "axios": "^1.13.2",
-    "bcrypt": "^6.0.0",
-    "concurrently": "^9.2.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
     "motion": "^12.23.24",
     "node": "^24.9.0",
     "ol": "^10.7.0",
