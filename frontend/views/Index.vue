@@ -19,43 +19,45 @@
 
 <!-- #########################################################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
 
-      <div class="hover">
-        <p>
-          <span class="title">La Mintonette Cup</span>
-          <br />
-          <span class="descri"
-            >La Mintonette Cup, désormais accueillie à
-            <strong>Montpellier</strong>, connaît un essor remarquable et
-            s’impose comme l’un des rendez-vous majeurs du volley amateur dans
-            le Sud de la France. L’édition précédente a rassemblé près de
-            <strong>15 000 spectateurs sur trois jours</strong>, portée par
-            l’attractivité des installations montpelliéraines et la forte
-            culture volley de la ville, notamment grâce à la présence du
-            <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.</span
-          >
-        </p>
+      <div class="bloc">
+          <span class="title">3ème édition</span>
+          <img class="illustration" src="./../images/logo-couleur.png" />
+          <span class="descri">
+              La Mintonette Cup, désormais accueillie à
+              <strong>Montpellier</strong>, connaît un essor remarquable et
+              s’impose comme l’un des rendez-vous majeurs du volley amateur dans
+              le Sud de la France. 
+            
+              L’édition précédente a rassemblé près de
+              <strong>15 000 spectateurs sur trois jours</strong>, portée par
+              l’attractivité des installations montpelliéraines et la forte
+              culture volley de la ville, notamment grâce à la présence du
+              <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
       </div>
 
-      <div class="hover">
-        <p>
+      <div class="bloc">
           <span class="title"><countUp :from="0" :to="760" :duration="2" class="count-up-text" /> millions</span>
-          <br />
-          <span class="descri"
-            >C'est le nombre  de personnes pratiquants le volley-ball, qu’il s’agisse de
+          <img class="illustration" src="./../images/test.png" />
+          <span class="descri">
+            C'est le nombre  de personnes pratiquants le volley-ball, qu’il s’agisse de
             loisirs, de pratique scolaire ou à haut niveau. Ce chiffre fait du
-            volley-ball l’un des sports collectifs les plus populaires au monde,
+            volley-ball l’un des sports collectifs <strong>les plus populaires au monde</strong>,
             juste derrière le football.
           </span>
-        </p>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
       </div>
-
       
-      <div class="hover">
-        <p>
-          <span class="title"><countUp :from="0" :to="200" :duration="2" class="count-up-text" /></span>
-          <br />
-          <span class="descri"
-            >C'est le nombre de pays oû le volley-ball est aujourd’hui représenté
+      <div class="bloc">
+          <span class="title"><countUp :from="0" :to="200" :duration="2" class="count-up-text" /> pays</span>
+          <img class="illustration" src="./../images/logo-couleur.png" />
+          <span class="descri">
+            C'est le nombre de pays oû le volley-ball est aujourd’hui représenté
              à travers divers clubs,
             compétitions et fédérations nationales. La Fédération Internationale
             de Volley-ball (FIVB) regroupe
@@ -63,28 +65,30 @@
             mondiale du sport et son implantation dans toutes les régions du
             globe.
           </span>
-        </p>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
       </div>
 
-      <div class="hover">
-        <p>
+      <div class="bloc">
           <span class="title"><countUp :from="0" :to="24" :duration="2" class="count-up-text" /> millions</span>
-          <br />
-          <span class="descri"
-            >C’est le pic d’audience enregistré pour un match de volley-ball en
+          <img class="illustration" src="./../images/logo-couleur.png" />
+          <span class="descri">
+            C’est le pic d’audience enregistré pour un match de volley-ball en
             2024, preuve de l’intérêt croissant du public pour ce sport. Les
             compétitions internationales, en particulier, attirent
             <strong>des millions de téléspectateurs</strong> et contribuent à
             renforcer la visibilité du volley sur la
-            <strong>scène sportive mondiale</strong>.</span
-          >
-        </p>
+            <strong>scène sportive mondiale</strong>.
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
       </div>
 
-      <div class="hover">
-        <p>
+      <div class="bloc">
           <span class="title">Les réseaux sociaux n’ont pas été en reste</span>
-          <br />
+          <img class="illustration" src="./../images/logo-couleur.png" />
           <span class="descri">
             La couverture numérique de la Mintonette Cup a généré
             <strong>1,2 million d’impressions</strong> et plus de
@@ -94,11 +98,15 @@
             édition de dépasser les
             <strong>300 000 visionnages en ligne</strong>, consolidant ainsi la
             réputation de la Mintonette Cup comme un événement incontournable à
-            Montpellier.</span
-          >
-        </p>
+            Montpellier.
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
       </div>
+
     </section>
+
   </div>
   <router-link to="/PolygoneCreation" class="btnLink"
     >Truc de Mathis pour les polygones</router-link
@@ -148,18 +156,14 @@ onBeforeUnmount(() => {
 body::-webkit-scrollbar {
   display: none;
 }
-
-:root {
-  /* Couleurs */
-  --primary-color: #00167a;
-  --baniere-color-food: #b71c1c;
-
-  /* Transitions */
-  --transition-fast: 0.3s ease;
-}
 </style>
 
 <style scoped>
+
+.pointer{    
+  cursor: pointer;
+}
+
 .navbar {
   position: fixed;
   left: 0;
@@ -197,41 +201,54 @@ body::-webkit-scrollbar {
   align-items: center;
 
   width: 95%;
-  margin-left: 2.5%;
-  margin-bottom: 50px;
-  gap: 25px;
+  margin: 50px 2.5% 50px 2.5%;
+  gap: 50px;
 }
 
-.hover p {
-  background-color: grey;
-  border: solid black 1px;
-  border-radius: 10px;
-  padding: 5px 10px;
-  max-width: 60%;
-  margin: 15px 20%;
-  cursor: pointer;
-  width: 300px;
+.bloc {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--jaune-logo);
+    opacity: 0.7;
+    border: solid black 1px;
+    padding: 5px 10px;
+    max-width: 60%;
+    width: 300px;
 
-  transition: transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+    transition: var(--transition-fast);
 }
 
-.title {
-  font-weight: bold;
+.bloc:hover {
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.hover p:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.bloc .title {
+    font-weight: bold;
+    font-size: 1.3em;
+    transition: font-size 0.3s ease;
 }
 
-.hover p:hover .title {
-  font-size: 1.3em;
-  transition: font-size 0.3s ease;
+.illustration {
+    width: 90%;
+    margin: 20px 5%;
+    background-color: white;
 }
 
 .descri {
-  font-size: 0.7em;
+    font-size: 0.7em;
+}
+
+.voirPlus {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    text-align: end;
+    color: var(--bleu-logo);
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .presta_formulaire {

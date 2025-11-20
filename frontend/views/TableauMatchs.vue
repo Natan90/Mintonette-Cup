@@ -107,34 +107,6 @@ onMounted(async () => {
 
 
 
-<style>
-:root {
-    /* Coordonnées à laquelle commencent les barres */
-    --verticalVal: 30px;
-    --horizontalVal: -50px;
-
-    /* Le gap entre les deux matchs du round4  */
-    --gapBetweenRound4Matchs: 70px;
-    /* Le padding en hauteur entre les deux matchs du round4 */
-    --paddingBottomRound4Matchs: 50px;
-    /* La taille de la barre horizontale qui reçoitle gagnant du round8 */
-    --widthHorizontalBar: 2px;
-    /* La couleur de la barre */
-    --barColor: #005bbb;
-    /* Longueur de la barre horizontale */
-    --horizontalBarLength: 50px;
-    /* Hauteur et largeur de la barre horizontale */
-    --horizontalBarHeightWidth: 2px;
-
-    /* Calcul de la hauteur de la barre verticale */
-    --heightVerticalBarRound4: calc(100% + var(--gapBetweenRound4Matchs) + var(--paddingBottomRound4Matchs) + var(--widthHorizontalBar) + 20px);
-
-    /* Calcul de la hauteur des matchs du round2 */
-    --heightVerticalMatchsRound2: calc(var(var(--heightVerticalBarRound4) - 100%));
-}
-</style>
-
-
 <style scoped>
 .tableau {
     display: flex;
