@@ -1,5 +1,4 @@
 <template>
-    <NavView></NavView>
 
     <div>
         <span>Qu'est ce que la Mintonnette Cup ?</span>
@@ -20,15 +19,12 @@
 
     </div>
 
-    <Footer></Footer>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 
-import NavView from "@/components/NavView.vue";
-import Footer from "@/components/Footer.vue";
-
+    
 const content = ref('')
 const selectedItem = ref(0)
 
