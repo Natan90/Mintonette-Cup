@@ -9,7 +9,7 @@
         <!-- {{ $t("mintonetteCup.title") }} -->
       </div>
     </div>
-
+<PresentationMintonette></PresentationMintonette>
     <Map> </Map>
 
     <!-- <TableauMatchs></TableauMatchs> -->
@@ -17,7 +17,7 @@
     <section class="infos">
       <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
 
-<!-- #########################################################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
+<!-- #############################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
 
       <div class="bloc">
           <span class="title">3ème édition</span>
@@ -132,6 +132,7 @@ import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
 import CountUp from "./../components/countUp.vue";
+import PresentationMintonette from "./PresentationMintonette.vue";
 
 const navbar = ref("0px");
 
