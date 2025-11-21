@@ -55,7 +55,7 @@
       
       <div class="bloc">
           <span class="title"><countUp :from="0" :to="200" :duration="2" class="count-up-text" /> pays</span>
-          <img class="illustration" src="./../images/logo-couleur.png" />
+          <img class="illustration" src="./../images/foule.jpg" />
           <span class="descri">
             C'est le nombre de pays oû le volley-ball est aujourd’hui représenté
              à travers divers clubs,
@@ -72,7 +72,7 @@
 
       <div class="bloc">
           <span class="title"><countUp :from="0" :to="24" :duration="2" class="count-up-text" /> millions</span>
-          <img class="illustration" src="./../images/logo-couleur.png" />
+          <img class="illustration" src="./../images/stade.jpg" />
           <span class="descri">
             C’est le pic d’audience enregistré pour un match de volley-ball en
             2024, preuve de l’intérêt croissant du public pour ce sport. Les
@@ -87,18 +87,18 @@
       </div>
 
       <div class="bloc">
-          <span class="title">Les réseaux sociaux n’ont pas été en reste</span>
-          <img class="illustration" src="./../images/logo-couleur.png" />
+          <span class="title"><countUp :from="0" :to="150" :duration="2" class="count-up-text" /> 000</span>
+          <img class="illustration" src="./../images/reseaux.jpg" />
           <span class="descri">
-            La couverture numérique de la Mintonette Cup a généré
-            <strong>1,2 million d’impressions</strong> et plus de
-            <strong>150 000 interactions</strong>, alimentées par des vidéos
-            courtes, des moments forts des matchs et des interviews exclusives.
+            C'est le nombre d'interactions sur les réseaux sociaux générées par l'édition précédente de la Mintonette Cup,
+            alimentées par des vidéos
+            courtes, <strong>des moments forts</strong> des matchs et des <strong>interviews exclusives</strong>.
             Forts de cette dynamique, les organisateurs visent pour la prochaine
             édition de dépasser les
             <strong>300 000 visionnages en ligne</strong>, consolidant ainsi la
             réputation de la Mintonette Cup comme un événement incontournable à
             Montpellier.
+            Les réseaux sociaux n’ont pas été en reste !
           </span>
           <div class="voirPlus">
               <span class="pointer">Voir plus</span>
@@ -235,10 +235,18 @@ body::-webkit-scrollbar {
     width: 90%;
     margin: 20px 5%;
     background-color: white;
+    height: 150px;
+    object-fit: cover;
 }
 
 .descri {
     font-size: 0.7em;
+    height: 2.7em;
+    overflow: hidden;
+    display: -webkit-box;
+    /* limite à 2 lignes */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .voirPlus {
