@@ -74,7 +74,6 @@
         </div>
       </div>
 
-      <!-- ----- BLOC 4 ----- -->
       <div class="bloc">
         <img class="illustration" src="./../images/logo-couleur.png" />
 
@@ -95,7 +94,6 @@
         </div>
       </div>
 
-      <!-- ----- BLOC 5 ----- -->
       <div class="bloc">
         <img class="illustration" src="./../images/logo-couleur.png" />
 
