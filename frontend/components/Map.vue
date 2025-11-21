@@ -46,7 +46,7 @@ let standStyle;
 let standHoverStyle;
 let lastFeature = null;
 let label = null;
-const tailleMap = [0, 0, 2000, 1600];
+const tailleMap = [0, 0, 1000, 800];
 const projection = new Projection({
   code: "MintonetteMap",
   units: "pixels",
@@ -768,7 +768,7 @@ onMounted(() => {
       center: [1000, 600],
       minZoom: 1,
       maxZoom: 1,
-      zoom: 5,
+      zoom: 1,
     }),
   });
 
