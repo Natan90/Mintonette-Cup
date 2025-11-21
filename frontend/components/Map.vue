@@ -1054,7 +1054,7 @@ body::-webkit-scrollbar {
 }
 .mapContainer {
   width: 100%;
-  height: 100vh;
+  height: 80vh; 
   display: flex;
   justify-content: center;
   align-items: center;

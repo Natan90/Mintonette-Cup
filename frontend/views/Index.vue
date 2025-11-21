@@ -19,13 +19,17 @@
         <div class="contenuTexte">
           <span class="title">3ème édition</span>
 
-          <span class="descri">
+          <!-- <span class="descri">
             La Mintonette Cup, désormais accueillie à <strong>Montpellier</strong>, connaît un essor remarquable
             et s’impose comme l’un des rendez-vous majeurs du volley amateur dans le Sud de la France.
             L’édition précédente a rassemblé près de
             <strong>15 000 spectateurs sur trois jours</strong>, portée par l’attractivité des installations
             montpelliéraines et la forte culture volley de la ville, notamment grâce au
             <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.
+          </span> -->
+          <span class="descri">
+           
+            <strong>Ca fait tellement viellot (2008 je dirais)</strong>.
           </span>
 
           <div class="voirPlus">
