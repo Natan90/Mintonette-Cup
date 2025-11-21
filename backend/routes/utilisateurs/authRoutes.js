@@ -4,6 +4,80 @@ const pool = require("../../database/db");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require('uuid');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Utilisateurs
+ *   description: Gestion des utilisateurs
+ */
+
+/**
+ * @swagger
+ * /api/utilisateur/inscription:
+ *   post:
+ *     summary: Crée un nouvel utilisateur
+ *     tags: [Utilisateurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nom
+ *               - prenom
+ *               - login
+ *               - mdp
+ *               - mail
+ *               - date_naissance
+ *               - sexe
+ *             properties:
+ *               nom:
+ *                 type: string
+ *               prenom:
+ *                 type: string
+ *               login:
+ *                 type: string
+ *               mdp:
+ *                 type: string
+ *               mail:
+ *                 type: string
+ *               date_naissance:
+ *                 type: string
+ *                 format: date
+ *               sexe:
+ *                 type: string
+ *                 enum: [H, F]
+ *           example:
+ *             nom: "Dupont"
+ *             prenom: "Jean"
+ *             login: "jdupont"
+ *             mdp: "Motdepasse123"
+ *             mail: "jean.dupont@mail.com"
+ *             date_naissance: "1990-05-12"
+ *             sexe: "H"
+ *     responses:
+ *       201:
+ *         description: Utilisateur créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *       400:
+ *         description: Champs obligatoires manquants
+ *       409:
+ *         description: Email déjà utilisé
+ *       500:
+ *         description: Erreur serveur
+ */
 // POST /utilisateur/inscription
 router.post("/inscription", async (req, res) => {
   console.log("Body reçu :", req.body);
@@ -64,9 +138,62 @@ router.post("/inscription", async (req, res) => {
     });
   } finally {
     client.release(); 
-}
+  }
 });
 
+/**
+ * @swagger
+ * /api/utilisateur/connexion:
+ *   post:
+ *     summary: Connecte un utilisateur et retourne un token de session
+ *     tags: [Utilisateurs]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - login
+ *               - mdp
+ *             properties:
+ *               login:
+ *                 type: string
+ *               mdp:
+ *                 type: string
+ *           example:
+ *             login: "jdupont"
+ *             mdp: "Motdepasse123"
+ *     responses:
+ *       200:
+ *         description: Connexion réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     login:
+ *                       type: string
+ *                     nom:
+ *                       type: string
+ *                     prenom:
+ *                       type: string
+ *                 expiresAt:
+ *                   type: string
+ *       401:
+ *         description: Login ou mot de passe incorrect
+ *       500:
+ *         description: Erreur serveur
+ */
 // POST /utilisateur/connexion
 router.post("/connexion", async (req, res) => {
   const { login, mdp } = req.body;
@@ -170,8 +297,7 @@ router.post("/connexion", async (req, res) => {
     console.error(err);
   } finally {
     client.release(); 
-}
+  }
 });
-
 
 module.exports = router;

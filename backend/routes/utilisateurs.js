@@ -1,36 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-/**
- * @swagger
- * tags:
- *   name: Utilisateurs
- *   description: Gestion des utilisateurs
- */
-
-/**
- * @swagger
- * /utilisateur/show:
- *   get:
- *     summary: Récupère tous les utilisateurs
- *     tags: [Utilisateurs]
- *     responses:
- *       200:
- *         description: Liste des utilisateurs
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_utilisateur:
- *                     type: integer
- *                   nom_utilisateur:
- *                     type: string
- *                   prenom_utilisateur:
- *                     type: string
- */
 router.get("/show", (req, res) => {
   const db = req.db;
   db.all("SELECT * FROM Utilisateur", (err, rows) => {
@@ -50,62 +20,6 @@ router.get("/show/:id", (req, res) => {
     res.json(row);
   });
 })
-
-/**
- * @swagger
- * /utilisateur/inscription:
- *   post:
- *     summary: Ajoute un utilisateur dans la base de données
- *     tags: [Utilisateurs]
- *     description: >
- *       Ajoute un utilisateur dans la base de données en vérifiant qu'il ne manque pas de valeurs.
- *       Renvoie un message d'erreur ou de succès.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - nom
- *               - prenom
- *               - login
- *               - mdp
- *               - mail
- *               - date_naissance
- *               - sexe
- *             properties:
- *               nom:
- *                 type: string
- *                 example: Dupont
- *               prenom:
- *                 type: string
- *                 example: Jean
- *               login:
- *                 type: string
- *                 example: jdupont
- *               mdp:
- *                 type: string
- *                 example: password123
- *               mail:
- *                 type: string
- *                 example: jean.dupont@example.com
- *               date_naissance:
- *                 type: string
- *                 format: date
- *                 example: 2001-05-10
- *               sexe:
- *                 type: string
- *                 enum: [Homme, Femme, Autre]
- *                 example: Homme
- *     responses:
- *       200:
- *         description: Utilisateur créé avec succès
- *       400:
- *         description: Champs manquants
- *       500:
- *         description: Erreur d’insertion en base de données
- */
 
 router.post("/inscription", (req, res) => {
   const db = req.db;
