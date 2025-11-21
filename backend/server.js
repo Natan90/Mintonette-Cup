@@ -8,8 +8,6 @@ const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 // const utilisateursRoutes = require("./routes/utilisateurs");
 
-const swaggerUi = require("swagger-ui-express");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -30,8 +28,9 @@ app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
 
 // Swagger
+const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
-const { default: axios } = require("axios");
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // router.post("/", async (req, res) => {

@@ -84,11 +84,7 @@ const routes = [
     name: "Gradin Nord",
     component: GradinNord,
   },
-  {
-    path: "/countUp",
-    name: "countUp",
-    component: countUp,
-  },
+
 ];
 
 const router = createRouter({

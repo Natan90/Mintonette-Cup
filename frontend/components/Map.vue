@@ -765,7 +765,7 @@ onMounted(() => {
     interactions: [], // Enlève le zoom, dezoom, drag, mouvement...
     view: new View({
       projection,
-      center: [500, 400],
+      center: [1000, 600],
       minZoom: 1,
       maxZoom: 1,
       zoom: 1,
@@ -1041,16 +1041,6 @@ body::-webkit-scrollbar {
   transform: translateY(-2px);
 }
 
-.map {
-  height: 420px;
-  width: 520px;
-  margin: 0 auto;
-  border: 2px solid #00167a;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
 .hoverName {
   display: none;
   z-index: 9999;
@@ -1062,9 +1052,22 @@ body::-webkit-scrollbar {
   color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
-.map-container {
-  position: relative;
-  width: 520px;
+.mapContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.map {
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
+  border: 2px solid #00167a;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
 }
 </style>
