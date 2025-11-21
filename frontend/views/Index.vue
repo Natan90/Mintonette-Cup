@@ -7,7 +7,7 @@
       <!-- {{ $t("mintonetteCup.title") }} -->
     </div>
   </div>
-
+<PresentationMintonette></PresentationMintonette>
   <div class="fondBlanc">
     <Map></Map>
 
@@ -136,6 +136,7 @@ import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
 import CountUp from "./../components/countUp.vue";
+import PresentationMintonette from "./PresentationMintonette.vue";
 
 const navbar = ref("0px");
 
