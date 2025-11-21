@@ -7,7 +7,7 @@
       <!-- {{ $t("mintonetteCup.title") }} -->
     </div>
   </div>
-<PresentationMintonette></PresentationMintonette>
+
   <div class="fondBlanc">
     <Map></Map>
 
@@ -55,7 +55,7 @@
       </div>
 
       <div class="bloc">
-        <img class="illustration" src="./../images/foule.jpg" />
+        <img class="illustration" src="./../images/logo-couleur.png" />
 
         <div class="contenuTexte">
           <span class="title">
@@ -75,7 +75,7 @@
       </div>
 
       <div class="bloc">
-        <img class="illustration" src="./../images/stade.jpg" />
+        <img class="illustration" src="./../images/logo-couleur.png" />
 
         <div class="contenuTexte">
           <span class="title">
@@ -95,18 +95,17 @@
       </div>
 
       <div class="bloc">
-          <span class="title"><countUp :from="0" :to="150" :duration="2" class="count-up-text" /> 000</span>
-          <img class="illustration" src="./../images/reseaux.jpg" />
+        <img class="illustration" src="./../images/logo-couleur.png" />
+
+        <div class="contenuTexte">
+          <span class="title">Les réseaux sociaux n’ont pas été en reste</span>
+
           <span class="descri">
-            C'est le nombre d'interactions sur les réseaux sociaux générées par l'édition précédente de la Mintonette Cup,
-            alimentées par des vidéos
-            courtes, <strong>des moments forts</strong> des matchs et des <strong>interviews exclusives</strong>.
-            Forts de cette dynamique, les organisateurs visent pour la prochaine
-            édition de dépasser les
-            <strong>300 000 visionnages en ligne</strong>, consolidant ainsi la
-            réputation de la Mintonette Cup comme un événement incontournable à
-            Montpellier.
-            Les réseaux sociaux n’ont pas été en reste !
+            La couverture numérique de la Mintonette Cup a généré
+            <strong>1,2 million d’impressions</strong> et plus de
+            <strong>150 000 interactions</strong>.
+            Les organisateurs visent pour la prochaine édition de dépasser
+            <strong>300 000 visionnages en ligne</strong>, renforçant encore sa notoriété.
           </span>
 
           <div class="voirPlus">
@@ -137,7 +136,6 @@ import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
 import CountUp from "./../components/countUp.vue";
-import PresentationMintonette from "./PresentationMintonette.vue";
 
 const navbar = ref("0px");
 
@@ -258,18 +256,10 @@ body::-webkit-scrollbar {
   font-weight: 700;
   font-size: 2em;
   color: var(--bleu-logo);
-    height: 150px;
-    object-fit: cover;
 }
 
 .descri {
   font-size: 1.1em;
-    height: 2.7em;
-    overflow: hidden;
-    display: -webkit-box;
-    /* limite à 2 lignes */
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
   line-height: 1.6;
 }
 
