@@ -760,8 +760,8 @@ onMounted(() => {
       projection,
       center: [1000, 800],
       minZoom: 2,
-      maxZoom: 1,
-      zoom: 1,
+      maxZoom: 2,
+      zoom: 2,
     }),
   });
 
