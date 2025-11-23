@@ -1,15 +1,9 @@
 <template>
   <div id="app">
     <div class="toolbar">
-      <button @click="startDrawing('Polygon')" :disabled="drawing">
-        Dessiner un polygone
-      </button>
-      <button @click="stopDrawing" :disabled="!drawing">
-        Terminer le dessin
-      </button>
-      <button @click="getPolygonCoords" :disabled="!lastPolygon">
-        Récupérer les coordonnées
-      </button>
+      <button @click="startDrawing('Polygon')" :disabled="drawing">Dessiner un polygone</button>
+      <button @click="stopDrawing" :disabled="!drawing">Terminer le dessin</button>
+      <button @click="getPolygonCoords" :disabled="!lastPolygon">Récupérer les coordonnées</button>
     </div>
 
     <div ref="mapContainer" class="map"></div>
@@ -32,7 +26,7 @@ import { Draw } from "ol/interaction.js";
 import ImageLayer from "ol/layer/Image.js";
 import ImageStatic from "ol/source/ImageStatic.js";
 import { getCenter } from "ol/extent.js";
-import { Projection, addProjection } from "ol/proj.js"; // ✅ bonne importation
+import { Projection, addProjection } from "ol/proj.js";
 
 const mapContainer = ref(null);
 const polygonCoords = ref(null);
@@ -70,11 +64,10 @@ onMounted(() => {
     layers: [imageLayer, vectorLayer],
     view: new View({
       projection: projection,
-      projection,
       center: [1000, 800],
-      minZoom: 2,
-      maxZoom: 1,
-      zoom: 1,
+      minZoom: 1,
+      maxZoom: 4,
+      zoom: 2,
     }),
   });
 });
@@ -140,13 +133,11 @@ function getPolygonCoords() {
   background: #aaa;
   cursor: not-allowed;
 }
-.map {
+
+
+.map{
   width: 100%;
   height: 90vh;
-  border: 2px solid #00167a;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 .coords {
   background: #f9f9f9;
