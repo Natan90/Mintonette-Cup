@@ -28,7 +28,6 @@
             <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.
           </span> -->
           <span class="descri">
-           
             <strong>Ca fait tellement viellot (2008 je dirais)</strong>.
           </span>
 

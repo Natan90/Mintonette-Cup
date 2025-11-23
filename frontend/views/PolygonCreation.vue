@@ -1,9 +1,15 @@
 <template>
   <div id="app">
     <div class="toolbar">
-      <button @click="startDrawing('Polygon')" :disabled="drawing">Dessiner un polygone</button>
-      <button @click="stopDrawing" :disabled="!drawing">Terminer le dessin</button>
-      <button @click="getPolygonCoords" :disabled="!lastPolygon">Récupérer les coordonnées</button>
+      <button @click="startDrawing('Polygon')" :disabled="drawing">
+        Dessiner un polygone
+      </button>
+      <button @click="stopDrawing" :disabled="!drawing">
+        Terminer le dessin
+      </button>
+      <button @click="getPolygonCoords" :disabled="!lastPolygon">
+        Récupérer les coordonnées
+      </button>
     </div>
 
     <div ref="mapContainer" class="map"></div>
@@ -36,7 +42,7 @@ const lastPolygon = ref(null);
 let map, vectorSource, drawInteraction;
 
 onMounted(() => {
-  const tailleMap = [0, 0, 1000, 800];
+  const tailleMap = [0, 0, 2000, 1600];
 
   const projection = new Projection({
     code: "ImagePixels",
@@ -64,9 +70,11 @@ onMounted(() => {
     layers: [imageLayer, vectorLayer],
     view: new View({
       projection: projection,
-      center: getCenter(tailleMap),
-      zoom: 2,
-      maxZoom: 8,
+      projection,
+      center: [1000, 800],
+      minZoom: 2,
+      maxZoom: 1,
+      zoom: 1,
     }),
   });
 });
@@ -132,9 +140,14 @@ function getPolygonCoords() {
   background: #aaa;
   cursor: not-allowed;
 }
-
-
-
+.map {
+  width: 100%;
+  height: 90vh;
+  border: 2px solid #00167a;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 .coords {
   background: #f9f9f9;
   padding: 10px;

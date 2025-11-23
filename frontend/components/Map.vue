@@ -46,7 +46,7 @@ let standStyle;
 let standHoverStyle;
 let lastFeature = null;
 let label = null;
-const tailleMap = [0, 0, 1000, 800];
+const tailleMap = [0, 0, 2000, 1600];
 const projection = new Projection({
   code: "MintonetteMap",
   units: "pixels",
@@ -59,16 +59,10 @@ const generalMap = [
     name: "Zone prestataire",
     image: "/MapPresta.png",
     coord: [
-      [693.8792661774507, 636.9559333691755],
-      [870.263312505851, 637.8558545122205],
-      [871.6687911735673, 439.78735794499914],
-      [897.5438129236188, 438.66246509847605],
-      [897.7249110769575, 341.6783612678291],
-      [871.3999132797832, 342.57828241087475],
-      [870.2842118717624, 242.85344341462655],
-      [694.8192363609953, 243.83226863870473],
-      [692.5212355017975, 383.5284801803098],
-      [693.8792661774507, 636.9559333691755],
+      [261.50507760622804, 1290.1996148210974],
+      [1166.872630570585, 931.7169299932932],
+      [652.6236394498301, 804.9806663439063],
+      [261.50507760622804, 1290.1996148210974],
     ],
   },
   {
@@ -765,8 +759,8 @@ onMounted(() => {
     interactions: [], // Enlève le zoom, dezoom, drag, mouvement...
     view: new View({
       projection,
-      center: [1000, 600],
-      minZoom: 1,
+      center: [1000, 800],
+      minZoom: 2,
       maxZoom: 1,
       zoom: 1,
     }),
@@ -1054,14 +1048,14 @@ body::-webkit-scrollbar {
 }
 .mapContainer {
   width: 100%;
-  height: 80vh; 
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .map {
   width: 100%;
-  height: 100%;
+  height: 90vh;
   margin: 0 auto;
   border: 2px solid #00167a;
   border-radius: 10px;
