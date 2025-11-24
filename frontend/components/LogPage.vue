@@ -198,7 +198,10 @@ async function getValuesConnexion() {
 
         if (connexion.value) {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            router.push('/');
+            router.push({
+                name: 'Home', 
+                query: { showModal: true }
+            });
         }
     } catch (err) {
         message.value = `Erreur lors de la connexion : ${err.response?.data?.error || err.message}`;
@@ -236,7 +239,10 @@ async function getValuesInscription() {
 
         if (inscription.value) {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            router.push('/');
+            router.push({
+                name: 'Home', 
+                query: { showModal: true }
+            });
         }
     } catch (err) {
         message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;

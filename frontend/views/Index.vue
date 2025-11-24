@@ -1,6 +1,21 @@
 <template>
   <NavView :style="{ top: navbar }" class="navbar" />
 
+  <div class="modal-backdrop" v-if="showModal">
+    <div class="modal-content">
+      <!-- <button class="close-btn" @click="closeModal">✕</button> -->
+      <div class="check-wrapper">
+        <svg class="checkmark" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none" />
+          <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17" />
+        </svg>
+      </div>
+      <p>Vous êtes bien connecté(e) ! </p>
+    </div>
+  </div>
+
+
+
   <div class="image">
     <div class="texteImage">
       Mintonette Cup
@@ -68,7 +83,8 @@
           <span class="descri">
             C'est le nombre de pays où le volley-ball est aujourd’hui représenté à travers divers clubs,
             compétitions et fédérations nationales. La Fédération Internationale de Volley-ball (FIVB) regroupe
-            <strong>plus de 220 fédérations membres</strong>, montrant l’ampleur mondiale du sport et son implantation.
+            <strong>plus de 220 fédérations membres</strong>, montrant l’ampleur mondiale du sport et son
+            implantation.
           </span>
 
           <div class="voirPlus">
@@ -132,13 +148,45 @@
 
 <script setup>
 import NavView from "@/components/NavView.vue";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
 import CountUp from "./../components/countUp.vue";
+import { useRouter, useRoute } from "vue-router";
+
+const props = defineProps({
+  showModal: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const router = useRouter();
+const route = useRoute();
+
+const showModal = ref(false);
+
+const closeModal = () => {
+  showModal.value = false;
+
+  router.replace({ query: {} });
+};
+
+watch(
+  () => route.query.showModal,
+  (value) => {
+    if (value === 'true') {
+      showModal.value = true;
+      // setTimeout(() => {
+      //   closeModal();
+      // }, 2000);
+    }
+  },
+  { immediate: true } // pour déclencher si showModal est déjà dans l'URL
+);
 
 const navbar = ref("0px");
 
@@ -167,7 +215,6 @@ body::-webkit-scrollbar {
 </style>
 
 <style scoped>
-
 .pointer {
   cursor: pointer;
 }
@@ -204,7 +251,7 @@ body::-webkit-scrollbar {
   padding-top: 50px;
   z-index: 10;
   border-radius: 20px;
-  box-shadow: 0 -10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.2);
   padding-bottom: 10%;
 }
 
@@ -245,7 +292,7 @@ body::-webkit-scrollbar {
   width: 40%;
   object-fit: cover;
   border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .contenuTexte {
@@ -274,6 +321,7 @@ body::-webkit-scrollbar {
 }
 
 @media (max-width: 900px) {
+
   .bloc,
   .bloc:nth-child(even) {
     flex-direction: column;
@@ -298,13 +346,82 @@ body::-webkit-scrollbar {
 }
 
 .presta_formulaire {
-  background: linear-gradient(
-    135deg,
-    var(--colorGradientBlue),
-    var(--colorGradientGreen)
-  );
+  background: linear-gradient(135deg,
+      var(--colorGradientBlue),
+      var(--colorGradientGreen));
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 300px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.2em;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Check animation */
+.check-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px auto;
+}
+
+.checkmark {
+  width: 90%;
+  height: 90%;
+  stroke: var(--colorGradientBlue);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.checkmark-circle {
+  stroke-dasharray: 157;
+  stroke-dashoffset: 157;
+  animation: draw-circle 0.6s forwards;
+}
+
+.checkmark-check {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: draw-check 0.4s 0.6s forwards;
+}
+
+@keyframes draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 </style>

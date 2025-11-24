@@ -19,7 +19,13 @@ import countUp from "@/components/countUp.vue";
 
 
 const routes = [
-  { path: "/", name: "Home", component: Index },
+  { path: "/", 
+    name: "Home", 
+    component: Index,
+    props: route => ({
+      showModal: route.query.showModal === 'true'
+    })
+  },
   {
     path: "/PrestatairePublic",
     name: "PrestatairePublic",
