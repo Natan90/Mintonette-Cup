@@ -1,4 +1,23 @@
 <template>
+    <div class="modal-backdrop" v-if="showModal">
+    <div class="modal-content">
+      <div class="check-wrapper">
+        <svg class="checkmark" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none" />
+          <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17" />
+        </svg>
+      </div>
+      <div v-if="isConnexionModal">
+        <p >{{$t('modal.connexion')}}</p>
+      </div>
+      
+      <div v-else>
+        <p>{{$t('modal.inscription')}}</p>
+      </div>
+      
+    </div>
+  </div>
+
     <div class="page" :class="{ moved: showRegister }">
         <div class="left-side" :class="{ moved: showRegister }">
             <div class="blob" :class="{ moved: showRegister }"></div>
@@ -161,6 +180,20 @@ const userId = ref(0);
 const router = useRouter();
 const userStore = useUserStore();
 
+const showModal = ref(false);
+const isConnexionModal = computed(() => route.path === "/utilisateur/connexion");
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+function ModalShow() {
+    showModal.value = true;
+    setTimeout(() => {
+        closeModal();
+        router.push({name: 'Home'});
+      }, 2000);
+}
 
 
 const valueTexts = computed(() => {
@@ -197,11 +230,7 @@ async function getValuesConnexion() {
         connexion.value = true;
 
         if (connexion.value) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            router.push({
-                name: 'Home', 
-                query: { showModal: true }
-            });
+            ModalShow();
         }
     } catch (err) {
         message.value = `Erreur lors de la connexion : ${err.response?.data?.error || err.message}`;
@@ -238,11 +267,7 @@ async function getValuesInscription() {
         }
 
         if (inscription.value) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            router.push({
-                name: 'Home', 
-                query: { showModal: true }
-            });
+            ModalShow();
         }
     } catch (err) {
         message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;
@@ -669,5 +694,66 @@ input::placeholder {
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 300px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+/* Check animation */
+.check-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px auto;
+}
+
+.checkmark {
+  width: 90%;
+  height: 90%;
+  stroke: var(--colorGradientBlue);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.checkmark-circle {
+  stroke-dasharray: 157;
+  stroke-dashoffset: 157;
+  animation: draw-circle 0.6s forwards;
+}
+
+.checkmark-check {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: draw-check 0.4s 0.6s forwards;
+}
+
+@keyframes draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 </style>

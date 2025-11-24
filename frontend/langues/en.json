@@ -1,22 +1,22 @@
 {
   "mintonetteCup": {
-    "title": "Montpellier hosts the Mintonette Cup, the world volleyball tournament bringing together the best players!"
+    "title": "Montpellier hosts the Mintonette Cup, the world volleyball tournament bringing together the best players!\n"
   },
   "pageLog": {
-    "mdpOublie": "Forgot password ?",
+    "mdpOublie": "Forgot password?",
     "annuler": "Cancel",
     "titreRejoindre": "Join us!",
-    "texteRejoindre": "Don’t have an account yet? Sign up and start your journey with us today.",
+    "texteRejoindre": "Don't have an account yet? Sign up and start your journey with us today.",
     "titreConnecter": "Great to see you again!",
     "texteConnecter": "Already registered? Log in here."
   },
   "user": {
-    "nom": "Last name",
-    "prenom": "First name",
+    "nom": "Last Name",
+    "prenom": "First Name",
     "login": "Username",
     "mdp": "Password",
     "mail": "Email",
-    "dateNaissance": "Date of birth",
+    "dateNaissance": "Date of Birth",
     "sexe": "Gender",
     "typeSexe": {
       "homme": "Male",
@@ -24,17 +24,33 @@
       "autre": "Other"
     },
     "connexion": "Login",
-    "inscription": "Sign up",
+    "inscription": "Sign Up",
     "buttonInscription": "Register",
-    "buttonConnexion": "Log in"
+    "buttonConnexion": "Log In"
   },
   "burgerStand": {
     "title": "Burger Stand",
-    "description": "Good news! The burger stand will indeed be present at the Mintonette Cup.\nYou’ll find a wide selection to satisfy every craving: tasty classic burgers,\nmore indulgent recipes, as well as vegetarian options so everyone can enjoy.\n\nWhether you’re a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It’s the perfect opportunity to share a friendly moment over a good meal while enjoying the event!"
+    "description": "Good news! The burger stand will be present at the Mintonette Cup.\nYou will find a wide selection to satisfy all tastes: delicious classic burgers,\ngourmet creations, and vegetarian options so everyone can enjoy.\n\nWhether you are a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It's the perfect opportunity to share a friendly moment over a good meal while enjoying the event!"
   },
   "services": {
-    "title": "Vendor Services",
-    "actions": ["Order meal", "Book table"]
+    "title": "Provider Services",
+    "actions": ["Order Meal", "Reserve Table"]
   },
-  "homeLink": "Home"
+  "homeLink": "Home",
+  "modal": {
+    "connexion": "Login successful! \n Happy to see you back on the court.",
+    "inscription": "Registration complete! \n Welcome to the volleyball adventure."
+  },
+  "blocInfo": {
+    "voirPlus": "See more",
+    "titleEdition": "3rd edition",
+    "descriEdition": "The Mintonette Cup, now hosted in <strong>Montpellier</strong>, has seen remarkable growth and has become one of the major events for amateur volleyball in the South of France. The previous edition gathered nearly <strong>15,000 spectators over three days</strong>, thanks to the appeal of Montpellier’s facilities and the city’s strong volleyball culture, notably supported by <strong>Montpellier Hérault Sport Club Volleyball</strong>.",
+    "titleMillions": " million",
+    "descriPratiquants": "This is the number of people playing volleyball, whether for leisure, school programs, or at a high level. This makes volleyball one of the <strong>most popular team sports in the world</strong>, just behind football.",
+    "titlePays": " countries",
+    "descriPays": "This is the number of countries where volleyball is represented today through various clubs, competitions, and national federations. The International Volleyball Federation (FIVB) has <strong>over 220 member federations</strong>, showing the sport's global reach and presence.",
+    "descriAudience": "This was the peak viewership recorded for a volleyball match in 2024, demonstrating the growing public interest in the sport. International competitions attract <strong>millions of viewers</strong> and increase volleyball’s visibility.",
+    "titleReseauxSociaux": "Social media also made its mark",
+    "descriReseauxSociaux": "The digital coverage of the Mintonette Cup generated <strong>1.2 million impressions</strong> and over <strong>150,000 interactions</strong>. Organizers aim to exceed <strong>300,000 online views</strong> for the next edition, further boosting the event’s popularity."
+  }
 }
