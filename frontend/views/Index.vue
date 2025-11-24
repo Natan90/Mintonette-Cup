@@ -13,89 +13,14 @@
 
     <section class="infos">
 
-      <div class="bloc">
-        <img class="illustration" src="./../images/logo-couleur.png" />
-
-        <div class="contenuTexte">
-          <span class="title">{{ $t('blocInfo.titleEdition') }}</span>
-
-          <!-- <span class="descri">
-            <p v-html="$t('blocInfo.descriEdition')"></p>
-          </span> -->
-          <span class="descri">
-            <strong>Ca fait tellement viellot (2008 je dirais)</strong>.
-          </span>
-
-          <div class="voirPlus">
-            <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bloc">
-        <img class="illustration" src="./../images/photo_fond.png" />
-
+      <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
+        <img class="illustration" :src="item.image" />
         <div class="contenuTexte">
           <span class="title">
-            <countUp :from="0" :to="760" :duration="2" class="count-up-text" /> {{ $t('blocInfo.titleMillions') }}
+            <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp"/>
+            {{ item.title }}
           </span>
-
-          <span class="descri">
-            <p v-html="$t('blocInfo.descriPratiquants')"></p>
-          </span>
-
-          <div class="voirPlus">
-            <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bloc">
-        <img class="illustration" src="./../images/logo-couleur.png" />
-
-        <div class="contenuTexte">
-          <span class="title">
-            <countUp :from="0" :to="200" :duration="2" class="count-up-text" /> {{ $t('blocInfo.titlePays') }}
-          </span>
-
-          <span class="descri">
-            <p v-html="$t('blocInfo.descriPays')"></p>
-          </span>
-
-          <div class="voirPlus">
-            <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bloc">
-        <img class="illustration" src="./../images/logo-couleur.png" />
-
-        <div class="contenuTexte">
-          <span class="title">
-            <countUp :from="0" :to="24" :duration="2" class="count-up-text" /> {{ $t('blocInfo.titleMillions') }}
-          </span>
-
-          <span class="descri">
-            <p v-html="$t('blocInfo.descriAudience')"></p>
-          </span>
-
-          <div class="voirPlus">
-            <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bloc">
-        <img class="illustration" src="./../images/logo-couleur.png" />
-
-        <div class="contenuTexte">
-          <span class="title">{{ $t('blocInfo.titleReseauxSociaux') }}</span>
-
-          <span class="descri">
-            <p v-html="$t('blocInfo.descriReseauxSociaux')"></p>
-          </span>
-
+          <span class="descri" v-html="item.descri"></span>
           <div class="voirPlus">
             <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
           </div>
@@ -116,14 +41,35 @@
 
 
 <script setup>
+/* ********************
+        IMPORTS 
+******************** */
 import NavView from "@/components/NavView.vue";
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
 import CountUp from "./../components/countUp.vue";
+import { useI18n } from "vue-i18n";
+
+/* ********************
+    IMAGES IMPORTS 
+******************** */
+import logoCouleur from '../images/logo-couleur.png';
+import photoFond from '../images/photo_fond.png';
+
+
+const { t } = useI18n();
+
+const blocInfoArray = computed(() => [
+  { title: t("blocInfo.titleEdition"), descri: t("blocInfo.descriEdition"), image: logoCouleur },
+  { title: t("blocInfo.titleMillions"), descri: t("blocInfo.descriPratiquants"), image: photoFond, countUp: 760 },
+  { title: t("blocInfo.titlePays"), descri: t("blocInfo.descriPays"), image: logoCouleur, countUp: 200 },
+  { title: t("blocInfo.titleMillions"), descri: t("blocInfo.descriAudience"), image: logoCouleur, countUp: 24 },
+  { title: t("blocInfo.titleReseauxSociaux"), descri: t("blocInfo.descriReseauxSociaux"), image: logoCouleur },
+]);
 
 
 const navbar = ref("0px");
