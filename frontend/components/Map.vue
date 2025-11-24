@@ -983,11 +983,11 @@ onMounted(() => {
       const name = searchFeature.get("name");
       const pixel = event.originalEvent;
       label.style.display = "block";
-      label.style.left = pixel.pageX + 8 + "px";
-      label.style.top = pixel.pageY - 25 + "px";
+      label.style.left = pixel.pageX - 110 + "px"; // pour changer la distance horizontale
+      label.style.top = pixel.pageY - 735 + "px"; // pour changer la distance verticale
       label.innerText = name;
       mapElement.style.cursor = "pointer";
-      label.style.fontSize = "12px";
+      label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
