@@ -47,7 +47,7 @@ function drop_handler(ev) {
     const element = document.getElementById(id);
 
     ev.target.appendChild(element);
-    isInBox = true;
+    isInBox.value = true;
 }
 </script>
 
