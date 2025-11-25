@@ -13,64 +13,92 @@ import { gsap } from 'gsap';
 
 const props = defineProps({
     images: { type: Array, default: () => [] },
-    containerWidth: { type: Number, default: 400 },
-    containerHeight: { type: Number, default: 400 },
-    transformStyles: {
-        type: Array,
-    },
-    enableHover: { type: Boolean, default: true }
+    containerWidth: Number,
+    containerHeight: Number,
+    transformStyles: Array
 });
 
 const cardStates = reactive([]);
 
-// Animation d'apparition
 onMounted(() => {
     props.images.forEach((_, i) => {
-        const baseTransform = props.transformStyles[i] || 'none';
-        gsap.set(`.card-${i}`, parseTransform(baseTransform));
+        const base = parseTransform(props.transformStyles[i] || 'none');
+        cardStates[i] = { 
+            x: base.x,
+            rotate: base.rotate
+        };
+        gsap.set(`.card-${i}`, base);
     });
 
-    gsap.from('.card', { scale: 0, stagger: 0.06, ease: 'elastic.out(1,0.8)', delay: 0.5 });
+    gsap.from('.card', { 
+        scale: 0,
+        stagger: 0.06,
+        ease: 'elastic.out(1,0.8)',
+        delay: 0.5 
+    });
 });
 
 function parseTransform(str) {
-    const rotate = (str.match(/rotate\(([-0-9.]+)deg\)/) || [0, 0])[1];
-    const translateX = (str.match(/translate\(([-0-9.]+)px\)/) || [0, 0])[1];
-    return { rotate: parseFloat(rotate), x: parseFloat(translateX), scale: 1 };
+    const rotate = parseFloat((str.match(/rotate\(([-0-9.]+)deg\)/) || [0, 0])[1]);
+    const x = parseFloat((str.match(/translate\(([-0-9.]+)px\)/) || [0, 0])[1]);
+    return { rotate, x, scale: 1 };
 }
 
 
-// Hover : carte survolée à rotate 0, les autres sont repoussées
 const hoverCard = (hoveredIdx) => {
-    const hoverX = cardStates[hoveredIdx].x;
+    const originX = cardStates[hoveredIdx].x;
 
     props.images.forEach((_, i) => {
+        const base = cardStates[i];
+
+        // Si la carte est déjà à la bonne position et la bonne scale, ne rien faire
+        const currentX = gsap.getProperty(`.card-${i}`, "x");
+        const currentScale = gsap.getProperty(`.card-${i}`, "scale");
+        if (i === hoveredIdx && currentX === originX && currentScale === 1.1) return;
+
         gsap.killTweensOf(`.card-${i}`);
+
         if (i === hoveredIdx) {
-            gsap.to(`.card-${i}`, { scale: 1.1, rotate: 0, duration: 0.4, ease: 'back.out(1.4)' });
-        } else {
-            const direction = i < hoveredIdx ? -1 : 1;
-            const distance = Math.abs(i - hoveredIdx) * 160;
-            gsap.to(`.card-${i}`, { x: hoverX + direction * distance, duration: 0.4, ease: 'back.out(1.4)' });
+            gsap.to(`.card-${i}`, { x: originX, rotate: 0, scale: 1.1, duration: 0.3, ease: "circ.out" });
+            return;
+        }
+        if (i === hoveredIdx - 1) {
+            gsap.to(`.card-${i}`, { x: originX - 300, rotate: base.rotate, scale: 1, duration: 0.3, ease: "circ.out" });
+            return;
+        }
+        if (i === hoveredIdx + 1) {
+            gsap.to(`.card-${i}`, { x: originX + 300, rotate: base.rotate, scale: 1, duration: 0.3, ease: "circ.out" });
+            return;
+        }
+
+        const GAP = 50;
+        if (i < hoveredIdx - 1) {
+            const steps = (hoveredIdx - 1) - i;
+            gsap.to(`.card-${i}`, { x: originX - 300 - steps * GAP, rotate: base.rotate, scale: 1, duration: 0.3, ease: "circ.out" });
+        }
+        if (i > hoveredIdx + 1) {
+            const steps = i - (hoveredIdx + 1);
+            gsap.to(`.card-${i}`, { x: originX + 300 + steps * GAP, rotate: base.rotate, scale: 1, duration: 0.3, ease: "circ.out" });
         }
     });
 };
 
+
 const resetCards = () => {
     props.images.forEach((_, i) => {
+        const base = cardStates[i];
         gsap.killTweensOf(`.card-${i}`);
-        const baseTransform = parseTransform(props.transformStyles[i] || 'none');
-        gsap.to(`.card-${i}`, { ...baseTransform, scale: 1, duration: 0.4, ease: 'back.out(1.4)' });
+        gsap.to(`.card-${i}`, {
+            x: base.x,
+            rotate: base.rotate,
+            scale: 1,
+            duration: 0.3,
+            ease: "circ.out"
+        });
     });
 };
-
-
-// Extraire rotation depuis la string transform
-const getRotate = (transformStr) => {
-    const match = transformStr.match(/rotate\(([-0-9.]+)deg\)/);
-    return match ? parseFloat(match[1]) : 0;
-};
 </script>
+
 
 <style scoped>
 .bounceCardsContainer {
@@ -95,5 +123,6 @@ const getRotate = (transformStr) => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none;
 }
 </style>
