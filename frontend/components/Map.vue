@@ -978,11 +978,13 @@ onMounted(() => {
 
     if (searchFeature) {
       const name = searchFeature.get("name");
+      //C'est pour récupérer la position et les dimensions de la carte ( pour afficher le label au bon endroit )
       const bounds = mapContainer.getBoundingClientRect();
 
       const labelHeight = label.offsetHeight || 20;
-      const x =
-        event.originalEvent.clientX - bounds.left - label.offsetWidth / 2;
+      //Pour centrer sur le cursur 
+      const x = event.originalEvent.clientX - bounds.left - label.offsetWidth / 2;
+      //Pour baisser de 70 px 
       const y = event.originalEvent.clientY - bounds.top - labelHeight + 70;
 
       label.style.display = "block";
