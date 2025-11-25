@@ -1,77 +1,139 @@
 <template>
-  <NavView :style="{ top: navbar }" class="navbar" />
+  <div>
+    <NavView :style="{ top: navbar }" class="navbar" />
 
-  <div class="image">
-    <div class="texteImage">
+    <div class="image">
+      <img src="../images/photo_fond.png" alt="" />
+      <div class="texteImage">
       Mintonette Cup
-      <!-- {{ $t("mintonetteCup.title") }} -->
+        <!-- {{ $t("mintonetteCup.title") }} -->
+      </div>
     </div>
-  </div>
+<PresentationMintonette></PresentationMintonette>
+    <Map> </Map>
 
-  <div class="fondBlanc">
-    <Map></Map>
+    <!-- <TableauMatchs></TableauMatchs> -->
 
     <section class="infos">
+      <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
 
-      <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
-        <img class="illustration" :src="item.image" />
-        <div class="contenuTexte">
-          <span class="title">
-            <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp"/>
-            {{ item.title }}
+<!-- #############################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
+
+      <div class="bloc">
+          <span class="title">3ème édition</span>
+          <img class="illustration" src="./../images/logo-couleur.png" />
+          <span class="descri">
+              La Mintonette Cup, désormais accueillie à
+              <strong>Montpellier</strong>, connaît un essor remarquable et
+              s’impose comme l’un des rendez-vous majeurs du volley amateur dans
+              le Sud de la France. 
+            
+              L’édition précédente a rassemblé près de
+              <strong>15 000 spectateurs sur trois jours</strong>, portée par
+              l’attractivité des installations montpelliéraines et la forte
+              culture volley de la ville, notamment grâce à la présence du
+              <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.
           </span>
-          <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span>
-          <span class="descri" v-html="item.descri" v-else></span>
+          <span class="descri" v-html="item.descri"></span>
           <div class="voirPlus">
-            <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
+              <span class="pointer">Voir plus</span>
           </div>
-        </div>
+      </div>
+
+      <div class="bloc">
+          <span class="title"><countUp :from="0" :to="760" :duration="2" class="count-up-text" /> millions</span>
+          <img class="illustration" src="./../images/photo_fond.png" />
+          <span class="descri">
+            C'est le nombre  de personnes pratiquants le volley-ball, qu’il s’agisse de
+            loisirs, de pratique scolaire ou à haut niveau. Ce chiffre fait du
+            volley-ball l’un des sports collectifs <strong>les plus populaires au monde</strong>,
+            juste derrière le football.
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
+      </div>
+      
+      <div class="bloc">
+          <span class="title"><countUp :from="0" :to="200" :duration="2" class="count-up-text" /> pays</span>
+          <img class="illustration" src="./../images/foule.jpg" />
+          <span class="descri">
+            C'est le nombre de pays oû le volley-ball est aujourd’hui représenté
+             à travers divers clubs,
+            compétitions et fédérations nationales. La Fédération Internationale
+            de Volley-ball (FIVB) regroupe
+            <strong>plus de 220 fédérations membres</strong>, montrant l’ampleur
+            mondiale du sport et son implantation dans toutes les régions du
+            globe.
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
+      </div>
+
+      <div class="bloc">
+          <span class="title"><countUp :from="0" :to="24" :duration="2" class="count-up-text" /> millions</span>
+          <img class="illustration" src="./../images/stade.jpg" />
+          <span class="descri">
+            C’est le pic d’audience enregistré pour un match de volley-ball en
+            2024, preuve de l’intérêt croissant du public pour ce sport. Les
+            compétitions internationales, en particulier, attirent
+            <strong>des millions de téléspectateurs</strong> et contribuent à
+            renforcer la visibilité du volley sur la
+            <strong>scène sportive mondiale</strong>.
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
+      </div>
+
+      <div class="bloc">
+          <span class="title"><countUp :from="0" :to="150" :duration="2" class="count-up-text" /> 000</span>
+          <img class="illustration" src="./../images/reseaux.jpg" />
+          <span class="descri">
+            C'est le nombre d'interactions sur les réseaux sociaux générées par l'édition précédente de la Mintonette Cup,
+            alimentées par des vidéos
+            courtes, <strong>des moments forts</strong> des matchs et des <strong>interviews exclusives</strong>.
+            Forts de cette dynamique, les organisateurs visent pour la prochaine
+            édition de dépasser les
+            <strong>300 000 visionnages en ligne</strong>, consolidant ainsi la
+            réputation de la Mintonette Cup comme un événement incontournable à
+            Montpellier.
+            Les réseaux sociaux n’ont pas été en reste !
+          </span>
+          <div class="voirPlus">
+              <span class="pointer">Voir plus</span>
+          </div>
       </div>
 
     </section>
 
-    <div class="presta_formulaire">
-      <ListPresta></ListPresta>
-      <Formulaire></Formulaire>
-    </div>
-
   </div>
+  <!-- <router-link to="/PolygoneCreation" class="btnLink"
+    >Truc pour les polygones</router-link
+  >
+  <br /><br /> -->
+
+  <div class="presta_formulaire">
+    <ListPresta></ListPresta>
+    <Formulaire></Formulaire>
+  </div>
+
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
   <Footer></Footer>
 </template>
 
-
 <script setup>
-/* ********************
-        IMPORTS 
-******************** */
 import NavView from "@/components/NavView.vue";
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
 import Formulaire from "./Formulaire.vue";
 import CountUp from "./../components/countUp.vue";
-import { useI18n } from "vue-i18n";
-
-/* ********************
-    IMAGES IMPORTS 
-******************** */
-import logoCouleur from '../images/logo-couleur.png';
-import photoFond from '../images/photo_fond.png';
-
-
-const { t } = useI18n();
-
-const blocInfoArray = computed(() => [
-  { title: t("blocInfo.titleEdition"), descri: t("blocInfo.descriEdition"), image: logoCouleur },
-  { title: t("blocInfo.titleMillions"), descri: t("blocInfo.descriPratiquants"), image: photoFond, countUp: 760 },
-  { title: t("blocInfo.titlePays"), descri: t("blocInfo.descriPays"), image: logoCouleur, countUp: 200 },
-  { title: t("blocInfo.titleMillions"), descri: t("blocInfo.descriAudience"), image: logoCouleur, countUp: 24 },
-  { title: t("blocInfo.titleReseauxSociaux"), descri: t("blocInfo.descriReseauxSociaux"), image: logoCouleur },
-]);
-
+import PresentationMintonette from "./PresentationMintonette.vue";
 
 const navbar = ref("0px");
 
@@ -92,7 +154,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-
 <style>
 body::-webkit-scrollbar {
   display: none;
@@ -100,7 +161,8 @@ body::-webkit-scrollbar {
 </style>
 
 <style scoped>
-.pointer {
+
+.pointer{    
   cursor: pointer;
 }
 
@@ -113,31 +175,10 @@ body::-webkit-scrollbar {
   z-index: 999;
 }
 
-.image {
-  position: fixed;
-  top: 0;
-  left: 0;
+.image img {
   width: 100%;
-  height: 100vh;
-  background-image: url("../images/photo_fond.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  filter: brightness(0.7);
-  z-index: -1;
-}
-
-.fondBlanc {
-  width: 90%;
-  margin: auto;
-  background: white;
-  position: relative;
-  margin-top: 100vh;
-  padding-top: 50px;
-  z-index: 10;
-  border-radius: 20px;
-  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.2);
-  padding-bottom: 10%;
+  height: 100%;
+  /* margin-top: 1.5em; */
 }
 
 .texteImage {
@@ -156,84 +197,76 @@ body::-webkit-scrollbar {
 
 .infos {
   display: flex;
-  flex-direction: column;
-  gap: 80px;
-  width: 90%;
-  margin: 50px auto;
+  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+
+  width: 95%;
+  margin: 50px 2.5% 50px 2.5%;
+  gap: 50px;
 }
 
 .bloc {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--jaune-logo);
+    opacity: 0.7;
+    border: solid black 1px;
+    padding: 5px 10px;
+    max-width: 60%;
+    width: 300px;
+
+    transition: var(--transition-fast);
 }
 
-.bloc:nth-child(even) {
-  flex-direction: row-reverse;
+.bloc:hover {
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.bloc .title {
+    font-weight: bold;
+    font-size: 1.3em;
+    transition: font-size 0.3s ease;
 }
 
 .illustration {
-  width: 40%;
-  object-fit: cover;
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.contenuTexte {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-}
-
-.title {
-  font-weight: 700;
-  font-size: 2em;
-  color: var(--bleu-logo);
+    width: 90%;
+    margin: 20px 5%;
+    background-color: white;
+    height: 150px;
+    object-fit: cover;
 }
 
 .descri {
-  font-size: 1.1em;
-  line-height: 1.6;
+    font-size: 0.7em;
+    height: 2.7em;
+    overflow: hidden;
+    display: -webkit-box;
+    /* limite à 2 lignes */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .voirPlus {
-  color: var(--bleu-logo);
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-@media (max-width: 900px) {
-
-  .bloc,
-  .bloc:nth-child(even) {
-    flex-direction: column;
-  }
-
-  .illustration {
     width: 100%;
-  }
-
-  .contenuTexte {
-    text-align: center;
-    max-width: 100%;
-  }
-
-  .title {
-    font-size: 1.7em;
-  }
-
-  .descri {
-    font-size: 1em;
-  }
+    display: flex;
+    justify-content: flex-end;
+    text-align: end;
+    color: var(--bleu-logo);
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .presta_formulaire {
-  background: linear-gradient(135deg,
-      var(--colorGradientBlue),
-      var(--colorGradientGreen));
+  background: linear-gradient(
+    135deg,
+    var(--colorGradientBlue),
+    var(--colorGradientGreen)
+  );
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
