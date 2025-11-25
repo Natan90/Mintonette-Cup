@@ -984,15 +984,20 @@ onMounted(() => {
       label.style.display = "block";
       //Pour centrer sur le cursur
 
-      const x =
-        event.originalEvent.clientX - bounds.left - label.offsetWidth / 2;
-      const y =
-        event.originalEvent.clientY - bounds.top - label.offsetHeight + 1020;
+      const mouseX = event.originalEvent.clientX;
+      const mouseY = event.originalEvent.clientY;
+
+      // Montrer le label AVANT calcul pour obtenir offsetWidth/offsetHeight
+      label.style.display = "block";
+
+      // Centrer horizontalement + décaler verticalement de 15px sous la souris
+      const x = mouseX - label.offsetWidth / 2;
+      const y = mouseY - 40;
 
       label.style.left = x + "px";
       label.style.top = y + "px";
 
-      // reste du code…
+      
       label.innerText = name;
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
@@ -1188,11 +1193,11 @@ body::-webkit-scrollbar {
   color: #fff;
   transform: translateY(-2px);
 }
-
 .hoverName {
   display: none;
   z-index: 999999;
-  position: absolute;
+  pointer-events: none;
+  position: fixed;
   padding: 6px 10px;
   background: #fff;
   border-radius: 6px;
