@@ -20,7 +20,8 @@
             <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp"/>
             {{ item.title }}
           </span>
-          <span class="descri" v-html="item.descri"></span>
+          <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span>
+          <span class="descri" v-html="item.descri" v-else></span>
           <div class="voirPlus">
             <span class="pointer">{{ $t('blocInfo.voirPlus') }}</span>
           </div>
