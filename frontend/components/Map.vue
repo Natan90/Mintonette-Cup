@@ -911,7 +911,7 @@ onMounted(() => {
   //On ajoute les tableaux des coordonnées
   const featuresList = features(generalMap);
 
-  //Style hover et normal
+  //Style hover et normal //Stroke c'est pour le contour
   hoverStyle = new Style({
     stroke: new Stroke({ color: "#ffffff", width: 2 }),
     fill: new Fill({ color: "rgba(0,22,122,0.3)" }),
@@ -960,13 +960,10 @@ onMounted(() => {
   lastFeature = null;
   label = document.getElementById("hoverName");
   map.on("pointermove", (event) => {
-    const searchFeature = map.forEachFeatureAtPixel(
-      event.pixel,
-      (featureFound) => featureFound
-    );
-    const mapElement = document.getElementById("map");
+    const searchFeature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
+    const mapContainer = document.getElementById("map");
 
-    //Permet de remettre la bonne couleur quand on part du polygone
+    // Remet le style normal si on quitte une feature
     if (searchFeature !== lastFeature) {
       if (lastFeature) {
         if (lastFeature.get("type") === "stand")
@@ -981,14 +978,21 @@ onMounted(() => {
 
     if (searchFeature) {
       const name = searchFeature.get("name");
-      const pixel = event.originalEvent;
+      const bounds = mapContainer.getBoundingClientRect();
+
+      const labelHeight = label.offsetHeight || 20;
+      const x =
+        event.originalEvent.clientX - bounds.left - label.offsetWidth / 2;
+      const y = event.originalEvent.clientY - bounds.top - labelHeight + 70;
+
       label.style.display = "block";
-      label.style.left = pixel.pageX - 110 + "px"; // pour changer la distance horizontale
-      label.style.top = pixel.pageY - 735 + "px"; // pour changer la distance verticale
+      label.style.left = x + "px";
+      label.style.top = y + "px";
       label.innerText = name;
-      mapElement.style.cursor = "pointer";
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
+
+      // Styles selon le type
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
         label.style.backgroundColor = "#000000";
@@ -1002,10 +1006,13 @@ onMounted(() => {
         searchFeature.setStyle(hoverStyle);
         label.style.backgroundColor = "#00167a";
       }
+
+      mapContainer.style.cursor = "pointer";
     } else {
-      mapElement.style.cursor = "default";
       label.style.display = "none";
+      mapContainer.style.cursor = "default";
     }
+
     lastFeature = searchFeature;
   });
 
