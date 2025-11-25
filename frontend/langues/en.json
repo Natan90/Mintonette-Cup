@@ -40,7 +40,8 @@
   "homeLink": "Home",
   "modal": {
     "connexion": "Login successful! \n Happy to see you back on the court.",
-    "inscription": "Registration complete! \n Welcome to the volleyball adventure."
+    "inscription": "Registration complete! \n Welcome to the volleyball adventure.",
+    "goToPrestataire": "Launch your service provider profile"
   },
   "blocInfo": {
     "voirPlus": "See more",

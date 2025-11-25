@@ -1,22 +1,24 @@
 <template>
     <div class="modal-backdrop" v-if="showModal">
-    <div class="modal-content">
-      <div class="check-wrapper">
-        <svg class="checkmark" viewBox="0 0 52 52">
-          <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none" />
-          <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17" />
-        </svg>
-      </div>
-      <div v-if="isConnexionModal">
-        <p >{{$t('modal.connexion')}}</p>
-      </div>
-      
-      <div v-else>
-        <p>{{$t('modal.inscription')}}</p>
-      </div>
-      
+        <div class="modal-content">
+            <span class="modal-close" @click="closeModal">&times;</span>
+            <div class="check-wrapper">
+                <svg class="checkmark" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none" />
+                    <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17" />
+                </svg>
+            </div>
+            <div v-if="isConnexionModal">
+                <p>{{ $t('modal.connexion') }}</p>
+            </div>
+
+            <div v-else>
+                <p>{{ $t('modal.inscription') }}</p>
+                <button @click="goToAddPrestataire" class="button-prestataire">{{ $t('modal.goToPrestataire') }}</button>
+            </div>
+
+        </div>
     </div>
-  </div>
 
     <div class="page" :class="{ moved: showRegister }">
         <div class="left-side" :class="{ moved: showRegister }">
@@ -184,15 +186,25 @@ const showModal = ref(false);
 const isConnexionModal = computed(() => route.path === "/utilisateur/connexion");
 
 const closeModal = () => {
-  showModal.value = false;
+    showModal.value = false;
+
+    if (!isConnexionModal.value) {
+        router.push({ name: 'Home' });
+    }
 };
 
-function ModalShow() {
+function ModalShow(isInscription) {
     showModal.value = true;
-    setTimeout(() => {
-        closeModal();
-        router.push({name: 'Home'});
-      }, 2000);
+    if (!isInscription) {
+        setTimeout(() => {
+            closeModal();
+            router.push({ name: 'Home' });
+        }, 2000);
+    }
+}
+
+function goToAddPrestataire() {
+    router.push({ name: 'AddPrtestataire' })
 }
 
 
@@ -230,7 +242,7 @@ async function getValuesConnexion() {
         connexion.value = true;
 
         if (connexion.value) {
-            ModalShow();
+            ModalShow(false);
         }
     } catch (err) {
         message.value = `Erreur lors de la connexion : ${err.response?.data?.error || err.message}`;
@@ -267,7 +279,7 @@ async function getValuesInscription() {
         }
 
         if (inscription.value) {
-            ModalShow();
+            ModalShow(true);
         }
     } catch (err) {
         message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;
@@ -697,63 +709,102 @@ input::placeholder {
 }
 
 .modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
 }
 
 .modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 300px;
-  width: 90%;
-  text-align: center;
-  position: relative;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 300px;
+    width: 90%;
+    text-align: center;
+    position: relative;
 }
 
 /* Check animation */
 .check-wrapper {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 20px auto;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px auto;
 }
 
 .checkmark {
-  width: 90%;
-  height: 90%;
-  stroke: var(--colorGradientBlue);
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
+    width: 90%;
+    height: 90%;
+    stroke: var(--colorGradientBlue);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
 }
 
 .checkmark-circle {
-  stroke-dasharray: 157;
-  stroke-dashoffset: 157;
-  animation: draw-circle 0.6s forwards;
+    stroke-dasharray: 157;
+    stroke-dashoffset: 157;
+    animation: draw-circle 0.6s forwards;
 }
 
 .checkmark-check {
-  stroke-dasharray: 40;
-  stroke-dashoffset: 40;
-  animation: draw-check 0.4s 0.6s forwards;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: draw-check 0.4s 0.6s forwards;
 }
 
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+  color: #ff0000;
+}
+
+.button-prestataire {
+  background: linear-gradient(90deg, var(--colorGradientPurple), var(--colorGradientBlue));
+  color: white;
+  font-weight: 600;
+  font-size: 1.2em;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgb(30, 144, 255, 0.4);
+}
+
+.button-prestataire:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgb(30, 144, 255, 054);
+}
+
+.button-prestataire:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 10px rgb(30, 144, 255, 0.3);
+}
+
+
 @keyframes draw-circle {
-  to {
-    stroke-dashoffset: 0;
-  }
+    to {
+        stroke-dashoffset: 0;
+    }
 }
 
 @keyframes draw-check {
-  to {
-    stroke-dashoffset: 0;
-  }
+    to {
+        stroke-dashoffset: 0;
+    }
 }
 </style>

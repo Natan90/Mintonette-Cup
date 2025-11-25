@@ -40,7 +40,8 @@
   "homeLink": "Accueil",
   "modal": {
     "connexion": "Connexion réussie ! \n Heureux(se) de vous revoir sur le terrain.",
-    "inscription": "Inscription validée ! \n Bienvenue dans l'aventure volley."
+    "inscription": "Inscription validée ! \n Bienvenue dans l'aventure volley.",
+    "goToPrestataire": "Lancez votre profil prestataire"
   },
   "blocInfo": {
     "voirPlus": "Voir plus",
