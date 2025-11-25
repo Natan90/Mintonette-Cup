@@ -981,15 +981,18 @@ onMounted(() => {
       //C'est pour récupérer la position et les dimensions de la carte ( pour afficher le label au bon endroit )
       const bounds = mapContainer.getBoundingClientRect();
 
-      const labelHeight = label.offsetHeight || 20;
-      //Pour centrer sur le cursur 
-      const x = event.originalEvent.clientX - bounds.left - label.offsetWidth / 2;
-      //Pour baisser de 70 px 
-      const y = event.originalEvent.clientY - bounds.top - labelHeight + 70;
-
       label.style.display = "block";
+      //Pour centrer sur le cursur
+
+      const x =
+        event.originalEvent.clientX - bounds.left - label.offsetWidth / 2;
+      const y =
+        event.originalEvent.clientY - bounds.top - label.offsetHeight + 1020;
+
       label.style.left = x + "px";
       label.style.top = y + "px";
+
+      // reste du code…
       label.innerText = name;
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
@@ -1188,7 +1191,7 @@ body::-webkit-scrollbar {
 
 .hoverName {
   display: none;
-  z-index: 9999;
+  z-index: 999999;
   position: absolute;
   padding: 6px 10px;
   background: #fff;
@@ -1203,6 +1206,7 @@ body::-webkit-scrollbar {
   align-items: center;
 }
 .map {
+  z-index: 1;
   margin: 0 auto;
   border: 2px solid #00167a;
   border-radius: 10px;
