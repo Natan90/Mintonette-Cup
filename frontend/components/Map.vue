@@ -982,8 +982,8 @@ onMounted(() => {
       const bounds = mapContainer.getBoundingClientRect();
 
       label.style.display = "block";
-      //Pour centrer sur le cursur
-
+      
+      //Pour centrer sur le curseur
       const mouseX = event.originalEvent.clientX;
       const mouseY = event.originalEvent.clientY;
 
@@ -1213,7 +1213,7 @@ body::-webkit-scrollbar {
 .map {
   z-index: 1;
   margin: 0 auto;
-  border: 2px solid #00167a;
+  /* border: 2px solid #00167a; */
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
