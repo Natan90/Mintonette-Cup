@@ -3,10 +3,6 @@
     <div class="container">
         <div class="content_left">
             <div>
-                <div class="title">
-                    <p>Ajouter un nouveau prestataire</p>
-                </div>
-
                 <p id="target" @dragover="dragover_handler" @drop="drop_handler">
                     Zone pour déposer
                 </p>
@@ -14,10 +10,17 @@
 
         </div>
         <div class="content_right">
-            <div>
-                <p id="p1" draggable="true" @dragstart="dragstart_handler">
-                    Test déplacement
-                </p>
+            <div class="title">
+                <p>Ajouter un nouveau prestataire</p>
+            </div>
+            <div class="type_prestataire">
+                <div draggable="true" @dragstart="dragstart_handler" v-for="(item, index) in type_prestataire"
+                    :key="index" class="boite_type_presta" :class="{ notInBox: !item.inBox }" :id="`p-${index}`">
+                    <p class="texte_type_presta">
+                        {{ item.nom_type_prestataire }}
+                    </p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -26,10 +29,29 @@
 
 <script setup>
 import NavView from '@/components/NavView.vue';
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import axios from 'axios';
 
 
 const isInBox = ref(false);
+const type_prestataire = ref([]);
+
+onMounted(async () => {
+    try {
+        fetchPrestataire();
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+async function fetchPrestataire() {
+    try {
+        const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
+        type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 function dragstart_handler(ev) {
     ev.dataTransfer.setData("text/plain", ev.target.id);
@@ -47,7 +69,8 @@ function drop_handler(ev) {
     const element = document.getElementById(id);
 
     ev.target.appendChild(element);
-    isInBox.value = true;
+    const index = parseInt(id.split('-')[1]);
+    type_prestataire.value[index].inBox = true;
 }
 </script>
 
@@ -57,21 +80,45 @@ function drop_handler(ev) {
     flex-direction: row;
     gap: 2rem;
     padding: 2rem;
-    max-width: 1200px;
+    max-width: 80%;
     margin: 0 auto;
-    min-height: calc(100vh - 80px);
 }
 
-.content_left, .content_right {
+.content_left,
+.content_right {
     flex: 1;
 }
 
-.title {}
+.content_right {
+    display: flex;
+    flex-direction: column;
+}
 
 #target {
     padding: 20px;
     border: 2px dashed #888;
     border-radius: 10px;
     min-height: 50px;
+}
+
+.boite_type_presta {
+    text-align: center;
+}
+
+.type_prestataire {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.texte_type_presta {
+    font-size: 1.2em;
+    padding: 0px 10px;
+}
+
+.notInBox {
+    border: 1px solid #888;
+    border-radius: 7px;
 }
 </style>
