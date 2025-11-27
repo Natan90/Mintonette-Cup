@@ -1,52 +1,78 @@
 <template>
-    <div>
-        <NavBar />
+  <div>
+    <NavBar />
+    <h1>Gradin Nord</h1>
+    <section>
+      <p class="legend">Cliquez sur une place pour réserver / annuler</p>
 
-        <main class="gradin-nord">
-            <h1>Gradin Nord</h1>
-        </main>
+      <div class="seatJsp">
+        <button
+          class="seat"
+          v-for="(placeNumber, index) in 100"
+          :key="index"
+          @click="toggleSeat(placeNumber)"
+          :class="{ reserved: reservedSeats.includes(placeNumber) }">
+          <img src="/AvailableSeat.svg" alt="Siège disponible" class/>
+        </button>
+      </div>
 
-        <section class="seating-container">
-            <p class="legend">Cliquez sur une place pour réserver / annuler</p>
-
-            <div class="seating-grid">
-                <button
-                    v-for="n in 40"
-                    :key="n"
-                    class="seat"
-                    @click="$event.currentTarget.classList.toggle('reserved')"
-                    :title="`Place ${n} — cliquer pour réserver / annuler`"
-                >
-                    <img
-                        :src="require('@/assets/seat.png')"
-                        :alt="`Place ${n} — cliquer pour réserver / annuler`"
-                        class="seat-icon"
-                        draggable="false"
-                    />
-                    {{ n }}
-                </button>
-            </div>
-
-            <Footer />
-        </section>
-    </div>
+     
+    </section>
+    <Footer />
+  </div>
 </template>
 
-<script>
-import NavBar from '../NavView.vue'
-import Footer from '../Footer.vue'
+<script setup>
+import { ref } from "vue";
+import NavBar from "../NavView.vue";
+import Footer from "../Footer.vue";
 
-export default {
-    name: 'GradinNord',
-    components: {
-        NavBar,
-        Footer
-    }
+const reservedSeats = ref([]);
+
+function toggleSeat(placeNumber) {
+  if (reservedSeats.value.includes(placeNumber)) {
+    reservedSeats.value = reservedSeats.value.filter((n) => n !== placeNumber);
+  } else {
+    reservedSeats.value.push(placeNumber);
+  }
 }
 </script>
 
 <style scoped>
-.gradin-nord {
-    padding: 16px;
+.seatJsp {
+  display: grid;
+  justify-content: center; 
+  grid-template-columns: repeat(12, 60px); 
+  gap: 10px;
+  margin-top: 16px;
 }
+
+.seat {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.seat img.seat-icon {
+  width: 70px;
+  height: 70px;
+  opacity: 0.4; 
+  pointer-events: none; 
+}
+
+.NumberSeat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  color: #000; 
+  pointer-events: none;
+}
+
+
 </style>

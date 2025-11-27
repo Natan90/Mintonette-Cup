@@ -364,7 +364,7 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Est",
-    image: "/GradinEst.png",
+    url: "/Gradins/GradinEst",
     coord: [
       [1699.2872443846295, 1060.8454726559387],
       [1725.3432849977123, 639.4000844547812],
@@ -399,7 +399,7 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Sud",
-    image: "/GradinSud.png",
+    url: "/Gradins/GradinSud",
     coord: [
       [236.03013260397483, 418.7509251881477],
       [274.4660337456147, 392.7680015228414],
@@ -458,7 +458,7 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Ouest",
-    image: "/GradinOuest.png",
+    url: "/Gradins/GradinOuest",
     coord: [
       [0.4557218135466883, 1148.188299638987],
       [286.87683149725086, 1063.956641415362],
