@@ -5,7 +5,6 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
-
       DROP TABLE IF EXISTS a_lieu CASCADE;
       DROP TABLE IF EXISTS prend_une_place CASCADE;
       DROP TABLE IF EXISTS equipe_2 CASCADE;
@@ -42,6 +41,8 @@ const pool = require("./db");
       DROP TABLE IF EXISTS Equipe CASCADE;
       DROP TABLE IF EXISTS Pays CASCADE;
       DROP TABLE IF EXISTS Organisateur CASCADE;
+      DROP TABLE IF EXISTS Prestataire CASCADE;
+      DROP TABLE IF EXISTS Type_prestataire CASCADE;
       DROP TABLE IF EXISTS Type_utilisateur CASCADE;
       DROP TABLE IF EXISTS Utilisateur CASCADE;
 
@@ -63,9 +64,53 @@ const pool = require("./db");
         droit_type_utilisateur VARCHAR(50)
       );
 
-      CREATE TABLE IF NOT EXISTS Organisateur(
-        id_organisateur SERIAL PRIMARY KEY,
-        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
+      CREATE TABLE IF NOT EXISTS Zone(
+        id_zone SERIAL PRIMARY KEY,
+        nom_zone VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Date_du_jour(
+        JJ_MM_AAAA DATE PRIMARY KEY,
+        hh_mm TIME
+      );
+
+      CREATE TABLE IF NOT EXISTS Type_animation(
+        id_type_animation SERIAL PRIMARY KEY,
+        nom_type_animation VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Type_prestataire(
+        id_type_prestataire SERIAL PRIMARY KEY,
+        nom_type_prestataire VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Prestataire(
+        id_prestataire SERIAL PRIMARY KEY,
+        nom_prestataire VARCHAR(50),
+        type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire)
+      );
+
+      CREATE TABLE IF NOT EXISTS Aliment(
+        id_aliment SERIAL PRIMARY KEY,
+        nom_aliment VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Article(
+        id_article SERIAL PRIMARY KEY,
+        nom_article VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Plat(
+        id_plat SERIAL PRIMARY KEY,
+        nom_plat VARCHAR(50),
+        description_plat VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Match_volley(
+        id_match SERIAL PRIMARY KEY,
+        prix_place_match NUMERIC(19,4),
+        score_match VARCHAR(50),
+        vainqueur_match VARCHAR(50)
       );
 
       CREATE TABLE IF NOT EXISTS Pays(
@@ -76,13 +121,6 @@ const pool = require("./db");
         qualifie BOOLEAN,
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
-
-      CREATE TABLE IF NOT EXISTS Prestataire(
-        id_prestataire SERIAL PRIMARY KEY,
-        nom_prestataire VARCHAR(50),
-        type_prestataire VARCHAR(50)
-      );
-
 
       CREATE TABLE IF NOT EXISTS Equipe(
         id_equipe SERIAL PRIMARY KEY,
@@ -116,51 +154,6 @@ const pool = require("./db");
         qualifie BOOLEAN DEFAULT FALSE
       );
 
-      CREATE TABLE IF NOT EXISTS Aliment(
-        id_aliment SERIAL PRIMARY KEY,
-        nom_aliment VARCHAR(50)
-      );
-
-      CREATE TABLE IF NOT EXISTS Date_du_jour(
-        JJ_MM_AAAA DATE PRIMARY KEY,
-        hh_mm TIME
-      );
-
-      CREATE TABLE IF NOT EXISTS Type_animation(
-        id_type_animation SERIAL PRIMARY KEY,
-        nom_type_animation VARCHAR(50)
-      );
-
-      CREATE TABLE IF NOT EXISTS Agent_securite(
-        id_agent_securite SERIAL PRIMARY KEY,
-        nom_agent_securite VARCHAR(50),
-        prenom_agent_securite VARCHAR(50),
-        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
-      );
-
-      CREATE TABLE IF NOT EXISTS Article(
-        id_article SERIAL PRIMARY KEY,
-        nom_article VARCHAR(50)
-      );
-
-      CREATE TABLE IF NOT EXISTS Zone(
-        id_zone SERIAL PRIMARY KEY,
-        nom_zone VARCHAR(50)
-      );
-
-      CREATE TABLE IF NOT EXISTS Plat(
-        id_plat SERIAL PRIMARY KEY,
-        nom_plat VARCHAR(50),
-        description_plat VARCHAR(50)
-      );
-
-      CREATE TABLE IF NOT EXISTS Match_volley(
-        id_match SERIAL PRIMARY KEY,
-        prix_place_match NUMERIC(19,4),
-        score_match VARCHAR(50),
-        vainqueur_match VARCHAR(50)
-      );
-
       CREATE TABLE IF NOT EXISTS Stade(
         id_stade SERIAL PRIMARY KEY,
         nom_stade VARCHAR(50),
@@ -170,9 +163,18 @@ const pool = require("./db");
       CREATE TABLE IF NOT EXISTS Restauration(
         id_restauration SERIAL PRIMARY KEY,
         nom_restaurant VARCHAR(50),
-        nb_couverts INTEGER,
+        nb_tables INTEGER,
         id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
+      );
+
+      CREATE TABLE IF NOT EXISTS Reservation(
+        id_reservation SERIAL PRIMARY KEY,
+        jour_reservation DATE,
+        nb_couverts_reservation INTEGER,
+        nom_reservation VARCHAR(50),
+        heure_reservation TIME,
+        id_restauration INTEGER NOT NULL REFERENCES Restauration(id_restauration)
       );
 
       CREATE TABLE IF NOT EXISTS Animation(
@@ -185,14 +187,6 @@ const pool = require("./db");
         id_type_animation INTEGER NOT NULL REFERENCES Type_animation(id_type_animation)
       );
 
-      CREATE TABLE IF NOT EXISTS Poste_secouriste(
-        id_poste_secouriste VARCHAR(50) PRIMARY KEY,
-        nb_lits_occupes INTEGER,
-        nb_lits_disponibles INTEGER,
-        id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
-        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
-      );
-
       CREATE TABLE IF NOT EXISTS Boutique(
         id_boutique SERIAL PRIMARY KEY,
         nom_boutique VARCHAR(50),
@@ -202,13 +196,24 @@ const pool = require("./db");
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
 
-      CREATE TABLE IF NOT EXISTS Reservation(
-        id_reservation SERIAL PRIMARY KEY,
-        jour_reservation DATE,
-        nb_couverts_reservation INTEGER,
-        nom_reservation VARCHAR(50),
-        heure_reservation TIME,
-        id_restauration INTEGER NOT NULL REFERENCES Restauration(id_restauration)
+      CREATE TABLE IF NOT EXISTS Poste_secouriste(
+        id_poste_secouriste VARCHAR(50) PRIMARY KEY,
+        nb_lits_occupes INTEGER,
+        nb_lits_disponibles INTEGER,
+        id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
+        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
+      );
+
+      CREATE TABLE IF NOT EXISTS Agent_securite(
+        id_agent_securite SERIAL PRIMARY KEY,
+        nom_agent_securite VARCHAR(50),
+        prenom_agent_securite VARCHAR(50),
+        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
+      );
+
+      CREATE TABLE IF NOT EXISTS Organisateur(
+        id_organisateur SERIAL PRIMARY KEY,
+        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
       );
 
       CREATE TABLE IF NOT EXISTS present_dans_restaurant(
@@ -227,7 +232,7 @@ const pool = require("./db");
         FOREIGN KEY(id_restauration) REFERENCES Restauration(id_restauration),
         FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA)
       );
-
+      
       CREATE TABLE IF NOT EXISTS visiteurs_animation(
         JJ_MM_AAAA DATE,
         id_animation INTEGER,
@@ -378,18 +383,24 @@ const pool = require("./db");
         ('Sophie', 'Moreau', 'sophiem', 'sophie11', 'sophie.moreau@gmail.com', '1998-11-25', 'F'),
         ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', '2005-09-30', 'M'),
         ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', '2001-04-20', 'F'),
-        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '1997-02-13', 'M')
+        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '1997-02-13', 'M');
     `;
     await pool.query(insertUsers);
 
+    const insertTypePrestataire = `
+    INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
+      ('Restauration'),
+      ('Animation'),
+      ('Equipe'),
+      ('Boutique');
+    `;
+    await pool.query(insertTypePrestataire);
+
     const insertPrestataire = `
-    INSERT INTO Prestataire (nom_prestataire, type_prestataire) VALUES
-      ('FoodExpress', 'Restauration'),
-      ('AnimEvent', 'Animation'),
-      ('SecurePlus', 'Sécurité'),
-      ('SportMerch', 'Boutique'),
-      ('LogiTrans', 'Logistique'),
-      ('TechLight', 'Technique');
+    INSERT INTO Prestataire (nom_prestataire, type_prestataire_id) VALUES
+      ('FoodExpress', 1),
+      ('AnimEvent', 2),
+      ('SportMerch', 4);
     `;
     await pool.query(insertPrestataire);
 

@@ -71,6 +71,7 @@ function drop_handler(ev) {
 #target {
     padding: 20px;
     border: 2px dashed #888;
+    border-radius: 10px;
     min-height: 50px;
 }
 </style>

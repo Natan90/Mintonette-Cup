@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require("../../database/db");
 
 
-router.get("/show", async (req, res) => {
+router.get("/showPrestataire", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM Prestataire ORDER BY nom_prestataire");
     res.json(result.rows);
@@ -13,5 +13,7 @@ router.get("/show", async (req, res) => {
   }
 });
 
+
+router.get("/")
 
 module.exports = router;
