@@ -22,11 +22,11 @@
       <section class="infos">
 
         <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
-          <span class="title">
+          <img class="illustration" :src="item.image" />
+            <span class="title">
               <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
               {{ item.title }}
             </span>
-          <img class="illustration" :src="item.image" />
           <div class="contenuTexte">
             
             <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span>
@@ -182,57 +182,68 @@ body::-webkit-scrollbar {
 }
 
 .bloc {
-  display: flex;
-  flex-wrap: wrap;
-  background-color: var(--jaune-logo);
-  opacity: 0.7;
-  border: solid black 1px;
-  padding: 5px 10px;
-  max-width: 60%;
-  width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--jaune-logo);
+    opacity: 0.7;
+    padding-bottom: 5px;
+    max-width: 60%;
+    margin: 15px 20px;
+    cursor: pointer;
+    width: 300px;
+    height: 270px;
 
-  transition: var(--transition-fast);
+    border-radius: 10px;
+
+    transition: var(--transition-fast);
 }
 
 .bloc:hover {
-  background-color: var(--jaune-logo);
-  opacity: 0.9;
-  transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
+
+
 .bloc .title {
-  font-weight: bold;
-  font-size: 1.3em;
-  transition: font-size 0.3s ease;
+    margin: 0px 10px;
+    font-weight: bold;
+    font-size: 1.3em;
+    transition: font-size 0.3s ease;
 }
 
 .illustration {
-  width: 90%;
-  margin: 20px 5%;
-  background-color: white;
-  height: 150px;
-  object-fit: cover;
+    width: 100%;
+    margin: 0;
+    background-color: white;
+    height: 150px;
+    border-radius: 10px 10px 0 0;
+
+    object-fit: cover;
 }
 
 .descri {
-  font-size: 0.7em;
-  height: 2.7em;
-  overflow: hidden;
-  display: -webkit-box;
-  /* limite à 2 lignes */
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+    margin: 0px 10px;
+    font-size: 0.7em;
+    height: 2.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* limite à 2 lignes */
+    -webkit-box-orient: vertical;
 }
 
 .voirPlus {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  text-align: end;
-  color: var(--bleu-logo);
-  font-weight: bold;
-  text-decoration: underline;
+    width: calc(100% - 5px);
+    margin-right: 5px;
+    display: flex;
+    justify-content: flex-end;
+    text-align: end;
+    color: var(--bleu-logo);
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .presta_formulaire {

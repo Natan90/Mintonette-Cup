@@ -35,7 +35,10 @@
   },
   "services": {
     "title": "Services du prestataire",
-    "actions": ["Commander repas", "Réserver table"]
+    "actions": [
+      "Commander repas",
+      "Réserver table"
+    ]
   },
   "homeLink": "Accueil",
   "modal": {
@@ -52,7 +55,7 @@
     "titlePays": " pays",
     "descriPays": "C'est le nombre de pays où le volley-ball est aujourd’hui représenté à travers divers clubs, compétitions et fédérations nationales. La Fédération Internationale de Volley-ball (FIVB) regroupe <strong>plus de 220 fédérations membres</strong>, montrant l’ampleur mondiale du sport et son implantation.",
     "descriAudience": "C’est le pic d’audience enregistré pour un match de volley-ball en 2024, preuve de l’intérêt croissant du public pour ce sport. Les compétitions internationales attirent <strong>des millions de téléspectateurs</strong> et renforcent la visibilité du volley.",
-    "titleReseauxSociaux": "Les réseaux sociaux n’ont pas été en reste",
-    "descriReseauxSociaux": "La couverture numérique de la Mintonette Cup a généré <strong>1,2 million d’impressions</strong> et plus de <strong>150 000 interactions</strong>. Les organisateurs visent pour la prochaine édition de dépasser <strong>300 000 visionnages en ligne</strong>, renforçant encore sa notoriété."
+    "titleReseauxSociaux": "150 mille",
+    "descriReseauxSociaux": "C'est le nombre d'interractions sur les réseaux sociaux relatives à l'édition précédente de la Mintonette Cup. Les organisateurs espèrent cette année dépasser <strong>300 000 visionnages en ligne</strong>, renforçant encore sa notoriété. Les réseaux sociaux n'ont pas été en reste !"
   }
 }

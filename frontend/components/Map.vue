@@ -46,6 +46,7 @@ let standStyle;
 let standHoverStyle;
 let lastFeature = null;
 let label = null;
+
 const tailleMap = [0, 0, 2000, 1600];
 const projection = new Projection({
   code: "MintonetteMap",
@@ -982,12 +983,11 @@ onMounted(() => {
       const bounds = mapContainer.getBoundingClientRect();
 
       label.style.display = "block";
-      
+
       //Pour centrer sur le curseur
       const mouseX = event.originalEvent.clientX;
       const mouseY = event.originalEvent.clientY;
 
-      // Montrer le label AVANT calcul pour obtenir offsetWidth/offsetHeight
       label.style.display = "block";
 
       // Centrer horizontalement + décaler verticalement de 15px sous la souris
@@ -997,7 +997,6 @@ onMounted(() => {
       label.style.left = x + "px";
       label.style.top = y + "px";
 
-      
       label.innerText = name;
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";

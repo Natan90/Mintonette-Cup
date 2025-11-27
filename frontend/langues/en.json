@@ -35,7 +35,10 @@
   },
   "services": {
     "title": "Provider Services",
-    "actions": ["Order Meal", "Reserve Table"]
+    "actions": [
+      "Order Meal",
+      "Reserve Table"
+    ]
   },
   "homeLink": "Home",
   "modal": {
@@ -52,7 +55,7 @@
     "titlePays": " countries",
     "descriPays": "This is the number of countries where volleyball is represented today through various clubs, competitions, and national federations. The International Volleyball Federation (FIVB) has <strong>over 220 member federations</strong>, showing the sport's global reach and presence.",
     "descriAudience": "This was the peak viewership recorded for a volleyball match in 2024, demonstrating the growing public interest in the sport. International competitions attract <strong>millions of viewers</strong> and increase volleyball’s visibility.",
-    "titleReseauxSociaux": "Social media also made its mark",
-    "descriReseauxSociaux": "The digital coverage of the Mintonette Cup generated <strong>1.2 million impressions</strong> and over <strong>150,000 interactions</strong>. Organizers aim to exceed <strong>300,000 online views</strong> for the next edition, further boosting the event’s popularity."
+    "titleReseauxSociaux": "150 thousand",
+    "descriReseauxSociaux": "This is the number of social media interactions related to the previous edition of the Mintonette Cup. The organizers hope to exceed <strong>300,000 online views</strong> this year, further boosting its visibility. Social media were not left behind !"
   }
 }
