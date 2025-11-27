@@ -31,12 +31,12 @@
                 <p class="title">{{ $t('user.connexion') }}</p>
 
                 <div class="item input_item">
-                    <input :placeholder="$t('user.login')" v-model="login_utilisateur_connexion" />
+                    <input :placeholder="$t('user.login')" v-model="login_utilisateur_connexion" @keyup.enter="getValuesConnexion"/>
                     <hr />
                 </div>
 
                 <div class="item input_item">
-                    <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur_connexion" />
+                    <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur_connexion" @keyup.enter="getValuesConnexion"/>
                     <hr />
                 </div>
 
@@ -62,29 +62,29 @@
                     <div class="container_left">
                         <div class="item both_size">
                             <div class="item">
-                                <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" />
+                                <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" @keyup.enter="getValuesInscription"/>
                                 <hr />
                             </div>
 
                             <div class="item">
-                                <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur" />
+                                <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur" @keyup.enter="getValuesInscription"/>
                                 <hr />
                             </div>
 
                         </div>
 
                         <div class="item">
-                            <input :placeholder="$t('user.login')" v-model="login_utilisateur" />
+                            <input :placeholder="$t('user.login')" v-model="login_utilisateur" @keyup.enter="getValuesInscription"/>
                             <hr />
                         </div>
 
                         <div class="item">
-                            <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur" />
+                            <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur" @keyup.enter="getValuesInscription"/>
                             <hr />
                         </div>
 
                         <div class="item">
-                            <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur" />
+                            <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur" @keyup.enter="getValuesInscription"/>
                             <hr />
                         </div>
                     </div>
