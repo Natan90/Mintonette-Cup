@@ -14,4 +14,16 @@ router.get("/show", async (req, res) => {
 });
 
 
+router.get("/showTypePrestataire", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM Type_prestataire ORDER BY nom_type_prestataire");
+    res.json(result.rows);
+  }  catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
 module.exports = router;

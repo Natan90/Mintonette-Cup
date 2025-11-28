@@ -1,52 +1,81 @@
 <template>
-    <div>
-        <NavBar />
+  <div>
+    <NavBar />
+    <h1>Gradin Nord</h1>
 
-        <main class="gradin-nord">
-            <h1>Gradin Nord</h1>
-        </main>
+    <section>
+      <p class="legend">Cliquez sur une place pour réserver / annuler</p>
+      Il faut que cette page soit accessible seulement si on est connecté 
 
-        <section class="seating-container">
-            <p class="legend">Cliquez sur une place pour réserver / annuler</p>
+      <div class="seatContainer">
+        <button
+          class="Seat"
+          v-for="(placeNumber, index) in 100"
+          :key="index"
+          @mouseover="hoverIndex = index"
+          @mouseleave="hoverIndex = null"
+          @click="isAvailable(index)">
+          <img
+            v-if="hoverIndex === index && seats[index] === 'available'"
+            src="/AvailableSeatHover.svg"
+            alt="Siège disponible"
+            class="ImgSeat" />
+          <img
+            v-else-if="seats[index] === 'reserved'"
+            src="/ReservedSeat.svg"
+            alt="Siège réservé"
+            class="ImgSeat" />
+          <img
+            v-else
+            src="/AvailableSeat.svg"
+            alt="Siège disponible"
+            class="ImgSeat" />
+        </button>
+      </div>
+    </section>
 
-            <div class="seating-grid">
-                <button
-                    v-for="n in 40"
-                    :key="n"
-                    class="seat"
-                    @click="$event.currentTarget.classList.toggle('reserved')"
-                    :title="`Place ${n} — cliquer pour réserver / annuler`"
-                >
-                    <img
-                        :src="require('@/assets/seat.png')"
-                        :alt="`Place ${n} — cliquer pour réserver / annuler`"
-                        class="seat-icon"
-                        draggable="false"
-                    />
-                    {{ n }}
-                </button>
-            </div>
-
-            <Footer />
-        </section>
-    </div>
+    <Footer />
+  </div>
 </template>
 
-<script>
-import NavBar from '../NavView.vue'
-import Footer from '../Footer.vue'
+<script setup>
+import { ref } from "vue";
+import NavBar from "../NavView.vue";
+import Footer from "../Footer.vue";
 
-export default {
-    name: 'GradinNord',
-    components: {
-        NavBar,
-        Footer
-    }
+const hoverIndex = ref(null);
+const seats = ref(Array(100).fill("available"));
+
+function isAvailable(index) {
+  if (seats.value[index] === "available") {
+    seats.value[index] = "reserved";
+  } else if (seats.value[index] === "reserved") {
+    seats.value[index] = "available";
+  }
 }
 </script>
 
 <style scoped>
-.gradin-nord {
-    padding: 16px;
+.seatContainer {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(12, 60px);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.Seat {
+  width: 60px;
+  height: 70px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ImgSeat {
+  width: 70px;
+  height: 70px;
+  pointer-events: none;
 }
 </style>

@@ -13,8 +13,10 @@ import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
 import terrain4 from "@/views/Terrains/terrain4.vue";
 import AddPrestataire from "@/views/AddPrestataire.vue";
-import Gradin_nord from "@/components/gradins/GradinNord.vue";
 import GradinNord from "@/components/gradins/GradinNord.vue";
+import GradinSud from "@/components/gradins/GradinSud.vue";
+import GradinOuest from "@/components/gradins/GradinOuest.vue";
+import GradinEst from "@/components/gradins/GradinEst.vue";
 import countUp from "@/components/CountUp.vue";
 
 
@@ -89,6 +91,21 @@ const routes = [
     path: "/Gradins/GradinNord",
     name: "Gradin Nord",
     component: GradinNord,
+  },
+  {
+    path: "/Gradins/GradinEst",
+    name: "Gradin Est",
+    component: GradinEst,
+  },
+  {
+    path: "/Gradins/GradinSud",
+    name: "Gradin Sud",
+    component: GradinSud,
+  },
+  {
+    path: "/Gradins/GradinOuest",
+    name: "Gradin Ouest",
+    component: GradinOuest,
   },
 
 ];
