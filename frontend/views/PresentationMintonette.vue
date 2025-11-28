@@ -1,23 +1,29 @@
 <template>
 
-    <div>
-        <span>Qu'est ce que la Mintonnette Cup ?</span>
+    <section class="presentation">
+        <span class="question">QUI SOMMES NOUS ?</span>
 
         <span>
-            Vous êtes adepte de sport, aimez suivre de grands évenements sportifs qui regroupent passionnés et bonne ambiance ?
-            La Mintonnette Cup vous attend !
+            Le grand <b>tournoi de Volley mondial</b> Mintonette Cup arrive <b>à Montpellier</b> !
+            Notre deuxième édition édition s'annonce folle.
         </span>
 
         <span>
-            Le grand tournoi de Volley mondial Mintonette Cup arrive à Montpellier !
-            Notre première édition s'annonce folle.
+            Vous êtes <b>adèpte de sport</b>, aimez suivre de <b>grands évenements sportifs</b> qui
+            regroupent <b>passionnés</b> et <b>bonne ambiance</b> ?
+            <b>La Mintonnette Cup vous attend !</b>
         </span>
 
         <span>
-
+            Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une
+            <b>ambiance débordante</b>.
         </span>
 
-    </div>
+        <span>
+            On vous attends dans les gradins !
+        </span>
+
+    </section>
 
 </template>
 
@@ -29,3 +35,22 @@ const content = ref('')
 const selectedItem = ref(0)
 
 </script>
+
+<style>
+.presentation {
+    width: 70%;
+    margin: 30px 15%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    text-align: justify;
+
+}
+
+.question {
+    font-weight: bold;
+    align-self: center ;
+}
+</style>
