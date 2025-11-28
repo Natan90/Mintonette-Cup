@@ -44,6 +44,7 @@ const pool = require("./db");
       DROP TABLE IF EXISTS Prestataire CASCADE;
       DROP TABLE IF EXISTS Type_prestataire CASCADE;
       DROP TABLE IF EXISTS Type_utilisateur CASCADE;
+      DROP TABLE IF EXISTS Siege CASCADE;
       DROP TABLE IF EXISTS Utilisateur CASCADE;
 
 
@@ -56,6 +57,15 @@ const pool = require("./db");
         mail_utilisateur VARCHAR(200),
         date_naissance_utilisateur DATE,
         sexe_utilisateur VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Siege(
+      numero_colonne VARCHAR(2) ,
+      numero_ligne INTEGER ,
+      est_reserve BOOLEAN DEFAULT FALSE, 
+      id_utilisateur INTEGER,
+      PRIMARY KEY (numero_colonne, numero_ligne),
+      FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
       );
 
       CREATE TABLE IF NOT EXISTS Type_utilisateur(
@@ -404,7 +414,6 @@ const pool = require("./db");
     `;
     await pool.query(insertPrestataire);
 
-
     const insertPays = `
     INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES
     ('France', 'Bleu / Blanc', 'José le portemanteau', true, 1),
@@ -560,6 +569,45 @@ const pool = require("./db");
     `;
 
     await pool.query(insertClassementPoule);
+
+    const insertSiege = `
+    INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, id_utilisateur) VALUES
+    ('A', 1, TRUE, NULL), ('B', 1, FALSE, NULL), ('C', 1, FALSE, NULL), ('D', 1, FALSE, NULL),
+    ('E', 1, FALSE, NULL), ('F', 1, FALSE, NULL), ('G', 1, FALSE, NULL), ('H', 1, FALSE, NULL),
+    ('I', 1, FALSE, NULL), ('J', 1, FALSE, NULL), ('K', 1, FALSE, NULL), ('L', 1, FALSE, NULL),
+
+    ('A', 2, FALSE, NULL), ('B', 2, FALSE, NULL), ('C', 2, TRUE, NULL), ('D', 2, TRUE, NULL),
+    ('E', 2, FALSE, NULL), ('F', 2, FALSE, NULL), ('G', 2, FALSE, NULL), ('H', 2, FALSE, NULL),
+    ('I', 2, FALSE, NULL), ('J', 2, FALSE, NULL), ('K', 2, FALSE, NULL), ('L', 2, FALSE, NULL),
+
+    ('A', 3, TRUE, NULL), ('B', 3, FALSE, NULL), ('C', 3, TRUE, NULL), ('D', 3, FALSE, NULL),
+    ('E', 3, FALSE, NULL), ('F', 3, FALSE, NULL), ('G', 3, FALSE, NULL), ('H', 3, FALSE, NULL),
+    ('I', 3, FALSE, NULL), ('J', 3, FALSE, NULL), ('K', 3, FALSE, NULL), ('L', 3, FALSE, NULL),
+
+    ('A', 4, FALSE, NULL), ('B', 4, FALSE, NULL), ('C', 4, FALSE, NULL), ('D', 4, FALSE, NULL),
+    ('E', 4, FALSE, NULL), ('F', 4, FALSE, NULL), ('G', 4, FALSE, NULL), ('H', 4, FALSE, NULL),
+    ('I', 4, FALSE, NULL), ('J', 4, FALSE, NULL), ('K', 4, FALSE, NULL), ('L', 4, FALSE, NULL),
+
+    ('A', 5, FALSE, NULL), ('B', 5, FALSE, NULL), ('C', 5, FALSE, NULL), ('D', 5, FALSE, NULL),
+    ('E', 5, FALSE, NULL), ('F', 5, FALSE, NULL), ('G', 5, FALSE, NULL), ('H', 5, FALSE, NULL),
+    ('I', 5, FALSE, NULL), ('J', 5, FALSE, NULL), ('K', 5, FALSE, NULL), ('L', 5, FALSE, NULL),
+
+    ('A', 6, FALSE, NULL), ('B', 6, TRUE, NULL), ('C', 6, FALSE, NULL), ('D', 6, TRUE, NULL),
+    ('E', 6, FALSE, NULL), ('F', 6, FALSE, NULL), ('G', 6, FALSE, NULL), ('H', 6, FALSE, NULL),
+    ('I', 6, FALSE, NULL), ('J', 6, FALSE, NULL), ('K', 6, FALSE, NULL), ('L', 6, FALSE, NULL),
+
+    ('A', 7, FALSE, NULL), ('B', 7, FALSE, NULL), ('C', 7, FALSE, NULL), ('D', 7, FALSE, NULL),
+    ('E', 7, FALSE, NULL), ('F', 7, FALSE, NULL), ('G', 7, FALSE, NULL), ('H', 7, FALSE, NULL),
+    ('I', 7, FALSE, NULL), ('J', 7, FALSE, NULL), ('K', 7, FALSE, NULL), ('L', 7, FALSE, NULL),
+
+    ('A', 8, FALSE, NULL), ('B', 8, FALSE, NULL), ('C', 8, TRUE, NULL), ('D', 8, FALSE, NULL),
+    ('E', 8, FALSE, NULL), ('F', 8, FALSE, NULL), ('G', 8, FALSE, NULL), ('H', 8, FALSE, NULL),
+    ('I', 8, TRUE, NULL), ('J', 8, FALSE, NULL), ('K', 8, FALSE, NULL), ('L', 8, TRUE, NULL),
+
+    ('A', 9, FALSE, NULL), ('B', 9, FALSE, NULL), ('C', 9, FALSE, NULL), ('D', 9, FALSE, NULL);
+    `;
+
+    await pool.query(insertSiege);
 
     console.log("Base PostgreSQL Mintonette Cup initialisée !");
   } catch (err) {

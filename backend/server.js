@@ -6,6 +6,7 @@ const pool = require("./database/db");
 const authRoutes = require("./routes/utilisateurs/authRoutes");
 const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
+const gradins = require("./routes/gradins/gradin")
 // const utilisateursRoutes = require("./routes/utilisateurs");
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/utilisateur", authRoutes);
 app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
+app.use("/gradin",gradins)
 
 // Swagger
 const swaggerUi = require("swagger-ui-express");

@@ -42,6 +42,7 @@
 import { ref } from "vue";
 import NavBar from "../NavView.vue";
 import Footer from "../Footer.vue";
+import axios from "axios";
 
 const hoverIndex = ref(null);
 const seats = ref(Array(100).fill("available"));
@@ -52,6 +53,15 @@ function isAvailable(index) {
   } else if (seats.value[index] === "reserved") {
     seats.value[index] = "available";
   }
+}
+
+async function fetchSiege() {
+    try {
+        const res = await axios.get("http://localhost:3000/siege");
+        type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
+    } catch (err) {
+        console.error(err);
+    }
 }
 </script>
 
