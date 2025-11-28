@@ -5,7 +5,7 @@
 
     <section>
       <p class="legend">Cliquez sur une place pour réserver / annuler</p>
-      Il faut que cette page soit accessible seulement si on est connecté 
+      Il faut que cette page soit accessible seulement si on est connecté
 
       <div class="seatContainer">
         <button
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import NavBar from "../NavView.vue";
 import Footer from "../Footer.vue";
 import axios from "axios";
@@ -47,22 +47,29 @@ import axios from "axios";
 const hoverIndex = ref(null);
 const seats = ref(Array(100).fill("available"));
 
-function isAvailable(index) {
-  if (seats.value[index] === "available") {
-    seats.value[index] = "reserved";
-  } else if (seats.value[index] === "reserved") {
-    seats.value[index] = "available";
+async function fetchGradin() {
+  try {
+    const res = await axios.get("http://localhost:3000/gradin/show");
+
+    seats.value = res.data.map((seat) => {
+      if (seat.est_reserve === true) {
+        return "reserved";
+      } else {
+        return "available";
+      }
+    });
+  } catch (err) {
+    console.error(err);
   }
 }
 
-async function fetchSiege() {
-    try {
-        const res = await axios.get("http://localhost:3000/siege");
-        type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
-    } catch (err) {
-        console.error(err);
-    }
-}
+onMounted(async () => {
+  try {
+    fetchGradin();
+  } catch (err) {
+    console.error(err);
+  }
+});
 </script>
 
 <style scoped>
