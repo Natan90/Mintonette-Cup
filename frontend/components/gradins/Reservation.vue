@@ -4,25 +4,29 @@
     <h1>Gradin Nord</h1>
 
     <section>
-      <p class="legend">Cliquez sur une place pour réserver / annuler</p>
-      Il faut que cette page soit accessible seulement si on est connecté
-
+      <h2>Réservation de place</h2>
       <div class="seatContainer">
         <button
           class="Seat"
-          v-for="(placeNumber, index) in 100"
+          v-for="(seat, index) in seats"
           :key="index"
           @mouseover="hoverIndex = index"
-          @mouseleave="hoverIndex = null">
+          @mouseleave="hoverIndex = null"
+          @click="SeatReservation(index)">
           <img
-            v-if="hoverIndex === index && seats[index] === 'available'"
+            v-if="hoverIndex === index && seat === 'available'"
             src="/AvailableSeatHover.svg"
             alt="Siège disponible"
             class="ImgSeat" />
           <img
-            v-else-if="seats[index] === 'reserved'"
+            v-else-if="seat === 'reserved'"
             src="/ReservedSeat.svg"
             alt="Siège réservé"
+            class="ImgSeat" />
+          <img
+            v-else-if="seat === 'selected'"
+            src="/SelectionnedSeat.svg"
+            alt="Siège sélectionné"
             class="ImgSeat" />
           <img
             v-else
@@ -31,8 +35,7 @@
             class="ImgSeat" />
         </button>
       </div>
-        <router-link to="/Gradins/Reservation" class="">Réservation d'un
-        billet</router-link>
+      <button>Passer à la banque</button>
     </section>
 
     <Footer />
@@ -51,25 +54,29 @@ const seats = ref(Array(100).fill("available"));
 async function fetchGradin() {
   try {
     const res = await axios.get("http://localhost:3000/gradin/show");
-
-    seats.value = res.data.map((seat) => {
-      if (seat.est_reserve === true) {
-        return "reserved";
-      } else {
-        return "available";
-      }
-    });
+    seats.value = res.data.map((seat) =>
+      seat.est_reserve === true ? "reserved" : "available"
+    );
   } catch (err) {
     console.error(err);
   }
 }
 
-onMounted(async () => {
-  try {
-    fetchGradin();
-  } catch (err) {
-    console.error(err);
+function SeatReservation(index) {
+  if (seats.value[index] === "reserved") {
+    alert("Non pas possible");
+    return;
   }
+
+  if (seats.value[index] === "available") {
+    seats.value[index] = "selected";
+  } else if (seats.value[index] === "selected") {
+    seats.value[index] = "available";
+  }
+}
+
+onMounted(() => {
+  fetchGradin();
 });
 </script>
 

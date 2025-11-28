@@ -18,6 +18,7 @@ import GradinSud from "@/components/gradins/GradinSud.vue";
 import GradinOuest from "@/components/gradins/GradinOuest.vue";
 import GradinEst from "@/components/gradins/GradinEst.vue";
 import countUp from "@/components/CountUp.vue";
+import GradinReservation from "@/components/gradins/Reservation.vue"
 
 
 const routes = [
@@ -107,6 +108,12 @@ const routes = [
     name: "Gradin Ouest",
     component: GradinOuest,
   },
+  {
+    path: "/Gradins/Reservation",
+    name: "GradinReservation",
+    component: GradinReservation,
+  },
+  
 
 ];
 
