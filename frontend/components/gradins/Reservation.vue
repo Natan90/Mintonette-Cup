@@ -5,6 +5,7 @@
 
     <section>
       <h2>Réservation de place</h2>
+
       <div class="seatContainer">
         <button
           class="Seat"
@@ -14,27 +15,25 @@
           @mouseleave="hoverIndex = null"
           @click="SeatReservation(index)">
           <img
-            v-if="hoverIndex === index && seat === 'available'"
+            v-if="hoverIndex === index && seat.state === 'available'"
             src="/AvailableSeatHover.svg"
-            alt="Siège disponible"
             class="ImgSeat" />
           <img
-            v-else-if="seat === 'reserved'"
+            v-else-if="seat.state === 'reserved'"
             src="/ReservedSeat.svg"
-            alt="Siège réservé"
             class="ImgSeat" />
           <img
-            v-else-if="seat === 'selected'"
+            v-else-if="seat.state === 'selected'"
             src="/SelectionnedSeat.svg"
-            alt="Siège sélectionné"
             class="ImgSeat" />
-          <img
-            v-else
-            src="/AvailableSeat.svg"
-            alt="Siège disponible"
-            class="ImgSeat" />
+          <img v-else src="/AvailableSeat.svg" class="ImgSeat" />
         </button>
       </div>
+
+      <p>Sièges sélectionnés :</p>
+      <p v-if="selectedSeats.length === 0">Aucun siège sélectionné</p>
+      <p v-else>{{ selectedSeatsLabel }}</p>
+
       <button>Passer à la banque</button>
     </section>
 
@@ -43,45 +42,60 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import NavBar from "../NavView.vue";
 import Footer from "../Footer.vue";
 import axios from "axios";
 
 const hoverIndex = ref(null);
-const seats = ref(Array(100).fill("available"));
+const seats = ref([]);
 
 async function fetchGradin() {
   try {
     const res = await axios.get("http://localhost:3000/gradin/show");
-    seats.value = res.data.map((seat) =>
-      seat.est_reserve === true ? "reserved" : "available"
-    );
+
+    seats.value = res.data.map((seat) => ({
+      ...seat,
+      state: seat.est_reserve ? "reserved" : "available",
+    }));
   } catch (err) {
     console.error(err);
   }
 }
 
 function SeatReservation(index) {
-  if (seats.value[index] === "reserved") {
-    alert("Non pas possible");
-    return;
-  }
+  const seat = seats.value[index];
 
-  if (seats.value[index] === "available") {
-    seats.value[index] = "selected";
-  } else if (seats.value[index] === "selected") {
-    seats.value[index] = "available";
+  if (seat.state === "reserved") return;
+
+  if (seat.state === "available") {
+    seat.state = "selected";
+  } else if (seat.state === "selected") {
+    seat.state = "available";
   }
 }
 
+const selectedSeats = computed(() =>
+  seats.value.filter((s) => s.state === "selected")
+);
+
+const selectedSeatsLabel = computed(() =>
+  selectedSeats.value
+    .map((s) => `${s.numero_colonne}${s.numero_ligne}`)
+    .join(", ")
+);
+
+function reset() {}
 onMounted(() => {
   fetchGradin();
 });
 </script>
 
+
 <style scoped>
+
 .seatContainer {
+  user-select: none;
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(12, 60px);

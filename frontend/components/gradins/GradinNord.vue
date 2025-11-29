@@ -31,8 +31,9 @@
             class="ImgSeat" />
         </button>
       </div>
-        <router-link to="/Gradins/Reservation" class="">Réservation d'un
-        billet</router-link>
+      <router-link to="/Gradins/Reservation" class=""
+        >Réservation d'un billet</router-link
+      >
     </section>
 
     <Footer />
@@ -46,7 +47,7 @@ import Footer from "../Footer.vue";
 import axios from "axios";
 
 const hoverIndex = ref(null);
-const seats = ref(Array(100).fill("available"));
+const seats = ref(Array(100));
 
 async function fetchGradin() {
   try {
@@ -75,6 +76,7 @@ onMounted(async () => {
 
 <style scoped>
 .seatContainer {
+  user-select: none;
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(12, 60px);
