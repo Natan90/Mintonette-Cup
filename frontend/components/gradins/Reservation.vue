@@ -33,8 +33,10 @@
       <p>Sièges sélectionnés :</p>
       <p v-if="selectedSeats.length === 0">Aucun siège sélectionné</p>
       <p v-else>{{ selectedSeatsLabel }}</p>
-
-      <button>Passer à la banque</button>
+      <button @click="reset">reset les places</button>
+      <p>
+        Le prix à payer <b> {{ price }}</b> euros
+      </p>
     </section>
 
     <Footer />
@@ -75,9 +77,39 @@ function SeatReservation(index) {
   }
 }
 
+function reset() {
+  seats.value.forEach((seat) => {
+    if (seat.state === "selected") {
+      seat.state = "available";
+    }
+  });
+}
+
 const selectedSeats = computed(() =>
   seats.value.filter((s) => s.state === "selected")
 );
+
+const price = computed(() => {
+  let total = 0;
+  for (const seat of selectedSeats.value) {
+    if (
+      seat.numero_colonne === "I" ||
+      seat.numero_colonne === "H" ||
+      seat.numero_colonne === "G"
+    ) {
+      total += 25;
+    } else if (
+      seat.numero_colonne === "F" ||
+      seat.numero_colonne === "E" ||
+      seat.numero_colonne === "D"
+    ) {
+      total += 18;
+    } else {
+      total += 12;
+    }
+  }
+  return total;
+});
 
 const selectedSeatsLabel = computed(() =>
   selectedSeats.value
@@ -85,15 +117,21 @@ const selectedSeatsLabel = computed(() =>
     .join(", ")
 );
 
-function reset() {}
+seats.value.forEach((seat) => {
+  if (seat.state === "selected") {
+    price.value += 10;
+  }
+});
 onMounted(() => {
-  fetchGradin();
+  try {
+    fetchGradin();
+  } catch (err) {
+    console.log(err);
+  }
 });
 </script>
 
-
 <style scoped>
-
 .seatContainer {
   user-select: none;
   display: grid;
