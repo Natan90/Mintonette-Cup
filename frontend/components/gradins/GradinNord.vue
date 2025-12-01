@@ -6,10 +6,10 @@
     <section>
       <p class="legend">Cliquez sur une place pour réserver / annuler</p>
       Il faut que cette page soit accessible seulement si on est connecté
-      <router-link to="/Gradins/ReservationOuest" class="">
+      <router-link to="/gradins/GradinOuest" class="">
         Gradin précédent
       </router-link>
-      <router-link to="/Gradins/ReservationEst" class="">
+      <router-link to="/gradins/GradinEst" class="">
         Gradin suivant
       </router-link>
       <div class="seatContainer">

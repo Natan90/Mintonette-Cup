@@ -37,6 +37,7 @@
       <p>
         Le prix à payer <b> {{ price }}</b> euros
       </p>
+      <button @click="payer">payer</button>
     </section>
 
     <Footer />
@@ -123,6 +124,28 @@ seats.value.forEach((seat) => {
     price.value += 10;
   }
 });
+
+async function payer() {
+  if (selectedSeats.value.length === 0) {
+    alert("Veuillez sélectionner au moins un siège avant de payer.");
+    return;
+  }
+
+  const confirmPay = confirm(`Voulez-vous payer ${price.value} euros ?`);
+  if (!confirmPay) return;
+  console.log("URL appelée :", "http://localhost:3000/gradin/update");
+  for (const seat of selectedSeats.value) {
+    await axios.put("http://localhost:3000/gradin/update", {
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      est_reserve: true,
+    });
+  }
+
+  await fetchGradin();
+}
+
 onMounted(() => {
   try {
     fetchGradin();
