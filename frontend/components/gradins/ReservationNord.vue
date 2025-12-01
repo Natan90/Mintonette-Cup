@@ -55,11 +55,12 @@ const seats = ref([]);
 async function fetchGradin() {
   try {
     const res = await axios.get("http://localhost:3000/gradin/show");
-
-    seats.value = res.data.map((seat) => ({
-      ...seat,
-      state: seat.est_reserve ? "reserved" : "available",
-    }));
+    seats.value = res.data
+      .filter((seat) => seat.zone === "NORD")
+      .map((seat) => ({
+        ...seat,
+        state: seat.est_reserve ? "reserved" : "available",
+      }));
   } catch (err) {
     console.error(err);
   }

@@ -4,7 +4,7 @@ const pool = require("../../database/db");
 
 router.get("/show", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM Siege ORDER BY numero_colonne");
+    const result = await pool.query("SELECT * FROM Siege ORDER BY zone ASC, numero_colonne ASC, numero_ligne ASC;");
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });

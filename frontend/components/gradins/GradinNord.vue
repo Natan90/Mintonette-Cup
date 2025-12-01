@@ -6,11 +6,16 @@
     <section>
       <p class="legend">Cliquez sur une place pour réserver / annuler</p>
       Il faut que cette page soit accessible seulement si on est connecté
-
+      <router-link to="/Gradins/ReservationOuest" class="">
+        Gradin précédent
+      </router-link>
+      <router-link to="/Gradins/ReservationEst" class="">
+        Gradin suivant
+      </router-link>
       <div class="seatContainer">
         <button
           class="Seat"
-          v-for="(placeNumber, index) in 100"
+          v-for="(seat, index) in seats"
           :key="index"
           @mouseover="hoverIndex = index"
           @mouseleave="hoverIndex = null">
@@ -31,7 +36,7 @@
             class="ImgSeat" />
         </button>
       </div>
-      <router-link to="/Gradins/Reservation" class=""
+      <router-link to="/gradins/ReservationNord" class=""
         >Réservation d'un billet</router-link
       >
     </section>
@@ -53,13 +58,9 @@ async function fetchGradin() {
   try {
     const res = await axios.get("http://localhost:3000/gradin/show");
 
-    seats.value = res.data.map((seat) => {
-      if (seat.est_reserve === true) {
-        return "reserved";
-      } else {
-        return "available";
-      }
-    });
+    seats.value = res.data
+      .filter((seat) => seat.zone === "NORD")
+      .map((seat) => (seat.est_reserve ? "reserved" : "available"));
   } catch (err) {
     console.error(err);
   }
