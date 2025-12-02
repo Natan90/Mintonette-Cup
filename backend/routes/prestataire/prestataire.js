@@ -25,5 +25,15 @@ router.get("/showTypePrestataire", async (req, res) => {
 });
 
 
+router.get("/showTypeAnimation", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM Type_animation ORDER BY nom_type_animation");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+})
+
 
 module.exports = router;

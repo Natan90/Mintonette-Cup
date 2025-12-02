@@ -397,6 +397,18 @@ const pool = require("./db");
     `;
     await pool.query(insertUsers);
 
+    const insertTypeAnimation = `
+    INSERT INTO Type_animation (nom_type_animation) VALUES
+      ('Animation musicale'),
+      ('Show artistique'),
+      ('Animation public'),
+      ('Animation sportive'),
+      ('Animation festive'),
+      ('Média / Photo / Vidéo'),
+      ('Technique / Son & lumière')  
+    `;
+    await pool.query(insertTypeAnimation);
+
     const insertTypePrestataire = `
     INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
       ('Restauration'),

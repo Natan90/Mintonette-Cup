@@ -32,7 +32,21 @@
 
             </div>
             <div v-if="selectedType === 'animation'">
-                test1
+                <div>
+                    <p>Quel est votre type d'animation ?</p>
+                    <div v-for="(item, index) in type_animation" :key="index">
+                        <input type="checkbox"></input>
+                        <label>{{ item.nom_type_animation }}</label>
+                    </div>
+                    <span>
+                        <input type="checkbox"></input>
+                        <label>Autre</label>
+                        <span>
+                            <input></input>
+                        </span>
+                    </span>
+                    
+                </div>
             </div>
 
             <div v-if="selectedType === 'boutique'">
@@ -58,20 +72,31 @@ import { ref, onMounted } from "vue";
 import axios from 'axios';
 
 const type_prestataire = ref([]);
+const type_animation = ref([]);
 const selectedType = ref(null);
 
 onMounted(async () => {
     try {
-        fetchPrestataire();
+        fetchTypePresta();
+        fetchTypeAnimation();
     } catch (err) {
         console.error(err);
     }
 });
 
-async function fetchPrestataire() {
+async function fetchTypePresta() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
         type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function fetchTypeAnimation() {
+    try {
+        const res = await axios.get("http://localhost:3000/prestataire/showTypeAnimation");
+        type_animation.value = res.data;
     } catch (err) {
         console.error(err);
     }
