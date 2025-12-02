@@ -18,7 +18,12 @@ import GradinSud from "@/components/gradins/GradinSud.vue";
 import GradinOuest from "@/components/gradins/GradinOuest.vue";
 import GradinEst from "@/components/gradins/GradinEst.vue";
 import countUp from "@/components/CountUp.vue";
-import GradinReservation from "@/components/gradins/Reservation.vue"
+import GradinReservationNord from "@/components/gradins/ReservationNord.vue"
+import GradinReservationEst from "@/components/gradins/ReservationEst.vue"
+import GradinReservationSud from "@/components/gradins/ReservationSud.vue"
+import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
+
+
 
 
 const routes = [
@@ -109,9 +114,24 @@ const routes = [
     component: GradinOuest,
   },
   {
-    path: "/Gradins/Reservation",
-    name: "GradinReservation",
-    component: GradinReservation,
+    path: "/Gradins/ReservationNord",
+    name: "GradinReservationNord",
+    component: GradinReservationNord,
+  },
+  {
+    path: "/Gradins/ReservationEst",
+    name: "GradinReservationEst",
+    component: GradinReservationEst,
+  },
+  {
+    path: "/Gradins/ReservationSud",
+    name: "GradinReservationSud",
+    component: GradinReservationSud,
+  },
+  {
+    path: "/Gradins/ReservationOuest",
+    name: "GradinReservationOuest",
+    component: GradinReservationOuest,
   },
   
 
