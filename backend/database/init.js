@@ -33,6 +33,8 @@ const pool = require("./db");
       DROP TABLE IF EXISTS Zone CASCADE;
       DROP TABLE IF EXISTS Article CASCADE;
       DROP TABLE IF EXISTS Agent_securite CASCADE;
+      DROP TABLE IF EXISTS Type_boutique CASCADE;
+      DROP TABLE IF EXISTS Type_restauration CASCADE;
       DROP TABLE IF EXISTS Type_animation CASCADE;
       DROP TABLE IF EXISTS Date_du_jour CASCADE;
       DROP TABLE IF EXISTS Aliment CASCADE;
@@ -88,6 +90,16 @@ const pool = require("./db");
       CREATE TABLE IF NOT EXISTS Type_animation(
         id_type_animation SERIAL PRIMARY KEY,
         nom_type_animation VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Type_boutique(
+        id_type_boutique SERIAL PRIMARY KEY,
+        nom_type_boutique VARCHAR(50)
+      );
+
+      CREATE TABLE IF NOT EXISTS Type_restauration(
+        id_type_restauration SERIAL PRIMARY KEY,
+        nom_type_restauration VARCHAR(50)
       );
 
       CREATE TABLE IF NOT EXISTS Type_prestataire(
@@ -204,7 +216,8 @@ const pool = require("./db");
         commande_disponnible BOOLEAN,
         capacite_boutique INTEGER,
         id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
-        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
+        id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
+        id_type_boutique INTEGER NOT NULL REFERENCES Type_boutique(id_type_boutique)
       );
 
       CREATE TABLE IF NOT EXISTS Poste_secouriste(
@@ -409,6 +422,25 @@ const pool = require("./db");
       ('Technique / Son & lumière')  
     `;
     await pool.query(insertTypeAnimation);
+
+    const insertTypeRestauration = `
+    INSERT INTO Type_restauration (nom_type_restauration) VALUES
+      ('Restauration chaude'),
+      ('Restauration saine / végétarienne / vegan'),
+      ('Boissons et rafraîchissements'),
+      ('Desserts et gourmandises'),
+      ('Food trucks / street food')
+    `
+    await pool.query(insertTypeRestauration);
+
+    const insertTypeBoutique = `
+    INSERT INTO Type_boutique (nom_type_boutique) VALUES
+      ('Vêtements et accessoires'),
+      ('Objets et souvenirs'),
+      ('Livres et supports média'),
+      ('Articles créatifs / personnalisables')
+    `
+    await pool.query(insertTypeBoutique);
 
     const insertTypePrestataire = `
     INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
