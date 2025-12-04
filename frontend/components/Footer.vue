@@ -1,48 +1,33 @@
 <template>
   <footer>
     <section class="remerciement">
-        <span>AVEC LA COLLABORATION ET UN GRAND MERCI :</span>
-        <div class="logos">
-            <img src="../images/logo_herault.png" />
-            <img src="../images/logo_montpellier.png" />
-            <img src="../images/logo_vnl.jpg" />
-            <img src="../images/federation_volley.png" />
+        <span>{{ $t("footer.remerciement") }}</span>
+        <div class="logos" >
+            <span v-for="(item,index) in imgRemerciement">
+                <img :src="item.image"/>
+            </span>
         </div>
 
     </section>
 
     <section class="groupes">
 
-        <div class="groupe">
-            <span>PRESTATIARES</span>
+    <div class="groupe" v-for="(item,index) in footerArray" :key="index">
+        <span>{{ item.title }}</span>
 
-            <div class="elements">
-                <span class="pointer">À propos</span>
-                <span class="pointer">Services</span>
-            </div>
-
+        <div class="elements">
+        <span 
+            class="pointer"
+            v-for="(item2, index2) in item.options"
+            :key="index2"
+        >
+            {{ item2.option }}
+        </span>
         </div>
-
-        <div class="groupe">
-            <span>PRODUITS DÉRIVÉS</span>
-
-            <div class="elements">
-                <span class="pointer">Produits</span>
-                <span class="pointer">Où se rendre ?</span>
-            </div>
-        </div>
-
-        <div class="groupe">
-            <span>CONTACT</span>
-
-            <div class="elements">
-                <span class="pointer">Plus d'informations</span>
-                <span class="pointer">Où nous trouver ?</span>
-                <span class="pointer">Nous contacter</span>
-            </div>
-        </div>
+    </div>
 
     </section>
+
 
     <section>
         <div class="reseaux">
@@ -158,5 +143,66 @@ footer {
 }
 </style>
 
-<script>
+<script setup>
+
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+/* ********************
+    IMAGES IMPORTS 
+******************** */
+import logoHerault from "../images/logo_herault.png";
+import logoMontpellier from "../images/logo_montpellier.png";
+import logoVNL from "../images/logo_vnl.jpg";
+import logoFederationVolley from "../images/federation_volley.png";
+
+import iconYoutube from "../images/icon_youtube.svg";
+import iconInstagram from "../images/icon_instagram.svg";
+import iconX from "../images/icon_x.svg";
+import iconFacebook from "../images/icon_facebook.svg";
+
+
+
+const { t } = useI18n();
+
+const imgRemerciement=computed(()=>[
+    {
+        image: logoHerault
+    },
+    {
+        image: logoMontpellier
+    },
+    {
+        image: logoVNL
+    },
+    {
+        image: logoFederationVolley
+    }
+]);
+
+const footerArray = computed(() => [
+  {
+    title: t("footer.titlePrestataire"),
+    options: [
+      { option: t("footer.infoPrestataire1") },
+      { option: t("footer.infoPrestataire2") }
+    ]
+  },
+  {
+    title: t("footer.titleProduit"),
+    options: [
+      { option: t("footer.infoProduit1") },
+      { option: t("footer.infoProduit2") }
+    ]
+  },
+  {
+    title: t("footer.titleContact"),
+    options: [
+      { option: t("footer.infoContact1") },
+      { option: t("footer.infoContact2") },
+      { option: t("footer.infoContact3") }
+    ]
+  }
+])
+
 </script>

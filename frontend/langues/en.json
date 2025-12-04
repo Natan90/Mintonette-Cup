@@ -46,6 +46,13 @@
     "inscription": "Registration complete! \n Welcome to the volleyball adventure.",
     "goToPrestataire": "Launch your service provider profile"
   },
+  "PresentationMintonette": {
+    "title": "WHO ARE WE?",
+    "texte1": "The great <b>world Volleyball tournament</b> Mintonette Cup is coming <b>to Montpellier</b>! Our second edition promises to be amazing.",
+    "texte2": "Are you a <b>sports enthusiast</b>, do you love following <b>major sporting events</b> that bring together <b>passionate fans</b> and <b>a great atmosphere</b>? <b>The Mintonette Cup awaits you!</b>",
+    "texte3": "On the agenda: <b>thrilling matches</b>, an <b>amazing audience</b> and a <b>bustling atmosphere</b>.",
+    "texte4": "We look forward to seeing you in the stands!"
+  },
   "blocInfo": {
     "voirPlus": "See more",
     "titleEdition": "3rd edition",
@@ -57,5 +64,18 @@
     "descriAudience": "This was the peak viewership recorded for a volleyball match in 2024, demonstrating the growing public interest in the sport. International competitions attract <strong>millions of viewers</strong> and increase volleyball’s visibility.",
     "titleReseauxSociaux": "150 thousand",
     "descriReseauxSociaux": "This is the number of social media interactions related to the previous edition of the Mintonette Cup. The organizers hope to exceed <strong>300,000 online views</strong> this year, further boosting its visibility. Social media were not left behind !"
+  },
+  "footer": {
+    "remerciement": "WITH THE COLLABORATION AND A BIG THANK YOU TO:",
+    "titlePrestataire": "SERVICE PROVIDERS",
+    "infoPrestataire1": "About",
+    "infoPrestataire2": "Services",
+    "titleProduit": "MERCHANDISE",
+    "infoProduit1": "Products",
+    "infoProduit2": "Where to go?",
+    "titleContact": "CONTACTS",
+    "infoContact1": "More information",
+    "infoContact2": "Where to find us?",
+    "infoContact3": "Contact us"
   }
 }

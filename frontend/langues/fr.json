@@ -46,6 +46,13 @@
     "inscription": "Inscription validée ! \n Bienvenue dans l'aventure volley.",
     "goToPrestataire": "Lancez votre profil prestataire"
   },
+  "PresentationMintonette": {
+    "title": "QUI SOMMES NOUS ?",
+    "texte1": "Le grand <b>tournoi de Volley mondial</b> Mintonette Cup arrive <b>à Montpellier</b> ! Notre deuxième édition s'annonce folle.",
+    "texte2": "Vous êtes <b>adèpte de volley-ball</b>, aimez suivre de <b>grands évenements sportifs</b> qui regroupent <b>passionnés</b> et <b>bonne ambiance</b> ? <b>La Mintonnette Cup vous attend !</b>",
+    "texte3": "Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une <b>ambiance débordante</b>.",
+    "texte4": "On vous attends dans les gradins !"
+  },
   "blocInfo": {
     "voirPlus": "Voir plus",
     "titleEdition": "3ème édition",
@@ -57,5 +64,18 @@
     "descriAudience": "C’est le pic d’audience enregistré pour un match de volley-ball en 2024, preuve de l’intérêt croissant du public pour ce sport. Les compétitions internationales attirent <strong>des millions de téléspectateurs</strong> et renforcent la visibilité du volley.",
     "titleReseauxSociaux": "150 mille",
     "descriReseauxSociaux": "C'est le nombre d'interractions sur les réseaux sociaux relatives à l'édition précédente de la Mintonette Cup. Les organisateurs espèrent cette année dépasser <strong>300 000 visionnages en ligne</strong>, renforçant encore sa notoriété. Les réseaux sociaux n'ont pas été en reste !"
+  },
+  "footer": {
+    "remerciement": "AVEC LA COLLABORATION ET UN GRAND MERCI À :",
+    "titlePrestataire": "PRESTATAIRES",
+    "infoPrestataire1": "À propos",
+    "infoPrestataire2": "Services",
+    "titleProduit": "PRODUITS DÉRIVÉS",
+    "infoProduit1": "Produits",
+    "infoProduit2": "Où se rendre ?",
+    "titleContact": "CONTACTS",
+    "infoContact1": "Plus d'information",
+    "infoContact2": "Où nous trouver ?",
+    "infoContact3": "Nous contacter"
   }
 }
