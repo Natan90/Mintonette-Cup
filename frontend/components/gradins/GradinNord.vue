@@ -5,16 +5,20 @@
 
     <section>
       <p class="legend">Cliquez sur une place pour réserver / annuler</p>
-      Il faut que cette page soit accessible seulement si on est connecté 
-
+      Il faut que cette page soit accessible seulement si on est connecté
+      <router-link to="/gradins/GradinOuest" class="">
+        Gradin précédent
+      </router-link>
+      <router-link to="/gradins/GradinEst" class="">
+        Gradin suivant
+      </router-link>
       <div class="seatContainer">
         <button
           class="Seat"
-          v-for="(placeNumber, index) in 100"
+          v-for="(seat, index) in seats"
           :key="index"
           @mouseover="hoverIndex = index"
-          @mouseleave="hoverIndex = null"
-          @click="isAvailable(index)">
+          @mouseleave="hoverIndex = null">
           <img
             v-if="hoverIndex === index && seats[index] === 'available'"
             src="/AvailableSeatHover.svg"
@@ -32,6 +36,9 @@
             class="ImgSeat" />
         </button>
       </div>
+      <router-link to="/gradins/ReservationNord" class=""
+        >Réservation d'un billet</router-link
+      >
     </section>
 
     <Footer />
@@ -39,34 +46,38 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import NavBar from "../NavView.vue";
 import Footer from "../Footer.vue";
 import axios from "axios";
 
 const hoverIndex = ref(null);
-const seats = ref(Array(100).fill("available"));
+const seats = ref(Array(100));
 
-function isAvailable(index) {
-  if (seats.value[index] === "available") {
-    seats.value[index] = "reserved";
-  } else if (seats.value[index] === "reserved") {
-    seats.value[index] = "available";
+async function fetchGradin() {
+  try {
+    const res = await axios.get("http://localhost:3000/gradin/show");
+
+    seats.value = res.data
+      .filter((seat) => seat.zone === "NORD")
+      .map((seat) => (seat.est_reserve ? "reserved" : "available"));
+  } catch (err) {
+    console.error(err);
   }
 }
 
-async function fetchSiege() {
-    try {
-        const res = await axios.get("http://localhost:3000/siege");
-        type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
-    } catch (err) {
-        console.error(err);
-    }
-}
+onMounted(async () => {
+  try {
+    fetchGradin();
+  } catch (err) {
+    console.error(err);
+  }
+});
 </script>
 
 <style scoped>
 .seatContainer {
+  user-select: none;
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(12, 60px);
