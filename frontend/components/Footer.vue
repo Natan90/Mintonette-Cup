@@ -1,158 +1,160 @@
 <template>
-<div class="footer">
-  <div class="contain">
-  <div class="col">
-    <h1>Prestaire</h1>
-    <ul>
-      <li>About</li>
-      <li>Mission</li>
-      <li>Services</li>
-      <li>Social</li>
-      <li>Get in touch</li>
-    </ul>
-  </div>
-  <div class="col">
-    <h1>Produits</h1>
-    <ul>
-      <li>About</li>
-      <li>Mission</li>
-      <li>Services</li>
-      <li>Social</li>
-      <li>Get in touch</li>
-    </ul>
-  </div>
-  <div class="col">
-    <h1>Contact</h1>
-    <ul>
-      <li>About</li>
-      <li>Mission</li>
-      <li>Services</li>
-      <li>Social</li>
-      <li>Get in touch</li>
-    </ul>
-  </div>
-  <div class="col social">
-    <h1>Social</h1>
-    <ul>
-      <li><img width="40" src="../images/icons8-facebook.svg" alt=""></li>
-      <li><img width="40" src="../images/icons8-twitterx.svg" alt=""></li>
-      <li><img width="40" src="../images/icons8-instagram.svg" alt=""></li>
-        <li><img width="40" src="../images/icons8-linkedin.svg" alt=""></li>
-    </ul>
-  </div>
-<div class="clearfix"></div>
-</div>
-</div>
+  <footer>
+    <section class="remerciement">
+        <span>AVEC LA COLLABORATION ET UN GRAND MERCI :</span>
+        <div class="logos">
+            <img src="../images/logo_herault.png" />
+            <img src="../images/logo_montpellier.png" />
+            <img src="../images/logo_vnl.jpg" />
+            <img src="../images/federation_volley.png" />
+        </div>
 
+    </section>
+
+    <section class="groupes">
+
+        <div class="groupe">
+            <span>PRESTATIARES</span>
+
+            <div class="elements">
+                <span class="pointer">À propos</span>
+                <span class="pointer">Services</span>
+            </div>
+
+        </div>
+
+        <div class="groupe">
+            <span>PRODUITS DÉRIVÉS</span>
+
+            <div class="elements">
+                <span class="pointer">Produits</span>
+                <span class="pointer">Où se rendre ?</span>
+            </div>
+        </div>
+
+        <div class="groupe">
+            <span>CONTACT</span>
+
+            <div class="elements">
+                <span class="pointer">Plus d'informations</span>
+                <span class="pointer">Où nous trouver ?</span>
+                <span class="pointer">Nous contacter</span>
+            </div>
+        </div>
+
+    </section>
+
+    <section>
+        <div class="reseaux">
+            <img class="pointer" src="../images/icon_youtube.svg" />
+            <img class="pointer" src="../images/icon_instagram.svg" />
+            <img class="pointer" src="../images/icon_x.svg" />
+            <img class="pointer" src="../images/icon_facebook.svg" />
+        </div>
+    </section>
+  </footer>
 </template>
 
 <style scoped>
-html,body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, Sans-serif;
-  background-color: #070617;
-}
-.footer {
-  width: 100%;
-  position: relative;
-  height: auto;
-  background-color: #070617;
-  bottom: 0;
-  padding: 0 0 100px 0;
-}
-.footer .col {
-  width: 190px;
-  height: auto;
-  float: left;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  padding: 0px 20px 20px 20px;
-}
-.footer .col h1 {
-  margin: 0;
-  padding: 0;
-  font-family: inherit;
-  font-size: 12px;
-  line-height: 17px;
-  padding: 20px 0px 5px 0px;
-  color: rgba(255,255,255,0.2);
-  font-weight: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.250em;
-}
-.footer .col ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.footer .col ul li {
-  color: #999999;
-  font-size: 14px;
-  font-family: inherit;
-  font-weight: bold;
-  padding: 5px 0px 5px 0px;
+
+.pointer{
   cursor: pointer;
-  transition: .2s;
-  -webkit-transition: .2s;
-  -moz-transition: .2s;
-}
-.social ul li {
-  display: inline-block;
-  padding-right: 5px !important;
 }
 
-.footer .col ul li:hover {
-  color: #ffffff;
-  transition: .1s;
-  -webkit-transition: .1s;
-  -moz-transition: .1s;
-}
-.clearfix {
-  clear: both;
-}
-@media only screen and (min-width: 1280px) {
-  .contain {
-    width: 1200px;
-    margin: 0 auto;
-  }
-}
-@media only screen and (max-width: 1139px) {
-  .contain .social {
-    width: 1000px;
-    display: block;
-  }
-  .social h1 {
-    margin: 0px;
-  }
-}
-@media only screen and (max-width: 950px) {
-  .footer .col {
-    width: 33%;
-  }
-  .footer .col h1 {
-    font-size: 14px;
-  }
-  .footer .col ul li {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 500px) {
-    .footer .col {
-      width: 50%;
-    }
-    .footer .col h1 {
-      font-size: 14px;
-    }
-    .footer .col ul li {
-      font-size: 13px;
-    }
-}
-@media only screen and (max-width: 340px) {
-  .footer .col {
+footer {
     width: 100%;
-  }
+    background-color: black;
+
+    padding: 20px 0;
+}
+
+.remerciement {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin: 0 30px 30px 30px;
+}
+
+.remerciement>span {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.logos {
+    margin-top: 1.5em;
+    margin-bottom: 2em;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.logos img {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+}
+
+.groupes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 15px;
+}
+
+.groupe {
+    padding: 10px;
+    background-color: none;
+    border-radius: 10px;
+    color: white;
+}
+
+.groupe>span {
+    font-weight: bold;
+}
+
+.elements {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5em;
+}
+
+.elements span {
+    margin-left: 0.5em;
+}
+
+.elements span:hover {
+    color: grey;
+    transition: var(--transition-fast);
+}
+
+.reseaux {
+
+    background-color: white;
+
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.reseaux img {
+
+    width: 100%;
+    width: 50px;
+
+    opacity: 0.8;
+}
+
+.reseaux img:hover {
+    opacity: 1;
+    transition: var(--transition-fast);
 }
 </style>
 
