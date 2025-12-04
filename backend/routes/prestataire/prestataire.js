@@ -25,5 +25,23 @@ router.get("/showTypePrestataire", async (req, res) => {
 });
 
 
+router.get("/showEveryType", async (req, res) => {
+  try {
+    const animations = await pool.query("SELECT * FROM Type_animation ORDER BY nom_type_animation");
+    const restaurations = await pool.query("SELECT * FROM Type_restauration ORDER BY nom_type_restauration");
+    const boutiques = await pool.query("SELECT * FROM Type_boutique ORDER BY nom_type_boutique");
+
+    res.json({
+      animations: animations.rows,
+      restaurations: restaurations.rows,
+      boutiques: boutiques.rows
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+})
+
 
 module.exports = router;

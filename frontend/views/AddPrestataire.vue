@@ -32,20 +32,76 @@
 
             </div>
             <div v-if="selectedType === 'animation'">
-                test1
+                <div>
+                    <p>Quel est votre type d'animation ?</p>
+                    <div v-for="(item, index) in type_animation" :key="index">
+                        <input type="checkbox"></input>
+                        <label>{{ item.nom_type_animation }}</label>
+                    </div>
+                    <span>
+                        <input type="checkbox"></input>
+                        <label>Autre</label>
+                        <span>
+                            <input></input>
+                        </span>
+                    </span>
+                    
+                </div>
             </div>
 
             <div v-if="selectedType === 'boutique'">
-                test2
-            </div>
-
-            <div v-if="selectedType === 'equipe'">
-                test3
+                <div>
+                    <p>Quel est votre type d'animation ?</p>
+                    <div v-for="(item, index) in type_boutique" :key="index">
+                        <input type="checkbox"></input>
+                        <label>{{ item.nom_type_boutique }}</label>
+                    </div>
+                    <span>
+                        <input type="checkbox"></input>
+                        <label>Autre</label>
+                        <span>
+                            <input></input>
+                        </span>
+                    </span>
+                    
+                </div>
             </div>
 
             <div v-if="selectedType === 'reservation'">
-                test4
+                <div>
+                    <p>Quel est votre type d'animation ?</p>
+                    <div v-for="(item, index) in type_restauration" :key="index">
+                        <input type="checkbox"></input>
+                        <label>{{ item.nom_type_restauration }}</label>
+                    </div>
+                    <span>
+                        <input type="checkbox"></input>
+                        <label>Autre</label>
+                        <span>
+                            <input></input>
+                        </span>
+                    </span>
+                    
+                </div>
             </div>
+            <div v-if="selectedType === 'equipe'">
+                <!-- <div>
+                    <p>Quel est votre type d'animation ?</p>
+                    <div v-for="(item, index) in type_animation" :key="index">
+                        <input type="checkbox"></input>
+                        <label>{{ item.nom_type_animation }}</label>
+                    </div>
+                    <span>
+                        <input type="checkbox"></input>
+                        <label>Autre</label>
+                        <span>
+                            <input></input>
+                        </span>
+                    </span>
+                    
+                </div> -->
+            </div>
+
 
         </div>
     </div>
@@ -57,21 +113,37 @@ import NavView from '@/components/NavView.vue';
 import { ref, onMounted } from "vue";
 import axios from 'axios';
 
+const type_animation = ref([]);
+const type_restauration = ref([]);
+const type_boutique = ref([]);
+
 const type_prestataire = ref([]);
 const selectedType = ref(null);
 
 onMounted(async () => {
     try {
-        fetchPrestataire();
+        fetchTypePresta();
+        fetchTypeAnimation();
     } catch (err) {
         console.error(err);
     }
 });
 
-async function fetchPrestataire() {
+async function fetchTypePresta() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
         type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function fetchTypeAnimation() {
+    try {
+        const res = await axios.get("http://localhost:3000/prestataire/showEveryType");
+        type_animation.value = res.data.animations;
+        type_restauration.value = res.data.restaurations;
+        type_boutique.value = res.data.boutiques;
     } catch (err) {
         console.error(err);
     }
