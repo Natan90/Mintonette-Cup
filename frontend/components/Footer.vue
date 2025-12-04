@@ -31,10 +31,9 @@
 
     <section>
         <div class="reseaux">
-            <img class="pointer" src="../images/icon_youtube.svg" />
-            <img class="pointer" src="../images/icon_instagram.svg" />
-            <img class="pointer" src="../images/icon_x.svg" />
-            <img class="pointer" src="../images/icon_facebook.svg" />
+            <span v-for="(item,index) in imgReseaux">
+                <img class="pointer"  :src="item.image"/>
+            </span>
         </div>
     </section>
   </footer>
@@ -119,9 +118,6 @@ footer {
 }
 
 .reseaux {
-
-    background-color: white;
-
     margin-top: 20px;
     display: flex;
     justify-content: center;
@@ -156,10 +152,10 @@ import logoMontpellier from "../images/logo_montpellier.png";
 import logoVNL from "../images/logo_vnl.jpg";
 import logoFederationVolley from "../images/federation_volley.png";
 
-import iconYoutube from "../images/icon_youtube.svg";
-import iconInstagram from "../images/icon_instagram.svg";
-import iconX from "../images/icon_x.svg";
-import iconFacebook from "../images/icon_facebook.svg";
+import iconYoutube from "../images/icon_youtube.png";
+import iconInstagram from "../images/icon_instagram.png";
+import iconX from "../images/icon_x.png";
+import iconFacebook from "../images/icon_facebook.png";
 
 
 
@@ -177,6 +173,21 @@ const imgRemerciement=computed(()=>[
     },
     {
         image: logoFederationVolley
+    }
+]);
+
+const imgReseaux=computed(()=>[
+    {
+        image: iconYoutube
+    },
+    {
+        image: iconInstagram
+    },
+    {
+        image: iconX
+    },
+    {
+        image: iconFacebook
     }
 ]);
 
