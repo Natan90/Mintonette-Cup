@@ -193,7 +193,7 @@ body::-webkit-scrollbar {
   font-size: 5em;
   text-align: center;
   position: absolute;
-  top: 20%;
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
@@ -208,7 +208,6 @@ body::-webkit-scrollbar {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-
   width: 95%;
   margin: 50px 2.5% 50px 2.5%;
   gap: 50px;
