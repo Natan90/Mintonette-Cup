@@ -1,33 +1,32 @@
 <template>
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <router-link to="/">
-      <img src="../images/logo.png" alt="logo" id="logo" />
+      <img class="pointer" src="../images/logo.png" alt="logo" id="logo" />
     </router-link>
     <div class="routeurLink">
-      <router-link to="/" class="">Home</router-link><br />
       <router-link to="/PrestatairePublic" class=""
-        >Prestataire(mode public)</router-link
+        ><span class="pointer optionNav">Prestataire(mode public)</span></router-link
       >
       <router-link to="/PrestatairePresta" class=""
-        >Prestataire (mode presta)</router-link
+        ><span class="pointer optionNav">Prestataire (mode presta)</span></router-link
       >
       <!-- SI ON EST EN ANGLAIS IL NE FAUT PRESENTER QUE LE FRANCAIS ET INVERSEMENT  -->
       <span>
-        <button @click="changeLanguage('fr')" class="langue pointer">Fr</button>/
-        <button @click="changeLanguage('en')" class="langue pointer">En</button>
+        <button @click="changeLanguage('fr')" class="langue pointer optionNav"><span>Fr</span></button>/
+        <button @click="changeLanguage('en')" class="langue pointer optionNav"><span>En</span></button>
       </span>
       <span v-if="!userStore.isConnected"
         ><strong
-          ><router-link to="/utilisateur/connexion">{{
+          ><router-link to="/utilisateur/connexion"><span class="pointer optionNav">{{
             $t("user.buttonConnexion")
-          }}</router-link>
+          }}</span></router-link>
           /
-          <router-link to="/utilisateur/inscription">{{
+          <router-link to="/utilisateur/inscription"><span class="pointer optionNav">{{
             $t("user.buttonInscription")
-          }}</router-link></strong
+          }}</span></router-link></strong
         ></span
       >
-      <span v-else>Mon profil / Se déconnecter (menu burger)</span>
+      <span v-else><span class="pointer optionNav">Mon profil / Se déconnecter (menu burger)</span></span>
     </div>
   </nav>
 </template>
@@ -72,9 +71,9 @@ body {
 .barre-nav {
   padding: 0;
   background: linear-gradient(to bottom, #000000, transparent);
-  display: flex;
-  justify-content: space-between;
   color: white;
+  display: flex;
+  align-items: center;
   font-size: 1.2em;
   width: 100%;
 }
@@ -86,6 +85,13 @@ body {
 
 #logo {
   height: 100px;
+}
+
+.routeurLink{
+  display: flex;
+  justify-content: space-evenly;
+  width: calc(100% - 100px);
+  height: 1.2em;
 }
 
 .log {
@@ -107,9 +113,12 @@ body {
 .barre-nav a {
   text-decoration: none;
   color: white;
+  cursor: default;
 }
 
-.barre-nav a:hover {
+
+
+.optionNav:hover {
   color: #ffff00;
 }
 </style>
