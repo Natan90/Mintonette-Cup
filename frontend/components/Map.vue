@@ -5,7 +5,7 @@
     <div class="map" id="map">
       <button
         v-if="currentMapType !== 'generalZone'"
-        class="SwitchButton"
+        class="SwitchButton pointer"
         @click="goBack">
         Retour
       </button>
@@ -1173,7 +1173,6 @@ body::-webkit-scrollbar {
 .SwitchButton {
   z-index: 1000;
   position: absolute;
-  cursor: pointer;
   padding: 8px 16px;
   margin-top: 5px;
   margin-left: 5px;
