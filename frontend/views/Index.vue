@@ -23,18 +23,11 @@
           <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
             <img class="illustration" :src="item.image" />
             <span class="title">
-              <countUp
-                :from="0"
-                :to="item.countUp"
-                :duration="2"
-                class="count-up-text"
-                v-if="item.countUp" />
+              <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
               {{ item.title }}
             </span>
             <div class="contenuTexte">
-              <span v-if="index === 0"
-                >C'est trop vieillot ! (ça fait 2008)</span
-              >
+              <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span>
               <span class="descri" v-html="item.descri" v-else></span>
               <div class="voirPlus">
                 <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
@@ -43,7 +36,7 @@
           </div>
         </section>
 
-        <BounceCard
+        <!-- <BounceCard
           class="custom-bounceCards"
           :images="blocInfoArray.map((b) => b.image)"
           :containerWidth="500"
@@ -52,13 +45,46 @@
           :animationStagger="0.08"
           easeType="elastic.out(1, 0.5)"
           :transformStyles="transformStyles"
-          :enableHover="false" />
+          :enableHover="false" /> -->
       </section>
     </div>
     <!-- <router-link to="/PolygoneCreation" class="btnLink"
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
+    <section class="presta_texte">
+      <h2>Envie de faire partie de l’aventure ?</h2>
+      <p>
+        Que vous proposiez une animation, une boutique ou de la restauration,<br>
+        <strong>devenez prestataire officiel de la Mintonette Cup !</strong>
+      </p>
+      <p>
+        Rejoignez l'équipe et apportez votre savoir-faire à l’événement :
+      </p>
+
+      <router-link to="/Prestataire/Add" class="btn_presta">
+        Je deviens prestataire
+      </router-link>
+    </section>
+    <section class="teams_texte">
+      <h2>Plongez dans la compétition !</h2>
+
+      <p>
+        Plongez au cœur de la compétition et explorez les pays engagés dans la
+        Mintonette Cup.<br>
+        <strong>Compositions, photos et infos essentielles : tout est là !</strong>
+      </p>
+
+      <p>
+        Que vous soyez joueur, supporter ou simple curieux, découvrez tous les
+        pays du tournoi :
+      </p>
+
+      <router-link to="/Equipes" class="btn_teams">
+        Voir les pays
+      </router-link>
+    </section>
+
 
     <!-- <div class="presta_formulaire">
       <ListPresta></ListPresta>
@@ -169,6 +195,7 @@ body::-webkit-scrollbar {
 .all {
   user-select: none;
 }
+
 .pointer {
   cursor: pointer;
 }
@@ -277,13 +304,108 @@ body::-webkit-scrollbar {
 }
 
 .presta_formulaire {
-  background: linear-gradient(
-    135deg,
-    var(--colorGradientBlue),
-    var(--colorGradientGreen)
-  );
+  background: linear-gradient(135deg,
+      var(--colorGradientBlue),
+      var(--colorGradientGreen));
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
 }
+
+.presta_texte {
+  text-align: center;
+  margin: 0px auto;
+  padding: 60px 40px;
+  width: 100%;
+
+  background: linear-gradient(135deg, #f7c325cc, #ffe37fcc);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.presta_texte h2 {
+  font-size: 2.6em;
+  font-weight: 800;
+  color: #0a1d42;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.presta_texte p {
+  font-size: 1.2em;
+  color: #0a1d42;
+  margin-bottom: 12px;
+  line-height: 1.5em;
+}
+
+.btn_presta {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 16px 35px;
+
+  background: #0a3a75;
+  color: white;
+
+  font-weight: bold;
+  font-size: 1.3em;
+  border-radius: 50px;
+  text-decoration: none;
+
+  box-shadow: 0 6px 14px rgba(10, 58, 117, 0.35);
+  transition: 0.25s ease;
+}
+
+.btn_presta:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(10, 58, 117, 0.5);
+}
+
+.teams_texte {
+  text-align: center;
+  margin: 0 auto;
+  padding: 60px 40px;
+  width: 100%;
+
+  /* background: linear-gradient(135deg, #0a3a75cc, #4fa3ffcc); */
+  backdrop-filter: blur(8px);
+  /* box-shadow: 0 10px 30px rgba(0,0,0,0.15); */
+}
+
+.teams_texte h2 {
+  font-size: 2.6em;
+  font-weight: 800;
+  color: black;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.teams_texte p {
+  font-size: 1.2em;
+  color: black;
+  margin-bottom: 12px;
+  line-height: 1.5em;
+}
+
+.btn_teams {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 16px 35px;
+
+  background: #f7c325;
+  color: #0a1d42;
+
+  font-weight: bold;
+  font-size: 1.3em;
+  border-radius: 50px;
+  text-decoration: none;
+
+  box-shadow: 0 6px 14px rgba(247,195,37,0.35);
+  transition: 0.25s ease;
+}
+
+.btn_teams:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(247,195,37,0.55);
+}
+
 </style>
