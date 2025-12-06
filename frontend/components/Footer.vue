@@ -41,10 +41,6 @@
 
 <style scoped>
 
-.pointer{
-  cursor: pointer;
-}
-
 footer {
     width: 100%;
     background-color: black;
