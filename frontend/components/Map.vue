@@ -1172,8 +1172,7 @@ body::-webkit-scrollbar {
 
 .SwitchButton {
   z-index: 1000;
-  position: absolute;
-  padding: 8px 16px;
+  position: absolute;  padding: 8px 16px;
   margin-top: 5px;
   margin-left: 5px;
   border: none;

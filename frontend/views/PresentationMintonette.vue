@@ -49,6 +49,7 @@ const selectedItem = ref(0)
 }
 
 .question {
+    font-size: 2em;
     font-weight: bold;
     align-self: center ;
 }
