@@ -36,8 +36,8 @@
                 >C'est trop vieillot ! (ça fait 2008)</span
               >
               <span class="descri" v-html="item.descri" v-else></span>
-              <div class="voirPlus">
-                <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
+              <div class="voirPlus pointer">
+                <span>{{ $t("blocInfo.voirPlus") }}</span>
               </div>
             </div>
           </div>
@@ -222,7 +222,6 @@ body::-webkit-scrollbar {
   padding-bottom: 5px;
   max-width: 60%;
   margin: 15px 20px;
-  cursor: pointer;
   width: 300px;
   height: 270px;
 
