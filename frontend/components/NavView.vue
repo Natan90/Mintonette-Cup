@@ -10,6 +10,9 @@
       <router-link to="/PrestatairePresta" class=""
         ><span class="pointer optionNav">Prestataire (mode presta)</span></router-link
       >
+      <router-link to="/utilisateur" class="">
+      <span class="pointer optionNav">Vue administrateur</span>
+    </router-link>
       <!-- SI ON EST EN ANGLAIS IL NE FAUT PRESENTER QUE LE FRANCAIS ET INVERSEMENT  -->
       <span>
         <button @click="changeLanguage('fr')" class="langue pointer optionNav"><span>Fr</span></button>/

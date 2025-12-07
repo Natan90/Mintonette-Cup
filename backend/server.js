@@ -7,7 +7,7 @@ const authRoutes = require("./routes/utilisateurs/authRoutes");
 const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
-// const utilisateursRoutes = require("./routes/utilisateurs");
+const utilisateursRoutes = require("./routes/utilisateurs/utilisateurs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,10 +24,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/utilisateur", authRoutes);
+app.use("/utilisateur", utilisateursRoutes);
+app.use("/utilisateur/auth", authRoutes);
 app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
-app.use("/gradin",gradins)
+app.use("/gradin", gradins);
 
 // Swagger
 const swaggerUi = require("swagger-ui-express");

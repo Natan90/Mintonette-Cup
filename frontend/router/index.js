@@ -25,7 +25,6 @@ import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
 
 
 
-
 const routes = [
   { path: "/", 
     name: "Home", 
