@@ -6,7 +6,7 @@
     <h2>Liste des utilisateurs</h2>
     <ul>
       <li v-for="(item, index) in utilisateurs" :key="index">
-        {{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
+        {{ item.id_utilisateur}} {{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
         <button @click="supprimerUtilisateur(item.id_utilisateur)">Supprimer</button>
       </li>
     </ul>
