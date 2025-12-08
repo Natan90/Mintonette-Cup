@@ -29,8 +29,8 @@
             <div class="contenuTexte">
               <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span>
               <span class="descri" v-html="item.descri" v-else></span>
-              <div class="voirPlus pointer">
-                <span >{{ $t("blocInfo.voirPlus") }}</span>
+              <div class="voirPlus">
+                <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
               </div>
             </div>
           </div>
@@ -52,39 +52,45 @@
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
-    <section class="presta_texte">
-      <h2>Envie de faire partie de l’aventure ?</h2>
-      <p>
-        Que vous proposiez une animation, une boutique ou de la restauration,<br>
-        <strong>devenez prestataire officiel de la Mintonette Cup !</strong>
-      </p>
-      <p>
-        Rejoignez l'équipe et apportez votre savoir-faire à l’événement :
-      </p>
+    <section>
+      <div class="presta_texte">
+        <h2>Envie de faire partie de l’aventure ?</h2>
+        <p>
+          Que vous proposiez une animation, une boutique ou de la restauration,<br>
+          <strong>devenez prestataire officiel de la Mintonette Cup !</strong>
+        </p>
+        <p>
+          Rejoignez l'équipe et apportez votre savoir-faire à l’événement :
+        </p>
 
-      <router-link to="/Prestataire/Add" class="btn_presta">
-        Je deviens prestataire
-      </router-link>
+        <router-link to="/Prestataire/Add" class="btn_presta">
+          Je deviens prestataire
+        </router-link>
+      </div>
+
     </section>
-    <section class="teams_texte">
-      <h2>Plongez dans la compétition !</h2>
+    <section>
+      <div class="teams_texte">
 
-      <p>
-        Plongez au cœur de la compétition et explorez les pays engagés dans la
-        Mintonette Cup.<br>
-        <strong>Compositions, photos et infos essentielles : tout est là !</strong>
-      </p>
+        <h2>Plongez dans la compétition !</h2>
 
-      <p>
-        Que vous soyez joueur, supporter ou simple curieux, découvrez tous les
-        pays du tournoi :
-      </p>
+        <p>
+          Plongez au cœur de la compétition et explorez les pays engagés dans la
+          Mintonette Cup.<br>
+          <strong>Compositions, photos et infos essentielles : tout est là !</strong>
+        </p>
 
-      <router-link to="/Equipes" class="btn_teams">
-        Voir les pays
-      </router-link>
+        <p>
+          Que vous soyez joueur, supporter ou simple curieux, découvrez tous les
+          pays du tournoi :
+        </p>
+
+        <router-link to="/Equipes" class="btn_teams">
+          Voir les pays
+        </router-link>
+      </div>
     </section>
-    
+
 
     <!-- <div class="presta_formulaire">
       <ListPresta></ListPresta>
@@ -196,6 +202,10 @@ body::-webkit-scrollbar {
   user-select: none;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .navbar {
   position: fixed;
   left: 0;
@@ -244,6 +254,7 @@ body::-webkit-scrollbar {
   padding-bottom: 5px;
   max-width: 60%;
   margin: 15px 20px;
+  cursor: pointer;
   width: 300px;
   height: 270px;
 
@@ -309,9 +320,9 @@ body::-webkit-scrollbar {
 
 .presta_texte {
   text-align: center;
-  margin: 0px auto;
+  margin: auto;
   padding: 60px 40px;
-  width: 100%;
+  width: calc(100% - 80px);
 
   background: linear-gradient(135deg, #f7c325cc, #ffe37fcc);
   backdrop-filter: blur(8px);
@@ -359,7 +370,7 @@ body::-webkit-scrollbar {
   text-align: center;
   margin: 0 auto;
   padding: 60px 40px;
-  width: 100%;
+  width: calc(100% - 80px);
 
   /* background: linear-gradient(135deg, #0a3a75cc, #4fa3ffcc); */
   backdrop-filter: blur(8px);
@@ -394,13 +405,12 @@ body::-webkit-scrollbar {
   border-radius: 50px;
   text-decoration: none;
 
-  box-shadow: 0 6px 14px rgba(247,195,37,0.35);
+  box-shadow: 0 6px 14px rgba(247, 195, 37, 0.35);
   transition: 0.25s ease;
 }
 
 .btn_teams:hover {
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(247,195,37,0.55);
+  box-shadow: 0 12px 25px rgba(247, 195, 37, 0.55);
 }
-
 </style>
