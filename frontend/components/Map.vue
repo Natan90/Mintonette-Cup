@@ -32,6 +32,8 @@ import VectorLayer from "ol/layer/Vector.js";
 import router from "@/router";
 import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
+import { useUserStore } from '@/stores/user';
+
 
 let map;
 const currentMapType = ref("generalZone");
@@ -46,6 +48,9 @@ let standStyle;
 let standHoverStyle;
 let lastFeature = null;
 let label = null;
+
+const userStore = useUserStore();
+
 
 const tailleMap = [0, 0, 2000, 1600];
 const projection = new Projection({
@@ -326,7 +331,8 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Nord (VIP)",
-    url: "/Gradins/GradinNord",
+    url: userStore.isConnected ? "/Gradins/GradinNord" : "/utilisateur/connexion",
+      
     coord: [
       [249.35839950326178, 1486.0319221298562],
       [331.91885069417697, 1341.9196650761246],
