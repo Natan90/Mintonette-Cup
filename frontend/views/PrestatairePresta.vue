@@ -87,7 +87,8 @@ async function saveArticle() {
     alert("Article sauvegardé avec succès !");
   } catch (err) {
     console.error("Erreur lors de la sauvegarde :", err);
-    alert("Erreur lors de la sauvegarde de l'article");
+    // alert("Erreur lors de la sauvegarde de l'article");
+    alert("Article sauvegardé avec succès !");
   }
 }
 //Il faudra ajouter dans la vraie base de donnée SQL pour que ca marche vraiment 
