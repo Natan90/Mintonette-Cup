@@ -104,7 +104,10 @@
 
 
         </div>
+        
     </div>
+    
+    <router-link to="/PrestatairePresta" style="padding-left: 50px;" @click.prevent="becomePresta">Inscription prestataire</router-link>
 
 </template>
 
@@ -112,6 +115,8 @@
 import NavView from '@/components/NavView.vue';
 import { ref, onMounted } from "vue";
 import axios from 'axios';
+import { useUserStore } from '@/stores/user';
+
 
 const type_animation = ref([]);
 const type_restauration = ref([]);
@@ -119,6 +124,13 @@ const type_boutique = ref([]);
 
 const type_prestataire = ref([]);
 const selectedType = ref(null);
+
+const userStore = useUserStore();
+
+function becomePresta() {
+  userStore.setPresta();
+}
+
 
 onMounted(async () => {
     try {

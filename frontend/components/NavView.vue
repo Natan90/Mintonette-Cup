@@ -8,7 +8,7 @@
         ><span class="pointer optionNav">Prestataire(mode public)</span></router-link
       >
       <router-link to="/PrestatairePresta" class=""
-        ><span class="pointer optionNav">Prestataire (mode presta)</span></router-link
+        v-if="userStore.isPresta"><span class="pointer optionNav">Prestataire (mode presta)</span></router-link
       >
       <router-link to="/utilisateur" class="">
       <span class="pointer optionNav">Vue administrateur</span>

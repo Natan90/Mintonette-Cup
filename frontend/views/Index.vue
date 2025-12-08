@@ -52,7 +52,7 @@
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
-    <section>
+    <section v-if="userStore.isConnected">
       <div class="presta_texte">
         <h2>Envie de faire partie de l’aventure ?</h2>
         <p>
@@ -109,6 +109,8 @@
 ******************** */
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useUserStore } from '@/stores/user';
+
 
 /* ********************
     PAGES IMPORTS 
@@ -133,6 +135,8 @@ import photoStade from "./../images/stade.jpg";
 import photoReseaux from "./../images/reseaux.jpg";
 
 const navbar = ref("0px");
+
+const userStore = useUserStore();
 
 const { t } = useI18n();
 const blocInfoArray = computed(() => [
@@ -371,6 +375,7 @@ body::-webkit-scrollbar {
   margin: 0 auto;
   padding: 60px 40px;
   width: calc(100% - 80px);
+  background: #0a3a75;
 
   /* background: linear-gradient(135deg, #0a3a75cc, #4fa3ffcc); */
   backdrop-filter: blur(8px);
@@ -380,14 +385,14 @@ body::-webkit-scrollbar {
 .teams_texte h2 {
   font-size: 2.6em;
   font-weight: 800;
-  color: black;
+  color: white;
   margin-bottom: 20px;
   letter-spacing: 1px;
 }
 
 .teams_texte p {
   font-size: 1.2em;
-  color: black;
+  color: white;
   margin-bottom: 12px;
   line-height: 1.5em;
 }

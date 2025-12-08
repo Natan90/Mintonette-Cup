@@ -151,10 +151,10 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { useUserStore } from '@/stores/user';
+import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -232,7 +232,7 @@ async function getValuesConnexion() {
     }
 
     try {
-        const res = await axios.post('http://localhost:3000/utilisateur/connexion', {
+        const res = await axios.post('http://localhost:3000/utilisateur/auth/connexion', {
             login: login_utilisateur_connexion.value,
             mdp: mdp_utilisateur_connexion.value,
         });
@@ -261,7 +261,7 @@ async function getValuesInscription() {
             sexe_utilisateur.value = autre_sexe_utilisateur.value;
         }
 
-        const res = await axios.post('http://localhost:3000/utilisateur/inscription', {
+        const res = await axios.post('http://localhost:3000/utilisateur/auth/inscription', {
             nom: nom_utilisateur.value,
             prenom: prenom_utilisateur.value,
             login: login_utilisateur.value,

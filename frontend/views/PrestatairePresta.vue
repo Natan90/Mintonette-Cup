@@ -26,9 +26,9 @@
     <h3>Prévisualisation :</h3>
     <div v-html="content"></div>
     <button @click="saveArticle()">Sauvegarder</button>
-    <div class="ConteneurImageBurger">
+    <!-- <div class="ConteneurImageBurger">
       <img src="../images/PhotoFond.png" alt="photo_fond" id="photo_presta" />
-    </div>
+    </div> -->
   </div>
   <br />
   <Editor
