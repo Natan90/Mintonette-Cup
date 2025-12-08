@@ -29,7 +29,8 @@
           }}</span></router-link></strong
         ></span
       >
-      <span v-else><span class="pointer optionNav">Mon profil / Se déconnecter (menu burger)</span></span>
+      <!-- <span v-else><span class="pointer optionNav">Mon profil / Se déconnecter (menu burger)</span></span> -->
+      <span v-else><button class="pointer optionNav" @click="userStore.logout">Se déconnecter</button></span>
     </div>
   </nav>
 </template>

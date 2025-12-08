@@ -15,6 +15,12 @@ export const useUserStore = defineStore('user', () => {
     isPresta.value = true;
   }
 
+  function logout() {
+    userId.value = 0;
+    isConnected.value = false;
+    isPresta.value = false;
+  }
 
-  return { userId, isConnected, isPresta, setUser, setPresta };
+
+  return { userId, isConnected, isPresta, setUser, setPresta, logout };
 });
