@@ -29,9 +29,9 @@
             <div class="contenuTexte">
               <!-- <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span> -->
               <span class="descri" v-html="item.descri"></span>
-              <div class="voirPlus">
-                <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
-              </div>
+                <router-link to="/Informations" class="voirPlus pointer">
+                  <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
+                </router-link>
             </div>
           </div>
         </section>
@@ -206,10 +206,6 @@ body::-webkit-scrollbar {
   user-select: none;
 }
 
-.pointer {
-  cursor: pointer;
-}
-
 .navbar {
   position: fixed;
   left: 0;
@@ -258,7 +254,6 @@ body::-webkit-scrollbar {
   padding-bottom: 5px;
   max-width: 60%;
   margin: 15px 20px;
-  cursor: pointer;
   width: 300px;
   height: 270px;
 
