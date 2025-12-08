@@ -27,8 +27,8 @@
               {{ item.title }}
             </span>
             <div class="contenuTexte">
-              <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span>
-              <span class="descri" v-html="item.descri" v-else></span>
+              <!-- <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span> -->
+              <span class="descri" v-html="item.descri"></span>
               <div class="voirPlus">
                 <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
               </div>
