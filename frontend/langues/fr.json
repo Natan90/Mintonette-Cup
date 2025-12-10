@@ -17,7 +17,7 @@
     "login": "Nom d'utilisateur",
     "mdp": "Mot de passe",
     "mail": "Mail",
-    "dateNaissance": "Date de naissance",
+    "tel_utilisateur": "Téléphone",
     "sexe": "Sexe",
     "typeSexe": {
       "homme": "Homme",

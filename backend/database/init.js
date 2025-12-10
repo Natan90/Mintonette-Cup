@@ -57,7 +57,7 @@ const pool = require("./db");
         login_utilisateur VARCHAR(200),
         mdp_utilisateur VARCHAR(200),
         mail_utilisateur VARCHAR(200),
-        date_naissance_utilisateur DATE,
+        tel_utilisateur NUMERIC(10,0),
         sexe_utilisateur VARCHAR(50)
       );
 
@@ -396,18 +396,18 @@ const pool = require("./db");
 
     const insertUsers = `
       INSERT INTO Utilisateur 
-        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, date_naissance_utilisateur, sexe_utilisateur)
+        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur)
       VALUES
-        ('Alban', 'Robin', 'albanr', 'admin123', 'alban.robin@gmail.com', '2004-05-12', 'M'),
-        ('Emma', 'Durand', 'emmad', 'user123', 'emma.durand@gmail.com', '2002-10-22', 'F'),
-        ('Lucas', 'Martin', 'lucasm', 'lucas01', 'lucas.martin@gmail.com', '1999-08-17', 'M'),
-        ('Chloe', 'Petit', 'chloep', 'chloe22', 'chloe.petit@gmail.com', '2001-03-09', 'F'),
-        ('Nathan', 'Dupont', 'nathand', 'nathan44', 'nathan.dupont@gmail.com', '2000-12-01', 'M'),
-        ('Julie', 'Bernard', 'julieb', 'julie33', 'julie.bernard@gmail.com', '2003-06-15', 'F'),
-        ('Sophie', 'Moreau', 'sophiem', 'sophie11', 'sophie.moreau@gmail.com', '1998-11-25', 'F'),
-        ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', '2005-09-30', 'M'),
-        ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', '2001-04-20', 'F'),
-        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '1997-02-13', 'M');
+        ('Alban', 'Robin', 'albanr', 'admin123', 'alban.robin@gmail.com', 0763749895, 'M'),
+        ('Emma', 'Durand', 'emmad', 'user123', 'emma.durand@gmail.com', 0612345678, 'F'),
+        ('Lucas', 'Martin', 'lucasm', 'lucas01', 'lucas.martin@gmail.com', 0652437595, 'M'),
+        ('Chloe', 'Petit', 'chloep', 'chloe22', 'chloe.petit@gmail.com', 0610423571, 'F'),
+        ('Nathan', 'Dupont', 'nathand', 'nathan44', 'nathan.dupont@gmail.com', 0752435010, 'M'),
+        ('Julie', 'Bernard', 'julieb', 'julie33', 'julie.bernard@gmail.com', 0630102040, 'F'),
+        ('Sophie', 'Moreau', 'sophiem', 'sophie11', 'sophie.moreau@gmail.com', 0693759150, 'F'),
+        ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', 0630102040, 'M'),
+        ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', 0750402342, 'F'),
+        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', 0682759641, 'M');
     `;
     await pool.query(insertUsers);
 

@@ -81,9 +81,9 @@ const { v4: uuidv4 } = require('uuid');
 // POST /utilisateur/inscription
 router.post("/inscription", async (req, res) => {
   console.log("Body reçu :", req.body);
-  const { nom, prenom, login, mdp, mail, date_naissance, sexe } = req.body;
+  const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = req.body;
 
-  if (!nom || !prenom || !login || !mdp || !mail || !date_naissance || !sexe) {
+  if (!nom || !prenom || !login || !mdp || !mail || !tel_utilisateur || !sexe) {
     return res.status(400).json({
       error: "Champs obligatoires manquants",
     });
@@ -111,10 +111,10 @@ router.post("/inscription", async (req, res) => {
 
     const result = await client.query(
       `INSERT INTO Utilisateur 
-        (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, date_naissance_utilisateur, sexe_utilisateur) VALUES
+        (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur) VALUES
         ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id_utilisateur`,
-      [nom, prenom, login, mdp, mail, date_naissance, sexe] // mettre passwordHash quand il faudra le crypter
+      [nom, prenom, login, mdp, mail, tel_utilisateur, sexe] // mettre passwordHash quand il faudra le crypter
     );
 
     const newUser = result.rows[0];

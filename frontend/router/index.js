@@ -18,20 +18,19 @@ import GradinSud from "@/components/gradins/GradinSud.vue";
 import GradinOuest from "@/components/gradins/GradinOuest.vue";
 import GradinEst from "@/components/gradins/GradinEst.vue";
 import countUp from "@/components/CountUp.vue";
-import GradinReservationNord from "@/components/gradins/ReservationNord.vue"
-import GradinReservationEst from "@/components/gradins/ReservationEst.vue"
-import GradinReservationSud from "@/components/gradins/ReservationSud.vue"
-import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
-
-
+import GradinReservationNord from "@/components/gradins/ReservationNord.vue";
+import GradinReservationEst from "@/components/gradins/ReservationEst.vue";
+import GradinReservationSud from "@/components/gradins/ReservationSud.vue";
+import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue";
 
 const routes = [
-  { path: "/", 
-    name: "Home", 
+  {
+    path: "/",
+    name: "Home",
     component: Index,
-    props: route => ({
-      showModal: route.query.showModal === 'true'
-    })
+    props: (route) => ({
+      showModal: route.query.showModal === "true",
+    }),
   },
   {
     path: "/PrestatairePublic",
@@ -51,7 +50,7 @@ const routes = [
 
   { path: "/Commander", name: "Commander", component: Commander },
   { path: "/Reserver", name: "Reserver", component: Reserver },
-  { path: "/Utilisateur", name: "Utilisateur", component: Utilisateur },
+  { path: "/admin", name: "admin", component: Utilisateur },
   {
     path: "/utilisateur/inscription",
     name: "Inscription_utilisateur",
@@ -132,8 +131,6 @@ const routes = [
     name: "GradinReservationOuest",
     component: GradinReservationOuest,
   },
-  
-
 ];
 
 const router = createRouter({

@@ -62,12 +62,12 @@
                     <div class="container_left">
                         <div class="item both_size">
                             <div class="item">
-                                <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" @keyup.enter="getValuesInscription"/>
+                                <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur" @keyup.enter="getValuesInscription"/>
                                 <hr />
                             </div>
 
                             <div class="item">
-                                <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur" @keyup.enter="getValuesInscription"/>
+                                <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" @keyup.enter="getValuesInscription"/>
                                 <hr />
                             </div>
 
@@ -93,7 +93,7 @@
 
                     <div class="container_right">
                         <div class="item">
-                            <input type="date" v-model="date_naiss_utilisateur" /><br><br>
+                            <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" v-model="tel_utilisateur" :placeholder="$t('user.tel_utilisateur')"/><br><br>
                         </div>
 
                         <div class="item">
@@ -170,8 +170,7 @@ const prenom_utilisateur = ref("");
 const login_utilisateur = ref("");
 const mdp_utilisateur = ref("");
 const mail_utilisateur = ref("");
-const date_naiss_utilisateur = ref("");
-const autre_sexe_utilisateur = ref("");
+const tel_utilisateur = ref("");
 const sexe_utilisateur = ref("");
 
 const message = ref("");
@@ -267,7 +266,7 @@ async function getValuesInscription() {
             login: login_utilisateur.value,
             mdp: mdp_utilisateur.value,
             mail: mail_utilisateur.value,
-            date_naissance: date_naiss_utilisateur.value,
+            tel_utilisateur: tel_utilisateur.value,
             sexe: sexe_utilisateur.value,
         });
         if (res.data && res.data.user) {
