@@ -13,7 +13,7 @@ const { v4: uuidv4 } = require('uuid');
 
 /**
  * @swagger
- * /api/utilisateur/inscription:
+ * /utilisateur/inscription:
  *   post:
  *     summary: Crée un nouvel utilisateur
  *     tags: [Utilisateurs]
@@ -143,7 +143,7 @@ router.post("/inscription", async (req, res) => {
 
 /**
  * @swagger
- * /api/utilisateur/connexion:
+ * /utilisateur/connexion:
  *   post:
  *     summary: Connecte un utilisateur et retourne un token de session
  *     tags: [Utilisateurs]

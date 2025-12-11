@@ -18,14 +18,14 @@ app.use(
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-  })
+  }) 
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/admin", utilisateursRoutes);
-app.use("/utilisateur/auth", authRoutes);
+app.use("/utilisateur/auth", authRoutes);     //mettre /api/utilisateur
 app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
 app.use("/gradin", gradins);
@@ -34,7 +34,11 @@ app.use("/gradin", gradins);
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  swaggerOptions: {
+    tagsSorter: "alpha"
+  }
+}));
 
 // Lancement du serveur
 app.listen(PORT, () => {
