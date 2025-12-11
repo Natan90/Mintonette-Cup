@@ -446,7 +446,6 @@ const pool = require("./db");
     INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
       ('Restauration'),
       ('Animation'),
-      ('Equipe'),
       ('Boutique');
     `;
     await pool.query(insertTypePrestataire);
@@ -455,7 +454,7 @@ const pool = require("./db");
     INSERT INTO Prestataire (nom_prestataire, type_prestataire_id) VALUES
       ('FoodExpress', 1),
       ('AnimEvent', 2),
-      ('SportMerch', 4);
+      ('SportMerch', 3);
     `;
     await pool.query(insertPrestataire);
 
