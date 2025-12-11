@@ -38,11 +38,10 @@
               <router-link class="pointer optionNav">Voir son profil</router-link> <!-- S'il est prestataire -->
           </div>
           <div>
-            <router-link class="pointer optionNav">Paramètres</router-link>
+            <router-link to="/utilisateur/modifier" class="pointer optionNav">Paramètres</router-link>
           </div>
           <div>
-            <router-link class="pointer optionNav" @click="userStore.logout">Se déconnecter</router-link>
-
+            <button class="pointer optionNav logout-btn" @click="handleLogout">Se déconnecter</button>
           </div>
         </div>
       </span>
@@ -57,9 +56,10 @@ import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 import { useUserStore } from "@/stores/user";
 import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const userStore = useUserStore();
 const isInIndex = ref(route.path === "/");
 const showBloc = ref(false);
@@ -73,6 +73,12 @@ watch(
 
 function toggleBloc() {
   showBloc.value = !showBloc.value;
+}
+
+function handleLogout() {
+  userStore.logout();
+  showBloc.value = false;
+  router.push({ name: 'Home' });
 }
 
 function changeLanguage(lang) {
@@ -176,6 +182,25 @@ body {
   border-radius: 3px;
 }
 
+.logout-btn {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  border-radius: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.logout-btn:hover {
+  color: #ffff00;
+}
 
 .dropdown-block.open {
   max-height: 300px;

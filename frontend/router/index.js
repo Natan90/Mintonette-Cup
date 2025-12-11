@@ -8,6 +8,7 @@ import Utilisateur from "@/components/Utilisateur.vue";
 import PresentationMintonette from "@/views/PresentationMintonette.vue";
 import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
+import ModifyAccount from "@/views/ModifyAccount.vue";
 import terrain1 from "@/views/Terrains/terrain1.vue";
 import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
@@ -60,6 +61,11 @@ const routes = [
     path: "/utilisateur/connexion",
     name: "Connexion_utilisateur",
     component: LogPage,
+  },
+  {
+    path: "/utilisateur/modifier",
+    name: "ModifyAccount",
+    component: ModifyAccount,
   },
   {
     path: "/Presentation_Mintonette_Cup",

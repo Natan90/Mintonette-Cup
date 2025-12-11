@@ -29,6 +29,17 @@
     "buttonInscription": "Register",
     "buttonConnexion": "Log In"
   },
+  "account": {
+    "modifyAccount": "Modify my account",
+    "save": "Save",
+    "saving": "Saving...",
+    "loading": "Loading data...",
+    "requiredFields": "Please fill in all required fields",
+    "updateSuccess": "Your information has been successfully updated!",
+    "updateError": "An error occurred while updating",
+    "errorLoading": "Error loading data",
+    "emailAlreadyUsed": "This email is already in use"
+  },
   "burgerStand": {
     "title": "Burger Stand",
     "description": "Good news! The burger stand will be present at the Mintonette Cup.\nYou will find a wide selection to satisfy all tastes: delicious classic burgers,\ngourmet creations, and vegetarian options so everyone can enjoy.\n\nWhether you are a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It's the perfect opportunity to share a friendly moment over a good meal while enjoying the event!"
