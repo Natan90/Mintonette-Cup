@@ -22,6 +22,7 @@ import GradinReservationNord from "@/components/gradins/ReservationNord.vue"
 import GradinReservationEst from "@/components/gradins/ReservationEst.vue"
 import GradinReservationSud from "@/components/gradins/ReservationSud.vue"
 import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
+import Panier from "@/views/Panier.vue"
 
 
 
@@ -132,10 +133,15 @@ const routes = [
     name: "GradinReservationOuest",
     component: GradinReservationOuest,
   },
+  {
+    path: "/Panier",
+    name: "Panier",
+    component: Panier,
+  },
   
 
 ];
-
+Panier
 const router = createRouter({
   history: createWebHistory(),
   routes,
