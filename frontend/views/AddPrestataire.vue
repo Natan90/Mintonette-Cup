@@ -46,7 +46,7 @@
         </button>
     </div>
 
-    <div class="prestataire_container" v-if="continueInscription" id="prest_container">
+    <div class="prestataire_container" v-if="continueInscription" id="presta_container">
         <PrestatairePresta></PrestatairePresta>
     </div>
 
@@ -102,7 +102,7 @@ function showContinueInscription() {
     continueInscription.value = true;
 
     nextTick(() => {
-    const element = document.getElementById("prest_container");
+    const element = document.getElementById("presta_container");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }

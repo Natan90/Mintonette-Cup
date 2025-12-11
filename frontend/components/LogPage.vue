@@ -102,7 +102,7 @@
 
                         <div class="container_right">
                             <div class="item">
-                                <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}"
+                                <input type="tel" pattern="^0[1-9][0-9]{8}$"
                                     v-model="tel_utilisateur" :placeholder="$t('user.tel_utilisateur')" /><br><br>
                             </div>
 
