@@ -8,6 +8,7 @@ import Utilisateur from "@/components/Utilisateur.vue";
 import PresentationMintonette from "@/views/PresentationMintonette.vue";
 import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
+import ModifyAccount from "@/views/ModifyAccount.vue";
 import terrain1 from "@/views/Terrains/terrain1.vue";
 import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
@@ -18,6 +19,7 @@ import GradinSud from "@/components/gradins/GradinSud.vue";
 import GradinOuest from "@/components/gradins/GradinOuest.vue";
 import GradinEst from "@/components/gradins/GradinEst.vue";
 import countUp from "@/components/CountUp.vue";
+<<<<<<< HEAD
 import GradinReservationNord from "@/components/gradins/ReservationNord.vue"
 import GradinReservationEst from "@/components/gradins/ReservationEst.vue"
 import GradinReservationSud from "@/components/gradins/ReservationSud.vue"
@@ -25,14 +27,21 @@ import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
 import Panier from "@/views/Panier.vue"
 
 
+=======
+import GradinReservationNord from "@/components/gradins/ReservationNord.vue";
+import GradinReservationEst from "@/components/gradins/ReservationEst.vue";
+import GradinReservationSud from "@/components/gradins/ReservationSud.vue";
+import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue";
+>>>>>>> 7640a50d849db12936d6d47363061da6342bdcc0
 
 const routes = [
-  { path: "/", 
-    name: "Home", 
+  {
+    path: "/",
+    name: "Home",
     component: Index,
-    props: route => ({
-      showModal: route.query.showModal === 'true'
-    })
+    props: (route) => ({
+      showModal: route.query.showModal === "true",
+    }),
   },
   {
     path: "/PrestatairePublic",
@@ -52,7 +61,7 @@ const routes = [
 
   { path: "/Commander", name: "Commander", component: Commander },
   { path: "/Reserver", name: "Reserver", component: Reserver },
-  { path: "/Utilisateur", name: "Utilisateur", component: Utilisateur },
+  { path: "/admin", name: "admin", component: Utilisateur },
   {
     path: "/utilisateur/inscription",
     name: "Inscription_utilisateur",
@@ -62,6 +71,11 @@ const routes = [
     path: "/utilisateur/connexion",
     name: "Connexion_utilisateur",
     component: LogPage,
+  },
+  {
+    path: "/utilisateur/modifier",
+    name: "ModifyAccount",
+    component: ModifyAccount,
   },
   {
     path: "/Presentation_Mintonette_Cup",
@@ -133,6 +147,7 @@ const routes = [
     name: "GradinReservationOuest",
     component: GradinReservationOuest,
   },
+<<<<<<< HEAD
   {
     path: "/Panier",
     name: "Panier",
@@ -140,6 +155,8 @@ const routes = [
   },
   
 
+=======
+>>>>>>> 7640a50d849db12936d6d47363061da6342bdcc0
 ];
 Panier
 const router = createRouter({

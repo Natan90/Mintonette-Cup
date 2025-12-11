@@ -17,7 +17,7 @@
     "login": "Nom d'utilisateur",
     "mdp": "Mot de passe",
     "mail": "Mail",
-    "dateNaissance": "Date de naissance",
+    "tel_utilisateur": "Téléphone",
     "sexe": "Sexe",
     "typeSexe": {
       "homme": "Homme",
@@ -28,6 +28,17 @@
     "inscription": "Inscription",
     "buttonInscription": "S'inscrire",
     "buttonConnexion": "Se connecter"
+  },
+  "account": {
+    "modifyAccount": "Modifier mon compte",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "loading": "Chargement des données...",
+    "requiredFields": "Veuillez remplir tous les champs obligatoires",
+    "updateSuccess": "Vos informations ont été mises à jour avec succès !",
+    "updateError": "Une erreur est survenue lors de la mise à jour",
+    "errorLoading": "Erreur lors du chargement des données",
+    "emailAlreadyUsed": "Cet email est déjà utilisé"
   },
   "burgerStand": {
     "title": "Stand de Burger",

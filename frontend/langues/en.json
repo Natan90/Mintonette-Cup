@@ -17,7 +17,7 @@
     "login": "Username",
     "mdp": "Password",
     "mail": "Email",
-    "dateNaissance": "Date of Birth",
+    "tel_utilisateur": "Phone number",
     "sexe": "Gender",
     "typeSexe": {
       "homme": "Male",
@@ -28,6 +28,17 @@
     "inscription": "Sign Up",
     "buttonInscription": "Register",
     "buttonConnexion": "Log In"
+  },
+  "account": {
+    "modifyAccount": "Modify my account",
+    "save": "Save",
+    "saving": "Saving...",
+    "loading": "Loading data...",
+    "requiredFields": "Please fill in all required fields",
+    "updateSuccess": "Your information has been successfully updated!",
+    "updateError": "An error occurred while updating",
+    "errorLoading": "Error loading data",
+    "emailAlreadyUsed": "This email is already in use"
   },
   "burgerStand": {
     "title": "Burger Stand",

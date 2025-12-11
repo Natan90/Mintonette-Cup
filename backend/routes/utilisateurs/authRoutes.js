@@ -13,7 +13,7 @@ const { v4: uuidv4 } = require('uuid');
 
 /**
  * @swagger
- * /api/utilisateur/inscription:
+ * /utilisateur/inscription:
  *   post:
  *     summary: Crée un nouvel utilisateur
  *     tags: [Utilisateurs]
@@ -81,9 +81,9 @@ const { v4: uuidv4 } = require('uuid');
 // POST /utilisateur/inscription
 router.post("/inscription", async (req, res) => {
   console.log("Body reçu :", req.body);
-  const { nom, prenom, login, mdp, mail, date_naissance, sexe } = req.body;
+  const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = req.body;
 
-  if (!nom || !prenom || !login || !mdp || !mail || !date_naissance || !sexe) {
+  if (!nom || !prenom || !login || !mdp || !mail || !tel_utilisateur || !sexe) {
     return res.status(400).json({
       error: "Champs obligatoires manquants",
     });
@@ -111,10 +111,10 @@ router.post("/inscription", async (req, res) => {
 
     const result = await client.query(
       `INSERT INTO Utilisateur 
-        (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, date_naissance_utilisateur, sexe_utilisateur) VALUES
+        (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur) VALUES
         ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id_utilisateur`,
-      [nom, prenom, login, mdp, mail, date_naissance, sexe] // mettre passwordHash quand il faudra le crypter
+      [nom, prenom, login, mdp, mail, tel_utilisateur, sexe] // mettre passwordHash quand il faudra le crypter
     );
 
     const newUser = result.rows[0];
@@ -143,7 +143,7 @@ router.post("/inscription", async (req, res) => {
 
 /**
  * @swagger
- * /api/utilisateur/connexion:
+ * /utilisateur/connexion:
  *   post:
  *     summary: Connecte un utilisateur et retourne un token de session
  *     tags: [Utilisateurs]
@@ -295,6 +295,137 @@ router.post("/connexion", async (req, res) => {
 
   } catch (err) {
     console.error(err);
+  } finally {
+    client.release(); 
+  }
+});
+
+/**
+ * @swagger
+ * /api/utilisateur/{id}:
+ *   put:
+ *     summary: Modifie les informations de l'utilisateur
+ *     tags: [Utilisateurs]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de l'utilisateur
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nom:
+ *                 type: string
+ *               prenom:
+ *                 type: string
+ *               mail:
+ *                 type: string
+ *               tel_utilisateur:
+ *                 type: string
+ *               login:
+ *                 type: string
+ *               sexe:
+ *                 type: string
+ *           example:
+ *             nom: "Dupont"
+ *             prenom: "Jean"
+ *             mail: "jean.dupont@mail.com"
+ *             tel_utilisateur: "01-23-45-67-89"
+ *             login: "jdupont"
+ *             sexe: "H"
+ *     responses:
+ *       200:
+ *         description: Utilisateur mis à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+// PUT /utilisateur/auth/:id
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { nom, prenom, mail, tel_utilisateur, login, sexe } = req.body;
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    const checkUser = await client.query(
+      "SELECT id_utilisateur FROM Utilisateur WHERE id_utilisateur = $1",
+      [id]
+    );
+
+    if (checkUser.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({
+        error: "Utilisateur non trouvé",
+      });
+    }
+
+    if (mail) {
+      const checkEmail = await client.query(
+        "SELECT id_utilisateur FROM Utilisateur WHERE mail_utilisateur = $1 AND id_utilisateur != $2",
+        [mail, id]
+      );
+
+      if (checkEmail.rows.length > 0) {
+        await client.query("ROLLBACK");
+        return res.status(409).json({
+          error: "Email déjà utilisé",
+        });
+      }
+    }
+
+    const updateQuery = `
+      UPDATE Utilisateur 
+      SET 
+        nom_utilisateur = COALESCE($1, nom_utilisateur),
+        prenom_utilisateur = COALESCE($2, prenom_utilisateur),
+        mail_utilisateur = COALESCE($3, mail_utilisateur),
+        tel_utilisateur = COALESCE($4, tel_utilisateur),
+        login_utilisateur = COALESCE($5, login_utilisateur),
+        sexe_utilisateur = COALESCE($6, sexe_utilisateur)
+      WHERE id_utilisateur = $7
+      RETURNING *
+    `;
+
+    const result = await client.query(updateQuery, [nom, prenom, mail, tel_utilisateur, login, sexe, id]);
+
+    await client.query("COMMIT");
+
+    res.json({
+      message: "Utilisateur mis à jour avec succès",
+      user: {
+        id: result.rows[0].id_utilisateur,
+        nom: result.rows[0].nom_utilisateur,
+        prenom: result.rows[0].prenom_utilisateur,
+        mail: result.rows[0].mail_utilisateur,
+        tel_utilisateur: result.rows[0].tel_utilisateur,
+        login: result.rows[0].login_utilisateur,
+        sexe: result.rows[0].sexe_utilisateur,
+      }
+    });
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("Erreur modification utilisateur : ", err);
+    res.status(500).json({
+      error: "Erreur serveur",
+    });
   } finally {
     client.release(); 
   }

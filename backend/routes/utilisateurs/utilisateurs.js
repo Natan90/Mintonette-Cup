@@ -2,6 +2,47 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../../database/db");
 
+/**
+ * @swagger
+ * tags:
+ *   name: Administrateur
+ *   description: Gestion des utilisateurs (lecture & suppression)
+ */
+
+
+/**
+ * @swagger
+ * /admin/show:
+ *   get:
+ *     summary: Récupère la liste de tous les utilisateurs
+ *     tags: [Administrateur]
+ *     responses:
+ *       200:
+ *         description: Liste des utilisateurs récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_utilisateur:
+ *                     type: integer
+ *                   nom_utilisateur:
+ *                     type: string
+ *                   prenom_utilisateur:
+ *                     type: string
+ *                   login_utilisateur:
+ *                     type: string
+ *                   mail_utilisateur:
+ *                     type: string
+ *                   tel_utilisateur:
+ *                     type: string
+ *                   sexe_utilisateur:
+ *                     type: string
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get("/show", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM Utilisateur");
@@ -12,6 +53,47 @@ router.get("/show", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /utilisateur/show/{id}:
+ *   get:
+ *     summary: Récupère un utilisateur par son ID
+ *     tags: [Administrateur]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Utilisateur trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_utilisateur:
+ *                   type: integer
+ *                 nom_utilisateur:
+ *                   type: string
+ *                 prenom_utilisateur:
+ *                   type: string
+ *                 login_utilisateur:
+ *                   type: string
+ *                 mail_utilisateur:
+ *                   type: string
+ *                 tel_utilisateur:
+ *                   type: string
+ *                 sexe_utilisateur:
+ *                   type: string
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get("/show/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -24,41 +106,37 @@ router.get("/show/:id", async (req, res) => {
   }
 });
 
-router.post("/inscription", async (req, res) => {
-  const { nom, prenom, login, mdp, mail, date_naissance, sexe } = req.body;
-  if (!nom || !prenom || !login || !mdp || !mail || !date_naissance || !sexe)
-    return res.status(400).json({ error: "Champs obligatoires manquants" });
 
-  try {
-    const result = await pool.query(
-      `INSERT INTO Utilisateur 
-      (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, date_naissance_utilisateur, sexe_utilisateur)
-      VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id_utilisateur`,
-      [nom, prenom, login, mdp, mail, date_naissance, sexe]
-    );
-    res.json({ message: "Utilisateur créé", id: result.rows[0].id_utilisateur });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-router.post("/connexion", async (req, res) => {
-  const { login, mdp } = req.body;
-  if (!login || !mdp) return res.status(400).json({ error: "Champs obligatoires manquants" });
-
-  try {
-    const result = await pool.query(
-      "SELECT * FROM Utilisateur WHERE login_utilisateur=$1 AND mdp_utilisateur=$2",
-      [login, mdp]
-    );
-    if (result.rows.length === 0) return res.status(401).json({ message: "Identifiants invalides" });
-    res.json({ message: "Connexion réussie", utilisateur: result.rows[0] });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
+/**
+ * @swagger
+ * /utilisateur/{id}:
+ *   delete:
+ *     summary: Supprime un utilisateur par son ID
+ *     tags: [Administrateur]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur à supprimer
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Utilisateur supprimé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 utilisateur:
+ *                   type: object
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
   try {
