@@ -19,20 +19,20 @@
             <div v-if="selectedType" class="container_table">
                 <h1>Quel est votre type {{ selectedTypeLabel }} ?</h1>
                 <table class="table_type_presta">
-                    <tbody>
+                    <tbody> 
                         <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
                             <td>
-                                <input type="checkbox" :id="`item-${index}`"></input>
+                                <input type="checkbox"  v-model="checkedItems" :id="`item-${index}`" :value="item.nom"></input>
                                 <label :for="`item-${index}`">{{ item.nom }}</label>
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="other-option">
                                 <input type="checkbox" id="other" />
                                 <label for="other">Autre</label>
                                 <input type="text" />
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
 
                 </table>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="button_container" v-if="!continueInscription">
-        <button @click.prevent="showContinueInscription">
+        <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
             Inscription prestataire
         </button>
     </div>
@@ -64,13 +64,20 @@ import Footer from '@/components/Footer.vue';
 
 
 const userStore = useUserStore();
+
+const type_prestataire = ref([]);
 const type_animation = ref([]);
 const type_restauration = ref([]);
 const type_boutique = ref([]);
 
-const type_prestataire = ref([]);
 const selectedType = ref("animation");
 const continueInscription = ref(false);
+const checkedItems = ref([]);
+
+const isSelectionValid = computed(() => {
+    return checkedItems.value.length == 1;
+});
+
 
 const selectedItems = computed(() => {
     switch (selectedType.value) {
@@ -301,6 +308,21 @@ function selectTypePresta(index) {
 .button_container button:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 12px 25px var(--primary-color);
+}
+
+.button_container button.disabled::after {
+  content: none;
+  transition: none;
+}
+
+.button_container button.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.button_container button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .prestataire_container {
