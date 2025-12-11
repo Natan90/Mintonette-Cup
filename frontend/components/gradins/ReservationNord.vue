@@ -33,9 +33,9 @@
       <p>Panier : {{ cartSeats.length }} sièges – {{ cartTotal }} €</p>
 
       <button @click="resetCart">Réinitialiser les places</button>
-       <router-link to="/Panier">
-        <span class="pointer optionNav">Panier</span>
-      </router-link>
+       <button @click="forceUpdate()">
+        <span class="pointer optionNav">Ajouter au panier</span>
+      </button>
     </section>
 
     <Footer />
