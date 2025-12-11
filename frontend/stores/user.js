@@ -27,25 +27,3 @@ export const useUserStore = defineStore('user', () => {
 });
 
 
-export const useCartStore = defineStore("cart", () => {
-  const cartSeats = ref([]);
-
-  const cartTotal = computed(() =>
-    cartSeats.value.reduce((sum, seat) => {
-      if (["I","H","G"].includes(seat.numero_colonne)) return sum + 25;
-      if (["F","E","D"].includes(seat.numero_colonne)) return sum + 18;
-      return sum + 12;
-    }, 0)
-  );
-
-  async function fetchCart() {
-    try {
-      const res = await axios.get("http://localhost:3000/gradin/panier/show");
-      cartSeats.value = res.data;
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  return { cartSeats, cartTotal, fetchCart };
-});

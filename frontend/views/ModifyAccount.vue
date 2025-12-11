@@ -1,19 +1,20 @@
 <template>
-  <div class="modify-account-container">
-    <div class="modify-account-card">
-      <div class="card-header">
+  <NavView></NavView>
+  <div class="page">
+    <div class="formulaire">
+      <div class="titre_formulaire">
         <h1>{{ $t('account.modifyAccount') }}</h1>
-        <router-link to="/" class="close-btn">&times;</router-link>
+        <router-link to="/" class="croix pointer">&times;</router-link>
       </div>
 
       <div v-if="loading" class="loading">
         <p>{{ $t('account.loading') }}</p>
       </div>
 
-      <div v-else class="form-content">
+      <div v-else>
         <form @submit.prevent="updateUserInfo">
-          <div class="form-grid">
-            <div class="form-group full-width">
+          <section class="infos_utilisateur">
+            <div class="bloc_information">
               <label for="prenom">{{ $t('user.prenom') }}</label>
               <input
                 id="prenom"
@@ -23,7 +24,7 @@
               />
             </div>
 
-            <div class="form-group full-width">
+            <div class="bloc_information">
               <label for="nom">{{ $t('user.nom') }}</label>
               <input
                 id="nom"
@@ -33,7 +34,7 @@
               />
             </div>
 
-            <div class="form-group full-width">
+            <div class="bloc_information">
               <label for="login">{{ $t('user.login') }}</label>
               <input
                 id="login"
@@ -43,7 +44,7 @@
               />
             </div>
 
-            <div class="form-group full-width">
+            <div class="bloc_information">
               <label for="mail">{{ $t('user.mail') }}</label>
               <input
                 id="mail"
@@ -53,7 +54,7 @@
               />
             </div>
 
-            <div class="form-group full-width">
+            <div class="bloc_information">
               <label for="tel">{{ $t('user.tel_utilisateur') }}</label>
               <input
                 id="tel"
@@ -64,10 +65,10 @@
               />
             </div>
 
-            <div class="form-group full-width">
+            <div class="bloc_information">
               <label>{{ $t('user.sexe') }}</label>
-              <div class="radio-group">
-                <div class="radio-option">
+              <div class="sexe">
+                <div>
                   <input
                     id="sexe-h"
                     v-model="formData.sexe"
@@ -78,7 +79,7 @@
                   <label for="sexe-h">{{ $t('user.typeSexe.homme') }}</label>
                 </div>
 
-                <div class="radio-option">
+                <div>
                   <input
                     id="sexe-f"
                     v-model="formData.sexe"
@@ -89,7 +90,7 @@
                   <label for="sexe-f">{{ $t('user.typeSexe.femme') }}</label>
                 </div>
 
-                <div class="radio-option">
+                <div>
                   <input
                     id="sexe-a"
                     v-model="formData.sexe"
@@ -101,17 +102,17 @@
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
           <div v-if="message" :class="['message', messageType]">
             {{ message }}
           </div>
 
-          <div class="button-group">
-            <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+          <div class="boutons">
+            <button class="pointer" type="submit" :disabled="isSubmitting">
               {{ isSubmitting ? $t('account.saving') : $t('account.save') }}
             </button>
-            <router-link to="/" class="btn btn-secondary">
+            <router-link to="/">
               {{ $t('pageLog.annuler') }}
             </router-link>
           </div>
@@ -119,6 +120,7 @@
       </div>
     </div>
   </div>
+  <Footer></Footer>
 </template>
 
 <script setup>
@@ -127,6 +129,9 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import NavView from '@/components/NavView.vue';
+import Footer from '@/components/Footer.vue';
+
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -221,56 +226,128 @@ const updateUserInfo = async () => {
 </script>
 
 <style scoped>
-.modify-account-container {
+
+.page{
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.modify-account-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+.formulaire{
+  margin: 40px;
+  width: 80%;
   max-width: 600px;
-  width: 100%;
-  overflow: hidden;
+
+  border-radius: 10px;
+
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.6);
+
+  background-color: var(--jaune-logo);
+
 }
 
-.card-header {
+.titre_formulaire{
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 30px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  justify-content: center;
+  gap: 30px;
+  border-radius: 10px 10px 0 0;
+
   color: white;
-  border-bottom: 3px solid #667eea;
+
+
+  background-color: black;
 }
 
-.card-header h1 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 600;
-}
-
-.close-btn {
-  font-size: 32px;
+.croix {
+  font-size: 40px;
   font-weight: bold;
-  color: white;
-  cursor: pointer;
+  color: red;
   text-decoration: none;
-  transition: transform 0.2s;
 }
 
-.close-btn:hover {
-  transform: scale(1.2);
+.croix:hover{
+  scale: 1.1;
+  transition: var(--transition-fast);
 }
 
-.form-content {
-  padding: 30px;
+.infos_utilisateur{
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
+
+.bloc_information{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bloc_information>label{
+  text-transform: uppercase;
+  font-size: 15px;
+  font-weight: 500;
+
+}
+
+.bloc_information>input{
+  width: 40%;
+  border: none;
+  border-radius: 10px;
+  padding: 4px;
+
+}
+
+.sexe div:hover{
+  color: grey;
+  transition: var(--transition-fast);
+}
+
+.boutons{
+  font-size: 15px;
+  text-align: center;
+  align-items: baseline;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px;
+
+  border-radius: 0 0 10px 10px;
+
+  background-color: black;
+}
+
+.boutons button{
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.boutons a{
+  font-size: 16px;
+
+  font-weight: 500;
+
+  color: white;
+  border-radius: 10px;
+  padding: 3px;
+  text-decoration: none;
+}
+
+.boutons a:hover, 
+.boutons button:hover{
+    background-color: white;
+    color: black;
+    transition: var(--transition-fast);
+}
+
 
 .loading {
   padding: 40px 30px;
@@ -279,182 +356,4 @@ const updateUserInfo = async () => {
   color: #666;
 }
 
-.form-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"] {
-  padding: 12px 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s;
-  font-family: inherit;
-}
-
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
-.form-group input[type="tel"]:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 15px;
-  background: #f5f5f5;
-  border-radius: 8px;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.radio-option input[type="radio"] {
-  cursor: pointer;
-  width: 18px;
-  height: 18px;
-  accent-color: #667eea;
-}
-
-.radio-option label {
-  cursor: pointer;
-  margin: 0;
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: normal;
-  color: #555;
-}
-
-.message {
-  padding: 12px 15px;
-  margin: 20px 0;
-  border-radius: 8px;
-  font-weight: 500;
-  animation: slideIn 0.3s ease;
-}
-
-.message.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.button-group {
-  display: flex;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.btn {
-  padding: 12px 30px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-  text-align: center;
-  flex: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: #e0e0e0;
-  color: #333;
-}
-
-.btn-secondary:hover {
-  background: #d0d0d0;
-  transform: translateY(-2px);
-}
-
-.full-width {
-  grid-column: 1 / -1;
-}
-
-@media (max-width: 600px) {
-  .modify-account-card {
-    border-radius: 0;
-  }
-
-  .card-header {
-    padding: 20px;
-  }
-
-  .card-header h1 {
-    font-size: 24px;
-  }
-
-  .form-content {
-    padding: 20px;
-  }
-
-  .button-group {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
-  }
-}
 </style>
