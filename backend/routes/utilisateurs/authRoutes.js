@@ -82,7 +82,6 @@ const { v4: uuidv4 } = require('uuid');
 router.post("/inscription", async (req, res) => {
   console.log("Body reçu :", req.body);
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = req.body;
-  console.log(req.body);
 
   if (!nom || !prenom || !login || !mdp || !mail || !tel_utilisateur || !sexe) {
     return res.status(400).json({
