@@ -1,14 +1,6 @@
 <template>
     <NavView></NavView>
     <div class="container">
-        <!-- <div class="content_left">
-            <div>
-                <p id="target" @dragover="dragover_handler" @drop="drop_handler">
-                    Zone pour déposer
-                </p>
-            </div> 
-
-        </div> -->
         <div class="title">
             <p>Devenez membre à part de la Mintonette Cup ! </p>
         </div>
@@ -17,118 +9,109 @@
                 <p>Votre rôle dans l’événement : choisissez votre catégorie :</p>
             </div>
             <div class="type_prestataire">
-                <!-- <div draggable="true" @dragstart="dragstart_handler" v-for="(item, index) in type_prestataire"
-                    :key="index" class="boite_type_presta" :class="{ notInBox: !item.inBox }" :id="`p-${index}`">
-                    <p class="texte_type_presta">
-                        {{ item.nom_type_prestataire }}
-                    </p>
-                </div> -->
                 <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta"
                     :id="`p-${index}`">
                     <button class="button_type_presta" @click="selectTypePresta(index)">
                         {{ item.nom_type_prestataire }}
                     </button>
                 </div>
-
             </div>
-            <div v-if="selectedType === 'animation'">
-                <div>
-                    <p>Quel est votre type d'animation ?</p>
-                    <div v-for="(item, index) in type_animation" :key="index">
-                        <input type="checkbox"></input>
-                        <label>{{ item.nom_type_animation }}</label>
-                    </div>
-                    <span>
-                        <input type="checkbox"></input>
-                        <label>Autre</label>
-                        <span>
-                            <input></input>
-                        </span>
-                    </span>
-                    
-                </div>
-            </div>
+            <div v-if="selectedType" class="container_table">
+                <h1>Quel est votre type {{ selectedTypeLabel }} ?</h1>
+                <table class="table_type_presta">
+                    <tbody>
+                        <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
+                            <td>
+                                <input type="checkbox" :id="`item-${index}`"></input>
+                                <label :for="`item-${index}`">{{ item.nom }}</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="other-option">
+                                <input type="checkbox" id="other" />
+                                <label for="other">Autre</label>
+                                <input type="text" />
+                            </td>
+                        </tr>
+                    </tbody>
 
-            <div v-if="selectedType === 'boutique'">
-                <div>
-                    <p>Quel est votre type d'animation ?</p>
-                    <div v-for="(item, index) in type_boutique" :key="index">
-                        <input type="checkbox"></input>
-                        <label>{{ item.nom_type_boutique }}</label>
-                    </div>
-                    <span>
-                        <input type="checkbox"></input>
-                        <label>Autre</label>
-                        <span>
-                            <input></input>
-                        </span>
-                    </span>
-                    
-                </div>
+                </table>
             </div>
-
-            <div v-if="selectedType === 'reservation'">
-                <div>
-                    <p>Quel est votre type d'animation ?</p>
-                    <div v-for="(item, index) in type_restauration" :key="index">
-                        <input type="checkbox"></input>
-                        <label>{{ item.nom_type_restauration }}</label>
-                    </div>
-                    <span>
-                        <input type="checkbox"></input>
-                        <label>Autre</label>
-                        <span>
-                            <input></input>
-                        </span>
-                    </span>
-                    
-                </div>
-            </div>
-            <div v-if="selectedType === 'equipe'">
-                <!-- <div>
-                    <p>Quel est votre type d'animation ?</p>
-                    <div v-for="(item, index) in type_animation" :key="index">
-                        <input type="checkbox"></input>
-                        <label>{{ item.nom_type_animation }}</label>
-                    </div>
-                    <span>
-                        <input type="checkbox"></input>
-                        <label>Autre</label>
-                        <span>
-                            <input></input>
-                        </span>
-                    </span>
-                    
-                </div> -->
-            </div>
-
-
         </div>
-        
     </div>
-    
-    <router-link to="/PrestatairePresta" style="padding-left: 50px;" @click.prevent="becomePresta">Inscription prestataire</router-link>
+
+    <div class="button_container" v-if="!continueInscription">
+        <button @click.prevent="showContinueInscription">
+            Inscription prestataire
+        </button>
+    </div>
+
+    <div class="prestataire_container" v-if="continueInscription" id="prest_container">
+        <PrestatairePresta></PrestatairePresta>
+    </div>
+
+    <Footer></Footer>
 
 </template>
 
 <script setup>
 import NavView from '@/components/NavView.vue';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 import axios from 'axios';
 import { useUserStore } from '@/stores/user';
+import PrestatairePresta from './PrestatairePresta.vue';
+import Footer from '@/components/Footer.vue';
 
 
+const userStore = useUserStore();
 const type_animation = ref([]);
 const type_restauration = ref([]);
 const type_boutique = ref([]);
 
 const type_prestataire = ref([]);
-const selectedType = ref(null);
+const selectedType = ref("animation");
+const continueInscription = ref(false);
 
-const userStore = useUserStore();
+const selectedItems = computed(() => {
+    switch (selectedType.value) {
+        case "animation":
+            return type_animation.value.map(item => ({ nom: item.nom_type_animation }));
+        case "boutique":
+            return type_boutique.value.map(item => ({ nom: item.nom_type_boutique }));
+        case "reservation":
+            return type_restauration.value.map(item => ({ nom: item.nom_type_restauration }));
+        default:
+            return [];
+    }
+});
+
+const selectedTypeLabel = computed(() => {
+    switch (selectedType.value) {
+        case "animation":
+            return "d'animation";
+        case "boutique":
+            return "de boutique";
+        case "reservation":
+            return "de restauration";
+        default:
+            return "";
+    }
+});
+
+function showContinueInscription() {
+    continueInscription.value = true;
+
+    nextTick(() => {
+    const element = document.getElementById("prest_container");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+}
+
 
 function becomePresta() {
-  userStore.setPresta();
+    userStore.setPresta();
 }
 
 
@@ -162,91 +145,168 @@ async function fetchTypeAnimation() {
 }
 
 function selectTypePresta(index) {
-    const types = ["animation", "boutique", "equipe", "reservation"];
+    const types = ["animation", "boutique", "reservation"];
     selectedType.value = types[index] || null;
 }
 
-
-// function dragstart_handler(ev) {
-//     ev.dataTransfer.setData("text/plain", ev.target.id);
-// }
-
-// function dragover_handler(ev) {
-//     ev.preventDefault();
-//     ev.dataTransfer.dropEffect = "move";
-// }
-
-// function drop_handler(ev) {
-//     ev.preventDefault();
-
-//     const id = ev.dataTransfer.getData("text/plain");
-//     const element = document.getElementById(id);
-
-//     ev.target.appendChild(element);
-//     const index = parseInt(id.split('-')[1]);
-//     type_prestataire.value[index].inBox = true;
-// }
 </script>
 
 <style scoped>
 .container {
     display: flex;
     flex-direction: column;
-    padding: 50px;
+    align-items: center;
+    padding: 10px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #0a1d42;
 }
 
-.title {
+.title p {
     text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--primary-color);
 }
 
-.subtitle {
-    font-size: 1.4em;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.subtitle p {
+    font-size: 1.3em;
+    text-align: center;
+    margin-bottom: 30px;
+    color: black;
 }
 
 .type_prestataire {
     display: flex;
-    flex-direction: row;
-    gap: 10px;
+    gap: 20px;
     flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
 .button_type_presta {
-    /* background: linear-gradient(135deg, #0057ff 0%, #003bbd 50%, #f7c325 100%); */
-    /* background: linear-gradient(135deg, #0057ff, #003bbd); */
-    /* color: white; */
     background: linear-gradient(135deg, #f7c325, #ffdb59);
     color: #0a1d42;
     font-weight: 700;
     font-size: 1.1em;
-    padding: 12px 26px;
+    padding: 15px 30px;
     border: none;
     border-radius: 30px;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-
-    box-shadow: 0 5px 12px rgba(247, 195, 37, 0.4);
-    transition: 0.25s ease-out;
+    box-shadow: 0 6px 15px rgba(247, 195, 37, 0.4);
+    transition: all 0.3s ease;
 }
 
 .button_type_presta:hover {
-    transform: translateY(-4px) scale(1.04);
-    box-shadow:
-        0 0 18px rgba(247, 195, 37, 0.55),
-        0 0 6px rgba(247, 195, 37, 0.6) inset;
-    filter: brightness(1.1);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 20px rgba(247, 195, 37, 0.6), 0 0 8px rgba(247, 195, 37, 0.4) inset;
 }
 
 .button_type_presta:active {
-    transform: translateY(1px) scale(0.97);
-    box-shadow: 0 3px 8px rgba(0, 87, 255, 0.3);
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 3px 10px rgba(0, 87, 255, 0.3);
 }
+
+.container_table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.table_type_presta {
+    width: 400px;
+    max-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.table_type_presta td {
+    padding: 15px 20px;
+    font-size: 1em;
+}
+
+.table-row {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.other-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.other-option input[type="text"] {
+    flex: 1;
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.container_table h1 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #1b2e59;
+}
+
+.button_container {
+    display: flex;
+    justify-content: center;
+}
+
+.button_container button {
+    margin: 30px 0px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2em;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    background: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(0, 87, 255, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.button_container button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-25deg);
+    transition: all 0.5s ease;
+}
+
+.button_container button:hover::after {
+    left: 125%;
+}
+
+.button_container button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 25px var(--primary-color);
+}
+
+.prestataire_container {
+  padding-top: 80px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 </style>
