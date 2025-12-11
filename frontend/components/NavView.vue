@@ -148,10 +148,6 @@ const cartTotal = computed(() =>
   }, 0)
 );
 
-function goToFullCart() {
-  router.push("/Panier");
-}
-
 onMounted(fetchCart);
 
 document.addEventListener("click", () => (showMiniCart.value = false));
