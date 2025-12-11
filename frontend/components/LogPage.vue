@@ -14,7 +14,8 @@
 
             <div v-else>
                 <p>{{ $t('modal.inscription') }}</p>
-                <button @click="goToAddPrestataire" class="button-prestataire">{{ $t('modal.goToPrestataire') }}</button>
+                <button @click="goToAddPrestataire" class="button-prestataire">{{ $t('modal.goToPrestataire')
+                    }}</button>
             </div>
 
         </div>
@@ -31,12 +32,14 @@
                 <p class="title">{{ $t('user.connexion') }}</p>
 
                 <div class="item input_item">
-                    <input :placeholder="$t('user.login')" v-model="login_utilisateur_connexion" @keyup.enter="getValuesConnexion"/>
+                    <input :placeholder="$t('user.login')" v-model="login_utilisateur_connexion"
+                        @keyup.enter="getValuesConnexion" />
                     <hr />
                 </div>
 
                 <div class="item input_item">
-                    <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur_connexion" @keyup.enter="getValuesConnexion"/>
+                    <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur_connexion"
+                        @keyup.enter="getValuesConnexion" />
                     <hr />
                 </div>
 
@@ -57,82 +60,91 @@
             </div>
 
             <div v-else>
-                <p class="title">{{ $t('user.inscription') }}</p>
-                <div class="grid">
-                    <div class="container_left">
-                        <div class="item both_size">
+                <form @submit.prevent="getValuesInscription">
+                    <p class="title">{{ $t('user.inscription') }}</p>
+                    <div class="grid">
+                        <div class="container_left">
+                            <div class="item both_size">
+                                <div class="item">
+                                    <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur"
+                                        @keyup.enter="getValuesInscription" />
+                                    <hr />
+                                </div>
+
+                                <div class="item">
+                                    <input :placeholder="$t('user.nom')" v-model="nom_utilisateur"
+                                        @keyup.enter="getValuesInscription" />
+                                    <hr />
+                                </div>
+
+                            </div>
+
                             <div class="item">
-                                <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur" @keyup.enter="getValuesInscription"/>
+                                <input :placeholder="$t('user.login')" v-model="login_utilisateur"
+                                    @keyup.enter="getValuesInscription" />
                                 <hr />
                             </div>
 
                             <div class="item">
-                                <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" @keyup.enter="getValuesInscription"/>
+                                <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur"
+                                    @keyup.enter="getValuesInscription" />
                                 <hr />
                             </div>
 
+                            <div class="item">
+                                <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur"
+                                    @keyup.enter="getValuesInscription" />
+                                <hr />
+                            </div>
                         </div>
 
-                        <div class="item">
-                            <input :placeholder="$t('user.login')" v-model="login_utilisateur" @keyup.enter="getValuesInscription"/>
-                            <hr />
+                        <div class="separator"></div>
+
+                        <div class="container_right">
+                            <div class="item">
+                                <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}"
+                                    v-model="tel_utilisateur" :placeholder="$t('user.tel_utilisateur')" /><br><br>
+                            </div>
+
+                            <div class="item">
+                            </div>
+
+                            <div class="item_radio">
+                                <div class="radio_group">
+                                    <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.homme')"
+                                        :value="$t('user.typeSexe.homme')" name="sexe">
+                                    <label :for="$t('user.typeSexe.homme')">{{ $t('user.typeSexe.homme') }}</label>
+                                </div>
+
+
+                                <div class="radio_group">
+                                    <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.femme')"
+                                        :value="$t('user.typeSexe.femme')" name="sexe">
+                                    <label :for="$t('user.typeSexe.femme')">{{ $t('user.typeSexe.femme') }}</label>
+                                </div>
+
+
+                                <div class="radio_group">
+                                    <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.autre')"
+                                        :value="$t('user.typeSexe.autre')" name="sexe">
+                                    <label :for="$t('user.typeSexe.autre')">{{ $t('user.typeSexe.autre') }}</label>
+                                </div>
+
+                            </div>
                         </div>
 
-                        <div class="item">
-                            <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur" @keyup.enter="getValuesInscription"/>
-                            <hr />
-                        </div>
-
-                        <div class="item">
-                            <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur" @keyup.enter="getValuesInscription"/>
-                            <hr />
-                        </div>
                     </div>
-
-                    <div class="separator"></div>
-
-                    <div class="container_right">
-                        <div class="item">
-                            <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" v-model="tel_utilisateur" :placeholder="$t('user.tel_utilisateur')"/><br><br>
-                        </div>
-
-                        <div class="item">
-                        </div>
-
-                        <div class="item_radio">
-                            <div class="radio_group">
-                                <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.homme')"
-                                    :value="$t('user.typeSexe.homme')" name="sexe">
-                                <label :for="$t('user.typeSexe.homme')">{{ $t('user.typeSexe.homme') }}</label>
-                            </div>
-
-
-                            <div class="radio_group">
-                                <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.femme')"
-                                    :value="$t('user.typeSexe.femme')" name="sexe">
-                                <label :for="$t('user.typeSexe.femme')">{{ $t('user.typeSexe.femme') }}</label>
-                            </div>
-
-
-                            <div class="radio_group">
-                                <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.autre')"
-                                    :value="$t('user.typeSexe.autre')" name="sexe">
-                                <label :for="$t('user.typeSexe.autre')">{{ $t('user.typeSexe.autre') }}</label>
-                            </div>
-
-                        </div>
+                    <br>
+                    <div class="item">
+                        <button type="submit" class="button_message button_connexion">{{
+                            $t('user.buttonInscription') }}</button>
+                        <p v-if="message" class="message">{{ message }}</p>
                     </div>
-
-                </div>
-                <br>
-                <div class="item">
-                    <button type="button" @click="getValuesInscription" class="button_message button_connexion">{{
-                        $t('user.buttonInscription') }}</button>
-                    <p v-if="message" class="message">{{ message }}</p>
-                </div>
-                <div class="item">
-                    <router-link to="/" class="button_message button_cancel">{{ $t('pageLog.annuler') }}</router-link>
-                </div>
+                    <div class="item">
+                        <router-link to="/" class="button_message button_cancel">{{ $t('pageLog.annuler')
+                            }}</router-link>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -757,41 +769,41 @@ input::placeholder {
 }
 
 .modal-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-  transition: color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .modal-close:hover {
-  color: #ff0000;
+    color: #ff0000;
 }
 
 .button-prestataire {
-  background: linear-gradient(90deg, var(--colorGradientPurple), var(--colorGradientBlue));
-  color: white;
-  font-weight: 600;
-  font-size: 1.2em;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgb(30, 144, 255, 0.4);
+    background: linear-gradient(90deg, var(--colorGradientPurple), var(--colorGradientBlue));
+    color: white;
+    font-weight: 600;
+    font-size: 1.2em;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgb(30, 144, 255, 0.4);
 }
 
 .button-prestataire:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgb(30, 144, 255, 054);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgb(30, 144, 255, 054);
 }
 
 .button-prestataire:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 10px rgb(30, 144, 255, 0.3);
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgb(30, 144, 255, 0.3);
 }
 
 

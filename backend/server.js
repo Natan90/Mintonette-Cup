@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/admin", utilisateursRoutes);
-app.use("/utilisateur/auth", authRoutes);     //mettre /api/utilisateur
+app.use("/utilisateur/auth", authRoutes);
 app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
 app.use("/gradin", gradins);
