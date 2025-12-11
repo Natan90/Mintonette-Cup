@@ -155,7 +155,7 @@ onMounted(async () => {
   // Récupérer les informations de l'utilisateur
   try {
     console.log('Fetching user data for ID:', userStore.userId);
-    const response = await axios.get(`/admin/show/${userStore.userId}`);
+    const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
     console.log('User data received:', response.data);
     
     formData.value = {
@@ -190,7 +190,7 @@ const updateUserInfo = async () => {
   message.value = '';
 
   try {
-    const response = await axios.put(`/utilisateur/auth/${userStore.userId}`, {
+    const response = await axios.put(`http://localhost:3000/utilisateur/auth/${userStore.userId}`, {
       prenom: formData.value.prenom,
       nom: formData.value.nom,
       login: formData.value.login,

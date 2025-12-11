@@ -356,7 +356,7 @@ router.post("/connexion", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
-// PUT /utilisateur/:id
+// PUT /utilisateur/auth/:id
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { nom, prenom, mail, tel_utilisateur, login, sexe } = req.body;
