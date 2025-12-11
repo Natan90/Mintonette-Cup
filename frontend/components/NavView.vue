@@ -14,39 +14,50 @@
         <span class="pointer optionNav">Vue administrateur</span>
       </router-link>
 
-      <div class="cartWrapper" @click.stop>
-        <button class="pointer optionNav" @click="toggleMiniCart">
-          Panier ({{ cartSeats.length }})
+      <router-link to="/gradins/reservationNord">
+        <span class="pointer optionNav">gradin</span>
+      </router-link>
+      <span>
+        <button @click="changeLanguage('fr')" class="langue pointer optionNav">
+          <span>Fr</span></button
+        >/
+        <button @click="changeLanguage('en')" class="langue pointer optionNav">
+          <span>En</span>
         </button>
+      </span>
+
+      <div class="cartWrapper" @click.stop v-if="userStore.isConnected">
+        <p class="pointer optionNav" @click="toggleMiniCart">
+          Panier ({{ cartSeats.length }})
+        </p>
         <div v-if="showMiniCart" class="miniCart">
           <h4>Panier</h4>
           <p v-if="!cartSeats.length">Votre panier est vide.</p>
           <ul v-else>
-            <li v-for="seat in cartSeats" :key="seat.numero_colonne + seat.numero_ligne">
+            <li
+              v-for="seat in cartSeats"
+              :key="seat.numero_colonne + seat.numero_ligne">
               {{ seat.numero_colonne }}{{ seat.numero_ligne }}
             </li>
           </ul>
-          <p v-if="cartSeats.length">Total : {{ cartTotal }} €</p>
-          <button v-if="cartSeats.length" @click="goToFullCart">Voir le panier complet</button>
+          <p v-if="cartSeats.length">Total :{{ cartTotal }} €</p>
+          <router-link to="/Panier">
+            <span class="pointer textePanier">Panier</span>
+          </router-link>
         </div>
       </div>
-
-      <router-link to="/gradins/reservationNord">
-        <span class="pointer optionNav">gradin</span>
-      </router-link>
-
-      <span>
-        <button @click="changeLanguage('fr')" class="langue pointer optionNav"><span>Fr</span></button>/
-        <button @click="changeLanguage('en')" class="langue pointer optionNav"><span>En</span></button>
-      </span>
 
       <span v-if="!userStore.isConnected">
         <strong>
           <router-link to="/utilisateur/connexion">
-            <span class="pointer optionNav">{{ $t("user.buttonConnexion") }}</span>
-          </router-link>/
+            <span class="pointer optionNav">{{
+              $t("user.buttonConnexion")
+            }}</span> </router-link
+          >/
           <router-link to="/utilisateur/inscription">
-            <span class="pointer optionNav">{{ $t("user.buttonInscription") }}</span>
+            <span class="pointer optionNav">{{
+              $t("user.buttonInscription")
+            }}</span>
           </router-link>
         </strong>
       </span>
@@ -58,10 +69,14 @@
             <router-link class="pointer optionNav">Voir son profil</router-link>
           </div>
           <div>
-            <router-link to="/utilisateur/modifier" class="pointer optionNav">Paramètres</router-link>
+            <router-link to="/utilisateur/modifier" class="pointer optionNav"
+              >Paramètres</router-link
+            >
           </div>
           <div>
-            <button class="pointer optionNav logout-btn" @click="handleLogout">Se déconnecter</button>
+            <button class="pointer optionNav logout-btn" @click="handleLogout">
+              Se déconnecter
+            </button>
           </div>
         </div>
       </span>
@@ -86,9 +101,12 @@ const showBloc = ref(false);
 const showMiniCart = ref(false);
 const cartSeats = ref([]);
 
-watch(() => route.path, (newPath) => {
-  isInIndex.value = newPath === "/";
-});
+watch(
+  () => route.path,
+  (newPath) => {
+    isInIndex.value = newPath === "/";
+  }
+);
 
 function toggleBloc() {
   showBloc.value = !showBloc.value;
@@ -124,8 +142,8 @@ async function fetchCart() {
 
 const cartTotal = computed(() =>
   cartSeats.value.reduce((sum, seat) => {
-    if (["I","H","G"].includes(seat.numero_colonne)) return sum + 25;
-    if (["F","E","D"].includes(seat.numero_colonne)) return sum + 18;
+    if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
+    if (["F", "E", "D"].includes(seat.numero_colonne)) return sum + 18;
     return sum + 12;
   }, 0)
 );
@@ -136,7 +154,7 @@ function goToFullCart() {
 
 onMounted(fetchCart);
 
-document.addEventListener("click", () => showMiniCart.value = false);
+document.addEventListener("click", () => (showMiniCart.value = false));
 </script>
 
 <style scoped>
@@ -249,9 +267,8 @@ document.addEventListener("click", () => showMiniCart.value = false);
   width: 220px;
   background: white;
   color: black;
-  border: 1px solid #ccc;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
@@ -268,5 +285,8 @@ document.addEventListener("click", () => showMiniCart.value = false);
   margin-top: 8px;
   width: 100%;
   padding: 6px;
+}
+.textePanier {
+  color: black;
 }
 </style>
