@@ -30,14 +30,12 @@
         </button>
       </div>
 
-      <p>Sièges sélectionnés :</p>
-      <p v-if="selectedSeats.length === 0">Aucun siège sélectionné</p>
-      <p v-else>{{ selectedSeatsLabel }}</p>
-      <button @click="reset">reset les places</button>
-      <p>
-        Le prix à payer <b> {{ price }}</b> euros
-      </p>
-      <button @click="payer">payer</button>
+      <p>Panier : {{ cartSeats.length }} sièges – {{ cartTotal }} €</p>
+
+      <button @click="resetCart">Réinitialiser les places</button>
+       <router-link to="/Panier">
+        <span class="pointer optionNav">Panier</span>
+      </router-link>
     </section>
 
     <Footer />
@@ -50,100 +48,82 @@ import NavBar from "../NavView.vue";
 import Footer from "../Footer.vue";
 import axios from "axios";
 
+const cartSeats = ref([]);
 const hoverIndex = ref(null);
 const seats = ref([]);
 
-async function fetchGradin() {
+const cartTotal = computed(() => {
+  return cartSeats.value.reduce((sum, seat) => {
+    if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
+    if (["F", "E", "D"].includes(seat.numero_colonne)) return sum + 18;
+    return sum + 12;
+  }, 0);
+});
+
+async function fetchCart() {
   try {
-    const res = await axios.get("http://localhost:3000/gradin/show");
-    seats.value = res.data
-      .filter((seat) => seat.zone === "NORD")
-      .map((seat) => ({
-        ...seat,
-        state: seat.est_reserve ? "reserved" : "available",
-      }));
+    const res = await axios.get("http://localhost:3000/gradin/panier/show");
+    cartSeats.value = res.data;
   } catch (err) {
     console.error(err);
   }
 }
 
-function SeatReservation(index) {
-  const seat = seats.value[index];
+async function fetchGradin() {
+  try {
+    const res = await axios.get("http://localhost:3000/gradin/show");
 
+    await fetchCart();
+
+    seats.value = res.data
+      .filter((seat) => seat.zone === "NORD")
+      .map((seat) => {
+        let state = "available";
+        if (seat.est_reserve) state = "reserved";
+        else if (seat.dans_panier) state = "selected";
+        return { ...seat, state };
+      });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function SeatReservation(index) {
+  const seat = seats.value[index];
   if (seat.state === "reserved") return;
 
   if (seat.state === "available") {
     seat.state = "selected";
-  } else if (seat.state === "selected") {
-    seat.state = "available";
-  }
-}
-
-function reset() {
-  seats.value.forEach((seat) => {
-    if (seat.state === "selected") {
-      seat.state = "available";
-    }
-  });
-}
-
-const selectedSeats = computed(() =>
-  seats.value.filter((s) => s.state === "selected")
-);
-
-const price = computed(() => {
-  let total = 0;
-  for (const seat of selectedSeats.value) {
-    if (
-      seat.numero_colonne === "I" ||
-      seat.numero_colonne === "H" ||
-      seat.numero_colonne === "G"
-    ) {
-      total += 25;
-    } else if (
-      seat.numero_colonne === "F" ||
-      seat.numero_colonne === "E" ||
-      seat.numero_colonne === "D"
-    ) {
-      total += 18;
-    } else {
-      total += 12;
-    }
-  }
-  return total;
-});
-
-const selectedSeatsLabel = computed(() =>
-  selectedSeats.value
-    .map((s) => `${s.numero_colonne}${s.numero_ligne}`)
-    .join(", ")
-);
-
-seats.value.forEach((seat) => {
-  if (seat.state === "selected") {
-    price.value += 10;
-  }
-});
-
-async function payer() {
-  if (selectedSeats.value.length === 0) {
-    alert("Veuillez sélectionner au moins un siège avant de payer.");
-    return;
-  }
-
-  const confirmPay = confirm(`Voulez-vous payer ${price.value} euros ?`);
-  if (!confirmPay) return;
-  console.log("URL appelée :", "http://localhost:3000/gradin/update");
-  for (const seat of selectedSeats.value) {
-    await axios.put("http://localhost:3000/gradin/update", {
+    await axios.put("http://localhost:3000/gradin/panier", {
       numero_colonne: seat.numero_colonne,
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
-      est_reserve: true,
+      dans_panier: true,
+    });
+  } else if (seat.state === "selected") {
+    seat.state = "available";
+    await axios.put("http://localhost:3000/gradin/panier", {
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      dans_panier: false,
     });
   }
 
+  await fetchCart();
+}
+
+async function resetCart() {
+  for (const seat of cartSeats.value) {
+    await axios.put("http://localhost:3000/gradin/panier", {
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      dans_panier: false,
+    });
+  }
   await fetchGradin();
+  await fetchCart();
 }
 
 onMounted(() => {

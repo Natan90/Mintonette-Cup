@@ -19,7 +19,6 @@ import GradinSud from "@/components/gradins/GradinSud.vue";
 import GradinOuest from "@/components/gradins/GradinOuest.vue";
 import GradinEst from "@/components/gradins/GradinEst.vue";
 import countUp from "@/components/CountUp.vue";
-<<<<<<< HEAD
 import GradinReservationNord from "@/components/gradins/ReservationNord.vue"
 import GradinReservationEst from "@/components/gradins/ReservationEst.vue"
 import GradinReservationSud from "@/components/gradins/ReservationSud.vue"
@@ -27,12 +26,6 @@ import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
 import Panier from "@/views/Panier.vue"
 
 
-=======
-import GradinReservationNord from "@/components/gradins/ReservationNord.vue";
-import GradinReservationEst from "@/components/gradins/ReservationEst.vue";
-import GradinReservationSud from "@/components/gradins/ReservationSud.vue";
-import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue";
->>>>>>> 7640a50d849db12936d6d47363061da6342bdcc0
 
 const routes = [
   {
@@ -147,16 +140,12 @@ const routes = [
     name: "GradinReservationOuest",
     component: GradinReservationOuest,
   },
-<<<<<<< HEAD
   {
     path: "/Panier",
     name: "Panier",
     component: Panier,
   },
   
-
-=======
->>>>>>> 7640a50d849db12936d6d47363061da6342bdcc0
 ];
 Panier
 const router = createRouter({
