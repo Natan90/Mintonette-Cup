@@ -242,7 +242,6 @@ const updateUserInfo = async () => {
 
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.6);
 
-  background-color: var(--jaune-logo);
 
 }
 
@@ -253,10 +252,8 @@ const updateUserInfo = async () => {
   gap: 30px;
   border-radius: 10px 10px 0 0;
 
-  color: white;
+  color: black;
 
-
-  background-color: black;
 }
 
 .croix {
@@ -272,10 +269,12 @@ const updateUserInfo = async () => {
 }
 
 .infos_utilisateur{
-  margin: 20px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  background-color: var(--jaune-logo);
 }
 
 .bloc_information{
@@ -314,37 +313,38 @@ const updateUserInfo = async () => {
 
   border-radius: 0 0 10px 10px;
 
-  background-color: black;
+  background-color: white;
+
 }
 
 .boutons button{
 
   font-size: 16px;
 
-  font-weight: 500;
+  font-weight: bolder;
 
-  background-color: black;
-  color: white;
+  color: black;
+  background-color: white;
   border: none;
   border-radius: 10px;
-  padding: 5px;
+  padding: 6px;
 }
 
 .boutons a{
   font-size: 16px;
 
-  font-weight: 500;
+  font-weight: bolder;
 
-  color: white;
+  color: black;
   border-radius: 10px;
-  padding: 3px;
+  padding: 6px;
   text-decoration: none;
 }
 
 .boutons a:hover, 
 .boutons button:hover{
-    background-color: white;
-    color: black;
+    background-color: var(--jaune-logo);
+    color: grey;
     transition: var(--transition-fast);
 }
 
