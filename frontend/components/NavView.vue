@@ -63,20 +63,22 @@
       </span>
 
       <span v-else class="user-buttons">
-        <button class="pointer optionNav" @click="toggleBloc">Profil</button>
+        <div class="pointer optionNav" @click="toggleBloc">
+          Profil
+        </div>
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
-            <router-link class="pointer optionNav">Voir son profil</router-link>
-          </div>
-          <div>
-            <router-link to="/utilisateur/modifier" class="pointer optionNav"
-              >Paramètres</router-link
-            >
-          </div>
-          <div>
-            <button class="pointer optionNav logout-btn" @click="handleLogout">
+            <router-link class="optionProfil">
+              Voir son profil
+            </router-link>
+
+            <router-link to="/utilisateur/modifier" class="pointer optionProfil">
+              Paramètres
+            </router-link>
+
+            <div class="optionProfil" @click="handleLogout">
               Se déconnecter
-            </button>
+            </div>
           </div>
         </div>
       </span>
@@ -176,6 +178,7 @@ document.addEventListener("click", () => (showMiniCart.value = false));
   justify-content: space-evenly;
   width: calc(100% - 100px);
   height: 1.2em;
+  font-weight: 500;
 }
 
 .langue {
@@ -183,6 +186,7 @@ document.addEventListener("click", () => (showMiniCart.value = false));
   border: none;
   color: white;
   font-size: 20px;
+  font-weight: 500;
 }
 
 .barre-nav a {
@@ -205,50 +209,39 @@ document.addEventListener("click", () => (showMiniCart.value = false));
   top: 35px;
   right: 0;
   background-color: #00167a;
-  color: white;
   border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   max-height: 0;
-  padding: 0;
   transition: max-height 0.3s ease, padding 0.3s ease;
   width: 200px;
   z-index: 1000;
 }
 
-.dropdown-block router-link {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.5rem;
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 0;
-  border-radius: 3px;
-}
-
-.logout-btn {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.5rem;
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 0;
-  border-radius: 3px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  font-size: 1rem;
-}
-
-.logout-btn:hover {
-  color: #ffff00;
-}
-
 .dropdown-block.open {
   max-height: 300px;
-  padding: 1rem;
+  border: 1px solid white;
+
+}
+
+.optionProfil{
+  width: 100%;
+  color: white;
+  height: 2.5em;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding-left: 0.5em;
+}
+
+.optionProfil:hover{
+  padding-left: 0.8em;
+  background-color: var(--jaune-logo);
+  color: black;
+  transition: var(--transition-fast);
+
+  cursor:pointer;
 }
 
 .cartWrapper {
