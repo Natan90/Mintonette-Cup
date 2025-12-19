@@ -2,6 +2,9 @@
   <div>
     <NavBar />
     <h1>Gradin Nord</h1>
+    Ce qu'il reste a faire : 
+    mettre le papier dans le menu déroulant "profil"
+
 
     <section>
       <h2>Réservation de place</h2>
@@ -30,10 +33,10 @@
         </button>
       </div>
 
-      <p>Panier : {{ cartSeats.length }} sièges – {{ cartTotal }} €</p>
+      <p>Panier : {{ cartSeats.length }} sièges – {{ PrixTotal }} €</p>
 
       <button @click="resetCart">Réinitialiser les places</button>
-       <button @click="forceUpdate()">
+       <button>
         <span class="pointer optionNav">Ajouter au panier</span>
       </button>
     </section>
@@ -52,7 +55,7 @@ const cartSeats = ref([]);
 const hoverIndex = ref(null);
 const seats = ref([]);
 
-const cartTotal = computed(() => {
+const PrixTotal = computed(() => {
   return cartSeats.value.reduce((sum, seat) => {
     if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
     if (["F", "E", "D"].includes(seat.numero_colonne)) return sum + 18;
