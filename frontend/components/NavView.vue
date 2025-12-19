@@ -26,27 +26,6 @@
         </button>
       </span>
 
-      <div class="cartWrapper" @click.stop v-if="userStore.isConnected">
-        <p class="pointer optionNav" @click="toggleMiniCart">
-          Panier ({{ cartSeats.length }})
-        </p>
-        <div v-if="showMiniCart" class="miniCart">
-          <h4>Panier</h4>
-          <p v-if="!cartSeats.length">Votre panier est vide.</p>
-          <ul v-else>
-            <li
-              v-for="seat in cartSeats"
-              :key="seat.numero_colonne + seat.numero_ligne">
-              {{ seat.numero_colonne }}{{ seat.numero_ligne }}
-            </li>
-          </ul>
-          <p v-if="cartSeats.length">Total :{{ cartTotal }} €</p>
-          <router-link to="/Panier">
-            <span class="pointer textePanier">Panier</span>
-          </router-link>
-        </div>
-      </div>
-
       <span v-if="!userStore.isConnected">
         <strong>
           <router-link to="/utilisateur/connexion">
@@ -63,22 +42,21 @@
       </span>
 
       <span v-else class="user-buttons">
-        <div class="pointer optionNav" @click="toggleBloc">
-          Profil
-        </div>
+        <div class="pointer optionNav" @click="toggleBloc">Profil</div>
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
-            <router-link class="optionProfil">
-              Voir son profil
+            <router-link class="optionProfil"> Voir son profil </router-link>
+            <router-link to="/panier" class="pointer optionProfil"
+              >Panier
             </router-link>
 
-            <router-link to="/utilisateur/modifier" class="pointer optionProfil">
+            <router-link
+              to="/utilisateur/modifier"
+              class="pointer optionProfil">
               Paramètres
             </router-link>
 
-            <div class="optionProfil" @click="handleLogout">
-              Se déconnecter
-            </div>
+            <div class="optionProfil" @click="handleLogout">Se déconnecter</div>
           </div>
         </div>
       </span>
@@ -89,7 +67,7 @@
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useUserStore,  } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 
@@ -220,10 +198,9 @@ document.addEventListener("click", () => (showMiniCart.value = false));
 .dropdown-block.open {
   max-height: 300px;
   border: 1px solid white;
-
 }
 
-.optionProfil{
+.optionProfil {
   width: 100%;
   color: white;
   height: 2.5em;
@@ -235,13 +212,13 @@ document.addEventListener("click", () => (showMiniCart.value = false));
   padding-left: 0.5em;
 }
 
-.optionProfil:hover{
+.optionProfil:hover {
   padding-left: 0.8em;
   background-color: var(--jaune-logo);
   color: black;
   transition: var(--transition-fast);
 
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .cartWrapper {
