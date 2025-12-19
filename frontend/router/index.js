@@ -9,6 +9,7 @@ import PresentationMintonette from "@/views/PresentationMintonette.vue";
 import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
 import ModifyAccount from "@/views/ModifyAccount.vue";
+import ShowAccount from "@/views/ShowAccount.vue";
 import terrain1 from "@/views/Terrains/terrain1.vue";
 import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
@@ -69,6 +70,11 @@ const routes = [
     path: "/utilisateur/modifier",
     name: "ModifyAccount",
     component: ModifyAccount,
+  },
+  {
+    path: "/utilisateur/profil",
+    name: "ShowAccount",
+    component: ShowAccount,
   },
   {
     path: "/Presentation_Mintonette_Cup",

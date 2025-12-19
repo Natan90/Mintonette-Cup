@@ -68,7 +68,7 @@
         </div>
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
-            <router-link class="optionProfil">
+            <router-link to="/utilisateur/profil" class="pointer optionProfil">
               Voir son profil
             </router-link>
 
