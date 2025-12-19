@@ -100,20 +100,17 @@ const userData = ref({
   createdAt: ''
 });
 
-// Vérifier que l'utilisateur est connecté et charger ses données
 onMounted(async () => {
   if (!userStore.isConnected) {
     router.push({ name: 'Connexion_utilisateur' });
     return;
   }
 
-  // Récupérer les informations de l'utilisateur
   try {
     console.log('Fetching user data for ID:', userStore.userId);
     const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
     console.log('User data received:', response.data);
     
-    // Formater la date si elle existe
     let formattedDate = '';
     if (response.data.date_creation_utilisateur) {
       const date = new Date(response.data.date_creation_utilisateur);
@@ -144,7 +141,6 @@ onMounted(async () => {
   }
 });
 
-// Fonction pour supprimer le compte
 const deleteAccount = async () => {
   if (!confirm(t('account.confirmDelete'))) {
     return;
@@ -159,10 +155,8 @@ const deleteAccount = async () => {
     message.value = t('account.accountDeleted');
     messageType.value = 'success';
     
-    // Déconnecter l'utilisateur
     userStore.logout();
     
-    // Rediriger après 2 secondes
     setTimeout(() => {
       router.push({ name: 'Home' });
     }, 2000);
