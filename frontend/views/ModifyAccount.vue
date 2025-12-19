@@ -156,7 +156,6 @@ onMounted(async () => {
     return;
   }
 
-  // Récupérer les informations de l'utilisateur
   try {
     console.log('Fetching user data for ID:', userStore.userId);
     const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
