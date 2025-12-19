@@ -42,7 +42,17 @@
       </span>
 
       <span v-else class="user-buttons">
-        <div class="pointer optionNav" @click="toggleBloc">Profil</div>
+        <div class="profile-button" @click="toggleBloc">
+          <img 
+            v-if="userProfilePhoto" 
+            :src="userProfilePhoto" 
+            alt="Photo de profil" 
+            class="profile-photo pointer"
+          />
+          <div v-else class="profile-placeholder pointer">
+            <span>{{ userInitials }}</span>
+          </div>
+        </div>
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
             <router-link to="/utilisateur/profil" class="pointer optionProfil">
@@ -83,11 +93,38 @@ const isInIndex = ref(route.path === "/");
 const showBloc = ref(false);
 const showMiniCart = ref(false);
 const cartSeats = ref([]);
+const userProfilePhoto = ref(null);
+const userInitials = ref('');
+
+const loadProfilePhoto = async () => {
+  if (userStore.isConnected) {
+    try {
+      const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
+      const userData = response.data;
+      
+      if (userData.photo_profil_utilisateur) {
+        userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
+      } else {
+        const prenom = userData.prenom_utilisateur || '';
+        const nom = userData.nom_utilisateur || '';
+        userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement du profil:', error);
+    }
+  }
+};
+onMounted(async () => {
+  loadProfilePhoto();
+});
 
 watch(
   () => route.path,
   (newPath) => {
     isInIndex.value = newPath === "/";
+    if (newPath === "/" || newPath === "/utilisateur/profil") {
+      loadProfilePhoto();
+    }
   }
 );
 
@@ -257,5 +294,50 @@ document.addEventListener("click", () => (showMiniCart.value = false));
 }
 .textePanier {
   color: black;
+}
+
+.profile-button {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+.profile-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  transition: all 0.3s ease;
+}
+
+.profile-photo:hover {
+  transform: scale(1.1);
+  border-color: var(--jaune-logo);
+}
+
+.profile-placeholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  border: 2px solid white;
+  transition: all 0.3s ease;
+}
+
+.profile-placeholder:hover {
+  transform: scale(1.1);
+  border-color: var(--jaune-logo);
+}
+
+.user-buttons {
+  position: relative;
+  display: inline-block;
 }
 </style>

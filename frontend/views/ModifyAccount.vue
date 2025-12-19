@@ -14,6 +14,29 @@
       <div v-else>
         <form @submit.prevent="updateUserInfo">
           <section class="infos_utilisateur">
+            <div class="bloc_information photo-upload">
+              <label for="photo">{{ $t('account.profilePhoto') }}</label>
+              <div class="photo-preview-container">
+                <img 
+                  v-if="photoPreview" 
+                  :src="photoPreview" 
+                  alt="Aperçu photo" 
+                  class="photo-preview"
+                />
+                <div v-else class="photo-placeholder">
+                  <span>{{ $t('account.noPhoto') }}</span>
+                </div>
+              </div>
+              <input
+                id="photo"
+                type="file"
+                accept="image/*"
+                @change="handlePhotoUpload"
+                class="photo-input"
+              />
+              <label for="photo" class="upload-btn">{{ $t('account.choosePhoto') }}</label>
+            </div>
+
             <div class="bloc_information">
               <label for="prenom">{{ $t('user.prenom') }}</label>
               <input
@@ -141,6 +164,8 @@ const loading = ref(true);
 const isSubmitting = ref(false);
 const message = ref('');
 const messageType = ref('');
+const photoPreview = ref(null);
+const photoFile = ref(null);
 
 const formData = ref({
   prenom: '',
@@ -170,6 +195,10 @@ onMounted(async () => {
       sexe: response.data.sexe_utilisateur || ''
     };
     
+    if (response.data.photo_profil_utilisateur) {
+      photoPreview.value = `data:image/jpeg;base64,${response.data.photo_profil_utilisateur}`;
+    }
+    
     console.log('Form data updated:', formData.value);
   } catch (error) {
     console.error('Erreur lors de la récupération des données :', error);
@@ -179,6 +208,19 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+const handlePhotoUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    photoFile.value = file;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      photoPreview.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 const updateUserInfo = async () => {
   if (isSubmitting.value) return;
@@ -193,13 +235,26 @@ const updateUserInfo = async () => {
   message.value = '';
 
   try {
+    let photoData = null;
+    if (photoFile.value) {
+      const reader = new FileReader();
+      photoData = await new Promise((resolve) => {
+        reader.onload = (e) => {
+          const base64String = e.target.result.split(',')[1];
+          resolve(base64String);
+        };
+        reader.readAsDataURL(photoFile.value);
+      });
+    }
+
     const response = await axios.put(`http://localhost:3000/utilisateur/auth/${userStore.userId}`, {
       prenom: formData.value.prenom,
       nom: formData.value.nom,
       login: formData.value.login,
       mail: formData.value.mail,
       tel_utilisateur: formData.value.tel_utilisateur,
-      sexe: formData.value.sexe
+      sexe: formData.value.sexe,
+      photo_profil: photoData
     });
 
     message.value = t('account.updateSuccess');
@@ -352,6 +407,62 @@ const updateUserInfo = async () => {
   text-align: center;
   font-size: 18px;
   color: #666;
+}
+
+.photo-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.photo-preview-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.photo-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #333;
+}
+
+.photo-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #333;
+  text-align: center;
+  padding: 10px;
+}
+
+.photo-input {
+  display: none;
+}
+
+.upload-btn {
+  display: inline-block;
+  width: fit-content;
+  margin: 0 auto;
+  background-color: #667eea;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.upload-btn:hover {
+  background-color: #764ba2;
 }
 
 </style>
