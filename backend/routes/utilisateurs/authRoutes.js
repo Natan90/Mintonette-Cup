@@ -359,7 +359,7 @@ router.post("/connexion", async (req, res) => {
 // PUT /utilisateur/auth/:id
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { nom, prenom, mail, tel_utilisateur, login, sexe } = req.body;
+  const { nom, prenom, mail, tel_utilisateur, login, sexe, photo_profil } = req.body;
 
   const client = await pool.connect();
   try {
@@ -391,6 +391,11 @@ router.put("/:id", async (req, res) => {
       }
     }
 
+    let photoBuffer = null;
+    if (photo_profil) {
+      photoBuffer = Buffer.from(photo_profil, 'base64');
+    }
+
     const updateQuery = `
       UPDATE Utilisateur 
       SET 
@@ -399,12 +404,13 @@ router.put("/:id", async (req, res) => {
         mail_utilisateur = COALESCE($3, mail_utilisateur),
         tel_utilisateur = COALESCE($4, tel_utilisateur),
         login_utilisateur = COALESCE($5, login_utilisateur),
-        sexe_utilisateur = COALESCE($6, sexe_utilisateur)
-      WHERE id_utilisateur = $7
+        sexe_utilisateur = COALESCE($6, sexe_utilisateur),
+        photo_profil_utilisateur = COALESCE($7, photo_profil_utilisateur)
+      WHERE id_utilisateur = $8
       RETURNING *
     `;
 
-    const result = await client.query(updateQuery, [nom, prenom, mail, tel_utilisateur, login, sexe, id]);
+    const result = await client.query(updateQuery, [nom, prenom, mail, tel_utilisateur, login, sexe, photoBuffer, id]);
 
     await client.query("COMMIT");
 

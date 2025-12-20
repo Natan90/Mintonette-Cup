@@ -58,7 +58,9 @@ const pool = require("./db");
         mdp_utilisateur VARCHAR(200),
         mail_utilisateur VARCHAR(200),
         tel_utilisateur NUMERIC(10,0),
-        sexe_utilisateur VARCHAR(50)
+        sexe_utilisateur VARCHAR(50),
+        photo_profil_utilisateur BYTEA,
+        date_creation_utilisateur TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
       CREATE TABLE IF NOT EXISTS Siege(
