@@ -21,6 +21,7 @@
     </div>
   </div>
   <button @click="payer">payer</button>
+  <button @click="reset">Vider le panier</button>
   <Footer />
 </template>
 
@@ -72,6 +73,7 @@ async function payer() {
       est_reserve: true,
       dans_panier: false, 
     });
+    seat.state = "owned";
   }
 
 
@@ -79,6 +81,26 @@ async function payer() {
 }
 
 
+async function reset() {
+  if (panier.value.length === 0) {
+    alert("Le panier est déjà vide");
+    return;
+  }
+
+ 
+  for (const seat of panier.value) {
+    await axios.put("http://localhost:3000/gradin/update", {
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      est_reserve: false,
+      dans_panier: false, 
+    });
+  }
+
+
+  await fetchPanier();
+}
 
 onMounted(() => {
   fetchPanier();

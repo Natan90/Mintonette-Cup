@@ -2,7 +2,9 @@
   <div>
     <NavBar />
     <h1>Gradin Nord</h1>
-<p>Rajouter les prix a coté du siegex</p>
+    <p>Rajouter les prix a coté du siegex</p>
+    <p>Rajouter affichage en bleu de ses propres siège acheté</p>
+
     <section>
       <h2>Réservation de place</h2>
 
@@ -23,6 +25,10 @@
             src="/ReservedSeat.svg"
             class="ImgSeat" />
           <img
+            v-else-if="seat.state === 'owned'"
+            src="/OwnedSeat.svg"
+            class="ImgSeat" />
+          <img
             v-else-if="seat.state === 'selected'"
             src="/SelectionnedSeat.svg"
             class="ImgSeat" />
@@ -34,6 +40,10 @@
       <button @click="AjoutPanier">
         <span class="pointer optionNav">Ajouter au panier</span>
       </button>
+
+      <span v-if="estAjoute">
+        Vous avez bien ajouté ces articles dans votre panier
+      </span>
     </section>
 
     <Footer />
@@ -48,12 +58,13 @@ import axios from "axios";
 
 const seats = ref([]);
 const hoverIndex = ref(null);
+const estAjoute = ref(false);
+
+const userId = 14; // ######################Il faut que je rajoute la sélection du l'id en dynamique ######################
 
 const selectedSeats = computed(() =>
   seats.value.filter((seat) => seat.state === "selected")
 );
-
-const selectedCount = computed(() => selectedSeats.value.length);
 
 const PrixTotal = computed(() => {
   return selectedSeats.value.reduce((sum, seat) => {
@@ -63,6 +74,35 @@ const PrixTotal = computed(() => {
   }, 0);
 });
 
+function saveSelection() {
+  const saved = seats.value
+    .filter((seat) => seat.state === "selected")
+    .map((seat) => ({
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+    }));
+
+  localStorage.setItem("selectedSeats", JSON.stringify(saved));
+}
+
+function restoreSelection() {
+  const saved = JSON.parse(localStorage.getItem("selectedSeats") || "[]");
+
+  seats.value.forEach((seat) => {
+    const found = saved.find(
+      (s) =>
+        s.numero_colonne === seat.numero_colonne &&
+        s.numero_ligne === seat.numero_ligne &&
+        s.zone === seat.zone
+    );
+
+    if (found && seat.state === "available") {
+      seat.state = "selected";
+    }
+  });
+}
+
 async function fetchGradin() {
   const res = await axios.get("http://localhost:3000/gradin/show");
 
@@ -71,34 +111,43 @@ async function fetchGradin() {
     .map((seat) => {
       let state = "available";
       if (seat.est_reserve) state = "reserved";
+      if (seat.est_achete && seat.id_utilisateur === userId) state = "owned";
       return { ...seat, state };
     });
+
+  restoreSelection();
 }
 
 function SeatReservation(index) {
   const seat = seats.value[index];
-  if (seat.state === "reserved") return;
+  if (seat.state === "reserved" || seat.state === "owned") return;
 
   seat.state = seat.state === "available" ? "selected" : "available";
+  saveSelection();
 }
 
 async function AjoutPanier() {
+  estAjoute.value = true;
+
   for (const seat of selectedSeats.value) {
     await axios.put("http://localhost:3000/gradin/panier", {
       numero_colonne: seat.numero_colonne,
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
       dans_panier: true,
+      id_utilisateur: userId,
     });
   }
 
-  await fetchGradin();
+  localStorage.removeItem("selectedSeats");
 }
 
 function resetSelection() {
   seats.value.forEach((seat) => {
     if (seat.state === "selected") seat.state = "available";
   });
+
+  localStorage.removeItem("selectedSeats");
 }
 
 onMounted(fetchGradin);

@@ -15,7 +15,7 @@
       </router-link>
 
       <router-link to="/gradins/reservationNord">
-        <span class="pointer optionNav">gradin</span>
+        <span class="pointer optionNav">gradin (temp)</span>
       </router-link>
       <span>
         <button @click="changeLanguage('fr')" class="langue pointer optionNav">
