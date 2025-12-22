@@ -15,7 +15,7 @@
           :key="index"
           @mouseover="hoverIndex = index"
           @mouseleave="hoverIndex = null"
-          @click="SeatReservation(index)">
+          @click="UpdateSiegeStatus(index)">
           <img
             v-if="hoverIndex === index && seat.state === 'available'"
             src="/AvailableSeatHover.svg"
@@ -24,18 +24,21 @@
             v-else-if="seat.state === 'reserved'"
             src="/ReservedSeat.svg"
             class="ImgSeat" />
-          <img
+          <!-- <img
             v-else-if="seat.state === 'owned'"
             src="/OwnedSeat.svg"
-            class="ImgSeat" />
+            class="ImgSeat" /> -->
           <img
             v-else-if="seat.state === 'selected'"
             src="/SelectionnedSeat.svg"
             class="ImgSeat" />
+          <img
+            v-else-if="seat.state === 'owned'"
+            src="/OwnedSeat.svg"
+            class="ImgSeat" />
           <img v-else src="/AvailableSeat.svg" class="ImgSeat" />
         </button>
       </div>
-
       <button @click="resetSelection">Réinitialiser la sélection</button>
       <button @click="AjoutPanier">
         <span class="pointer optionNav">Ajouter au panier</span>
@@ -111,14 +114,14 @@ async function fetchGradin() {
     .map((seat) => {
       let state = "available";
       if (seat.est_reserve) state = "reserved";
-      if (seat.est_achete && seat.id_utilisateur === userId) state = "owned";
+      if (seat.est_reserve && seat.id_utilisateur === userId) state = "owned";
       return { ...seat, state };
     });
 
   restoreSelection();
 }
 
-function SeatReservation(index) {
+function UpdateSiegeStatus(index) {
   const seat = seats.value[index];
   if (seat.state === "reserved" || seat.state === "owned") return;
 

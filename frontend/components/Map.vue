@@ -32,8 +32,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import router from "@/router";
 import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
-import { useUserStore } from '@/stores/user';
-
+import { useUserStore } from "@/stores/user";
 
 let map;
 const currentMapType = ref("generalZone");
@@ -50,7 +49,6 @@ let lastFeature = null;
 let label = null;
 
 const userStore = useUserStore();
-
 
 const tailleMap = [0, 0, 2000, 1600];
 const projection = new Projection({
@@ -331,8 +329,10 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Nord (VIP)",
-    url: userStore.isConnected ? "/Gradins/GradinNord" : "/utilisateur/connexion",
-      
+    url: userStore.isConnected
+      ? "/Gradins/GradinNord"
+      : "/utilisateur/connexion",
+
     coord: [
       [249.35839950326178, 1486.0319221298562],
       [331.91885069417697, 1341.9196650761246],
@@ -1057,11 +1057,15 @@ onMounted(() => {
       const image = clickedFeature.get("image");
 
       // Déterminer le type réel de la zone en fonction de l'image
-      if (image === "/mapTerrain.png") {
-        currentMapType.value = "terrains";
-      } else {
-        currentMapType.value = "prestataires";
-      }
+      // if (image === "/mapTerrain.png") {
+      //   currentMapType.value = "terrains";
+      // } else {
+      //   currentMapType.value = "prestataires";
+      // }
+
+      currentMapType.value =
+        image === "/mapTerrain.png" ? "terrains" : "prestataires";
+
       changeMap(currentMapType.value, image);
     } else {
       //Si c’est un terrain ou prestataire → redirection (fallback)
@@ -1178,7 +1182,8 @@ body::-webkit-scrollbar {
 
 .SwitchButton {
   z-index: 1000;
-  position: absolute;  padding: 8px 16px;
+  position: absolute;
+  padding: 8px 16px;
   margin-top: 5px;
   margin-left: 5px;
   border: none;

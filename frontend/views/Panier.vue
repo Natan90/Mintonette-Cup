@@ -31,8 +31,8 @@ import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import axios from "axios";
 const props = defineProps({
-    zone:String
-})
+  zone: String,
+});
 
 const panier = ref([]);
 
@@ -49,12 +49,11 @@ function getPrice(seat) {
 async function fetchPanier() {
   try {
     const res = await axios.get("http://localhost:3000/gradin/panier/show");
-    panier.value = res.data; 
+    panier.value = res.data;
   } catch (err) {
     console.error(err);
   }
 }
-
 
 async function payer() {
   if (panier.value.length === 0) {
@@ -71,15 +70,13 @@ async function payer() {
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
       est_reserve: true,
-      dans_panier: false, 
+      dans_panier: false,
+      id_utilisateur: 14,
     });
-    seat.state = "owned";
   }
-
 
   await fetchPanier();
 }
-
 
 async function reset() {
   if (panier.value.length === 0) {
@@ -87,17 +84,15 @@ async function reset() {
     return;
   }
 
- 
   for (const seat of panier.value) {
     await axios.put("http://localhost:3000/gradin/update", {
       numero_colonne: seat.numero_colonne,
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
       est_reserve: false,
-      dans_panier: false, 
+      dans_panier: false,
     });
   }
-
 
   await fetchPanier();
 }
