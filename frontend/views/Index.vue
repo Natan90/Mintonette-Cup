@@ -52,7 +52,7 @@
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
-    <section v-if="userStore.isConnected">
+    <section v-if="userStore.isConnected && !userStore.isPresta">
       <div class="presta_texte">
         <h2>Envie de faire partie de l’aventure ?</h2>
         <p>
@@ -69,6 +69,21 @@
       </div>
 
     </section>
+
+    <section v-if="userStore.isPresta">
+      <div class="presta_texte">
+        <h2>Bienvenue parmi nos prestataires !</h2>
+        <p>
+          Merci de contribuer à la Mintonette Cup avec votre savoir-faire.<br>
+          Vous pouvez gérer vos prestations et mettre à jour vos informations ci-dessous :
+        </p>
+
+        <router-link to="/Prestataire/Edit" class="btn_presta">
+          Gérer mes prestations
+        </router-link>
+      </div>
+    </section>
+
     <section>
       <div class="teams_texte">
 

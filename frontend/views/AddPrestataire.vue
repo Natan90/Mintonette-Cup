@@ -1,5 +1,5 @@
 <template>
-    <NavView></NavView>
+    <NavView id="nav_bar"></NavView>
     <div class="container">
         <div class="title">
             <p>Devenez membre à part de la Mintonette Cup ! </p>
@@ -19,10 +19,11 @@
             <div v-if="selectedType" class="container_table">
                 <h1>Quel est votre type {{ selectedTypeLabel }} ?</h1>
                 <table class="table_type_presta">
-                    <tbody> 
+                    <tbody>
                         <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
                             <td>
-                                <input type="checkbox"  v-model="checkedItems" :id="`item-${index}`" :value="item.nom"></input>
+                                <input type="checkbox" v-model="checkedItems" :id="`item-${index}`" :value="item.nom"
+                                    :disabled="continueInscription"></input>
                                 <label :for="`item-${index}`">{{ item.nom }}</label>
                             </td>
                         </tr>
@@ -40,23 +41,32 @@
         </div>
     </div>
 
+    <div class="message_error" v-if="!continueInscription">
+        <p>{{ errorMessageCheckBox }}</p>
+    </div>
+
     <div class="button_container" v-if="!continueInscription">
-        <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
-            Inscription prestataire
+        <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
+            :class="{ disabled: !isSelectionValid }">
+            Continuer l'inscription
+        </button>
+    </div>
+    <div class="button_container" v-if="continueInscription">
+        <button @click.prevent="hideContinueInscription">
+            Retour
         </button>
     </div>
 
     <div class="prestataire_container" v-if="continueInscription" id="presta_container">
-        <PrestatairePresta></PrestatairePresta>
+        <PrestatairePresta @submitPrestataire="addPrestataire"></PrestatairePresta>
     </div>
-
     <Footer></Footer>
 
 </template>
 
 <script setup>
 import NavView from '@/components/NavView.vue';
-import { ref, onMounted, computed, nextTick } from "vue";
+import { ref, onMounted, computed, nextTick, watch } from "vue";
 import axios from 'axios';
 import { useUserStore } from '@/stores/user';
 import PrestatairePresta from './PrestatairePresta.vue';
@@ -71,12 +81,36 @@ const type_restauration = ref([]);
 const type_boutique = ref([]);
 
 const selectedType = ref("animation");
+const selectedTypeId = ref(1);
 const continueInscription = ref(false);
 const checkedItems = ref([]);
+
+const errorMessageCheckBox = ref('Veuillez sélectionner une option.');
 
 const isSelectionValid = computed(() => {
     return checkedItems.value.length == 1;
 });
+
+onMounted(async () => {
+    try {
+        fetchTypePresta();
+        fetchTypeAnimation();
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+watch(checkedItems, (newValue) => {
+    if (newValue.length === 0) {
+        errorMessageCheckBox.value = 'Veuillez sélectionner une option.'
+    }
+    else if (newValue.length > 1) {
+        errorMessageCheckBox.value = 'Veuillez sélectionner une seule option.'
+    }
+    else {
+        errorMessageCheckBox.value = '';
+    }
+})
 
 
 const selectedItems = computed(() => {
@@ -109,27 +143,40 @@ function showContinueInscription() {
     continueInscription.value = true;
 
     nextTick(() => {
-    const element = document.getElementById("presta_container");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  });
+        const element = document.getElementById("presta_container");
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    });
 }
 
+function hideContinueInscription() {
+    continueInscription.value = false;
+
+    nextTick(() => {
+        const element = document.getElementById("nav_bar");
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    });
+}
+
+
+function selectTypePresta(index) {
+    const typeObj = type_prestataire.value[index];
+    if (typeObj) {
+        selectedType.value = typeObj.nom_type_prestataire.toLowerCase();
+        selectedTypeId.value = typeObj.id + 1;
+    }
+}
 
 function becomePresta() {
     userStore.setPresta();
 }
 
-
-onMounted(async () => {
-    try {
-        fetchTypePresta();
-        fetchTypeAnimation();
-    } catch (err) {
-        console.error(err);
-    }
-});
+//=========================
+//==== Async functions ====
+//=========================
 
 async function fetchTypePresta() {
     try {
@@ -151,11 +198,22 @@ async function fetchTypeAnimation() {
     }
 }
 
-function selectTypePresta(index) {
-    const types = ["animation", "boutique", "reservation"];
-    selectedType.value = types[index] || null;
-}
+async function addPrestataire(prestaData) {
+    console.log("userId:", userStore.userId);
+    console.log("selectedTypeId:", selectedTypeId.value);
 
+    try {
+        const res = await axios.post("http://localhost:3000/prestataire/becomePrestataire", {
+            ...prestaData,
+            type: selectedTypeId.value,
+            id_user: userStore.userId
+        });
+        becomePresta();
+        console.log("Prestataire ajouté :", res.data);
+    } catch (err) {
+        console.error(err);
+    }
+}
 </script>
 
 <style scoped>
@@ -311,24 +369,33 @@ function selectTypePresta(index) {
 }
 
 .button_container button.disabled::after {
-  content: none;
-  transition: none;
+    content: none;
+    transition: none;
 }
 
 .button_container button.disabled:hover {
-  transform: none;
-  box-shadow: none;
+    transform: none;
+    box-shadow: none;
 }
 
 .button_container button.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .prestataire_container {
-  padding-top: 80px;
-  width: 100%;
-  box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding-top: 80px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
+.message_error {
+    display: flex;
+    justify-content: center;
+    color: red;
+    font-weight: bold;
+    font-size: 1.2em;
+}
 </style>

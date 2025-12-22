@@ -144,6 +144,65 @@ router.get("/showEveryType", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
+});
+
+
+router.post("/becomePrestataire", async (req, res) => {
+  const { nom, descri, nb_participants, tarif, mail, tel, type, id_user } = req.body;
+  if (!nom || !descri || !tarif || !mail || !tel || !type || !id_user)
+    return res.status(400).json({
+      error: "Champs obligatoires manquants",
+    });
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Vérifier si le mail existe déjà
+    const checkPresta = await client.query(
+      "SELECT id_prestataire FROM Prestataire WHERE id_utilisateur = $1",
+      [id_user]
+    );
+
+    if (checkPresta.rows.length > 0) {
+      await client.query("ROLLBACK");
+
+      return res.status(409).json({
+        error: "Email déjà utilisé",
+      });
+    }
+
+    const result = await client.query(
+      `INSERT INTO Prestataire 
+        (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, id_utilisateur, type_prestataire_id) VALUES
+        ($1, $2, $3, $4, $5, $6, true, $7, $8)
+        RETURNING id_prestataire`,
+      [nom, descri, nb_participants, tarif, mail, tel, id_user, type]
+    );
+
+    const newUser = result.rows[0];
+
+    await client.query("COMMIT");
+
+    res.status(201).json({
+      message: "Utilisateur créé avec succès",
+      user: {
+        id: newUser.id_utilisateur,
+      }
+    });
+
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+
+    console.error("Erreur création prestataire : ", err);
+    res.status(500).json({
+      error: "Erreur serveur",
+    });
+  } finally {
+    client.release(); 
+  }
 })
 
 
