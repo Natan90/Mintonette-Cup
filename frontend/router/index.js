@@ -52,6 +52,11 @@ const routes = [
     name: "AddPrtestataire",
     component: AddPrestataire,
   },
+  {
+    path: "/Prestataire/Edit",
+    name: "EditPrestataire",
+    component: PrestatairePresta,
+  },
 
   { path: "/Commander", name: "Commander", component: Commander },
   { path: "/Reserver", name: "Reserver", component: Reserver },

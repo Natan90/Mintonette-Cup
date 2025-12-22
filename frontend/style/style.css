@@ -56,3 +56,60 @@
 .pointer {
     cursor: pointer;
 }
+
+.button_container {
+    display: flex;
+    justify-content: center;
+}
+
+.button_container button {
+    margin: 30px 0px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2em;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    background: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(0, 87, 255, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.button_container button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-25deg);
+    transition: all 0.5s ease;
+}
+
+.button_container button:hover::after {
+    left: 125%;
+}
+
+.button_container button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 25px var(--primary-color);
+}
+
+.button_container button.disabled::after {
+    content: none;
+    transition: none;
+}
+
+.button_container button.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.button_container button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
