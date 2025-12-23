@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia';
-import { ref, watch } from 'vue';
+import { defineStore } from "pinia";
+import { ref, watch } from "vue";
 
-export const useUserStore = defineStore('user', () => {
-  const userId = ref(localStorage.getItem("userId") || 0);
+export const useUserStore = defineStore("user", () => {
+  const userId = ref(Number(localStorage.getItem("userId")) || null);
   const isConnected = ref(localStorage.getItem("isConnected") === "true");
   const isPresta = ref(localStorage.getItem("isPresta") === "true");
 
@@ -22,11 +22,9 @@ export const useUserStore = defineStore('user', () => {
     localStorage.clear();
   }
 
-  watch(userId, v => localStorage.setItem("userId", v))
-  watch(isConnected, v => localStorage.setItem("isConnected", v))
-  watch(isPresta, v => localStorage.setItem("isPresta", v))
+  watch(userId, (v) => localStorage.setItem("userId", v));
+  watch(isConnected, (v) => localStorage.setItem("isConnected", v));
+  watch(isPresta, (v) => localStorage.setItem("isPresta", v));
 
   return { userId, isConnected, isPresta, setUser, setPresta, logout };
 });
-
-

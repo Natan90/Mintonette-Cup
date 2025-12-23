@@ -2,49 +2,69 @@
   <div>
     <NavBar />
     <h1>Gradin Nord</h1>
-    <p>Rajouter les prix a coté du siegex</p>
-    <p>Rajouter affichage en bleu de ses propres siège acheté ca marche mais il faut rajouter le dynamique
-      Pour test, l'id 14 marche: f en nom d'utilisateur et f en mdp
-    </p>
 
     <section>
       <h2>Réservation de place</h2>
 
-      <div class="seatContainer">
-        <button
-          class="Seat"
-          v-for="(seat, index) in seats"
-          :key="index"
-          @mouseover="hoverIndex = index"
-          @mouseleave="hoverIndex = null"
-          @click="UpdateSiegeStatus(index)">
-          <img
-            v-if="hoverIndex === index && seat.state === 'available'"
-            src="/AvailableSeatHover.svg"
-            class="ImgSeat" />
-          <img
-            v-else-if="seat.state === 'reserved'"
-            src="/ReservedSeat.svg"
-            class="ImgSeat" />
-          <!-- <img
-            v-else-if="seat.state === 'owned'"
-            src="/OwnedSeat.svg"
-            class="ImgSeat" /> -->
-          <img
-            v-else-if="seat.state === 'selected'"
-            src="/SelectionnedSeat.svg"
-            class="ImgSeat" />
-          <img
-            v-else-if="seat.state === 'owned'"
-            src="/OwnedSeat.svg"
-            class="ImgSeat" />
-          <img v-else src="/AvailableSeat.svg" class="ImgSeat" />
-        </button>
+      <div class="layout">
+        <div class="seatContainer">
+          <button
+            class="Seat"
+            v-for="(seat, index) in seats"
+            :key="index"
+            @mouseover="hoverIndex = index"
+            @mouseleave="hoverIndex = null"
+            @click="UpdateSiegeStatus(index)">
+            <img
+              v-if="hoverIndex === index && seat.state === 'available'"
+              src="/AvailableSeatHover.svg"
+              class="ImgSeat" />
+            <img
+              v-else-if="seat.state === 'reserved'"
+              src="/ReservedSeat.svg"
+              class="ImgSeat" />
+            <img
+              v-else-if="seat.state === 'owned'"
+              src="/OwnedSeat.svg"
+              class="ImgSeat" />
+            <img
+              v-else-if="
+                seat.dans_panier &&
+                Number(seat.id_utilisateur) === Number(userStore.userId)
+              "
+              src="/SelectionnedSeat.svg"
+              class="ImgSeat" />
+            <img
+              v-else-if="seat.state === 'selected'"
+              src="/SelectionnedSeat.svg"
+              class="ImgSeat" />
+            <img v-else src="/AvailableSeat.svg" class="ImgSeat" />
+          </button>
+        </div>
+
+        <div v-if="selectedSeats.length" class="SeatInfo">
+          <h3>Sièges sélectionnés</h3>
+
+          <ul>
+            <li
+              v-for="seat in selectedSeats"
+              :key="seat.numero_colonne + seat.numero_ligne">
+              {{ seat.numero_colonne }}{{ seat.numero_ligne }} –
+              {{ getSeatPrice(seat) }} €
+            </li>
+          </ul>
+
+          <p>
+            <b>Total : {{ PrixTotal }} €</b>
+          </p>
+
+          <button @click="AjoutPanier" class="pointer">
+            Ajouter au panier
+          </button>
+        </div>
       </div>
+
       <button @click="resetSelection">Réinitialiser la sélection</button>
-      <button @click="AjoutPanier">
-        <span class="pointer optionNav">Ajouter au panier</span>
-      </button>
 
       <span v-if="estAjoute">
         Vous avez bien ajouté ces articles dans votre panier
@@ -60,17 +80,25 @@ import { ref, computed, onMounted } from "vue";
 import NavBar from "../NavView.vue";
 import Footer from "../Footer.vue";
 import axios from "axios";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const seats = ref([]);
 const hoverIndex = ref(null);
 const estAjoute = ref(false);
 
-const userId = 14; // ######################Il faut que je rajoute la sélection du l'id en dynamique ######################
-
 const selectedSeats = computed(() =>
   seats.value.filter((seat) => seat.state === "selected")
 );
 
+function getSeatPrice(seat) {
+  if (!seat) return 0;
+  if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
+  if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
+  return 12;
+}
+//C'est moche de doubler il faudra changer ca
 const PrixTotal = computed(() => {
   return selectedSeats.value.reduce((sum, seat) => {
     if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
@@ -115,8 +143,21 @@ async function fetchGradin() {
     .filter((seat) => seat.zone === "NORD")
     .map((seat) => {
       let state = "available";
-      if (seat.est_reserve) state = "reserved";
-      if (seat.est_reserve && seat.id_utilisateur === userId) state = "owned";
+
+      if (
+        seat.est_reserve &&
+        Number(seat.id_utilisateur) === Number(userStore.userId)
+      ) {
+        state = "owned";
+      } else if (seat.est_reserve) {
+        state = "reserved";
+      } else if (
+        seat.dans_panier &&
+        Number(seat.id_utilisateur) === Number(userStore.userId)
+      ) {
+        state = "selected";
+      }
+
       return { ...seat, state };
     });
 
@@ -125,6 +166,7 @@ async function fetchGradin() {
 
 function UpdateSiegeStatus(index) {
   const seat = seats.value[index];
+
   if (seat.state === "reserved" || seat.state === "owned") return;
 
   seat.state = seat.state === "available" ? "selected" : "available";
@@ -132,6 +174,8 @@ function UpdateSiegeStatus(index) {
 }
 
 async function AjoutPanier() {
+  if (!selectedSeats.value.length) return;
+
   estAjoute.value = true;
 
   for (const seat of selectedSeats.value) {
@@ -140,16 +184,20 @@ async function AjoutPanier() {
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
       dans_panier: true,
-      id_utilisateur: userId,
+      id_utilisateur: userStore.userId,
     });
   }
 
   localStorage.removeItem("selectedSeats");
+
+  await fetchGradin();
 }
 
 function resetSelection() {
   seats.value.forEach((seat) => {
-    if (seat.state === "selected") seat.state = "available";
+    if (seat.state === "selected" && !seat.dans_panier) {
+      seat.state = "available";
+    }
   });
 
   localStorage.removeItem("selectedSeats");
@@ -159,13 +207,18 @@ onMounted(fetchGradin);
 </script>
 
 <style scoped>
+.layout {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
 .seatContainer {
   user-select: none;
   display: grid;
-  justify-content: center;
   grid-template-columns: repeat(12, 60px);
   gap: 10px;
-  margin-top: 16px;
 }
 
 .Seat {
@@ -181,5 +234,23 @@ onMounted(fetchGradin);
   width: 70px;
   height: 70px;
   pointer-events: none;
+}
+
+.SeatInfo {
+  width: 220px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.SeatInfo h3 {
+  margin-top: 0;
+}
+
+.SeatInfo button {
+  width: 100%;
+  padding: 8px;
+  font-weight: bold;
 }
 </style>
