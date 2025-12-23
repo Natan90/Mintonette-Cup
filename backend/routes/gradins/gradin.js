@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../../database/db"); 
+const pool = require("../../database/db");
+const { log } = require("node:console");
 
 router.get("/show", async (req, res) => {
   try {
@@ -14,19 +15,34 @@ router.get("/show", async (req, res) => {
 });
 
 router.put("/update", async (req, res) => {
-  const { numero_colonne, numero_ligne, zone, est_reserve, dans_panier } = req.body;
+  console.log(req);
 
+  const {
+    numero_colonne,
+    numero_ligne,
+    zone,
+    est_reserve,
+    dans_panier,
+    id_utilisateur,
+  } = req.body;
+  console.log(id_utilisateur);
   try {
     const result = await pool.query(
-      "UPDATE Siege SET est_reserve = $1, dans_panier = $2 WHERE numero_colonne = $3 AND numero_ligne = $4 AND zone = $5 RETURNING *",
-      [est_reserve, dans_panier, numero_colonne, numero_ligne, zone]
+      "UPDATE Siege SET est_reserve = $1, id_utilisateur = $6, dans_panier = $2 WHERE numero_colonne = $3 AND numero_ligne = $4 AND zone = $5 RETURNING *",
+      [
+        est_reserve,
+        dans_panier,
+        numero_colonne,
+        numero_ligne,
+        zone,
+        id_utilisateur,
+      ]
     );
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 router.put("/panier", async (req, res) => {
   const { numero_colonne, numero_ligne, zone, dans_panier } = req.body;
