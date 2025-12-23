@@ -119,6 +119,7 @@ const pool = require("./db");
         mail_prestataire VARCHAR(255) NOT NULL,
         tel_prestataire VARCHAR(10) NOT NULL,
         waitingForAdmin BOOLEAN,
+        specificite VARCHAR(100),
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
         type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire)
       );
@@ -454,17 +455,17 @@ const pool = require("./db");
 
     const insertTypePrestataire = `
     INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
-      ('Restauration'),
       ('Animation'),
-      ('Boutique');
+      ('Boutique'),
+      ('Restauration');
     `;
     await pool.query(insertTypePrestataire);
 
     const insertPrestataire = `
-    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, id_utilisateur, type_prestataire_id) VALUES
-      ('FoodExpress', 'Service de restauration rapide pour événements', 50, 5.00, 'contact@foodexpress.com', '0123456789', false, 2, 1),
-      ('AnimEvent', 'Animations pour tous types d’événements', 100, 15.00, 'contact@animevent.com', '0987654321', false, 3, 2),
-      ('SportMerch', 'Boutique spécialisée en articles sportifs', 20, 0.00, 'contact@sportmerch.com', '0112233445', false, 4, 3);
+    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, id_utilisateur, type_prestataire_id) VALUES
+      ('FoodExpress', 'Service de restauration rapide pour événements', 50, 5.00, 'contact@foodexpress.com', '0123456789', false, 'Animation festive', 2, 1),
+      ('AnimEvent', 'Animations pour tous types d’événements', 100, 15.00, 'contact@animevent.com', '0987654321', false, 'Livres et supports média', 3, 2),
+      ('SportMerch', 'Boutique spécialisée en articles sportifs', 20, 0.00, 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', 4, 2);
     `;
     await pool.query(insertPrestataire);
 

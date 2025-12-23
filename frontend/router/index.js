@@ -14,7 +14,7 @@ import terrain1 from "@/views/Terrains/terrain1.vue";
 import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
 import terrain4 from "@/views/Terrains/terrain4.vue";
-import AddPrestataire from "@/views/AddPrestataire.vue";
+import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import GradinNord from "@/components/gradins/GradinNord.vue";
 import GradinSud from "@/components/gradins/GradinSud.vue";
 import GradinOuest from "@/components/gradins/GradinOuest.vue";
@@ -48,14 +48,16 @@ const routes = [
     component: PrestatairePresta,
   },
   {
-    path: "/Prestataire/Add",
-    name: "AddPrtestataire",
-    component: AddPrestataire,
+    path: "/Prestataire/Add/:id",
+    name: "AddPrestataire",
+    component: PrestataireInfo,
+    props: true
   },
   {
-    path: "/Prestataire/Edit",
+    path: "/Prestataire/Edit/:id",
     name: "EditPrestataire",
-    component: PrestatairePresta,
+    component: PrestataireInfo,
+    props: true
   },
 
   { path: "/Commander", name: "Commander", component: Commander },

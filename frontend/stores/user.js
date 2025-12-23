@@ -15,6 +15,10 @@ export const useUserStore = defineStore('user', () => {
     isPresta.value = true;
   }
 
+  function delPresta() {
+    isPresta.value = false;
+  }
+
   function logout() {
     userId.value = 0;
     isConnected.value = false;
@@ -26,7 +30,7 @@ export const useUserStore = defineStore('user', () => {
   watch(isConnected, v => localStorage.setItem("isConnected", v))
   watch(isPresta, v => localStorage.setItem("isPresta", v))
 
-  return { userId, isConnected, isPresta, setUser, setPresta, logout };
+  return { userId, isConnected, isPresta, setUser, setPresta, delPresta, logout };
 });
 
 

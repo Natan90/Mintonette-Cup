@@ -22,46 +22,89 @@
                     <tbody>
                         <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
                             <td>
-                                <input type="checkbox" v-model="checkedItems" :id="`item-${index}`" :value="item.nom"
-                                    :disabled="continueInscription"></input>
+                                <input type="checkbox" :id="`item-${index}`" :value="index"
+                                    @change="onCheckChange($event, item.nom, index)"
+                                    :checked="isCheckedWithIndex(index)" :disabled="continueInscription"></input>
                                 <label :for="`item-${index}`">{{ item.nom }}</label>
                             </td>
                         </tr>
-                        <!-- <tr>
-                            <td class="other-option">
-                                <input type="checkbox" id="other" />
-                                <label for="other">Autre</label>
-                                <input type="text" />
-                            </td>
-                        </tr> -->
                     </tbody>
-
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="message_error" v-if="!continueInscription">
+    <div class="message_error" v-if="!continueInscription || !pathAdd">
         <p>{{ errorMessageCheckBox }}</p>
     </div>
 
-    <div class="button_container" v-if="!continueInscription">
+    <div class="button_container" v-if="!continueInscription && pathAdd">
         <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
             :class="{ disabled: !isSelectionValid }">
             Continuer l'inscription
         </button>
     </div>
-    <div class="button_container" v-if="continueInscription">
+    <div class="button_container" v-if="continueInscription && pathAdd">
         <button @click.prevent="hideContinueInscription">
             Retour
         </button>
     </div>
 
-    <div class="prestataire_container" v-if="continueInscription" id="presta_container">
-        <PrestatairePresta @submitPrestataire="addPrestataire" 
-        :message="message"
-        :type="messageType">
-        </PrestatairePresta>
+    <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
+        <div class="editor_container">
+            <div class="form_group">
+                <label for="nom">Nom de la prestation :</label>
+                <input type="text" id="nom" v-model="nom_presta" />
+            </div>
+
+            <div class="form_group">
+                <label>Description détaillée :</label>
+                <Editor v-model="descri_presta" api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo" :init="{
+                    height: 300,
+                    menubar: false,
+                    plugins: 'lists link image code',
+                    toolbar: 'undo redo | bold italic underline | bullist numlist | code',
+                    branding: false
+                }" />
+            </div>
+
+            <div class="form_group">
+                <label for="participants">Nombre maximum de participants :</label>
+                <input type="number" id="participants" v-model="nb_participants" min="1" />
+            </div>
+
+            <div class="form_group">
+                <label for="tarif">Tarif :</label>
+                <input type="number" id="tarif" v-model="tarif_presta" />
+            </div>
+
+            <div class="form_group">
+                <label for="contact">Email :</label>
+                <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
+            </div>
+
+            <div class="form_group">
+                <label for="contact">Téléphone :</label>
+                <input type="tel" pattern="^0[1-9][0-9]{8}$" id="contact" v-model="tel_presta"
+                    placeholder="0123456789" />
+            </div>
+
+            <div v-if="message" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+                <span class="text">{{ message }}</span>
+            </div>
+
+
+            <div class="button_container" v-if="!pathAdd">
+                <button @click="updatePresta">Modifier</button>
+            </div>
+            <div class="button_container" v-else>
+                <button @click="addPrestataire">S’inscrire</button>
+            </div>
+
+            <div class="button_container">
+                <button @click="delPresta">Supprimer</button>
+            </div>
+        </div>
     </div>
     <Footer></Footer>
 
@@ -70,28 +113,52 @@
 <script setup>
 import NavView from '@/components/NavView.vue';
 import { ref, onMounted, computed, nextTick, watch } from "vue";
-import axios from 'axios';
 import { useUserStore } from '@/stores/user';
-import PrestatairePresta from './PrestatairePresta.vue';
+import { useRoute } from "vue-router";
+import axios from 'axios';
+
+import Editor from "@tinymce/tinymce-vue";
 import Footer from '@/components/Footer.vue';
 
 
 const userStore = useUserStore();
+const route = useRoute();
+
+const prestaId = computed(() => route.params.id);
+const pathAdd = computed(() => route.name === "AddPrestataire");
 
 const message = ref('');
 const messageType = ref('success');
 
+
+//=========================
+//=== Type prestataire ====
+//=========================
 const type_prestataire = ref([]);
 const type_animation = ref([]);
 const type_restauration = ref([]);
 const type_boutique = ref([]);
+
 
 const selectedType = ref("animation");
 const selectedTypeId = ref(1);
 const continueInscription = ref(false);
 const checkedItems = ref([]);
 
+
+//=========================
+//===== Inputs fields =====
+//=========================
+const nom_presta = ref('');
+const descri_presta = ref('');
+const nb_participants = ref(1);
+const tarif_presta = ref(0);
+const mail_presta = ref('');
+const tel_presta = ref('');
+
 const errorMessageCheckBox = ref('Veuillez sélectionner une option.');
+
+const selectedNames = computed(() => checkedItems.value.map(item => item.nom));
 
 const isSelectionValid = computed(() => {
     return checkedItems.value.length == 1;
@@ -99,8 +166,10 @@ const isSelectionValid = computed(() => {
 
 onMounted(async () => {
     try {
-        fetchTypePresta();
-        fetchTypeAnimation();
+        await fetchTypePresta();
+        await fetchEveryType();
+        if (!pathAdd.value)
+            await getValuesPrestataire();
     } catch (err) {
         console.error(err);
     }
@@ -145,6 +214,19 @@ const selectedTypeLabel = computed(() => {
     }
 });
 
+
+function isCheckedWithIndex(index) {
+    return checkedItems.value.some(i => i.index === index);
+}
+
+function onCheckChange(event, nom, index) {
+    if (event.target.checked) {
+        checkedItems.value.push({ nom, index });
+    } else {
+        checkedItems.value = checkedItems.value.filter(i => i.index !== index);
+    }
+}
+
 function showContinueInscription() {
     continueInscription.value = true;
 
@@ -172,7 +254,7 @@ function selectTypePresta(index) {
     const typeObj = type_prestataire.value[index];
     if (typeObj) {
         selectedType.value = typeObj.nom_type_prestataire.toLowerCase();
-        selectedTypeId.value = typeObj.id + 1;
+        selectedTypeId.value = typeObj.id_type_prestataire;
     }
 }
 
@@ -180,10 +262,13 @@ function becomePresta() {
     userStore.setPresta();
 }
 
-//=========================
-//==== Async functions ====
-//=========================
+function delPresta() {
+    userStore.delPresta();
+}
 
+//=========================
+//= Async functions types =
+//=========================
 async function fetchTypePresta() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
@@ -193,7 +278,7 @@ async function fetchTypePresta() {
     }
 }
 
-async function fetchTypeAnimation() {
+async function fetchEveryType() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showEveryType");
         type_animation.value = res.data.animations;
@@ -204,14 +289,93 @@ async function fetchTypeAnimation() {
     }
 }
 
-async function addPrestataire(prestaData) {
+
+//==========================
+//= Async functions presta =
+//==========================
+async function getValuesPrestataire() {
+    if (prestaId.value === null) return;
+
     try {
-        const res = await axios.post("http://localhost:3000/prestataire/becomePrestataire", {
-            ...prestaData,
-            type: selectedTypeId.value,
-            id_user: userStore.userId
+        const res = await axios.get(`http://localhost:3000/prestataire/show/${prestaId.value}`);
+        const presta = res.data;
+
+        nom_presta.value = presta.nom_prestataire;
+        descri_presta.value = presta.descri_prestataire;
+        nb_participants.value = presta.nb_participants;
+        tarif_presta.value = presta.tarif_prestataire;
+        mail_presta.value = presta.mail_prestataire;
+        tel_presta.value = presta.tel_prestataire;
+
+        const typeObj = type_prestataire.value.find(t => t.id_type_prestataire === presta.type_prestataire_id);
+        if (typeObj) {
+            selectedType.value = typeObj.nom_type_prestataire.toLowerCase();
+            selectedTypeId.value = typeObj.id_type_prestataire;
+        }
+        await nextTick();
+
+        let spec = presta.specificite;
+
+        // Pour suppirmer tous les trucs chiants
+        if (typeof spec === 'string') {
+            spec = spec.replace(/[\{\}"]/g, '').trim();
+        }
+
+        const index = selectedItems.value.findIndex(
+            item => item.nom.trim().toLowerCase() === spec.toLowerCase()
+        );
+        if (index !== -1) {
+            checkedItems.value = [{ nom: selectedItems.value[index].nom, index }];
+        } else {
+            checkedItems.value = [];
+        }
+
+        console.log("selectedItems :", selectedItems.value);
+        console.log(presta.specificite);
+
+    } catch (err) {
+        console.error("Erreur lors de la récupération des données :", err);
+    }
+}
+
+async function addPrestataire() {
+    try {
+        const res = await axios.post(`http://localhost:3000/prestataire/becomePrestataire/${prestaId.value}`, {
+            nom: nom_presta.value,
+            descri: descri_presta.value,
+            nb_participants: Number(nb_participants.value),
+            tarif: Number(tarif_presta.value),
+            mail: mail_presta.value,
+            tel: tel_presta.value,
+            specificite: selectedNames.value,
+            type: Number(selectedTypeId.value)
         });
         becomePresta();
+        message.value = res.data.message;
+        messageType.value = "success";
+    } catch (err) {
+        if (err.response && err.response.data) {
+            message.value = err.response.data.error;
+        } else {
+            message.value = "Erreur inconnue";
+        }
+        messageType.value = 'error';
+    }
+}
+
+
+async function updatePresta() {
+    try {
+        const res = await axios.post(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
+            nom: nom_presta.value,
+            descri: descri_presta.value,
+            nb_participants: Number(nb_participants.value),
+            tarif: Number(tarif_presta.value),
+            mail: mail_presta.value,
+            tel: tel_presta.value,
+            specificite: selectedNames.value,
+            type: Number(selectedTypeId.value)
+        });
         message.value = res.data.message;
         messageType.value = "success";
     } catch (err) {
@@ -398,6 +562,73 @@ async function addPrestataire(prestaData) {
     padding-top: 80px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.editor_container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 60px;
+}
+
+.tox-tinymce {
+    width: 100% !important;
+}
+
+.form_group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form_group input,
+.form_group select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form_group button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #f7c325, #ffdb59);
+    color: #0a1d42;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.form_group button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(247, 195, 37, 0.4);
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+.message-success {
+    background: #e6f9f0;
+    color: #0f7a4a;
+    border: 1px solid #5ad39c;
+}
+
+.message-error {
+    background: #fdecea;
+    color: #b42318;
+    border: 1px solid #f5a3a3;
 }
 
 .message_error {

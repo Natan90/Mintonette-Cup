@@ -38,15 +38,15 @@
     </div>
 
     <div
-      v-if="props.message"
+      v-if="localMessage"
       class="message"
-      :class="props.type === 'error' ? 'message-error' : 'message-success'">
-      <span class="text">{{ props.message }}</span>
+      :class="localType === 'error' ? 'message-error' : 'message-success'">
+      <span class="text">{{ localMessage }}</span>
     </div>
 
 
     <div class="button_container" v-if="showNav">
-      <button @click="handleSubmit">Modifier</button>
+      <button @click="updatePresta">Modifier</button>
     </div>
     <div class="button_container" v-else>
       <button @click="handleSubmit">S’inscrire</button>
@@ -59,75 +59,52 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useUserStore } from "@/stores/user";
-import { useRoute } from "vue-router";
-import axios from "axios";
 
+//=========================
+//==== Async functions ====
+//=========================
 
-import Editor from "@tinymce/tinymce-vue";
-import NavView from "@/components/NavView.vue";
+async function getValuesPrestataire() {
+  if (prestaId.value === null) return;
 
-const props = defineProps({
-  message: {
-    type: String,
-    default: ''
-  },
-  type: {
-    type: String, // success ou error
-    default: 'success'
-  }
-});
-
-
-
-const userStore = useUserStore();
-const route = useRoute();
-
-const showNav = computed(() => route.path === "/Prestataire/Edit");
-
-const content = ref('');
-
-const nom_presta = ref('');
-const descri_presta = ref('');
-const nb_participants = ref(1);
-const tarif_presta = ref(0);
-const mail_presta = ref('');
-const tel_presta = ref('');
-
-const emit = defineEmits(["submitPrestataire"]);
-
-async function saveArticle() {
   try {
-    const res = await axios.post("http://localhost:3000/PrestatairePresta", {
-      contenu: content.value,
-      utilisateur_id: userStore.userId,
-    });
-    console.log("Article sauvegardé :", res.data);
-    alert("Article sauvegardé avec succès !");
+    const res = await axios.get(`http://localhost:3000/prestataire/show/${prestaId.value}`);
+
+    const presta = res.data;
+
+    nom_presta.value = presta.nom_prestataire;
+    descri_presta.value = presta.descri_prestataire;
+    nb_participants.value = presta.nb_participants;
+    tarif_presta.value = presta.tarif_prestataire;
+    mail_presta.value = presta.mail_prestataire;
+    tel_presta.value = presta.tel_prestataire;
+
   } catch (err) {
-    console.error("Erreur lors de la sauvegarde :", err);
-    alert("Erreur lors de la sauvegarde !");
+    console.error("Erreur lors de la récupération des données :", err);
   }
 }
 
-function handleSubmit() {
-  console.log({
-    nom: nom_presta.value,
-    descri: descri_presta.value,
-    nb_participants: nb_participants.value,
-    tarif: tarif_presta.value,
-    mail: mail_presta.value,
-    tel: tel_presta.value
-  });
-  emit("submitPrestataire", {
-    nom: nom_presta.value,
-    descri: descri_presta.value,
-    nb_participants: nb_participants.value,
-    tarif: tarif_presta.value,
-    mail: mail_presta.value,
-    tel: tel_presta.value
-  });
+async function updatePresta() {
+    try {
+        const res = await axios.post(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
+            nom: nom_presta.value,
+            descri: descri_presta.value,
+            nb_participants: nb_participants.value,
+            tarif: tarif_presta.value,
+            mail: mail_presta.value,
+            tel: tel_presta.value,
+            type: localType.value
+        });
+        localMessage.value = res.data.message;
+        localType.value = "success";
+    } catch (err) {
+        if (err.response && err.response.data) {
+            localMessage.value = err.response.data.error;
+        } else {
+            localMessage.value = "Erreur inconnue";
+        }
+        localType.value = 'error';
+    }
 }
 </script>
 
@@ -199,14 +176,4 @@ function handleSubmit() {
   border: 1px solid #f5a3a3;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 </style>

@@ -63,7 +63,8 @@
           Rejoignez l'équipe et apportez votre savoir-faire à l’événement :
         </p>
 
-        <router-link to="/Prestataire/Add" class="btn_presta">
+        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
+        class="btn_presta">
           Je deviens prestataire
         </router-link>
       </div>
@@ -78,7 +79,8 @@
           Vous pouvez gérer vos prestations et mettre à jour vos informations ci-dessous :
         </p>
 
-        <router-link to="/Prestataire/Edit" class="btn_presta">
+        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
+        class="btn_presta">
           Gérer mes prestations
         </router-link>
       </div>
