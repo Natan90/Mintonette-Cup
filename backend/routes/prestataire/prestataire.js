@@ -169,7 +169,7 @@ router.post("/becomePrestataire", async (req, res) => {
       await client.query("ROLLBACK");
 
       return res.status(409).json({
-        error: "Email déjà utilisé",
+        error: "Vous êtes déjà prestataire",
       });
     }
 
