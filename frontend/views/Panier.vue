@@ -35,6 +35,8 @@ const props = defineProps({
 });
 
 const panier = ref([]);
+const user = JSON.parse(localStorage.getItem("user"));
+const userId = user?.id;
 
 const total = computed(() => {
   return panier.value.reduce((sum, seat) => sum + getPrice(seat), 0);
@@ -71,7 +73,7 @@ async function payer() {
       zone: seat.zone,
       est_reserve: true,
       dans_panier: false,
-      id_utilisateur: 14,
+      id_utilisateur: userId,
     });
   }
 

@@ -3,7 +3,9 @@
     <NavBar />
     <h1>Gradin Nord</h1>
     <p>Rajouter les prix a coté du siegex</p>
-    <p>Rajouter affichage en bleu de ses propres siège acheté</p>
+    <p>Rajouter affichage en bleu de ses propres siège acheté ca marche mais il faut rajouter le dynamique
+      Pour test, l'id 14 marche: f en nom d'utilisateur et f en mdp
+    </p>
 
     <section>
       <h2>Réservation de place</h2>
