@@ -37,6 +37,14 @@
       <input type="tel" pattern="^0[1-9][0-9]{8}$" id="contact" v-model="tel_presta" placeholder="0123456789" />
     </div>
 
+    <div
+      v-if="props.message"
+      class="message"
+      :class="props.type === 'error' ? 'message-error' : 'message-success'">
+      <span class="text">{{ props.message }}</span>
+    </div>
+
+
     <div class="button_container" v-if="showNav">
       <button @click="handleSubmit">Modifier</button>
     </div>
@@ -60,13 +68,25 @@ import axios from "axios";
 import Editor from "@tinymce/tinymce-vue";
 import NavView from "@/components/NavView.vue";
 
+const props = defineProps({
+  message: {
+    type: String,
+    default: ''
+  },
+  type: {
+    type: String, // success ou error
+    default: 'success'
+  }
+});
+
+
+
 const userStore = useUserStore();
 const route = useRoute();
 
 const showNav = computed(() => route.path === "/Prestataire/Edit");
 
-const utilisateur = ref(null);
-const content = ref("");
+const content = ref('');
 
 const nom_presta = ref('');
 const descri_presta = ref('');
@@ -153,5 +173,40 @@ function handleSubmit() {
 .form_group button:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(247, 195, 37, 0.4);
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.message-success {
+  background: #e6f9f0;
+  color: #0f7a4a;
+  border: 1px solid #5ad39c;
+}
+
+.message-error {
+  background: #fdecea;
+  color: #b42318;
+  border: 1px solid #f5a3a3;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

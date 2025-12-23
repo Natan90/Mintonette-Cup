@@ -58,7 +58,10 @@
     </div>
 
     <div class="prestataire_container" v-if="continueInscription" id="presta_container">
-        <PrestatairePresta @submitPrestataire="addPrestataire"></PrestatairePresta>
+        <PrestatairePresta @submitPrestataire="addPrestataire" 
+        :message="message"
+        :type="messageType">
+        </PrestatairePresta>
     </div>
     <Footer></Footer>
 
@@ -74,6 +77,9 @@ import Footer from '@/components/Footer.vue';
 
 
 const userStore = useUserStore();
+
+const message = ref('');
+const messageType = ref('success');
 
 const type_prestataire = ref([]);
 const type_animation = ref([]);
@@ -199,9 +205,6 @@ async function fetchTypeAnimation() {
 }
 
 async function addPrestataire(prestaData) {
-    console.log("userId:", userStore.userId);
-    console.log("selectedTypeId:", selectedTypeId.value);
-
     try {
         const res = await axios.post("http://localhost:3000/prestataire/becomePrestataire", {
             ...prestaData,
@@ -209,9 +212,15 @@ async function addPrestataire(prestaData) {
             id_user: userStore.userId
         });
         becomePresta();
-        console.log("Prestataire ajouté :", res.data);
+        message.value = res.data.message;
+        messageType.value = "success";
     } catch (err) {
-        console.error(err);
+        if (err.response && err.response.data) {
+            message.value = err.response.data.error;
+        } else {
+            message.value = "Erreur inconnue";
+        }
+        messageType.value = 'error';
     }
 }
 </script>

@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
-import axios from "axios";
+import { ref, watch } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
-  const userId = ref(0);
-  const isConnected = ref(false);
-  const isPresta = ref(false);
+  const userId = ref(localStorage.getItem("userId") || 0);
+  const isConnected = ref(localStorage.getItem("isConnected") === "true");
+  const isPresta = ref(localStorage.getItem("isPresta") === "true");
 
   function setUser(id) {
     userId.value = id;
@@ -20,8 +19,12 @@ export const useUserStore = defineStore('user', () => {
     userId.value = 0;
     isConnected.value = false;
     isPresta.value = false;
+    localStorage.clear();
   }
 
+  watch(userId, v => localStorage.setItem("userId", v))
+  watch(isConnected, v => localStorage.setItem("isConnected", v))
+  watch(isPresta, v => localStorage.setItem("isPresta", v))
 
   return { userId, isConnected, isPresta, setUser, setPresta, logout };
 });
