@@ -30,10 +30,13 @@ import { ref, computed, onMounted } from "vue";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import axios from "axios";
+import { useUserStore } from "@/stores/user";
+
 const props = defineProps({
   zone: String,
 });
 
+const userStore = useUserStore();
 const panier = ref([]);
 
 const total = computed(() => {
@@ -71,10 +74,10 @@ async function payer() {
       zone: seat.zone,
       est_reserve: true,
       dans_panier: false,
-      id_utilisateur: 14,
+      id_utilisateur: userStore.userId,
     });
   }
-
+  console.log("USER ID PAYEUR :", userStore.userId);
   await fetchPanier();
 }
 

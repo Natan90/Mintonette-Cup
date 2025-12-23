@@ -15,8 +15,6 @@ router.get("/show", async (req, res) => {
 });
 
 router.put("/update", async (req, res) => {
-  console.log(req);
-
   const {
     numero_colonne,
     numero_ligne,
@@ -25,10 +23,20 @@ router.put("/update", async (req, res) => {
     dans_panier,
     id_utilisateur,
   } = req.body;
-  console.log(id_utilisateur);
+
   try {
     const result = await pool.query(
-      "UPDATE Siege SET est_reserve = $1, id_utilisateur = $6, dans_panier = $2 WHERE numero_colonne = $3 AND numero_ligne = $4 AND zone = $5 RETURNING *",
+      `
+      UPDATE Siege
+      SET 
+        est_reserve = $1,
+        dans_panier = $2,
+        id_utilisateur = COALESCE($6, id_utilisateur)
+      WHERE numero_colonne = $3
+        AND numero_ligne = $4
+        AND zone = $5
+      RETURNING *
+      `,
       [
         est_reserve,
         dans_panier,
@@ -38,6 +46,7 @@ router.put("/update", async (req, res) => {
         id_utilisateur,
       ]
     );
+
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
