@@ -13,13 +13,6 @@
       <router-link to="/admin">
         <span class="pointer optionNav">Vue administrateur</span>
       </router-link>
-
-      <router-link to="/gradins/reservationNord">
-        <span class="pointer optionNav">gradin (temp)</span>
-      </router-link>
-      <router-link to="/panier">
-        <span class="pointer optionNav">panier (temp)</span>
-      </router-link>
       <span>
         <button @click="changeLanguage('fr')" class="langue pointer optionNav">
           <span>Fr</span></button
@@ -46,12 +39,11 @@
 
       <span v-else class="user-buttons">
         <div class="profile-button" @click="toggleBloc">
-          <img 
-            v-if="userProfilePhoto" 
-            :src="userProfilePhoto" 
-            alt="Photo de profil" 
-            class="profile-photo pointer"
-          />
+          <img
+            v-if="userProfilePhoto"
+            :src="userProfilePhoto"
+            alt="Photo de profil"
+            class="profile-photo pointer" />
           <div v-else class="profile-placeholder pointer">
             <span>{{ userInitials }}</span>
           </div>
@@ -62,7 +54,13 @@
               Mon profil
             </router-link>
 
-            <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" class="pointer optionProfil" v-if="userStore.isPresta">
+            <router-link
+              :to="{
+                name: 'EditPrestataire',
+                params: { id: userStore.userId },
+              }"
+              class="pointer optionProfil"
+              v-if="userStore.isPresta">
               Mes prestations
             </router-link>
 
@@ -101,23 +99,25 @@ const showBloc = ref(false);
 const showMiniCart = ref(false);
 const cartSeats = ref([]);
 const userProfilePhoto = ref(null);
-const userInitials = ref('');
+const userInitials = ref("");
 
 const loadProfilePhoto = async () => {
   if (userStore.isConnected) {
     try {
-      const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
+      const response = await axios.get(
+        `http://localhost:3000/admin/show/${userStore.userId}`
+      );
       const userData = response.data;
-      
+
       if (userData.photo_profil_utilisateur) {
         userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
       } else {
-        const prenom = userData.prenom_utilisateur || '';
-        const nom = userData.nom_utilisateur || '';
+        const prenom = userData.prenom_utilisateur || "";
+        const nom = userData.nom_utilisateur || "";
         userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
       }
     } catch (error) {
-      console.error('Erreur lors du chargement du profil:', error);
+      console.error("Erreur lors du chargement du profil:", error);
     }
   }
 };

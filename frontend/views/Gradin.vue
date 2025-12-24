@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <h1>Gradin Nord</h1>
+    <h1>Gradin {{ zone }}</h1>
 
     <section>
       <h2>Réservation de place</h2>
@@ -75,10 +75,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import NavBar from "../NavView.vue";
-import Footer from "../Footer.vue";
+import NavBar from "../components/NavView.vue";
+import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const zone = route.params.zone;
 
 const userStore = useUserStore();
 
@@ -138,7 +142,7 @@ async function fetchGradin() {
   const res = await axios.get("http://localhost:3000/gradin/show");
 
   seats.value = res.data
-    .filter((seat) => seat.zone === "NORD")
+    .filter((seat) => seat.zone === zone.toUpperCase())
     .map((seat) => {
       let state = "available";
 
@@ -185,7 +189,6 @@ async function AddToCart() {
       id_utilisateur: userStore.userId,
     });
   }
-
 
   await fetchGradin();
 }
