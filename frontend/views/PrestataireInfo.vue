@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="message_error" v-if="!continueInscription || !pathAdd">
+    <div class="message_error" v-if="errorMessageCheckBox">
         <p>{{ errorMessageCheckBox }}</p>
     </div>
 
@@ -95,7 +95,10 @@
 
 
             <div class="button_container" v-if="!pathAdd">
-                <button @click="updatePresta">Modifier</button>
+                <button @click="updatePresta" :disabled="!errorMessageCheckBox"
+                    :class="{ disabled: !isSelectionValid }">
+                    Modifier
+                </button>
             </div>
             <div class="button_container" v-else>
                 <button @click="addPrestataire">S’inscrire</button>
@@ -112,7 +115,7 @@
 
 <script setup>
 import NavView from '@/components/NavView.vue';
-import { ref, onMounted, computed, nextTick, watch } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 import { useUserStore } from '@/stores/user';
 import { useRoute } from "vue-router";
 import axios from 'axios';
@@ -156,7 +159,7 @@ const tarif_presta = ref(0);
 const mail_presta = ref('');
 const tel_presta = ref('');
 
-const errorMessageCheckBox = ref('Veuillez sélectionner une option.');
+
 
 const selectedNames = computed(() => checkedItems.value.map(item => item.nom));
 
@@ -175,16 +178,15 @@ onMounted(async () => {
     }
 });
 
-watch(checkedItems, (newValue) => {
-    if (newValue.length === 0) {
-        errorMessageCheckBox.value = 'Veuillez sélectionner une option.'
+
+const errorMessageCheckBox = computed(() => {
+    if (checkedItems.value.length === 0) {
+        return 'Veuillez sélectionner une option.'
     }
-    else if (newValue.length > 1) {
-        errorMessageCheckBox.value = 'Veuillez sélectionner une seule option.'
+    if (checkedItems.value.length > 1) {
+        return 'Veuillez sélectionner une seule option.'
     }
-    else {
-        errorMessageCheckBox.value = '';
-    }
+    return ''
 })
 
 
@@ -215,6 +217,9 @@ const selectedTypeLabel = computed(() => {
 });
 
 
+//=========================
+//======== Events =========
+//=========================
 function isCheckedWithIndex(index) {
     return checkedItems.value.some(i => i.index === index);
 }
@@ -225,6 +230,7 @@ function onCheckChange(event, nom, index) {
     } else {
         checkedItems.value = checkedItems.value.filter(i => i.index !== index);
     }
+    console.log("checkedItems :", checkedItems.value);
 }
 
 function showContinueInscription() {
@@ -330,7 +336,7 @@ async function getValuesPrestataire() {
             checkedItems.value = [];
         }
 
-        console.log("selectedItems :", selectedItems.value);
+        console.log("checkedItems :", checkedItems.value);
         console.log(presta.specificite);
 
     } catch (err) {
@@ -366,7 +372,7 @@ async function addPrestataire() {
 
 async function updatePresta() {
     try {
-        const res = await axios.post(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
+        const res = await axios.put(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
             nom: nom_presta.value,
             descri: descri_presta.value,
             nb_participants: Number(nb_participants.value),

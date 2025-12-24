@@ -1,6 +1,34 @@
 <template>
   <NavView />
-  <div class="routeurLink">
+
+  <section>
+    <div class="container">
+      <div class="container_cards" v-for="item in allPresta" :key="item.id_prestataire">
+        <p class="title_presta">{{ item.nom_prestataire }}</p>
+        <!-- <img src=""> -->
+        <div class="description" 
+          v-html="item.descri_prestataire">
+        </div>
+        <p>{{ item.nb_participants }}</p>
+        <p>{{ item.tarif_prestataire }}</p>
+        <div class="contact_presta">
+          <p class="contact_title"><b>Contact</b></p>
+          <p>{{ item.mail_prestataire }}</p>
+          <p>{{ item.tel_prestataire }}</p>
+        </div>
+        <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }} 
+          <span>
+            <button>
+              En savoir plus
+            </button>
+          </span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- <div class="routeurLink">
     <router-link to="/" class="btnLink">Home</router-link>
   </div>
   <div class="Titre">
@@ -21,39 +49,72 @@
   <div class="SuiteTexte">
     <h2>{{ $t("services.title") }}</h2>
     <div class="cards-section">
-      <router-link
-        v-for="(elt, index) in photo"
-        :key="index"
-        :to="elt.link"
-        class="card">
+      <router-link v-for="(elt, index) in photo" :key="index" :to="elt.link" class="card">
         <img :src="elt.chemin" :alt="`Photo ${index}`" />
         <h3>{{ $t(`services.actions.${index}`) }}</h3>
       </router-link>
     </div>
   </div>
-<br>
+  <br> -->
   <Footer></Footer>
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+import axios from "axios";
+
 import NavView from "@/components/NavView.vue";
-import { ref } from "vue";
 import Footer from "@/components/Footer.vue";
 
-const photo = [
-  {
-    chemin: new URL("../images/Commander.jpg", import.meta.url).href,
-    link: "/Commander",
-  },
-  {
-    chemin: new URL("../images/Reserver.jpg", import.meta.url).href,
-    link: "/Reserver",
-  },
-];
+// const photo = [
+//   {
+//     chemin: new URL("../images/Commander.jpg", import.meta.url).href,
+//     link: "/Commander",
+//   },
+//   {
+//     chemin: new URL("../images/Reserver.jpg", import.meta.url).href,
+//     link: "/Reserver",
+//   },
+// ];
+const allPresta = ref([]);
+
+
+onMounted(async () => {
+    try {
+        await getValuesPrestataire();
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+
+
+//==========================
+//= Async functions presta =
+//==========================
+async function getValuesPrestataire() {
+    try {
+        const res = await axios.get("http://localhost:3000/prestataire/show");
+        allPresta.value = res.data;
+
+    } catch (err) {
+        console.error("Erreur lors de la récupération des données :", err);
+    }
+}
+
 </script>
 
 <style>
-body::-webkit-scrollbar {
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+.container_cards {
+  background-color: yellow;
+}
+/* body::-webkit-scrollbar {
   display: none;
 }
 
@@ -68,6 +129,7 @@ body::-webkit-scrollbar {
   padding: 25px;
   font-size: 25px;
 }
+
 .link {
   text-decoration: none;
   color: black;
@@ -77,14 +139,17 @@ body::-webkit-scrollbar {
   -webkit-transition: all 1s ease;
   -webkit-transform: scale(1.05);
 }
+
 .servicePrestataire1,
 .servicePrestataire2 {
   border: solid 1px black;
   border-radius: 15px;
 }
+
 .SuiteTexte {
   margin-left: 35px;
 }
+
 .routeurLink {
   display: flex;
   justify-content: center;
@@ -108,27 +173,33 @@ body::-webkit-scrollbar {
   background: var(--primary-color);
   color: white;
 }
+
 .Titre {
   margin-left: 35px;
 }
+
 .route {
   display: flex;
   align-items: center;
   gap: 40px;
 }
+
 .ConteneurTexte {
   max-width: 800px;
   margin-left: 35px;
   line-height: 1.5;
   text-align: justify;
 }
+
 .ConteneurImageBurger {
   max-width: 500px;
   align-items: end;
 }
+
 .imageBurger {
   width: 350px;
 }
+
 .cards-section {
   display: flex;
   justify-content: center;
@@ -148,7 +219,7 @@ body::-webkit-scrollbar {
   width: 250px;
   transition: transform 0.3s, box-shadow 0.3s;
   color: black;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card img {
@@ -166,6 +237,5 @@ body::-webkit-scrollbar {
 
 .card:hover {
   transform: translateY(-5px) scale(1.05);
-}
-
+} */
 </style>

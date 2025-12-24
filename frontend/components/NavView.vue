@@ -59,7 +59,11 @@
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
             <router-link to="/utilisateur/profil" class="pointer optionProfil">
-              Voir son profil
+              Mon profil
+            </router-link>
+
+            <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" class="pointer optionProfil" v-if="userStore.isPresta">
+              Mes prestations
             </router-link>
 
             <router-link to="/Panier" class="pointer optionProfil">

@@ -83,6 +83,7 @@
                 id="tel"
                 v-model="formData.tel_utilisateur"
                 type="tel"
+                pattern="^0[1-9][0-9]{8}$"
                 :placeholder="$t('user.tel_utilisateur')"
               />
             </div>

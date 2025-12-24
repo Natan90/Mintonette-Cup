@@ -39,7 +39,15 @@ const pool = require("../../database/db");
 router.get("/show", async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM Prestataire ORDER BY nom_prestataire"
+      `SELECT
+        p.*,
+        u.prenom_utilisateur,
+        u.nom_utilisateur
+      FROM Prestataire p
+      JOIN Utilisateur u
+        ON p.id_utilisateur = u.id_utilisateur
+      ORDER BY p.nom_prestataire;
+      `
     );
     res.json(result.rows);
   } catch (err) {
@@ -49,6 +57,54 @@ router.get("/show", async (req, res) => {
 });
 
 
+/**
+ * @swagger
+ * /prestataire/show/{id}:
+ *   get:
+ *     summary: Récupère le prestataire associé à un utilisateur
+ *     tags: [Prestataires]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Prestataire récupéré avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_prestataire:
+ *                   type: integer
+ *                 nom_prestataire:
+ *                   type: string
+ *                 descri_prestataire:
+ *                   type: string
+ *                 nb_participants:
+ *                   type: integer
+ *                 tarif_prestataire:
+ *                   type: number
+ *                 mail_prestataire:
+ *                   type: string
+ *                 tel_prestataire:
+ *                   type: string
+ *                 specificite:
+ *                   type: string
+ *                 waitingForAdmin:
+ *                   type: boolean
+ *                 type_prestataire_id:
+ *                   type: integer
+ *                 id_utilisateur:
+ *                   type: integer
+ *       404:
+ *         description: Prestataire non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get("/show/:id", async (req, res) => {
   const id_user = req.params.id;
   try {
@@ -167,6 +223,78 @@ router.get("/showEveryType", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /prestataire/becomePrestataire/{id}:
+ *   post:
+ *     summary: Crée un prestataire à partir d’un utilisateur
+ *     tags: [Prestataires]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nom
+ *               - descri
+ *               - nb_participants
+ *               - tarif
+ *               - mail
+ *               - tel
+ *               - specificite
+ *               - type
+ *             properties:
+ *               nom:
+ *                 type: string
+ *                 example: "Atelier peinture"
+ *               descri:
+ *                 type: string
+ *                 example: "Atelier créatif pour enfants"
+ *               nb_participants:
+ *                 type: integer
+ *                 example: 10
+ *               tarif:
+ *                 type: number
+ *                 example: 15
+ *               mail:
+ *                 type: string
+ *                 example: "contact@atelier.fr"
+ *               tel:
+ *                 type: string
+ *                 example: "0612345678"
+ *               specificite:
+ *                 type: string
+ *                 example: "Peinture acrylique"
+ *               type:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Prestataire créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Prestataire créé avec succès
+ *       400:
+ *         description: Champs obligatoires manquants
+ *       409:
+ *         description: L'utilisateur est déjà prestataire
+ *       500:
+ *         description: Erreur serveur
+ */
 router.post("/becomePrestataire/:id", async (req, res) => {
   const id_user = req.params.id;
   const { nom, descri, nb_participants, tarif, mail, tel, specificite, type } =
@@ -225,7 +353,79 @@ router.post("/becomePrestataire/:id", async (req, res) => {
   }
 });
 
-router.post("/updatePresta/:id", async (req, res) => {
+
+/**
+ * @swagger
+ * /prestataire/updatePresta/{id}:
+ *   put:
+ *     summary: Met à jour les informations d’un prestataire
+ *     tags: [Prestataires]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nom
+ *               - descri
+ *               - nb_participants
+ *               - tarif
+ *               - mail
+ *               - tel
+ *               - specificite
+ *               - type
+ *             properties:
+ *               nom:
+ *                 type: string
+ *                 example: "Atelier peinture"
+ *               descri:
+ *                 type: string
+ *                 example: "Atelier créatif mis à jour"
+ *               nb_participants:
+ *                 type: integer
+ *                 example: 12
+ *               tarif:
+ *                 type: number
+ *                 example: 20
+ *               mail:
+ *                 type: string
+ *                 example: "contact@atelier.fr"
+ *               tel:
+ *                 type: string
+ *                 example: "0612345678"
+ *               specificite:
+ *                 type: string
+ *                 example: "Peinture à l’huile"
+ *               type:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Prestataire modifié avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Prestataire modifié avec succès
+ *       400:
+ *         description: Champs obligatoires manquants
+ *       409:
+ *         description: L'utilisateur n'est pas prestataire
+ *       500:
+ *         description: Erreur serveur
+ */
+router.put("/updatePresta/:id", async (req, res) => {
   const id_user = req.params.id;
   const { nom, descri, nb_participants, tarif, mail, tel, specificite, type } =
     req.body;
