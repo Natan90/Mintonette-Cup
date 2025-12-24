@@ -77,7 +77,9 @@ async function payer() {
       id_utilisateur: userStore.userId,
     });
   }
-  console.log("USER ID PAYEUR :", userStore.userId);
+
+  localStorage.removeItem("selectedSeats");
+
   await fetchPanier();
 }
 

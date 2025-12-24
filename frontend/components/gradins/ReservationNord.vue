@@ -58,9 +58,7 @@
             <b>Total : {{ PrixTotal }} €</b>
           </p>
 
-          <button @click="AjoutPanier" class="pointer">
-            Ajouter au panier
-          </button>
+          <button @click="AddToCart" class="pointer">Ajouter au panier</button>
         </div>
       </div>
 
@@ -173,7 +171,7 @@ function UpdateSiegeStatus(index) {
   saveSelection();
 }
 
-async function AjoutPanier() {
+async function AddToCart() {
   if (!selectedSeats.value.length) return;
 
   estAjoute.value = true;
@@ -188,7 +186,6 @@ async function AjoutPanier() {
     });
   }
 
-  localStorage.removeItem("selectedSeats");
 
   await fetchGradin();
 }
