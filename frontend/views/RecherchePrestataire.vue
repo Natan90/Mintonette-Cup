@@ -1,5 +1,5 @@
 <template>
-    <form class="search_form" @submit.prevent="searchPrestataires">
+    <form class="search_form" @submit.prevent="searchPrestataires" id="filtre_presta">
         <p class="title_form">Prestataires – Coupe du Monde de Volley</p>
         <p>
             Retrouvez tous les prestataires officiels présents lors de la Coupe du Monde de volley

@@ -4,8 +4,8 @@
       <img class="pointer" src="../images/logo.png" alt="logo" id="logo" />
     </router-link>
     <div class="routeurLink">
-      <router-link to="/RecherchePresta">
-        <span class="pointer optionNav">RecherchePrestataire</span>
+      <router-link :to="{ path: '/', hash: '#filtre_presta' }" v-if="isInIndex">
+        <span class="pointer optionNav">Section prestataire</span>
       </router-link>
       <router-link to="/PrestatairePublic">
         <span class="pointer optionNav">Prestataire(mode public)</span>
