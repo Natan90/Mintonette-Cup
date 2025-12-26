@@ -7,8 +7,11 @@
       <router-link to="/PrestatairePublic">
         <span class="pointer optionNav">Prestataire(mode public)</span>
       </router-link>
-      <router-link to="/PrestatairePresta" v-if="userStore.isPresta">
-        <span class="pointer optionNav">Prestataire (mode presta)</span>
+      <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" v-if="userStore.isPresta">
+        <span class="pointer optionNav">Edit Prestataire (mode presta)</span>
+      </router-link>
+      <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }" v-else>
+        <span class="pointer optionNav">Become Prestataire (mode presta)</span>
       </router-link>
       <router-link to="/admin">
         <span class="pointer optionNav">Vue administrateur</span>

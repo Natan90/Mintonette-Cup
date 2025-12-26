@@ -109,10 +109,10 @@
     </section>
 
 
-    <!-- <div class="presta_formulaire">
+    <div class="presta_formulaire">
       <ListPresta></ListPresta>
       <Formulaire></Formulaire>
-    </div> -->
+    </div>
 
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 

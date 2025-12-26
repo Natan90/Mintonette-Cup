@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "@/views/Index.vue";
 import PrestatairePublic from "@/views/PrestatairePublic.vue";
-import PrestatairePresta from "@/views/PrestatairePresta.vue";
 import Commander from "@/views/Commander.vue";
 import Reserver from "@/views/Reserver.vue";
 import Utilisateur from "@/components/Utilisateur.vue";
@@ -41,11 +40,6 @@ const routes = [
     path: "/PrestatairePublic",
     name: "PrestatairePublic",
     component: PrestatairePublic,
-  },
-  {
-    path: "/PrestatairePresta",
-    name: "PrestatairePresta",
-    component: PrestatairePresta,
   },
   {
     path: "/Prestataire/Add/:id",
