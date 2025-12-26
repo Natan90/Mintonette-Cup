@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <h1>Gradin Nord</h1>
+    <h1>Gradin {{ zone }}</h1>
 
     <section>
       <h2>Réservation de place</h2>
@@ -14,7 +14,7 @@
             :key="index"
             @mouseover="hoverIndex = index"
             @mouseleave="hoverIndex = null"
-            @click="UpdateSiegeStatus(index)">
+            @click="UpdateSeatStatus(index)">
             <img
               v-if="hoverIndex === index && seat.state === 'available'"
               src="/AvailableSeatHover.svg"
@@ -55,12 +55,18 @@
           </ul>
 
           <p>
-            <b>Total : {{ PrixTotal }} €</b>
+            <b>Total : {{ totalPrice }} €</b>
           </p>
 
-          <button @click="AjoutPanier" class="pointer">
-            Ajouter au panier
+          <button @click="AddToCart" class="pointer">
+            <b>Ajouter au panier</b>
           </button>
+          <br />
+          <router-link :to="{ name: 'Panier', query: { fromZone: zone } }">
+            <button class="pointer">
+              <b>Accéder à votre panier</b>
+            </button>
+          </router-link>
         </div>
       </div>
 
@@ -77,10 +83,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import NavBar from "../NavView.vue";
-import Footer from "../Footer.vue";
+import NavBar from "../components/NavView.vue";
+import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const zone = route.params.zone;
 
 const userStore = useUserStore();
 
@@ -99,7 +109,7 @@ function getSeatPrice(seat) {
   return 12;
 }
 //C'est moche de doubler il faudra changer ca
-const PrixTotal = computed(() => {
+const totalPrice = computed(() => {
   return selectedSeats.value.reduce((sum, seat) => {
     if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
     if (["F", "E", "D"].includes(seat.numero_colonne)) return sum + 18;
@@ -140,7 +150,7 @@ async function fetchGradin() {
   const res = await axios.get("http://localhost:3000/gradin/show");
 
   seats.value = res.data
-    .filter((seat) => seat.zone === "NORD")
+    .filter((seat) => seat.zone === zone.toUpperCase())
     .map((seat) => {
       let state = "available";
 
@@ -164,7 +174,7 @@ async function fetchGradin() {
   restoreSelection();
 }
 
-function UpdateSiegeStatus(index) {
+function UpdateSeatStatus(index) {
   const seat = seats.value[index];
 
   if (seat.state === "reserved" || seat.state === "owned") return;
@@ -173,7 +183,7 @@ function UpdateSiegeStatus(index) {
   saveSelection();
 }
 
-async function AjoutPanier() {
+async function AddToCart() {
   if (!selectedSeats.value.length) return;
 
   estAjoute.value = true;
@@ -187,8 +197,6 @@ async function AjoutPanier() {
       id_utilisateur: userStore.userId,
     });
   }
-
-  localStorage.removeItem("selectedSeats");
 
   await fetchGradin();
 }
@@ -239,18 +247,17 @@ onMounted(fetchGradin);
 .SeatInfo {
   width: 220px;
   padding: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 8px;
-  background: #f9f9f9;
 }
 
-.SeatInfo h3 {
-  margin-top: 0;
+.SeatInfo a {
+  text-decoration: none;
+  color: black;
 }
-
 .SeatInfo button {
   width: 100%;
   padding: 8px;
-  font-weight: bold;
+  text-decoration: none;
 }
 </style>

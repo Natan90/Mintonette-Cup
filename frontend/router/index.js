@@ -14,18 +14,8 @@ import terrain2 from "@/views/Terrains/terrain2.vue";
 import terrain3 from "@/views/Terrains/terrain3.vue";
 import terrain4 from "@/views/Terrains/terrain4.vue";
 import PrestataireInfo from "@/views/PrestataireInfo.vue";
-import GradinNord from "@/components/gradins/GradinNord.vue";
-import GradinSud from "@/components/gradins/GradinSud.vue";
-import GradinOuest from "@/components/gradins/GradinOuest.vue";
-import GradinEst from "@/components/gradins/GradinEst.vue";
-import countUp from "@/components/CountUp.vue";
-import GradinReservationNord from "@/components/gradins/ReservationNord.vue"
-import GradinReservationEst from "@/components/gradins/ReservationEst.vue"
-import GradinReservationSud from "@/components/gradins/ReservationSud.vue"
-import GradinReservationOuest from "@/components/gradins/ReservationOuest.vue"
-import Panier from "@/views/Panier.vue"
-
-
+import Panier from "@/views/Panier.vue";
+import Gradin from "@/views/Gradin.vue";
 
 const routes = [
   {
@@ -45,13 +35,13 @@ const routes = [
     path: "/Prestataire/Add/:id",
     name: "AddPrestataire",
     component: PrestataireInfo,
-    props: true
+    props: true,
   },
   {
     path: "/Prestataire/Edit/:id",
     name: "EditPrestataire",
     component: PrestataireInfo,
-    props: true
+    props: true,
   },
 
   { path: "/Commander", name: "Commander", component: Commander },
@@ -108,53 +98,17 @@ const routes = [
     component: terrain4,
   },
   {
-    path: "/Gradins/GradinNord",
-    name: "Gradin Nord",
-    component: GradinNord,
-  },
-  {
-    path: "/Gradins/GradinEst",
-    name: "Gradin Est",
-    component: GradinEst,
-  },
-  {
-    path: "/Gradins/GradinSud",
-    name: "Gradin Sud",
-    component: GradinSud,
-  },
-  {
-    path: "/Gradins/GradinOuest",
-    name: "Gradin Ouest",
-    component: GradinOuest,
-  },
-  {
-    path: "/Gradins/ReservationNord",
-    name: "GradinReservationNord",
-    component: GradinReservationNord,
-  },
-  {
-    path: "/Gradins/ReservationEst",
-    name: "GradinReservationEst",
-    component: GradinReservationEst,
-  },
-  {
-    path: "/Gradins/ReservationSud",
-    name: "GradinReservationSud",
-    component: GradinReservationSud,
-  },
-  {
-    path: "/Gradins/ReservationOuest",
-    name: "GradinReservationOuest",
-    component: GradinReservationOuest,
+    path: "/Gradins/Gradin/:zone",
+    name: "Gradin",
+    component: Gradin,
   },
   {
     path: "/Panier",
     name: "Panier",
     component: Panier,
   },
-  
 ];
-Panier
+Panier;
 const router = createRouter({
   history: createWebHistory(),
   routes,
