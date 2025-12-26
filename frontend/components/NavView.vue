@@ -4,6 +4,9 @@
       <img class="pointer" src="../images/logo.png" alt="logo" id="logo" />
     </router-link>
     <div class="routeurLink">
+      <router-link to="/RecherchePresta">
+        <span class="pointer optionNav">RecherchePrestataire</span>
+      </router-link>
       <router-link to="/PrestatairePublic">
         <span class="pointer optionNav">Prestataire(mode public)</span>
       </router-link>

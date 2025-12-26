@@ -16,6 +16,7 @@ import terrain4 from "@/views/Terrains/terrain4.vue";
 import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
 import Gradin from "@/views/Gradin.vue";
+import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     props: (route) => ({
       showModal: route.query.showModal === "true",
     }),
+  },
+  {
+    path: "/RecherchePresta",
+    name: "RecherchePresta",
+    component: RecherchePrestataire,
   },
   {
     path: "/PrestatairePublic",

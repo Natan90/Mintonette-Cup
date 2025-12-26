@@ -42,10 +42,13 @@ router.get("/show", async (req, res) => {
       `SELECT
         p.*,
         u.prenom_utilisateur,
-        u.nom_utilisateur
+        u.nom_utilisateur,
+        t.nom_type_prestataire
       FROM Prestataire p
       JOIN Utilisateur u
         ON p.id_utilisateur = u.id_utilisateur
+      JOIN Type_prestataire t
+        ON p.type_prestataire_id = t.id_type_prestataire
       ORDER BY p.nom_prestataire;
       `
     );
@@ -115,6 +118,56 @@ router.get("/show/:id", async (req, res) => {
     if (result.rows.length === 0)
       return res.status(404).json({ message: "Prestataire non trouvé" });
     res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/showFilter", async (req, res) => {
+  const { nom, category, prixMin, prixMax } = req.query;
+  try {
+    let sql = `
+      SELECT
+        p.*,
+        t.nom_type_prestataire
+      FROM Prestataire p
+      JOIN Type_prestataire t
+        ON p.type_prestataire_id = t.id_type_prestataire
+      WHERE 1 = 1 `;
+    const values = [];
+    let index = 1;
+
+    if (nom) {
+      sql += ` AND p.nom_prestataire ILIKE $${index}`;
+      values.push(`%${nom}%`)
+      index++;
+    }
+
+    if (category && category !== "0") {
+      sql += ` AND p.type_prestataire_id = $${index}`;
+      values.push(Number(category));
+      index++;
+    }
+
+    if (prixMin) {
+      sql += ` AND p.tarif_prestataire >= $${index}`;
+      values.push(prixMin);
+      index++;
+    }
+
+    if (prixMax) {
+      sql += ` AND p.tarif_prestataire <= $${index}`;
+      values.push(prixMax);
+      index++;
+    }
+
+    sql += ` ORDER BY p.nom_prestataire`;
+
+    const result = await pool.query(sql, values);
+
+     res.json(result.rows);
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

@@ -109,11 +109,7 @@
     </section>
 
 
-    <div class="presta_formulaire">
-      <ListPresta></ListPresta>
-      <Formulaire></Formulaire>
-    </div>
-
+    <RecherchePrestataire></RecherchePrestataire>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
     <Footer></Footer>
@@ -137,8 +133,7 @@ import Footer from "@/components/Footer.vue";
 import Map from "@/components/Map.vue";
 import BounceCard from "@/components/BounceCard.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
-import ListPresta from "./ListPresta.vue";
-import Formulaire from "./Formulaire.vue";
+import RecherchePrestataire from "./RecherchePrestataire.vue";
 import CountUp from "../components/CountUp.vue";
 import PresentationMintonette from "./PresentationMintonette.vue";
 
@@ -323,15 +318,6 @@ body::-webkit-scrollbar {
   color: var(--bleu-logo);
   font-weight: bold;
   text-decoration: underline;
-}
-
-.presta_formulaire {
-  background: linear-gradient(135deg,
-      var(--colorGradientBlue),
-      var(--colorGradientGreen));
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
 }
 
 .presta_texte {
