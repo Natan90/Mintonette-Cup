@@ -7,16 +7,24 @@
   <router-link to="/Terrains/terrain_2" class="btnLink">
     terrain suivant
   </router-link>
-
+<p>Dans la bdd rajouter dans le 6 majeurs ou non</p>
   <div class="terrainConteneur">
     <div class="image">
       <div class="terrain">
         <div class="equipe gauche">
-          <img v-for="i in 6" :key="'g'+i" src="../../images/LogoPersonne.png" alt="personne" />
+          <img
+            v-for="i in 6"
+            :key="'g' + i"
+            src="../../images/LogoPersonne.png"
+            alt="personne" />
         </div>
 
         <div class="equipe droite">
-          <img v-for="i in 6" :key="'d'+i" src="../../images/LogoPersonne.png" alt="personne" />
+          <img
+            v-for="i in 6"
+            :key="'d' + i"
+            src="../../images/LogoPersonne.png"
+            alt="personne" />
         </div>
       </div>
     </div>

@@ -134,7 +134,7 @@ import { useUserStore } from '@/stores/user';
 ******************** */
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
-import Map from "@/components/Map.vue";
+import Map from "@/views/Map.vue";
 import BounceCard from "@/components/BounceCard.vue";
 import TableauMatchs from "../views/TableauMatchs.vue";
 import ListPresta from "./ListPresta.vue";
