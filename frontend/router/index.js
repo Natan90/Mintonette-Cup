@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "@/views/Index.vue";
 import PrestatairePublic from "@/views/PrestatairePublic.vue";
-import PrestatairePresta from "@/views/PrestatairePresta.vue";
 import Commander from "@/views/Commander.vue";
 import Reserver from "@/views/Reserver.vue";
 import Utilisateur from "@/components/Utilisateur.vue";
@@ -17,6 +16,7 @@ import terrain4 from "@/views/Terrains/terrain4.vue";
 import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
 import Gradin from "@/views/Gradin.vue";
+import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 
 const routes = [
   {
@@ -28,14 +28,14 @@ const routes = [
     }),
   },
   {
+    path: "/RecherchePresta",
+    name: "RecherchePresta",
+    component: RecherchePrestataire,
+  },
+  {
     path: "/PrestatairePublic",
     name: "PrestatairePublic",
     component: PrestatairePublic,
-  },
-  {
-    path: "/PrestatairePresta",
-    name: "PrestatairePresta",
-    component: PrestatairePresta,
   },
   {
     path: "/Prestataire/Add/:id",
@@ -118,9 +118,16 @@ Panier;
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() {
-    return { top: 0 };
-  },
+  scrollBehavior(to) {
+  if (to.hash) {
+    return {
+      el: to.hash,
+      behavior: 'smooth',
+    };
+  }
+  return { top: 0 };
+}
+
 });
 
 export default router;
