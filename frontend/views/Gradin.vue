@@ -14,7 +14,7 @@
             :key="index"
             @mouseover="hoverIndex = index"
             @mouseleave="hoverIndex = null"
-            @click="UpdateSiegeStatus(index)">
+            @click="UpdateSeatStatus(index)">
             <img
               v-if="hoverIndex === index && seat.state === 'available'"
               src="/AvailableSeatHover.svg"
@@ -55,10 +55,18 @@
           </ul>
 
           <p>
-            <b>Total : {{ PrixTotal }} €</b>
+            <b>Total : {{ totalPrice }} €</b>
           </p>
 
-          <button @click="AddToCart" class="pointer">Ajouter au panier</button>
+          <button @click="AddToCart" class="pointer">
+            <b>Ajouter au panier</b>
+          </button>
+          <br />
+          <router-link :to="{ name: 'Panier', query: { fromZone: zone } }">
+            <button class="pointer">
+              <b>Accéder à votre panier</b>
+            </button>
+          </router-link>
         </div>
       </div>
 
@@ -101,7 +109,7 @@ function getSeatPrice(seat) {
   return 12;
 }
 //C'est moche de doubler il faudra changer ca
-const PrixTotal = computed(() => {
+const totalPrice = computed(() => {
   return selectedSeats.value.reduce((sum, seat) => {
     if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
     if (["F", "E", "D"].includes(seat.numero_colonne)) return sum + 18;
@@ -166,7 +174,7 @@ async function fetchGradin() {
   restoreSelection();
 }
 
-function UpdateSiegeStatus(index) {
+function UpdateSeatStatus(index) {
   const seat = seats.value[index];
 
   if (seat.state === "reserved" || seat.state === "owned") return;
@@ -239,18 +247,17 @@ onMounted(fetchGradin);
 .SeatInfo {
   width: 220px;
   padding: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 8px;
-  background: #f9f9f9;
 }
 
-.SeatInfo h3 {
-  margin-top: 0;
+.SeatInfo a {
+  text-decoration: none;
+  color: black;
 }
-
 .SeatInfo button {
   width: 100%;
   padding: 8px;
-  font-weight: bold;
+  text-decoration: none;
 }
 </style>

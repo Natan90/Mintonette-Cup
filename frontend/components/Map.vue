@@ -370,7 +370,9 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Est",
-    url: "/Gradins/Gradin/est",
+    url: userStore.isConnected
+      ? "/Gradins/Gradin/est"
+      : "/utilisateur/connexion",
     coord: [
       [1699.2872443846295, 1060.8454726559387],
       [1725.3432849977123, 639.4000844547812],
@@ -405,7 +407,9 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Sud",
-    url: "/Gradins/Gradin/sud",
+    url: userStore.isConnected
+      ? "/Gradins/Gradin/sud"
+      : "/utilisateur/connexion",
     coord: [
       [236.03013260397483, 418.7509251881477],
       [274.4660337456147, 392.7680015228414],
@@ -464,7 +468,9 @@ const landLocations = [
   {
     type: "stand",
     name: "Tribune Ouest",
-    url: "/Gradins/Gradin/ouest",
+    url: userStore.isConnected
+      ? "/Gradins/Gradin/ouest"
+      : "/utilisateur/connexion",
     coord: [
       [0.4557218135466883, 1148.188299638987],
       [286.87683149725086, 1063.956641415362],

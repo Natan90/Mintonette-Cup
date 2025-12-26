@@ -20,8 +20,11 @@
       <div class="montant">{{ total }} €</div>
     </div>
   </div>
-  <button @click="payer">payer</button>
+  <button @click="pay">payer</button>
   <button @click="reset">Vider le panier</button>
+  <button v-if="fromZone" @click="backToBleacher">
+    Retour au gradin {{ fromZone }}
+  </button>
   <Footer />
 </template>
 
@@ -31,10 +34,12 @@ import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import { useRoute, useRouter } from "vue-router";
 
-const props = defineProps({
-  zone: String,
-});
+const route = useRoute();
+const router = useRouter();
+
+const fromZone = route.query.fromZone;
 
 const userStore = useUserStore();
 const panier = ref([]);
@@ -58,7 +63,7 @@ async function fetchPanier() {
   }
 }
 
-async function payer() {
+async function pay() {
   if (panier.value.length === 0) {
     alert("Aucun siège dans le panier.");
     return;
@@ -100,6 +105,13 @@ async function reset() {
   }
 
   await fetchPanier();
+}
+//Bleacher = gradin
+function backToBleacher() {
+  router.push({
+    name: "Gradin",
+    params: { zone: fromZone.toLowerCase() },
+  });
 }
 
 onMounted(() => {
