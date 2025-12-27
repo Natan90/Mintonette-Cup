@@ -596,9 +596,8 @@ const pool = require("./db");
     ('Diez', 'Yacine', 'Masculin', '1991-11-14', 1.95, 2, 'France', 'Receveur-Attaquant', 1),
     ('Louati', 'Trevor', 'Masculin', '1996-02-04', 1.97, 14, 'France', 'Central', 1),
     ('Henno', 'Dorian', 'Masculin', '1994-01-21', 1.87, 1, 'France', 'Libero', 1),
-    ('Tual', 'Lucas', 'Masculin', '1998-10-12', 2.01, 13, 'France', 'Attaquant', 1);
+    ('Tual', 'Lucas', 'Masculin', '1998-10-12', 2.01, 13, 'France', 'Attaquant', 1),
 
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     -- Allemagne
     ('Stern', 'Christian', 'Masculin', '1990-07-07', 1.98, 1, 'Allemagne', 'Passeur', 2),
     ('Friedrich', 'Denis', 'Masculin', '1995-03-03', 2.01, 2, 'Allemagne', 'Attaquant', 2),
@@ -613,9 +612,8 @@ const pool = require("./db");
     ('Maase', 'Nils', 'Masculin', '1989-03-28', 1.97, 11, 'Allemagne', 'Central', 2),
     ('Höfflin', 'Patrick', 'Masculin', '1993-05-16', 1.99, 12, 'Allemagne', 'Attaquant', 2),
     ('Reinhardt', 'Tobias', 'Masculin', '1992-07-11', 1.92, 13, 'Allemagne', 'Libero', 2),
-    ('Tille', 'Fabian', 'Masculin', '1997-09-30', 1.96, 14, 'Allemagne', 'Receveur-Attaquant', 2);
+    ('Tille', 'Fabian', 'Masculin', '1997-09-30', 1.96, 14, 'Allemagne', 'Receveur-Attaquant', 2),
 
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     -- Argentine
     ('Conte', 'Santiago', 'Masculin', '1985-07-22', 1.98, 1, 'Argentine', 'Passeur', 3),
     ('Ezequiel', 'Palacios', 'Masculin', '1992-11-16', 1.99, 2, 'Argentine', 'Attaquant', 3),
@@ -630,10 +628,9 @@ const pool = require("./db");
     ('Sosa', 'Matias', 'Masculin', '1995-10-20', 1.98, 11, 'Argentine', 'Central', 3),
     ('Torenzi', 'Agustin', 'Masculin', '1996-08-15', 1.95, 12, 'Argentine', 'Attaquant', 3),
     ('Hernandez', 'Facundo', 'Masculin', '1997-01-25', 1.99, 13, 'Argentine', 'Libero', 3),
-    ('Zapata', 'Nicolas', 'Masculin', '1998-04-12', 1.97, 14, 'Argentine', 'Receveur-Attaquant', 3);
+    ('Zapata', 'Nicolas', 'Masculin', '1998-04-12', 1.97, 14, 'Argentine', 'Receveur-Attaquant', 3),
 
     -- Italie 
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Zaytsev', 'Ivan', 'Masculin', '1988-10-02', 2.02, 9, 'Italie', 'Attaquant', 4),
     ('Michieletto', 'Alessandro', 'Masculin', '1999-04-06', 1.95, 7, 'Italie', 'Receveur-Attaquant', 4),
     ('Lanza', 'Simone', 'Masculin', '1989-10-21', 1.95, 10, 'Italie', 'Receveur-Attaquant', 4),
@@ -647,15 +644,9 @@ const pool = require("./db");
     ('Martini', 'Alessandro', 'Masculin', '1992-03-22', 1.97, 3, 'Italie', 'Attaquant', 4),
     ('Pietrini', 'Marco', 'Masculin', '2001-02-11', 1.96, 11, 'Italie', 'Receveur-Attaquant', 4),
     ('Buti', 'Gianluca', 'Masculin', '1996-08-19', 1.98, 13, 'Italie', 'Attaquant', 4),
-<<<<<<< HEAD
-    ('Galassi', 'Gianluca', 'Masculin', '1995-03-12', 2.04, 14, 'Italie', 'Central', 4);
-
-=======
     ('Juantorena', 'Osmany', 'Masculin', '1985-05-12', 2.02, 14, 'Italie', 'Attaquant', 4),
    
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     -- Canada
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Laflamme', 'Eric', 'Masculin', '1992-04-15', 1.98, 1, 'Canada', 'Passeur', 5),
     ('Hoag', 'Nick', 'Masculin', '1992-01-08', 1.98, 2, 'Canada', 'Attaquant', 5),
     ('Sander', 'Chris', 'Masculin', '1991-02-21', 1.97, 3, 'Canada', 'Central', 5),
@@ -669,16 +660,9 @@ const pool = require("./db");
     ('Lavoie', 'Maxime', 'Masculin', '1995-10-16', 1.95, 11, 'Canada', 'Central', 5),
     ('Taylor', 'Cameron', 'Masculin', '1996-12-02', 1.97, 12, 'Canada', 'Attaquant', 5),
     ('Boucher', 'Olivier', 'Masculin', '1994-09-20', 1.98, 13, 'Canada', 'Libero', 5),
-<<<<<<< HEAD
-    ('Martin', 'Samuel', 'Masculin', '1997-11-05', 2.01, 14, 'Canada', 'Attaquant', 5);
-
-    -- Bulgarie
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Martin', 'Samuel', 'Masculin', '1997-11-05', 2.01, 14, 'Canada', 'Attaquant', 5),
 
     -- Bulgarie
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Pavlov', 'Todor', 'Masculin', '1994-05-14', 2.00, 1, 'Bulgarie', 'Passeur', 6),
     ('Kolev', 'Dimitri', 'Masculin', '1991-08-22', 1.98, 2, 'Bulgarie', 'Attaquant', 6),
     ('Kalimonov', 'Georgi', 'Masculin', '1995-03-19', 1.97, 3, 'Bulgarie', 'Central', 6),
@@ -692,16 +676,9 @@ const pool = require("./db");
     ('Ivanov', 'Milan', 'Masculin', '1996-05-26', 1.95, 11, 'Bulgarie', 'Central', 6),
     ('Stefanov', 'Nikolay', 'Masculin', '1997-09-18', 1.97, 12, 'Bulgarie', 'Attaquant', 6),
     ('Dimitrov', 'Martin', 'Masculin', '1994-04-12', 1.98, 13, 'Bulgarie', 'Libero', 6),
-<<<<<<< HEAD
-    ('Kirilov', 'Angel', 'Masculin', '1998-01-20', 2.01, 14, 'Bulgarie', 'Attaquant', 6);
-
-    -- Brésil
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Kirilov', 'Angel', 'Masculin', '1998-01-20', 2.01, 14, 'Bulgarie', 'Attaquant', 6),
 
     -- Brésil
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Lucarelli', 'Ricardo', 'Masculin', '1992-10-14', 1.98, 9, 'Brésil', 'Attaquant', 7),
     ('Fakih', 'Mauricio', 'Masculin', '1989-05-25', 1.97, 3, 'Brésil', 'Receveur-Attaquant', 7),
     ('Héctor', 'Bruno', 'Masculin', '1991-07-21', 2.02, 4, 'Brésil', 'Central', 7),
@@ -715,16 +692,9 @@ const pool = require("./db");
     ('Thales', 'Hortencio', 'Masculin', '1990-08-30', 1.98, 11, 'Brésil', 'Receveur-Attaquant', 7),
     ('Mauricio', 'Nascimento', 'Masculin', '1988-03-15', 1.97, 1, 'Brésil', 'Passeur', 7),
     ('Leonardo', 'Zorro', 'Masculin', '1992-12-12', 1.99, 13, 'Brésil', 'Attaquant', 7),
-<<<<<<< HEAD
-    ('Alan', 'Souza', 'Masculin', '1991-05-19', 2.00, 14, 'Brésil', 'Central', 7);
-
-    -- Cuba
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Alan', 'Souza', 'Masculin', '1991-05-19', 2.00, 14, 'Brésil', 'Central', 7),
 
     -- Cuba
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Lorenzo', 'Tapia', 'Masculin', '1993-03-17', 2.01, 1, 'Cuba', 'Passeur', 8),
     ('Gonzalez', 'Miguel', 'Masculin', '1994-06-20', 1.99, 2, 'Cuba', 'Attaquant', 8),
     ('Rodriguez', 'Yosvani', 'Masculin', '1992-09-30', 1.97, 3, 'Cuba', 'Central', 8),
@@ -738,16 +708,9 @@ const pool = require("./db");
     ('Alvarez', 'Pedro', 'Masculin', '1995-06-17', 1.98, 11, 'Cuba', 'Central', 8),
     ('Garcia', 'Victor', 'Masculin', '1996-09-10', 1.97, 12, 'Cuba', 'Attaquant', 8),
     ('Lopez', 'Andres', 'Masculin', '1994-04-22', 1.99, 13, 'Cuba', 'Libero', 8),
-<<<<<<< HEAD
-    ('Mendez', 'Oscar', 'Masculin', '1997-12-05', 2.00, 14, 'Cuba', 'Central', 8);
-
-    -- États-Unis
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Mendez', 'Oscar', 'Masculin', '1997-12-05', 2.00, 14, 'Cuba', 'Central', 8),
 
     -- États-Unis
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Anderson', 'Matthew', 'Masculin', '1990-04-07', 2.00, 1, 'États-Unis', 'Passeur', 9),
     ('Sander', 'Taylor', 'Masculin', '1992-07-16', 1.98, 2, 'États-Unis', 'Attaquant', 9),
     ('McKenzie', 'Aaron', 'Masculin', '1991-03-12', 1.97, 3, 'États-Unis', 'Central', 9),
@@ -761,16 +724,9 @@ const pool = require("./db");
     ('Phillips', 'John', 'Masculin', '1992-03-19', 1.95, 11, 'États-Unis', 'Central', 9),
     ('Walker', 'Chris', 'Masculin', '1994-10-10', 1.97, 12, 'États-Unis', 'Attaquant', 9),
     ('Anderson', 'Luke', 'Masculin', '1990-06-25', 1.99, 13, 'États-Unis', 'Libero', 9),
-<<<<<<< HEAD
-    ('Gibbs', 'Kyle', 'Masculin', '1995-05-07', 2.01, 14, 'États-Unis', 'Central', 9);
-
-    -- Slovénie
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Gibbs', 'Kyle', 'Masculin', '1995-05-07', 2.01, 14, 'États-Unis', 'Central', 9),
 
     -- Slovénie
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Podržaj', 'Jan', 'Masculin', '1994-03-15', 1.98, 1, 'Slovénie', 'Passeur', 10),
     ('Klančnik', 'Žiga', 'Masculin', '1993-07-10', 1.97, 2, 'Slovénie', 'Attaquant', 10),
     ('Skrab', 'Miha', 'Masculin', '1995-02-28', 2.00, 3, 'Slovénie', 'Central', 10),
@@ -784,16 +740,9 @@ const pool = require("./db");
     ('Klemencic', 'Matej', 'Masculin', '1996-03-30', 1.95, 11, 'Slovénie', 'Central', 10),
     ('Krystof', 'Niko', 'Masculin', '1997-09-22', 1.97, 12, 'Slovénie', 'Attaquant', 10),
     ('Horvat', 'Luka', 'Masculin', '1994-07-05', 1.99, 13, 'Slovénie', 'Libero', 10),
-<<<<<<< HEAD
-    ('Poredoš', 'Tadej', 'Masculin', '1995-10-14', 2.01, 14, 'Slovénie', 'Central', 10);
-
-    -- Iran
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Poredoš', 'Tadej', 'Masculin', '1995-10-14', 2.01, 14, 'Slovénie', 'Central', 10),
 
     -- Iran
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Mousavi', 'Saeid', 'Masculin', '1989-12-22', 2.04, 1, 'Iran', 'Passeur', 11),
     ('Ebadipour', 'Saeid', 'Masculin', '1993-02-23', 1.98, 2, 'Iran', 'Attaquant', 11),
     ('Kazemi', 'Milad', 'Masculin', '1991-06-07', 2.01, 3, 'Iran', 'Central', 11),
@@ -807,16 +756,9 @@ const pool = require("./db");
     ('Alizadeh', 'Mehdi', 'Masculin', '1996-08-19', 1.98, 11, 'Iran', 'Central', 11),
     ('Rafiee', 'Mohammad', 'Masculin', '1994-02-10', 1.97, 12, 'Iran', 'Attaquant', 11),
     ('Shiri', 'Saman', 'Masculin', '1995-01-25', 1.99, 13, 'Iran', 'Libero', 11),
-<<<<<<< HEAD
-    ('Mousavi', 'Hamid', 'Masculin', '1997-06-18', 2.00, 14, 'Iran', 'Central', 11);
-
-    -- Ukraine
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Mousavi', 'Hamid', 'Masculin', '1997-06-18', 2.00, 14, 'Iran', 'Central', 11),
 
     -- Ukraine
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Yavorsky', 'Oleh', 'Masculin', '1992-03-08', 1.98, 1, 'Ukraine', 'Passeur', 12),
     ('Filipov', 'Ivan', 'Masculin', '1991-06-19', 1.97, 2, 'Ukraine', 'Attaquant', 12),
     ('Kravets', 'Andriy', 'Masculin', '1993-09-21', 2.00, 3, 'Ukraine', 'Central', 12),
@@ -830,16 +772,9 @@ const pool = require("./db");
     ('Stepanenko', 'Andriy', 'Masculin', '1991-09-28', 1.98, 11, 'Ukraine', 'Central', 12),
     ('Tkachenko', 'Dmytro', 'Masculin', '1996-01-30', 1.97, 12, 'Ukraine', 'Attaquant', 12),
     ('Kravchuk', 'Mykhailo', 'Masculin', '1993-03-12', 1.99, 13, 'Ukraine', 'Libero', 12),
-<<<<<<< HEAD
-    ('Moroz', 'Oleksandr', 'Masculin', '1994-05-16', 2.01, 14, 'Ukraine', 'Central', 12);
-
-    -- Chine
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Moroz', 'Oleksandr', 'Masculin', '1994-05-16', 2.01, 14, 'Ukraine', 'Central', 12),
 
     -- Chine
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Zhu', 'Cheng', 'Masculin', '1990-05-12', 2.01, 1, 'Chine', 'Passeur', 13),
     ('Zhang', 'Chen', 'Masculin', '1992-07-19', 1.98, 2, 'Chine', 'Attaquant', 13),
     ('Li', 'Yang', 'Masculin', '1991-09-03', 2.00, 3, 'Chine', 'Central', 13),
@@ -853,16 +788,9 @@ const pool = require("./db");
     ('Tang', 'Jun', 'Masculin', '1993-12-11', 1.95, 11, 'Chine', 'Central', 13),
     ('Liu', 'Tao', 'Masculin', '1996-01-29', 1.97, 12, 'Chine', 'Attaquant', 13),
     ('Gao', 'Feng', 'Masculin', '1994-05-22', 1.99, 13, 'Chine', 'Libero', 13),
-<<<<<<< HEAD
-    ('Deng', 'Kai', 'Masculin', '1995-07-13', 2.01, 14, 'Chine', 'Central', 13);
-
-    -- Japon
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
-=======
     ('Deng', 'Kai', 'Masculin', '1995-07-13', 2.01, 14, 'Chine', 'Central', 13),
 
     -- Japon
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
     ('Nagaoka', 'Yuji', 'Masculin', '1994-05-31', 1.97, 1, 'Japon', 'Passeur', 14),
     ('Yamagishi', 'Masahiro', 'Masculin', '1993-08-20', 1.98, 2, 'Japon', 'Attaquant', 14),
     ('Yoshida', 'Ryoma', 'Masculin', '1992-03-15', 1.99, 3, 'Japon', 'Central', 14),
@@ -876,11 +804,9 @@ const pool = require("./db");
     ('Sato', 'Ryo', 'Masculin', '1994-01-18', 1.95, 11, 'Japon', 'Central', 14),
     ('Matsumoto', 'Taku', 'Masculin', '1996-03-30', 1.97, 12, 'Japon', 'Attaquant', 14),
     ('Kawasaki', 'Daiki', 'Masculin', '1995-05-14', 1.99, 13, 'Japon', 'Libero', 14),
-<<<<<<< HEAD
-    ('Hirano', 'Yuki', 'Masculin', '1994-07-07', 2.00, 14, 'Japon', 'Central', 14);
+    ('Hirano', 'Yuki', 'Masculin', '1994-07-07', 2.00, 14, 'Japon', 'Central', 14),
 
     -- Pologne
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Kurek', 'Bart', 'Masculin', '1988-08-29', 2.01, 1, 'Pologne', 'Passeur', 15),
     ('Zatorski', 'Fabian', 'Masculin', '1990-12-23', 1.95, 2, 'Pologne', 'Libero', 15),
     ('Wlazly', 'Mariusz', 'Masculin', '1983-08-22', 1.98, 3, 'Pologne', 'Attaquant', 15),
@@ -894,10 +820,9 @@ const pool = require("./db");
     ('Mozdzonek', 'Grzegorz', 'Masculin', '1986-03-31', 2.02, 11, 'Pologne', 'Central', 15),
     ('Wojtaszek', 'Adam', 'Masculin', '1990-09-19', 1.98, 12, 'Pologne', 'Receveur-Attaquant', 15),
     ('Lisinac', 'Bartosz', 'Masculin', '1992-01-12', 2.03, 13, 'Pologne', 'Central', 15),
-    ('Jankowski', 'Mateusz', 'Masculin', '1995-05-21', 1.97, 14, 'Pologne', 'Attaquant', 15);
+    ('Jankowski', 'Mateusz', 'Masculin', '1995-05-21', 1.97, 14, 'Pologne', 'Attaquant', 15),
 
     -- Serbie
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Podrascanin', 'Marko', 'Masculin', '1987-10-29', 2.04, 1, 'Serbie', 'Central', 16),
     ('Kovacevic', 'Aleksandar', 'Masculin', '1995-06-11', 1.98, 2, 'Serbie', 'Attaquant', 16),
     ('Atanasijevic', 'Nemanja', 'Masculin', '1987-08-14', 2.03, 3, 'Serbie', 'Receveur-Attaquant', 16),
@@ -911,10 +836,9 @@ const pool = require("./db");
     ('Gocic', 'Uros', 'Masculin', '1993-03-22', 1.97, 11, 'Serbie', 'Central', 16),
     ('Mitic', 'Aleksandar', 'Masculin', '1994-05-19', 1.99, 12, 'Serbie', 'Attaquant', 16),
     ('Petrovic', 'Nikola', 'Masculin', '1990-12-03', 1.98, 13, 'Serbie', 'Libero', 16),
-    ('Zivkovic', 'Milan', 'Masculin', '1995-09-25', 2.00, 14, 'Serbie', 'Central', 16);
+    ('Zivkovic', 'Milan', 'Masculin', '1995-09-25', 2.00, 14, 'Serbie', 'Central', 16),
 
     -- Pays-Bas
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Verhoeven', 'Wout', 'Masculin', '1990-03-12', 2.00, 1, 'Pays-Bas', 'Passeur', 17),
     ('Akkerman', 'Ruben', 'Masculin', '1993-06-05', 1.97, 2, 'Pays-Bas', 'Attaquant', 17),
     ('Hoogendoorn', 'Niek', 'Masculin', '1992-09-17', 2.02, 3, 'Pays-Bas', 'Central', 17),
@@ -928,10 +852,9 @@ const pool = require("./db");
     ('Vonk', 'Koen', 'Masculin', '1993-10-22', 1.95, 11, 'Pays-Bas', 'Central', 17),
     ('Visser', 'Jelle', 'Masculin', '1994-04-02', 1.97, 12, 'Pays-Bas', 'Attaquant', 17),
     ('Dekker', 'Arjan', 'Masculin', '1992-05-09', 1.99, 13, 'Pays-Bas', 'Libero', 17),
-    ('Hendriks', 'Maarten', 'Masculin', '1995-06-27', 2.01, 14, 'Pays-Bas', 'Central', 17);
+    ('Hendriks', 'Maarten', 'Masculin', '1995-06-27', 2.01, 14, 'Pays-Bas', 'Central', 17),
 
     -- Turquie
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Yilmaz', 'Berk', 'Masculin', '1991-04-15', 1.98, 1, 'Turquie', 'Passeur', 18),
     ('Kurt', 'Ahmet', 'Masculin', '1992-07-11', 1.97, 2, 'Turquie', 'Attaquant', 18),
     ('Demir', 'Ozan', 'Masculin', '1993-02-23', 2.00, 3, 'Turquie', 'Central', 18),
@@ -945,10 +868,9 @@ const pool = require("./db");
     ('Demirtaş', 'Serkan', 'Masculin', '1994-09-27', 1.95, 11, 'Turquie', 'Central', 18),
     ('Gunes', 'Onur', 'Masculin', '1995-12-11', 1.97, 12, 'Turquie', 'Attaquant', 18),
     ('Polat', 'Kerem', 'Masculin', '1992-04-07', 1.99, 13, 'Turquie', 'Libero', 18),
-    ('Özdemir', 'Ege', 'Masculin', '1993-06-30', 2.01, 14, 'Turquie', 'Central', 18);
+    ('Özdemir', 'Ege', 'Masculin', '1993-06-30', 2.01, 14, 'Turquie', 'Central', 18),
 
     -- Belgique
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Van Dijk', 'Jasper', 'Masculin', '1990-03-28', 2.00, 1, 'Belgique', 'Passeur', 19),
     ('Claes', 'Tom', 'Masculin', '1992-06-14', 1.97, 2, 'Belgique', 'Attaquant', 19),
     ('Peeters', 'Dries', 'Masculin', '1993-02-21', 2.01, 3, 'Belgique', 'Central', 19),
@@ -962,10 +884,9 @@ const pool = require("./db");
     ('Jacobs', 'Kevin', 'Masculin', '1993-05-19', 1.95, 11, 'Belgique', 'Central', 19),
     ('Maes', 'Lukas', 'Masculin', '1995-09-22', 1.97, 12, 'Belgique', 'Attaquant', 19),
     ('Wouters', 'Mathieu', 'Masculin', '1992-02-11', 1.99, 13, 'Belgique', 'Libero', 19),
-    ('Hermans', 'Thijs', 'Masculin', '1994-06-07', 2.01, 14, 'Belgique', 'Central', 19);
+    ('Hermans', 'Thijs', 'Masculin', '1994-06-07', 2.01, 14, 'Belgique', 'Central', 19),
 
     -- Espagne
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Ruiz', 'Pablo', 'Masculin', '1991-07-12', 1.98, 1, 'Espagne', 'Passeur', 20),
     ('Gonzalez', 'Miguel', 'Masculin', '1993-03-21', 1.97, 2, 'Espagne', 'Attaquant', 20),
     ('Hernandez', 'Carlos', 'Masculin', '1990-11-04', 2.00, 3, 'Espagne', 'Central', 20),
@@ -979,10 +900,9 @@ const pool = require("./db");
     ('Blanco', 'Jorge', 'Masculin', '1993-05-07', 1.95, 11, 'Espagne', 'Central', 20),
     ('Cruz', 'Pablo', 'Masculin', '1995-10-09', 1.97, 12, 'Espagne', 'Attaquant', 20),
     ('Ramos', 'Miguel', 'Masculin', '1992-08-15', 1.99, 13, 'Espagne', 'Libero', 20),
-    ('Molina', 'Andres', 'Masculin', '1994-11-28', 2.01, 14, 'Espagne', 'Central', 20);
+    ('Molina', 'Andres', 'Masculin', '1994-11-28', 2.01, 14, 'Espagne', 'Central', 20),
 
     -- Angleterre
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Smith', 'James', 'Masculin', '1992-03-12', 1.98, 1, 'Angleterre', 'Passeur', 21),
     ('Brown', 'Daniel', 'Masculin', '1993-06-08', 1.97, 2, 'Angleterre', 'Attaquant', 21),
     ('Taylor', 'Michael', 'Masculin', '1991-09-22', 2.00, 3, 'Angleterre', 'Central', 21),
@@ -996,10 +916,9 @@ const pool = require("./db");
     ('Young', 'Robert', 'Masculin', '1993-11-22', 1.95, 11, 'Angleterre', 'Central', 21),
     ('King', 'Thomas', 'Masculin', '1995-09-18', 1.97, 12, 'Angleterre', 'Attaquant', 21),
     ('Wright', 'Steven', 'Masculin', '1992-05-03', 1.99, 13, 'Angleterre', 'Libero', 21),
-    ('Scott', 'Anthony', 'Masculin', '1994-06-25', 2.01, 14, 'Angleterre', 'Central', 21);
+    ('Scott', 'Anthony', 'Masculin', '1994-06-25', 2.01, 14, 'Angleterre', 'Central', 21),
 
     -- Thaïlande
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Anurak', 'Somsak', 'Masculin', '1993-02-17', 1.95, 1, 'Thaïlande', 'Passeur', 22),
     ('Chatchai', 'Prasit', 'Masculin', '1992-07-21', 1.94, 2, 'Thaïlande', 'Attaquant', 22),
     ('Somsak', 'Niwat', 'Masculin', '1994-05-12', 1.96, 3, 'Thaïlande', 'Central', 22),
@@ -1013,10 +932,9 @@ const pool = require("./db");
     ('Anucha', 'Nattapong', 'Masculin', '1992-10-20', 1.94, 11, 'Thaïlande', 'Central', 22),
     ('Wutthichai', 'Sakda', 'Masculin', '1994-01-30', 1.95, 12, 'Thaïlande', 'Attaquant', 22),
     ('Preecha', 'Chatchai', 'Masculin', '1993-03-17', 1.97, 13, 'Thaïlande', 'Libero', 22),
-    ('Somchai', 'Kittisak', 'Masculin', '1995-06-11', 1.96, 14, 'Thaïlande', 'Central', 22);
+    ('Somchai', 'Kittisak', 'Masculin', '1995-06-11', 1.96, 14, 'Thaïlande', 'Central', 22),
 
     -- Kazakhstan
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Akhmetov', 'Daniyar', 'Masculin', '1992-03-05', 1.98, 1, 'Kazakhstan', 'Passeur', 23),
     ('Sabitov', 'Azamat', 'Masculin', '1993-06-18', 1.97, 2, 'Kazakhstan', 'Attaquant', 23),
     ('Nursultan', 'Alikhan', 'Masculin', '1991-09-21', 2.00, 3, 'Kazakhstan', 'Central', 23),
@@ -1030,10 +948,9 @@ const pool = require("./db");
     ('Alikhan', 'Bekzat', 'Masculin', '1994-12-10', 1.95, 11, 'Kazakhstan', 'Central', 23),
     ('Marat', 'Erbol', 'Masculin', '1995-03-28', 1.97, 12, 'Kazakhstan', 'Attaquant', 23),
     ('Serik', 'Erlan', 'Masculin', '1992-06-15', 1.99, 13, 'Kazakhstan', 'Libero', 23),
-    ('Baurzhan', 'Kanat', 'Masculin', '1994-09-22', 2.01, 14, 'Kazakhstan', 'Central', 23);
+    ('Baurzhan', 'Kanat', 'Masculin', '1994-09-22', 2.01, 14, 'Kazakhstan', 'Central', 23),
 
     -- Corée du Sud
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Lee', 'Jin', 'Masculin', '1992-02-18', 1.97, 1, 'Corée du Sud', 'Passeur', 24),
     ('Kim', 'Min', 'Masculin', '1993-06-22', 1.96, 2, 'Corée du Sud', 'Attaquant', 24),
     ('Park', 'Joon', 'Masculin', '1991-09-14', 1.99, 3, 'Corée du Sud', 'Central', 24),
@@ -1047,10 +964,9 @@ const pool = require("./db");
     ('Hwang', 'Min', 'Masculin', '1994-11-05', 1.95, 11, 'Corée du Sud', 'Central', 24),
     ('Baek', 'Jin', 'Masculin', '1995-02-28', 1.97, 12, 'Corée du Sud', 'Attaquant', 24),
     ('Chung', 'Woo', 'Masculin', '1992-06-09', 1.99, 13, 'Corée du Sud', 'Libero', 24),
-    ('Han', 'Seung', 'Masculin', '1994-09-14', 2.01, 14, 'Corée du Sud', 'Central', 24);
+    ('Han', 'Seung', 'Masculin', '1994-09-14', 2.01, 14, 'Corée du Sud', 'Central', 24),
 
     -- Australie
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Smith', 'Liam', 'Masculin', '1992-04-12', 1.98, 1, 'Australie', 'Passeur', 25),
     ('Brown', 'Ethan', 'Masculin', '1993-07-18', 1.97, 2, 'Australie', 'Attaquant', 25),
     ('Wilson', 'Jack', 'Masculin', '1991-10-22', 2.00, 3, 'Australie', 'Central', 25),
@@ -1064,10 +980,9 @@ const pool = require("./db");
     ('King', 'Samuel', 'Masculin', '1993-11-11', 1.95, 11, 'Australie', 'Central', 25),
     ('Wright', 'Benjamin', 'Masculin', '1995-09-05', 1.97, 12, 'Australie', 'Attaquant', 25),
     ('Scott', 'Alexander', 'Masculin', '1992-05-02', 1.99, 13, 'Australie', 'Libero', 25),
-    ('Adams', 'Nathan', 'Masculin', '1994-06-28', 2.01, 14, 'Australie', 'Central', 25);
+    ('Adams', 'Nathan', 'Masculin', '1994-06-28', 2.01, 14, 'Australie', 'Central', 25),
 
     -- Paraguay
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Gonzalez', 'Luis', 'Masculin', '1992-02-14', 1.97, 1, 'Paraguay', 'Passeur', 26),
     ('Lopez', 'Carlos', 'Masculin', '1993-06-19', 1.96, 2, 'Paraguay', 'Attaquant', 26),
     ('Rodriguez', 'Miguel', 'Masculin', '1991-09-25', 1.99, 3, 'Paraguay', 'Central', 26),
@@ -1081,10 +996,9 @@ const pool = require("./db");
     ('Alvarez', 'Emilio', 'Masculin', '1993-11-05', 1.95, 11, 'Paraguay', 'Central', 26),
     ('Sanchez', 'Hector', 'Masculin', '1995-09-18', 1.97, 12, 'Paraguay', 'Attaquant', 26),
     ('Gimenez', 'Felipe', 'Masculin', '1992-05-10', 1.99, 13, 'Paraguay', 'Libero', 26),
-    ('Diaz', 'Rafael', 'Masculin', '1994-06-23', 2.01, 14, 'Paraguay', 'Central', 26);
+    ('Diaz', 'Rafael', 'Masculin', '1994-06-23', 2.01, 14, 'Paraguay', 'Central', 26),
 
     -- Uruguay
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Gomez', 'Matias', 'Masculin', '1992-03-16', 1.98, 1, 'Uruguay', 'Passeur', 27),
     ('Rodriguez', 'Diego', 'Masculin', '1993-07-21', 1.97, 2, 'Uruguay', 'Attaquant', 27),
     ('Fernandez', 'Lucas', 'Masculin', '1991-10-28', 2.00, 3, 'Uruguay', 'Central', 27),
@@ -1098,10 +1012,9 @@ const pool = require("./db");
     ('Torres', 'Bruno', 'Masculin', '1993-11-07', 1.95, 11, 'Uruguay', 'Central', 27),
     ('Vega', 'Maximiliano', 'Masculin', '1995-09-20', 1.97, 12, 'Uruguay', 'Attaquant', 27),
     ('Morales', 'Emiliano', 'Masculin', '1992-05-13', 1.99, 13, 'Uruguay', 'Libero', 27),
-    ('Castro', 'Diego', 'Masculin', '1994-06-27', 2.01, 14, 'Uruguay', 'Central', 27);
+    ('Castro', 'Diego', 'Masculin', '1994-06-27', 2.01, 14, 'Uruguay', 'Central', 27),
 
     -- Afrique du Sud
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Nkosi', 'Thabo', 'Masculin', '1992-04-22', 1.98, 1, 'Afrique du Sud', 'Passeur', 28),
     ('van der Merwe', 'Johan', 'Masculin', '1993-07-30', 1.97, 2, 'Afrique du Sud', 'Attaquant', 28),
     ('Botha', 'Siyabonga', 'Masculin', '1991-10-15', 2.00, 3, 'Afrique du Sud', 'Central', 28),
@@ -1115,10 +1028,9 @@ const pool = require("./db");
     ('Steyn', 'Gerrit', 'Masculin', '1993-11-12', 1.95, 11, 'Afrique du Sud', 'Central', 28),
     ('Coetzee', 'Dylan', 'Masculin', '1995-09-08', 1.97, 12, 'Afrique du Sud', 'Attaquant', 28),
     ('Botha', 'Riaan', 'Masculin', '1992-05-21', 1.99, 13, 'Afrique du Sud', 'Libero', 28),
-    ('van der Westhuizen', 'Frans', 'Masculin', '1994-06-29', 2.01, 14, 'Afrique du Sud', 'Central', 28);
+    ('van der Westhuizen', 'Frans', 'Masculin', '1994-06-29', 2.01, 14, 'Afrique du Sud', 'Central', 28),
 
     -- Maroc
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('El Amrani', 'Youssef', 'Masculin', '1992-04-18', 1.97, 1, 'Maroc', 'Passeur', 29),
     ('Bouazza', 'Mohamed', 'Masculin', '1993-07-23', 1.96, 2, 'Maroc', 'Attaquant', 29),
     ('Haddadi', 'Mehdi', 'Masculin', '1991-10-12', 2.00, 3, 'Maroc', 'Central', 29),
@@ -1132,10 +1044,9 @@ const pool = require("./db");
     ('Boukadida', 'Hamid', 'Masculin', '1993-11-09', 1.95, 11, 'Maroc', 'Central', 29),
     ('Bouhaddi', 'Yassir', 'Masculin', '1995-09-25', 1.97, 12, 'Maroc', 'Attaquant', 29),
     ('Amrani', 'Omar', 'Masculin', '1992-05-05', 1.99, 13, 'Maroc', 'Libero', 29),
-    ('El Khalfi', 'Mohammed', 'Masculin', '1994-06-20', 2.01, 14, 'Maroc', 'Central', 29);
+    ('El Khalfi', 'Mohammed', 'Masculin', '1994-06-20', 2.01, 14, 'Maroc', 'Central', 29),
 
     -- Arabie Saoudite
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Al-Shehri', 'Fahad', 'Masculin', '1992-03-14', 1.97, 1, 'Arabie Saoudite', 'Passeur', 30),
     ('Al-Qahtani', 'Mohammed', 'Masculin', '1993-07-19', 1.96, 2, 'Arabie Saoudite', 'Attaquant', 30),
     ('Al-Mutairi', 'Abdullah', 'Masculin', '1991-10-11', 2.00, 3, 'Arabie Saoudite', 'Central', 30),
@@ -1149,10 +1060,9 @@ const pool = require("./db");
     ('Al-Mansour', 'Sami', 'Masculin', '1993-11-07', 1.95, 11, 'Arabie Saoudite', 'Central', 30),
     ('Al-Khalid', 'Ahmed', 'Masculin', '1995-09-19', 1.97, 12, 'Arabie Saoudite', 'Attaquant', 30),
     ('Al-Saud', 'Majed', 'Masculin', '1992-05-07', 1.99, 13, 'Arabie Saoudite', 'Libero', 30),
-    ('Al-Farsi', 'Tariq', 'Masculin', '1994-06-25', 2.01, 14, 'Arabie Saoudite', 'Central', 30);
+    ('Al-Farsi', 'Tariq', 'Masculin', '1994-06-25', 2.01, 14, 'Arabie Saoudite', 'Central', 30),
 
     -- Tunisie
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Ben Salah', 'Mohamed', 'Masculin', '1992-03-19', 1.97, 1, 'Tunisie', 'Passeur', 31),
     ('Khemiri', 'Ahmed', 'Masculin', '1993-07-22', 1.96, 2, 'Tunisie', 'Attaquant', 31),
     ('Trabelsi', 'Sami', 'Masculin', '1991-10-13', 2.00, 3, 'Tunisie', 'Central', 31),
@@ -1166,10 +1076,9 @@ const pool = require("./db");
     ('Chakroun', 'Rami', 'Masculin', '1993-11-08', 1.95, 11, 'Tunisie', 'Central', 31),
     ('Ben Ali', 'Hatem', 'Masculin', '1995-09-19', 1.97, 12, 'Tunisie', 'Attaquant', 31),
     ('Triki', 'Mohamed', 'Masculin', '1992-05-06', 1.99, 13, 'Tunisie', 'Libero', 31),
-    ('Khaldi', 'Firas', 'Masculin', '1994-06-24', 2.01, 14, 'Tunisie', 'Central', 31);
+    ('Khaldi', 'Firas', 'Masculin', '1994-06-24', 2.01, 14, 'Tunisie', 'Central', 31),
 
     -- Saint-Marin
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     ('Berti', 'Marco', 'Masculin', '1992-03-20', 1.97, 1, 'Saint-Marin', 'Passeur', 32),
     ('Pettinelli', 'Luca', 'Masculin', '1993-07-24', 1.96, 2, 'Saint-Marin', 'Attaquant', 32),
     ('Gasperoni', 'Matteo', 'Masculin', '1991-10-14', 2.00, 3, 'Saint-Marin', 'Central', 32),
@@ -1186,10 +1095,7 @@ const pool = require("./db");
     ('Fabbri', 'Riccardo', 'Masculin', '1994-06-26', 2.01, 14, 'Saint-Marin', 'Central', 32);
 
     `;
-=======
-    ('Hirano', 'Yuki', 'Masculin', '1994-07-07', 2.00, 14, 'Japon', 'Central', 14)
-  `;
->>>>>>> 69966c0bc39dad5e571aff0c1ee914355a073a1b
+
     await pool.query(insertJoueurEquipe);
 
     const insertClassementPoule = `
