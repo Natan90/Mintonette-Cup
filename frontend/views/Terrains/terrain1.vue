@@ -7,7 +7,7 @@
   <router-link to="/Terrains/terrain_2" class="btnLink">
     terrain suivant
   </router-link>
-<p>Dans la bdd rajouter dans le 6 majeurs ou non</p>
+  <p>Dans la bdd rajouter dans le 6 majeurs ou non</p>
   <div class="terrainConteneur">
     <div class="image">
       <div class="terrain">
@@ -27,12 +27,33 @@
             alt="personne" />
         </div>
       </div>
+      <ul>
+        <li v-for="player in players" :key="player.id_joueur">
+          {{ player.nom_joueur }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script setup>
 import NavView from "@/components/NavView.vue";
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const players = ref([]);
+
+async function fetchPlayer() {
+  try {
+    const res = await axios.get("http://localhost:3000/equipe/showPlayer");
+    console.log("PLAYERS:", res.data); // 👈 DEBUG
+    players.value = res.data;
+  } catch (err) {
+    console.error("Erreur API:", err);
+  }
+}
+
+onMounted(fetchPlayer);
 </script>
 
 <style scoped>

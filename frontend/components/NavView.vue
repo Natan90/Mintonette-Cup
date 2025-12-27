@@ -8,27 +8,33 @@
     <div class="routeurLink">
       <router-link
         v-if="isInIndex"
-        :to="{ name: 'Home', params: { lang: locale }, hash: '#filtre_presta' }"
-      >
+        :to="{
+          name: 'Home',
+          params: { lang: locale },
+          hash: '#filtre_presta',
+        }">
         <span class="pointer optionNav">Section prestataire</span>
       </router-link>
 
       <router-link
-        :to="{ name: 'PrestatairePublic', params: { lang: locale } }"
-      >
+        :to="{ name: 'PrestatairePublic', params: { lang: locale } }">
         <span class="pointer optionNav">Prestataire (mode public)</span>
       </router-link>
 
       <router-link
         v-if="userStore.isPresta"
-        :to="{ name: 'EditPrestataire', params: { id: userStore.userId, lang: locale } }"
-      >
+        :to="{
+          name: 'EditPrestataire',
+          params: { id: userStore.userId, lang: locale },
+        }">
         <span class="pointer optionNav">Edit Prestataire (mode presta)</span>
       </router-link>
       <router-link
         v-else
-        :to="{ name: 'AddPrestataire', params: { id: userStore.userId, lang: locale } }"
-      >
+        :to="{
+          name: 'AddPrestataire',
+          params: { id: userStore.userId, lang: locale },
+        }">
         <span class="pointer optionNav">Become Prestataire (mode presta)</span>
       </router-link>
 
@@ -36,10 +42,18 @@
         <span class="pointer optionNav">Vue administrateur</span>
       </router-link>
 
+      <router-link
+        :to="{
+          name: 'Terrain1',
+          params: { lang: locale },
+        }">
+        <span class="pointer optionNav">Terrain (temp)</span>
+      </router-link>
+
       <span>
         <button @click="changeLanguage('fr')" class="langue pointer optionNav">
-          Fr
-        </button>/
+          Fr</button
+        >/
         <button @click="changeLanguage('en')" class="langue pointer optionNav">
           En
         </button>
@@ -48,14 +62,17 @@
       <span v-if="!userStore.isConnected">
         <strong>
           <router-link
-            :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
-          >
-            <span class="pointer optionNav">{{ $t("user.buttonConnexion") }}</span>
-          </router-link> /
+            :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }">
+            <span class="pointer optionNav">{{
+              $t("user.buttonConnexion")
+            }}</span>
+          </router-link>
+          /
           <router-link
-            :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
-          >
-            <span class="pointer optionNav">{{ $t("user.buttonInscription") }}</span>
+            :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }">
+            <span class="pointer optionNav">{{
+              $t("user.buttonInscription")
+            }}</span>
           </router-link>
         </strong>
       </span>
@@ -66,8 +83,7 @@
             v-if="userProfilePhoto"
             :src="userProfilePhoto"
             alt="Photo de profil"
-            class="profile-photo pointer"
-          />
+            class="profile-photo pointer" />
           <div v-else class="profile-placeholder pointer">
             <span>{{ userInitials }}</span>
           </div>
@@ -76,30 +92,29 @@
           <div>
             <router-link
               :to="{ name: 'ShowAccount', params: { lang: locale } }"
-              class="pointer optionProfil"
-            >
+              class="pointer optionProfil">
               Mon profil
             </router-link>
 
             <router-link
               v-if="userStore.isPresta"
-              :to="{ name: 'EditPrestataire', params: { id: userStore.userId, lang: locale } }"
-              class="pointer optionProfil"
-            >
+              :to="{
+                name: 'EditPrestataire',
+                params: { id: userStore.userId, lang: locale },
+              }"
+              class="pointer optionProfil">
               Mes prestations
             </router-link>
 
             <router-link
               :to="{ name: 'Panier', params: { lang: locale } }"
-              class="pointer optionProfil"
-            >
+              class="pointer optionProfil">
               Panier
             </router-link>
 
             <router-link
               :to="{ name: 'ModifyAccount', params: { lang: locale } }"
-              class="pointer optionProfil"
-            >
+              class="pointer optionProfil">
               Paramètres
             </router-link>
 
@@ -110,7 +125,6 @@
     </div>
   </nav>
 </template>
-
 
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
@@ -124,7 +138,7 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
-const isInIndex = ref(route.name === 'Home');
+const isInIndex = ref(route.name === "Home");
 const showBloc = ref(false);
 const showMiniCart = ref(false);
 const cartSeats = ref([]);
@@ -191,7 +205,6 @@ function changeLanguage(lang) {
   });
   locale.value = lang;
   localStorage.setItem("lang", lang);
-  
 }
 
 const savedLang = localStorage.getItem("lang");

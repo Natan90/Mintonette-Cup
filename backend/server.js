@@ -4,10 +4,11 @@ const router = express.Router();
 
 const pool = require("./database/db");
 const authRoutes = require("./routes/utilisateurs/authRoutes");
-const paysRoutes = require("./routes/equipes/equipes");
+// const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
 const utilisateursRoutes = require("./routes/utilisateurs/utilisateurs");
+const equipeRouter = require("./routes/equipes/equipes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,9 +27,10 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/admin", utilisateursRoutes);
 app.use("/utilisateur/auth", authRoutes);
-app.use("/pays", paysRoutes);
+// app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
 app.use("/gradin", gradins);
+app.use("/equipe", equipeRouter);
 
 // Swagger
 const swaggerUi = require("swagger-ui-express");

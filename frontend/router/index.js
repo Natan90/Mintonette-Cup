@@ -133,23 +133,23 @@ const routes = [
         component: PolygonCreation,
       },
       {
-        path: "Terrains/terrain_1",
-        name: "Terrain 1",
+        path: "Terrains/terrain1",
+        name: "Terrain1",
         component: terrain1,
       },
       {
-        path: "Terrains/terrain_2",
-        name: "Terrain 2",
+        path: "Terrains/terrain2",
+        name: "Terrain2",
         component: terrain2,
       },
       {
-        path: "Terrains/terrain_3",
-        name: "Terrain 3",
+        path: "Terrains/terrain3",
+        name: "Terrain3",
         component: terrain3,
       },
       {
-        path: "Terrains/terrain_4",
-        name: "Terrain 4",
+        path: "Terrains/terrain4",
+        name: "Terrain4",
         component: terrain4,
       },
       {
