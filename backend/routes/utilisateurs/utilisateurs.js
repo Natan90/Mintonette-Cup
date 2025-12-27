@@ -137,7 +137,7 @@ router.get("/show/:id", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const result = await pool.query("DELETE FROM Utilisateur WHERE id_utilisateur=$1 RETURNING *", [id]);

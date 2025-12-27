@@ -1,44 +1,61 @@
 <template>
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
-    <router-link to="/">
+    <!-- Logo -->
+    <router-link :to="{ name: 'Home', params: { lang: locale } }">
       <img class="pointer" src="../images/logo.png" alt="logo" id="logo" />
     </router-link>
+
     <div class="routeurLink">
-      <router-link :to="{ path: '/', hash: '#filtre_presta' }" v-if="isInIndex">
+      <router-link
+        v-if="isInIndex"
+        :to="{ name: 'Home', params: { lang: locale }, hash: '#filtre_presta' }"
+      >
         <span class="pointer optionNav">Section prestataire</span>
       </router-link>
-      <router-link to="/PrestatairePublic">
-        <span class="pointer optionNav">Prestataire(mode public)</span>
+
+      <router-link
+        :to="{ name: 'PrestatairePublic', params: { lang: locale } }"
+      >
+        <span class="pointer optionNav">Prestataire (mode public)</span>
       </router-link>
-      <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" v-if="userStore.isPresta">
+
+      <router-link
+        v-if="userStore.isPresta"
+        :to="{ name: 'EditPrestataire', params: { id: userStore.userId, lang: locale } }"
+      >
         <span class="pointer optionNav">Edit Prestataire (mode presta)</span>
       </router-link>
-      <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }" v-else>
+      <router-link
+        v-else
+        :to="{ name: 'AddPrestataire', params: { id: userStore.userId, lang: locale } }"
+      >
         <span class="pointer optionNav">Become Prestataire (mode presta)</span>
       </router-link>
-      <router-link to="/admin">
+
+      <router-link :to="{ name: 'Evenement', params: { lang: locale } }">
         <span class="pointer optionNav">Vue administrateur</span>
       </router-link>
+
       <span>
         <button @click="changeLanguage('fr')" class="langue pointer optionNav">
-          <span>Fr</span></button
-        >/
+          Fr
+        </button>/
         <button @click="changeLanguage('en')" class="langue pointer optionNav">
-          <span>En</span>
+          En
         </button>
       </span>
 
       <span v-if="!userStore.isConnected">
         <strong>
-          <router-link to="/utilisateur/connexion">
-            <span class="pointer optionNav">{{
-              $t("user.buttonConnexion")
-            }}</span> </router-link
-          >/
-          <router-link to="/utilisateur/inscription">
-            <span class="pointer optionNav">{{
-              $t("user.buttonInscription")
-            }}</span>
+          <router-link
+            :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
+          >
+            <span class="pointer optionNav">{{ $t("user.buttonConnexion") }}</span>
+          </router-link> /
+          <router-link
+            :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
+          >
+            <span class="pointer optionNav">{{ $t("user.buttonInscription") }}</span>
           </router-link>
         </strong>
       </span>
@@ -49,34 +66,40 @@
             v-if="userProfilePhoto"
             :src="userProfilePhoto"
             alt="Photo de profil"
-            class="profile-photo pointer" />
+            class="profile-photo pointer"
+          />
           <div v-else class="profile-placeholder pointer">
             <span>{{ userInitials }}</span>
           </div>
         </div>
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
-            <router-link to="/utilisateur/profil" class="pointer optionProfil">
+            <router-link
+              :to="{ name: 'ShowAccount', params: { lang: locale } }"
+              class="pointer optionProfil"
+            >
               Mon profil
             </router-link>
 
             <router-link
-              :to="{
-                name: 'EditPrestataire',
-                params: { id: userStore.userId },
-              }"
+              v-if="userStore.isPresta"
+              :to="{ name: 'EditPrestataire', params: { id: userStore.userId, lang: locale } }"
               class="pointer optionProfil"
-              v-if="userStore.isPresta">
+            >
               Mes prestations
             </router-link>
 
-            <router-link to="/Panier" class="pointer optionProfil">
+            <router-link
+              :to="{ name: 'Panier', params: { lang: locale } }"
+              class="pointer optionProfil"
+            >
               Panier
             </router-link>
 
             <router-link
-              to="/utilisateur/modifier"
-              class="pointer optionProfil">
+              :to="{ name: 'ModifyAccount', params: { lang: locale } }"
+              class="pointer optionProfil"
+            >
               Paramètres
             </router-link>
 
@@ -87,6 +110,7 @@
     </div>
   </nav>
 </template>
+
 
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
@@ -100,7 +124,7 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
-const isInIndex = ref(route.path === "/");
+const isInIndex = ref(route.name === 'Home');
 const showBloc = ref(false);
 const showMiniCart = ref(false);
 const cartSeats = ref([]);
@@ -132,10 +156,10 @@ onMounted(async () => {
 });
 
 watch(
-  () => route.path,
-  (newPath) => {
-    isInIndex.value = newPath === "/";
-    if (newPath === "/" || newPath === "/utilisateur/profil") {
+  () => route.name,
+  (newName) => {
+    isInIndex.value = newName === "Home";
+    if (newName === "Home" || newName === "ShowAccount") {
       loadProfilePhoto();
     }
   }
@@ -157,8 +181,17 @@ function handleLogout() {
 }
 
 function changeLanguage(lang) {
+  // Ça permet de garder déjà ce qu'il y a dans l'URL et d'ajouter la langue
+  const newParams = { ...route.params, lang };
+  router.push({
+    name: router.name,
+    params: newParams,
+    query: route.query,
+    hash: route.hash,
+  });
   locale.value = lang;
   localStorage.setItem("lang", lang);
+  
 }
 
 const savedLang = localStorage.getItem("lang");

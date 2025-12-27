@@ -124,6 +124,86 @@ router.get("/show/:id", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /prestataire/showFilter:
+ *   get:
+ *     summary: Récupère la liste des prestataires filtrés
+ *     description: >
+ *       Permet de filtrer les prestataires selon plusieurs critères :
+ *       nom, catégorie de service et fourchette de prix.
+ *       Tous les paramètres sont optionnels.
+ *     tags: [Prestataires]
+ *     parameters:
+ *       - in: query
+ *         name: nom
+ *         required: false
+ *         description: Filtrer les prestataires par nom (recherche partielle)
+ *         schema:
+ *           type: string
+ *           example: "pizza"
+ *
+ *       - in: query
+ *         name: category
+ *         required: false
+ *         description: ID du type de prestataire (0 = tous)
+ *         schema:
+ *           type: integer
+ *           example: 2
+ *
+ *       - in: query
+ *         name: prixMin
+ *         required: false
+ *         description: Prix minimum du prestataire
+ *         schema:
+ *           type: number
+ *           example: 10
+ *
+ *       - in: query
+ *         name: prixMax
+ *         required: false
+ *         description: Prix maximum du prestataire
+ *         schema:
+ *           type: number
+ *           example: 50
+ *
+ *     responses:
+ *       200:
+ *         description: Liste des prestataires correspondant aux filtres
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_prestataire:
+ *                     type: integer
+ *                   nom_prestataire:
+ *                     type: string
+ *                   descri_prestataire:
+ *                     type: string
+ *                   nb_participants:
+ *                     type: integer
+ *                   tarif_prestataire:
+ *                     type: number
+ *                   mail_prestataire:
+ *                     type: string
+ *                   tel_prestataire:
+ *                     type: string
+ *                   specificite:
+ *                     type: string
+ *                   waitingForAdmin:
+ *                     type: boolean
+ *                   type_prestataire_id:
+ *                     type: integer
+ *                   nom_type_prestataire:
+ *                     type: string
+ *
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get("/showFilter", async (req, res) => {
   const { nom, category, prixMin, prixMax } = req.query;
   try {

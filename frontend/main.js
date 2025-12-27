@@ -23,4 +23,12 @@ app.use(createPinia())
 app.use(router)
 app.use(i18n)  
 
+router.beforeEach((to, from, next) => {
+  const lang = to.params.lang
+  if (lang && i18n.global.locale !== lang) {
+    i18n.global.locale = lang
+  }
+  next()
+})
+
 app.mount('#app')
