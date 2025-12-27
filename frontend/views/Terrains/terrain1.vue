@@ -18,6 +18,7 @@
             src="../../images/LogoPersonne.png"
             alt="personne" />
         </div>
+        <!-- <div></div> -->
 
         <div class="equipe droite">
           <img
