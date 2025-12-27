@@ -32,7 +32,7 @@
         <span class="pointer optionNav">Become Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link :to="{ name: 'admin', params: { lang: locale } }">
+      <router-link :to="{ name: 'Evenement', params: { lang: locale } }">
         <span class="pointer optionNav">Vue administrateur</span>
       </router-link>
 

@@ -3,7 +3,6 @@ import Index from "@/views/Index.vue";
 import PrestatairePublic from "@/views/PrestatairePublic.vue";
 import Commander from "@/views/Commander.vue";
 import Reserver from "@/views/Reserver.vue";
-import Utilisateur from "@/components/Utilisateur.vue";
 import PresentationMintonette from "@/views/PresentationMintonette.vue";
 import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
@@ -18,6 +17,11 @@ import Panier from "@/views/Panier.vue";
 import Gradin from "@/views/Gradin.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
+import Evenement from "@/views/Administrateur/Evenement.vue";
+import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
+import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
+import Statistiques from "@/views/Administrateur/Statistiques.vue";
+import MenuAdmin from "@/components/MenuAdmin.vue";
 
 const routes = [
   {
@@ -56,28 +60,67 @@ const routes = [
         props: true,
       },
 
-      { path: "Commander", name: "Commander", component: Commander },
-      { path: "Reserver", name: "Reserver", component: Reserver },
-      { path: "admin", name: "admin", component: Utilisateur },
       {
-        path: "utilisateur/inscription",
-        name: "Inscription_utilisateur",
-        component: LogPage,
+        path: "Commander",
+        name: "Commander",
+        component: Commander,
       },
       {
-        path: "utilisateur/connexion",
-        name: "Connexion_utilisateur",
-        component: LogPage,
+        path: "Reserver",
+        name: "Reserver",
+        component: Reserver,
       },
       {
-        path: "utilisateur/modifier",
-        name: "ModifyAccount",
-        component: ModifyAccount,
+        path: "admin",
+        name: "admin",
+        children: [
+          {
+            path: "evenement",
+            name: "Evenement",
+            component: Evenement,
+          },
+          {
+            path: "utilisateurs",
+            name: "Utilisateurs",
+            component: Utilisateur,
+          },
+          {
+            path: "prestataires",
+            name: "Prestataires",
+            component: AdminPrestataire,
+          },
+          {
+            path: "statistiques",
+            name: "Statistiques",
+            component: Statistiques,
+          },
+        ],
       },
       {
-        path: "utilisateur/profil",
-        name: "ShowAccount",
-        component: ShowAccount,
+        path: "utilisateur",
+        name: "utilisateur",
+        children: [
+          {
+            path: "inscription",
+            name: "Inscription_utilisateur",
+            component: LogPage,
+          },
+          {
+            path: "connexion",
+            name: "Connexion_utilisateur",
+            component: LogPage,
+          },
+          {
+            path: "profil",
+            name: "ShowAccount",
+            component: ShowAccount,
+          },
+          {
+            path: "profil/modifier",
+            name: "ModifyAccount",
+            component: ModifyAccount,
+          },
+        ],
       },
       {
         path: "Presentation_Mintonette_Cup",

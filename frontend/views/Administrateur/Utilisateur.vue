@@ -1,6 +1,8 @@
 <template>
-  <nav-view></nav-view>
-  <div class="container">
+  <NavView></NavView>
+  <MenuAdmin></MenuAdmin>
+
+  <div class="main_content">
     <h2 class="title">Liste des utilisateurs</h2>
 
     <ul class="user-list">
@@ -20,9 +22,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import NavView from "./NavView.vue";
+import { useI18n } from "vue-i18n";
+import NavView from "@/components/NavView.vue";
+import MenuAdmin from "@/components/MenuAdmin.vue";
+
+const { locale } = useI18n();
 
 const utilisateurs = ref([]);
+
+
 
 const fetchUtilisateurs = async () => {
   try {
@@ -39,7 +47,7 @@ const supprimerUtilisateur = async (id) => {
   if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
   
   try {
-    await axios.delete(`http://localhost:3000/admin/${id}`);
+    await axios.delete(`http://localhost:3000/admin/delete/${id}`);
     utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== id);
   } catch (err) {
     console.error("Erreur suppression utilisateur:", err);
@@ -48,16 +56,15 @@ const supprimerUtilisateur = async (id) => {
 </script>
 
 <style scoped>
-/* Container général */
-.container {
+.main_content {
   max-width: 800px;
+  margin-left: 250px;
   margin: 2rem auto;
   padding: 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
-/* Lien home */
 .home-link {
   display: inline-flex;
   align-items: center;
@@ -76,14 +83,12 @@ const supprimerUtilisateur = async (id) => {
   font-size: 1.2rem;
 }
 
-/* Titre */
 .title {
   text-align: center;
   margin-bottom: 1.5rem;
   color: #2c3e50;
 }
 
-/* Liste utilisateurs */
 .user-list {
   list-style: none;
   padding: 0;
@@ -92,7 +97,6 @@ const supprimerUtilisateur = async (id) => {
   gap: 1rem;
 }
 
-/* Carte utilisateur */
 .user-card {
   display: flex;
   justify-content: space-between;
@@ -109,7 +113,6 @@ const supprimerUtilisateur = async (id) => {
   transform: translateY(-2px);
 }
 
-/* Infos utilisateur */
 .user-info {
   display: flex;
   gap: 1rem;
@@ -124,7 +127,6 @@ const supprimerUtilisateur = async (id) => {
   color: #2c3e50;
 }
 
-/* Bouton supprimer */
 .btn-delete {
   background-color: #e74c3c;
   color: white;
