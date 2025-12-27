@@ -17,101 +17,113 @@ import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
 import Gradin from "@/views/Gradin.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
+import App from "@/App.vue";
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Index,
-    props: (route) => ({
-      showModal: route.query.showModal === "true",
-    }),
-  },
-  {
-    path: "/RecherchePresta",
-    name: "RecherchePresta",
-    component: RecherchePrestataire,
-  },
-  {
-    path: "/PrestatairePublic",
-    name: "PrestatairePublic",
-    component: PrestatairePublic,
-  },
-  {
-    path: "/Prestataire/Add/:id",
-    name: "AddPrestataire",
-    component: PrestataireInfo,
-    props: true,
-  },
-  {
-    path: "/Prestataire/Edit/:id",
-    name: "EditPrestataire",
-    component: PrestataireInfo,
-    props: true,
-  },
+    path: "/:lang(fr|en)",
+    name: "App",
+    component: App,
+    children: [
+      {
+        path: "",
+        name: "Home",
+        component: Index,
+        props: (route) => ({
+          showModal: route.query.showModal === "true",
+        }),
+      },
+      {
+        path: "RecherchePresta",
+        name: "RecherchePresta",
+        component: RecherchePrestataire,
+      },
+      {
+        path: "PrestatairePublic",
+        name: "PrestatairePublic",
+        component: PrestatairePublic,
+      },
+      {
+        path: "Prestataire/Add/:id",
+        name: "AddPrestataire",
+        component: PrestataireInfo,
+        props: true,
+      },
+      {
+        path: "Prestataire/Edit/:id",
+        name: "EditPrestataire",
+        component: PrestataireInfo,
+        props: true,
+      },
 
-  { path: "/Commander", name: "Commander", component: Commander },
-  { path: "/Reserver", name: "Reserver", component: Reserver },
-  { path: "/admin", name: "admin", component: Utilisateur },
-  {
-    path: "/utilisateur/inscription",
-    name: "Inscription_utilisateur",
-    component: LogPage,
+      { path: "Commander", name: "Commander", component: Commander },
+      { path: "Reserver", name: "Reserver", component: Reserver },
+      { path: "admin", name: "admin", component: Utilisateur },
+      {
+        path: "utilisateur/inscription",
+        name: "Inscription_utilisateur",
+        component: LogPage,
+      },
+      {
+        path: "utilisateur/connexion",
+        name: "Connexion_utilisateur",
+        component: LogPage,
+      },
+      {
+        path: "utilisateur/modifier",
+        name: "ModifyAccount",
+        component: ModifyAccount,
+      },
+      {
+        path: "utilisateur/profil",
+        name: "ShowAccount",
+        component: ShowAccount,
+      },
+      {
+        path: "Presentation_Mintonette_Cup",
+        name: "Presentation_Mintonette_Cup",
+        component: PresentationMintonette,
+      },
+      {
+        path: "PolygoneCreation",
+        name: "PolygoneCreation",
+        component: PolygonCreation,
+      },
+      {
+        path: "Terrains/terrain_1",
+        name: "Terrain 1",
+        component: terrain1,
+      },
+      {
+        path: "Terrains/terrain_2",
+        name: "Terrain 2",
+        component: terrain2,
+      },
+      {
+        path: "Terrains/terrain_3",
+        name: "Terrain 3",
+        component: terrain3,
+      },
+      {
+        path: "Terrains/terrain_4",
+        name: "Terrain 4",
+        component: terrain4,
+      },
+      {
+        path: "Gradins/Gradin/:zone",
+        name: "Gradin",
+        component: Gradin,
+      },
+      {
+        path: "Panier",
+        name: "Panier",
+        component: Panier,
+      },
+    ],
   },
   {
-    path: "/utilisateur/connexion",
-    name: "Connexion_utilisateur",
-    component: LogPage,
-  },
-  {
-    path: "/utilisateur/modifier",
-    name: "ModifyAccount",
-    component: ModifyAccount,
-  },
-  {
-    path: "/utilisateur/profil",
-    name: "ShowAccount",
-    component: ShowAccount,
-  },
-  {
-    path: "/Presentation_Mintonette_Cup",
-    name: "Presentation_Mintonette_Cup",
-    component: PresentationMintonette,
-  },
-  {
-    path: "/PolygoneCreation",
-    name: "PolygoneCreation",
-    component: PolygonCreation,
-  },
-  {
-    path: "/Terrains/terrain_1",
-    name: "Terrain 1",
-    component: terrain1,
-  },
-  {
-    path: "/Terrains/terrain_2",
-    name: "Terrain 2",
-    component: terrain2,
-  },
-  {
-    path: "/Terrains/terrain_3",
-    name: "Terrain 3",
-    component: terrain3,
-  },
-  {
-    path: "/Terrains/terrain_4",
-    name: "Terrain 4",
-    component: terrain4,
-  },
-  {
-    path: "/Gradins/Gradin/:zone",
-    name: "Gradin",
-    component: Gradin,
-  },
-  {
-    path: "/Panier",
-    name: "Panier",
-    component: Panier,
+    path: "/:catchAll(.*)",
+    redirect: "/fr",
   },
 ];
 Panier;
@@ -119,15 +131,14 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to) {
-  if (to.hash) {
-    return {
-      el: to.hash,
-      behavior: 'smooth',
-    };
-  }
-  return { top: 0 };
-}
-
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: "smooth",
+      };
+    }
+    return { top: 0 };
+  },
 });
 
 export default router;

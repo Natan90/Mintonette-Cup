@@ -64,25 +64,34 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
+const router = useRouter();
+const route = useRoute();
 
 const type_prestataire = ref([]);
 const prestataires = ref([]);
 const filters = ref({
-    nom: '',
-    category: null,
-    prixMin: null,
-    prixMax: null
-})
+  nom: route.query.nom || '',
+  category: route.query.category ? Number(route.query.category) : 0,
+  prixMin: route.query.prixMin || null,
+  prixMax: route.query.prixMax || null
+});
+
 
 onMounted(async () => {
     try {
-        await getValuesPrestataire();
         await getValuesTypePrestataire();
-    } catch (err) {
-        console.error(err);
-    }
+
+        if (Object.keys(route.query).length > 0) {
+            await searchPrestataires();
+        } else {
+            await getValuesPrestataire();
+        }
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 function resetFilters() {
@@ -92,6 +101,7 @@ function resetFilters() {
     prixMin: null,
     prixMax: null
     }
+    router.push({ path: "/", hash: '#filtre_presta', query: {} });
     getValuesPrestataire();
 }
 
@@ -117,6 +127,16 @@ async function getValuesTypePrestataire() {
 }
 
 async function searchPrestataires() {
+    router.push({
+        path: "/", hash: '#filtre_presta',
+        query: {
+        nom: filters.value.nom || undefined,
+        category: filters.value.category || undefined,
+        prixMin: filters.value.prixMin || undefined,
+        prixMax: filters.value.prixMax || undefined,
+        },
+    });
+
     const res = await axios.get('http://localhost:3000/prestataire/showFilter', {
         params: filters.value
     });
