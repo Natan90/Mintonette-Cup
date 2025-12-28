@@ -12,7 +12,7 @@ const pool = require("../../database/db");
 
 /**
  * @swagger
- * /admin/show:
+ * /admin/utilisateur/show:
  *   get:
  *     summary: Récupère la liste de tous les utilisateurs
  *     tags: [Administrateur]
@@ -43,7 +43,7 @@ const pool = require("../../database/db");
  *       500:
  *         description: Erreur serveur
  */
-router.get("/show", async (req, res) => {
+router.get("/utilisateur/show", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM Utilisateur");
     res.json(result.rows);
@@ -56,7 +56,7 @@ router.get("/show", async (req, res) => {
 
 /**
  * @swagger
- * /utilisateur/show/{id}:
+ * /admin/utilisateur/show/{id}:
  *   get:
  *     summary: Récupère un utilisateur par son ID
  *     tags: [Administrateur]
@@ -94,7 +94,7 @@ router.get("/show", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
-router.get("/show/:id", async (req, res) => {
+router.get("/utilisateur/show/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const result = await pool.query("SELECT * FROM Utilisateur WHERE id_utilisateur=$1", [id]);
@@ -109,20 +109,20 @@ router.get("/show/:id", async (req, res) => {
 
 /**
  * @swagger
- * /utilisateur/{id}:
- *   delete:
- *     summary: Supprime un utilisateur par son ID
+ * /admin/prestataire/validate/{id}:
+ *   patch:
+ *     summary: Valide un prestataire en attente
  *     tags: [Administrateur]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID de l'utilisateur à supprimer
+ *         description: ID du prestataire à valider
  *         schema:
  *           type: integer
  *     responses:
- *       200:
- *         description: Utilisateur supprimé avec succès
+ *       201:
+ *         description: Prestataire validé avec succès
  *         content:
  *           application/json:
  *             schema:
@@ -130,27 +130,13 @@ router.get("/show/:id", async (req, res) => {
  *               properties:
  *                 message:
  *                   type: string
- *                 utilisateur:
- *                   type: object
- *       404:
- *         description: Utilisateur non trouvé
+ *       400:
+ *         description: ID de la prestation invalide
+ *       409:
+ *         description: Prestataire déjà validé
  *       500:
  *         description: Erreur serveur
  */
-router.delete("/utilisateur/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  try {
-    const result = await pool.query("DELETE FROM Utilisateur WHERE id_utilisateur=$1 RETURNING *", [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-    res.json({ message: "Utilisateur supprimé", utilisateur: result.rows[0] });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
 router.patch("/prestataire/validate/:id", async (req, res) => {
   const id_presta = req.params.id;
 
@@ -205,6 +191,50 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /admin/prestataire/delete/{id}:
+ *   delete:
+ *     summary: Supprime un prestataire par son ID
+ *     tags: [Administrateur]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID du prestataire à supprimer
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Prestataire supprimé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 prestataire:
+ *                   type: object
+ *                   properties:
+ *                     id_prestataire:
+ *                       type: integer
+ *                     nom_prestataire:
+ *                       type: string
+ *                     prenom_utilisateur:
+ *                       type: string
+ *                     nom_utilisateur:
+ *                       type: string
+ *                     waitingforadmin:
+ *                       type: boolean
+ *       404:
+ *         description: Prestataire non trouvé
+ *       400:
+ *         description: ID invalide
+ *       500:
+ *         description: Erreur serveur
+ */
 router.delete("/prestataire/delete/:id", async (req, res) => {
   const id_presta = req.params.id;
 
@@ -222,7 +252,52 @@ router.delete("/prestataire/delete/:id", async (req, res) => {
       message: "Prestataire supprimé", 
       prestataire: result.rows[0] 
     });
-    
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+/**
+ * @swagger
+ * /admin/utilisateur/delete/{id}:
+ *   delete:
+ *     summary: Supprime un utilisateur par son ID
+ *     tags: [Administrateur]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur à supprimer
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Utilisateur supprimé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 utilisateur:
+ *                   type: object
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+router.delete("/utilisateur/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await pool.query("DELETE FROM Utilisateur WHERE id_utilisateur=$1 RETURNING *", [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    res.json({ message: "Utilisateur supprimé", utilisateur: result.rows[0] });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

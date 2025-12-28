@@ -13,7 +13,7 @@ const { v4: uuidv4 } = require('uuid');
 
 /**
  * @swagger
- * /utilisateur/inscription:
+ * /utilisateur/auth/inscription:
  *   post:
  *     summary: Crée un nouvel utilisateur
  *     tags: [Utilisateurs]
@@ -78,7 +78,6 @@ const { v4: uuidv4 } = require('uuid');
  *       500:
  *         description: Erreur serveur
  */
-// POST /utilisateur/auth/inscription
 router.post("/inscription", async (req, res) => {
   console.log("Body reçu :", req.body);
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = req.body;
@@ -143,7 +142,7 @@ router.post("/inscription", async (req, res) => {
 
 /**
  * @swagger
- * /utilisateur/connexion:
+ * /utilisateur/auth/connexion:
  *   post:
  *     summary: Connecte un utilisateur et retourne un token de session
  *     tags: [Utilisateurs]
@@ -194,7 +193,6 @@ router.post("/inscription", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
-// POST /utilisateur/connexion
 router.post("/connexion", async (req, res) => {
   const { login, mdp } = req.body;
 
@@ -302,7 +300,7 @@ router.post("/connexion", async (req, res) => {
 
 /**
  * @swagger
- * /api/utilisateur/{id}:
+ * /utilisateur/auth/update/{id}:
  *   put:
  *     summary: Modifie les informations de l'utilisateur
  *     tags: [Utilisateurs]
@@ -356,8 +354,7 @@ router.post("/connexion", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
-// PUT /utilisateur/auth/:id
-router.put("/:id", async (req, res) => {
+router.put("/update/:id", async (req, res) => {
   const { id } = req.params;
   const { nom, prenom, mail, tel_utilisateur, login, sexe, photo_profil } = req.body;
 

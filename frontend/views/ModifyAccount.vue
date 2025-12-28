@@ -248,7 +248,7 @@ const updateUserInfo = async () => {
       });
     }
 
-    const response = await axios.put(`http://localhost:3000/utilisateur/auth/${userStore.userId}`, {
+    const response = await axios.put(`http://localhost:3000/utilisateur/auth/update/${userStore.userId}`, {
       prenom: formData.value.prenom,
       nom: formData.value.nom,
       login: formData.value.login,

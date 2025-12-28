@@ -34,7 +34,7 @@ const utilisateurs = ref([]);
 
 const fetchUtilisateurs = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/admin/show");
+    const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
     utilisateurs.value = res.data;
   } catch (err) {
     console.error("Erreur fetch utilisateurs:", err);
