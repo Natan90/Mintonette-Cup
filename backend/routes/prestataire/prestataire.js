@@ -49,7 +49,7 @@ router.get("/show", async (req, res) => {
         ON p.id_utilisateur = u.id_utilisateur
       JOIN Type_prestataire t
         ON p.type_prestataire_id = t.id_type_prestataire
-      ORDER BY p.nom_prestataire;
+      ORDER BY p.waitingforadmin, p.nom_prestataire;
       `
     );
     res.json(result.rows);
@@ -617,7 +617,7 @@ router.put("/updatePresta/:id", async (req, res) => {
   } catch (err) {
     await client.query("ROLLBACK");
 
-    console.error("Erreur création prestataire : ", err);
+    console.error("Erreur modification prestataire : ", err);
     res.status(500).json({
       error: "Erreur serveur",
     });

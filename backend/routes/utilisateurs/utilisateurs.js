@@ -137,7 +137,7 @@ router.get("/show/:id", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/utilisateur/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const result = await pool.query("DELETE FROM Utilisateur WHERE id_utilisateur=$1 RETURNING *", [id]);
@@ -145,6 +145,84 @@ router.delete("/delete/:id", async (req, res) => {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
     res.json({ message: "Utilisateur supprimé", utilisateur: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.patch("/prestataire/validate/:id", async (req, res) => {
+  const id_presta = req.params.id;
+
+  if (!id_presta)
+    return res.status(400).json({
+      error: "La prestation est invalide",
+    }); 
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const checkPresta = await client.query(
+      "SELECT nom_prestataire FROM Prestataire WHERE waitingforadmin = false AND id_prestataire = $1",
+      [id_presta]
+    );
+
+    if (checkPresta.rows.length > 0) {
+      await client.query("ROLLBACK");
+
+      return res.status(409).json({
+        error: "Ce prestataire est déjà validé",
+      });
+    }
+
+    const result = await client.query(
+      `UPDATE Prestataire
+        SET
+          waitingforadmin = false
+        WHERE id_prestataire = $1`,
+        [id_presta]
+    );
+
+    await client.query("COMMIT");
+
+    res.status(201).json({
+      message: "Prestataire validé avec succès"
+    });
+
+
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+
+    console.error("Erreur modification prestataire : ", err);
+    res.status(500).json({
+      error: "Erreur serveur",
+    });
+  } finally {
+    client.release();
+  }
+});
+
+router.delete("/prestataire/delete/:id", async (req, res) => {
+  const id_presta = req.params.id;
+
+  if (!id_presta)
+    return res.status(400).json({
+      error: "La prestation est invalide",
+    }); 
+
+  try {
+    const result = await pool.query("DELETE FROM Prestataire WHERE id_prestataire = $1 RETURNING *", [id_presta]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Prestataire non trouvé" });
+    }
+    res.json({ 
+      message: "Prestataire supprimé", 
+      prestataire: result.rows[0] 
+    });
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

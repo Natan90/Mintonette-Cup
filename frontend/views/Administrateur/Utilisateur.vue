@@ -47,7 +47,7 @@ const supprimerUtilisateur = async (id) => {
   if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
   
   try {
-    await axios.delete(`http://localhost:3000/admin/delete/${id}`);
+    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${id}`);
     utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== id);
   } catch (err) {
     console.error("Erreur suppression utilisateur:", err);
