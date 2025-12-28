@@ -2,11 +2,11 @@
     <NavView id="nav_bar"></NavView>
     <div class="container">
         <div class="title">
-            <p>Devenez membre à part de la Mintonette Cup ! </p>
+            <p>{{$t('prestataireInfo.title')}} </p>
         </div>
         <div class="content">
             <div class="subtitle">
-                <p>Votre rôle dans l’événement : choisissez votre catégorie :</p>
+                <p>{{$t('prestataireInfo.role')}}</p>
             </div>
             <div class="type_prestataire">
                 <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta"
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div v-if="selectedType" class="container_table">
-                <h1>Quel est votre type {{ selectedTypeLabel }} ?</h1>
+                <h1>{{$t('prestataireInfo.type')}} {{ selectedTypeLabel }} ?</h1>
                 <table class="table_type_presta">
                     <tbody>
                         <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
@@ -41,24 +41,24 @@
     <div class="button_container" v-if="!continueInscription && pathAdd">
         <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
             :class="{ disabled: !isSelectionValid }">
-            Continuer l'inscription
+            {{$t('prestataireInfo.btnContinueInscription')}}
         </button>
     </div>
     <div class="button_container" v-if="continueInscription && pathAdd">
         <button @click.prevent="hideContinueInscription">
-            Retour
+            {{$t('prestataireInfo.btnRetour')}}
         </button>
     </div>
 
     <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
         <div class="editor_container">
             <div class="form_group">
-                <label for="nom">Nom de la prestation :</label>
+                <label for="nom">{{ $t('prestataireInfo.formulaire.nom') }}</label>
                 <input type="text" id="nom" v-model="nom_presta" />
             </div>
 
             <div class="form_group">
-                <label>Description détaillée :</label>
+                <label>{{ $t('prestataireInfo.formulaire.descri') }}</label>
                 <Editor v-model="descri_presta" api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo" :init="{
                     height: 300,
                     menubar: false,
@@ -69,22 +69,22 @@
             </div>
 
             <div class="form_group">
-                <label for="participants">Nombre maximum de participants :</label>
+                <label for="participants">{{ $t('prestataireInfo.formulaire.nbParticipants') }}</label>
                 <input type="number" id="participants" v-model="nb_participants" min="1" />
             </div>
 
             <div class="form_group">
-                <label for="tarif">Tarif :</label>
+                <label for="tarif">{{ $t('prestataireInfo.formulaire.tarif') }}</label>
                 <input type="number" id="tarif" v-model="tarif_presta" />
             </div>
 
             <div class="form_group">
-                <label for="contact">Email :</label>
+                <label for="contact">{{ $t('user.mail') }}</label>
                 <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
             </div>
 
             <div class="form_group">
-                <label for="contact">Téléphone :</label>
+                <label for="contact">{{ $t('user.tel_utilisateur') }}</label>
                 <input type="tel" pattern="^0[1-9][0-9]{8}$" id="contact" v-model="tel_presta"
                     placeholder="0123456789" />
             </div>
@@ -97,15 +97,15 @@
             <div class="button_container" v-if="!pathAdd">
                 <button @click="updatePresta" :disabled="!errorMessageCheckBox"
                     :class="{ disabled: !isSelectionValid }">
-                    Modifier
+                    {{ $t('prestataireInfo.formulaire.btnModifier') }}
                 </button>
             </div>
             <div class="button_container" v-else>
-                <button @click="addPrestataire">S’inscrire</button>
+                <button @click="addPrestataire">{{ $t('user.buttonInscription') }}</button>
             </div>
 
             <div class="button_container">
-                <button @click="delPresta">Supprimer</button>
+                <button @click="delPresta">{{ $t('adminPage.prestataire.btn_suppr') }}</button>
             </div>
         </div>
     </div>

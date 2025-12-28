@@ -100,5 +100,35 @@
     "infoContact1": "More information",
     "infoContact2": "Where to find us?",
     "infoContact3": "Contact us"
+  },
+  "prestataireInfo": {
+    "title": "Become a member of the Mintonette Cup!",
+    "role": "Your role in the event: choose your category:",
+    "type": "What is your type",
+    "btnContinueInscription": "Continue Registration",
+    "btnRetour": "Back",
+    "formulaire": {
+      "nom": "Service Name:",
+      "descri": "Detailed Description:",
+      "nbParticipants": "Maximum Number of Participants:",
+      "tarif": "Price:",
+      "btnModifier": "Edit"
+    }
+  },
+  "adminPage": {
+    "prestataire": {
+      "title": "Competition Service Providers Management",
+      "descri": "Welcome to the administration area dedicated to service providers involved in our volleyball events. \nHere, you can view all the services offered: catering, entertainment, shops, and services for teams and spectators. Pending requests must be approved before the provider can operate on the field or in event areas. \nThis management ensures an optimal and safe experience for all participants.",
+      "nb_presta1": "There are ",
+      "nb_presta2": " service provider(s) pending approval.",
+      "nb_prestaVide": "All service providers are ready for the field and event areas: the competition can proceed smoothly!",
+      "prestation": "Service",
+      "statut": "Status",
+      "action": "Actions",
+      "btn_suppr": "Delete",
+      "btn_valid": "Approve",
+      "btn_refuser": "Reject"
+    }
   }
+
 }

@@ -100,5 +100,34 @@
     "infoContact1": "Plus d'information",
     "infoContact2": "Où nous trouver ?",
     "infoContact3": "Nous contacter"
+  },
+  "prestataireInfo" : {
+    "title" : "Devenez membre à part de la Mintonette Cup !",
+    "role" : "Votre rôle dans l’événement : choisissez votre catégorie :",
+    "type" : "Quel est votre type",
+    "btnContinueInscription" : "Continuer l'inscription",
+    "btnRetour" : "Retour",
+    "formulaire" : {
+      "nom" : "Nom de la prestation :",
+      "descri" : "Description détaillée :",
+      "nbParticipants" : "Nombre maximum de participants :",
+      "tarif" : "Tarif :",
+      "btnModifier" : "Modifier"
+    }
+  },
+  "adminPage": {
+    "prestataire": {
+      "title": "Gestion des prestataires de la compétition",
+      "descri" : "Bienvenue dans l’espace d’administration dédié aux prestataires intervenant sur nos événements de volley. \n Ici, vous pouvez consulter toutes les prestations proposées : restauration, animations, boutiques et services pour les équipes et spectateurs.Les demandes en attente doivent être validées avant que le prestataire ne puisse intervenir sur le terrain ou dans les espaces événementiels. \n Cette gestion vous permet de garantir une expérience optimale et sécurisée pour tous les participants.",
+      "nb_presta1" : "Il y a ",
+      "nb_presta2" : " prestataire(s) en attente de validation.",
+      "nb_prestaVide" : "Tous les prestataires sont prêts pour le terrain et les espaces événementiels : la compétition peut se dérouler en toute sérénité !",
+      "prestation" : "Prestation",
+      "statut" : "Statut",
+      "action" : "Actions",
+      "btn_suppr" : "Supprimer",
+      "btn_valid" : "Valider",
+      "btn_refuser" : "Refuser"
+    }
   }
 }
