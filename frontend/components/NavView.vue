@@ -51,11 +51,14 @@
       </router-link>
 
       <span>
-        <button @click="changeLanguage('fr')" class="langue pointer optionNav">
-          Fr</button
-        >/
-        <button @click="changeLanguage('en')" class="langue pointer optionNav">
-          En
+        <button @click="changeLanguage('fr')" class="langue pointer optionNav"
+        v-if="locale === 'en'">
+          Français
+        </button
+        >
+        <button @click="changeLanguage('en')" class="langue pointer optionNav"
+        v-else-if="locale === 'fr'">
+          English
         </button>
       </span>
 

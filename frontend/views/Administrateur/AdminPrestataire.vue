@@ -49,7 +49,7 @@
                 <tbody>
                     <tr v-for="(item, index) in prestataires" :key="item.id_prestataire">
                         <td>
-                            {{ item.nom_prestataire }}
+                            <b>{{ item.nom_prestataire }}</b>
                         </td>
                         <td>
                             {{ item.prenom_utilisateur }}
