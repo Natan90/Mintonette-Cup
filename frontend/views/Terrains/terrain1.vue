@@ -22,6 +22,7 @@
   </div>
 
   <p>Dans la bdd rajouter dans le 6 majeurs ou non</p>
+  Mettre les libéros a la 4e positions
 
   <div class="terrainConteneur">
     <div class="terrainLayout">
