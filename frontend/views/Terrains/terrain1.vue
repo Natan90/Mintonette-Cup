@@ -9,15 +9,16 @@
   </router-link>
 
   <div>
-    <span v-for="(elt, index) in article" :key="index">
-      <button @click="selectArticle(index)">
-        {{ elt.nom }}
-      </button>
-    </span>
-
-    <div v-if="descriArticle[selectedItem]">
-      {{ descriArticle[selectedItem].descri }}
-    </div>
+    <button
+      v-for="(elt, index) in article"
+      :key="index"
+      @click="selectArticle(index)"
+      class="matchTitle">
+      {{ elt.nom }}
+    </button>
+  </div>
+  <div v-if="descriArticle[selectedItem]">
+    {{ descriArticle[selectedItem].descri }}
   </div>
 
   <p>Dans la bdd rajouter dans le 6 majeurs ou non</p>
@@ -25,7 +26,7 @@
   <div class="terrainConteneur">
     <div class="terrainLayout">
       <div class="image" @click="selectedPlayer = null">
-        <div class="rightTeam">
+        <div class="rightTeam , pointer">
           <div
             v-for="player in getMajorPlayers(getSelectedTeams().team1)"
             :key="player.id_joueur"
@@ -37,7 +38,7 @@
           </div>
         </div>
 
-        <div class="leftTeam">
+        <div class="leftTeam , pointer">
           <div
             v-for="player in getMajorPlayers(getSelectedTeams().team2)"
             :key="player.id_joueur"
@@ -59,10 +60,6 @@
           <p><strong>Poste :</strong> {{ selectedPlayer.poste }}</p>
           <p><strong>Âge :</strong> {{ getAge(selectedPlayer) }} ans</p>
           <p><strong>Taille :</strong> {{ selectedPlayer.taille }} cm</p>
-        </div>
-
-        <div v-else class="playerCard empty">
-          <p>Sélectionne un joueur</p>
         </div>
       </div>
     </div>
@@ -206,6 +203,12 @@ onMounted(fetchPlayer);
   margin-top: 4px;
   text-align: center;
 }
+.matchTitle {
+  width: auto;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
 /* A faire  ###################################################################### */
 .playerCard {
@@ -217,14 +220,8 @@ onMounted(fetchPlayer);
   padding: 12px;
   border-radius: 10px;
   z-index: 10;
+  box-shadow: 5px 5px 5px rgb(103, 103, 103);
 }
-
-.playerCard h4 {
-  margin: 0 0 8px;
-  font-size: 14px;
-  text-align: center;
-}
-
 .playerCard p {
   margin: 4px 0;
   font-size: 12px;
