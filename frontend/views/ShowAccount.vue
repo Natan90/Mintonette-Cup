@@ -1,5 +1,8 @@
 <template>
   <NavView></NavView>
+  <div class="back-arrow pointer" @click="router.back()">
+      &#8592; Retour
+  </div>
   <div class="page">
     <div class="formulaire">
       <div class="titre_formulaire">
@@ -89,7 +92,7 @@ const props = defineProps({
     type: Number,
     required: true
   }
-})
+});
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -191,6 +194,22 @@ async function deleteAccount(id) {
 </script>
 
 <style scoped>
+.back-arrow {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  color: black;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.back-arrow:hover {
+  color: var(--jaune-logo);
+  transition: var(--transition-fast);
+}
+
 .page {
   display: flex;
   flex-direction: column;
@@ -198,7 +217,6 @@ async function deleteAccount(id) {
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background-color: #f0f0f0;
 }
 
 .formulaire {
