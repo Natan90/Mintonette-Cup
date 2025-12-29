@@ -184,7 +184,7 @@ onMounted(async () => {
 
   try {
     console.log('Fetching user data for ID:', userStore.userId);
-    const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
+    const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`);
     console.log('User data received:', response.data);
     
     formData.value = {

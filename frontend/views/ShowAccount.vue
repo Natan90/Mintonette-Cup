@@ -53,16 +53,18 @@
         </div>
 
         <div class="boutons">
-          <router-link to="/utilisateur/modifier" class="pointer">
+          <router-link :to="{ name: 'ModifyAccount', params: { lang: t } }"
+           class="pointer">
             {{ $t('account.modify') }}
           </router-link>
-          <router-link to="/Panier" class="pointer">
+          <router-link :to="{ name: 'Panier', params: { lang: t } }" 
+          class="pointer">
             {{ $t('account.viewCart') }}
           </router-link>
           <button @click="deleteAccount" class="pointer delete-btn" :disabled="isDeleting">
             {{ isDeleting ? $t('account.deleting') : $t('account.deleteAccount') }}
           </button>
-          <router-link to="/">
+          <router-link :to="{ name: 'Home', params: { lang: t } }" >
             {{ $t('pageLog.annuler') }}
           </router-link>
         </div>
@@ -108,7 +110,7 @@ onMounted(async () => {
 
   try {
     console.log('Fetching user data for ID:', userStore.userId);
-    const response = await axios.get(`http://localhost:3000/admin/show/${userStore.userId}`);
+    const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`);
     console.log('User data received:', response.data);
     
     let formattedDate = '';
@@ -150,7 +152,7 @@ const deleteAccount = async () => {
   message.value = '';
 
   try {
-    await axios.delete(`http://localhost:3000/admin/${userStore.userId}`);
+    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${userStore.userId}`);
     
     message.value = t('account.accountDeleted');
     messageType.value = 'success';
