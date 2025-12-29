@@ -120,7 +120,7 @@ async function getValuesPrestataire() {
 async function getValuesTypePrestataire() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
-        type_prestataire.value = res.data;
+        type_prestataire.value = res.data.result;
     } catch (err) {
         console.error(err);
     }

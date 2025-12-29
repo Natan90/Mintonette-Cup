@@ -71,6 +71,7 @@
                 'badge-non': !item.ispresta
               }">
                 <span v-if="item.ispresta">✅</span>
+                <span v-else-if="item.waitingforadmin">⏳</span>
                 <span v-else>❌</span>
               </span>
             </td>
@@ -79,11 +80,13 @@
                 Voir profil
               </button>
               <span v-if="item.ispresta">
-                <!-- <button class="btn_valider" @click="validPrestataire(item.id_prestataire)">
-                  {{ $t('adminPage.prestataire.btn_valid') }}
-                </button> -->
                 <button class="btn_refuser" @click="">
                   Retirer
+                </button>
+              </span>
+              <span v-else-if="item.waitingforadmin">
+                <button class="btn_valider" @click="goToAcceptPrestataire">
+                  Valider
                 </button>
               </span>
               <button class="btn_supprimer" @click="ModalShow(item)">
@@ -137,6 +140,15 @@ function showProfil(id_user) {
       lang: locale.value
     }
   });
+};
+
+function goToAcceptPrestataire() {
+  router.push({
+    name: 'Prestataires',
+    params: {
+      lang: locale.value
+    }
+  })
 }
 
 
@@ -163,6 +175,7 @@ async function getValuesUtilisateurs() {
   try {
     const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
     utilisateurs.value = res.data;
+    console.log(utilisateurs.value);
 
   } catch (err) {
     console.error("Erreur fetch utilisateurs:", err);

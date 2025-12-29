@@ -70,7 +70,7 @@
                                 </button>
                             </span>
                             <span v-if="item.waitingforadmin">
-                                <button class="btn_valider" @click="validPrestataire(item.id_prestataire)">
+                                <button class="btn_valider" @click="validPrestataire(item)">
                                     {{ $t('adminPage.prestataire.btn_valid') }}
                                 </button>
                                 <button class="btn_refuser">
@@ -144,10 +144,11 @@ async function getPrestataires() {
     }
 }
 
-async function validPrestataire(idPresta) {
+async function validPrestataire(presta) {
     try {
-        const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${idPresta}`);
+        const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${presta.id_prestataire}`);
 
+        await changePresta(true, presta.id_utilisateur);
         await getPrestataires();
     } catch (err) {
         console.error(err);
@@ -166,6 +167,17 @@ async function deletePrestataire(idPresta) {
         router.push({ name: 'Prestataires', params: { lang: locale.value } });
 
         await getPrestataires();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function changePresta(newValue, idPresta) {
+    try {
+        const res = await axios.patch(`http://localhost:3000/admin/utilisateur/changePresta/${idPresta}`, {
+            valueChange: newValue
+        });
+        console.log(res.data.message);
     } catch (err) {
         console.error(err);
     }
