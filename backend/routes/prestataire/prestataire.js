@@ -41,6 +41,7 @@ router.get("/show", async (req, res) => {
     const result = await pool.query(
       `SELECT
         p.*,
+        u.id_utilisateur,
         u.prenom_utilisateur,
         u.nom_utilisateur,
         t.nom_type_prestataire
@@ -282,7 +283,21 @@ router.get("/showTypePrestataire", async (req, res) => {
     const result = await pool.query(
       "SELECT * FROM Type_prestataire ORDER BY nom_type_prestataire"
     );
-    res.json(result.rows);
+    const count = await pool.query(
+      `SELECT t.nom_type_prestataire, COUNT(p.id_prestataire) AS nb_prestataires
+        FROM Type_prestataire t
+        LEFT JOIN Prestataire p
+          ON p.type_prestataire_id = t.id_type_prestataire
+        GROUP BY t.nom_type_prestataire
+        ORDER BY nb_prestataires DESC;
+        `
+    );
+
+
+    res.json({
+      result: result.rows,
+      count: count.rows
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

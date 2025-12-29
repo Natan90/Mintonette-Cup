@@ -45,7 +45,14 @@ const pool = require("../../database/db");
  */
 router.get("/utilisateur/show", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM Utilisateur");
+    const result = await pool.query(`
+      SELECT u.*,
+      p.waitingforadmin 
+      FROM Utilisateur u
+      LEFT JOIN Prestataire p
+      ON p.id_utilisateur = u.id_utilisateur
+      `
+    );
     res.json(result.rows);
   } catch (err) {
     console.error(err);

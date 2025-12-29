@@ -278,7 +278,7 @@ function delPresta() {
 async function fetchTypePresta() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
-        type_prestataire.value = res.data.map(item => ({ ...item, inBox: false }));
+        type_prestataire.value = res.data.result;
     } catch (err) {
         console.error(err);
     }
@@ -356,7 +356,7 @@ async function addPrestataire() {
             specificite: selectedNames.value,
             type: Number(selectedTypeId.value)
         });
-        changePresta(true);
+        // changePresta(true);
         message.value = res.data.message;
         messageType.value = "success";
     } catch (err) {
@@ -368,18 +368,6 @@ async function addPrestataire() {
         messageType.value = 'error';
     }
 }
-
-async function changePresta(newValue) {
-    try {
-        const res = await axios.patch(`http://localhost:3000/admin/utilisateur/changePresta/${prestaId.value}`, {
-            valueChange: newValue
-        });
-        console.log(res.data.message);
-    } catch (err) {
-        console.error(err);
-    }
-}
-
 
 async function updatePresta() {
     try {

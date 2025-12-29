@@ -122,7 +122,10 @@ const pool = require("./db");
         waitingforadmin BOOLEAN,
         specificite VARCHAR(100),
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
-        type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire)
+        type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire),
+        type_animation_id INTEGER REFERENCES Type_animation(id_type_animation),
+        type_restauration_id INTEGER REFERENCES Type_restauration(id_type_restauration),
+        type_boutique_id INTEGER REFERENCES Type_boutique(id_type_boutique)
       );
 
       CREATE TABLE IF NOT EXISTS Aliment(
@@ -411,18 +414,18 @@ const pool = require("./db");
 
     const insertUsers = `
       INSERT INTO Utilisateur 
-        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur)
+        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta)
       VALUES
-        ('Alban', 'Robin', 'albanr', 'admin123', 'alban.robin@gmail.com', '0763749895', 'M'),
-        ('Emma', 'Durand', 'emmad', 'user123', 'emma.durand@gmail.com', '0612345678', 'F'),
-        ('Lucas', 'Martin', 'lucasm', 'lucas01', 'lucas.martin@gmail.com', '0652437595', 'M'),
-        ('Chloe', 'Petit', 'chloep', 'chloe22', 'chloe.petit@gmail.com', '0610423571', 'F'),
-        ('Nathan', 'Dupont', 'nathand', 'nathan44', 'nathan.dupont@gmail.com', '0752435010', 'M'),
-        ('Julie', 'Bernard', 'julieb', 'julie33', 'julie.bernard@gmail.com', '0630102040', 'F'),
-        ('Sophie', 'Moreau', 'sophiem', 'sophie11', 'sophie.moreau@gmail.com', '0693759150', 'F'),
-        ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', '0630102040', 'M'),
-        ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', '0750402342', 'F'),
-        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '0682759641', 'M');
+        ('Alban', 'Robin', 'albanr', 'admin123', 'alban.robin@gmail.com', '0763749895', 'M', FALSE),
+        ('Emma', 'Durand', 'emmad', 'user123', 'emma.durand@gmail.com', '0612345678', 'F', TRUE),
+        ('Lucas', 'Martin', 'lucasm', 'lucas01', 'lucas.martin@gmail.com', '0652437595', 'M', TRUE),
+        ('Chloe', 'Petit', 'chloep', 'chloe22', 'chloe.petit@gmail.com', '0610423571', 'F', TRUE),
+        ('Nathan', 'Dupont', 'nathand', 'nathan44', 'nathan.dupont@gmail.com', '0752435010', 'M', FALSE),
+        ('Julie', 'Bernard', 'julieb', 'julie33', 'julie.bernard@gmail.com', '0630102040', 'F', FALSE),
+        ('Sophie', 'Moreau', 'sophiem', 'sophie11', 'sophie.moreau@gmail.com', '0693759150', 'F', FALSE),
+        ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', '0630102040', 'M', FALSE),
+        ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', '0750402342', 'F', FALSE),
+        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE);
     `;
     await pool.query(insertUsers);
 
