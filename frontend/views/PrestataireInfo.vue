@@ -356,7 +356,7 @@ async function addPrestataire() {
             specificite: selectedNames.value,
             type: Number(selectedTypeId.value)
         });
-        becomePresta();
+        changePresta(true);
         message.value = res.data.message;
         messageType.value = "success";
     } catch (err) {
@@ -366,6 +366,17 @@ async function addPrestataire() {
             message.value = "Erreur inconnue";
         }
         messageType.value = 'error';
+    }
+}
+
+async function changePresta(newValue) {
+    try {
+        const res = await axios.patch(`http://localhost:3000/admin/utilisateur/changePresta/${prestaId.value}`, {
+            valueChange: newValue
+        });
+        console.log(res.data.message);
+    } catch (err) {
+        console.error(err);
     }
 }
 

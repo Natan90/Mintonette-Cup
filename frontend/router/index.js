@@ -111,9 +111,10 @@ const routes = [
             component: LogPage,
           },
           {
-            path: "profil",
+            path: "profil/:userId",
             name: "ShowAccount",
             component: ShowAccount,
+            props: true,
           },
           {
             path: "profil/modifier",

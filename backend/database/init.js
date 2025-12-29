@@ -60,7 +60,8 @@ const pool = require("./db");
         tel_utilisateur VARCHAR(10),
         sexe_utilisateur VARCHAR(50),
         photo_profil_utilisateur BYTEA,
-        date_creation_utilisateur TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        date_creation_utilisateur TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        ispresta BOOLEAN DEFAULT FALSE
       );
 
       CREATE TABLE IF NOT EXISTS Siege(

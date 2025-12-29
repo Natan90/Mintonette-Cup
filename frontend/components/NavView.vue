@@ -22,7 +22,7 @@
       </router-link>
 
       <router-link
-        v-if="userStore.isPresta"
+        v-if="utilisateur.ispresta"
         :to="{
           name: 'EditPrestataire',
           params: { id: userStore.userId, lang: locale },
@@ -91,13 +91,13 @@
         <div class="dropdown-block" :class="{ open: showBloc }">
           <div>
             <router-link
-              :to="{ name: 'ShowAccount', params: { lang: locale } }"
+              :to="{ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } }"
               class="pointer optionProfil">
               Mon profil
             </router-link>
 
             <router-link
-              v-if="userStore.isPresta"
+              v-if="utilisateur.ispresta"
               :to="{
                 name: 'EditPrestataire',
                 params: { id: userStore.userId, lang: locale },
@@ -144,12 +144,13 @@ const showMiniCart = ref(false);
 const cartSeats = ref([]);
 const userProfilePhoto = ref(null);
 const userInitials = ref("");
+const utilisateur = ref([]);
 
 const loadProfilePhoto = async () => {
   if (userStore.isConnected) {
     try {
       const response = await axios.get(
-        `http://localhost:3000/admin/show/${userStore.userId}`
+        `http://localhost:3000/admin/utilisateur/show/${userStore.userId}`
       );
       const userData = response.data;
 
@@ -219,6 +220,16 @@ async function fetchCart() {
   }
 }
 
+async function getValuesUser() {
+  try {
+    const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
+    utilisateur.value = res.data;
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 const cartTotal = computed(() =>
   cartSeats.value.reduce((sum, seat) => {
     if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
@@ -227,7 +238,14 @@ const cartTotal = computed(() =>
   }, 0)
 );
 
-onMounted(fetchCart);
+onMounted(async () => {
+    try {
+        await fetchCart();
+        await getValuesUser();
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 document.addEventListener("click", () => (showMiniCart.value = false));
 </script>

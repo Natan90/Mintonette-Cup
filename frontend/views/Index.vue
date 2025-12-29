@@ -52,7 +52,7 @@
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
-    <section v-if="userStore.isConnected && !userStore.isPresta">
+    <section v-if="userStore.isConnected && !utilisateur.ispresta">
       <div class="presta_texte">
         <h2>Envie de faire partie de l’aventure ?</h2>
         <p>
@@ -71,7 +71,7 @@
 
     </section>
 
-    <section v-if="userStore.isPresta">
+    <section v-if="utilisateur.ispresta">
       <div class="presta_texte">
         <h2>Bienvenue parmi nos prestataires !</h2>
         <p>
@@ -145,10 +145,13 @@ import photoFond from "../images/photo_fond.png";
 import photoFoule from "./../images/foule.jpg";
 import photoStade from "./../images/stade.jpg";
 import photoReseaux from "./../images/reseaux.jpg";
+import axios from "axios";
 
 const navbar = ref("0px");
 
 const userStore = useUserStore();
+
+const utilisateur = ref([]);
 
 const { t } = useI18n();
 const blocInfoArray = computed(() => [
@@ -198,13 +201,31 @@ const handleScroll = () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener("scroll", handleScroll);
+  try {
+    await getValuesUser();
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
+
+
+
+async function getValuesUser() {
+  try {
+    const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
+    utilisateur.value = res.data;
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 </script>
 
 <style>

@@ -119,15 +119,34 @@
     "prestataire": {
       "title": "Competition Service Providers Management",
       "descri": "Welcome to the administration area dedicated to service providers involved in our volleyball events. \nHere, you can view all the services offered: catering, entertainment, shops, and services for teams and spectators. Pending requests must be approved before the provider can operate on the field or in event areas. \nThis management ensures an optimal and safe experience for all participants.",
-      "nb_presta1": "There are ",
-      "nb_presta2": " service provider(s) pending approval.",
+      "nb_presta": "There are {count} service provider(s) pending approval.",
       "nb_prestaVide": "All service providers are ready for the field and event areas: the competition can proceed smoothly!",
+      "messageSuppr": "is no longer part of the competition’s service providers.",
       "prestation": "Service",
-      "statut": "Status",
       "action": "Actions",
       "btn_suppr": "Delete",
       "btn_valid": "Approve",
-      "btn_refuser": "Reject"
+      "btn_refuser": "Reject",
+      "modal": {
+        "confirmation": "Are you sure you want to delete the service provider ",
+        "btn_confirmer": "Confirm"
+      },
+      "statuts": {
+        "nom": "Status",
+        "valider": "Approved",
+        "enAttente": "Pending approval"
+      }
+    },
+    "user": {
+      "title": "User Management",
+      "descri": "Welcome to the user administration area. Here, you can view, manage, and delete registered accounts. This page ensures platform security and proper functionality by allowing only valid users to access its features. Deleting a user is permanent, so please double-check the information before confirming.",
+      "nb_users": "There are {count} user(s) in the system.",
+      "nb_userVide": "No users at the moment.",
+      "btn_suppr": "Delete",
+      "messageSuppr": "is no longer part of the users.",
+      "modal": {
+        "confirmation": "Are you sure you want to delete the user"
+      }
     }
   }
 

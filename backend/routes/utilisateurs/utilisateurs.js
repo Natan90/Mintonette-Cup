@@ -106,6 +106,35 @@ router.get("/utilisateur/show/:id", async (req, res) => {
   }
 });
 
+router.patch("/utilisateur/changePresta/:id", async (req, res) => {
+  const idUser = req.params.id;
+  const valueChange = req.body.valueChange;
+
+  if (!idUser)
+    return res.status(400).json({ error: "Utilisateur invalide" });
+
+  try {
+    const result = await pool.query(
+      `UPDATE Utilisateur
+       SET ispresta = $1
+       WHERE id_utilisateur = $2
+       RETURNING *`,
+      [valueChange, idUser]
+    );
+
+    if (result.rows.length === 0)
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+
+    res.status(200).json({
+      message: `Utilisateur mis à jour avec succès`,
+      utilisateur: result.rows[0],
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
 
 /**
  * @swagger
@@ -293,6 +322,7 @@ router.delete("/prestataire/delete/:id", async (req, res) => {
 router.delete("/utilisateur/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
+    await pool.query("DELETE FROM Prestataire WHERE id_utilisateur=$1", [id]);
     const result = await pool.query("DELETE FROM Utilisateur WHERE id_utilisateur=$1 RETURNING *", [id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });

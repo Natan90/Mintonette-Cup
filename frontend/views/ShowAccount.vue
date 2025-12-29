@@ -61,7 +61,7 @@
           class="pointer">
             {{ $t('account.viewCart') }}
           </router-link>
-          <button @click="deleteAccount" class="pointer delete-btn" :disabled="isDeleting">
+          <button @click="deleteAccount(userData.id_user)" class="pointer delete-btn" :disabled="isDeleting">
             {{ isDeleting ? $t('account.deleting') : $t('account.deleteAccount') }}
           </button>
           <router-link :to="{ name: 'Home', params: { lang: t } }" >
@@ -83,6 +83,14 @@ import axios from 'axios';
 import NavView from '@/components/NavView.vue';
 import Footer from '@/components/Footer.vue';
 
+
+const props = defineProps({
+  userId: {         // L'id qu'on a besoin pour récupérer les données
+    type: Number,
+    required: true
+  }
+})
+
 const router = useRouter();
 const userStore = useUserStore();
 const { t } = useI18n();
@@ -93,6 +101,7 @@ const messageType = ref('');
 const isDeleting = ref(false);
 
 const userData = ref({
+  id_user: '',
   prenom: '',
   nom: '',
   login: '',
@@ -103,14 +112,22 @@ const userData = ref({
 });
 
 onMounted(async () => {
+  try {
+    await getValuesUtilisateurs(props.userId)
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+async function getValuesUtilisateurs(id) {
   if (!userStore.isConnected) {
     router.push({ name: 'Connexion_utilisateur' });
     return;
   }
 
   try {
-    console.log('Fetching user data for ID:', userStore.userId);
-    const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`);
+    console.log('Fetching user data for ID:', id);
+    const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${id}`);
     console.log('User data received:', response.data);
     
     let formattedDate = '';
@@ -124,6 +141,7 @@ onMounted(async () => {
     }
     
     userData.value = {
+      id_user: response.data.id_utilisateur || '',
       prenom: response.data.prenom_utilisateur || '',
       nom: response.data.nom_utilisateur || '',
       login: response.data.login_utilisateur || '',
@@ -141,9 +159,9 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
-});
+}
 
-const deleteAccount = async () => {
+async function deleteAccount(id) {
   if (!confirm(t('account.confirmDelete'))) {
     return;
   }
@@ -152,7 +170,7 @@ const deleteAccount = async () => {
   message.value = '';
 
   try {
-    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${userStore.userId}`);
+    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${id}`);
     
     message.value = t('account.accountDeleted');
     messageType.value = 'success';

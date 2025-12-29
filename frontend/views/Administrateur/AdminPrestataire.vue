@@ -6,41 +6,43 @@
             <span class="modal-close" @click="closeModal">&times;</span>
             <div>
                 <p>
-                    Êtes-vous sûr de vouloir supprimer le prestataire 
-                    <span class="name_presta">{{ prestataires[indexPresta].nom_prestataire }}</span> ?
+                    {{ $t('adminPage.prestataire.modal.confirmation') }}
+                    <span class="name_delete background_name" v-if="selectedPresta">{{ selectedPresta.nom_prestataire }}</span> ?
                 </p>
 
             </div>
             <div>
                 <button @click="deletePrestataire(id_prestataire)" class="btn_modal btn_supprimer">
-                    Confirmer
+                    {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
                 </button>
             </div>
-
         </div>
     </div>
     <div class="main_content">
         <h1 class="page_title">
             {{ $t('adminPage.prestataire.title') }}
         </h1>
-        <p class="page_subtitle">
+        <p class="backgroundBorderL page_subtitle">
             {{ $t('adminPage.prestataire.descri') }}
         </p>
         <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
-            {{ $t('adminPage.prestataire.nb_presta1') }} {{prestataires.filter(p => p.waitingforadmin).length}} {{
-                $t('adminPage.prestataire.nb_presta2') }}
+            {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.length }) }}
         </p>
         <p class="nb_presta valid" v-else>
             {{ $t('adminPage.prestataire.nb_prestaVide') }}
         </p>
-        <div class="all_presta">
-            <table>
+        <p class="backgroundBorderL message_suppr" v-if="deleting">
+            <span class="name_delete">{{ deletedPresta.nom_prestataire }}</span>{{ $t('adminPage.prestataire.messageSuppr') }}
+            <span class="modal-close" @click="closeMessageSuppr">&times;</span>
+        </p>
+        <div class="all_data">
+            <table class="adminTable">
                 <thead>
                     <tr>
                         <th>{{ $t('adminPage.prestataire.prestation') }}</th>
                         <th>{{ $t('user.prenom') }}</th>
                         <th>{{ $t('user.nom') }}</th>
-                        <th>{{ $t('adminPage.prestataire.statut') }}</th>
+                        <th>{{ $t('adminPage.prestataire.statuts.nom') }}</th>
                         <th>{{ $t('adminPage.prestataire.action') }}</th>
                     </tr>
                 </thead>
@@ -56,14 +58,14 @@
                             {{ item.nom_utilisateur }}
                         </td>
                         <td :class="item.waitingforadmin ? 'waiting' : 'notWaiting'">
-                            {{ item.waitingforadmin ? 'En attente de validation' : 'Validé' }}
+                            {{ item.waitingforadmin ? $t('adminPage.prestataire.statuts.enAttente') : $t('adminPage.prestataire.statuts.valider') }}
                         </td>
                         <td>
                             <span v-if="!item.waitingforadmin">
                                 <button class="btn_info">
                                     Aller voir
                                 </button>
-                                <button class="btn_supprimer" @click="ModalShow(item.id_prestataire, index)">
+                                <button class="btn_supprimer" @click="ModalShow(item)">
                                     {{ $t('adminPage.prestataire.btn_suppr') }}
                                 </button>
                             </span>
@@ -79,7 +81,6 @@
                     </tr>
                 </tbody>
             </table>
-            {{ message }}
         </div>
     </div>
 </template>
@@ -95,12 +96,14 @@ import NavView from '@/components/NavView.vue';
 const router = useRouter();
 
 const isDelete = ref(false);
+const deleting = ref(false);
 
 const prestataires = ref([]);
-const message = ref('message');
+const selectedPresta = ref(null);
+const deletedPresta = ref(null);
+
 
 const id_prestataire = ref(0);
-const indexPresta = ref(0);
 
 onMounted(async () => {
     try {
@@ -114,12 +117,18 @@ const closeModal = () => {
     isDelete.value = false;
 };
 
-function ModalShow(id, index) {
-    id_prestataire.value = id;
-    indexPresta.value = index;
+const closeMessageSuppr = () =>{
+    deleting.value = false;
+};
+
+function ModalShow(presta) {
+    selectedPresta.value = presta;
+    id_prestataire.value = presta.id_prestataire;
 
     isDelete.value = true;
-}
+};
+
+
 
 
 //==========================
@@ -138,7 +147,6 @@ async function getPrestataires() {
 async function validPrestataire(idPresta) {
     try {
         const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${idPresta}`);
-        message.value = res.data.message;
 
         await getPrestataires();
     } catch (err) {
@@ -148,11 +156,14 @@ async function validPrestataire(idPresta) {
 
 async function deletePrestataire(idPresta) {
     try {
+        deletedPresta.value = { ...selectedPresta.value };
+
         const res = await axios.delete(`http://localhost:3000/admin/prestataire/delete/${idPresta}`);
-        message.value = res.data.message;
 
         isDelete.value = false;
-        router.push({ name: 'Prestataires' });
+        deleting.value = true;
+        prestataires.value = prestataires.value.filter(u => u.id_prestataire !== idPresta);
+        router.push({ name: 'Prestataires', params: { lang: locale.value } });
 
         await getPrestataires();
     } catch (err) {
@@ -165,49 +176,6 @@ async function deletePrestataire(idPresta) {
 
 
 <style scoped>
-.modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-}
-
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    max-width: 300px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-}
-
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.modal-close:hover {
-    color: #ff0000;
-}
-
-.name_presta {
-    font-weight: 700;
-    color: #1e3a8a;
-    background-color: #dbeafe;
-    padding: 2px 6px;
-    border-radius: 4px;
-    display: inline-block;
-}
 
 
 .main_content {
@@ -227,14 +195,9 @@ async function deletePrestataire(idPresta) {
 }
 
 .page_subtitle {
-    font-size: 16px;
-    line-height: 1.6;
     color: #374151;
-    margin-bottom: 16px;
     background: #e0f2fe;
-    padding: 12px 16px;
     border-left: 4px solid #3b82f6;
-    border-radius: 6px;
 }
 
 .nb_presta {
@@ -256,49 +219,29 @@ async function deletePrestataire(idPresta) {
     background-color: #d1fae5;
 }
 
-.all_presta {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+.message_suppr {
+    position: relative;
+    margin: 20px 0;
+    background-color: #fee2e2; /* rouge très clair */
+    border-left: 6px solid #ef4444;
+    color: #7f1d1d;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
+    animation: fadeIn 0.3s ease;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Segoe UI', sans-serif;
-    table-layout: fixed;
-    text-align: center;
-}
-
-thead tr {
-    background-color: #f0f2f5;
-}
-
-thead th {
-    text-align: center;
-    padding: 14px;
-    font-size: 14px;
-    color: #555;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-tbody tr {
-    border-bottom: 1px solid #eaeaea;
-    transition: background-color 0.2s ease;
-}
-
-tbody tr:hover {
-    background-color: #f9fafb;
-}
-
-td {
-    padding: 14px;
-    font-size: 15px;
-    color: #333;
-    vertical-align: middle;
-    word-wrap: break-word;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .waiting {
@@ -311,47 +254,6 @@ td {
     font-weight: 600;
 }
 
-td button, .btn_modal {
-    color: white;
-    margin-left: 8px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: none;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
 
-.btn_valider {
-    background-color: #10b981;
-}
-
-.btn_valider:hover {
-    background-color: #059669;
-}
-
-.btn_refuser {
-    background-color: #f59e0b;
-}
-
-.btn_refuser:hover {
-    background-color: #d97706;
-}
-
-.btn_supprimer {
-    background-color: #ef4444;
-}
-
-.btn_supprimer:hover {
-    background-color: #dc2626;
-}
-
-.btn_info {
-    background-color: #1e40af;
-}
-
-.btn_info:hover {
-    background-color: #1e3a8a;
-}
 
 </style>
