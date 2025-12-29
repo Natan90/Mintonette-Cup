@@ -164,6 +164,7 @@ const pool = require("./db");
         id_equipe SERIAL PRIMARY KEY,
         sexe_equipe VARCHAR(50),
         nb_joueurs INTEGER,
+        entraineur VARCHAR(50),
         id_pays INTEGER NOT NULL REFERENCES Pays(id_pays)
       );
 
@@ -515,71 +516,71 @@ const pool = require("./db");
     await pool.query(insertPays);
 
     const insertEquipes = `
-    INSERT INTO Equipe (sexe_equipe, nb_joueurs, id_pays) VALUES
-    ('Homme', 12, 1),  -- France
-    ('Homme', 12, 2),  -- Allemagne
-    ('Homme', 12, 3),  -- Argentine
-    ('Homme', 12, 4),  -- Italie
-    ('Homme', 12, 5),  -- Canada
-    ('Homme', 12, 6),  -- Bulgarie
-    ('Homme', 12, 7),  -- Brésil
-    ('Homme', 12, 8),  -- Cuba
-    ('Homme', 12, 9),  -- États-Unis
-    ('Homme', 12, 10), -- Slovénie
-    ('Homme', 12, 11), -- Iran
-    ('Homme', 12, 12), -- Ukraine
-    ('Homme', 12, 13), -- Chine
-    ('Homme', 12, 14), -- Japon
-    ('Homme', 12, 15), -- Pologne
-    ('Homme', 12, 16), -- Serbie
-    ('Homme', 12, 17), -- Pays-Bas
-    ('Homme', 12, 18), -- Turquie
-    ('Homme', 12, 19), -- Belgique
-    ('Homme', 12, 20), -- Espagne
-    ('Homme', 12, 21), -- Angleterre
-    ('Homme', 12, 22), -- Thaïlande
-    ('Homme', 12, 23), -- Kazakhstan
-    ('Homme', 12, 24), -- Corée du Sud
-    ('Homme', 12, 25), -- Australie
-    ('Homme', 12, 26), -- Paraguay
-    ('Homme', 12, 27), -- Uruguay
-    ('Homme', 12, 28), -- Afrique du Sud
-    ('Homme', 12, 29), -- Maroc
-    ('Homme', 12, 30), -- Arabie Saoudite
-    ('Homme', 12, 31), -- Tunisie
-    ('Homme', 12, 32), -- Saint Marin
-    ('Femme', 12, 1),  -- France
-    ('Femme', 12, 2),  -- Allemagne
-    ('Femme', 12, 3),  -- Argentine
-    ('Femme', 12, 4),  -- Italie
-    ('Femme', 12, 5),  -- Canada
-    ('Femme', 12, 6),  -- Bulgarie
-    ('Femme', 12, 7),  -- Brésil
-    ('Femme', 12, 8),  -- Cuba
-    ('Femme', 12, 9),  -- États-Unis
-    ('Femme', 12, 10), -- Slovénie
-    ('Femme', 12, 11), -- Iran
-    ('Femme', 12, 12), -- Ukraine
-    ('Femme', 12, 13), -- Chine
-    ('Femme', 12, 14), -- Japon
-    ('Femme', 12, 15), -- Pologne
-    ('Femme', 12, 16), -- Serbie
-    ('Femme', 12, 17), -- Pays-Bas
-    ('Femme', 12, 18), -- Turquie
-    ('Femme', 12, 19), -- Belgique
-    ('Femme', 12, 20), -- Espagne
-    ('Femme', 12, 21), -- Angleterre
-    ('Femme', 12, 22), -- Thaïlande
-    ('Femme', 12, 23), -- Kazakhstan
-    ('Femme', 12, 24), -- Corée du Sud
-    ('Femme', 12, 25), -- Australie
-    ('Femme', 12, 26), -- Paraguay
-    ('Femme', 12, 27), -- Uruguay
-    ('Femme', 12, 28), -- Afrique du Sud
-    ('Femme', 12, 29), -- Maroc
-    ('Femme', 12, 30), -- Arabie Saoudite
-    ('Femme', 12, 31), -- Tunisie
-    ('Femme', 12, 32); -- Saint Marin
+    INSERT INTO Equipe (sexe_equipe, nb_joueurs, id_pays, entraineur) VALUES
+    ('Homme', 14, 1, 'Andrea Giani'),  -- France
+    ('Homme', 14, 2, 'Michał Winiarski'),  -- Allemagne
+    ('Homme', 14, 3, 'Marcelo Méndez'),  -- Argentine
+    ('Homme', 14, 4, 'Ferdinando De Giorgi'),  -- Italie
+    ('Homme', 14, 5, 'Daniel Lewis'),  -- Canada
+    ('Homme', 14, 6, 'Gianlorenzo Blengini'),  -- Bulgarie
+    ('Homme', 14, 7, 'Bernardo Rezende'),  -- Brésil
+    ('Homme', 14, 8, 'Jesús Cruz'),  -- Cuba
+    ('Homme', 14, 9, 'Karch Kiraly'),  -- États-Unis
+    ('Homme', 14, 10, 'Fabio Soli'), -- Slovénie
+    ('Homme', 14, 11, 'Roberto Piazza'), -- Iran
+    ('Homme', 14, 12, 'Raúl Lozano'), -- Ukraine
+    ('Homme', 14, 13, 'Vital Heynen'), -- Chine
+    ('Homme', 14, 14, 'Laurent Tillie'), -- Japon
+    ('Homme', 14, 15, 'Nikola Grbić'), -- Pologne
+    ('Homme', 14, 16, 'Gheorghe Crețu'), -- Serbie
+    ('Homme', 14, 17, 'Joel Banks'), -- Pays-Bas
+    ('Homme', 14, 18, 'Slobodan Kovač'), -- Turquie
+    ('Homme', 14, 19, 'Emanuele Zanini'), -- Belgique
+    ('Homme', 14, 20, 'Julio Velasco'), -- Espagne
+    ('Homme', 14, 21, 'Harry Brokking'), -- Angleterre
+    ('Homme', 14, 22, 'Supajirakul Monchai'), -- Thaïlande
+    ('Homme', 14, 23, 'Genadijs Parsins'), -- Kazakhstan
+    ('Homme', 14, 24, 'Issanayê Ramires Ferraz'), -- Corée du Sud
+    ('Homme', 14, 25, 'Russell Borgeaud'), -- Australie
+    ('Homme', 14, 26, 'Gustavo Alfaro'), -- Paraguay
+    ('Homme', 14, 27, 'Alejandro Matoso'), -- Uruguay
+    ('Homme', 14, 28, 'H. El Wassimy'), -- Afrique du Sud
+    ('Homme', 14, 29, 'Zouheir El Graoui'), -- Maroc
+    ('Homme', 14, 30, 'Veselin Vuković'), -- Arabie Saoudite
+    ('Homme', 14, 31, 'Camillo Placi'), -- Tunisie
+    ('Homme', 14, 32, 'Stefano Mascetti'), -- Saint Marin 
+    ('Femme', 12, 1, NULL),  -- France
+    ('Femme', 12, 2, NULL),  -- Allemagne
+    ('Femme', 12, 3, NULL),  -- Argentine
+    ('Femme', 12, 4, NULL),  -- Italie
+    ('Femme', 12, 5, NULL),  -- Canada
+    ('Femme', 12, 6, NULL),  -- Bulgarie
+    ('Femme', 12, 7, NULL),  -- Brésil
+    ('Femme', 12, 8, NULL),  -- Cuba
+    ('Femme', 12, 9, NULL),  -- États-Unis
+    ('Femme', 12, 10, NULL), -- Slovénie
+    ('Femme', 12, 11, NULL), -- Iran
+    ('Femme', 12, 12, NULL), -- Ukraine
+    ('Femme', 12, 13, NULL), -- Chine
+    ('Femme', 12, 14, NULL), -- Japon
+    ('Femme', 12, 15, NULL), -- Pologne
+    ('Femme', 12, 16, NULL), -- Serbie
+    ('Femme', 12, 17, NULL), -- Pays-Bas
+    ('Femme', 12, 18, NULL), -- Turquie
+    ('Femme', 12, 19, NULL), -- Belgique
+    ('Femme', 12, 20, NULL), -- Espagne
+    ('Femme', 12, 21, NULL), -- Angleterre
+    ('Femme', 12, 22, NULL), -- Thaïlande
+    ('Femme', 12, 23, NULL), -- Kazakhstan
+    ('Femme', 12, 24, NULL), -- Corée du Sud
+    ('Femme', 12, 25, NULL), -- Australie
+    ('Femme', 12, 26, NULL), -- Paraguay
+    ('Femme', 12, 27, NULL), -- Uruguay
+    ('Femme', 12, 28, NULL), -- Afrique du Sud
+    ('Femme', 12, 29, NULL), -- Maroc
+    ('Femme', 12, 30, NULL), -- Arabie Saoudite
+    ('Femme', 12, 31, NULL), -- Tunisie
+    ('Femme', 12, 32, NULL); -- Saint Marin
     `;
 
     await pool.query(insertEquipes);

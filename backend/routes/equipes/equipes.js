@@ -24,6 +24,16 @@ router.get("/showPlayer", async (req, res) => {
   }
 });
 
+router.get("/showTeam", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM Equipe ORDER BY id_pays ");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get("/showQualifie", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM Pays WHERE qualifie = 'true' ORDER BY id_pays");

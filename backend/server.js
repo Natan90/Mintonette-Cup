@@ -8,7 +8,8 @@ const authRoutes = require("./routes/utilisateurs/authRoutes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
 const utilisateursRoutes = require("./routes/utilisateurs/utilisateurs");
-const equipeRouter = require("./routes/equipes/equipes");
+const playerRouter = require("./routes/equipes/equipes");
+const teamRouter = require("./routes/equipes/equipes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,7 +20,7 @@ app.use(
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-  }) 
+  })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,21 +31,25 @@ app.use("/utilisateur/auth", authRoutes);
 // app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
 app.use("/gradin", gradins);
-app.use("/equipe", equipeRouter);
+app.use("/equipe", playerRouter);
+app.use("/team", teamRouter);
 
 // Swagger
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  swaggerOptions: {
-    tagsSorter: "alpha"
-  }
-}));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      tagsSorter: "alpha",
+    },
+  })
+);
 
 // Lancement du serveur
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
 
-// module.exports = router;

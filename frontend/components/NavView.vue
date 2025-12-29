@@ -233,24 +233,7 @@ async function getValuesUser() {
   }
 }
 
-const cartTotal = computed(() =>
-  cartSeats.value.reduce((sum, seat) => {
-    if (["I", "H", "G"].includes(seat.numero_colonne)) return sum + 25;
-    if (["F", "E", "D"].includes(seat.numero_colonne)) return sum + 18;
-    return sum + 12;
-  }, 0)
-);
 
-onMounted(async () => {
-    try {
-        await fetchCart();
-        await getValuesUser();
-    } catch (err) {
-        console.error(err);
-    }
-});
-
-document.addEventListener("click", () => (showMiniCart.value = false));
 </script>
 
 <style scoped>

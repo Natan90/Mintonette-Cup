@@ -13,16 +13,17 @@
       v-for="(elt, index) in article"
       :key="index"
       @click="selectArticle(index)"
-      class="matchTitle">
-      {{ elt.nom }}
+      class="matchTitle , pointer">
+      {{ getCountry(elt.team1Id) }} - {{ getCountry(elt.team2Id) }}
     </button>
   </div>
-  <div v-if="descriArticle[selectedItem]">
-    {{ descriArticle[selectedItem].descri }}
+  <div v-if="article[selectedItem]">
+    {{ getCountry(article[selectedItem].team1Id) }} vs
+    {{ getCountry(article[selectedItem].team2Id) }}
   </div>
 
-  <p>Dans la bdd rajouter dans le 6 majeurs ou non</p>
-  Mettre les libéros a la 4e positions
+  <!-- <p>Dans la bdd rajouter dans le 6 majeurs ou non</p> -->
+  <!-- Mettre les libéros a la 4e positions -->
 
   <div class="terrainConteneur">
     <div class="terrainLayout">
@@ -32,10 +33,10 @@
             v-for="player in getMajorPlayers(getSelectedTeams().team1)"
             :key="player.id_joueur"
             class="player">
-            <img :src="logoPersonne" @click.stop="moreInfo(player)" />
-            <span class="name">
-              {{ player.prenom_joueur }} {{ player.nom_joueur }}
-            </span>
+            <img :src="logoPersonne" @click.stop="moreInfo(player, 'right')" />
+            <span class="name"
+              >{{ player.prenom_joueur }} {{ player.nom_joueur }}</span
+            >
           </div>
         </div>
 
@@ -44,47 +45,52 @@
             v-for="player in getMajorPlayers(getSelectedTeams().team2)"
             :key="player.id_joueur"
             class="player">
-            <img :src="logoPersonne" @click.stop="moreInfo(player)" />
-            <span class="name">
-              {{ player.prenom_joueur }} {{ player.nom_joueur }}
-            </span>
+            <img :src="logoPersonne" @click.stop="moreInfo(player, 'left')" />
+            <span class="name"
+              >{{ player.prenom_joueur }} {{ player.nom_joueur }}</span
+            >
           </div>
         </div>
       </div>
 
-      <div class="sideCard">
-        <div v-if="selectedPlayer" class="playerCard">
-          <h4>
-            {{ selectedPlayer.prenom_joueur }}
-            {{ selectedPlayer.nom_joueur }}
-          </h4>
-          <p><strong>Poste :</strong> {{ selectedPlayer.poste }}</p>
-          <p><strong>Âge :</strong> {{ getAge(selectedPlayer) }} ans</p>
-          <p><strong>Taille :</strong> {{ selectedPlayer.taille }} cm</p>
-        </div>
+      <div v-if="selectedPlayer" class="playerCard" :class="cardSide">
+        <h4>
+          {{ selectedPlayer.prenom_joueur }} {{ selectedPlayer.nom_joueur }}
+        </h4>
+        <p><strong>Poste :</strong> {{ selectedPlayer.poste }}</p>
+        <p><strong>Âge :</strong> {{ getAge(selectedPlayer) }} ans</p>
+        <p><strong>Taille :</strong> {{ selectedPlayer.taille }} cm</p>
       </div>
     </div>
+    <br />
+    <div class="subsContainer">
+      <div class="subPlayer">
+        <p>
+          Coach: <b>{{ getCoach(getSelectedTeams().team1) }}</b>
+        </p>
+        <h4>Remplaçants {{ getCountry(getSelectedTeams().team1) }}</h4>
+        <ul>
+          <li
+            v-for="player in getSubstitutes(getSelectedTeams().team1)"
+            :key="player.id_joueur">
+            {{ player.prenom_joueur }} {{ player.nom_joueur }}
+          </li>
+        </ul>
+      </div>
 
-    <div>
-      <h4>Remplaçants Équipe 1</h4>
-      <ul>
-        <li
-          v-for="player in getSubstitutes(getSelectedTeams().team1)"
-          :key="player.id_joueur">
-          {{ player.prenom_joueur }} {{ player.nom_joueur }}
-        </li>
-      </ul>
-    </div>
-
-    <div>
-      <h4>Remplaçants Équipe 2</h4>
-      <ul>
-        <li
-          v-for="player in getSubstitutes(getSelectedTeams().team2)"
-          :key="player.id_joueur">
-          {{ player.prenom_joueur }} {{ player.nom_joueur }}
-        </li>
-      </ul>
+      <div class="subPlayer">
+        <p>
+          Coach: <b>{{ getCoach(getSelectedTeams().team2) }}</b>
+        </p>
+        <h4>Remplaçants {{ getCountry(getSelectedTeams().team2) }}</h4>
+        <ul>
+          <li
+            v-for="player in getSubstitutes(getSelectedTeams().team2)"
+            :key="player.id_joueur">
+            {{ player.prenom_joueur }} {{ player.nom_joueur }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -97,13 +103,25 @@ import axios from "axios";
 import logoPersonne from "@/images/LogoPersonne.png";
 
 const players = ref([]);
+const team = ref([]);
+
 const selectedItem = ref(0);
 const selectedPlayer = ref(null);
+const cardSide = ref("right");
 
 async function fetchPlayer() {
   try {
     const res = await axios.get("http://localhost:3000/equipe/showPlayer");
     players.value = res.data;
+  } catch (err) {
+    console.error("Erreur API:", err);
+  }
+}
+
+async function fetchTeam() {
+  try {
+    const res = await axios.get("http://localhost:3000/equipe/showTeam");
+    team.value = res.data;
   } catch (err) {
     console.error("Erreur API:", err);
   }
@@ -119,17 +137,17 @@ function getSubstitutes(teamId) {
 }
 
 const article = [
-  { nom: "France - Argentine", team1Id: 1, team2Id: 3 },
-  { nom: "Espagne - Corée du Sud", team1Id: 20, team2Id: 24 },
-  { nom: "Italie - Japon", team1Id: 4, team2Id: 14 },
-  { nom: "Allemagne - Canada", team1Id: 2, team2Id: 5 },
+  { nom: " ", team1Id: 1, team2Id: 3 },
+  { nom: " ", team1Id: 20, team2Id: 24 },
+  { nom: " ", team1Id: 4, team2Id: 14 },
+  { nom: " ", team1Id: 2, team2Id: 5 },
 ];
 
 const descriArticle = [
-  { descri: "Match 1" },
-  { descri: "Match 2" },
-  { descri: "Match 3" },
-  { descri: "Match 4" },
+  { descri: " " },
+  { descri: " " },
+  { descri: " " },
+  { descri: " " },
 ];
 function selectArticle(id) {
   if (id >= article.length) return;
@@ -140,8 +158,20 @@ function getSelectedTeams() {
   const match = article[selectedItem.value];
   return { team1: match.team1Id, team2: match.team2Id };
 }
-function moreInfo(player) {
+function getCoach(teamId) {
+  if (!team.value || team.value.length === 0) return "Inconnu";
+
+  const foundTeam = team.value.find((t) => t.id_equipe === teamId);
+  return foundTeam ? foundTeam.entraineur : "Inconnu";
+}
+function getCountry(teamId) {
+  const player = players.value.find((p) => p.id_equipe === teamId);
+  return player ? player.pays : "Inconnu";
+}
+
+function moreInfo(player, side) {
   selectedPlayer.value = player;
+  cardSide.value = side;
 }
 
 function getAge(player) {
@@ -155,7 +185,10 @@ function getAge(player) {
   return age;
 }
 
-onMounted(fetchPlayer);
+onMounted(async () => {
+  await fetchPlayer();
+  await fetchTeam();
+});
 </script>
 
 <style scoped>
@@ -205,26 +238,59 @@ onMounted(fetchPlayer);
   text-align: center;
 }
 .matchTitle {
-  width: auto;
-  padding: 8px 12px;
+  padding: 10px 18px;
+  margin: 5px;
   border-radius: 8px;
-  cursor: pointer;
+  background-color: #00167a;
+  color: white;
+  transition: all 0.2s ease-in-out;
 }
 
-/* A faire  ###################################################################### */
+.matchTitle:hover {
+  transform: translateY(-2px);
+}
+
 .playerCard {
   position: absolute;
   top: 52%;
-  left: 10%;
-  transform: translateX(-50%);
   width: 220px;
   padding: 12px;
   border-radius: 10px;
   z-index: 10;
-  box-shadow: 5px 5px 5px rgb(103, 103, 103);
 }
+
+.playerCard.right {
+  right: -2%;  
+}
+
+.playerCard.left {
+  left: 4%;    
+}
+
+
 .playerCard p {
   margin: 4px 0;
   font-size: 12px;
+}
+.terrainConteneur li:hover {
+  color: #111;
+  font-weight: 500;
+}
+
+.subsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.subPlayer {
+  flex: 1;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.subPlayer li {
+  margin-bottom: 4px;
+  list-style-type: none;
 }
 </style>
