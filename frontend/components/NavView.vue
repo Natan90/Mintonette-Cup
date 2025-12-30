@@ -7,16 +7,6 @@
 
     <div class="routeurLink">
       <router-link
-        v-if="isInIndex"
-        :to="{
-          name: 'Home',
-          params: { lang: locale },
-          hash: '#filtre_presta',
-        }">
-        <span class="pointer optionNav">Section prestataire</span>
-      </router-link>
-
-      <router-link
         :to="{ name: 'PrestatairePublic', params: { lang: locale } }">
         <span class="pointer optionNav">Prestataire (mode public)</span>
       </router-link>

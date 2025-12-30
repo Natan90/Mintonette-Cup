@@ -101,7 +101,7 @@ function resetFilters() {
     prixMin: null,
     prixMax: null
     }
-    router.push({ path: "/", hash: '#filtre_presta', query: {} });
+    router.push({ path: "/", query: {} });
     getValuesPrestataire();
 }
 
@@ -128,7 +128,7 @@ async function getValuesTypePrestataire() {
 
 async function searchPrestataires() {
     router.push({
-        path: "/", hash: '#filtre_presta',
+        path: "/", 
         query: {
         nom: filters.value.nom || undefined,
         category: filters.value.category || undefined,
