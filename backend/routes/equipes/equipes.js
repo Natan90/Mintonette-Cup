@@ -34,6 +34,7 @@ router.get("/showTeam", async (req, res) => {
   }
 });
 
+
 router.get("/showQualifie", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM Pays WHERE qualifie = 'true' ORDER BY id_pays");

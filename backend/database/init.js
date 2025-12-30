@@ -5,10 +5,7 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
-      DROP TABLE IF EXISTS a_lieu CASCADE;
       DROP TABLE IF EXISTS prend_une_place CASCADE;
-      DROP TABLE IF EXISTS equipe_2 CASCADE;
-      DROP TABLE IF EXISTS equipe_1 CASCADE;
       DROP TABLE IF EXISTS a_pour_ingredient CASCADE;
       DROP TABLE IF EXISTS a_la_carte CASCADE;
       DROP TABLE IF EXISTS est_affecte CASCADE;
@@ -28,7 +25,7 @@ const pool = require("./db");
       DROP TABLE IF EXISTS Animation CASCADE;
       DROP TABLE IF EXISTS Restauration CASCADE;
       DROP TABLE IF EXISTS Stade CASCADE;
-      DROP TABLE IF EXISTS Match_volley CASCADE;
+      DROP TABLE IF EXISTS Match CASCADE;
       DROP TABLE IF EXISTS Plat CASCADE;
       DROP TABLE IF EXISTS Zone CASCADE;
       DROP TABLE IF EXISTS Article CASCADE;
@@ -48,7 +45,12 @@ const pool = require("./db");
       DROP TABLE IF EXISTS Type_utilisateur CASCADE;
       DROP TABLE IF EXISTS Siege CASCADE;
       DROP TABLE IF EXISTS Utilisateur CASCADE;
+      DROP TABLE IF EXISTS Terrain CASCADE;
 
+      CREATE TABLE IF NOT EXISTS Terrain(
+        id_terrain SERIAL PRIMARY KEY,
+        nom_terrain VARCHAR(50)
+      );
 
       CREATE TABLE IF NOT EXISTS Utilisateur(
         id_utilisateur SERIAL PRIMARY KEY,
@@ -145,11 +147,16 @@ const pool = require("./db");
         description_plat VARCHAR(50)
       );
 
-      CREATE TABLE IF NOT EXISTS Match_volley(
+      CREATE TABLE IF NOT EXISTS Match(
         id_match SERIAL PRIMARY KEY,
-        prix_place_match NUMERIC(19,4),
-        score_match VARCHAR(50),
-        vainqueur_match VARCHAR(50)
+        id_terrain INTEGER NOT NULL REFERENCES Terrain(id_terrain),
+        id_equipe1 INTEGER NOT NULL REFERENCES Equipe(id_equipe),
+        id_equipe2 INTEGER NOT NULL REFERENCES Equipe(id_equipe),
+        date_match TIMESTAMP,
+        score_equipe1 INTEGER,
+        score_equipe2 INTEGER,
+        statut VARCHAR(20) DEFAULT 'A venir', -- 'A venir', 'En cours', 'Terminé'
+        CHECK (id_equipe1 != id_equipe2)
       );
 
       CREATE TABLE IF NOT EXISTS Pays(
@@ -377,38 +384,13 @@ const pool = require("./db");
         FOREIGN KEY(id_plat) REFERENCES Plat(id_plat)
       );
 
-      CREATE TABLE IF NOT EXISTS equipe_1(
-        id_equipe INTEGER,
-        id_match INTEGER,
-        PRIMARY KEY(id_equipe, id_match),
-        FOREIGN KEY(id_equipe) REFERENCES Equipe(id_equipe),
-        FOREIGN KEY(id_match) REFERENCES Match_volley(id_match)
-      );
-
-      CREATE TABLE IF NOT EXISTS equipe_2(
-        id_equipe INTEGER,
-        id_match INTEGER,
-        PRIMARY KEY(id_equipe, id_match),
-        FOREIGN KEY(id_equipe) REFERENCES Equipe(id_equipe),
-        FOREIGN KEY(id_match) REFERENCES Match_volley(id_match)
-      );
 
       CREATE TABLE IF NOT EXISTS prend_une_place(
         id_utilisateur INTEGER,
         id_match INTEGER,
         PRIMARY KEY(id_utilisateur, id_match),
         FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
-        FOREIGN KEY(id_match) REFERENCES Match_volley(id_match)
-      );
-
-      CREATE TABLE IF NOT EXISTS a_lieu(
-        JJ_MM_AAAA DATE,
-        id_match INTEGER,
-        id_stade INTEGER,
-        PRIMARY KEY(JJ_MM_AAAA, id_match, id_stade),
-        FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA),
-        FOREIGN KEY(id_match) REFERENCES Match_volley(id_match),
-        FOREIGN KEY(id_stade) REFERENCES Stade(id_stade)
+        FOREIGN KEY(id_match) REFERENCES Match(id_match)
       );
     `;
 
@@ -430,6 +412,43 @@ const pool = require("./db");
         ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE);
     `;
     await pool.query(insertUsers);
+
+    const insertTerrains = `
+    INSERT INTO Terrain (nom_terrain) VALUES
+      ('Terrain 1'),
+      ('Terrain 2'),
+      ('Terrain 3'),
+      ('Terrain 4');
+    `;
+    await pool.query(insertTerrains);
+
+    const insertMatchs = `
+  INSERT INTO Match_volley (id_terrain, id_equipe1, id_equipe2, date_match) VALUES
+      -- Terrain 1 (4 matchs)
+      (1, 1, 17, '2026-01-01 10:00:00'),   -- France vs Pays-Bas
+      (1, 2, 18, '2026-01-01 14:00:00'),   -- Allemagne vs Turquie
+      (1, 3, 19, '2026-01-01 18:00:00'),   -- Argentine vs Belgique
+      (1, 4, 20, '2026-01-01 21:00:00'),   -- Italie vs Espagne
+      
+      -- Terrain 2 (4 matchs)
+      (2, 5, 21, '2026-01-01 10:00:00'),   -- Canada vs Angleterre
+      (2, 6, 22, '2026-01-01 14:00:00'),   -- Bulgarie vs Thaïlande
+      (2, 7, 23, '2026-01-01 18:00:00'),   -- Brésil vs Kazakhstan
+      (2, 8, 24, '2026-01-01 21:00:00'),   -- Cuba vs Corée du Sud
+      
+      -- Terrain 3 (4 matchs)
+      (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Australie
+      (3, 10, 26, '2026-01-01 14:00:00'),  -- Slovénie vs Paraguay
+      (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Uruguay
+      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs Afrique du Sud
+      
+      -- Terrain 4 (4 matchs)
+      (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Maroc
+      (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Arabie Saoudite
+      (4, 15, 31, '2026-01-01 18:00:00'),  -- Pologne vs Tunisie
+      (4, 16, 32, '2026-01-01 21:00:00');  -- Serbie vs Saint-Marin
+  `;
+    await pool.query(insertMatchs);
 
     const insertTypeAnimation = `
     INSERT INTO Type_animation (nom_type_animation) VALUES
