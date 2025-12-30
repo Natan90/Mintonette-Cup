@@ -146,6 +146,12 @@
       "messageSuppr": "is no longer part of the users.",
       "modal": {
         "confirmation": "Are you sure you want to delete the user"
+      },
+      "tri": {
+        "nom": "Sort by :",
+        "az": "Name A → Z",
+        "za": "Name Z → A",
+        "presta": "Service providers first"
       }
     }
   }

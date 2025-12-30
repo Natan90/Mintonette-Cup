@@ -241,7 +241,7 @@ async function getValuesUser() {
 }
 
 #logo {
-  height: 100px;
+  height: var(--barreNav-height);
 }
 
 .routeurLink {

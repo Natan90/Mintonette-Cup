@@ -146,6 +146,12 @@
       "messageSuppr": "ne fait désormais plus partie des utilisateurs.",
       "modal": {
         "confirmation": "Êtes-vous sûr de vouloir supprimer l'utilisateur"
+      },
+      "tri": {
+        "nom": "Trier :",
+        "az": "Nom A → Z",
+        "za": "Nom Z → A",
+        "presta": "Prestataires en premier"
       }
     }
   }

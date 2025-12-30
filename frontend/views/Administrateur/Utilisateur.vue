@@ -25,28 +25,28 @@
     <p class="backgroundBorderL page_subtitle">
       {{ $t('adminPage.user.descri') }}
     </p>
-    <p class="nb_presta toValidate" v-if="utilisateurs.filter(p => p.ispresta).length > 0">
-      {{ $t('adminPage.user.nb_users', { count: utilisateurs.length }) }}
-    </p>
-    <p class="nb_presta valid" v-else>
-      {{ $t('adminPage.user.nb_userVide') }}
-    </p>
+    <div class="textAndFiltre">
+      <p class="nb_presta toValidate" v-if="utilisateurs.filter(p => p.ispresta).length > 0">
+        {{ $t('adminPage.user.nb_users', { count: utilisateurs.length }) }}
+      </p>
+      <p class="nb_presta valid" v-else>
+        {{ $t('adminPage.user.nb_userVide') }}
+      </p>
+      <p>
+        <div class="filtre">
+          <label for="triAlpha">{{ $t('adminPage.user.tri.nom') }}</label>
+          <select id="triAlpha" v-model="adminStore.typeTri">
+            <option value="az">{{ $t('adminPage.user.tri.az') }}</option>
+            <option value="za">{{ $t('adminPage.user.tri.za') }}</option>
+            <option value="presta">{{ $t('adminPage.user.tri.presta') }}</option>
+          </select>
+        </div>
+      </p>
+    </div>
     <p class="backgroundBorderL message_suppr" v-if="deleting">
       <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{ $t('adminPage.user.messageSuppr') }}
       <span class="modal-close" @click="closeMessageSuppr">&times;</span>
     </p>
-
-    <!-- <ul class="user-list">
-      <li v-for="(item, index) in utilisateurs" :key="index" class="user-card">
-        <div class="user-info">
-          <span class="user-id">{{ item.id_utilisateur }}</span>
-          <span class="user-name">{{ item.nom_utilisateur }} {{ item.prenom_utilisateur }}</span>
-        </div>
-        <button class="btn-delete" @click="supprimerUtilisateur(item.id_utilisateur)">
-          Supprimer
-        </button>
-      </li>
-    </ul> -->
     <div class="all_data">
       <table class="adminTable">
         <thead>
@@ -58,7 +58,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in utilisateurs" :key="item.id_utilisateur">
+          <tr v-for="(item, index) in utilisateursFiltres" :key="item.id_utilisateur">
             <td>
               {{ item.nom_utilisateur }}
             </td>
@@ -101,15 +101,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
+import { useAdminStore } from "@/stores/admin";
 
 const router = useRouter();
 const { locale } = useI18n();
+const adminStore = useAdminStore();
 
 //==========================
 //====== Utilisateurs ======
@@ -158,6 +160,32 @@ function ModalShow(user) {
 
     isDelete.value = true;
 };
+
+
+const utilisateursFiltres = computed(() => {
+  let liste = [...utilisateurs.value];
+
+  // Tri alphabétique
+  liste.sort((a, b) => {
+    if (adminStore.typeTri === "presta") {
+      if (a.ispresta && !b.ispresta) return -1;
+      if (!a.ispresta && b.ispresta) return 1;
+    }
+
+    const nomA = a.nom_utilisateur?.toLowerCase() || "";
+    const nomB = b.nom_utilisateur?.toLowerCase() || "";
+
+    if (adminStore.typeTri === "za")
+      return nomB.localeCompare(nomA);
+    
+    return nomA.localeCompare(nomB);
+
+  });
+
+  return liste;
+});
+
+
 
 onMounted(async () => {
   try {
@@ -221,6 +249,14 @@ async function deleteUtilisateur(idUser) {
   color: #374151;
   background: #e0f2fe;
   border-left: 4px solid #3b82f6;
+}
+
+.textAndFiltre {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 40px;
+  align-items: center;
 }
 
 .nb_presta {
@@ -344,5 +380,45 @@ async function deleteUtilisateur(idUser) {
 
 .btn-delete:hover {
   background-color: #c0392b;
+}
+
+.filtre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #e0f2fe;
+  border-left: 4px solid #3b82f6;
+  padding: 8px 14px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+}
+
+.filtre label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e3a8a;
+  white-space: nowrap;
+}
+
+.filtre select {
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid #bfdbfe;
+  background-color: #ffffff;
+  color: #1e3a8a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filtre select:hover {
+  border-color: #3b82f6;
+}
+
+.filtre select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 </style>
