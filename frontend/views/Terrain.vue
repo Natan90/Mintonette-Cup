@@ -3,12 +3,21 @@
 
   <div class="pageContainer">
     <div class="navMatch">
-      <router-link to="/Terrains/terrain_4" class="button">
+      <router-link
+        :to="{ name: 'Terrain', params: { id: terrainId - 1 } }"
+        class="button">
         ⬅ Terrain précédent
       </router-link>
-      <router-link to="/Terrains/terrain_2" class="button">
+
+      <router-link
+        :to="{ name: 'Terrain', params: { id: terrainId - 1 } }"
+        class="button">
         Terrain suivant ➡
       </router-link>
+    </div>
+
+    <div class="matchHeader">
+      <h2>Mintonette Cup – Terrain {{ terrainId }}</h2>
     </div>
 
     <div class="matchSelector">
@@ -16,23 +25,23 @@
         v-for="(elt, index) in article"
         :key="index"
         @click="selectArticle(index)"
-        :class="['matchTitle , pointer', { active: index === selectedItem }]">
+        :class="['matchTitle pointer', { active: index === selectedItem }]">
         {{ getCountry(elt.team1Id) }} - {{ getCountry(elt.team2Id) }}
       </button>
     </div>
 
     <div class="matchHeader" v-if="article[selectedItem]">
-      <h2>
+      <h3>
         {{ getCountry(article[selectedItem].team1Id) }}
         <span>VS</span>
         {{ getCountry(article[selectedItem].team2Id) }}
-      </h2>
+      </h3>
     </div>
 
     <div class="terrainConteneur">
       <div class="terrainLayout">
         <div class="image" @click="selectedPlayer = null">
-          <div class="rightTeam , pointer">
+          <div class="rightTeam pointer">
             <div
               v-for="player in getMajorPlayers(getSelectedTeams().team1)"
               :key="player.id_joueur"
@@ -40,21 +49,21 @@
               <img
                 :src="logoPersonne"
                 @click.stop="moreInfo(player, 'right')" />
-              <span class="name"
-                >{{ player.prenom_joueur }} {{ player.nom_joueur }}</span
-              >
+              <span class="name">
+                {{ player.prenom_joueur }} {{ player.nom_joueur }}
+              </span>
             </div>
           </div>
 
-          <div class="leftTeam , pointer">
+          <div class="leftTeam pointer">
             <div
               v-for="player in getMajorPlayers(getSelectedTeams().team2)"
               :key="player.id_joueur"
               class="player">
               <img :src="logoPersonne" @click.stop="moreInfo(player, 'left')" />
-              <span class="name"
-                >{{ player.prenom_joueur }} {{ player.nom_joueur }}</span
-              >
+              <span class="name">
+                {{ player.prenom_joueur }} {{ player.nom_joueur }}
+              </span>
             </div>
           </div>
         </div>
@@ -68,12 +77,15 @@
           <p><strong>Taille :</strong> {{ selectedPlayer.taille }} cm</p>
         </div>
       </div>
+
       <br />
+
       <div class="subsContainer">
         <div class="subPlayer">
           <h3>{{ getCountry(getSelectedTeams().team1) }}</h3>
           <p>
-            Coach: <b>{{ getCoach(getSelectedTeams().team1) }}</b>
+            Coach :
+            <b>{{ getCoach(getSelectedTeams().team1) }}</b>
           </p>
           <h4>Remplaçants</h4>
           <ul>
@@ -88,7 +100,8 @@
         <div class="subPlayer">
           <h3>{{ getCountry(getSelectedTeams().team2) }}</h3>
           <p>
-            Coach: <b>{{ getCoach(getSelectedTeams().team2) }}</b>
+            Coach :
+            <b>{{ getCoach(getSelectedTeams().team2) }}</b>
           </p>
           <h4>Remplaçants</h4>
           <ul>
@@ -106,9 +119,14 @@
 
 <script setup>
 import NavView from "@/components/NavView.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import axios from "axios";
 import logoPersonne from "@/images/LogoPersonne.png";
+
+const route = useRoute();
+const terrainId = computed(() => Number(route.params.id));
+const maxTerrain = 4;
 
 const players = ref([]);
 const team = ref([]);
@@ -126,14 +144,6 @@ async function fetchTeam() {
   team.value = res.data;
 }
 
-function getMajorPlayers(teamId) {
-  return players.value.filter((p) => p.id_equipe === teamId).slice(0, 6);
-}
-
-function getSubstitutes(teamId) {
-  return players.value.filter((p) => p.id_equipe === teamId).slice(6);
-}
-
 const article = [
   { team1Id: 1, team2Id: 3 },
   { team1Id: 20, team2Id: 24 },
@@ -146,18 +156,25 @@ function selectArticle(id) {
 }
 
 function getSelectedTeams() {
-  const match = article[selectedItem.value];
-  return { team1: match.team1Id, team2: match.team2Id };
+  return article[selectedItem.value];
+}
+
+function getMajorPlayers(teamId) {
+  return players.value.filter((p) => p.id_equipe === teamId).slice(0, 6);
+}
+
+function getSubstitutes(teamId) {
+  return players.value.filter((p) => p.id_equipe === teamId).slice(6);
 }
 
 function getCoach(teamId) {
-  const foundTeam = team.value.find((t) => t.id_equipe === teamId);
-  return foundTeam ? foundTeam.entraineur : "Inconnu";
+  const found = team.value.find((t) => t.id_equipe === teamId);
+  return found ? found.entraineur : "Inconnu";
 }
 
 function getCountry(teamId) {
-  const player = players.value.find((p) => p.id_equipe === teamId);
-  return player ? player.pays : "Inconnu";
+  const p = players.value.find((p) => p.id_equipe === teamId);
+  return p ? p.pays : "Inconnu";
 }
 
 function moreInfo(player, side) {
@@ -166,14 +183,15 @@ function moreInfo(player, side) {
 }
 
 function getAge(player) {
-  const birthDate = new Date(player.date_naissance_joueur);
-  const today = new Date();
-  return today.getFullYear() - birthDate.getFullYear();
+  return (
+    new Date().getFullYear() -
+    new Date(player.date_naissance_joueur).getFullYear()
+  );
 }
 
-onMounted(async () => {
-  await fetchPlayer();
-  await fetchTeam();
+onMounted(() => {
+  fetchPlayer();
+  fetchTeam();
 });
 </script>
 

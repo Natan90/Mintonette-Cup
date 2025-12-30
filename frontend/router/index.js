@@ -22,6 +22,7 @@ import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
 import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
 import Statistiques from "@/views/Administrateur/Statistiques.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
+import Terrain from "@/views/Terrain.vue"
 
 const routes = [
   {
@@ -152,6 +153,12 @@ const routes = [
         path: "Terrains/terrain4",
         name: "Terrain4",
         component: terrain4,
+      },
+      {
+        path: "/terrain/:id",
+        name: "Terrain",
+        component: Terrain,
+        props: true,
       },
       {
         path: "Gradins/Gradin/:zone",

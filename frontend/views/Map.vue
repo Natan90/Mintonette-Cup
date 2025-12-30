@@ -33,6 +33,10 @@ import router from "@/router";
 import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
 
 let map;
 const currentMapType = ref("generalZone");
@@ -280,7 +284,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 1",
-    url: "../Terrains/terrain_1",
+    terrainId: 1,
     coord: [
       [455.745856348253, 1038.1583883478115],
       [959.6213272781175, 1033.5671124347055],
@@ -292,7 +296,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 2",
-    url: "../Terrains/terrain_2",
+    terrainId: 2,
     coord: [
       [1046.4892222541098, 1033.455234377288],
       [1541.939359896889, 1035.0028339136063],
@@ -304,7 +308,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 3",
-    url: "../Terrains/terrain_3",
+    terrainId: 3,
     coord: [
       [442.9922551816334, 678.0303751011293],
       [956.9116595064504, 676.5464815124001],
@@ -316,7 +320,7 @@ const landLocations = [
   {
     type: "court",
     name: "Terrain 4",
-    url: "../Terrains/terrain_4",
+    terrainId: 4,
     coord: [
       [1044.26509630362, 677.7501285267031],
       [1551.1435166341125, 676.0133699469278],
@@ -888,6 +892,7 @@ function features(location) {
       type: location.type,
       url: location.url,
       image: location.image,
+      terrainId: location.terrainId,
     });
     return feature;
   });
@@ -1044,41 +1049,39 @@ onMounted(() => {
     );
     if (!clickedFeature) return;
 
-    const featureUrl = clickedFeature.get("url");
-    if (featureUrl) {
-      router.push(featureUrl);
+    const type = clickedFeature.get("type");
+
+    if (type === "court") {
+      const terrainId = clickedFeature.get("terrainId");
+      if (terrainId) {
+        router.push({
+          name: "Terrain",
+          params: {
+            id: terrainId,
+            locale: route.params.lang   ,
+          },
+        });
+      }
       return;
     }
 
-    const type = clickedFeature.get("type");
-
     if (type === "stand") {
-      // Récupère l'image du gradin
       const image = clickedFeature.get("image");
       currentMapType.value = "stand";
-      // Appelle changeMap avec cette image
       changeMap("stand", image);
-    } else if (type === "generalZone") {
+      return;
+    }
+
+    if (type === "generalZone") {
       const image = clickedFeature.get("image");
-
-      // Déterminer le type réel de la zone en fonction de l'image
-      // if (image === "/mapTerrain.png") {
-      //   currentMapType.value = "terrains";
-      // } else {
-      //   currentMapType.value = "prestataires";
-      // }
-
       currentMapType.value =
         image === "/mapTerrain.png" ? "terrains" : "prestataires";
-
       changeMap(currentMapType.value, image);
-    } else {
-      //Si c’est un terrain ou prestataire → redirection (fallback)
-      const url = clickedFeature.get("url");
-      if (url) router.push(url);
+      return;
     }
   });
 });
+
 function changeMap(type, image = null) {
   if (!map) return;
   currentMapType.value = type; //Pour mémoriser le type de carte actif
