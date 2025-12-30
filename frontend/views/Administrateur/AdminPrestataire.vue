@@ -45,10 +45,15 @@
             </div>
             </p>
         </div>
-        <p class="backgroundBorderL message_suppr" v-if="deleting">
+        <p class="backgroundBorderL message suppr" v-if="deleting">
             <span class="name_delete">{{ deletedPresta.nom_prestataire }}</span>{{
                 $t('adminPage.prestataire.messageSuppr') }}
             <span class="modal-close" @click="closeMessageSuppr">&times;</span>
+        </p>
+        <p class="backgroundBorderL message refus" v-else-if="refusing">
+            <span class="name_delete">{{ refusedPresta.nom_prestataire }}</span>{{
+                $t('adminPage.prestataire.messageRefus') }}
+            <span class="modal-close" @click="closeMessageRefus">&times;</span>
         </p>
         <div class="all_data">
             <table class="adminTable">
@@ -72,9 +77,11 @@
                         <td>
                             {{ item.nom_utilisateur }}
                         </td>
-                        <td :class="item.waitingforadmin ? 'waiting' : 'notWaiting'">
-                            {{ item.waitingforadmin ? $t('adminPage.prestataire.statuts.enAttente') :
-                                $t('adminPage.prestataire.statuts.valider') }}
+                        <td :class="item.refused ? 'refused' : (item.waitingforadmin ? 'waiting' : 'notWaiting')">
+                            {{ item.refused ? $t('adminPage.prestataire.statuts.refuse')
+                                : (item.waitingforadmin
+                                    ? $t('adminPage.prestataire.statuts.enAttente')
+                                    : $t('adminPage.prestataire.statuts.valider')) }}
                         </td>
                         <td>
                             <span v-if="!item.waitingforadmin">
@@ -89,7 +96,7 @@
                                 <button class="btn_valider" @click="validPrestataire(item)">
                                     {{ $t('adminPage.bouton.btn_valid') }}
                                 </button>
-                                <button class="btn_refuser">
+                                <button class="btn_refuser" @click="refuserPrestataire(item)">
                                     {{ $t('adminPage.bouton.btn_refuser') }}
                                 </button>
                             </span>
@@ -116,10 +123,12 @@ const adminStore = useAdminStore();
 
 const isDelete = ref(false);
 const deleting = ref(false);
+const refusing = ref(false);
 
 const prestataires = ref([]);
 const selectedPresta = ref(null);
 const deletedPresta = ref(null);
+const refusedPresta = ref(null);
 
 
 const id_prestataire = ref(0);
@@ -138,6 +147,10 @@ const closeModal = () => {
 
 const closeMessageSuppr = () => {
     deleting.value = false;
+};
+
+const closeMessageRefus = () => {
+    refusing.value = false;
 };
 
 function ModalShow(presta) {
@@ -197,6 +210,19 @@ async function validPrestataire(presta) {
         const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${presta.id_prestataire}`);
 
         await changePresta(true, presta.id_utilisateur);
+        await getPrestataires();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function refuserPrestataire(presta) {
+    try {
+        refusedPresta.value = presta;
+
+        const res = await axios.patch(`http://localhost:3000/admin/prestataire/refuser/${presta.id_prestataire}`);
+
+        refusing.value = true;
         await getPrestataires();
     } catch (err) {
         console.error(err);
@@ -277,31 +303,9 @@ async function changePresta(newValue, idPresta) {
     background-color: #d1fae5;
 }
 
-.message_suppr {
-    position: relative;
-    margin: 20px 0;
-    background-color: #fee2e2;
-    /* rouge très clair */
-    border-left: 6px solid #ef4444;
-    color: #7f1d1d;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.refused {
+    color: #b91c1c;
+    font-weight: 600;
 }
 
 .waiting {

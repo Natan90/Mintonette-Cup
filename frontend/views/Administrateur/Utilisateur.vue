@@ -44,7 +44,7 @@
         </div>
       </p>
     </div>
-    <p class="backgroundBorderL message_suppr" v-if="deleting">
+    <p class="backgroundBorderL message suppr" v-if="deleting">
       <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{ $t('adminPage.user.messageSuppr') }}
       <span class="modal-close" @click="closeMessageSuppr">&times;</span>
     </p>
@@ -54,7 +54,7 @@
           <tr>
             <th>{{ $t('user.nom') }}</th>
             <th>{{ $t('user.prenom') }}</th>
-            <th>Prestataire</th>
+            <th>{{ $t('adminPage.prestataire.prestataire') }}</th>
             <th>{{ $t('adminPage.prestataire.action') }}</th>
           </tr>
         </thead>
@@ -81,7 +81,7 @@
                 {{ $t('adminPage.bouton.btn_voir') }}
               </button>
               <span v-if="item.ispresta">
-                <button class="btn_refuser" @click="">
+                <button class="btn_refuser" @click="goToRetirerPrestataire">
                   {{ $t('adminPage.bouton.btn_retirer') }}
                 </button>
               </span>
@@ -146,6 +146,15 @@ function showProfil(id_user) {
 };
 
 function goToAcceptPrestataire() {
+  router.push({
+    name: 'Prestataires',
+    params: {
+      lang: locale.value
+    }
+  })
+}
+
+function goToRetirerPrestataire() {
   router.push({
     name: 'Prestataires',
     params: {
@@ -276,32 +285,7 @@ async function deleteUtilisateur(idUser) {
   background-color: #d1fae5;
 }
 
-.message_suppr {
-  position: relative;
-  margin: 20px 0;
-  background-color: #fee2e2;
-  /* rouge très clair */
-  border-left: 6px solid #ef4444;
-  color: #7f1d1d;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
-  animation: fadeIn 0.3s ease;
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .home-link {
   display: inline-flex;

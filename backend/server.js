@@ -7,7 +7,7 @@ const authRoutes = require("./routes/utilisateurs/authRoutes");
 // const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
-const utilisateursRoutes = require("./routes/utilisateurs/utilisateurs");
+const utilisateursRoutes = require("./routes/utilisateurs/admin");
 const playerRouter = require("./routes/equipes/equipes");
 const teamRouter = require("./routes/equipes/equipes");
 

@@ -232,12 +232,10 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
     return res.status(400).json({
       error: "La prestation est invalide",
     }); 
-
   const client = await pool.connect();
 
   try {
     await client.query("BEGIN");
-
     const checkPresta = await client.query(
       "SELECT nom_prestataire FROM Prestataire WHERE waitingforadmin = false AND id_prestataire = $1",
       [id_presta]
@@ -250,7 +248,6 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
         error: "Ce prestataire est déjà validé",
       });
     }
-
     const result = await client.query(
       `UPDATE Prestataire
         SET
@@ -265,8 +262,6 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
       message: "Prestataire validé avec succès"
     });
 
-
-
   } catch (err) {
     await client.query("ROLLBACK");
 
@@ -278,6 +273,59 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
     client.release();
   }
 });
+
+router.patch("/prestataire/refuser/:id", async (req, res) => {
+  const id_presta = req.params.id;
+
+  if (!id_presta)
+    return res.status(400).json({ error: "ID prestataire invalide" });
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const checkPresta = await client.query(
+      "SELECT id_utilisateur FROM Prestataire WHERE id_prestataire = $1 AND waitingforadmin = true",
+      [id_presta]
+    );
+
+    if (checkPresta.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({ error: "Prestataire non trouvé ou déjà validé/refusé" });
+    }
+
+    const idUtilisateur = checkPresta.rows[0].id_utilisateur;
+
+    const result = await client.query(
+      `UPDATE Prestataire
+       SET waitingforadmin = false, 
+       refused = true
+       WHERE id_prestataire = $1
+       RETURNING *`,
+      [id_presta]
+    );
+
+    await client.query(
+      "UPDATE Utilisateur SET ispresta = FALSE WHERE id_utilisateur = $1",
+      [idUtilisateur]
+    );
+    await client.query("COMMIT");
+
+    res.status(200).json({
+      message: "Prestataire refusé avec succès",
+      prestataire: result.rows[0]
+    });
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  } finally {
+    client.release();
+  }
+});
+
 
 
 /**
@@ -326,8 +374,13 @@ router.delete("/prestataire/delete/:id", async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Prestataire non trouvé" });
     }
+
+    const idUtilisateur = result.rows[0].id_utilisateur;
+
+    await pool.query("UPDATE Utilisateur SET ispresta = FALSE WHERE id_utilisateur = $1",[idUtilisateur]);
+
     res.json({ 
-      message: "Prestataire supprimé", 
+      message: "Prestataire supprimé et utilisateur mis à jour", 
       prestataire: result.rows[0] 
     });
 

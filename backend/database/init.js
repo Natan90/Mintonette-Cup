@@ -120,6 +120,7 @@ const pool = require("./db");
         mail_prestataire VARCHAR(255) NOT NULL,
         tel_prestataire VARCHAR(10) NOT NULL,
         waitingforadmin BOOLEAN,
+        refused BOOLEAN DEFAULT FALSE,
         specificite VARCHAR(100),
         id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
         type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire),

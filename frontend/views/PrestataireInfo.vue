@@ -264,10 +264,6 @@ function selectTypePresta(index) {
     }
 }
 
-function becomePresta() {
-    userStore.setPresta();
-}
-
 function delPresta() {
     userStore.delPresta();
 }
