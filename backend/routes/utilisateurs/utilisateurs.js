@@ -40,9 +40,13 @@ const pool = require("../../database/db");
  *                     type: string
  *                   sexe_utilisateur:
  *                     type: string
+ *                   waitingforadmin:
+ *                     type: boolean
+ *                     description: Indique si l'utilisateur prestataire est en attente de validation
  *       500:
  *         description: Erreur serveur
  */
+
 router.get("/utilisateur/show", async (req, res) => {
   try {
     const result = await pool.query(`
@@ -101,6 +105,7 @@ router.get("/utilisateur/show", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
+
 router.get("/utilisateur/show/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -112,6 +117,52 @@ router.get("/utilisateur/show/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+/**
+ * @swagger
+ * /admin/utilisateur/changePresta/{id}:
+ *   patch:
+ *     summary: Change le statut prestataire d’un utilisateur
+ *     tags: [Administrateur]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - valueChange
+ *             properties:
+ *               valueChange:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Statut prestataire mis à jour
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 utilisateur:
+ *                   type: object
+ *       400:
+ *         description: Utilisateur invalide
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
 
 router.patch("/utilisateur/changePresta/:id", async (req, res) => {
   const idUser = req.params.id;
@@ -153,7 +204,7 @@ router.patch("/utilisateur/changePresta/:id", async (req, res) => {
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID du prestataire à valider
+ *         description: ID du prestataire
  *         schema:
  *           type: integer
  *     responses:
@@ -167,12 +218,13 @@ router.patch("/utilisateur/changePresta/:id", async (req, res) => {
  *                 message:
  *                   type: string
  *       400:
- *         description: ID de la prestation invalide
+ *         description: ID invalide
  *       409:
  *         description: Prestataire déjà validé
  *       500:
  *         description: Erreur serveur
  */
+
 router.patch("/prestataire/validate/:id", async (req, res) => {
   const id_presta = req.params.id;
 
@@ -238,7 +290,7 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID du prestataire à supprimer
+ *         description: ID du prestataire
  *         schema:
  *           type: integer
  *     responses:
@@ -253,17 +305,6 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
  *                   type: string
  *                 prestataire:
  *                   type: object
- *                   properties:
- *                     id_prestataire:
- *                       type: integer
- *                     nom_prestataire:
- *                       type: string
- *                     prenom_utilisateur:
- *                       type: string
- *                     nom_utilisateur:
- *                       type: string
- *                     waitingforadmin:
- *                       type: boolean
  *       404:
  *         description: Prestataire non trouvé
  *       400:
@@ -271,6 +312,7 @@ router.patch("/prestataire/validate/:id", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
+
 router.delete("/prestataire/delete/:id", async (req, res) => {
   const id_presta = req.params.id;
 
@@ -306,7 +348,7 @@ router.delete("/prestataire/delete/:id", async (req, res) => {
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID de l'utilisateur à supprimer
+ *         description: ID de l'utilisateur
  *         schema:
  *           type: integer
  *     responses:
@@ -326,6 +368,7 @@ router.delete("/prestataire/delete/:id", async (req, res) => {
  *       500:
  *         description: Erreur serveur
  */
+
 router.delete("/utilisateur/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
