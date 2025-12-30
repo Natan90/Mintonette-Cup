@@ -34,11 +34,12 @@
       </p>
       <p>
         <div class="filtre">
-          <label for="triAlpha">{{ $t('adminPage.user.tri.nom') }}</label>
-          <select id="triAlpha" v-model="adminStore.typeTri">
-            <option value="az">{{ $t('adminPage.user.tri.az') }}</option>
-            <option value="za">{{ $t('adminPage.user.tri.za') }}</option>
-            <option value="presta">{{ $t('adminPage.user.tri.presta') }}</option>
+          <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
+          <select id="triAlpha" v-model="adminStore.typeTriUser">
+            <option value="az">{{ $t('adminPage.tri.az') }}</option>
+            <option value="za">{{ $t('adminPage.tri.za') }}</option>
+            <option value="presta">{{ $t('adminPage.tri.presta') }}</option>
+            <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
           </select>
         </div>
       </p>
@@ -77,20 +78,20 @@
             </td>
             <td>
               <button class="btn_info" @click="showProfil(item.id_utilisateur)">
-                Voir profil
+                {{ $t('adminPage.bouton.btn_voir') }}
               </button>
               <span v-if="item.ispresta">
                 <button class="btn_refuser" @click="">
-                  Retirer
+                  {{ $t('adminPage.bouton.btn_retirer') }}
                 </button>
               </span>
               <span v-else-if="item.waitingforadmin">
                 <button class="btn_valider" @click="goToAcceptPrestataire">
-                  Valider
+                  {{ $t('adminPage.bouton.btn_valid') }}
                 </button>
               </span>
               <button class="btn_supprimer" @click="ModalShow(item)">
-                {{ $t('adminPage.prestataire.btn_suppr') }}
+                {{ $t('adminPage.bouton.btn_suppr') }}
               </button>
             </td>
           </tr>
@@ -167,15 +168,20 @@ const utilisateursFiltres = computed(() => {
 
   // Tri alphabétique
   liste.sort((a, b) => {
-    if (adminStore.typeTri === "presta") {
+    if (adminStore.typeTriUser === "presta") {
       if (a.ispresta && !b.ispresta) return -1;
       if (!a.ispresta && b.ispresta) return 1;
+    }
+
+    if (adminStore.typeTriUser === "nonPresta") {
+      if (a.ispresta && !b.ispresta) return 1;
+      if (!a.ispresta && b.ispresta) return -1;
     }
 
     const nomA = a.nom_utilisateur?.toLowerCase() || "";
     const nomB = b.nom_utilisateur?.toLowerCase() || "";
 
-    if (adminStore.typeTri === "za")
+    if (adminStore.typeTriUser === "za")
       return nomB.localeCompare(nomA);
     
     return nomA.localeCompare(nomB);
@@ -249,14 +255,6 @@ async function deleteUtilisateur(idUser) {
   color: #374151;
   background: #e0f2fe;
   border-left: 4px solid #3b82f6;
-}
-
-.textAndFiltre {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-right: 40px;
-  align-items: center;
 }
 
 .nb_presta {
@@ -382,43 +380,4 @@ async function deleteUtilisateur(idUser) {
   background-color: #c0392b;
 }
 
-.filtre {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #e0f2fe;
-  border-left: 4px solid #3b82f6;
-  padding: 8px 14px;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
-}
-
-.filtre label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1e3a8a;
-  white-space: nowrap;
-}
-
-.filtre select {
-  padding: 6px 10px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid #bfdbfe;
-  background-color: #ffffff;
-  color: #1e3a8a;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filtre select:hover {
-  border-color: #3b82f6;
-}
-
-.filtre select:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
 </style>

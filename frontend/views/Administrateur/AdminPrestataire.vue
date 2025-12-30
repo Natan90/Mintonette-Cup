@@ -7,7 +7,8 @@
             <div>
                 <p>
                     {{ $t('adminPage.prestataire.modal.confirmation') }}
-                    <span class="name_delete background_name" v-if="selectedPresta">{{ selectedPresta.nom_prestataire }}</span> ?
+                    <span class="name_delete background_name" v-if="selectedPresta">{{ selectedPresta.nom_prestataire
+                        }}</span> ?
                 </p>
 
             </div>
@@ -25,14 +26,28 @@
         <p class="backgroundBorderL page_subtitle">
             {{ $t('adminPage.prestataire.descri') }}
         </p>
-        <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
-            {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.length }) }}
-        </p>
-        <p class="nb_presta valid" v-else>
-            {{ $t('adminPage.prestataire.nb_prestaVide') }}
-        </p>
+        <div class="textAndFiltre">
+            <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
+                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length }) }}
+            </p>
+            <p class="nb_presta valid" v-else>
+                {{ $t('adminPage.prestataire.nb_prestaVide') }}
+            </p>
+            <p>
+            <div class="filtre">
+                <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
+                <select id="triAlpha" v-model="adminStore.typeTriPresta">
+                    <option value="az">{{ $t('adminPage.tri.az') }}</option>
+                    <option value="za">{{ $t('adminPage.tri.za') }}</option>
+                    <option value="attente">{{ $t('adminPage.tri.attente') }}</option>
+                    <option value="valide">{{ $t('adminPage.tri.valide') }}</option>
+                </select>
+            </div>
+            </p>
+        </div>
         <p class="backgroundBorderL message_suppr" v-if="deleting">
-            <span class="name_delete">{{ deletedPresta.nom_prestataire }}</span>{{ $t('adminPage.prestataire.messageSuppr') }}
+            <span class="name_delete">{{ deletedPresta.nom_prestataire }}</span>{{
+                $t('adminPage.prestataire.messageSuppr') }}
             <span class="modal-close" @click="closeMessageSuppr">&times;</span>
         </p>
         <div class="all_data">
@@ -47,7 +62,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in prestataires" :key="item.id_prestataire">
+                    <tr v-for="(item, index) in prestatairesFiltres" :key="item.id_prestataire">
                         <td>
                             <b>{{ item.nom_prestataire }}</b>
                         </td>
@@ -58,23 +73,24 @@
                             {{ item.nom_utilisateur }}
                         </td>
                         <td :class="item.waitingforadmin ? 'waiting' : 'notWaiting'">
-                            {{ item.waitingforadmin ? $t('adminPage.prestataire.statuts.enAttente') : $t('adminPage.prestataire.statuts.valider') }}
+                            {{ item.waitingforadmin ? $t('adminPage.prestataire.statuts.enAttente') :
+                                $t('adminPage.prestataire.statuts.valider') }}
                         </td>
                         <td>
                             <span v-if="!item.waitingforadmin">
                                 <button class="btn_info">
-                                    Aller voir
+                                    {{ $t('adminPage.bouton.btn_voir') }}
                                 </button>
                                 <button class="btn_supprimer" @click="ModalShow(item)">
-                                    {{ $t('adminPage.prestataire.btn_suppr') }}
+                                    {{ $t('adminPage.bouton.btn_suppr') }}
                                 </button>
                             </span>
                             <span v-if="item.waitingforadmin">
                                 <button class="btn_valider" @click="validPrestataire(item)">
-                                    {{ $t('adminPage.prestataire.btn_valid') }}
+                                    {{ $t('adminPage.bouton.btn_valid') }}
                                 </button>
                                 <button class="btn_refuser">
-                                    {{ $t('adminPage.prestataire.btn_refuser') }}
+                                    {{ $t('adminPage.bouton.btn_refuser') }}
                                 </button>
                             </span>
                         </td>
@@ -87,13 +103,16 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
 import { useRouter } from "vue-router";
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
+import { useAdminStore } from "@/stores/admin";
+
 
 const router = useRouter();
+const adminStore = useAdminStore();
 
 const isDelete = ref(false);
 const deleting = ref(false);
@@ -117,7 +136,7 @@ const closeModal = () => {
     isDelete.value = false;
 };
 
-const closeMessageSuppr = () =>{
+const closeMessageSuppr = () => {
     deleting.value = false;
 };
 
@@ -128,6 +147,35 @@ function ModalShow(presta) {
     isDelete.value = true;
 };
 
+
+const prestatairesFiltres = computed(() => {
+  let liste = [...prestataires.value];
+
+  // Tri alphabétique
+  liste.sort((a, b) => {
+    if (adminStore.typeTriPresta === "attente") {
+      if (a.waitingforadmin && !b.waitingforadmin) return -1;
+      if (!a.waitingforadmin && b.waitingforadmin) return 1;
+    }
+
+    if (adminStore.typeTriPresta === "valide") {
+      if (a.waitingforadmin && !b.waitingforadmin) return 1;
+      if (!a.waitingforadmin && b.waitingforadmin) return -1;
+    }
+
+
+    const nomA = a.nom_prestataire?.toLowerCase() || "";
+    const nomB = b.nom_prestataire?.toLowerCase() || "";
+
+    if (adminStore.typeTriPresta === "za")
+      return nomB.localeCompare(nomA);
+    
+    return nomA.localeCompare(nomB);
+
+  });
+
+  return liste;
+});
 
 
 
@@ -188,8 +236,6 @@ async function changePresta(newValue, idPresta) {
 
 
 <style scoped>
-
-
 .main_content {
     margin-left: 250px;
     padding: 30px;
@@ -234,7 +280,8 @@ async function changePresta(newValue, idPresta) {
 .message_suppr {
     position: relative;
     margin: 20px 0;
-    background-color: #fee2e2; /* rouge très clair */
+    background-color: #fee2e2;
+    /* rouge très clair */
     border-left: 6px solid #ef4444;
     color: #7f1d1d;
     font-weight: 500;
@@ -250,6 +297,7 @@ async function changePresta(newValue, idPresta) {
         opacity: 0;
         transform: translateY(-6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -265,7 +313,4 @@ async function changePresta(newValue, idPresta) {
     color: #059669;
     font-weight: 600;
 }
-
-
-
 </style>

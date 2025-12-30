@@ -116,6 +116,22 @@
     }
   },
   "adminPage": {
+    "bouton": {
+      "btn_voir": "Aller voir",
+      "btn_suppr" : "Supprimer",
+      "btn_valid" : "Valider",
+      "btn_refuser" : "Refuser",
+      "btn_retirer": "Retirer"
+    },
+    "tri": {
+      "nom": "Trier par :",
+      "az": "Nom A → Z",
+      "za": "Nom Z → A",
+      "presta": "Prestataires en premier",
+      "nonPresta": "Prestataires en dernier",
+      "attente": "En attente en premier",
+      "valide": "Validé en premier"
+    },
     "prestataire": {
       "title": "Gestion des prestataires de la compétition",
       "descri" : "Bienvenue dans l’espace d’administration dédié aux prestataires intervenant sur nos événements de volley. \n Ici, vous pouvez consulter toutes les prestations proposées : restauration, animations, boutiques et services pour les équipes et spectateurs.Les demandes en attente doivent être validées avant que le prestataire ne puisse intervenir sur le terrain ou dans les espaces événementiels. \n Cette gestion vous permet de garantir une expérience optimale et sécurisée pour tous les participants.",
@@ -124,9 +140,6 @@
       "messageSuppr" : "ne fait désormais plus partie des prestataires de la compétition.",
       "prestation" : "Prestation",
       "action" : "Actions",
-      "btn_suppr" : "Supprimer",
-      "btn_valid" : "Valider",
-      "btn_refuser" : "Refuser",
       "modal" : {
         "confirmation" : "Êtes-vous sûr de vouloir supprimer le prestataire ",
         "btn_confirmer" : "Confirmer"
@@ -142,16 +155,9 @@
       "descri": "Bienvenue dans l’espace d’administration des utilisateurs. Ici, vous pouvez consulter, gérer et supprimer les comptes inscrits.\n Cette page vous permet de garantir la sécurité et le bon fonctionnement de la plateforme, en vous assurant que seuls les utilisateurs valides ont accès aux fonctionnalités.\n La suppression d’un utilisateur est définitive, pensez donc à vérifier les informations avant de confirmer.",
       "nb_users": "Il y a {count} utilisateur(s) dans le système.",
       "nb_userVide": "Aucun utilisateur pour le moment.",
-      "btn_suppr": "Supprimer",
       "messageSuppr": "ne fait désormais plus partie des utilisateurs.",
       "modal": {
         "confirmation": "Êtes-vous sûr de vouloir supprimer l'utilisateur"
-      },
-      "tri": {
-        "nom": "Trier :",
-        "az": "Nom A → Z",
-        "za": "Nom Z → A",
-        "presta": "Prestataires en premier"
       }
     }
   }

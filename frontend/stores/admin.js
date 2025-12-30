@@ -2,13 +2,19 @@ import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
 export const useAdminStore = defineStore("admin", () => {
-  const typeTri = ref(String(localStorage.getItem("typeTri")) || "az");
+  const typeTriUser = ref(String(localStorage.getItem("typeTriUser")) || "az");
+  const typeTriPresta = ref(String(localStorage.getItem("typeTriPresta")) || "az");
 
-  function setTypeTri(value) {
-    typeTri.value = value;
+  function setTypeTriUser(value) {
+    typeTriUser.value = value;
   }
 
-  watch(typeTri, (v) => localStorage.setItem("typeTri", v));
+  function setTypeTriPresta(value) {
+    typeTriPresta.value = value;
+  }
 
-  return { typeTri, setTypeTri };
+  watch(typeTriUser, (v) => localStorage.setItem("typeTriUser", v));
+  watch(typeTriPresta, (v) => localStorage.setItem("typeTriPresta", v));
+
+  return { typeTriUser, typeTriPresta, setTypeTriUser, setTypeTriPresta };
 });
