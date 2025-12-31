@@ -8,10 +8,6 @@ import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
 import ModifyAccount from "@/views/ModifyAccount.vue";
 import ShowAccount from "@/views/ShowAccount.vue";
-import terrain1 from "@/views/Terrains/terrain1.vue";
-import terrain2 from "@/views/Terrains/terrain2.vue";
-import terrain3 from "@/views/Terrains/terrain3.vue";
-import terrain4 from "@/views/Terrains/terrain4.vue";
 import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
 import Gradin from "@/views/Gradin.vue";
@@ -22,7 +18,7 @@ import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
 import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
 import Statistiques from "@/views/Administrateur/Statistiques.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
-import Terrain from "@/views/Terrain.vue"
+import Terrain from "@/views/Terrain.vue";
 
 const routes = [
   {
@@ -135,27 +131,7 @@ const routes = [
         component: PolygonCreation,
       },
       {
-        path: "Terrains/terrain1",
-        name: "Terrain1",
-        component: terrain1,
-      },
-      {
-        path: "Terrains/terrain2",
-        name: "Terrain2",
-        component: terrain2,
-      },
-      {
-        path: "Terrains/terrain3",
-        name: "Terrain3",
-        component: terrain3,
-      },
-      {
-        path: "Terrains/terrain4",
-        name: "Terrain4",
-        component: terrain4,
-      },
-      {
-        path: "/terrain/:id",
+        path: "terrain/:id",
         name: "Terrain",
         component: Terrain,
         props: true,

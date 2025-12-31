@@ -37,7 +37,6 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-
 let map;
 const currentMapType = ref("generalZone");
 let coucheVecteur = null;
@@ -1058,7 +1057,7 @@ onMounted(() => {
           name: "Terrain",
           params: {
             id: terrainId,
-            locale: route.params.lang   ,
+            lang: route.params.lang,
           },
         });
       }
@@ -1066,9 +1065,34 @@ onMounted(() => {
     }
 
     if (type === "stand") {
-      const image = clickedFeature.get("image");
-      currentMapType.value = "stand";
-      changeMap("stand", image);
+      const standName = clickedFeature.get("name"); // ex: "Tribune Nord"
+      let zone = "";
+
+      // Détermine la zone en fonction du stand
+      switch (standName) {
+        case "Tribune Nord":
+          zone = "nord";
+          break;
+        case "Tribune Est":
+          zone = "est";
+          break;
+        case "Tribune Sud":
+          zone = "sud";
+          break;
+        case "Tribune Ouest":
+          zone = "ouest";
+          break;
+        default:
+          zone = "nord";
+      }
+
+      router.push({
+        name: "Gradin",
+        params: {
+          lang: route.params.lang,
+          zone: zone,
+        },
+      });
       return;
     }
 

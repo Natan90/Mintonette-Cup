@@ -1,16 +1,22 @@
 <template>
   <NavView />
 
-  <div class="pageContainer">
+  <div class="pageContainer" v-if="selectedMatch">
     <div class="navMatch">
       <router-link
-        :to="{ name: 'Terrain', params: { id: terrainId - 1 } }"
+        :to="{
+          name: 'Terrain',
+          params: { lang: lang.value, id: terrainId - 1 || 4 },
+        }"
         class="button">
         ⬅ Terrain précédent
       </router-link>
 
       <router-link
-        :to="{ name: 'Terrain', params: { id: terrainId - 1 } }"
+        :to="{
+          name: 'Terrain',
+          params: { lang: lang.value, id: (terrainId % 4) + 1 },
+        }"
         class="button">
         Terrain suivant ➡
       </router-link>
@@ -22,28 +28,32 @@
 
     <div class="matchSelector">
       <button
-        v-for="(elt, index) in article"
-        :key="index"
-        @click="selectArticle(index)"
+        v-for="(match, index) in matches"
+        :key="match.id_match"
+        @click="selectedItem = index"
         :class="['matchTitle pointer', { active: index === selectedItem }]">
-        {{ getCountry(elt.team1Id) }} - {{ getCountry(elt.team2Id) }}
+        {{ match.team1_country }} - {{ match.team2_country }}
       </button>
     </div>
 
-    <div class="matchHeader" v-if="article[selectedItem]">
+    <div class="matchHeader">
       <h3>
-        {{ getCountry(article[selectedItem].team1Id) }}
+        {{ selectedMatch.team1_country }}
         <span>VS</span>
-        {{ getCountry(article[selectedItem].team2Id) }}
+        {{ selectedMatch.team2_country }}
       </h3>
+      <p class="matchTime">Heure : {{ matchTime }}</p>
     </div>
 
     <div class="terrainConteneur">
       <div class="terrainLayout">
-        <div class="image" @click="selectedPlayer = null">
+        <div
+          class="image"
+          :style="{ backgroundImage: `url(${terrainImage})` }"
+          @click="selectedPlayer = null">
           <div class="rightTeam pointer">
             <div
-              v-for="player in getMajorPlayers(getSelectedTeams().team1)"
+              v-for="player in getMajorPlayers(selectedMatch.team2_id)"
               :key="player.id_joueur"
               class="player">
               <img
@@ -57,7 +67,7 @@
 
           <div class="leftTeam pointer">
             <div
-              v-for="player in getMajorPlayers(getSelectedTeams().team2)"
+              v-for="player in getMajorPlayers(selectedMatch.team1_id)"
               :key="player.id_joueur"
               class="player">
               <img :src="logoPersonne" @click.stop="moreInfo(player, 'left')" />
@@ -70,7 +80,8 @@
 
         <div v-if="selectedPlayer" class="playerCard" :class="cardSide">
           <h4>
-            {{ selectedPlayer.prenom_joueur }} {{ selectedPlayer.nom_joueur }}
+            {{ selectedPlayer.prenom_joueur }}
+            {{ selectedPlayer.nom_joueur }}
           </h4>
           <p><strong>Poste :</strong> {{ selectedPlayer.poste }}</p>
           <p><strong>Âge :</strong> {{ getAge(selectedPlayer) }} ans</p>
@@ -82,15 +93,15 @@
 
       <div class="subsContainer">
         <div class="subPlayer">
-          <h3>{{ getCountry(getSelectedTeams().team1) }}</h3>
+          <h3>{{ selectedMatch.team1_country }}</h3>
           <p>
             Coach :
-            <b>{{ getCoach(getSelectedTeams().team1) }}</b>
+            <b>{{ selectedMatch.team1_coach }}</b>
           </p>
           <h4>Remplaçants</h4>
           <ul>
             <li
-              v-for="player in getSubstitutes(getSelectedTeams().team1)"
+              v-for="player in getSubstitutes(selectedMatch.team1_id)"
               :key="player.id_joueur">
               {{ player.prenom_joueur }} {{ player.nom_joueur }}
             </li>
@@ -98,15 +109,15 @@
         </div>
 
         <div class="subPlayer">
-          <h3>{{ getCountry(getSelectedTeams().team2) }}</h3>
+          <h3>{{ selectedMatch.team2_country }}</h3>
           <p>
             Coach :
-            <b>{{ getCoach(getSelectedTeams().team2) }}</b>
+            <b>{{ selectedMatch.team2_coach }}</b>
           </p>
           <h4>Remplaçants</h4>
           <ul>
             <li
-              v-for="player in getSubstitutes(getSelectedTeams().team2)"
+              v-for="player in getSubstitutes(selectedMatch.team2_id)"
               :key="player.id_joueur">
               {{ player.prenom_joueur }} {{ player.nom_joueur }}
             </li>
@@ -115,48 +126,70 @@
       </div>
     </div>
   </div>
+  <router-link
+    :to="{
+      name: 'Gradin',
+      params: {
+        lang: lang.value,
+        zone: terrainToZone[terrainId],
+      },
+    }"
+    class="button">
+    Réserver votre billet dès à présent
+  </router-link>
+  >
+  <Footer></Footer>
 </template>
 
 <script setup>
 import NavView from "@/components/NavView.vue";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import logoPersonne from "@/images/LogoPersonne.png";
+import terrainImage from "@/images/TerrainSans.png";
+import Footer from "@/components/Footer.vue";
+
+const terrainToZone = {
+  1: "nord",
+  2: "est",
+  3: "sud",
+  4: "ouest",
+};
 
 const route = useRoute();
 const terrainId = computed(() => Number(route.params.id));
-const maxTerrain = 4;
 
 const players = ref([]);
-const team = ref([]);
+const matches = ref([]);
 const selectedItem = ref(0);
 const selectedPlayer = ref(null);
 const cardSide = ref("right");
 
-async function fetchPlayer() {
-  const res = await axios.get("http://localhost:3000/equipe/showPlayer");
+//La langue
+const lang = computed(() => route.params.lang);
+
+const selectedMatch = computed(() => matches.value[selectedItem.value]);
+
+const matchTime = computed(() => {
+  if (!selectedMatch.value) return "";
+  const date = new Date(selectedMatch.value.date_match);
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+});
+
+async function fetchPlayers() {
+  const res = await axios.get("http://localhost:3000/equipes/players");
   players.value = res.data;
 }
 
-async function fetchTeam() {
-  const res = await axios.get("http://localhost:3000/equipe/showTeam");
-  team.value = res.data;
-}
-
-const article = [
-  { team1Id: 1, team2Id: 3 },
-  { team1Id: 20, team2Id: 24 },
-  { team1Id: 4, team2Id: 14 },
-  { team1Id: 2, team2Id: 5 },
-];
-
-function selectArticle(id) {
-  selectedItem.value = id;
-}
-
-function getSelectedTeams() {
-  return article[selectedItem.value];
+async function fetchMatches() {
+  const res = await axios.get(
+    `http://localhost:3000/equipes/match/terrain/${terrainId.value}`
+  );
+  matches.value = res.data;
+  selectedItem.value = 0;
 }
 
 function getMajorPlayers(teamId) {
@@ -165,16 +198,6 @@ function getMajorPlayers(teamId) {
 
 function getSubstitutes(teamId) {
   return players.value.filter((p) => p.id_equipe === teamId).slice(6);
-}
-
-function getCoach(teamId) {
-  const found = team.value.find((t) => t.id_equipe === teamId);
-  return found ? found.entraineur : "Inconnu";
-}
-
-function getCountry(teamId) {
-  const p = players.value.find((p) => p.id_equipe === teamId);
-  return p ? p.pays : "Inconnu";
 }
 
 function moreInfo(player, side) {
@@ -190,8 +213,12 @@ function getAge(player) {
 }
 
 onMounted(() => {
-  fetchPlayer();
-  fetchTeam();
+  fetchPlayers();
+  fetchMatches();
+});
+
+watch(terrainId, () => {
+  fetchMatches();
 });
 </script>
 
@@ -220,6 +247,7 @@ onMounted(() => {
   gap: 10px;
 }
 .matchTitle {
+  width: 250px;
   padding: 10px 18px;
   border-radius: 20px;
   background-color: #e6e9f5;
@@ -227,7 +255,6 @@ onMounted(() => {
   font-weight: 600;
   transition: 0.2s ease-in-out;
 }
-
 .matchTitle.active,
 .matchTitle:hover {
   background-color: #00167a;
@@ -243,12 +270,8 @@ onMounted(() => {
   margin: 0 10px;
   color: #00167a;
 }
-
 .image {
-  width: 100%;
   aspect-ratio: 16/9;
-  margin: auto;
-  background-image: url("../../images/TerrainSans.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

@@ -32,13 +32,6 @@
         <span class="pointer optionNav">Vue administrateur</span>
       </router-link>
 
-      <router-link
-        :to="{
-          name: 'Terrain1',
-          params: { lang: locale },
-        }">
-        <span class="pointer optionNav">Terrain (temp)</span>
-      </router-link>
 
       <span>
         <button @click="changeLanguage('fr')" class="langue pointer optionNav"

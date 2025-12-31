@@ -8,8 +8,8 @@ const authRoutes = require("./routes/utilisateurs/authRoutes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
 const utilisateursRoutes = require("./routes/utilisateurs/admin");
-const playerRouter = require("./routes/equipes/equipes");
-const teamRouter = require("./routes/equipes/equipes");
+const equipesRoutes = require("./routes/equipes/equipes");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,8 +31,8 @@ app.use("/utilisateur/auth", authRoutes);
 // app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);
 app.use("/gradin", gradins);
-app.use("/equipe", playerRouter);
-app.use("/team", teamRouter);
+app.use("/equipes", equipesRoutes);
+
 
 // Swagger
 const swaggerUi = require("swagger-ui-express");
@@ -52,4 +52,3 @@ app.use(
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
-
