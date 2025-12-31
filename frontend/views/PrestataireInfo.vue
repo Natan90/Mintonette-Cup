@@ -645,35 +645,5 @@ async function updatePresta() {
     box-shadow: 0 5px 15px rgba(247, 195, 37, 0.4);
 }
 
-.message {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 1rem;
-    margin-top: 10px;
-    animation: fadeIn 0.3s ease;
-}
 
-.message-success {
-    background: #e6f9f0;
-    color: #0f7a4a;
-    border: 1px solid #5ad39c;
-}
-
-.message-error {
-    background: #fdecea;
-    color: #b42318;
-    border: 1px solid #f5a3a3;
-}
-
-.message_error {
-    display: flex;
-    justify-content: center;
-    color: red;
-    font-weight: bold;
-    font-size: 1.2em;
-}
 </style>

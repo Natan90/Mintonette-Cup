@@ -577,10 +577,6 @@ router.put("/updatePresta/:id", async (req, res) => {
   const id_user = req.params.id;
   const { nom, descri, nb_participants, tarif, mail, tel, specificite, type } =
     req.body;
-  if (!nom || !descri || !tarif || !mail || !tel || !specificite || !type || !id_user)
-    return res.status(400).json({
-      error: "Champs obligatoires manquants",
-    });
 
   const client = await pool.connect();
 

@@ -68,6 +68,15 @@
                 }" />
             </div>
 
+            <div
+                v-if="message"
+                class="message"
+                :class="messageType === 'error'
+                    ? 'message-error'
+                    : 'message-success'">
+                <span class="text">{{ message }}</span>
+            </div>
+
             <div class="button_container">
                 <button @click="updateEvent">
                     {{ $t('prestataireInfo.formulaire.btnModifier') }}
@@ -112,6 +121,9 @@ const fonts = [
     'Meie Script'
 ];
 const selectedFont = ref(null);
+
+const message = ref('');
+const messageType = ref('success');
 
 watch(() => locale.value,
     (newLang) => {
@@ -167,9 +179,10 @@ async function getValuesEvenement() {
 
 async function updateEvent() {
     try {
-        const res = await axios.put("http://localhost:3000/admin/event/update", {
+        const res = await axios.put("http://localhost:3000/admin/evenement/update", {
             title: title_evenement.value,
-            descri: descri_evenement.value,
+            descri_fr: descri_evenement.value,
+            descri_en: descri_evenement.value,
             color: colorTitle.value,
             font: selectedFont.value,
             image: imagePreview.value

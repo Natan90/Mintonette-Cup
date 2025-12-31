@@ -4,8 +4,8 @@
     <div class="all">
       <div class="image">
         <img src="../images/photo_fond.png" alt="" />
-        <div class="texteImage"> 
-          Mintonette Cup
+        <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }"> 
+          {{ title_evenement }}
           <!-- {{ $t("mintonetteCup.title") }} -->
         </div>
       </div>
@@ -153,6 +153,14 @@ const userStore = useUserStore();
 
 const utilisateur = ref([]);
 
+/* ********************
+    Evenement Values
+******************** */
+const title_evenement = ref('');
+const colorTitle = ref('');
+const imagePreview = ref(null);
+const selectedFont = ref(null);
+
 const { t } = useI18n();
 const blocInfoArray = computed(() => [
   {
@@ -204,6 +212,7 @@ const handleScroll = () => {
 onMounted(async () => {
   window.addEventListener("scroll", handleScroll);
   try {
+    await getValuesEvenement();
     await getValuesUser();
   } catch (err) {
     console.error(err);
@@ -215,6 +224,21 @@ onBeforeUnmount(() => {
 });
 
 
+//=========================
+//= Async functions event =
+//=========================
+async function getValuesEvenement() {
+    try {
+        const res = await axios.get("http://localhost:3000/admin/evenement/show");
+        title_evenement.value = res.data.nom_evenement;
+        colorTitle.value = res.data.color_title;
+        selectedFont.value = res.data.text_font;
+        imagePreview.value = res.data.image_evenement;
+
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 async function getValuesUser() {
   try {
@@ -262,10 +286,10 @@ body::-webkit-scrollbar {
   top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  /* color: white; */
   border-radius: 10px;
   padding: 5px 10px;
-  font-family: "Meie Script";
+  /* font-family: "Meie Script"; */
 }
 
 .infos {

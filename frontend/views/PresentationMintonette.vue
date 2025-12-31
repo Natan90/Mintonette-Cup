@@ -2,7 +2,7 @@
 
     <section class="presentation">
 
-    <span class="question" v-html="descri_evenement_title"></span>
+    <span class="question">{{ $t('PresentationMintonette.title') }}</span>
 
     <span v-html="descri_evenement_texte"></span>
 
