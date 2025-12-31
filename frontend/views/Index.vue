@@ -4,7 +4,7 @@
     <div class="all">
       <div class="image">
         <img src="../images/photo_fond.png" alt="" />
-        <div class="texteImage">
+        <div class="texteImage"> 
           Mintonette Cup
           <!-- {{ $t("mintonetteCup.title") }} -->
         </div>
@@ -122,6 +122,7 @@
 ******************** */
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import axios from "axios";
 import { useUserStore } from '@/stores/user';
 
 
@@ -141,11 +142,10 @@ import PresentationMintonette from "./PresentationMintonette.vue";
     IMAGES IMPORTS 
 ******************** */
 import logoCouleur from "../images/logo-couleur.png";
-import photoFond from "../images/photo_fond.png";
+import photoFond from "/photo_fond.png";
 import photoFoule from "./../images/foule.jpg";
 import photoStade from "./../images/stade.jpg";
 import photoReseaux from "./../images/reseaux.jpg";
-import axios from "axios";
 
 const navbar = ref("0px");
 

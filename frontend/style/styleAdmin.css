@@ -1,3 +1,6 @@
+/* ============================= */
+/* ========== MODALE =========== */
+/* ============================= */
 
 .modal-backdrop {
     position: fixed;
@@ -34,6 +37,11 @@
     color: #ff0000;
 }
 
+
+/* ============================= */
+/* ===== CONTENU GÉNÉRAL ======= */
+/* ============================= */
+
 .backgroundBorderL {
     font-size: 16px;
     line-height: 1.6;
@@ -42,13 +50,17 @@
     border-radius: 6px;
 }
 
-
 .all_data {
     background: #ffffff;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
+
+
+/* ============================= */
+/* ======== TABLE ADMIN ======== */
+/* ============================= */
 
 .adminTable {
     width: 100%;
@@ -88,7 +100,13 @@
     word-wrap: break-word;
 }
 
-.adminTable td button, .btn_modal {
+
+/* ============================= */
+/* ======== BOUTONS ============ */
+/* ============================= */
+
+.adminTable td button,
+.btn_modal {
     color: white;
     margin-left: 8px;
     padding: 6px 12px;
@@ -131,6 +149,11 @@
     background-color: #1e3a8a;
 }
 
+
+/* ============================= */
+/* ===== TEXTE & BADGES ======== */
+/* ============================= */
+
 .name_delete {
     font-weight: 700;
     color: #1e3a8a;
@@ -138,91 +161,195 @@
     border-radius: 4px;
     display: inline-block;
 }
+
 .background_name {
     background-color: #dbeafe;
 }
 
+
+/* ============================= */
+/* ===== TEXTE & FILTRE ======== */
+/* ============================= */
+
 .textAndFiltre {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-right: 40px;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 40px;
+    align-items: center;
 }
 
 .filtre {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #e0f2fe;
-  border-left: 4px solid #3b82f6;
-  padding: 8px 14px;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e0f2fe;
+    border-left: 4px solid #3b82f6;
+    padding: 8px 14px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
 }
 
 .filtre label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1e3a8a;
-  white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e3a8a;
+    white-space: nowrap;
 }
 
 .filtre select {
-  padding: 6px 10px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid #bfdbfe;
-  background-color: #ffffff;
-  color: #1e3a8a;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid #bfdbfe;
+    background-color: #ffffff;
+    color: #1e3a8a;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .filtre select:hover {
-  border-color: #3b82f6;
+    border-color: #3b82f6;
 }
 
 .filtre select:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
+
+/* ============================= */
+/* ========= MESSAGES ========== */
+/* ============================= */
+
 .message {
-  position: relative;
-  margin: 20px 0;
-  /* rouge très clair */
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: fadeIn 0.3s ease;
+    position: relative;
+    margin: 20px 0;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .suppr {
-  background-color: #fee2e2;
-  border-left: 6px solid #ef4444;
-  color: #7f1d1d;
-  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
+    background-color: #fee2e2;
+    border-left: 6px solid #ef4444;
+    color: #7f1d1d;
+    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
 }
 
 .refus {
-  background-color: #fee2e2;
-  border-left: 6px solid #ef4444;
-  color: #7f1d1d;
-  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
+    background-color: #fee2e2;
+    border-left: 6px solid #ef4444;
+    color: #7f1d1d;
+    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.15);
+}
+
+
+/* ============================= */
+/* ===== FORMULAIRE / EDITOR === */
+/* ============================= */
+
+.editor_container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 60px;
+}
+
+.tox-tinymce {
+    width: 100% !important;
+}
+
+.form_group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form_group input,
+.form_group select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+
+/* ============================= */
+/* ===== Container de boutons == */
+/* ============================= */
+
+.button_container {
+    display: flex;
+    justify-content: center;
+}
+
+.button_container button {
+    margin: 30px 0px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2em;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    background: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(0, 87, 255, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.button_container button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-25deg);
+    transition: all 0.5s ease;
+}
+
+.button_container button:hover::after {
+    left: 125%;
+}
+
+.button_container button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 25px var(--primary-color);
+}
+
+.button_container button.disabled::after {
+    content: none;
+    transition: none;
+}
+
+.button_container button.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.button_container button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

@@ -4,7 +4,7 @@ const pool = require("./db");
   try {
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
-const schemaSQL = `
+    const schemaSQL = `
   DROP TABLE IF EXISTS prend_une_place CASCADE;
   DROP TABLE IF EXISTS a_pour_ingredient CASCADE;
   DROP TABLE IF EXISTS a_la_carte CASCADE;
@@ -45,12 +45,22 @@ const schemaSQL = `
   DROP TABLE IF EXISTS Type_utilisateur CASCADE;
   DROP TABLE IF EXISTS Siege CASCADE;
   DROP TABLE IF EXISTS Utilisateur CASCADE;
+  DROP TABLE IF EXISTS Evenement CASCADE;
   DROP TABLE IF EXISTS Terrain CASCADE;
 
   -- 1. Tables sans dépendances
   CREATE TABLE IF NOT EXISTS Terrain(
     id_terrain SERIAL PRIMARY KEY,
     nom_terrain VARCHAR(50)
+  );
+
+  CREATE TABLE IF NOT EXISTS Evenement(
+    id_evenement SERIAL PRIMARY KEY,
+    nom_evenement VARCHAR(50),
+    color_title VARCHAR(50),
+    text_font VARCHAR(100),
+    image_evenement VARCHAR(255),
+    descri_evenement JSONB
   );
 
   CREATE TABLE IF NOT EXISTS Utilisateur(
@@ -400,6 +410,32 @@ const schemaSQL = `
 
     await pool.query(schemaSQL);
 
+    const insertEvenement = `
+      INSERT INTO Evenement
+      (nom_evenement, color_title, text_font, image_evenement, descri_evenement)
+      VALUES
+      (
+        'Mintonette Cup',
+        '#ffffff',
+        'Meie Script',
+        '/photo_fond.png',
+        $$
+        {
+          "fr": {
+            "title": "QUI SOMMES NOUS ?<br>",
+            "texte": "Le grand <b>tournoi de Volley mondial</b> Mintonette Cup arrive <b>à Montpellier</b> ! Notre troisième édition s'annonce folle.<br>Vous êtes <b>adèpte de volley-ball</b>, aimez suivre de <b>grands évenements sportifs</b> qui regroupent <b>passionnés</b> et <b>bonne ambiance</b> ? <b>La Mintonnette Cup vous attend !</b><br>Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une <b>ambiance débordante</b>.<br>On vous attends dans les gradins !<br>"
+          },
+          "en": {
+            "title": "WHO ARE WE ?",
+            "texte": "The great <b>world Volleyball tournament</b> Mintonette Cup is coming <b>to Montpellier</b>! Our third edition promises to be amazing.<br>Are you a <b>sports enthusiast</b>, do you love following <b>major sporting events</b> that bring together <b>passionate fans</b> and <b>a great atmosphere</b>? <b>The Mintonette Cup awaits you !</b><br>On the agenda: <b>thrilling matches</b>, an <b>amazing audience</b> and a <b>bustling atmosphere</b>.<br>We look forward to seeing you in the stands !<br>"
+          }
+        }
+        $$::jsonb
+      );
+      `;
+
+    await pool.query(insertEvenement);
+
     const insertUsers = `
       INSERT INTO Utilisateur 
         (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta)
@@ -608,7 +644,7 @@ const schemaSQL = `
       (4, 16, 32, '2026-01-01 21:00:00');  -- Serbie vs Saint-Marin
   `;
     await pool.query(insertMatchs);
-    
+
     const insertJoueurEquipe = `
     INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe) VALUES
     -- France

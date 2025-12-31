@@ -1,31 +1,60 @@
 <template>
+    <!-- Barre de navigation principale -->
     <NavView id="nav_bar"></NavView>
+
     <div class="container">
+        <!-- Titre principal de la page -->
         <div class="title">
-            <p>{{$t('prestataireInfo.title')}} </p>
+            <p>{{ $t('prestataireInfo.title') }}</p>
         </div>
+
         <div class="content">
+            <!-- Sous-titre indiquant le rôle du prestataire -->
             <div class="subtitle">
-                <p>{{$t('prestataireInfo.role')}}</p>
+                <p>{{ $t('prestataireInfo.role') }}</p>
             </div>
+
+            <!-- Liste des types de prestataires disponibles -->
             <div class="type_prestataire">
-                <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta"
+                <div
+                    v-for="(item, index) in type_prestataire"
+                    :key="index"
+                    class="boite_type_presta"
                     :id="`p-${index}`">
-                    <button class="button_type_presta" @click="selectTypePresta(index)">
+                    <!-- Bouton de sélection du type de prestataire -->
+                    <button
+                        class="button_type_presta"
+                        @click="selectTypePresta(index)">
                         {{ item.nom_type_prestataire }}
                     </button>
                 </div>
             </div>
+
+            <!-- Tableau affichant les spécificités selon le type choisi -->
             <div v-if="selectedType" class="container_table">
-                <h1>{{$t('prestataireInfo.type')}} {{ selectedTypeLabel }} ?</h1>
+                <h1>
+                    {{ $t('prestataireInfo.type') }} {{ selectedTypeLabel }} ?
+                </h1>
+
                 <table class="table_type_presta">
                     <tbody>
-                        <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
+                        <!-- Liste des options possibles -->
+                        <tr
+                            v-for="(item, index) in selectedItems"
+                            :key="index"
+                            class="table-row">
                             <td>
-                                <input type="checkbox" :id="`item-${index}`" :value="index"
+                                <!-- Checkbox (une seule sélection autorisée) -->
+                                <input
+                                    type="checkbox"
+                                    :id="`item-${index}`"
+                                    :value="index"
                                     @change="onCheckChange($event, item.nom, index)"
-                                    :checked="isCheckedWithIndex(index)" :disabled="continueInscription"></input>
-                                <label :for="`item-${index}`">{{ item.nom }}</label>
+                                    :checked="isCheckedWithIndex(index)"
+                                    :disabled="continueInscription"/>
+                                <label :for="`item-${index}`">
+                                    {{ item.nom }}
+                                </label>
                             </td>
                         </tr>
                     </tbody>
@@ -34,84 +63,149 @@
         </div>
     </div>
 
+    <!-- Message d'erreur si la sélection des checkbox est invalide -->
     <div class="message_error" v-if="errorMessageCheckBox">
         <p>{{ errorMessageCheckBox }}</p>
     </div>
 
+    <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
     <div class="button_container" v-if="!continueInscription && pathAdd">
-        <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
+        <button
+            @click.prevent="showContinueInscription"
+            :disabled="!isSelectionValid"
             :class="{ disabled: !isSelectionValid }">
-            {{$t('prestataireInfo.btnContinueInscription')}}
-        </button>
-    </div>
-    <div class="button_container" v-if="continueInscription && pathAdd">
-        <button @click.prevent="hideContinueInscription">
-            {{$t('prestataireInfo.btnRetour')}}
+            {{ $t('prestataireInfo.btnContinueInscription') }}
         </button>
     </div>
 
-    <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
+    <!-- Bouton retour vers la sélection du type -->
+    <div class="button_container" v-if="continueInscription && pathAdd">
+        <button @click.prevent="hideContinueInscription">
+            {{ $t('prestataireInfo.btnRetour') }}
+        </button>
+    </div>
+
+    <!-- Formulaire de création / modification du prestataire -->
+    <div
+        class="prestataire_container"
+        v-if="continueInscription || !pathAdd"
+        id="presta_container">
         <div class="editor_container">
+
+            <!-- Champ : nom du prestataire -->
             <div class="form_group">
-                <label for="nom">{{ $t('prestataireInfo.formulaire.nom') }}</label>
+                <label for="nom">
+                    {{ $t('prestataireInfo.formulaire.nom') }}
+                </label>
                 <input type="text" id="nom" v-model="nom_presta" />
             </div>
 
+            <!-- Champ : description avec éditeur TinyMCE -->
             <div class="form_group">
-                <label>{{ $t('prestataireInfo.formulaire.descri') }}</label>
-                <Editor v-model="descri_presta" api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo" :init="{
-                    height: 300,
-                    menubar: false,
-                    plugins: 'lists link image code',
-                    toolbar: 'undo redo | bold italic underline | bullist numlist | code',
-                    branding: false
-                }" />
+                <label>
+                    {{ $t('prestataireInfo.formulaire.descri') }}
+                </label>
+                <Editor
+                    v-model="descri_presta"
+                    api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo"
+                    :init="{
+                        height: 600,
+                        menubar: false,
+                        plugins: 'lists link image table media code preview anchor',
+                        toolbar: 'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+                        branding: false
+                    }"
+                />
             </div>
 
+            <!-- Champ : nombre de participants -->
             <div class="form_group">
-                <label for="participants">{{ $t('prestataireInfo.formulaire.nbParticipants') }}</label>
-                <input type="number" id="participants" v-model="nb_participants" min="1" />
+                <label for="participants">
+                    {{ $t('prestataireInfo.formulaire.nbParticipants') }}
+                </label>
+                <input
+                    type="number"
+                    id="participants"
+                    v-model="nb_participants"
+                    min="1"
+                />
             </div>
 
+            <!-- Champ : tarif -->
             <div class="form_group">
-                <label for="tarif">{{ $t('prestataireInfo.formulaire.tarif') }}</label>
+                <label for="tarif">
+                    {{ $t('prestataireInfo.formulaire.tarif') }}
+                </label>
                 <input type="number" id="tarif" v-model="tarif_presta" />
             </div>
 
+            <!-- Champ : email de contact -->
             <div class="form_group">
-                <label for="contact">{{ $t('user.mail') }}</label>
-                <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
+                <label for="contact">
+                    {{ $t('user.mail') }}
+                </label>
+                <input
+                    type="text"
+                    id="contact"
+                    v-model="mail_presta"
+                    placeholder="mail@example.com"
+                />
             </div>
 
+            <!-- Champ : téléphone -->
             <div class="form_group">
-                <label for="contact">{{ $t('user.tel_utilisateur') }}</label>
-                <input type="tel" pattern="^0[1-9][0-9]{8}$" id="contact" v-model="tel_presta"
-                    placeholder="0123456789" />
+                <label for="contact">
+                    {{ $t('user.tel_utilisateur') }}
+                </label>
+                <input
+                    type="tel"
+                    id="contact"
+                    v-model="tel_presta"
+                    pattern="^0[1-9][0-9]{8}$"
+                    placeholder="0123456789"
+                />
             </div>
 
-            <div v-if="message" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+            <!-- Message de succès ou d’erreur après action -->
+            <div
+                v-if="message"
+                class="message"
+                :class="messageType === 'error'
+                    ? 'message-error'
+                    : 'message-success'">
                 <span class="text">{{ message }}</span>
             </div>
 
-
+            <!-- Bouton de modification (mode édition) -->
             <div class="button_container" v-if="!pathAdd">
-                <button @click="updatePresta" :disabled="!errorMessageCheckBox"
+                <button
+                    @click="updatePresta"
+                    :disabled="!isSelectionValid"
                     :class="{ disabled: !isSelectionValid }">
                     {{ $t('prestataireInfo.formulaire.btnModifier') }}
                 </button>
             </div>
+
+            <!-- Bouton d'inscription (mode ajout) -->
             <div class="button_container" v-else>
-                <button @click="addPrestataire">{{ $t('user.buttonInscription') }}</button>
+                <button @click="addPrestataire">
+                    {{ $t('user.buttonInscription') }}
+                </button>
             </div>
 
+            <!-- Bouton de suppression du prestataire -->
             <div class="button_container">
-                <button @click="delPresta">{{ $t('adminPage.prestataire.btn_suppr') }}</button>
+                <button @click="delPresta">
+                    {{ $t('adminPage.prestataire.btn_suppr') }}
+                </button>
             </div>
         </div>
     </div>
-    <Footer></Footer>
 
+    <!-- Pied de page -->
+    <Footer></Footer>
 </template>
+
 
 <script setup>
 import NavView from '@/components/NavView.vue';
@@ -169,8 +263,8 @@ const isSelectionValid = computed(() => {
 
 onMounted(async () => {
     try {
-        await fetchTypePresta();
-        await fetchEveryType();
+        await getValuesTypePresta();
+        await getValuesEveryType();
         if (!pathAdd.value)
             await getValuesPrestataire();
     } catch (err) {
@@ -271,7 +365,7 @@ function delPresta() {
 //=========================
 //= Async functions types =
 //=========================
-async function fetchTypePresta() {
+async function getValuesTypePresta() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
         type_prestataire.value = res.data.result;
@@ -280,7 +374,7 @@ async function fetchTypePresta() {
     }
 }
 
-async function fetchEveryType() {
+async function getValuesEveryType() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showEveryType");
         type_animation.value = res.data.animations;
@@ -498,63 +592,6 @@ async function updatePresta() {
     font-size: 1.5em;
     margin-bottom: 20px;
     color: #1b2e59;
-}
-
-.button_container {
-    display: flex;
-    justify-content: center;
-}
-
-.button_container button {
-    margin: 30px 0px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.2em;
-    padding: 15px 40px;
-    border: none;
-    border-radius: 50px;
-    background: var(--primary-color);
-    box-shadow: 0 8px 20px rgba(0, 87, 255, 0.4);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.button_container button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -75%;
-    width: 50%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: skewX(-25deg);
-    transition: all 0.5s ease;
-}
-
-.button_container button:hover::after {
-    left: 125%;
-}
-
-.button_container button:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 12px 25px var(--primary-color);
-}
-
-.button_container button.disabled::after {
-    content: none;
-    transition: none;
-}
-
-.button_container button.disabled:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-.button_container button.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .prestataire_container {

@@ -108,14 +108,24 @@
     "btnContinueInscription" : "Continuer l'inscription",
     "btnRetour" : "Retour",
     "formulaire" : {
-      "nom" : "Nom de la prestation :",
-      "descri" : "Description détaillée :",
-      "nbParticipants" : "Nombre maximum de participants :",
-      "tarif" : "Tarif :",
+      "nom" : "Nom de la prestation ",
+      "descri" : "Description détaillée ",
+      "nbParticipants" : "Nombre maximum de participants ",
+      "tarif" : "Tarif ",
       "btnModifier" : "Modifier"
     }
   },
   "adminPage": {
+    "evenement" : {
+      "nom" : "Nom de l'évènement",
+      "couleur" : "Couleur du titre",
+      "police" : "Police du texte",
+      "imageCouverture" : "Image de couverture",
+      "typeImage" : "(JPG, JPEG, PNG ou WebP)",
+      "choisirFichier" : "Choisir une image",
+      "choisirAutreFichier" : "Choisir une autre image",
+      "descri" : "Description de l'évènement"
+    },
     "bouton": {
       "btn_voir": "Aller voir",
       "btn_suppr" : "Supprimer",

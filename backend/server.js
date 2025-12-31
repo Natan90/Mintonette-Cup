@@ -7,7 +7,7 @@ const authRoutes = require("./routes/utilisateurs/authRoutes");
 // const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
-const utilisateursRoutes = require("./routes/utilisateurs/admin");
+const adminRoutes = require("./routes/admin/index");
 const equipesRoutes = require("./routes/equipes/equipes");
 
 
@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/admin", utilisateursRoutes);
+app.use("/admin", adminRoutes);
 app.use("/utilisateur/auth", authRoutes);
 // app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);

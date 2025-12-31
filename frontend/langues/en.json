@@ -108,14 +108,24 @@
     "btnContinueInscription": "Continue Registration",
     "btnRetour": "Back",
     "formulaire": {
-      "nom": "Service Name:",
-      "descri": "Detailed Description:",
-      "nbParticipants": "Maximum Number of Participants:",
-      "tarif": "Price:",
+      "nom": "Service Name",
+      "descri": "Detailed Description",
+      "nbParticipants": "Maximum Number of Participants",
+      "tarif": "Price",
       "btnModifier": "Edit"
     }
   },
   "adminPage": {
+    "evenement": {
+      "nom": "Event Name",
+      "couleur" : "Title color",
+      "police" : "Text font",
+      "imageCouverture": "Cover Image",
+      "typeImage": "(JPG, JPEG, PNG or WebP)",
+      "choisirFichier" : "Choose an Image",
+      "choisirAutreFichier" : "Choose another Image",
+      "descri": "Event Description"
+    },
     "bouton": {
       "btn_voir": "View",
       "btn_suppr": "Delete",
