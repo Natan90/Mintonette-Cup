@@ -179,14 +179,12 @@ async function getValuesEvenement() {
 
 async function updateEvent() {
     try {
-        let targetLang = locale.value === 'fr' ? 'en' : 'fr';
-
-        const translate = await translateTextLibre(descri_evenement.value, targetLang);
+        // IL faudra traduire le texte là 
 
         const res = await axios.put("http://localhost:3000/admin/evenement/update", {
             title: title_evenement.value,
-            descri_fr: locale.value === 'fr' ? descri_evenement.value : translate,
-            descri_en: locale.value === 'en' ? descri_evenement.value : translate,
+            descri_fr: descri_evenement.value,
+            descri_en: descri_evenement.value,
             color: colorTitle.value,
             font: selectedFont.value,
             image: imagePreview.value
@@ -201,20 +199,6 @@ async function updateEvent() {
         }
         messageType.value = 'error';
     }
-}
-
-async function translateTextLibre(text, targetLang) {
-  try {
-    const res = await axios.post("http://localhost:3000/translate/libretranslate", {
-      text,
-      targetLang
-    });
-    console.log(res.data.translatedText);
-    return res.data.translatedText;
-  } catch (err) {
-    console.error("Erreur traduction via backend :", err);
-    return text;
-  }
 }
 
 
