@@ -896,7 +896,7 @@ const pool = require("./db");
     ('Kovacevic', 'Marko', 'Masculin', '1991-08-18', 1.90, 8, 'Serbie', 'Libero', 16),
     ('Tomic', 'Sasa', 'Masculin', '1995-04-10', 2.01, 9, 'Serbie', 'Attaquant', 16),
     ('Stevanovic', 'Nikola', 'Masculin', '1992-07-07', 1.98, 10, 'Serbie', 'Receveur-Attaquant', 16),
-    ('Gocic', 'Uros', 'Masculin', '1993-03-22', 1.97, 11, 'Serbie', 'Central', 16),
+    ('Gocic', 'Uros', 'Masculin', '1993-03-22', 1.97, 11, 'Serbie', 'Passeur', 16),
     ('Mitic', 'Aleksandar', 'Masculin', '1994-05-19', 1.99, 12, 'Serbie', 'Attaquant', 16),
     ('Petrovic', 'Nikola', 'Masculin', '1990-12-03', 1.98, 13, 'Serbie', 'Libero', 16),
     ('Zivkovic', 'Milan', 'Masculin', '1995-09-25', 2.00, 14, 'Serbie', 'Central', 16),

@@ -52,8 +52,8 @@
           :style="{ backgroundImage: `url(${terrainImage})` }"
           @click="selectedPlayer = null">
           <div class="rightTeam pointer">
-           <div
-              v-for="player in getMajorPlayers(selectedMatch.team2_id)"
+            <div
+              v-for="player in getMajorPlayers(selectedMatch.team2_id, 'right')"
               :key="player.id_joueur"
               class="player"
               :class="[
@@ -71,7 +71,7 @@
 
           <div class="leftTeam pointer">
             <div
-              v-for="player in getMajorPlayers(selectedMatch.team1_id)"
+              v-for="player in getMajorPlayers(selectedMatch.team1_id, 'left')"
               :key="player.id_joueur"
               class="player"
               :class="[
@@ -165,14 +165,13 @@ const terrainToZone = {
   4: "ouest",
 };
 
-const POSITION_ORDER = [
-  "poste4",
-  "poste3",
-  "poste2",
-  "poste5",
-  "poste6",
-  "poste1",
-];
+const posteToPosition = {
+  Passeur: "poste2",
+  Central: "poste3",
+  Attaquant: "poste4",
+  "Receveur-Attaquant": "poste5",
+  Libero: "poste6",
+};
 
 const route = useRoute();
 const terrainId = computed(() => Number(route.params.id));
@@ -191,6 +190,7 @@ const selectedMatch = computed(() => matches.value[selectedItem.value]);
 const matchTime = computed(() => {
   if (!selectedMatch.value) return "";
   const date = new Date(selectedMatch.value.date_match);
+  //padStart force à avoir deux valeurs et comble avec un 0: "5" -> "05"
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
@@ -209,15 +209,50 @@ async function fetchMatches() {
   selectedItem.value = 0;
 }
 
-function getMajorPlayers(teamId) {
-  const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);
+function getMajorPlayers(teamId, side) {
+  const teamPlayers = players.value.filter(
+    (p) => p.id_equipe === teamId
+  );
 
-  const libero = teamPlayers.find((p) => p.poste === "Libero");
+  const passeur = teamPlayers.find(p => p.poste === "Passeur");
+  const central = teamPlayers.find(p => p.poste === "Central");
+  const attaquant = teamPlayers.find(p => p.poste === "Attaquant");
+  const libero = teamPlayers.find(p => p.poste === "Libero");
 
-  const others = teamPlayers.filter((p) => p.poste !== "Libero").slice(0, 5);
+  const receveurs = teamPlayers.filter(
+    p => p.poste === "Receveur-Attaquant"
+  );
 
-  return libero ? [...others.slice(0, 4), others[4], libero] : others;
+  // Positions spécifiques selon le côté
+  const positions =
+    side === "right"
+      ? {
+          passeur: "poste3",   // côté filet
+          recep1: "poste4",
+          central: "poste2",
+          libero: "libero",
+          attaquant: "poste1",
+          recep2: "poste5",
+        }
+      : {
+          passeur: "poste3",   
+          recep1: "poste4",
+          central: "poste2",
+          libero: "libero",
+          attaquant: "poste1",
+          recep2: "poste5",
+        };
+
+  return [
+    passeur && { ...passeur, terrainPosition: positions.passeur },
+    receveurs[0] && { ...receveurs[0], terrainPosition: positions.recep1 },
+    central && { ...central, terrainPosition: positions.central },
+    libero && { ...libero, terrainPosition: positions.libero },
+    attaquant && { ...attaquant, terrainPosition: positions.attaquant },
+    receveurs[1] && { ...receveurs[1], terrainPosition: positions.recep2 },
+  ].filter(Boolean);
 }
+
 
 function getSubstitutes(teamId) {
   return players.value.filter((p) => p.id_equipe === teamId).slice(6);
