@@ -61,8 +61,13 @@
                 player.poste === 'Libero' ? 'libero' : '',
               ]">
               <img
-                :src="logoPersonne"
+                :src="
+                  player.photo
+                    ? `/Joueurs/${player.pays}/${player.photo}`
+                    : logoPersonne
+                "
                 @click.stop="moreInfo(player, 'right')" />
+
               <span class="name">
                 {{ player.prenom_joueur }} {{ player.nom_joueur }}
               </span>
@@ -78,7 +83,13 @@
                 player.terrainPosition,
                 player.poste === 'Libero' ? 'libero' : '',
               ]">
-              <img :src="logoPersonne" @click.stop="moreInfo(player, 'left')" />
+              <img
+                :src="
+                  player.photo
+                    ? `/Joueurs/${player.pays}/${player.photo}`
+                    : logoPersonne
+                "
+                @click.stop="moreInfo(player, 'left')" />
               <span class="name">
                 {{ player.prenom_joueur }} {{ player.nom_joueur }}
               </span>
@@ -93,7 +104,7 @@
           </h4>
           <p><strong>Poste :</strong> {{ selectedPlayer.poste }}</p>
           <p><strong>Âge :</strong> {{ getAge(selectedPlayer) }} ans</p>
-          <p><strong>Taille :</strong> {{ selectedPlayer.taille }} cm</p>
+          <p><strong>Taille :</strong> {{ selectedPlayer.taille * 100 }} cm</p>
         </div>
       </div>
 
@@ -210,24 +221,18 @@ async function fetchMatches() {
 }
 
 function getMajorPlayers(teamId, side) {
-  const teamPlayers = players.value.filter(
-    (p) => p.id_equipe === teamId
-  );
+  const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);
 
-  const passeur = teamPlayers.find(p => p.poste === "Passeur");
-  const central = teamPlayers.find(p => p.poste === "Central");
-  const attaquant = teamPlayers.find(p => p.poste === "Attaquant");
-  const libero = teamPlayers.find(p => p.poste === "Libero");
+  const passeur = teamPlayers.find((p) => p.poste === "Passeur");
+  const central = teamPlayers.find((p) => p.poste === "Central");
+  const attaquant = teamPlayers.find((p) => p.poste === "Attaquant");
+  const libero = teamPlayers.find((p) => p.poste === "Libero");
+  const receveurs = teamPlayers.filter((p) => p.poste === "Receveur-Attaquant");
 
-  const receveurs = teamPlayers.filter(
-    p => p.poste === "Receveur-Attaquant"
-  );
-
-  // Positions spécifiques selon le côté
   const positions =
     side === "right"
       ? {
-          passeur: "poste3",   // côté filet
+          passeur: "poste3",
           recep1: "poste4",
           central: "poste2",
           libero: "libero",
@@ -235,7 +240,7 @@ function getMajorPlayers(teamId, side) {
           recep2: "poste5",
         }
       : {
-          passeur: "poste3",   
+          passeur: "poste3",
           recep1: "poste4",
           central: "poste2",
           libero: "libero",
@@ -253,7 +258,6 @@ function getMajorPlayers(teamId, side) {
   ].filter(Boolean);
 }
 
-
 function getSubstitutes(teamId) {
   return players.value.filter((p) => p.id_equipe === teamId).slice(6);
 }
@@ -268,6 +272,10 @@ function getAge(player) {
     new Date().getFullYear() -
     new Date(player.date_naissance_joueur).getFullYear()
   );
+}
+
+function getCountry(player) {
+  return player.pays;
 }
 
 onMounted(() => {
@@ -356,12 +364,18 @@ watch(terrainId, () => {
 }
 
 .player {
-  width: 90px;
-  height: 110px;
+  width: 100px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+}
+
+.player img {
+  width: 100px;
+  height: 100px;
+
 }
 
 .leftTeam .poste4 {
