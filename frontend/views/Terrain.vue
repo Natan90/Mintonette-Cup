@@ -223,11 +223,29 @@ async function fetchMatches() {
 function getMajorPlayers(teamId, side) {
   const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);
 
-  const passeur = teamPlayers.find((p) => p.poste === "Passeur");
-  const central = teamPlayers.find((p) => p.poste === "Central");
-  const attaquant = teamPlayers.find((p) => p.poste === "Attaquant");
-  const libero = teamPlayers.find((p) => p.poste === "Libero");
-  const receveurs = teamPlayers.filter((p) => p.poste === "Receveur-Attaquant");
+  const findPlayerByPoste = (poste) => {
+    const joueurs = teamPlayers.filter((p) => p.poste === poste);
+    const avecPhoto = joueurs.find(
+      (p) => p.photo !== null && p.photo !== undefined
+    );
+    if (avecPhoto) return avecPhoto;
+    return joueurs[0];
+  };
+
+  const passeur = findPlayerByPoste("Passeur");
+  const central = findPlayerByPoste("Central");
+  const attaquant = findPlayerByPoste("Attaquant");
+  const libero = findPlayerByPoste("Libero");
+
+  const receveursAll = teamPlayers.filter(
+    (p) => p.poste === "Receveur-Attaquant"
+  );
+  const receveursAvecPhoto = receveursAll.filter(
+    (p) => p.photo !== null && p.photo !== undefined
+  );
+  const receveursSansPhoto = receveursAll.filter((p) => !p.photo);
+
+  const receveurs = [...receveursAvecPhoto, ...receveursSansPhoto];
 
   const positions =
     side === "right"
@@ -240,11 +258,11 @@ function getMajorPlayers(teamId, side) {
           recep2: "poste5",
         }
       : {
-          passeur: "poste3",
+          passeur: "poste1",
           recep1: "poste4",
           central: "poste2",
           libero: "libero",
-          attaquant: "poste1",
+          attaquant: "poste3",
           recep2: "poste5",
         };
 
@@ -375,7 +393,6 @@ watch(terrainId, () => {
 .player img {
   width: 100px;
   height: 100px;
-
 }
 
 .leftTeam .poste4 {
