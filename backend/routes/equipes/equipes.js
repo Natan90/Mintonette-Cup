@@ -15,7 +15,9 @@ router.get("/show", async (req, res) => {
 
 router.get("/showPlayer", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM Joueur ORDER BY id_equipe ");
+    const result = await pool.query(
+      "SELECT * FROM Joueur ORDER BY id_equipe, poste, numero_joueur"
+    );
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -83,7 +85,6 @@ router.get("/players", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 router.get("/showTeam", async (req, res) => {
   try {

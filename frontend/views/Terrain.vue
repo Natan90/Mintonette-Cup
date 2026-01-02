@@ -52,10 +52,14 @@
           :style="{ backgroundImage: `url(${terrainImage})` }"
           @click="selectedPlayer = null">
           <div class="rightTeam pointer">
-            <div
+           <div
               v-for="player in getMajorPlayers(selectedMatch.team2_id)"
               :key="player.id_joueur"
-              class="player">
+              class="player"
+              :class="[
+                player.terrainPosition,
+                player.poste === 'Libero' ? 'libero' : '',
+              ]">
               <img
                 :src="logoPersonne"
                 @click.stop="moreInfo(player, 'right')" />
@@ -69,7 +73,11 @@
             <div
               v-for="player in getMajorPlayers(selectedMatch.team1_id)"
               :key="player.id_joueur"
-              class="player">
+              class="player"
+              :class="[
+                player.terrainPosition,
+                player.poste === 'Libero' ? 'libero' : '',
+              ]">
               <img :src="logoPersonne" @click.stop="moreInfo(player, 'left')" />
               <span class="name">
                 {{ player.prenom_joueur }} {{ player.nom_joueur }}
@@ -157,6 +165,15 @@ const terrainToZone = {
   4: "ouest",
 };
 
+const POSITION_ORDER = [
+  "poste4",
+  "poste3",
+  "poste2",
+  "poste5",
+  "poste6",
+  "poste1",
+];
+
 const route = useRoute();
 const terrainId = computed(() => Number(route.params.id));
 
@@ -193,7 +210,13 @@ async function fetchMatches() {
 }
 
 function getMajorPlayers(teamId) {
-  return players.value.filter((p) => p.id_equipe === teamId).slice(0, 6);
+  const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);
+
+  const libero = teamPlayers.find((p) => p.poste === "Libero");
+
+  const others = teamPlayers.filter((p) => p.poste !== "Libero").slice(0, 5);
+
+  return libero ? [...others.slice(0, 4), others[4], libero] : others;
 }
 
 function getSubstitutes(teamId) {
@@ -304,6 +327,62 @@ watch(terrainId, () => {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+}
+
+.leftTeam .poste4 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.leftTeam .poste3 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.leftTeam .poste2 {
+  grid-column: 2;
+  grid-row: 2;
+}
+.leftTeam .poste5 {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.leftTeam .poste1 {
+  grid-column: 2;
+  grid-row: 3;
+}
+.leftTeam .libero {
+  grid-column: 1;
+  grid-row: 2;
+}
+.rightTeam .poste4 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.rightTeam .poste3 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.rightTeam .poste2 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.rightTeam .poste5 {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.rightTeam .poste1 {
+  grid-column: 1;
+  grid-row: 3;
+}
+.rightTeam .libero {
+  grid-column: 2;
+  grid-row: 2;
 }
 
 .player .name {
