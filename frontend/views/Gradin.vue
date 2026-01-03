@@ -2,7 +2,9 @@
   <div>
     <NavBar />
     <h1>Gradin {{ zone }}</h1>
-
+Ici, il faut que je recupère tous les matchs sur ce terrain ( nord : idTerrain = 1, est : 2 ...)
+ensuite afficher en haut les pays avec l'heure, quand je clique sur un match 100 nouveau siège arrive ( car pas le meme match )
+Dans les siège sélectionnés, il faut marquer genre FR vs CA pour savoir c'est quel match et il est possible d'avoir deux fois le meme siège si c'est pas le même match et du coup la même chose dans panier 
     <section>
       <h2>Réservation de place</h2>
 

@@ -176,14 +176,6 @@ const terrainToZone = {
   4: "ouest",
 };
 
-const posteToPosition = {
-  Passeur: "poste2",
-  Central: "poste3",
-  Attaquant: "poste4",
-  "Receveur-Attaquant": "poste5",
-  Libero: "poste6",
-};
-
 const route = useRoute();
 const terrainId = computed(() => Number(route.params.id));
 

@@ -137,7 +137,7 @@ const routes = [
         props: true,
       },
       {
-        path: "Gradins/Gradin/:zone",
+        path: "Gradin/:zone",
         name: "Gradin",
         component: Gradin,
       },

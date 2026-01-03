@@ -1225,7 +1225,7 @@ const pool = require("./db");
 
     const insertSiege = `
     INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, dans_panier, id_utilisateur, zone) VALUES
-    ('A', 1, TRUE, FALSE, NULL, 'NORD'), ('A', 2, TRUE, FALSE, NULL, 'NORD'), ('A', 3, TRUE, FALSE, NULL, 'NORD'), ('A', 4, FALSE, FALSE, NULL, 'NORD'),
+    ('A', 1, FALSE, FALSE, NULL, 'NORD'), ('A', 2, FALSE, FALSE, NULL, 'NORD'), ('A', 3, FALSE, FALSE, NULL, 'NORD'), ('A', 4, FALSE, FALSE, NULL, 'NORD'),
     ('A', 5, FALSE, FALSE, NULL, 'NORD'), ('A', 6, FALSE, FALSE, NULL, 'NORD'), ('A', 7, FALSE, FALSE, NULL, 'NORD'), ('A', 8, FALSE, FALSE, NULL, 'NORD'),
     ('A', 9, FALSE, FALSE, NULL, 'NORD'), ('A', 10, FALSE, FALSE, NULL, 'NORD'), ('A', 11, FALSE, FALSE, NULL, 'NORD'), ('A', 12, FALSE, FALSE, NULL, 'NORD'),
 
@@ -1260,8 +1260,8 @@ const pool = require("./db");
     ('I', 1, FALSE, FALSE, NULL, 'NORD'), ('I', 2, FALSE, FALSE, NULL, 'NORD'), ('I', 3, FALSE, FALSE, NULL, 'NORD'), ('I', 4, FALSE, FALSE, NULL, 'NORD'),
 
 
-    ('A', 1, FALSE, FALSE, NULL, 'EST'), ('A', 2, FALSE, FALSE, NULL, 'EST'), ('A', 3, FALSE, FALSE, NULL, 'EST'), ('A', 4, TRUE, FALSE, NULL, 'EST'),
-    ('A', 5, TRUE, FALSE, NULL, 'EST'), ('A', 6, TRUE, FALSE, NULL, 'EST'), ('A', 7, FALSE, FALSE, NULL, 'EST'), ('A', 8, FALSE, FALSE, NULL, 'EST'),
+    ('A', 1, FALSE, FALSE, NULL, 'EST'), ('A', 2, FALSE, FALSE, NULL, 'EST'), ('A', 3, FALSE, FALSE, NULL, 'EST'), ('A', 4, FALSE, FALSE, NULL, 'EST'),
+    ('A', 5, FALSE, FALSE, NULL, 'EST'), ('A', 6, FALSE, FALSE, NULL, 'EST'), ('A', 7, FALSE, FALSE, NULL, 'EST'), ('A', 8, FALSE, FALSE, NULL, 'EST'),
     ('A', 9, FALSE, FALSE, NULL, 'EST'), ('A', 10, FALSE, FALSE, NULL, 'EST'), ('A', 11, FALSE, FALSE, NULL, 'EST'), ('A', 12, FALSE, FALSE, NULL, 'EST'),
 
     ('B', 1, FALSE, FALSE, NULL, 'EST'), ('B', 2, FALSE, FALSE, NULL, 'EST'), ('B', 3, FALSE, FALSE, NULL, 'EST'), ('B', 4, FALSE, FALSE, NULL, 'EST'),
@@ -1296,8 +1296,8 @@ const pool = require("./db");
 
     
     ('A', 1, FALSE, FALSE, NULL, 'SUD'), ('A', 2, FALSE, FALSE, NULL, 'SUD'), ('A', 3, FALSE, FALSE, NULL, 'SUD'), ('A', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('A', 5, FALSE, FALSE, NULL, 'SUD'), ('A', 6, FALSE, FALSE, NULL, 'SUD'), ('A', 7, TRUE, FALSE, NULL, 'SUD'), ('A', 8, TRUE, FALSE, NULL, 'SUD'),
-    ('A', 9, TRUE, FALSE, NULL, 'SUD'), ('A', 10, FALSE, FALSE, NULL, 'SUD'), ('A', 11, FALSE, FALSE, NULL, 'SUD'), ('A', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('A', 5, FALSE, FALSE, NULL, 'SUD'), ('A', 6, FALSE, FALSE, NULL, 'SUD'), ('A', 7, FALSE, FALSE, NULL, 'SUD'), ('A', 8, FALSE, FALSE, NULL, 'SUD'),
+    ('A', 9, FALSE, FALSE, NULL, 'SUD'), ('A', 10, FALSE, FALSE, NULL, 'SUD'), ('A', 11, FALSE, FALSE, NULL, 'SUD'), ('A', 12, FALSE, FALSE, NULL, 'SUD'),
 
     ('B', 1, FALSE, FALSE, NULL, 'SUD'), ('B', 2, FALSE, FALSE, NULL, 'SUD'), ('B', 3, FALSE, FALSE, NULL, 'SUD'), ('B', 4, FALSE, FALSE, NULL, 'SUD'),
     ('B', 5, FALSE, FALSE, NULL, 'SUD'), ('B', 6, FALSE, FALSE, NULL, 'SUD'), ('B', 7, FALSE, FALSE, NULL, 'SUD'), ('B', 8, FALSE, FALSE, NULL, 'SUD'),
@@ -1332,7 +1332,7 @@ const pool = require("./db");
 
     ('A', 1, FALSE, FALSE, NULL, 'OUEST'), ('A', 2, FALSE, FALSE, NULL, 'OUEST'), ('A', 3, FALSE, FALSE, NULL, 'OUEST'), ('A', 4, FALSE, FALSE, NULL, 'OUEST'),
     ('A', 5, FALSE, FALSE, NULL, 'OUEST'), ('A', 6, FALSE, FALSE, NULL, 'OUEST'), ('A', 7, FALSE, FALSE, NULL, 'OUEST'), ('A', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('A', 9, FALSE, FALSE, NULL, 'OUEST'), ('A', 10, TRUE, FALSE, NULL, 'OUEST'), ('A', 11, TRUE, FALSE, NULL, 'OUEST'), ('A', 12, TRUE, FALSE, NULL, 'OUEST'),
+    ('A', 9, FALSE, FALSE, NULL, 'OUEST'), ('A', 10, FALSE, FALSE, NULL, 'OUEST'), ('A', 11, FALSE, FALSE, NULL, 'OUEST'), ('A', 12, FALSE, FALSE, NULL, 'OUEST'),
 
     ('B', 1, FALSE, FALSE, NULL, 'OUEST'), ('B', 2, FALSE, FALSE, NULL, 'OUEST'), ('B', 3, FALSE, FALSE, NULL, 'OUEST'), ('B', 4, FALSE, FALSE, NULL, 'OUEST'),
     ('B', 5, FALSE, FALSE, NULL, 'OUEST'), ('B', 6, FALSE, FALSE, NULL, 'OUEST'), ('B', 7, FALSE, FALSE, NULL, 'OUEST'), ('B', 8, FALSE, FALSE, NULL, 'OUEST'),
