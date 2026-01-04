@@ -2,11 +2,24 @@
   <div>
     <NavBar />
     <h1>Gradin {{ zone }}</h1>
-Ici, il faut que je recupère tous les matchs sur ce terrain ( nord : idTerrain = 1, est : 2 ...)
-ensuite afficher en haut les pays avec l'heure, quand je clique sur un match 100 nouveau siège arrive ( car pas le meme match )
-Dans les siège sélectionnés, il faut marquer genre FR vs CA pour savoir c'est quel match et il est possible d'avoir deux fois le meme siège si c'est pas le même match et du coup la même chose dans panier 
+    <strong>Ici, il faut que je recupère tous les matchs sur ce terrain ( nord :
+    idTerrain = 1, est : 2 ...) ensuite afficher en haut les pays </strong>avec l'heure,
+    quand je clique sur un match 100 nouveau siège arrive ( car pas le meme
+    match ) Dans les siège sélectionnés, il faut marquer genre FR vs CA pour
+    savoir c'est quel match et il est possible d'avoir deux fois le meme siège
+    si c'est pas le même match et du coup la même chose dans panier
     <section>
+      <h2 v-if="matches.length">
+        <p>Match sur ce terrain</p>
+      </h2>
+      <div v-for="match in matches" :key="match.id_match">
+        <button @click="selectMatch(match)">
+          <p>{{ match.team1_country }} vs {{ match.team2_country }}</p>
+        </button>
+      </div>
+
       <h2>Réservation de place</h2>
+      {{ idMatch }}
 
       <div class="layout">
         <div class="seatContainer">
@@ -96,10 +109,21 @@ const zone = route.params.zone;
 
 const userStore = useUserStore();
 
+const matches = ref([]);
 const seats = ref([]);
 const hoverIndex = ref(null);
 const estAjoute = ref(false);
+const idMatch = ref(1);
 
+const zoneToTerrain = {
+  nord: 1,
+  est: 2,
+  sud: 3,
+  ouest: 4,
+};
+
+const terrainId = ref(zoneToTerrain[zone]);
+// alert(terrainId.value);
 const selectedSeats = computed(() =>
   seats.value.filter((seat) => seat.state === "selected")
 );
@@ -176,6 +200,21 @@ async function fetchGradin() {
   restoreSelection();
 }
 
+async function fetchMatches() {
+  const res = await axios.get(
+    `http://localhost:3000/equipes/match/terrain/${terrainId.value}`
+  );
+  matches.value = res.data;
+  idMatch.value = id_match;
+}
+
+function selectMatch(match) {
+  idMatch.value = match.id_match;
+
+  resetSelection();
+  fetchGradin();
+}
+
 function UpdateSeatStatus(index) {
   const seat = seats.value[index];
 
@@ -208,12 +247,16 @@ function resetSelection() {
     if (seat.state === "selected" && !seat.dans_panier) {
       seat.state = "available";
     }
+    if (seat.state === "owned" && !seat.dans_panier) {
+      seat.state = "available";
+    }
   });
 
   localStorage.removeItem("selectedSeats");
 }
 
 onMounted(fetchGradin);
+onMounted(fetchMatches);
 </script>
 
 <style scoped>

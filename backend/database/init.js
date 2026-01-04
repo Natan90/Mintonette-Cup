@@ -636,7 +636,7 @@ const pool = require("./db");
       (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Australie
       (3, 10, 26, '2026-01-01 14:00:00'),  -- Slovénie vs Paraguay
       (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Uruguay
-      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs Afrique du Sud
+      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs Afrique du Sud 
       
       -- Terrain 4 (4 matchs)
       (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Maroc
