@@ -113,7 +113,7 @@ router.get("/show/:id", async (req, res) => {
   const id_user = req.params.id;
   try {
     const result = await pool.query(
-      "SELECT * FROM Prestataire WHERE id_utilisateur = $1",
+      "SELECT * FROM Prestataire WHERE id_prestataire = $1",
       [id_user]
     );
     if (result.rows.length === 0)

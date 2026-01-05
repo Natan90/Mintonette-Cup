@@ -7,21 +7,16 @@
         <p class="title_presta">{{ onePresta.nom_prestataire }}</p>
         <!-- <img src=""> -->
         <div class="description" v-html="onePresta.descri_prestataire">
-            </div>
-            <p>Capacité : <span>{{ Number(onePresta.nb_participants) }}</span></p>
-            <p>Tarif : <span>{{ onePresta.tarif_prestataire }}</span></p>
-            <div class="contact_presta">
-                <p class="contact_title"><b>Contact</b></p>
-                <p>{{ onePresta.mail_prestataire }}</p>
-                <p>{{ onePresta.tel_prestataire }}</p>
-            </div>
-            <p>{{ onePresta.prenom_utilisateur }} {{ onePresta.nom_utilisateur }}
-                <span>
-                    <button>
-                        En savoir plus
-                    </button>
-                </span>
-            </p>
+        </div>
+        <p>Capacité : <span>{{ Number(onePresta.nb_participants) }}</span></p>
+        <p>Tarif : <span>{{ onePresta.tarif_prestataire }}</span></p>
+        <div class="contact_presta">
+          <p class="contact_title"><b>Contact</b></p>
+          <p>{{ onePresta.mail_prestataire }}</p>
+          <p>{{ onePresta.tel_prestataire }}</p>
+        </div>
+        <p>{{ onePresta.prenom_utilisateur }} {{ onePresta.nom_utilisateur }}
+        </p>
       </div>
     </div>
   </section>
@@ -84,11 +79,11 @@ const onePresta = ref({
 const idPresta = route.params.id;
 
 onMounted(async () => {
-    try {
-        await getValuesPrestataire(idPresta);
-    } catch (err) {
-        console.error(err);
-    }
+  try {
+    await getValuesPrestataire(idPresta);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 
@@ -97,13 +92,13 @@ onMounted(async () => {
 //= Async functions presta =
 //==========================
 async function getValuesPrestataire() {
-    try {
-        const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
-        onePresta.value = res.data;
+  try {
+    const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
+    onePresta.value = res.data;
 
-    } catch (err) {
-        console.error("Erreur lors de la récupération des données :", err);
-    }
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
 }
 
 </script>
@@ -115,9 +110,11 @@ async function getValuesPrestataire() {
   justify-content: center;
   gap: 20px;
 }
+
 .container_cards {
   background-color: yellow;
 }
+
 /* body::-webkit-scrollbar {
   display: none;
 }

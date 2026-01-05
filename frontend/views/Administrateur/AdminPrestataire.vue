@@ -85,7 +85,7 @@
                         </td>
                         <td>
                             <span v-if="!item.waitingforadmin">
-                                <button class="btn_info">
+                                <button class="btn_info" @click="goToSpecificPrestataire(item.id_prestataire)">
                                     {{ $t('adminPage.bouton.btn_voir') }}
                                 </button>
                                 <button class="btn_supprimer" @click="ModalShow(item)">
@@ -160,6 +160,14 @@ function ModalShow(presta) {
     isDelete.value = true;
 };
 
+function goToSpecificPrestataire(idPresta) {
+    router.push({
+        name: "ShowPrestataire",
+        params: {
+            id: idPresta
+        }
+    });
+}
 
 const prestatairesFiltres = computed(() => {
   let liste = [...prestataires.value];
