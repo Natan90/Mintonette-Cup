@@ -446,7 +446,8 @@ async function addPrestataire() {
             type: Number(selectedTypeId.value),
             services: services.value.filter(s => s.trim() !== '')
         });
-        // changePresta(true);
+        userStore.prestaId = res.data.user.prestaId;
+
         message.value = res.data.message;
         messageType.value = "success";
     } catch (err) {

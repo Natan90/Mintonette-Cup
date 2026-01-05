@@ -63,7 +63,7 @@
           Rejoignez l'équipe et apportez votre savoir-faire à l’événement :
         </p>
 
-        <router-link :to="{ name: 'AddPrestataire' }"
+        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
         class="btn_presta">
           Je deviens prestataire
         </router-link>

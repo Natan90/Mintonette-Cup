@@ -512,6 +512,7 @@ router.post("/becomePrestataire/:id", async (req, res) => {
       message: "Prestataire créé avec succès",
       user: {
         id: newPresta.id_utilisateur,
+        prestaId: newPresta.id_prestataire
       },
     });
   } catch (err) {
