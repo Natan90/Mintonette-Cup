@@ -190,10 +190,40 @@ async function getValuesUser() {
   }
 }
 
+// Pour que la barre de nav apparaisse/disparaisse lorsqu'on scroll
+
+// :style="{ top: navbar }"
+
+// const navbar = ref("0px");
+
+
+// const handleScroll = () => {
+//   if (window.scrollY > 500) {
+//     navbar.value = "-100px";
+//   } else {
+//     navbar.value = "0px";
+//   }
+// };
+
+// onMounted(async () => {
+//   window.addEventListener("scroll", handleScroll);
+//   try {
+//     await getValuesEvenement();
+//     await getValuesUser();
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
+
+// onBeforeUnmount(() => {
+//   window.removeEventListener("scroll", handleScroll);
+// });
+
 
 </script>
 
 <style scoped>
+
 .barre-nav {
   padding: 0;
   color: white;
@@ -201,6 +231,10 @@ async function getValuesUser() {
   align-items: center;
   font-size: 1.2em;
   width: 100%;
+  
+  left: 0;
+  right: 0;
+  height: 100px;
 }
 
 .blueBar {
@@ -232,7 +266,6 @@ async function getValuesUser() {
   justify-content: center;  /* centrage horizontal */
 
   height: 100%;
-  /* cursor: pointer; */
 }
 
 .boutonNav:hover {
