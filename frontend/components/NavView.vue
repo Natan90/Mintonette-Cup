@@ -5,12 +5,20 @@
       <img src="../images/logo.png" class="logo pointer" alt="logo" />
     </router-link>
 
+<<<<<<< HEAD
     <div class="optionNav">
 
       <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
         class="boutonNav">
         <span class="pointer">Prestataire (mode public)</span>
       </router-link>
+=======
+    <div class="routeurLink">
+      <!-- <router-link
+        :to="{ name: 'ShowPrestataire', params: { lang: locale } }">
+        <span class="pointer optionNav">Prestataire (mode public)</span>
+      </router-link> -->
+>>>>>>> b081f84ae974b62fa47c78c584d37f5c61e91ba4
 
       <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
         class="boutonNav">

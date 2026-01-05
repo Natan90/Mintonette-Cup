@@ -71,7 +71,7 @@
 
     </section>
 
-    <section v-if="utilisateur.ispresta">
+    <section v-if="userStore.isConnected && utilisateur.ispresta">
       <div class="presta_texte">
         <h2>Bienvenue parmi nos prestataires !</h2>
         <p>

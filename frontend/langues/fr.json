@@ -102,7 +102,8 @@
     "infoContact3": "Nous contacter"
   },
   "prestataireInfo" : {
-    "title" : "Devenez membre à part de la Mintonette Cup !",
+    "titleAdd" : "Devenez membre à part de la Mintonette Cup !",
+    "titleEdit" : "Perfectionnez votre profil de prestataire Mintonette Cup !",
     "role" : "Votre rôle dans l’événement : choisissez votre catégorie :",
     "type" : "Quel est votre type",
     "btnContinueInscription" : "Continuer l'inscription",

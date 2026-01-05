@@ -41,8 +41,8 @@
             <!-- <img src=""> -->
             <div class="description" v-html="item.descri_prestataire">
             </div>
-            <p>{{ item.nb_participants }}</p>
-            <p>{{ item.tarif_prestataire }}</p>
+            <p>Capacité : <span>{{ Number(item.nb_participants) }}</span></p>
+            <p>Tarif : <span>{{ item.tarif_prestataire }}</span></p>
             <div class="contact_presta">
                 <p class="contact_title"><b>Contact</b></p>
                 <p>{{ item.mail_prestataire }}</p>
@@ -50,7 +50,7 @@
             </div>
             <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
                 <span>
-                    <button>
+                    <button @click="goToSpecificPrestataire(item.id_prestataire)">
                         En savoir plus
                     </button>
                 </span>
@@ -64,9 +64,11 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
+const { locale } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
@@ -103,6 +105,16 @@ function resetFilters() {
     }
     router.push({ path: "/", query: {} });
     getValuesPrestataire();
+}
+
+function goToSpecificPrestataire(idPresta) {
+    router.push({
+        name: "ShowPrestataire",
+        params: { 
+            lang: locale, 
+            id: idPresta
+        }
+    });
 }
 
 //=========================
