@@ -7,10 +7,10 @@
 
     <div class="optionNav">
 
-      <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
+      <!-- <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
         class="boutonNav">
         <span class="pointer">Prestataire (mode public)</span>
-      </router-link>
+      </router-link> -->
 
       <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
         class="boutonNav">
@@ -54,7 +54,7 @@
 
       <div v-else class="userButtons">
 
-        <img v-if="userProfilePhoto" :src="userProfilePhoto" alt="Photo de profil" class="profile-photo pointer" />
+        <img v-if="userProfilePhoto" :src="userProfilePhoto" alt="Photo de profil" class="profile-photo pointer primaire" />
         
         <div v-else class="profile-placeholder pointer">
           <span>{{ userInitials }}</span>
@@ -141,9 +141,6 @@ watch(
   }
 );
 
-function toggleBloc() {
-  showBloc.value = !showBloc.value;
-}
 
 function toggleMiniCart() {
   showMiniCart.value = !showMiniCart.value;
@@ -152,7 +149,6 @@ function toggleMiniCart() {
 
 function handleLogout() {
   userStore.logout();
-  showBloc.value = false;
   router.push({ name: "Home" });
 }
 
