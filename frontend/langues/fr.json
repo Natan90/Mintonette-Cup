@@ -114,7 +114,8 @@
       "nbParticipants" : "Nombre maximum de participants ",
       "tarif" : "Tarif ",
       "btnModifier" : "Modifier"
-    }
+    },
+    "services" : "Service{gotS}"
   },
   "adminPage": {
     "evenement" : {
@@ -162,6 +163,10 @@
         "valider" : "Validé",
         "enAttente" : "En attente de validation",
         "refuse": "Refuser"
+      },
+      "show": {
+        "title" : "Découvrez ce prestataire",
+        "descri" : "Retrouvez ici toutes les informations concernant <span class='name_delete background_name'>{nom_prestataire}</span> : ses services proposés, ses tarifs, le nombre de participants pris en charge ainsi que ses coordonnées. Ce prestataire participe à l’événement et met son expertise à votre disposition."
       }
     },
     "user": {

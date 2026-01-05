@@ -56,18 +56,18 @@
         </div>
 
         <div class="boutons">
-          <router-link :to="{ name: 'ModifyAccount', params: { lang: t } }"
+          <router-link :to="{ name: 'ModifyAccount', params: { lang: t.value } }"
            class="pointer">
             {{ $t('account.modify') }}
           </router-link>
-          <router-link :to="{ name: 'Panier', params: { lang: t } }" 
+          <router-link :to="{ name: 'Panier', params: { lang: t.value } }" 
           class="pointer">
             {{ $t('account.viewCart') }}
           </router-link>
           <button @click="deleteAccount(userData.id_user)" class="pointer delete-btn" :disabled="isDeleting">
             {{ isDeleting ? $t('account.deleting') : $t('account.deleteAccount') }}
           </button>
-          <router-link :to="{ name: 'Home', params: { lang: t } }" >
+          <router-link :to="{ name: 'Home', params: { lang: t.value } }" >
             {{ $t('pageLog.annuler') }}
           </router-link>
         </div>
@@ -194,22 +194,6 @@ async function deleteAccount(id) {
 </script>
 
 <style scoped>
-.back-arrow {
-  margin: 20px 0;
-  font-size: 18px;
-  font-weight: 500;
-  text-decoration: none;
-  color: black;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.back-arrow:hover {
-  color: var(--jaune-logo);
-  transition: var(--transition-fast);
-}
-
 .page {
   display: flex;
   flex-direction: column;

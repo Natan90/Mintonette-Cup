@@ -277,21 +277,6 @@ async function changePresta(newValue, idPresta) {
     min-height: 100vh;
 }
 
-.page_title {
-    font-size: 32px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: #1e3a8a;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.page_subtitle {
-    color: #374151;
-    background: #e0f2fe;
-    border-left: 4px solid #3b82f6;
-}
-
 .nb_presta {
     font-size: 14px;
     font-weight: 600;

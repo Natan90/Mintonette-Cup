@@ -40,6 +40,7 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Date_du_jour CASCADE;
   DROP TABLE IF EXISTS Aliment CASCADE;
   DROP TABLE IF EXISTS Organisateur CASCADE;
+  DROP TABLE IF EXISTS Services CASCADE;
   DROP TABLE IF EXISTS Prestataire CASCADE;
   DROP TABLE IF EXISTS Type_prestataire CASCADE;
   DROP TABLE IF EXISTS Type_utilisateur CASCADE;
@@ -48,7 +49,6 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Evenement CASCADE;
   DROP TABLE IF EXISTS Terrain CASCADE;
 
-  -- 1. Tables sans dépendances
   CREATE TABLE IF NOT EXISTS Terrain(
     id_terrain SERIAL PRIMARY KEY,
     nom_terrain VARCHAR(50)
@@ -129,7 +129,6 @@ const pool = require("./db");
     description_plat VARCHAR(50)
   );
 
-  -- 2. Tables avec dépendances niveau 1
   CREATE TABLE IF NOT EXISTS Siege(
     numero_colonne VARCHAR(2),
     numero_ligne INTEGER,
@@ -141,15 +140,16 @@ const pool = require("./db");
     FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
   );
 
+  
   CREATE TABLE IF NOT EXISTS Prestataire(
     id_prestataire SERIAL PRIMARY KEY,
     nom_prestataire VARCHAR(50),
     descri_prestataire VARCHAR(500),
-    nb_participants NUMERIC(10, 2),
+    nb_participants INTEGER,
     tarif_prestataire NUMERIC(10, 2),
     mail_prestataire VARCHAR(255) NOT NULL,
     tel_prestataire VARCHAR(10) NOT NULL,
-    waitingforadmin BOOLEAN,
+    waitingforadmin BOOLEAN DEFAULT FALSE,
     refused BOOLEAN DEFAULT FALSE,
     specificite VARCHAR(100),
     id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
@@ -157,7 +157,15 @@ const pool = require("./db");
     type_animation_id INTEGER REFERENCES Type_animation(id_type_animation),
     type_restauration_id INTEGER REFERENCES Type_restauration(id_type_restauration),
     type_boutique_id INTEGER REFERENCES Type_boutique(id_type_boutique)
-  );
+    );
+    
+
+    CREATE TABLE IF NOT EXISTS Services(
+      id_service SERIAL PRIMARY KEY,
+      nom_service VARCHAR(100),
+      prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
+    );
+
 
   CREATE TABLE IF NOT EXISTS Pays(
     id_pays SERIAL PRIMARY KEY,

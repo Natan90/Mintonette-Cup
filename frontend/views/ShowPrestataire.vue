@@ -1,5 +1,16 @@
 <template>
   <NavView />
+  <div class="back-arrow pointer" @click="router.back()">
+    &#8592; Retour
+  </div>
+  <div class="bloc_texte">
+    <h1 class="page_title">
+      {{ $t('adminPage.prestataire.show.title') }}
+    </h1>
+    <p v-html="$t('adminPage.prestataire.show.descri', { nom_prestataire: onePresta.nom_prestataire })"
+      class="backgroundBorderL page_subtitle"></p>
+
+  </div>
 
   <section>
     <div class="container">
@@ -18,8 +29,23 @@
         <p>{{ onePresta.prenom_utilisateur }} {{ onePresta.nom_utilisateur }}
         </p>
       </div>
+      <div class="services_container">
+        <p>
+          <b>
+            {{ $t('prestataireInfo.services', { gotS: services.length > 1 ? 's' : '' }) }}
+          </b>
+        </p>
+        <ul>
+          <li v-for="(item, index) in services" :key="index" class="service_item">
+            {{ item.nom_service }}
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
+
+
+
 
 
   <!-- <div class="routeurLink">
@@ -56,10 +82,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 
 const route = useRoute();
+const router = useRouter();
 
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
@@ -76,6 +103,7 @@ const onePresta = ref({
   nom_utilisateur: ""
 });
 
+const services = ref([]);
 const idPresta = route.params.id;
 
 onMounted(async () => {
@@ -94,7 +122,9 @@ onMounted(async () => {
 async function getValuesPrestataire() {
   try {
     const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
-    onePresta.value = res.data;
+    onePresta.value = res.data.prestataire;
+
+    services.value = res.data.services;
 
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
@@ -107,13 +137,21 @@ async function getValuesPrestataire() {
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  gap: 20px;
+  margin-left: 250px;
+  gap: 200px;
 }
 
 .container_cards {
+  min-width: 600px;
   background-color: yellow;
 }
+
+.bloc_texte {
+  display: flex;
+  flex-direction: column;
+  padding: 0 50px;
+}
+
 
 /* body::-webkit-scrollbar {
   display: none;

@@ -7,7 +7,7 @@
       <div>
         <p>
           {{ $t('adminPage.user.modal.confirmation') }}
-          <span class="name_presta background_name" v-if="selectedUser">{{ selectedUser.nom_utilisateur }}</span> ?
+          <span class="name_delete background_name" v-if="selectedUser">{{ selectedUser.nom_utilisateur }}</span> ?
         </p>
 
       </div>
