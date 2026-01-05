@@ -1,127 +1,135 @@
 <template>
   <div>
     <NavBar />
-    <h1>Gradin {{ zone }}</h1>
-    <strong
-      >Ici, il faut que je recupère tous les matchs sur ce terrain ( nord :
-      idTerrain = 1, est : 2 ...) ensuite afficher en haut les pays avec
-      l'heure,</strong
-    >
-    quand je clique sur un match 100 nouveau siège arrive ( car pas le meme
-    match ) Dans les siège sélectionnés, il faut marquer genre FR vs CA pour
-    savoir c'est quel match et il est possible d'avoir deux fois le meme siège
-    si c'est pas le même match et du coup la même chose dans panier
 
-
-    legende des siège
-    <section>
-      <h2 v-if="matches.length">Matchs sur ce terrain</h2>
-
-      <div v-for="match in matches" :key="match.id_match">
-        <button
-          class="pointer"
-          :class="{ active: match.id_match === idMatch }"
-          @click="selectMatch(match)">
-          {{ match.team1_country }} vs {{ match.team2_country }} –
-          {{ getMatchTime(match) }}
-        </button>
+    <div class="pageContainer">
+      <div class="matchHeader">
+        <h2>Mintonette Cup – Gradin {{ zone.toUpperCase() }}</h2>
       </div>
 
-      <h2 v-if="idMatch">Réservation de place</h2>
-      {{ idMatch }}
+      <section v-if="matches.length">
+        <h3 class="sectionTitle">Matchs sur ce terrain</h3>
 
-      <div class="layout" v-if="idMatch">
-        <div class="seatContainer" :key="idMatch">
+        <div class="matchSelector">
           <button
-            class="Seat"
-            v-for="(seat, index) in seats"
-            :key="
-              idMatch +
-              '-' +
-              seat.zone +
-              seat.numero_colonne +
-              seat.numero_ligne
-            "
-            @mouseover="hoverIndex = index"
-            @mouseleave="hoverIndex = null"
-            @click="UpdateSeatStatus(index)">
-            <img
-              v-if="hoverIndex === index && seat.state === 'available'"
-              src="/AvailableSeatHover.svg"
-              class="ImgSeat" />
-            <img
-              v-else-if="seat.state === 'reserved'"
-              src="/ReservedSeat.svg"
-              class="ImgSeat" />
-            <img
-              v-else-if="seat.state === 'owned'"
-              src="/OwnedSeat.svg"
-              class="ImgSeat" />
-            <img
-              v-else-if="seat.state === 'selected'"
-              src="/SelectionnedSeat.svg"
-              class="ImgSeat" />
-            <img v-else src="/AvailableSeat.svg" class="ImgSeat" />
+            v-for="match in matches"
+            :key="match.id_match"
+            @click="selectMatch(match)"
+            :class="[
+              'matchTitle pointer',
+              { active: match.id_match === idMatch },
+            ]">
+            {{ match.team1_country }} - {{ match.team2_country }}
+            <span class="matchTime">{{ getMatchTime(match) }}</span>
           </button>
         </div>
 
-        <div class="SeatInfo" v-if="globalSelectedSeats.length">
-          <h3>Sièges sélectionnés</h3>
-          <ul>
-            <li
-              v-for="seat in globalSelectedSeats"
-              :key="
-                seat.matchId +
-                seat.zone +
-                seat.numero_colonne +
-                seat.numero_ligne
-              ">
-              {{ seat.team1.substring(0, 3) }} vs
-              {{ seat.team2.substring(0, 3) }} – {{ seat.numero_colonne
-              }}{{ seat.numero_ligne }} – {{ getSeatPrice(seat) }} €
-            </li>
-          </ul>
+        <div v-if="idMatch" class="matchHeader">
+          <h3>Réservation de place</h3>
+        </div>
 
-          <p>
-            <b>Total : {{ globalTotalPrice }} €</b>
-          </p>
+        <div class="layout" v-if="idMatch">
+          <div class="terrainConteneur">
+            <div class="seatContainer" :key="idMatch">
+              <button
+                class="Seat"
+                v-for="(seat, index) in seats"
+                :key="
+                  idMatch +
+                  '-' +
+                  seat.zone +
+                  seat.numero_colonne +
+                  seat.numero_ligne
+                "
+                @mouseover="hoverIndex = index"
+                @mouseleave="hoverIndex = null"
+                @click="UpdateSeatStatus(index)">
+                <img
+                  v-if="hoverIndex === index && seat.state === 'available'"
+                  src="/AvailableSeatHover.svg"
+                  class="ImgSeat" />
+                <img
+                  v-else-if="seat.state === 'reserved'"
+                  src="/ReservedSeat.svg"
+                  class="ImgSeat" />
+                <img
+                  v-else-if="seat.state === 'owned'"
+                  src="/OwnedSeat.svg"
+                  class="ImgSeat" />
+                <img
+                  v-else-if="seat.state === 'selected'"
+                  src="/SelectionnedSeat.svg"
+                  class="ImgSeat" />
+                <img v-else src="/AvailableSeat.svg" class="ImgSeat" />
+              </button>
+            </div>
+          </div>
 
-          <button class="pointer" @click="AddToCart">
-            <b>Ajouter au panier</b>
-          </button>
+          <div class="SeatInfo" v-if="globalSelectedSeats.length">
+            <h3>Sièges sélectionnés ({{ globalSelectedSeats.length }})</h3>
+            <ul>
+              <li
+                v-for="seat in globalSelectedSeats"
+                :key="
+                  seat.matchId +
+                  seat.zone +
+                  seat.numero_colonne +
+                  seat.numero_ligne
+                ">
+                <span class="seatMatch">
+                  {{ seat.team1.substring(0, 3) }} vs
+                  {{ seat.team2.substring(0, 3) }}
+                </span>
+                <span class="seatLocation">
+                  {{ seat.numero_colonne }}{{ seat.numero_ligne }}
+                </span>
+                <span class="seatPrice">{{ getSeatPrice(seat) }} €</span>
+              </li>
+            </ul>
 
-          <button @click="goToPanier">
-            <button class="pointer"><b>Accéder à votre panier</b></button>
-          </button>
+            <p class="totalPrice">
+              <b>Total : {{ globalTotalPrice }} €</b>
+            </p>
+            <div class="buttonContainer">
+              <button class="button" @click="AddToCart">
+                <b>Ajouter au panier </b>
+              </button>
 
-          <button class="pointer" @click="resetAllSelection">
-            <b>Réinitialiser la sélection</b>
+              <router-link :to="{ name: 'Panier' }">
+                <button class="button basket">
+                  <b>Accéder à votre panier</b>
+                </button>
+              </router-link>
+              <button class="button reset" @click="resetSelection">
+                Réinitialiser la sélection pour ce match
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttonContainer" v-if="idMatch">
+          <button class="button resetButton" @click="resetAllSelection">
+            <b>Réinitialiser la sélection totale </b>
           </button>
         </div>
-      </div>
-
-      <button v-if="idMatch" @click="resetSelection">
-        Réinitialiser la sélection pour ce match
-      </button>
-
-      <span v-if="estAjoute">
-        Vous avez bien ajouté ces articles dans votre panier
-      </span>
-    </section>
+        <div v-if="estAjoute" class="successMessage">
+          ✓ Vous avez bien ajouté ces articles dans votre panier
+        </div>
+      </section>
+    </div>
 
     <Footer />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import NavBar from "../components/NavView.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
-
 
 const route = useRoute();
 const router = useRouter();
@@ -145,8 +153,8 @@ const zoneToTerrain = {
 
 const terrainId = zoneToTerrain[zone];
 
-const selectedSeats = computed(() =>
-  seats.value.filter((seat) => seat.state === "selected")
+const globalSelectedSeats = ref(
+  JSON.parse(localStorage.getItem("selectedSeats") || "[]")
 );
 
 const globalTotalPrice = computed(() =>
@@ -156,8 +164,8 @@ const globalTotalPrice = computed(() =>
 function goToPanier() {
   navStore.previousRoute = route.fullPath;
   router.push({
-    name: "Panier"
-  })
+    name: "Panier",
+  });
 }
 
 function getMatchTime(match) {
@@ -174,40 +182,11 @@ function getSeatPrice(seat) {
   return 12;
 }
 
-const globalSelectedSeats = ref(
-  JSON.parse(localStorage.getItem("selectedSeats") || "[]")
-);
-
-function saveGlobalSelections(list) {
-  localStorage.setItem("selectedSeats", JSON.stringify(list));
-}
-
-function restoreSelection() {
-  const saved = getGlobalSelections();
-
-  seats.value.forEach((seat) => {
-    const found = saved.find(
-      (s) =>
-        s.matchId === idMatch.value &&
-        s.zone === seat.zone &&
-        s.numero_colonne === seat.numero_colonne &&
-        s.numero_ligne === seat.numero_ligne
-    );
-
-    seat.state = found
-      ? "selected"
-      : seat.state === "reserved"
-      ? "reserved"
-      : "available";
-  });
-}
-
 async function fetchGradin() {
   const res = await axios.get("http://localhost:3000/gradin/show", {
     params: { matchId: idMatch.value },
   });
 
-  // Filtrer par zone
   const seatsForZone = res.data
     .filter((seat) => seat.zone === zone.toUpperCase())
     .map((seat) => {
@@ -233,7 +212,6 @@ async function fetchGradin() {
     });
 
   seatsByMatch.value[idMatch.value] = seatsForZone;
-
   seats.value = seatsByMatch.value[idMatch.value];
 }
 
@@ -247,6 +225,7 @@ async function fetchMatches() {
 async function selectMatch(match) {
   idMatch.value = match.id_match;
   hoverIndex.value = null;
+  estAjoute.value = false;
 
   if (!seatsByMatch.value[idMatch.value]) {
     await fetchGradin();
@@ -255,10 +234,9 @@ async function selectMatch(match) {
   }
 }
 
-
 function UpdateSeatStatus(index) {
   const seat = seats.value[index];
-  if (seat.state === "reserved") return;
+  if (seat.state === "reserved" || seat.state === "owned") return;
 
   const match = matches.value.find((m) => m.id_match === idMatch.value);
 
@@ -298,18 +276,25 @@ function UpdateSeatStatus(index) {
 async function AddToCart() {
   if (!globalSelectedSeats.value.length) return;
 
-  for (const seat of globalSelectedSeats.value) {
-    await axios.put("http://localhost:3000/gradin/panier", {
-      matchId: seat.matchId,
-      zone: seat.zone,
-      numero_colonne: seat.numero_colonne,
-      numero_ligne: seat.numero_ligne,
-      dans_panier: true,
-      id_utilisateur: userStore.userId,
-    });
-  }
+  try {
+    for (const seat of globalSelectedSeats.value) {
+      await axios.put("http://localhost:3000/gradin/panier", {
+        matchId: seat.matchId,
+        zone: seat.zone,
+        numero_colonne: seat.numero_colonne,
+        numero_ligne: seat.numero_ligne,
+        dans_panier: true,
+        id_utilisateur: userStore.userId,
+      });
+    }
 
-  estAjoute.value = true;
+    estAjoute.value = true;
+    setTimeout(() => {
+      estAjoute.value = false;
+    }, 3000);
+  } catch (error) {
+    console.error("Erreur lors de l'ajout au panier:", error);
+  }
 }
 
 function resetSelection() {
@@ -321,6 +306,7 @@ function resetSelection() {
     "selectedSeats",
     JSON.stringify(globalSelectedSeats.value)
   );
+
   seats.value.forEach((seat) => {
     if (seat.state === "selected") {
       seat.state = seat.est_reserve ? "reserved" : "available";
@@ -333,23 +319,100 @@ function resetAllSelection() {
   seats.value.forEach((seat) => {
     if (seat.state === "selected") seat.state = "available";
   });
-  localStorage.setItem(
-    "selectedSeats",
-    JSON.stringify(globalSelectedSeats.value)
-  );
+  localStorage.setItem("selectedSeats", "[]");
 }
 
 onMounted(async () => {
   await fetchMatches();
+  if (matches.value.length > 0) {
+    await selectMatch(matches.value[0]);
+  }
 });
 </script>
 
 <style scoped>
+.pageContainer {
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px;
+}
+
+.matchHeader {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.matchHeader h2 {
+  color: #00167a;
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.matchHeader h3 {
+  color: #00167a;
+  font-size: 1.5em;
+  margin: 20px 0;
+}
+
+.sectionTitle {
+  text-align: center;
+  color: #00167a;
+  font-size: 1.3em;
+  margin-bottom: 20px;
+}
+
+.matchSelector {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.matchTitle {
+  min-width: 250px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 20px;
+  background-color: #e6e9f5;
+  color: #00167a;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.matchTitle .matchTime {
+  font-size: 0.85em;
+  color: #4a5568;
+}
+
+.matchTitle.active,
+.matchTitle:hover {
+  background-color: #00167a;
+  color: white;
+}
+
+.matchTitle.active .matchTime,
+.matchTitle:hover .matchTime {
+  color: #cbd5e0;
+}
+.buttonContainer {
+  align-items: center;
+}
 .layout {
   display: flex;
   justify-content: center;
   gap: 40px;
-  margin-top: 20px;
+  margin-top: 30px;
+}
+
+.terrainConteneur {
+  flex: 1;
+  max-width: 900px;
 }
 
 .seatContainer {
@@ -357,6 +420,10 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(12, 60px);
   gap: 10px;
+  background: #f6f7fb;
+  padding: 30px;
+  border-radius: 12px;
+  justify-content: center;
 }
 
 .Seat {
@@ -366,6 +433,11 @@ onMounted(async () => {
   background: none;
   cursor: pointer;
   padding: 0;
+  transition: transform 0.1s;
+}
+
+.Seat:hover {
+  transform: scale(1.05);
 }
 
 .ImgSeat {
@@ -375,19 +447,174 @@ onMounted(async () => {
 }
 
 .SeatInfo {
-  width: 220px;
-  padding: 16px;
-  border: 1px solid black;
+  width: 320px;
+  padding: 20px;
+  background: #f6f7fb;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.SeatInfo h3 {
+  color: #00167a;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.SeatInfo ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.SeatInfo li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.9em;
+  gap: 8px;
+}
+
+.SeatInfo li:hover {
+  background: #e6e9f5;
+}
+
+.seatMatch {
+  font-weight: 600;
+  color: #00167a;
+  min-width: 60px;
+}
+
+.seatLocation {
+  color: #4a5568;
+  flex: 1;
+}
+
+.seatPrice {
+  font-weight: bold;
+  color: #2c5282;
+}
+
+.totalPrice {
+  text-align: center;
+  font-size: 1.3em;
+  color: #00167a;
+  margin: 20px 0;
+  padding: 15px;
+  background: white;
   border-radius: 8px;
 }
 
-.SeatInfo a {
+.button {
+  background: #00167a;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
   text-decoration: none;
-  color: black;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
 }
-.SeatInfo button {
-  width: 100%;
-  padding: 8px;
-  text-decoration: none;
+
+.button:hover {
+  background: #001a99;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.actionButton.basket {
+  background: #4a5568;
+}
+
+.actionButton.basket:hover {
+  background: #2d3748;
+}
+
+.buttonContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.resetButton {
+  background: #ef2828;
+}
+
+.resetButton:hover {
+  background: #c92424;
+}
+
+.successMessage {
+  background: #48bb78;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 600;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* @media (max-width: 1200px) {
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .SeatInfo {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .seatContainer {
+    grid-template-columns: repeat(6, 50px);
+    gap: 8px;
+    padding: 20px;
+  }
+
+  .Seat {
+    width: 50px;
+    height: 60px;
+  }
+
+  .ImgSeat {
+    width: 50px;
+    height: 50px;
+  }
+
+  .matchTitle {
+    min-width: 200px;
+    font-size: 0.9em;
+  }
+} */
 </style>

@@ -50,11 +50,25 @@ const { log } = require("node:console");
 
 router.get("/show", async (req, res) => {
   try {
+    const { matchId } = req.query;
+
+    if (!matchId) {
+      return res.status(400).json({ error: "matchId est requis" });
+    }
+
+
     const result = await pool.query(
-      "SELECT * FROM Siege ORDER BY zone ASC, numero_colonne ASC, numero_ligne ASC"
+      "SELECT * FROM Siege WHERE match_id = $1 ORDER BY numero_colonne, numero_ligne",
+      [matchId]
     );
+
+    console.log(
+      `${result.rows.length} sièges trouvés pour le match ${matchId}`
+    );
+
     res.json(result.rows);
   } catch (err) {
+    console.error("Erreur lors de la récupération des sièges:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -192,12 +206,31 @@ router.put("/update", async (req, res) => {
  */
 
 router.put("/panier", async (req, res) => {
-  const { numero_colonne, numero_ligne, zone, dans_panier } = req.body;
+  const {
+    matchId,
+    numero_colonne,
+    numero_ligne,
+    zone,
+    dans_panier,
+    id_utilisateur,
+  } = req.body;
+
   try {
     const result = await pool.query(
-      "UPDATE Siege SET dans_panier = $1 WHERE numero_colonne = $2 AND numero_ligne = $3 AND zone = $4 RETURNING *",
-      [dans_panier, numero_colonne, numero_ligne, zone]
+      `UPDATE Siege 
+       SET dans_panier = $1, id_utilisateur = $2 
+       WHERE match_id = $3 
+         AND numero_colonne = $4 
+         AND numero_ligne = $5 
+         AND zone = $6 
+       RETURNING *`,
+      [dans_panier, id_utilisateur, matchId, numero_colonne, numero_ligne, zone]
     );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Siège non trouvé" });
+    }
+
     res.status(200).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
