@@ -46,23 +46,28 @@ router.patch("/validate/:id", async (req, res) => {
   try {
     await client.query("BEGIN");
     const checkPresta = await client.query(
-      "SELECT nom_prestataire FROM Prestataire WHERE waitingforadmin = false AND id_prestataire = $1",
+      "SELECT id_utilisateur FROM Prestataire WHERE id_prestataire = $1 AND waitingforadmin = true",
       [id_presta]
     );
 
-    if (checkPresta.rows.length > 0) {
+    if (checkPresta.rows.length === 0) {
       await client.query("ROLLBACK");
-
-      return res.status(409).json({
-        error: "Ce prestataire est déjà validé",
-      });
+      return res.status(404).json({ error: "Prestataire non trouvé " });
     }
+
+    const idUtilisateur = checkPresta.rows[0].id_utilisateur;
+
     const result = await client.query(
       `UPDATE Prestataire
         SET
           waitingforadmin = false
         WHERE id_prestataire = $1`,
         [id_presta]
+    );
+
+    await client.query(
+      "UPDATE Utilisateur SET ispresta = TRUE WHERE id_utilisateur = $1",
+      [idUtilisateur]
     );
 
     await client.query("COMMIT");

@@ -41,20 +41,26 @@
             <!-- <img src=""> -->
             <div class="description" v-html="item.descri_prestataire">
             </div>
-            <p>{{ item.nb_participants }}</p>
-            <p>{{ item.tarif_prestataire }}</p>
+            <!-- <p>Capacité : <span>{{ Number(item.nb_participants) }}</span></p>
+            <p>Tarif : <span>{{ item.tarif_prestataire }}</span></p> -->
             <div class="contact_presta">
-                <p class="contact_title"><b>Contact</b></p>
-                <p>{{ item.mail_prestataire }}</p>
-                <p>{{ item.tel_prestataire }}</p>
+                <p class="contact_title"><b>Contact</b>
+                    <span>
+                        <button @click="goToSpecificPrestataire(item.id_prestataire)">
+                            En savoir plus
+                        </button>
+                    </span>
+                </p>
+                <!-- <p>{{ item.mail_prestataire }}</p>
+                <p>{{ item.tel_prestataire }}</p> -->
             </div>
-            <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
+            <!-- <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
                 <span>
-                    <button>
+                    <button @click="goToSpecificPrestataire(item.id_prestataire)">
                         En savoir plus
                     </button>
                 </span>
-            </p>
+            </p> -->
         </div>
     </div>
 
@@ -73,10 +79,10 @@ const route = useRoute();
 const type_prestataire = ref([]);
 const prestataires = ref([]);
 const filters = ref({
-  nom: route.query.nom || '',
-  category: route.query.category ? Number(route.query.category) : 0,
-  prixMin: route.query.prixMin || null,
-  prixMax: route.query.prixMax || null
+    nom: route.query.nom || '',
+    category: route.query.category ? Number(route.query.category) : 0,
+    prixMin: route.query.prixMin || null,
+    prixMax: route.query.prixMax || null
 });
 
 
@@ -89,20 +95,29 @@ onMounted(async () => {
         } else {
             await getValuesPrestataire();
         }
-  } catch (err) {
-    console.error(err);
-  }
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 function resetFilters() {
     filters.value = {
-    nom: '',
-    category: null,
-    prixMin: null,
-    prixMax: null
+        nom: '',
+        category: null,
+        prixMin: null,
+        prixMax: null
     }
     router.push({ path: "/", query: {} });
     getValuesPrestataire();
+}
+
+function goToSpecificPrestataire(idPresta) {
+    router.push({
+        name: "ShowPrestataire",
+        params: {
+            id: idPresta
+        }
+    });
 }
 
 //=========================
@@ -128,12 +143,12 @@ async function getValuesTypePrestataire() {
 
 async function searchPrestataires() {
     router.push({
-        path: "/", 
+        path: "/",
         query: {
-        nom: filters.value.nom || undefined,
-        category: filters.value.category || undefined,
-        prixMin: filters.value.prixMin || undefined,
-        prixMax: filters.value.prixMax || undefined,
+            nom: filters.value.nom || undefined,
+            category: filters.value.category || undefined,
+            prixMin: filters.value.prixMin || undefined,
+            prixMax: filters.value.prixMax || undefined,
         },
     });
 
@@ -151,8 +166,6 @@ async function searchPrestataires() {
 <style></style>
 
 <style scoped>
-
-
 .affichage_presta {
     display: flex;
     flex-direction: row;

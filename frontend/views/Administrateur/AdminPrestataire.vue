@@ -85,7 +85,7 @@
                         </td>
                         <td>
                             <span v-if="!item.waitingforadmin">
-                                <button class="btn_info">
+                                <button class="btn_info" @click="goToSpecificPrestataire(item.id_prestataire)">
                                     {{ $t('adminPage.bouton.btn_voir') }}
                                 </button>
                                 <button class="btn_supprimer" @click="ModalShow(item)">
@@ -160,6 +160,14 @@ function ModalShow(presta) {
     isDelete.value = true;
 };
 
+function goToSpecificPrestataire(idPresta) {
+    router.push({
+        name: "ShowPrestataire",
+        params: {
+            id: idPresta
+        }
+    });
+}
 
 const prestatairesFiltres = computed(() => {
   let liste = [...prestataires.value];
@@ -267,21 +275,6 @@ async function changePresta(newValue, idPresta) {
     padding: 30px;
     background-color: #f5f7fa;
     min-height: 100vh;
-}
-
-.page_title {
-    font-size: 32px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: #1e3a8a;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.page_subtitle {
-    color: #374151;
-    background: #e0f2fe;
-    border-left: 4px solid #3b82f6;
 }
 
 .nb_presta {

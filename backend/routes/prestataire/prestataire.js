@@ -60,18 +60,17 @@ router.get("/show", async (req, res) => {
   }
 });
 
-
 /**
  * @swagger
  * /prestataire/show/{id}:
  *   get:
- *     summary: Récupère le prestataire associé à un utilisateur
+ *     summary: Récupère le prestataire avec son ID
  *     tags: [Prestataires]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID de l'utilisateur
+ *         description: ID du prestataire
  *         schema:
  *           type: integer
  *     responses:
@@ -110,21 +109,31 @@ router.get("/show", async (req, res) => {
  *         description: Erreur serveur
  */
 router.get("/show/:id", async (req, res) => {
-  const id_user = req.params.id;
+  const idPresta = req.params.id;
   try {
     const result = await pool.query(
-      "SELECT * FROM Prestataire WHERE id_utilisateur = $1",
-      [id_user]
+      `SELECT * FROM Prestataire
+        WHERE id_prestataire = $1`,
+      [idPresta]
     );
     if (result.rows.length === 0)
       return res.status(404).json({ message: "Prestataire non trouvé" });
-    res.json(result.rows[0]);
+
+    const resultServices = await pool.query(
+      `SELECT * FROM Services WHERE prestataire_id = $1`,
+      [idPresta]
+    );
+
+    res.json({
+      prestataire: result.rows[0],
+      services: resultServices.rows
+    });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
-
 
 /**
  * @swagger
@@ -221,7 +230,7 @@ router.get("/showFilter", async (req, res) => {
 
     if (nom) {
       sql += ` AND p.nom_prestataire ILIKE $${index}`;
-      values.push(`%${nom}%`)
+      values.push(`%${nom}%`);
       index++;
     }
 
@@ -247,8 +256,7 @@ router.get("/showFilter", async (req, res) => {
 
     const result = await pool.query(sql, values);
 
-     res.json(result.rows);
-
+    res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
@@ -293,10 +301,9 @@ router.get("/showTypePrestataire", async (req, res) => {
         `
     );
 
-
     res.json({
       result: result.rows,
-      count: count.rows
+      count: count.rows,
     });
   } catch (err) {
     console.error(err);
@@ -371,7 +378,6 @@ router.get("/showEveryType", async (req, res) => {
   }
 });
 
-
 /**
  * @swagger
  * /prestataire/becomePrestataire/{id}:
@@ -445,9 +451,8 @@ router.get("/showEveryType", async (req, res) => {
  */
 router.post("/becomePrestataire/:id", async (req, res) => {
   const id_user = req.params.id;
-  const { nom, descri, nb_participants, tarif, mail, tel, specificite, type } =
-    req.body;
-  if (!nom || !descri || !tarif || !mail || !tel || !specificite || !type || !id_user)
+  const { nom, descri, nb_participants, tarif, mail, tel, specificite, type, services } = req.body;
+  if ( !nom || !descri || !tarif || !mail || !tel || !specificite || !type || !id_user || !services)
     return res.status(400).json({
       error: "Champs obligatoires manquants",
     });
@@ -476,10 +481,30 @@ router.post("/becomePrestataire/:id", async (req, res) => {
         (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, id_utilisateur, type_prestataire_id) VALUES
         ($1, $2, $3, $4, $5, $6, true, $7, $8, $9)
         RETURNING id_prestataire`,
-      [nom, descri, nb_participants, tarif, mail, tel, specificite, id_user, type]
+      [
+        nom,
+        descri,
+        nb_participants,
+        tarif,
+        mail,
+        tel,
+        specificite,
+        id_user,
+        type,
+      ]
     );
 
     const newPresta = result.rows[0];
+
+    if (Array.isArray(services) && services.length > 0) {
+      for (const service of services) {
+        await client.query(
+          `INSERT INTO Services (nom_service, prestataire_id)
+          VALUES ($1, $2)`,
+          [service, newPresta.id_prestataire]
+        );
+      }
+    }
 
     await client.query("COMMIT");
 
@@ -500,7 +525,6 @@ router.post("/becomePrestataire/:id", async (req, res) => {
     client.release();
   }
 });
-
 
 /**
  * @swagger
@@ -612,7 +636,17 @@ router.put("/updatePresta/:id", async (req, res) => {
         WHERE id_utilisateur = $9
         RETURNING id_prestataire;
         `,
-      [nom, descri, nb_participants, tarif, mail, tel, specificite, type, id_user]
+      [
+        nom,
+        descri,
+        nb_participants,
+        tarif,
+        mail,
+        tel,
+        specificite,
+        type,
+        id_user,
+      ]
     );
 
     const newPresta = result.rows[0];

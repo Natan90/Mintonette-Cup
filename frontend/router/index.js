@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "@/views/Index.vue";
-import PrestatairePublic from "@/views/PrestatairePublic.vue";
+import ShowPrestataire from "@/views/ShowPrestataire.vue";
 import Commander from "@/views/Commander.vue";
 import Reserver from "@/views/Reserver.vue";
 import PresentationMintonette from "@/views/PresentationMintonette.vue";
@@ -40,18 +40,18 @@ const routes = [
         component: RecherchePrestataire,
       },
       {
-        path: "PrestatairePublic",
-        name: "PrestatairePublic",
-        component: PrestatairePublic,
+        path: "ShowPrestataire/:id",
+        name: "ShowPrestataire",
+        component: ShowPrestataire,
       },
       {
-        path: "Prestataire/Add/:id",
+        path: "Prestataire/Add/:id?",
         name: "AddPrestataire",
         component: PrestataireInfo,
         props: true,
       },
       {
-        path: "Prestataire/Edit/:id",
+        path: "Prestataire/Edit/:id?",
         name: "EditPrestataire",
         component: PrestataireInfo,
         props: true,

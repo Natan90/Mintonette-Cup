@@ -102,7 +102,8 @@
     "infoContact3": "Contact us"
   },
   "prestataireInfo": {
-    "title": "Become a member of the Mintonette Cup!",
+    "titleAdd": "Become a full member of the Mintonette Cup!",
+    "titleEdit": "Enhance your Mintonette Cup service provider profile!",
     "role": "Your role in the event: choose your category:",
     "type": "What is your type",
     "btnContinueInscription": "Continue Registration",
@@ -113,7 +114,8 @@
       "nbParticipants": "Maximum Number of Participants",
       "tarif": "Price",
       "btnModifier": "Edit"
-    }
+    },
+    "services": "Service{gotS}"
   },
   "adminPage": {
     "evenement": {
@@ -161,6 +163,10 @@
         "valider": "Approved",
         "enAttente": "Pending approval",
         "refuse": "Refuse"
+      },
+      "show": {
+        "title": "Discover this provider",
+        "descri": "Find here all the information about <span class='name_delete background_name'>{nom_prestataire}</span> : the services offered, pricing, number of participants accommodated, as well as contact details. This provider takes part in the event and puts their expertise at your disposal."
       }
     },
     "user": {
