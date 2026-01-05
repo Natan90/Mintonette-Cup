@@ -2,113 +2,88 @@
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <!-- Logo -->
     <router-link :to="{ name: 'Home', params: { lang: locale } }">
-      <img class="pointer" src="../images/logo.png" alt="logo" id="logo" />
+      <img src="../images/logo.png" class="logo pointer" alt="logo" />
     </router-link>
 
-    <div class="routeurLink">
-      <router-link
-        :to="{ name: 'PrestatairePublic', params: { lang: locale } }">
-        <span class="pointer optionNav">Prestataire (mode public)</span>
+    <div class="optionNav">
+
+      <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
+        class="boutonNav">
+        <span class="pointer">Prestataire (mode public)</span>
       </router-link>
 
-      <router-link
-        v-if="utilisateur.ispresta"
-        :to="{
-          name: 'EditPrestataire',
-          params: { id: userStore.userId, lang: locale },
-        }">
-        <span class="pointer optionNav">Edit Prestataire (mode presta)</span>
-      </router-link>
-      <router-link
-        v-else
-        :to="{
-          name: 'AddPrestataire',
-          params: { id: userStore.userId, lang: locale },
-        }">
-        <span class="pointer optionNav">Become Prestataire (mode presta)</span>
+      <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
+        class="boutonNav">
+        <span class="pointer">Edit Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link :to="{ name: 'Evenement', params: { lang: locale } }">
-        <span class="pointer optionNav">Vue administrateur</span>
+      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}" 
+        class="boutonNav">
+        <span class="pointer">Become Prestataire (mode presta)</span>
       </router-link>
 
+      <router-link :to="{ name: 'Evenement', params: { lang: locale } }"
+        class="boutonNav">
+        <span class="pointer">Vue administrateur</span>
+      </router-link>
 
-      <span>
-        <button @click="changeLanguage('fr')" class="langue pointer optionNav"
-        v-if="locale === 'en'">
-          Français
-        </button
-        >
-        <button @click="changeLanguage('en')" class="langue pointer optionNav"
-        v-else-if="locale === 'fr'">
-          English
-        </button>
-      </span>
+      <div class="langue">
+        <div v-if="locale === 'en'" @click="changeLanguage('fr')"  class="boutonNav pointer">
+          <span>Français</span>
+        </div>
+        <div v-else-if="locale === 'fr'" @click="changeLanguage('en')"  class="boutonNav pointer">
+          <span>English</span>
+        </div>
+      </div>
 
-      <span v-if="!userStore.isConnected">
-        <strong>
-          <router-link
-            :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }">
-            <span class="pointer optionNav">{{
-              $t("user.buttonConnexion")
-            }}</span>
-          </router-link>
+      <div v-if="!userStore.isConnected" class="partieProfil">
+        <router-link :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
+           class="boutonNav">
+          <span class="pointer">{{ $t("user.buttonConnexion")}}</span>
+        </router-link>
+
+        <div class="default">
           /
-          <router-link
-            :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }">
-            <span class="pointer optionNav">{{
-              $t("user.buttonInscription")
-            }}</span>
-          </router-link>
-        </strong>
-      </span>
-
-      <span v-else class="user-buttons">
-        <div class="profile-button" @click="toggleBloc">
-          <img
-            v-if="userProfilePhoto"
-            :src="userProfilePhoto"
-            alt="Photo de profil"
-            class="profile-photo pointer" />
-          <div v-else class="profile-placeholder pointer">
-            <span>{{ userInitials }}</span>
-          </div>
         </div>
-        <div class="dropdown-block" :class="{ open: showBloc }">
-          <div>
-            <router-link
-              :to="{ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } }"
-              class="pointer optionProfil">
-              Mon profil
-            </router-link>
 
-            <router-link
-              v-if="utilisateur.ispresta"
-              :to="{
-                name: 'EditPrestataire',
-                params: { id: userStore.userId, lang: locale },
-              }"
-              class="pointer optionProfil">
-              Mes prestations
-            </router-link>
+        <router-link :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
+           class="boutonNav">
+          <span class="pointer">{{$t("user.buttonInscription")}}</span>
+        </router-link>
+      </div>
 
-            <router-link
-              :to="{ name: 'Panier', params: { lang: locale } }"
-              class="pointer optionProfil">
-              Panier
-            </router-link>
+      <div v-else class="userButtons">
 
-            <router-link
-              :to="{ name: 'ModifyAccount', params: { lang: locale } }"
-              class="pointer optionProfil">
-              Paramètres
-            </router-link>
-
-            <div class="optionProfil" @click="handleLogout">Se déconnecter</div>
-          </div>
+        <img v-if="userProfilePhoto" :src="userProfilePhoto" alt="Photo de profil" class="profile-photo pointer" />
+        
+        <div v-else class="profile-placeholder pointer">
+          <span>{{ userInitials }}</span>
         </div>
-      </span>
+
+          <div class="optionsUser">
+
+            <router-link :to="{ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } }" 
+              class="pointer optionProfil">
+              <span>Mon profil</span>
+            </router-link>
+
+            <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
+              class="pointer optionProfil">
+              <span class="pointer">Mes prestations</span>
+            </router-link>
+
+            <router-link :to="{ name: 'Panier', params: { lang: locale } }"
+              class="pointer optionProfil">
+              <span class="pointer">Panier</span>
+            </router-link>
+
+          <div class="optionProfil pointer" @click="handleLogout">
+            <span>Se déconnecter</span>
+          </div>
+
+        </div>
     </div>
+  </div>
   </nav>
 </template>
 
@@ -233,23 +208,16 @@ async function getValuesUser() {
   background-color: #00167a;
 }
 
-#logo {
+.logo {
   height: var(--barreNav-height);
 }
 
-.routeurLink {
+.optionNav {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: calc(100% - 100px);
-  height: 1.2em;
-  font-weight: 500;
-}
-
-.langue {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 20px;
+  height: 50%;
+  margin-left: 100px;
   font-weight: 500;
 }
 
@@ -259,47 +227,110 @@ async function getValuesUser() {
   cursor: default;
 }
 
-.optionNav:hover {
+.boutonNav {
+  display: flex;
+  align-items: center;      /* centrage vertical */
+  justify-content: center;  /* centrage horizontal */
+
+  height: 100%;
+  /* cursor: pointer; */
+}
+
+.boutonNav:hover {
   color: #ffff00;
 }
 
-.user-buttons {
-  position: relative;
-  display: inline-block;
+a span{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
 }
 
-.dropdown-block {
-  position: absolute;
-  top: 35px;
-  right: 0;
-  background-color: #00167a;
-  border-radius: 5px;
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-  width: 200px;
-  z-index: 1000;
+.langue {
+  display: flex;
+  flex-direction: row;
+
+  gap: 4px;
+  font-size: 20px;
+  font-weight: 500;
 }
 
-.dropdown-block.open {
-  max-height: 300px;
-  border: 1px solid white;
+.partieProfil div{
+  display: flex;
+  align-items: center;
+}
+
+.default{
+  cursor: default;
+  height: 100%;
+}
+
+.partieProfil{
+  height: 100%;
+  display: flex;
+  flex-direction:row;
+  align-items: center;
+  gap: 4px;
+  margin-right: 0.6em;
+}
+
+.userButtons {
+  width: 17%;
+  margin-right: 0.6em;
+}
+
+.userButtons:hover{
+
+  .optionsUser{
+    height: 300%;
+    margin-right: 1em;
+
+    background-color: blue;
+
+    transition: var(--transition-fast);
+  }
+
+  .optionProfil{
+    height: 2.5em;
+    width: 100%;
+
+    font-size: 1em;
+
+    transition: var(--transition-fast);
+  }
+}
+
+.primaire{
+  height: 100%;
+  width: 100%;
+
+  text-align: center;
+  align-content: center;
+}
+
+.optionsUser{
+  height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background-color: blue;
 }
 
 .optionProfil {
+  height: 0;
   width: 100%;
-  color: white;
-  height: 2.5em;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  padding-left: 0.5em;
+  font-size: 0;
+  text-indent: 0.5em;
+  align-content: center;
 }
 
 .optionProfil:hover {
-  padding-left: 0.8em;
+  text-indent: 0.8em;
   background-color: var(--jaune-logo);
   color: black;
   transition: var(--transition-fast);
