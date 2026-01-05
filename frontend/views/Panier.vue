@@ -22,9 +22,7 @@
   </div>
   <button @click="pay">payer</button>
   <button @click="reset">Vider le panier</button>
-  <button v-if="fromZone" @click="backToBleacher">
-    Retour au gradin {{ fromZone }}
-  </button>
+  <button @click="router.back()">Retour au gradin</button>
   <Footer />
 </template>
 
@@ -38,8 +36,6 @@ import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
-
-const fromZone = route.query.fromZone;
 
 const userStore = useUserStore();
 const panier = ref([]);
@@ -74,6 +70,7 @@ async function pay() {
 
   for (const seat of panier.value) {
     await axios.put("http://localhost:3000/gradin/update", {
+      matchId: seat.matchId, 
       numero_colonne: seat.numero_colonne,
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
@@ -87,7 +84,13 @@ async function pay() {
 
   await fetchPanier();
 }
-
+async function fetchMatches() {
+  const res = await axios.get(
+    `http://localhost:3000/equipes/match/terrain/${terrainId.value}`
+  );
+  matches.value = res.data;
+  selectedItem.value = 0;
+}
 async function reset() {
   if (panier.value.length === 0) {
     alert("Le panier est déjà vide");
@@ -105,13 +108,6 @@ async function reset() {
   }
 
   await fetchPanier();
-}
-//Bleacher = gradin
-function backToBleacher() {
-  router.push({
-    name: "Gradin",
-    params: { zone: fromZone.toLowerCase() },
-  });
 }
 
 onMounted(() => {

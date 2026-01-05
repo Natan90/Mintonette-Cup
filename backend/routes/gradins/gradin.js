@@ -3,15 +3,12 @@ const router = express.Router();
 const pool = require("../../database/db");
 const { log } = require("node:console");
 
-
 /**
  * @swagger
  * tags:
  *   name: Sieges
  *   description: Gestion des sièges (réservation, panier)
  */
-
-
 
 /**
  * @swagger
@@ -61,7 +58,6 @@ router.get("/show", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 /**
  * @swagger
@@ -114,6 +110,7 @@ router.get("/show", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   const {
+    matchId,
     numero_colonne,
     numero_ligne,
     zone,
@@ -129,8 +126,9 @@ router.put("/update", async (req, res) => {
       SET 
         est_reserve = $1,
         dans_panier = $2,
-        id_utilisateur = COALESCE($6, id_utilisateur)
-      WHERE numero_colonne = $3
+        id_utilisateur = COALESCE($7, id_utilisateur)
+      WHERE match_id = $6
+        AND numero_colonne = $3
         AND numero_ligne = $4
         AND zone = $5
       RETURNING *
@@ -141,6 +139,7 @@ router.put("/update", async (req, res) => {
         numero_colonne,
         numero_ligne,
         zone,
+        matchId,
         id_utilisateur,
       ]
     );
@@ -150,7 +149,6 @@ router.put("/update", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 /**
  * @swagger
@@ -205,7 +203,6 @@ router.put("/panier", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 /**
  * @swagger
