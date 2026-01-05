@@ -26,38 +26,6 @@
 
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
-        <div class="SeatInfo" v-if="globalSelectedSeats.length">
-          <h3>Sièges sélectionnés</h3>
-          <ul>
-            <li
-              v-for="seat in globalSelectedSeats"
-              :key="
-                seat.matchId +
-                seat.zone +
-                seat.numero_colonne +
-                seat.numero_ligne
-              ">
-              {{ seat.team1.substring(0, 3) }} vs
-              {{ seat.team2.substring(0, 3) }} – {{ seat.numero_colonne
-              }}{{ seat.numero_ligne }} – {{ getSeatPrice(seat) }} €
-            </li>
-          </ul>
-
-          <p>
-            <b>Total : {{ globalTotalPrice }} €</b>
-          </p>
-
-          <button class="pointer" @click="AddToCart">
-            <b>Ajouter au panier</b>
-          </button>
-
-          <button @click="goToPanier">
-            <button class="pointer"><b>Accéder à votre panier</b></button>
-          </button>
-
-          <button class="pointer" @click="resetAllSelection">
-            <b>Réinitialiser la sélection</b>
-          </button>
         </div>
 
         <div class="layout" v-if="idMatch">
@@ -139,11 +107,11 @@
           </div>
         </div>
 
-          <div class="buttonContainer" v-if="idMatch">
-            <button class="button resetButton" @click="resetAllSelection">
-              <b>Réinitialiser la sélection totale </b>
-            </button>
-          </div>
+        <div class="buttonContainer" v-if="idMatch">
+          <button class="button resetButton" @click="resetAllSelection">
+            <b>Réinitialiser la sélection totale </b>
+          </button>
+        </div>
         <div v-if="estAjoute" class="successMessage">
           ✓ Vous avez bien ajouté ces articles dans votre panier
         </div>
@@ -162,7 +130,6 @@ import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
-
 
 const route = useRoute();
 const router = useRouter();
@@ -197,8 +164,8 @@ const globalTotalPrice = computed(() =>
 function goToPanier() {
   navStore.previousRoute = route.fullPath;
   router.push({
-    name: "Panier"
-  })
+    name: "Panier",
+  });
 }
 
 function getMatchTime(match) {
@@ -433,7 +400,7 @@ onMounted(async () => {
 .matchTitle:hover .matchTime {
   color: #cbd5e0;
 }
-.buttonContainer{
+.buttonContainer {
   align-items: center;
 }
 .layout {
