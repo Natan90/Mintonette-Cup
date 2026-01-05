@@ -90,9 +90,9 @@
             <b>Ajouter au panier</b>
           </button>
 
-          <router-link :to="{ name: 'Panier' }">
+          <button @click="goToPanier">
             <button class="pointer"><b>Accéder à votre panier</b></button>
-          </router-link>
+          </button>
 
           <button class="pointer" @click="resetAllSelection">
             <b>Réinitialiser la sélection</b>
@@ -119,11 +119,15 @@ import NavBar from "../components/NavView.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useNavigationStore } from "@/stores/navigation";
+
 
 const route = useRoute();
+const router = useRouter();
 const zone = route.params.zone;
 const userStore = useUserStore();
+const navStore = useNavigationStore();
 
 const matches = ref([]);
 const seats = ref([]);
@@ -148,6 +152,13 @@ const selectedSeats = computed(() =>
 const globalTotalPrice = computed(() =>
   globalSelectedSeats.value.reduce((sum, seat) => sum + getSeatPrice(seat), 0)
 );
+
+function goToPanier() {
+  navStore.previousRoute = route.fullPath;
+  router.push({
+    name: "Panier"
+  })
+}
 
 function getMatchTime(match) {
   const date = new Date(match.date_match);

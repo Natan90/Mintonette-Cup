@@ -1,6 +1,6 @@
 <template>
   <NavView />
-  <div class="back-arrow pointer" @click="router.back()">
+  <div class="back-arrow pointer" @click="goBack">
     &#8592; Retour
   </div>
   <div class="bloc_texte">
@@ -56,13 +56,14 @@
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from 'vue-router';
+import { useNavigationStore } from "@/stores/navigation";
+import NavView from "@/components/NavView.vue";
+import Footer from "@/components/Footer.vue";
 
 
 const route = useRoute();
 const router = useRouter();
-
-import NavView from "@/components/NavView.vue";
-import Footer from "@/components/Footer.vue";
+const navStore = useNavigationStore();
 
 
 const onePresta = ref({
@@ -87,6 +88,11 @@ onMounted(async () => {
   }
 });
 
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 
 //==========================

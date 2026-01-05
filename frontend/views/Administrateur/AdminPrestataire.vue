@@ -117,14 +117,17 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
 import { useAdminStore } from "@/stores/admin";
+import { useNavigationStore } from "@/stores/navigation";
 
 
+const route = useRoute();
 const router = useRouter();
 const adminStore = useAdminStore();
+const navStore = useNavigationStore();
 
 const isDelete = ref(false);
 const deleting = ref(false);
@@ -166,10 +169,14 @@ function ModalShow(presta) {
 };
 
 function goToSpecificPrestataire(idPresta) {
+    navStore.previousRoute = route.fullPath;
     router.push({
         name: "ShowPrestataire",
         params: {
             id: idPresta
+        },
+        state: {
+            from: route.fullPath
         }
     });
 }
