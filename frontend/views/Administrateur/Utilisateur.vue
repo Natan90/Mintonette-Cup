@@ -27,7 +27,7 @@
     </p>
     <div class="textAndFiltre">
       <p class="nb_presta toValidate" v-if="utilisateurs.filter(p => p.ispresta).length > 0">
-        {{ $t('adminPage.user.nb_users', { count: utilisateurs.length }) }}
+        {{ $t('adminPage.user.nb_users', { count: utilisateurs.length, gotS: utilisateurs.length > 1 ? 's' : '' }) }}
       </p>
       <p class="nb_presta valid" v-else>
         {{ $t('adminPage.user.nb_userVide') }}

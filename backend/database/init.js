@@ -151,6 +151,7 @@ const pool = require("./db");
     tel_prestataire VARCHAR(10) NOT NULL,
     waitingforadmin BOOLEAN DEFAULT FALSE,
     refused BOOLEAN DEFAULT FALSE,
+    message_ajout BOOLEAN,
     specificite VARCHAR(100),
     id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
     type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire),
@@ -511,10 +512,10 @@ const pool = require("./db");
     await pool.query(insertTypePrestataire);
 
     const insertPrestataire = `
-    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingforadmin, specificite, id_utilisateur, type_prestataire_id) VALUES
-      ('FoodExpress', 'Service de restauration rapide pour événements', 50, 5.00, 'contact@foodexpress.com', '0123456789', false, 'Animation festive', 2, 1),
-      ('AnimEvent', 'Animations pour tous types d’événements', 100, 15.00, 'contact@animevent.com', '0987654321', false, 'Livres et supports média', 3, 2),
-      ('SportMerch', 'Boutique spécialisée en articles sportifs', 20, 0.00, 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', 4, 2);
+    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingforadmin, specificite, message_ajout, id_utilisateur, type_prestataire_id) VALUES
+      ('FoodExpress', 'Service de restauration rapide pour événements', 50, 5.00, 'contact@foodexpress.com', '0123456789', false, 'Animation festive', true, 2, 1),
+      ('AnimEvent', 'Animations pour tous types d’événements', 100, 15.00, 'contact@animevent.com', '0987654321', false, 'Livres et supports média', true, 3, 2),
+      ('SportMerch', 'Boutique spécialisée en articles sportifs', 20, 0.00, 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', true, 4, 2);
     `;
     await pool.query(insertPrestataire);
 

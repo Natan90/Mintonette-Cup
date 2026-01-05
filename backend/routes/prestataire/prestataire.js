@@ -452,7 +452,7 @@ router.get("/showEveryType", async (req, res) => {
 router.post("/becomePrestataire/:id", async (req, res) => {
   const id_user = req.params.id;
   const { nom, descri, nb_participants, tarif, mail, tel, specificite, type, services } = req.body;
-  if ( !nom || !descri || !tarif || !mail || !tel || !specificite || !type || !id_user || !services)
+  if ( !nom || !descri || !tarif || !mail || !tel || !specificite || !type || !id_user || services.length === 0)
     return res.status(400).json({
       error: "Champs obligatoires manquants",
     });
@@ -478,8 +478,8 @@ router.post("/becomePrestataire/:id", async (req, res) => {
 
     const result = await client.query(
       `INSERT INTO Prestataire 
-        (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, id_utilisateur, type_prestataire_id) VALUES
-        ($1, $2, $3, $4, $5, $6, true, $7, $8, $9)
+        (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, message_ajout, id_utilisateur, type_prestataire_id) VALUES
+        ($1, $2, $3, $4, $5, $6, true, $7, true, $8, $9)
         RETURNING id_prestataire`,
       [
         nom,
@@ -632,6 +632,7 @@ router.put("/updatePresta/:id", async (req, res) => {
             tel_prestataire = $6,
             waitingForAdmin = true,
             specificite = $7,
+            message_ajout = false,
             type_prestataire_id = $8
         WHERE id_utilisateur = $9
         RETURNING id_prestataire;

@@ -28,7 +28,9 @@
         </p>
         <div class="textAndFiltre">
             <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
-                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length }) }}
+                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length, 
+                    gotS : prestataires.filter(p => p.waitingforadmin).length > 1  ? 's' : '',
+                    verbe : prestataires.filter(p => p.waitingforadmin).length > 1  ? 'are' : 'is' }) }}
             </p>
             <p class="nb_presta valid" v-else>
                 {{ $t('adminPage.prestataire.nb_prestaVide') }}
@@ -80,7 +82,10 @@
                         <td :class="item.refused ? 'refused' : (item.waitingforadmin ? 'waiting' : 'notWaiting')">
                             {{ item.refused ? $t('adminPage.prestataire.statuts.refuse')
                                 : (item.waitingforadmin
-                                    ? $t('adminPage.prestataire.statuts.enAttente')
+                                    ? $t('adminPage.prestataire.statuts.enAttente', { changement : item.message_ajout 
+                                                                                                        ? $t('adminPage.prestataire.statuts.messageAjout') 
+                                                                                                        : $t('adminPage.prestataire.statuts.messageModif') 
+                                                                                                    })
                                     : $t('adminPage.prestataire.statuts.valider')) }}
                         </td>
                         <td>

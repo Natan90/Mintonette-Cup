@@ -147,7 +147,7 @@
     "prestataire": {
       "title": "Gestion des prestataires de la compétition",
       "descri" : "Bienvenue dans l’espace d’administration dédié aux prestataires intervenant sur nos événements de volley. \n Ici, vous pouvez consulter toutes les prestations proposées : restauration, animations, boutiques et services pour les équipes et spectateurs.Les demandes en attente doivent être validées avant que le prestataire ne puisse intervenir sur le terrain ou dans les espaces événementiels. \n Cette gestion vous permet de garantir une expérience optimale et sécurisée pour tous les participants.",
-      "nb_presta" : "Il y a {count} prestataire(s) en attente de validation.",
+      "nb_presta" : "Il y a {count} prestataire{gotS} en attente de validation.",
       "nb_prestaVide" : "Tous les prestataires sont prêts pour le terrain et les espaces événementiels : la compétition peut se dérouler en toute sérénité !",
       "messageSuppr" : "ne fait désormais plus partie des prestataires de la compétition.",
       "messageRefus": "Le prestataire a été refusé et marqué comme inactif dans la compétition.",
@@ -161,7 +161,9 @@
       "statuts" : {
         "nom" : "Statut",
         "valider" : "Validé",
-        "enAttente" : "En attente de validation",
+        "enAttente" : "En attente de validation \n {changement}",
+        "messageModif" : "Modification du compte",
+        "messageAjout" : "Création du compte",
         "refuse": "Refuser"
       },
       "show": {
@@ -172,7 +174,7 @@
     "user": {
       "title": "Gestion des utilisateurs",
       "descri": "Bienvenue dans l’espace d’administration des utilisateurs. Ici, vous pouvez consulter, gérer et supprimer les comptes inscrits.\n Cette page vous permet de garantir la sécurité et le bon fonctionnement de la plateforme, en vous assurant que seuls les utilisateurs valides ont accès aux fonctionnalités.\n La suppression d’un utilisateur est définitive, pensez donc à vérifier les informations avant de confirmer.",
-      "nb_users": "Il y a {count} utilisateur(s) dans le système.",
+      "nb_users": "Il y a {count} utilisateur{gotS} dans le système.",
       "nb_userVide": "Aucun utilisateur pour le moment.",
       "messageSuppr": "ne fait désormais plus partie des utilisateurs.",
       "modal": {
