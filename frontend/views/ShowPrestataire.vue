@@ -3,26 +3,25 @@
 
   <section>
     <div class="container">
-      <div class="container_cards" v-for="item in allPresta" :key="item.id_prestataire">
-        <p class="title_presta">{{ item.nom_prestataire }}</p>
+      <div class="container_cards">
+        <p class="title_presta">{{ onePresta.nom_prestataire }}</p>
         <!-- <img src=""> -->
-        <div class="description" 
-          v-html="item.descri_prestataire">
-        </div>
-        <p>{{ item.nb_participants }}</p>
-        <p>{{ item.tarif_prestataire }}</p>
-        <div class="contact_presta">
-          <p class="contact_title"><b>Contact</b></p>
-          <p>{{ item.mail_prestataire }}</p>
-          <p>{{ item.tel_prestataire }}</p>
-        </div>
-        <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }} 
-          <span>
-            <button>
-              En savoir plus
-            </button>
-          </span>
-        </p>
+        <div class="description" v-html="onePresta.descri_prestataire">
+            </div>
+            <p>Capacité : <span>{{ Number(onePresta.nb_participants) }}</span></p>
+            <p>Tarif : <span>{{ onePresta.tarif_prestataire }}</span></p>
+            <div class="contact_presta">
+                <p class="contact_title"><b>Contact</b></p>
+                <p>{{ onePresta.mail_prestataire }}</p>
+                <p>{{ onePresta.tel_prestataire }}</p>
+            </div>
+            <p>{{ onePresta.prenom_utilisateur }} {{ onePresta.nom_utilisateur }}
+                <span>
+                    <button>
+                        En savoir plus
+                    </button>
+                </span>
+            </p>
       </div>
     </div>
   </section>
@@ -62,26 +61,31 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import axios from "axios";
+import { useRoute } from 'vue-router';
+
+
+const route = useRoute();
 
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 
-// const photo = [
-//   {
-//     chemin: new URL("../images/Commander.jpg", import.meta.url).href,
-//     link: "/Commander",
-//   },
-//   {
-//     chemin: new URL("../images/Reserver.jpg", import.meta.url).href,
-//     link: "/Reserver",
-//   },
-// ];
-const allPresta = ref([]);
 
+const onePresta = ref({
+  nom_prestataire: "",
+  descri_prestataire: "",
+  nb_participants: 0,
+  tarif_prestataire: "",
+  mail_prestataire: "",
+  tel_prestataire: "",
+  prenom_utilisateur: "",
+  nom_utilisateur: ""
+});
+
+const idPresta = route.params.id;
 
 onMounted(async () => {
     try {
-        await getValuesPrestataire();
+        await getValuesPrestataire(idPresta);
     } catch (err) {
         console.error(err);
     }
@@ -94,8 +98,8 @@ onMounted(async () => {
 //==========================
 async function getValuesPrestataire() {
     try {
-        const res = await axios.get("http://localhost:3000/prestataire/show");
-        allPresta.value = res.data;
+        const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
+        onePresta.value = res.data;
 
     } catch (err) {
         console.error("Erreur lors de la récupération des données :", err);

@@ -5,7 +5,8 @@
     <div class="container">
         <!-- Titre principal de la page -->
         <div class="title">
-            <p>{{ $t('prestataireInfo.title') }}</p>
+            <p v-if="pathAdd">{{ $t('prestataireInfo.titleAdd') }}</p>
+            <p v-else>{{ $t('prestataireInfo.titleEdit') }}</p>
         </div>
 
         <div class="content">
@@ -33,7 +34,7 @@
             <!-- Tableau affichant les spécificités selon le type choisi -->
             <div v-if="selectedType" class="container_table">
                 <h1>
-                    {{ $t('prestataireInfo.type') }} {{ selectedTypeLabel }} ?
+                    {{ $t('prestataireInfo.type') }} <span :style="{ color: 'red' }">{{ selectedTypeLabel }}</span> ?
                 </h1>
 
                 <table class="table_type_presta">

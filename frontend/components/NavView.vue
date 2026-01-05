@@ -6,10 +6,10 @@
     </router-link>
 
     <div class="routeurLink">
-      <router-link
-        :to="{ name: 'PrestatairePublic', params: { lang: locale } }">
+      <!-- <router-link
+        :to="{ name: 'ShowPrestataire', params: { lang: locale } }">
         <span class="pointer optionNav">Prestataire (mode public)</span>
-      </router-link>
+      </router-link> -->
 
       <router-link
         v-if="utilisateur.ispresta"

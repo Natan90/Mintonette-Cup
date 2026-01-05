@@ -118,6 +118,7 @@ router.get("/show/:id", async (req, res) => {
     );
     if (result.rows.length === 0)
       return res.status(404).json({ message: "Prestataire non trouvé" });
+    
     res.json(result.rows[0]);
   } catch (err) {
     console.error(err);

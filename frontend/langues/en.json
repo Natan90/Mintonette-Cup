@@ -102,7 +102,8 @@
     "infoContact3": "Contact us"
   },
   "prestataireInfo": {
-    "title": "Become a member of the Mintonette Cup!",
+    "titleAdd": "Become a full member of the Mintonette Cup!",
+    "titleEdit": "Enhance your Mintonette Cup service provider profile!",
     "role": "Your role in the event: choose your category:",
     "type": "What is your type",
     "btnContinueInscription": "Continue Registration",
