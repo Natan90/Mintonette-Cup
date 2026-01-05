@@ -209,6 +209,7 @@ const utilisateursFiltres = computed(() => {
 onMounted(async () => {
   try {
     await getValuesUtilisateurs();
+    if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
   } catch (err) {
     console.error(err);
   }

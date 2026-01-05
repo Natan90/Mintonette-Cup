@@ -142,7 +142,9 @@
       "presta": "Providers first",
       "nonPresta": "Providers last",
       "attente": "Waiting first",
-      "valide": "Validated first"
+      "valide": "Validated first",
+      "activeFirst": "Active services first",
+      "inactiveFirst": "Inactive services first"
     },
     "prestataire": {
       "title": "Competition Service Providers Management",

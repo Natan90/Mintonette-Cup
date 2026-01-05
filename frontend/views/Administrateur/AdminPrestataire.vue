@@ -144,6 +144,7 @@ const id_prestataire = ref(0);
 onMounted(async () => {
     try {
         await getPrestataires();
+        if (!adminStore.typeTriPresta) adminStore.typeTriPresta = "az";
     } catch (err) {
         console.error(err);
     }
