@@ -1,6 +1,6 @@
 <template>
   <NavView />
-  <div class="back-arrow pointer" @click="router.back()">
+  <div class="back-arrow pointer" @click="goBack">
     &#8592; Retour
   </div>
   <div class="bloc_texte">
@@ -12,6 +12,27 @@
 
   </div>
 
+  <div class="textAndFiltre">
+            <!-- <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
+                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length, 
+                    gotS : prestataires.filter(p => p.waitingforadmin).length > 1  ? 's' : '',
+                    verbe : prestataires.filter(p => p.waitingforadmin).length > 1  ? 'are' : 'is' }) }}
+            </p> -->
+            <!-- <p class="nb_presta valid" v-else>
+                {{ $t('adminPage.prestataire.nb_prestaVide') }}
+            </p> -->
+            <p>
+            <div class="filtre">
+                <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
+                <select id="triAlpha" v-model="adminStore.services">
+                    <option value="az">{{ $t('adminPage.tri.az') }}</option>
+                    <option value="za">{{ $t('adminPage.tri.za') }}</option>
+                    <option value="activer">{{ $t('adminPage.tri.activeFirst') }}</option>
+                    <option value="desactiver">{{ $t('adminPage.tri.inactiveFirst') }}</option>
+                </select>
+            </div>
+            </p>
+        </div>
   <section>
     <div class="container">
       <div class="container_cards">
@@ -32,17 +53,31 @@
       <div>
         <div class="services_container">
           <p>
-          <b>
-            {{ $t('prestataireInfo.services', { gotS: services.length > 1 ? 's' : '' }) }}
-          </b>
-        </p>
-        <ul>
-          <li v-for="(item, index) in services" :key="index" class="service_item">
-            {{ item.nom_service }}
-          </li>
-        </ul>
+            <b>
+              {{ $t('prestataireInfo.services', { gotS: services.length > 1 ? 's' : '' }) }}
+            </b>
+          </p>
+          <ul>
+            <li v-for="(item, index) in servicesFiltres" :key="index" class="service_item" style="padding-bottom: 10px;">
+              <div class="serviceWithButtons">
+                {{ item.nom_service }}
+                <span class="diff_button">
+                  <button class="btn_activate" v-if="item.activate">
+                    Activer
+                  </button>
+                  <button class="btn_desactivate" v-else>
+                    Désactiver
+                  </button>
+                  <button class="btn_supprimer">
+                    Supprimer
+                  </button>
+                </span>
+              </div>
+
+            </li>
+          </ul>
         </div>
-        
+
       </div>
     </div>
   </section>
@@ -53,16 +88,19 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from 'vue-router';
+import { useNavigationStore } from "@/stores/navigation";
+import NavView from "@/components/NavView.vue";
+import Footer from "@/components/Footer.vue";
+import { useAdminStore } from "@/stores/admin";
 
 
 const route = useRoute();
 const router = useRouter();
-
-import NavView from "@/components/NavView.vue";
-import Footer from "@/components/Footer.vue";
+const navStore = useNavigationStore();
+const adminStore = useAdminStore();
 
 
 const onePresta = ref({
@@ -82,11 +120,48 @@ const idPresta = route.params.id;
 onMounted(async () => {
   try {
     await getValuesPrestataire(idPresta);
+    if (!adminStore.services) adminStore.services = "az";
   } catch (err) {
     console.error(err);
   }
 });
 
+const servicesFiltres = computed(() => {
+  let liste = [...services.value];
+
+  // Tri alphabétique
+  liste.sort((a, b) => {
+    if (adminStore.services === "activer") {
+      if (a.activate && !b.activate) return -1;
+      if (!a.activate && b.activate) return 1;
+    }
+
+    if (adminStore.services === "desactiver") {
+      if (a.activate && !b.activate) return 1;
+      if (!a.activate && b.activate) return -1;
+    }
+
+
+    const nomA = a.nom_service?.toLowerCase() || "";
+    const nomB = b.nom_service?.toLowerCase() || "";
+
+    if (adminStore.services === "za")
+      return nomB.localeCompare(nomA);
+    
+    return nomA.localeCompare(nomB);
+
+  });
+
+  return liste;
+});
+
+
+
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 
 //==========================
@@ -130,5 +205,11 @@ async function getValuesPrestataire() {
   border: 3px solid black;
   border-radius: 10px;
   background-color: aqua;
+}
+
+.serviceWithButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>

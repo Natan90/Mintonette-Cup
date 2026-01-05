@@ -26,6 +26,38 @@
 
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
+        <div class="SeatInfo" v-if="globalSelectedSeats.length">
+          <h3>Sièges sélectionnés</h3>
+          <ul>
+            <li
+              v-for="seat in globalSelectedSeats"
+              :key="
+                seat.matchId +
+                seat.zone +
+                seat.numero_colonne +
+                seat.numero_ligne
+              ">
+              {{ seat.team1.substring(0, 3) }} vs
+              {{ seat.team2.substring(0, 3) }} – {{ seat.numero_colonne
+              }}{{ seat.numero_ligne }} – {{ getSeatPrice(seat) }} €
+            </li>
+          </ul>
+
+          <p>
+            <b>Total : {{ globalTotalPrice }} €</b>
+          </p>
+
+          <button class="pointer" @click="AddToCart">
+            <b>Ajouter au panier</b>
+          </button>
+
+          <button @click="goToPanier">
+            <button class="pointer"><b>Accéder à votre panier</b></button>
+          </button>
+
+          <button class="pointer" @click="resetAllSelection">
+            <b>Réinitialiser la sélection</b>
+          </button>
         </div>
 
         <div class="layout" v-if="idMatch">
@@ -128,11 +160,15 @@ import NavBar from "../components/NavView.vue";
 import Footer from "../components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useNavigationStore } from "@/stores/navigation";
+
 
 const route = useRoute();
+const router = useRouter();
 const zone = route.params.zone;
 const userStore = useUserStore();
+const navStore = useNavigationStore();
 
 const matches = ref([]);
 const seats = ref([]);
@@ -157,6 +193,13 @@ const globalSelectedSeats = ref(
 const globalTotalPrice = computed(() =>
   globalSelectedSeats.value.reduce((sum, seat) => sum + getSeatPrice(seat), 0)
 );
+
+function goToPanier() {
+  navStore.previousRoute = route.fullPath;
+  router.push({
+    name: "Panier"
+  })
+}
 
 function getMatchTime(match) {
   const date = new Date(match.date_match);

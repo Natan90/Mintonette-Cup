@@ -1,6 +1,6 @@
 <template>
   <NavView></NavView>
-  <div class="back-arrow pointer" @click="router.back()">
+  <div class="back-arrow pointer" @click="goBack">
       &#8592; Retour
   </div>
   <div class="page">
@@ -79,10 +79,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import { useNavigationStore } from "@/stores/navigation";
 import NavView from '@/components/NavView.vue';
 import Footer from '@/components/Footer.vue';
 
@@ -95,7 +96,10 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const route = useRoute();
 const userStore = useUserStore();
+const navStore = useNavigationStore();
+
 const { t } = useI18n();
 
 const loading = ref(true);
@@ -121,6 +125,12 @@ onMounted(async () => {
     console.error(err);
   }
 });
+
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 async function getValuesUtilisateurs(id) {
   if (!userStore.isConnected) {

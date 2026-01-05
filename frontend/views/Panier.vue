@@ -41,6 +41,9 @@
       </button>
     </div>
   </div>
+  <button @click="pay">payer</button>
+  <button @click="reset">Vider le panier</button>
+  <button @click="goBack">Retour au gradin</button>
   <Footer />
 </template>
 
@@ -50,15 +53,23 @@ import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useNavigationStore } from "@/stores/navigation";
 
 const router = useRouter();
 const userStore = useUserStore();
+const navStore = useNavigationStore();
 const panier = ref([]);
 
 const total = computed(() => {
   return panier.value.reduce((sum, seat) => sum + getPrice(seat), 0);
 });
+
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 function getPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;

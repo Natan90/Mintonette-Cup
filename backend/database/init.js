@@ -152,6 +152,8 @@ const pool = require("./db");
     CREATE TABLE IF NOT EXISTS Services(
       id_service SERIAL PRIMARY KEY,
       nom_service VARCHAR(100),
+      visible_public BOOLEAN DEFAULT TRUE,
+      activate BOOLEAN,
       prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
     );
 
@@ -518,6 +520,23 @@ const pool = require("./db");
       ('SportMerch', 'Boutique spécialisée en articles sportifs', 20, 0.00, 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', true, 4, 2);
     `;
     await pool.query(insertPrestataire);
+
+    const insertServices = `
+    INSERT INTO Services (nom_service, activate, prestataire_id) VALUES
+      ('Stand de burgers sur place', true, 1),
+      ('Service de boissons fraîches', false, 1),
+      ('Restauration rapide événementielle', false, 1),
+      ('Snacking sucré et salé', true, 1),
+      ('Animation musicale sur scène', false, 2),
+      ('Animation micro et public', true, 2),
+      ('Jeux et animations interactives', false, 2),
+      ('Animation pour enfants sur place', true, 2),
+      ('Stand de vente de produits sportifs', false, 3),
+      ('Personnalisation de maillots sur place', false, 3),
+      ('Vente d’accessoires sportifs', false, 3),
+      ('Boutique éphémère événementielle', true, 3);
+    `;
+    await pool.query(insertServices);
 
     const insertPays = `
     INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES

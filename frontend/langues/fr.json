@@ -142,7 +142,9 @@
       "presta": "Prestataires en premier",
       "nonPresta": "Prestataires en dernier",
       "attente": "En attente en premier",
-      "valide": "Validé en premier"
+      "valide": "Validé en premier",
+      "activeFirst": "Services actifs en premier",
+      "inactiveFirst": "Services désactivés en premier"
     },
     "prestataire": {
       "title": "Gestion des prestataires de la compétition",

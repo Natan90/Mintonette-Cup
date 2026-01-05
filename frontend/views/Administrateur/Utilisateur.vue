@@ -104,15 +104,18 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminStore } from "@/stores/admin";
+import { useNavigationStore } from "@/stores/navigation";
 
 const router = useRouter();
+const route = useRoute();
 const { locale } = useI18n();
 const adminStore = useAdminStore();
+const navStore = useNavigationStore();
 
 //==========================
 //====== Utilisateurs ======
@@ -136,6 +139,7 @@ const closeMessageSuppr = () =>{
 };
 
 function showProfil(id_user) {
+  navStore.previousRoute = route.fullPath;
   router.push({ 
     name: 'ShowAccount',
     params: { 
@@ -205,6 +209,7 @@ const utilisateursFiltres = computed(() => {
 onMounted(async () => {
   try {
     await getValuesUtilisateurs();
+    if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
   } catch (err) {
     console.error(err);
   }
