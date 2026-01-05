@@ -289,38 +289,4 @@ async function changePresta(newValue, idPresta) {
     background-color: #f5f7fa;
     min-height: 100vh;
 }
-
-.nb_presta {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 6px;
-}
-
-.toValidate {
-    color: #d97706;
-    background-color: #fef3c7;
-}
-
-.valid {
-    color: #059669;
-    background-color: #d1fae5;
-}
-
-.refused {
-    color: #b91c1c;
-    font-weight: 600;
-}
-
-.waiting {
-    color: #d97706;
-    font-weight: 600;
-}
-
-.notWaiting {
-    color: #059669;
-    font-weight: 600;
-}
 </style>

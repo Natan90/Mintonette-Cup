@@ -168,9 +168,14 @@
         "messageAjout": "Account creation",
         "refuse": "Refuse"
       },
-      "show": {
+      "service": {
         "title": "Discover this provider",
-        "descri": "Find here all the information about <span class='name_delete background_name'>{nom_prestataire}</span> : the services offered, pricing, number of participants accommodated, as well as contact details. This provider takes part in the event and puts their expertise at your disposal."
+        "descri": "Find here all the information about <span class='name_delete background_name'>{nom_prestataire}</span> : the services offered, pricing, number of participants accommodated, as well as contact details. This provider takes part in the event and puts their expertise at your disposal.",
+        "nb_services": "This provider offers {count} service{gotS}.",
+        "nb_servicesVide": "No services are available for this provider.",
+        "messageActiver": "The service <span class='name_delete'>{nomService}</span> has been activated.",
+        "messageDesactiver": "The service <span class='name_delete'>{nomService}</span> has been deactivated.",
+        "messageSuppr": "The service <span class='name_delete'>{nomService}</span> has been deleted."
       }
     },
     "user": {

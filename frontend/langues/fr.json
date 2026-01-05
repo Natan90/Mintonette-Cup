@@ -168,9 +168,14 @@
         "messageAjout" : "Création du compte",
         "refuse": "Refuser"
       },
-      "show": {
+      "service": {
         "title" : "Découvrez ce prestataire",
-        "descri" : "Retrouvez ici toutes les informations concernant <span class='name_delete background_name'>{nom_prestataire}</span> : ses services proposés, ses tarifs, le nombre de participants pris en charge ainsi que ses coordonnées. Ce prestataire participe à l’événement et met son expertise à votre disposition."
+        "descri" : "Retrouvez ici toutes les informations concernant <span class='name_delete background_name'>{nom_prestataire}</span> : ses services proposés, ses tarifs, le nombre de participants pris en charge ainsi que ses coordonnées. Ce prestataire participe à l’événement et met son expertise à votre disposition.",
+        "nb_services": "Ce prestataire propose {count} service{gotS}.",
+        "nb_servicesVide": "Aucun service n'est disponible pour ce prestataire.",
+        "messageActiver": "Le service <span class='name_delete'>{nomService}</span> a été activé.",
+        "messageDesactiver": "Le service <span class='name_delete'>{nomService}</span> a été désactivé.",
+        "messageSuppr": "Le service <span class='name_delete'>{nomService}</span> a été supprimé."
       }
     },
     "user": {
