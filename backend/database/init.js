@@ -25,6 +25,7 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Animation CASCADE;
   DROP TABLE IF EXISTS Restauration CASCADE;
   DROP TABLE IF EXISTS Stade CASCADE;
+  DROP TABLE IF EXISTS Siege CASCADE;
   DROP TABLE IF EXISTS Match CASCADE;
   DROP TABLE IF EXISTS ClassementPoule CASCADE;
   DROP TABLE IF EXISTS Joueur CASCADE;
@@ -44,7 +45,6 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Prestataire CASCADE;
   DROP TABLE IF EXISTS Type_prestataire CASCADE;
   DROP TABLE IF EXISTS Type_utilisateur CASCADE;
-  DROP TABLE IF EXISTS Siege CASCADE;
   DROP TABLE IF EXISTS Utilisateur CASCADE;
   DROP TABLE IF EXISTS Evenement CASCADE;
   DROP TABLE IF EXISTS Terrain CASCADE;
@@ -128,19 +128,7 @@ const pool = require("./db");
     nom_plat VARCHAR(50),
     description_plat VARCHAR(50)
   );
-
-  CREATE TABLE IF NOT EXISTS Siege(
-    numero_colonne VARCHAR(2),
-    numero_ligne INTEGER,
-    est_reserve BOOLEAN DEFAULT FALSE, 
-    dans_panier BOOLEAN DEFAULT FALSE,
-    zone VARCHAR(20),
-    id_utilisateur INTEGER,
-    PRIMARY KEY (numero_colonne, numero_ligne, zone),
-    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
-  );
-
-  
+ 
   CREATE TABLE IF NOT EXISTS Prestataire(
     id_prestataire SERIAL PRIMARY KEY,
     nom_prestataire VARCHAR(50),
@@ -231,7 +219,6 @@ const pool = require("./db");
     id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
   );
 
-  -- 3. Tables avec dépendances niveau 2
   CREATE TABLE IF NOT EXISTS Equipe(
     id_equipe SERIAL PRIMARY KEY,
     sexe_equipe VARCHAR(50),
@@ -249,7 +236,6 @@ const pool = require("./db");
     id_restauration INTEGER NOT NULL REFERENCES Restauration(id_restauration)
   );
 
-  -- 4. Tables avec dépendances niveau 3
   CREATE TABLE IF NOT EXISTS Match(
     id_match SERIAL PRIMARY KEY,
     id_terrain INTEGER NOT NULL REFERENCES Terrain(id_terrain),
@@ -261,6 +247,20 @@ const pool = require("./db");
     statut VARCHAR(20) DEFAULT 'A venir',
     CHECK (id_equipe1 != id_equipe2)
   );
+
+  CREATE TABLE IF NOT EXISTS Siege(
+    numero_colonne VARCHAR(2) NOT NULL,
+    numero_ligne INTEGER NOT NULL,
+    match_id INTEGER NOT NULL,
+    est_reserve BOOLEAN DEFAULT FALSE, 
+    dans_panier BOOLEAN DEFAULT FALSE,
+    zone VARCHAR(20) NOT NULL,
+    id_utilisateur INTEGER NULL,
+    PRIMARY KEY (numero_colonne, numero_ligne, zone, match_id),
+    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
+    FOREIGN KEY(match_id) REFERENCES Match(id_match)
+  );
+
 
   CREATE TABLE IF NOT EXISTS Joueur(
     id_joueur SERIAL PRIMARY KEY,
@@ -1233,146 +1233,563 @@ const pool = require("./db");
     await pool.query(insertClassementPoule);
 
     const insertSiege = `
-    INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, dans_panier, id_utilisateur, zone) VALUES
-    ('A', 1, FALSE, FALSE, NULL, 'NORD'), ('A', 2, FALSE, FALSE, NULL, 'NORD'), ('A', 3, FALSE, FALSE, NULL, 'NORD'), ('A', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('A', 5, FALSE, FALSE, NULL, 'NORD'), ('A', 6, FALSE, FALSE, NULL, 'NORD'), ('A', 7, FALSE, FALSE, NULL, 'NORD'), ('A', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('A', 9, FALSE, FALSE, NULL, 'NORD'), ('A', 10, FALSE, FALSE, NULL, 'NORD'), ('A', 11, FALSE, FALSE, NULL, 'NORD'), ('A', 12, FALSE, FALSE, NULL, 'NORD'),
+    INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, dans_panier, id_utilisateur, zone, match_id) VALUES
+    ('A', 1, FALSE, FALSE, NULL, 'NORD', 1), ('A', 2, FALSE, FALSE, NULL, 'NORD', 1), ('A', 3, FALSE, FALSE, NULL, 'NORD', 1), ('A', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('A', 5, FALSE, FALSE, NULL, 'NORD', 1), ('A', 6, FALSE, FALSE, NULL, 'NORD', 1), ('A', 7, FALSE, FALSE, NULL, 'NORD', 1), ('A', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('A', 9, FALSE, FALSE, NULL, 'NORD', 1), ('A', 10, FALSE, FALSE, NULL, 'NORD', 1), ('A', 11, FALSE, FALSE, NULL, 'NORD', 1), ('A', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('B', 1, FALSE, FALSE, NULL, 'NORD'), ('B', 2, FALSE, FALSE, NULL, 'NORD'), ('B', 3, FALSE, FALSE, NULL, 'NORD'), ('B', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('B', 5, FALSE, FALSE, NULL, 'NORD'), ('B', 6, FALSE, FALSE, NULL, 'NORD'), ('B', 7, FALSE, FALSE, NULL, 'NORD'), ('B', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('B', 9, FALSE, FALSE, NULL, 'NORD'), ('B', 10, FALSE, FALSE, NULL, 'NORD'), ('B', 11, FALSE, FALSE, NULL, 'NORD'), ('B', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('B', 1, FALSE, FALSE, NULL, 'NORD', 1), ('B', 2, FALSE, FALSE, NULL, 'NORD', 1), ('B', 3, FALSE, FALSE, NULL, 'NORD', 1), ('B', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('B', 5, FALSE, FALSE, NULL, 'NORD', 1), ('B', 6, FALSE, FALSE, NULL, 'NORD', 1), ('B', 7, FALSE, FALSE, NULL, 'NORD', 1), ('B', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('B', 9, FALSE, FALSE, NULL, 'NORD', 1), ('B', 10, FALSE, FALSE, NULL, 'NORD', 1), ('B', 11, FALSE, FALSE, NULL, 'NORD', 1), ('B', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('C', 1, FALSE, FALSE, NULL, 'NORD'), ('C', 2, FALSE, FALSE, NULL, 'NORD'), ('C', 3, FALSE, FALSE, NULL, 'NORD'), ('C', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('C', 5, FALSE, FALSE, NULL, 'NORD'), ('C', 6, FALSE, FALSE, NULL, 'NORD'), ('C', 7, FALSE, FALSE, NULL, 'NORD'), ('C', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('C', 9, FALSE, FALSE, NULL, 'NORD'), ('C', 10, FALSE, FALSE, NULL, 'NORD'), ('C', 11, FALSE, FALSE, NULL, 'NORD'), ('C', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('C', 1, FALSE, FALSE, NULL, 'NORD', 1), ('C', 2, FALSE, FALSE, NULL, 'NORD', 1), ('C', 3, FALSE, FALSE, NULL, 'NORD', 1), ('C', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('C', 5, FALSE, FALSE, NULL, 'NORD', 1), ('C', 6, FALSE, FALSE, NULL, 'NORD', 1), ('C', 7, FALSE, FALSE, NULL, 'NORD', 1), ('C', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('C', 9, FALSE, FALSE, NULL, 'NORD', 1), ('C', 10, FALSE, FALSE, NULL, 'NORD', 1), ('C', 11, FALSE, FALSE, NULL, 'NORD', 1), ('C', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('D', 1, FALSE, FALSE, NULL, 'NORD'), ('D', 2, FALSE, FALSE, NULL, 'NORD'), ('D', 3, FALSE, FALSE, NULL, 'NORD'), ('D', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('D', 5, FALSE, FALSE, NULL, 'NORD'), ('D', 6, FALSE, FALSE, NULL, 'NORD'), ('D', 7, FALSE, FALSE, NULL, 'NORD'), ('D', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('D', 9, FALSE, FALSE, NULL, 'NORD'), ('D', 10, FALSE, FALSE, NULL, 'NORD'), ('D', 11, FALSE, FALSE, NULL, 'NORD'), ('D', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('D', 1, FALSE, FALSE, NULL, 'NORD', 1), ('D', 2, FALSE, FALSE, NULL, 'NORD', 1), ('D', 3, FALSE, FALSE, NULL, 'NORD', 1), ('D', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('D', 5, FALSE, FALSE, NULL, 'NORD', 1), ('D', 6, FALSE, FALSE, NULL, 'NORD', 1), ('D', 7, FALSE, FALSE, NULL, 'NORD', 1), ('D', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('D', 9, FALSE, FALSE, NULL, 'NORD', 1), ('D', 10, FALSE, FALSE, NULL, 'NORD', 1), ('D', 11, FALSE, FALSE, NULL, 'NORD', 1), ('D', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('E', 1, FALSE, FALSE, NULL, 'NORD'), ('E', 2, FALSE, FALSE, NULL, 'NORD'), ('E', 3, FALSE, FALSE, NULL, 'NORD'), ('E', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('E', 5, FALSE, FALSE, NULL, 'NORD'), ('E', 6, FALSE, FALSE, NULL, 'NORD'), ('E', 7, FALSE, FALSE, NULL, 'NORD'), ('E', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('E', 9, FALSE, FALSE, NULL, 'NORD'), ('E', 10, FALSE, FALSE, NULL, 'NORD'), ('E', 11, FALSE, FALSE, NULL, 'NORD'), ('E', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('E', 1, FALSE, FALSE, NULL, 'NORD', 1), ('E', 2, FALSE, FALSE, NULL, 'NORD', 1), ('E', 3, FALSE, FALSE, NULL, 'NORD', 1), ('E', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('E', 5, FALSE, FALSE, NULL, 'NORD', 1), ('E', 6, FALSE, FALSE, NULL, 'NORD', 1), ('E', 7, FALSE, FALSE, NULL, 'NORD', 1), ('E', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('E', 9, FALSE, FALSE, NULL, 'NORD', 1), ('E', 10, FALSE, FALSE, NULL, 'NORD', 1), ('E', 11, FALSE, FALSE, NULL, 'NORD', 1), ('E', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('F', 1, FALSE, FALSE, NULL, 'NORD'), ('F', 2, FALSE, FALSE, NULL, 'NORD'), ('F', 3, FALSE, FALSE, NULL, 'NORD'), ('F', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('F', 5, FALSE, FALSE, NULL, 'NORD'), ('F', 6, FALSE, FALSE, NULL, 'NORD'), ('F', 7, FALSE, FALSE, NULL, 'NORD'), ('F', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('F', 9, FALSE, FALSE, NULL, 'NORD'), ('F', 10, FALSE, FALSE, NULL, 'NORD'), ('F', 11, FALSE, FALSE, NULL, 'NORD'), ('F', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('F', 1, FALSE, FALSE, NULL, 'NORD', 1), ('F', 2, FALSE, FALSE, NULL, 'NORD', 1), ('F', 3, FALSE, FALSE, NULL, 'NORD', 1), ('F', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('F', 5, FALSE, FALSE, NULL, 'NORD', 1), ('F', 6, FALSE, FALSE, NULL, 'NORD', 1), ('F', 7, FALSE, FALSE, NULL, 'NORD', 1), ('F', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('F', 9, FALSE, FALSE, NULL, 'NORD', 1), ('F', 10, FALSE, FALSE, NULL, 'NORD', 1), ('F', 11, FALSE, FALSE, NULL, 'NORD', 1), ('F', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('G', 1, FALSE, FALSE, NULL, 'NORD'), ('G', 2, FALSE, FALSE, NULL, 'NORD'), ('G', 3, FALSE, FALSE, NULL, 'NORD'), ('G', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('G', 5, FALSE, FALSE, NULL, 'NORD'), ('G', 6, FALSE, FALSE, NULL, 'NORD'), ('G', 7, FALSE, FALSE, NULL, 'NORD'), ('G', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('G', 9, FALSE, FALSE, NULL, 'NORD'), ('G', 10, FALSE, FALSE, NULL, 'NORD'), ('G', 11, FALSE, FALSE, NULL, 'NORD'), ('G', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('G', 1, FALSE, FALSE, NULL, 'NORD', 1), ('G', 2, FALSE, FALSE, NULL, 'NORD', 1), ('G', 3, FALSE, FALSE, NULL, 'NORD', 1), ('G', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('G', 5, FALSE, FALSE, NULL, 'NORD', 1), ('G', 6, FALSE, FALSE, NULL, 'NORD', 1), ('G', 7, FALSE, FALSE, NULL, 'NORD', 1), ('G', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('G', 9, FALSE, FALSE, NULL, 'NORD', 1), ('G', 10, FALSE, FALSE, NULL, 'NORD', 1), ('G', 11, FALSE, FALSE, NULL, 'NORD', 1), ('G', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('H', 1, FALSE, FALSE, NULL, 'NORD'), ('H', 2, FALSE, FALSE, NULL, 'NORD'), ('H', 3, FALSE, FALSE, NULL, 'NORD'), ('H', 4, FALSE, FALSE, NULL, 'NORD'),
-    ('H', 5, FALSE, FALSE, NULL, 'NORD'), ('H', 6, FALSE, FALSE, NULL, 'NORD'), ('H', 7, FALSE, FALSE, NULL, 'NORD'), ('H', 8, FALSE, FALSE, NULL, 'NORD'),
-    ('H', 9, FALSE, FALSE, NULL, 'NORD'), ('H', 10, FALSE, FALSE, NULL, 'NORD'), ('H', 11, FALSE, FALSE, NULL, 'NORD'), ('H', 12, FALSE, FALSE, NULL, 'NORD'),
+    ('H', 1, FALSE, FALSE, NULL, 'NORD', 1), ('H', 2, FALSE, FALSE, NULL, 'NORD', 1), ('H', 3, FALSE, FALSE, NULL, 'NORD', 1), ('H', 4, FALSE, FALSE, NULL, 'NORD', 1),
+    ('H', 5, FALSE, FALSE, NULL, 'NORD', 1), ('H', 6, FALSE, FALSE, NULL, 'NORD', 1), ('H', 7, FALSE, FALSE, NULL, 'NORD', 1), ('H', 8, FALSE, FALSE, NULL, 'NORD', 1),
+    ('H', 9, FALSE, FALSE, NULL, 'NORD', 1), ('H', 10, FALSE, FALSE, NULL, 'NORD', 1), ('H', 11, FALSE, FALSE, NULL, 'NORD', 1), ('H', 12, FALSE, FALSE, NULL, 'NORD', 1),
 
-    ('I', 1, FALSE, FALSE, NULL, 'NORD'), ('I', 2, FALSE, FALSE, NULL, 'NORD'), ('I', 3, FALSE, FALSE, NULL, 'NORD'), ('I', 4, FALSE, FALSE, NULL, 'NORD'),
+    ('I', 1, FALSE, FALSE, NULL, 'NORD', 1), ('I', 2, FALSE, FALSE, NULL, 'NORD', 1), ('I', 3, FALSE, FALSE, NULL, 'NORD', 1), ('I', 4, FALSE, FALSE, NULL, 'NORD', 1),
+
+    ('A', 1, FALSE, FALSE, NULL, 'NORD', 2), ('A', 2, FALSE, FALSE, NULL, 'NORD', 2), ('A', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('A', 4, FALSE, FALSE, NULL, 'NORD', 2), ('A', 5, FALSE, FALSE, NULL, 'NORD', 2), ('A', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('A', 7, FALSE, FALSE, NULL, 'NORD', 2), ('A', 8, FALSE, FALSE, NULL, 'NORD', 2), ('A', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('A', 10, FALSE, FALSE, NULL, 'NORD', 2), ('A', 11, FALSE, FALSE, NULL, 'NORD', 2), ('A', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('B', 1, FALSE, FALSE, NULL, 'NORD', 2), ('B', 2, FALSE, FALSE, NULL, 'NORD', 2), ('B', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('B', 4, FALSE, FALSE, NULL, 'NORD', 2), ('B', 5, FALSE, FALSE, NULL, 'NORD', 2), ('B', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('B', 7, FALSE, FALSE, NULL, 'NORD', 2), ('B', 8, FALSE, FALSE, NULL, 'NORD', 2), ('B', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('B', 10, FALSE, FALSE, NULL, 'NORD', 2), ('B', 11, FALSE, FALSE, NULL, 'NORD', 2), ('B', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('C', 1, FALSE, FALSE, NULL, 'NORD', 2), ('C', 2, FALSE, FALSE, NULL, 'NORD', 2), ('C', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('C', 4, FALSE, FALSE, NULL, 'NORD', 2), ('C', 5, FALSE, FALSE, NULL, 'NORD', 2), ('C', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('C', 7, FALSE, FALSE, NULL, 'NORD', 2), ('C', 8, FALSE, FALSE, NULL, 'NORD', 2), ('C', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('C', 10, FALSE, FALSE, NULL, 'NORD', 2), ('C', 11, FALSE, FALSE, NULL, 'NORD', 2), ('C', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('D', 1, FALSE, FALSE, NULL, 'NORD', 2), ('D', 2, FALSE, FALSE, NULL, 'NORD', 2), ('D', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('D', 4, FALSE, FALSE, NULL, 'NORD', 2), ('D', 5, FALSE, FALSE, NULL, 'NORD', 2), ('D', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('D', 7, FALSE, FALSE, NULL, 'NORD', 2), ('D', 8, FALSE, FALSE, NULL, 'NORD', 2), ('D', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('D', 10, FALSE, FALSE, NULL, 'NORD', 2), ('D', 11, FALSE, FALSE, NULL, 'NORD', 2), ('D', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('E', 1, FALSE, FALSE, NULL, 'NORD', 2), ('E', 2, FALSE, FALSE, NULL, 'NORD', 2), ('E', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('E', 4, FALSE, FALSE, NULL, 'NORD', 2), ('E', 5, FALSE, FALSE, NULL, 'NORD', 2), ('E', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('E', 7, FALSE, FALSE, NULL, 'NORD', 2), ('E', 8, FALSE, FALSE, NULL, 'NORD', 2), ('E', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('E', 10, FALSE, FALSE, NULL, 'NORD', 2), ('E', 11, FALSE, FALSE, NULL, 'NORD', 2), ('E', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('F', 1, FALSE, FALSE, NULL, 'NORD', 2), ('F', 2, FALSE, FALSE, NULL, 'NORD', 2), ('F', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('F', 4, FALSE, FALSE, NULL, 'NORD', 2), ('F', 5, FALSE, FALSE, NULL, 'NORD', 2), ('F', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('F', 7, FALSE, FALSE, NULL, 'NORD', 2), ('F', 8, FALSE, FALSE, NULL, 'NORD', 2), ('F', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('F', 10, FALSE, FALSE, NULL, 'NORD', 2), ('F', 11, FALSE, FALSE, NULL, 'NORD', 2), ('F', 12, FALSE, FALSE, NULL, 'NORD', 2),
+    
+    ('G', 1, FALSE, FALSE, NULL, 'NORD', 2), ('G', 2, FALSE, FALSE, NULL, 'NORD', 2), ('G', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('G', 4, FALSE, FALSE, NULL, 'NORD', 2), ('G', 5, FALSE, FALSE, NULL, 'NORD', 2), ('G', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('G', 7, FALSE, FALSE, NULL, 'NORD', 2), ('G', 8, FALSE, FALSE, NULL, 'NORD', 2), ('G', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('G', 10, FALSE, FALSE, NULL, 'NORD', 2), ('G', 11, FALSE, FALSE, NULL, 'NORD', 2), ('G', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('H', 1, FALSE, FALSE, NULL, 'NORD', 2), ('H', 2, FALSE, FALSE, NULL, 'NORD', 2), ('H', 3, FALSE, FALSE, NULL, 'NORD', 2),
+    ('H', 4, FALSE, FALSE, NULL, 'NORD', 2), ('H', 5, FALSE, FALSE, NULL, 'NORD', 2), ('H', 6, FALSE, FALSE, NULL, 'NORD', 2),
+    ('H', 7, FALSE, FALSE, NULL, 'NORD', 2), ('H', 8, FALSE, FALSE, NULL, 'NORD', 2), ('H', 9, FALSE, FALSE, NULL, 'NORD', 2),
+    ('H', 10, FALSE, FALSE, NULL, 'NORD', 2), ('H', 11, FALSE, FALSE, NULL, 'NORD', 2), ('H', 12, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('I', 1, FALSE, FALSE, NULL, 'NORD', 2), ('I', 2, FALSE, FALSE, NULL, 'NORD', 2), ('I', 3, FALSE, FALSE, NULL, 'NORD', 2), ('I', 4, FALSE, FALSE, NULL, 'NORD', 2),
+
+    ('A', 1, FALSE, FALSE, NULL, 'NORD', 3), ('A', 2, FALSE, FALSE, NULL, 'NORD', 3), ('A', 3, FALSE, FALSE, NULL, 'NORD', 3), ('A', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('A', 5, FALSE, FALSE, NULL, 'NORD', 3), ('A', 6, FALSE, FALSE, NULL, 'NORD', 3), ('A', 7, FALSE, FALSE, NULL, 'NORD', 3), ('A', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('A', 9, FALSE, FALSE, NULL, 'NORD', 3), ('A', 10, FALSE, FALSE, NULL, 'NORD', 3), ('A', 11, FALSE, FALSE, NULL, 'NORD', 3), ('A', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('B', 1, FALSE, FALSE, NULL, 'NORD', 3), ('B', 2, FALSE, FALSE, NULL, 'NORD', 3), ('B', 3, FALSE, FALSE, NULL, 'NORD', 3), ('B', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('B', 5, FALSE, FALSE, NULL, 'NORD', 3), ('B', 6, FALSE, FALSE, NULL, 'NORD', 3), ('B', 7, FALSE, FALSE, NULL, 'NORD', 3), ('B', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('B', 9, FALSE, FALSE, NULL, 'NORD', 3), ('B', 10, FALSE, FALSE, NULL, 'NORD', 3), ('B', 11, FALSE, FALSE, NULL, 'NORD', 3), ('B', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('C', 1, FALSE, FALSE, NULL, 'NORD', 3), ('C', 2, FALSE, FALSE, NULL, 'NORD', 3), ('C', 3, FALSE, FALSE, NULL, 'NORD', 3), ('C', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('C', 5, FALSE, FALSE, NULL, 'NORD', 3), ('C', 6, FALSE, FALSE, NULL, 'NORD', 3), ('C', 7, FALSE, FALSE, NULL, 'NORD', 3), ('C', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('C', 9, FALSE, FALSE, NULL, 'NORD', 3), ('C', 10, FALSE, FALSE, NULL, 'NORD', 3), ('C', 11, FALSE, FALSE, NULL, 'NORD', 3), ('C', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('D', 1, FALSE, FALSE, NULL, 'NORD', 3), ('D', 2, FALSE, FALSE, NULL, 'NORD', 3), ('D', 3, FALSE, FALSE, NULL, 'NORD', 3), ('D', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('D', 5, FALSE, FALSE, NULL, 'NORD', 3), ('D', 6, FALSE, FALSE, NULL, 'NORD', 3), ('D', 7, FALSE, FALSE, NULL, 'NORD', 3), ('D', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('D', 9, FALSE, FALSE, NULL, 'NORD', 3), ('D', 10, FALSE, FALSE, NULL, 'NORD', 3), ('D', 11, FALSE, FALSE, NULL, 'NORD', 3), ('D', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('E', 1, FALSE, FALSE, NULL, 'NORD', 3), ('E', 2, FALSE, FALSE, NULL, 'NORD', 3), ('E', 3, FALSE, FALSE, NULL, 'NORD', 3), ('E', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('E', 5, FALSE, FALSE, NULL, 'NORD', 3), ('E', 6, FALSE, FALSE, NULL, 'NORD', 3), ('E', 7, FALSE, FALSE, NULL, 'NORD', 3), ('E', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('E', 9, FALSE, FALSE, NULL, 'NORD', 3), ('E', 10, FALSE, FALSE, NULL, 'NORD', 3), ('E', 11, FALSE, FALSE, NULL, 'NORD', 3), ('E', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('F', 1, FALSE, FALSE, NULL, 'NORD', 3), ('F', 2, FALSE, FALSE, NULL, 'NORD', 3), ('F', 3, FALSE, FALSE, NULL, 'NORD', 3), ('F', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('F', 5, FALSE, FALSE, NULL, 'NORD', 3), ('F', 6, FALSE, FALSE, NULL, 'NORD', 3), ('F', 7, FALSE, FALSE, NULL, 'NORD', 3), ('F', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('F', 9, FALSE, FALSE, NULL, 'NORD', 3), ('F', 10, FALSE, FALSE, NULL, 'NORD', 3), ('F', 11, FALSE, FALSE, NULL, 'NORD', 3), ('F', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('G', 1, FALSE, FALSE, NULL, 'NORD', 3), ('G', 2, FALSE, FALSE, NULL, 'NORD', 3), ('G', 3, FALSE, FALSE, NULL, 'NORD', 3), ('G', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('G', 5, FALSE, FALSE, NULL, 'NORD', 3), ('G', 6, FALSE, FALSE, NULL, 'NORD', 3), ('G', 7, FALSE, FALSE, NULL, 'NORD', 3), ('G', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('G', 9, FALSE, FALSE, NULL, 'NORD', 3), ('G', 10, FALSE, FALSE, NULL, 'NORD', 3), ('G', 11, FALSE, FALSE, NULL, 'NORD', 3), ('G', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('H', 1, FALSE, FALSE, NULL, 'NORD', 3), ('H', 2, FALSE, FALSE, NULL, 'NORD', 3), ('H', 3, FALSE, FALSE, NULL, 'NORD', 3), ('H', 4, FALSE, FALSE, NULL, 'NORD', 3),
+    ('H', 5, FALSE, FALSE, NULL, 'NORD', 3), ('H', 6, FALSE, FALSE, NULL, 'NORD', 3), ('H', 7, FALSE, FALSE, NULL, 'NORD', 3), ('H', 8, FALSE, FALSE, NULL, 'NORD', 3),
+    ('H', 9, FALSE, FALSE, NULL, 'NORD', 3), ('H', 10, FALSE, FALSE, NULL, 'NORD', 3), ('H', 11, FALSE, FALSE, NULL, 'NORD', 3), ('H', 12, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('I', 1, FALSE, FALSE, NULL, 'NORD', 3), ('I', 2, FALSE, FALSE, NULL, 'NORD', 3), ('I', 3, FALSE, FALSE, NULL, 'NORD', 3), ('I', 4, FALSE, FALSE, NULL, 'NORD', 3),
+
+    ('A', 1, FALSE, FALSE, NULL, 'NORD', 4), ('A', 2, FALSE, FALSE, NULL, 'NORD', 4), ('A', 3, FALSE, FALSE, NULL, 'NORD', 4), ('A', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('A', 5, FALSE, FALSE, NULL, 'NORD', 4), ('A', 6, FALSE, FALSE, NULL, 'NORD', 4), ('A', 7, FALSE, FALSE, NULL, 'NORD', 4), ('A', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('A', 9, FALSE, FALSE, NULL, 'NORD', 4), ('A', 10, FALSE, FALSE, NULL, 'NORD', 4), ('A', 11, FALSE, FALSE, NULL, 'NORD', 4), ('A', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('B', 1, FALSE, FALSE, NULL, 'NORD', 4), ('B', 2, FALSE, FALSE, NULL, 'NORD', 4), ('B', 3, FALSE, FALSE, NULL, 'NORD', 4), ('B', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('B', 5, FALSE, FALSE, NULL, 'NORD', 4), ('B', 6, FALSE, FALSE, NULL, 'NORD', 4), ('B', 7, FALSE, FALSE, NULL, 'NORD', 4), ('B', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('B', 9, FALSE, FALSE, NULL, 'NORD', 4), ('B', 10, FALSE, FALSE, NULL, 'NORD', 4), ('B', 11, FALSE, FALSE, NULL, 'NORD', 4), ('B', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('C', 1, FALSE, FALSE, NULL, 'NORD', 4), ('C', 2, FALSE, FALSE, NULL, 'NORD', 4), ('C', 3, FALSE, FALSE, NULL, 'NORD', 4), ('C', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('C', 5, FALSE, FALSE, NULL, 'NORD', 4), ('C', 6, FALSE, FALSE, NULL, 'NORD', 4), ('C', 7, FALSE, FALSE, NULL, 'NORD', 4), ('C', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('C', 9, FALSE, FALSE, NULL, 'NORD', 4), ('C', 10, FALSE, FALSE, NULL, 'NORD', 4), ('C', 11, FALSE, FALSE, NULL, 'NORD', 4), ('C', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('D', 1, FALSE, FALSE, NULL, 'NORD', 4), ('D', 2, FALSE, FALSE, NULL, 'NORD', 4), ('D', 3, FALSE, FALSE, NULL, 'NORD', 4), ('D', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('D', 5, FALSE, FALSE, NULL, 'NORD', 4), ('D', 6, FALSE, FALSE, NULL, 'NORD', 4), ('D', 7, FALSE, FALSE, NULL, 'NORD', 4), ('D', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('D', 9, FALSE, FALSE, NULL, 'NORD', 4), ('D', 10, FALSE, FALSE, NULL, 'NORD', 4), ('D', 11, FALSE, FALSE, NULL, 'NORD', 4), ('D', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('E', 1, FALSE, FALSE, NULL, 'NORD', 4), ('E', 2, FALSE, FALSE, NULL, 'NORD', 4), ('E', 3, FALSE, FALSE, NULL, 'NORD', 4), ('E', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('E', 5, FALSE, FALSE, NULL, 'NORD', 4), ('E', 6, FALSE, FALSE, NULL, 'NORD', 4), ('E', 7, FALSE, FALSE, NULL, 'NORD', 4), ('E', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('E', 9, FALSE, FALSE, NULL, 'NORD', 4), ('E', 10, FALSE, FALSE, NULL, 'NORD', 4), ('E', 11, FALSE, FALSE, NULL, 'NORD', 4), ('E', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('F', 1, FALSE, FALSE, NULL, 'NORD', 4), ('F', 2, FALSE, FALSE, NULL, 'NORD', 4), ('F', 3, FALSE, FALSE, NULL, 'NORD', 4), ('F', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('F', 5, FALSE, FALSE, NULL, 'NORD', 4), ('F', 6, FALSE, FALSE, NULL, 'NORD', 4), ('F', 7, FALSE, FALSE, NULL, 'NORD', 4), ('F', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('F', 9, FALSE, FALSE, NULL, 'NORD', 4), ('F', 10, FALSE, FALSE, NULL, 'NORD', 4), ('F', 11, FALSE, FALSE, NULL, 'NORD', 4), ('F', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('G', 1, FALSE, FALSE, NULL, 'NORD', 4), ('G', 2, FALSE, FALSE, NULL, 'NORD', 4), ('G', 3, FALSE, FALSE, NULL, 'NORD', 4), ('G', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('G', 5, FALSE, FALSE, NULL, 'NORD', 4), ('G', 6, FALSE, FALSE, NULL, 'NORD', 4), ('G', 7, FALSE, FALSE, NULL, 'NORD', 4), ('G', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('G', 9, FALSE, FALSE, NULL, 'NORD', 4), ('G', 10, FALSE, FALSE, NULL, 'NORD', 4), ('G', 11, FALSE, FALSE, NULL, 'NORD', 4), ('G', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('H', 1, FALSE, FALSE, NULL, 'NORD', 4), ('H', 2, FALSE, FALSE, NULL, 'NORD', 4), ('H', 3, FALSE, FALSE, NULL, 'NORD', 4), ('H', 4, FALSE, FALSE, NULL, 'NORD', 4),
+    ('H', 5, FALSE, FALSE, NULL, 'NORD', 4), ('H', 6, FALSE, FALSE, NULL, 'NORD', 4), ('H', 7, FALSE, FALSE, NULL, 'NORD', 4), ('H', 8, FALSE, FALSE, NULL, 'NORD', 4),
+    ('H', 9, FALSE, FALSE, NULL, 'NORD', 4), ('H', 10, FALSE, FALSE, NULL, 'NORD', 4), ('H', 11, FALSE, FALSE, NULL, 'NORD', 4), ('H', 12, FALSE, FALSE, NULL, 'NORD', 4),
+
+    ('I', 1, FALSE, FALSE, NULL, 'NORD', 4), ('I', 2, FALSE, FALSE, NULL, 'NORD', 4), ('I', 3, FALSE, FALSE, NULL, 'NORD', 4), ('I', 4, FALSE, FALSE, NULL, 'NORD', 4),
 
 
-    ('A', 1, FALSE, FALSE, NULL, 'EST'), ('A', 2, FALSE, FALSE, NULL, 'EST'), ('A', 3, FALSE, FALSE, NULL, 'EST'), ('A', 4, FALSE, FALSE, NULL, 'EST'),
-    ('A', 5, FALSE, FALSE, NULL, 'EST'), ('A', 6, FALSE, FALSE, NULL, 'EST'), ('A', 7, FALSE, FALSE, NULL, 'EST'), ('A', 8, FALSE, FALSE, NULL, 'EST'),
-    ('A', 9, FALSE, FALSE, NULL, 'EST'), ('A', 10, FALSE, FALSE, NULL, 'EST'), ('A', 11, FALSE, FALSE, NULL, 'EST'), ('A', 12, FALSE, FALSE, NULL, 'EST'),
+    ('A', 1, FALSE, FALSE, NULL, 'EST', 1), ('A', 2, FALSE, FALSE, NULL, 'EST', 1), ('A', 3, FALSE, FALSE, NULL, 'EST', 1), ('A', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('A', 5, FALSE, FALSE, NULL, 'EST', 1), ('A', 6, FALSE, FALSE, NULL, 'EST', 1), ('A', 7, FALSE, FALSE, NULL, 'EST', 1), ('A', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('A', 9, FALSE, FALSE, NULL, 'EST', 1), ('A', 10, FALSE, FALSE, NULL, 'EST', 1), ('A', 11, FALSE, FALSE, NULL, 'EST', 1), ('A', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('B', 1, FALSE, FALSE, NULL, 'EST'), ('B', 2, FALSE, FALSE, NULL, 'EST'), ('B', 3, FALSE, FALSE, NULL, 'EST'), ('B', 4, FALSE, FALSE, NULL, 'EST'),
-    ('B', 5, FALSE, FALSE, NULL, 'EST'), ('B', 6, FALSE, FALSE, NULL, 'EST'), ('B', 7, FALSE, FALSE, NULL, 'EST'), ('B', 8, FALSE, FALSE, NULL, 'EST'),
-    ('B', 9, FALSE, FALSE, NULL, 'EST'), ('B', 10, FALSE, FALSE, NULL, 'EST'), ('B', 11, FALSE, FALSE, NULL, 'EST'), ('B', 12, FALSE, FALSE, NULL, 'EST'),
+    ('B', 1, FALSE, FALSE, NULL, 'EST', 1), ('B', 2, FALSE, FALSE, NULL, 'EST', 1), ('B', 3, FALSE, FALSE, NULL, 'EST', 1), ('B', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('B', 5, FALSE, FALSE, NULL, 'EST', 1), ('B', 6, FALSE, FALSE, NULL, 'EST', 1), ('B', 7, FALSE, FALSE, NULL, 'EST', 1), ('B', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('B', 9, FALSE, FALSE, NULL, 'EST', 1), ('B', 10, FALSE, FALSE, NULL, 'EST', 1), ('B', 11, FALSE, FALSE, NULL, 'EST', 1), ('B', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('C', 1, FALSE, FALSE, NULL, 'EST'), ('C', 2, FALSE, FALSE, NULL, 'EST'), ('C', 3, FALSE, FALSE, NULL, 'EST'), ('C', 4, FALSE, FALSE, NULL, 'EST'),
-    ('C', 5, FALSE, FALSE, NULL, 'EST'), ('C', 6, FALSE, FALSE, NULL, 'EST'), ('C', 7, FALSE, FALSE, NULL, 'EST'), ('C', 8, FALSE, FALSE, NULL, 'EST'),
-    ('C', 9, FALSE, FALSE, NULL, 'EST'), ('C', 10, FALSE, FALSE, NULL, 'EST'), ('C', 11, FALSE, FALSE, NULL, 'EST'), ('C', 12, FALSE, FALSE, NULL, 'EST'),
+    ('C', 1, FALSE, FALSE, NULL, 'EST', 1), ('C', 2, FALSE, FALSE, NULL, 'EST', 1), ('C', 3, FALSE, FALSE, NULL, 'EST', 1), ('C', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('C', 5, FALSE, FALSE, NULL, 'EST', 1), ('C', 6, FALSE, FALSE, NULL, 'EST', 1), ('C', 7, FALSE, FALSE, NULL, 'EST', 1), ('C', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('C', 9, FALSE, FALSE, NULL, 'EST', 1), ('C', 10, FALSE, FALSE, NULL, 'EST', 1), ('C', 11, FALSE, FALSE, NULL, 'EST', 1), ('C', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('D', 1, FALSE, FALSE, NULL, 'EST'), ('D', 2, FALSE, FALSE, NULL, 'EST'), ('D', 3, FALSE, FALSE, NULL, 'EST'), ('D', 4, FALSE, FALSE, NULL, 'EST'),
-    ('D', 5, FALSE, FALSE, NULL, 'EST'), ('D', 6, FALSE, FALSE, NULL, 'EST'), ('D', 7, FALSE, FALSE, NULL, 'EST'), ('D', 8, FALSE, FALSE, NULL, 'EST'),
-    ('D', 9, FALSE, FALSE, NULL, 'EST'), ('D', 10, FALSE, FALSE, NULL, 'EST'), ('D', 11, FALSE, FALSE, NULL, 'EST'), ('D', 12, FALSE, FALSE, NULL, 'EST'),
+    ('D', 1, FALSE, FALSE, NULL, 'EST', 1), ('D', 2, FALSE, FALSE, NULL, 'EST', 1), ('D', 3, FALSE, FALSE, NULL, 'EST', 1), ('D', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('D', 5, FALSE, FALSE, NULL, 'EST', 1), ('D', 6, FALSE, FALSE, NULL, 'EST', 1), ('D', 7, FALSE, FALSE, NULL, 'EST', 1), ('D', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('D', 9, FALSE, FALSE, NULL, 'EST', 1), ('D', 10, FALSE, FALSE, NULL, 'EST', 1), ('D', 11, FALSE, FALSE, NULL, 'EST', 1), ('D', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('E', 1, FALSE, FALSE, NULL, 'EST'), ('E', 2, FALSE, FALSE, NULL, 'EST'), ('E', 3, FALSE, FALSE, NULL, 'EST'), ('E', 4, FALSE, FALSE, NULL, 'EST'),
-    ('E', 5, FALSE, FALSE, NULL, 'EST'), ('E', 6, FALSE, FALSE, NULL, 'EST'), ('E', 7, FALSE, FALSE, NULL, 'EST'), ('E', 8, FALSE, FALSE, NULL, 'EST'),
-    ('E', 9, FALSE, FALSE, NULL, 'EST'), ('E', 10, FALSE, FALSE, NULL, 'EST'), ('E', 11, FALSE, FALSE, NULL, 'EST'), ('E', 12, FALSE, FALSE, NULL, 'EST'),
+    ('E', 1, FALSE, FALSE, NULL, 'EST', 1), ('E', 2, FALSE, FALSE, NULL, 'EST', 1), ('E', 3, FALSE, FALSE, NULL, 'EST', 1), ('E', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('E', 5, FALSE, FALSE, NULL, 'EST', 1), ('E', 6, FALSE, FALSE, NULL, 'EST', 1), ('E', 7, FALSE, FALSE, NULL, 'EST', 1), ('E', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('E', 9, FALSE, FALSE, NULL, 'EST', 1), ('E', 10, FALSE, FALSE, NULL, 'EST', 1), ('E', 11, FALSE, FALSE, NULL, 'EST', 1), ('E', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('F', 1, FALSE, FALSE, NULL, 'EST'), ('F', 2, FALSE, FALSE, NULL, 'EST'), ('F', 3, FALSE, FALSE, NULL, 'EST'), ('F', 4, FALSE, FALSE, NULL, 'EST'),
-    ('F', 5, FALSE, FALSE, NULL, 'EST'), ('F', 6, FALSE, FALSE, NULL, 'EST'), ('F', 7, FALSE, FALSE, NULL, 'EST'), ('F', 8, FALSE, FALSE, NULL, 'EST'),
-    ('F', 9, FALSE, FALSE, NULL, 'EST'), ('F', 10, FALSE, FALSE, NULL, 'EST'), ('F', 11, FALSE, FALSE, NULL, 'EST'), ('F', 12, FALSE, FALSE, NULL, 'EST'),
+    ('F', 1, FALSE, FALSE, NULL, 'EST', 1), ('F', 2, FALSE, FALSE, NULL, 'EST', 1), ('F', 3, FALSE, FALSE, NULL, 'EST', 1), ('F', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('F', 5, FALSE, FALSE, NULL, 'EST', 1), ('F', 6, FALSE, FALSE, NULL, 'EST', 1), ('F', 7, FALSE, FALSE, NULL, 'EST', 1), ('F', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('F', 9, FALSE, FALSE, NULL, 'EST', 1), ('F', 10, FALSE, FALSE, NULL, 'EST', 1), ('F', 11, FALSE, FALSE, NULL, 'EST', 1), ('F', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('G', 1, FALSE, FALSE, NULL, 'EST'), ('G', 2, FALSE, FALSE, NULL, 'EST'), ('G', 3, FALSE, FALSE, NULL, 'EST'), ('G', 4, FALSE, FALSE, NULL, 'EST'),
-    ('G', 5, FALSE, FALSE, NULL, 'EST'), ('G', 6, FALSE, FALSE, NULL, 'EST'), ('G', 7, FALSE, FALSE, NULL, 'EST'), ('G', 8, FALSE, FALSE, NULL, 'EST'),
-    ('G', 9, FALSE, FALSE, NULL, 'EST'), ('G', 10, FALSE, FALSE, NULL, 'EST'), ('G', 11, FALSE, FALSE, NULL, 'EST'), ('G', 12, FALSE, FALSE, NULL, 'EST'),
+    ('G', 1, FALSE, FALSE, NULL, 'EST', 1), ('G', 2, FALSE, FALSE, NULL, 'EST', 1), ('G', 3, FALSE, FALSE, NULL, 'EST', 1), ('G', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('G', 5, FALSE, FALSE, NULL, 'EST', 1), ('G', 6, FALSE, FALSE, NULL, 'EST', 1), ('G', 7, FALSE, FALSE, NULL, 'EST', 1), ('G', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('G', 9, FALSE, FALSE, NULL, 'EST', 1), ('G', 10, FALSE, FALSE, NULL, 'EST', 1), ('G', 11, FALSE, FALSE, NULL, 'EST', 1), ('G', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('H', 1, FALSE, FALSE, NULL, 'EST'), ('H', 2, FALSE, FALSE, NULL, 'EST'), ('H', 3, FALSE, FALSE, NULL, 'EST'), ('H', 4, FALSE, FALSE, NULL, 'EST'),
-    ('H', 5, FALSE, FALSE, NULL, 'EST'), ('H', 6, FALSE, FALSE, NULL, 'EST'), ('H', 7, FALSE, FALSE, NULL, 'EST'), ('H', 8, FALSE, FALSE, NULL, 'EST'),
-    ('H', 9, FALSE, FALSE, NULL, 'EST'), ('H', 10, FALSE, FALSE, NULL, 'EST'), ('H', 11, FALSE, FALSE, NULL, 'EST'), ('H', 12, FALSE, FALSE, NULL, 'EST'),
+    ('H', 1, FALSE, FALSE, NULL, 'EST', 1), ('H', 2, FALSE, FALSE, NULL, 'EST', 1), ('H', 3, FALSE, FALSE, NULL, 'EST', 1), ('H', 4, FALSE, FALSE, NULL, 'EST', 1),
+    ('H', 5, FALSE, FALSE, NULL, 'EST', 1), ('H', 6, FALSE, FALSE, NULL, 'EST', 1), ('H', 7, FALSE, FALSE, NULL, 'EST', 1), ('H', 8, FALSE, FALSE, NULL, 'EST', 1),
+    ('H', 9, FALSE, FALSE, NULL, 'EST', 1), ('H', 10, FALSE, FALSE, NULL, 'EST', 1), ('H', 11, FALSE, FALSE, NULL, 'EST', 1), ('H', 12, FALSE, FALSE, NULL, 'EST', 1),
 
-    ('I', 1, FALSE, FALSE, NULL, 'EST'), ('I', 2, FALSE, FALSE, NULL, 'EST'), ('I', 3, FALSE, FALSE, NULL, 'EST'), ('I', 4, FALSE, FALSE, NULL, 'EST'),
+    ('I', 1, FALSE, FALSE, NULL, 'EST', 1), ('I', 2, FALSE, FALSE, NULL, 'EST', 1), ('I', 3, FALSE, FALSE, NULL, 'EST', 1), ('I', 4, FALSE, FALSE, NULL, 'EST', 1),
+
+    ('A', 1, FALSE, FALSE, NULL, 'EST', 2), ('A', 2, FALSE, FALSE, NULL, 'EST', 2), ('A', 3, FALSE, FALSE, NULL, 'EST', 2), ('A', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('A', 5, FALSE, FALSE, NULL, 'EST', 2), ('A', 6, FALSE, FALSE, NULL, 'EST', 2), ('A', 7, FALSE, FALSE, NULL, 'EST', 2), ('A', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('A', 9, FALSE, FALSE, NULL, 'EST', 2), ('A', 10, FALSE, FALSE, NULL, 'EST', 2), ('A', 11, FALSE, FALSE, NULL, 'EST', 2), ('A', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('B', 1, FALSE, FALSE, NULL, 'EST', 2), ('B', 2, FALSE, FALSE, NULL, 'EST', 2), ('B', 3, FALSE, FALSE, NULL, 'EST', 2), ('B', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('B', 5, FALSE, FALSE, NULL, 'EST', 2), ('B', 6, FALSE, FALSE, NULL, 'EST', 2), ('B', 7, FALSE, FALSE, NULL, 'EST', 2), ('B', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('B', 9, FALSE, FALSE, NULL, 'EST', 2), ('B', 10, FALSE, FALSE, NULL, 'EST', 2), ('B', 11, FALSE, FALSE, NULL, 'EST', 2), ('B', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('C', 1, FALSE, FALSE, NULL, 'EST', 2), ('C', 2, FALSE, FALSE, NULL, 'EST', 2), ('C', 3, FALSE, FALSE, NULL, 'EST', 2), ('C', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('C', 5, FALSE, FALSE, NULL, 'EST', 2), ('C', 6, FALSE, FALSE, NULL, 'EST', 2), ('C', 7, FALSE, FALSE, NULL, 'EST', 2), ('C', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('C', 9, FALSE, FALSE, NULL, 'EST', 2), ('C', 10, FALSE, FALSE, NULL, 'EST', 2), ('C', 11, FALSE, FALSE, NULL, 'EST', 2), ('C', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('D', 1, FALSE, FALSE, NULL, 'EST', 2), ('D', 2, FALSE, FALSE, NULL, 'EST', 2), ('D', 3, FALSE, FALSE, NULL, 'EST', 2), ('D', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('D', 5, FALSE, FALSE, NULL, 'EST', 2), ('D', 6, FALSE, FALSE, NULL, 'EST', 2), ('D', 7, FALSE, FALSE, NULL, 'EST', 2), ('D', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('D', 9, FALSE, FALSE, NULL, 'EST', 2), ('D', 10, FALSE, FALSE, NULL, 'EST', 2), ('D', 11, FALSE, FALSE, NULL, 'EST', 2), ('D', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('E', 1, FALSE, FALSE, NULL, 'EST', 2), ('E', 2, FALSE, FALSE, NULL, 'EST', 2), ('E', 3, FALSE, FALSE, NULL, 'EST', 2), ('E', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('E', 5, FALSE, FALSE, NULL, 'EST', 2), ('E', 6, FALSE, FALSE, NULL, 'EST', 2), ('E', 7, FALSE, FALSE, NULL, 'EST', 2), ('E', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('E', 9, FALSE, FALSE, NULL, 'EST', 2), ('E', 10, FALSE, FALSE, NULL, 'EST', 2), ('E', 11, FALSE, FALSE, NULL, 'EST', 2), ('E', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('F', 1, FALSE, FALSE, NULL, 'EST', 2), ('F', 2, FALSE, FALSE, NULL, 'EST', 2), ('F', 3, FALSE, FALSE, NULL, 'EST', 2), ('F', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('F', 5, FALSE, FALSE, NULL, 'EST', 2), ('F', 6, FALSE, FALSE, NULL, 'EST', 2), ('F', 7, FALSE, FALSE, NULL, 'EST', 2), ('F', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('F', 9, FALSE, FALSE, NULL, 'EST', 2), ('F', 10, FALSE, FALSE, NULL, 'EST', 2), ('F', 11, FALSE, FALSE, NULL, 'EST', 2), ('F', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('G', 1, FALSE, FALSE, NULL, 'EST', 2), ('G', 2, FALSE, FALSE, NULL, 'EST', 2), ('G', 3, FALSE, FALSE, NULL, 'EST', 2), ('G', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('G', 5, FALSE, FALSE, NULL, 'EST', 2), ('G', 6, FALSE, FALSE, NULL, 'EST', 2), ('G', 7, FALSE, FALSE, NULL, 'EST', 2), ('G', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('G', 9, FALSE, FALSE, NULL, 'EST', 2), ('G', 10, FALSE, FALSE, NULL, 'EST', 2), ('G', 11, FALSE, FALSE, NULL, 'EST', 2), ('G', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('H', 1, FALSE, FALSE, NULL, 'EST', 2), ('H', 2, FALSE, FALSE, NULL, 'EST', 2), ('H', 3, FALSE, FALSE, NULL, 'EST', 2), ('H', 4, FALSE, FALSE, NULL, 'EST', 2),
+    ('H', 5, FALSE, FALSE, NULL, 'EST', 2), ('H', 6, FALSE, FALSE, NULL, 'EST', 2), ('H', 7, FALSE, FALSE, NULL, 'EST', 2), ('H', 8, FALSE, FALSE, NULL, 'EST', 2),
+    ('H', 9, FALSE, FALSE, NULL, 'EST', 2), ('H', 10, FALSE, FALSE, NULL, 'EST', 2), ('H', 11, FALSE, FALSE, NULL, 'EST', 2), ('H', 12, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('I', 1, FALSE, FALSE, NULL, 'EST', 2), ('I', 2, FALSE, FALSE, NULL, 'EST', 2), ('I', 3, FALSE, FALSE, NULL, 'EST', 2), ('I', 4, FALSE, FALSE, NULL, 'EST', 2),
+
+    ('A', 1, FALSE, FALSE, NULL, 'EST', 3), ('A', 2, FALSE, FALSE, NULL, 'EST', 3), ('A', 3, FALSE, FALSE, NULL, 'EST', 3), ('A', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('A', 5, FALSE, FALSE, NULL, 'EST', 3), ('A', 6, FALSE, FALSE, NULL, 'EST', 3), ('A', 7, FALSE, FALSE, NULL, 'EST', 3), ('A', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('A', 9, FALSE, FALSE, NULL, 'EST', 3), ('A', 10, FALSE, FALSE, NULL, 'EST', 3), ('A', 11, FALSE, FALSE, NULL, 'EST', 3), ('A', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('B', 1, FALSE, FALSE, NULL, 'EST', 3), ('B', 2, FALSE, FALSE, NULL, 'EST', 3), ('B', 3, FALSE, FALSE, NULL, 'EST', 3), ('B', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('B', 5, FALSE, FALSE, NULL, 'EST', 3), ('B', 6, FALSE, FALSE, NULL, 'EST', 3), ('B', 7, FALSE, FALSE, NULL, 'EST', 3), ('B', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('B', 9, FALSE, FALSE, NULL, 'EST', 3), ('B', 10, FALSE, FALSE, NULL, 'EST', 3), ('B', 11, FALSE, FALSE, NULL, 'EST', 3), ('B', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('C', 1, FALSE, FALSE, NULL, 'EST', 3), ('C', 2, FALSE, FALSE, NULL, 'EST', 3), ('C', 3, FALSE, FALSE, NULL, 'EST', 3), ('C', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('C', 5, FALSE, FALSE, NULL, 'EST', 3), ('C', 6, FALSE, FALSE, NULL, 'EST', 3), ('C', 7, FALSE, FALSE, NULL, 'EST', 3), ('C', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('C', 9, FALSE, FALSE, NULL, 'EST', 3), ('C', 10, FALSE, FALSE, NULL, 'EST', 3), ('C', 11, FALSE, FALSE, NULL, 'EST', 3), ('C', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('D', 1, FALSE, FALSE, NULL, 'EST', 3), ('D', 2, FALSE, FALSE, NULL, 'EST', 3), ('D', 3, FALSE, FALSE, NULL, 'EST', 3), ('D', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('D', 5, FALSE, FALSE, NULL, 'EST', 3), ('D', 6, FALSE, FALSE, NULL, 'EST', 3), ('D', 7, FALSE, FALSE, NULL, 'EST', 3), ('D', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('D', 9, FALSE, FALSE, NULL, 'EST', 3), ('D', 10, FALSE, FALSE, NULL, 'EST', 3), ('D', 11, FALSE, FALSE, NULL, 'EST', 3), ('D', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('E', 1, FALSE, FALSE, NULL, 'EST', 3), ('E', 2, FALSE, FALSE, NULL, 'EST', 3), ('E', 3, FALSE, FALSE, NULL, 'EST', 3), ('E', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('E', 5, FALSE, FALSE, NULL, 'EST', 3), ('E', 6, FALSE, FALSE, NULL, 'EST', 3), ('E', 7, FALSE, FALSE, NULL, 'EST', 3), ('E', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('E', 9, FALSE, FALSE, NULL, 'EST', 3), ('E', 10, FALSE, FALSE, NULL, 'EST', 3), ('E', 11, FALSE, FALSE, NULL, 'EST', 3), ('E', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('F', 1, FALSE, FALSE, NULL, 'EST', 3), ('F', 2, FALSE, FALSE, NULL, 'EST', 3), ('F', 3, FALSE, FALSE, NULL, 'EST', 3), ('F', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('F', 5, FALSE, FALSE, NULL, 'EST', 3), ('F', 6, FALSE, FALSE, NULL, 'EST', 3), ('F', 7, FALSE, FALSE, NULL, 'EST', 3), ('F', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('F', 9, FALSE, FALSE, NULL, 'EST', 3), ('F', 10, FALSE, FALSE, NULL, 'EST', 3), ('F', 11, FALSE, FALSE, NULL, 'EST', 3), ('F', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('G', 1, FALSE, FALSE, NULL, 'EST', 3), ('G', 2, FALSE, FALSE, NULL, 'EST', 3), ('G', 3, FALSE, FALSE, NULL, 'EST', 3), ('G', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('G', 5, FALSE, FALSE, NULL, 'EST', 3), ('G', 6, FALSE, FALSE, NULL, 'EST', 3), ('G', 7, FALSE, FALSE, NULL, 'EST', 3), ('G', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('G', 9, FALSE, FALSE, NULL, 'EST', 3), ('G', 10, FALSE, FALSE, NULL, 'EST', 3), ('G', 11, FALSE, FALSE, NULL, 'EST', 3), ('G', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('H', 1, FALSE, FALSE, NULL, 'EST', 3), ('H', 2, FALSE, FALSE, NULL, 'EST', 3), ('H', 3, FALSE, FALSE, NULL, 'EST', 3), ('H', 4, FALSE, FALSE, NULL, 'EST', 3),
+    ('H', 5, FALSE, FALSE, NULL, 'EST', 3), ('H', 6, FALSE, FALSE, NULL, 'EST', 3), ('H', 7, FALSE, FALSE, NULL, 'EST', 3), ('H', 8, FALSE, FALSE, NULL, 'EST', 3),
+    ('H', 9, FALSE, FALSE, NULL, 'EST', 3), ('H', 10, FALSE, FALSE, NULL, 'EST', 3), ('H', 11, FALSE, FALSE, NULL, 'EST', 3), ('H', 12, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('I', 1, FALSE, FALSE, NULL, 'EST', 3), ('I', 2, FALSE, FALSE, NULL, 'EST', 3), ('I', 3, FALSE, FALSE, NULL, 'EST', 3), ('I', 4, FALSE, FALSE, NULL, 'EST', 3),
+
+    ('A', 1, FALSE, FALSE, NULL, 'EST', 4), ('A', 2, FALSE, FALSE, NULL, 'EST', 4), ('A', 3, FALSE, FALSE, NULL, 'EST', 4), ('A', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('A', 5, FALSE, FALSE, NULL, 'EST', 4), ('A', 6, FALSE, FALSE, NULL, 'EST', 4), ('A', 7, FALSE, FALSE, NULL, 'EST', 4), ('A', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('A', 9, FALSE, FALSE, NULL, 'EST', 4), ('A', 10, FALSE, FALSE, NULL, 'EST', 4), ('A', 11, FALSE, FALSE, NULL, 'EST', 4), ('A', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('B', 1, FALSE, FALSE, NULL, 'EST', 4), ('B', 2, FALSE, FALSE, NULL, 'EST', 4), ('B', 3, FALSE, FALSE, NULL, 'EST', 4), ('B', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('B', 5, FALSE, FALSE, NULL, 'EST', 4), ('B', 6, FALSE, FALSE, NULL, 'EST', 4), ('B', 7, FALSE, FALSE, NULL, 'EST', 4), ('B', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('B', 9, FALSE, FALSE, NULL, 'EST', 4), ('B', 10, FALSE, FALSE, NULL, 'EST', 4), ('B', 11, FALSE, FALSE, NULL, 'EST', 4), ('B', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('C', 1, FALSE, FALSE, NULL, 'EST', 4), ('C', 2, FALSE, FALSE, NULL, 'EST', 4), ('C', 3, FALSE, FALSE, NULL, 'EST', 4), ('C', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('C', 5, FALSE, FALSE, NULL, 'EST', 4), ('C', 6, FALSE, FALSE, NULL, 'EST', 4), ('C', 7, FALSE, FALSE, NULL, 'EST', 4), ('C', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('C', 9, FALSE, FALSE, NULL, 'EST', 4), ('C', 10, FALSE, FALSE, NULL, 'EST', 4), ('C', 11, FALSE, FALSE, NULL, 'EST', 4), ('C', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('D', 1, FALSE, FALSE, NULL, 'EST', 4), ('D', 2, FALSE, FALSE, NULL, 'EST', 4), ('D', 3, FALSE, FALSE, NULL, 'EST', 4), ('D', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('D', 5, FALSE, FALSE, NULL, 'EST', 4), ('D', 6, FALSE, FALSE, NULL, 'EST', 4), ('D', 7, FALSE, FALSE, NULL, 'EST', 4), ('D', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('D', 9, FALSE, FALSE, NULL, 'EST', 4), ('D', 10, FALSE, FALSE, NULL, 'EST', 4), ('D', 11, FALSE, FALSE, NULL, 'EST', 4), ('D', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('E', 1, FALSE, FALSE, NULL, 'EST', 4), ('E', 2, FALSE, FALSE, NULL, 'EST', 4), ('E', 3, FALSE, FALSE, NULL, 'EST', 4), ('E', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('E', 5, FALSE, FALSE, NULL, 'EST', 4), ('E', 6, FALSE, FALSE, NULL, 'EST', 4), ('E', 7, FALSE, FALSE, NULL, 'EST', 4), ('E', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('E', 9, FALSE, FALSE, NULL, 'EST', 4), ('E', 10, FALSE, FALSE, NULL, 'EST', 4), ('E', 11, FALSE, FALSE, NULL, 'EST', 4), ('E', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('F', 1, FALSE, FALSE, NULL, 'EST', 4), ('F', 2, FALSE, FALSE, NULL, 'EST', 4), ('F', 3, FALSE, FALSE, NULL, 'EST', 4), ('F', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('F', 5, FALSE, FALSE, NULL, 'EST', 4), ('F', 6, FALSE, FALSE, NULL, 'EST', 4), ('F', 7, FALSE, FALSE, NULL, 'EST', 4), ('F', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('F', 9, FALSE, FALSE, NULL, 'EST', 4), ('F', 10, FALSE, FALSE, NULL, 'EST', 4), ('F', 11, FALSE, FALSE, NULL, 'EST', 4), ('F', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('G', 1, FALSE, FALSE, NULL, 'EST', 4), ('G', 2, FALSE, FALSE, NULL, 'EST', 4), ('G', 3, FALSE, FALSE, NULL, 'EST', 4), ('G', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('G', 5, FALSE, FALSE, NULL, 'EST', 4), ('G', 6, FALSE, FALSE, NULL, 'EST', 4), ('G', 7, FALSE, FALSE, NULL, 'EST', 4), ('G', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('G', 9, FALSE, FALSE, NULL, 'EST', 4), ('G', 10, FALSE, FALSE, NULL, 'EST', 4), ('G', 11, FALSE, FALSE, NULL, 'EST', 4), ('G', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('H', 1, FALSE, FALSE, NULL, 'EST', 4), ('H', 2, FALSE, FALSE, NULL, 'EST', 4), ('H', 3, FALSE, FALSE, NULL, 'EST', 4), ('H', 4, FALSE, FALSE, NULL, 'EST', 4),
+    ('H', 5, FALSE, FALSE, NULL, 'EST', 4), ('H', 6, FALSE, FALSE, NULL, 'EST', 4), ('H', 7, FALSE, FALSE, NULL, 'EST', 4), ('H', 8, FALSE, FALSE, NULL, 'EST', 4),
+    ('H', 9, FALSE, FALSE, NULL, 'EST', 4), ('H', 10, FALSE, FALSE, NULL, 'EST', 4), ('H', 11, FALSE, FALSE, NULL, 'EST', 4), ('H', 12, FALSE, FALSE, NULL, 'EST', 4),
+
+    ('I', 1, FALSE, FALSE, NULL, 'EST', 4), ('I', 2, FALSE, FALSE, NULL, 'EST', 4), ('I', 3, FALSE, FALSE, NULL, 'EST', 4), ('I', 4, FALSE, FALSE, NULL, 'EST', 4),
+
+
+    ('A', 1, FALSE, FALSE, NULL, 'SUD', 1), ('A', 2, FALSE, FALSE, NULL, 'SUD', 1), ('A', 3, FALSE, FALSE, NULL, 'SUD', 1), ('A', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('A', 5, FALSE, FALSE, NULL, 'SUD', 1), ('A', 6, FALSE, FALSE, NULL, 'SUD', 1), ('A', 7, FALSE, FALSE, NULL, 'SUD', 1), ('A', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('A', 9, FALSE, FALSE, NULL, 'SUD', 1), ('A', 10, FALSE, FALSE, NULL, 'SUD', 1), ('A', 11, FALSE, FALSE, NULL, 'SUD', 1), ('A', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('B', 1, FALSE, FALSE, NULL, 'SUD', 1), ('B', 2, FALSE, FALSE, NULL, 'SUD', 1), ('B', 3, FALSE, FALSE, NULL, 'SUD', 1), ('B', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('B', 5, FALSE, FALSE, NULL, 'SUD', 1), ('B', 6, FALSE, FALSE, NULL, 'SUD', 1), ('B', 7, FALSE, FALSE, NULL, 'SUD', 1), ('B', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('B', 9, FALSE, FALSE, NULL, 'SUD', 1), ('B', 10, FALSE, FALSE, NULL, 'SUD', 1), ('B', 11, FALSE, FALSE, NULL, 'SUD', 1), ('B', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('C', 1, FALSE, FALSE, NULL, 'SUD', 1), ('C', 2, FALSE, FALSE, NULL, 'SUD', 1), ('C', 3, FALSE, FALSE, NULL, 'SUD', 1), ('C', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('C', 5, FALSE, FALSE, NULL, 'SUD', 1), ('C', 6, FALSE, FALSE, NULL, 'SUD', 1), ('C', 7, FALSE, FALSE, NULL, 'SUD', 1), ('C', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('C', 9, FALSE, FALSE, NULL, 'SUD', 1), ('C', 10, FALSE, FALSE, NULL, 'SUD', 1), ('C', 11, FALSE, FALSE, NULL, 'SUD', 1), ('C', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('D', 1, FALSE, FALSE, NULL, 'SUD', 1), ('D', 2, FALSE, FALSE, NULL, 'SUD', 1), ('D', 3, FALSE, FALSE, NULL, 'SUD', 1), ('D', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('D', 5, FALSE, FALSE, NULL, 'SUD', 1), ('D', 6, FALSE, FALSE, NULL, 'SUD', 1), ('D', 7, FALSE, FALSE, NULL, 'SUD', 1), ('D', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('D', 9, FALSE, FALSE, NULL, 'SUD', 1), ('D', 10, FALSE, FALSE, NULL, 'SUD', 1), ('D', 11, FALSE, FALSE, NULL, 'SUD', 1), ('D', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('E', 1, FALSE, FALSE, NULL, 'SUD', 1), ('E', 2, FALSE, FALSE, NULL, 'SUD', 1), ('E', 3, FALSE, FALSE, NULL, 'SUD', 1), ('E', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('E', 5, FALSE, FALSE, NULL, 'SUD', 1), ('E', 6, FALSE, FALSE, NULL, 'SUD', 1), ('E', 7, FALSE, FALSE, NULL, 'SUD', 1), ('E', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('E', 9, FALSE, FALSE, NULL, 'SUD', 1), ('E', 10, FALSE, FALSE, NULL, 'SUD', 1), ('E', 11, FALSE, FALSE, NULL, 'SUD', 1), ('E', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('F', 1, FALSE, FALSE, NULL, 'SUD', 1), ('F', 2, FALSE, FALSE, NULL, 'SUD', 1), ('F', 3, FALSE, FALSE, NULL, 'SUD', 1), ('F', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('F', 5, FALSE, FALSE, NULL, 'SUD', 1), ('F', 6, FALSE, FALSE, NULL, 'SUD', 1), ('F', 7, FALSE, FALSE, NULL, 'SUD', 1), ('F', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('F', 9, FALSE, FALSE, NULL, 'SUD', 1), ('F', 10, FALSE, FALSE, NULL, 'SUD', 1), ('F', 11, FALSE, FALSE, NULL, 'SUD', 1), ('F', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('G', 1, FALSE, FALSE, NULL, 'SUD', 1), ('G', 2, FALSE, FALSE, NULL, 'SUD', 1), ('G', 3, FALSE, FALSE, NULL, 'SUD', 1), ('G', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('G', 5, FALSE, FALSE, NULL, 'SUD', 1), ('G', 6, FALSE, FALSE, NULL, 'SUD', 1), ('G', 7, FALSE, FALSE, NULL, 'SUD', 1), ('G', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('G', 9, FALSE, FALSE, NULL, 'SUD', 1), ('G', 10, FALSE, FALSE, NULL, 'SUD', 1), ('G', 11, FALSE, FALSE, NULL, 'SUD', 1), ('G', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('H', 1, FALSE, FALSE, NULL, 'SUD', 1), ('H', 2, FALSE, FALSE, NULL, 'SUD', 1), ('H', 3, FALSE, FALSE, NULL, 'SUD', 1), ('H', 4, FALSE, FALSE, NULL, 'SUD', 1),
+    ('H', 5, FALSE, FALSE, NULL, 'SUD', 1), ('H', 6, FALSE, FALSE, NULL, 'SUD', 1), ('H', 7, FALSE, FALSE, NULL, 'SUD', 1), ('H', 8, FALSE, FALSE, NULL, 'SUD', 1),
+    ('H', 9, FALSE, FALSE, NULL, 'SUD', 1), ('H', 10, FALSE, FALSE, NULL, 'SUD', 1), ('H', 11, FALSE, FALSE, NULL, 'SUD', 1), ('H', 12, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('I', 1, FALSE, FALSE, NULL, 'SUD', 1), ('I', 2, FALSE, FALSE, NULL, 'SUD', 1), ('I', 3, FALSE, FALSE, NULL, 'SUD', 1), ('I', 4, FALSE, FALSE, NULL, 'SUD', 1),
+
+    ('A', 1, FALSE, FALSE, NULL, 'SUD', 2), ('A', 2, FALSE, FALSE, NULL, 'SUD', 2), ('A', 3, FALSE, FALSE, NULL, 'SUD', 2), ('A', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('A', 5, FALSE, FALSE, NULL, 'SUD', 2), ('A', 6, FALSE, FALSE, NULL, 'SUD', 2), ('A', 7, FALSE, FALSE, NULL, 'SUD', 2), ('A', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('A', 9, FALSE, FALSE, NULL, 'SUD', 2), ('A', 10, FALSE, FALSE, NULL, 'SUD', 2), ('A', 11, FALSE, FALSE, NULL, 'SUD', 2), ('A', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('B', 1, FALSE, FALSE, NULL, 'SUD', 2), ('B', 2, FALSE, FALSE, NULL, 'SUD', 2), ('B', 3, FALSE, FALSE, NULL, 'SUD', 2), ('B', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('B', 5, FALSE, FALSE, NULL, 'SUD', 2), ('B', 6, FALSE, FALSE, NULL, 'SUD', 2), ('B', 7, FALSE, FALSE, NULL, 'SUD', 2), ('B', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('B', 9, FALSE, FALSE, NULL, 'SUD', 2), ('B', 10, FALSE, FALSE, NULL, 'SUD', 2), ('B', 11, FALSE, FALSE, NULL, 'SUD', 2), ('B', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('C', 1, FALSE, FALSE, NULL, 'SUD', 2), ('C', 2, FALSE, FALSE, NULL, 'SUD', 2), ('C', 3, FALSE, FALSE, NULL, 'SUD', 2), ('C', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('C', 5, FALSE, FALSE, NULL, 'SUD', 2), ('C', 6, FALSE, FALSE, NULL, 'SUD', 2), ('C', 7, FALSE, FALSE, NULL, 'SUD', 2), ('C', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('C', 9, FALSE, FALSE, NULL, 'SUD', 2), ('C', 10, FALSE, FALSE, NULL, 'SUD', 2), ('C', 11, FALSE, FALSE, NULL, 'SUD', 2), ('C', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('D', 1, FALSE, FALSE, NULL, 'SUD', 2), ('D', 2, FALSE, FALSE, NULL, 'SUD', 2), ('D', 3, FALSE, FALSE, NULL, 'SUD', 2), ('D', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('D', 5, FALSE, FALSE, NULL, 'SUD', 2), ('D', 6, FALSE, FALSE, NULL, 'SUD', 2), ('D', 7, FALSE, FALSE, NULL, 'SUD', 2), ('D', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('D', 9, FALSE, FALSE, NULL, 'SUD', 2), ('D', 10, FALSE, FALSE, NULL, 'SUD', 2), ('D', 11, FALSE, FALSE, NULL, 'SUD', 2), ('D', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('E', 1, FALSE, FALSE, NULL, 'SUD', 2), ('E', 2, FALSE, FALSE, NULL, 'SUD', 2), ('E', 3, FALSE, FALSE, NULL, 'SUD', 2), ('E', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('E', 5, FALSE, FALSE, NULL, 'SUD', 2), ('E', 6, FALSE, FALSE, NULL, 'SUD', 2), ('E', 7, FALSE, FALSE, NULL, 'SUD', 2), ('E', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('E', 9, FALSE, FALSE, NULL, 'SUD', 2), ('E', 10, FALSE, FALSE, NULL, 'SUD', 2), ('E', 11, FALSE, FALSE, NULL, 'SUD', 2), ('E', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('F', 1, FALSE, FALSE, NULL, 'SUD', 2), ('F', 2, FALSE, FALSE, NULL, 'SUD', 2), ('F', 3, FALSE, FALSE, NULL, 'SUD', 2), ('F', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('F', 5, FALSE, FALSE, NULL, 'SUD', 2), ('F', 6, FALSE, FALSE, NULL, 'SUD', 2), ('F', 7, FALSE, FALSE, NULL, 'SUD', 2), ('F', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('F', 9, FALSE, FALSE, NULL, 'SUD', 2), ('F', 10, FALSE, FALSE, NULL, 'SUD', 2), ('F', 11, FALSE, FALSE, NULL, 'SUD', 2), ('F', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('G', 1, FALSE, FALSE, NULL, 'SUD', 2), ('G', 2, FALSE, FALSE, NULL, 'SUD', 2), ('G', 3, FALSE, FALSE, NULL, 'SUD', 2), ('G', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('G', 5, FALSE, FALSE, NULL, 'SUD', 2), ('G', 6, FALSE, FALSE, NULL, 'SUD', 2), ('G', 7, FALSE, FALSE, NULL, 'SUD', 2), ('G', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('G', 9, FALSE, FALSE, NULL, 'SUD', 2), ('G', 10, FALSE, FALSE, NULL, 'SUD', 2), ('G', 11, FALSE, FALSE, NULL, 'SUD', 2), ('G', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('H', 1, FALSE, FALSE, NULL, 'SUD', 2), ('H', 2, FALSE, FALSE, NULL, 'SUD', 2), ('H', 3, FALSE, FALSE, NULL, 'SUD', 2), ('H', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    ('H', 5, FALSE, FALSE, NULL, 'SUD', 2), ('H', 6, FALSE, FALSE, NULL, 'SUD', 2), ('H', 7, FALSE, FALSE, NULL, 'SUD', 2), ('H', 8, FALSE, FALSE, NULL, 'SUD', 2),
+    ('H', 9, FALSE, FALSE, NULL, 'SUD', 2), ('H', 10, FALSE, FALSE, NULL, 'SUD', 2), ('H', 11, FALSE, FALSE, NULL, 'SUD', 2), ('H', 12, FALSE, FALSE, NULL, 'SUD', 2),
+      
+    ('I', 1, FALSE, FALSE, NULL, 'SUD', 2), ('I', 2, FALSE, FALSE, NULL, 'SUD', 2), ('I', 3, FALSE, FALSE, NULL, 'SUD', 2), ('I', 4, FALSE, FALSE, NULL, 'SUD', 2),
+    
+    ('A', 1, FALSE, FALSE, NULL, 'SUD', 3), ('A', 2, FALSE, FALSE, NULL, 'SUD', 3), ('A', 3, FALSE, FALSE, NULL, 'SUD', 3), ('A', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('A', 5, FALSE, FALSE, NULL, 'SUD', 3), ('A', 6, FALSE, FALSE, NULL, 'SUD', 3), ('A', 7, FALSE, FALSE, NULL, 'SUD', 3), ('A', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('A', 9, FALSE, FALSE, NULL, 'SUD', 3), ('A', 10, FALSE, FALSE, NULL, 'SUD', 3), ('A', 11, FALSE, FALSE, NULL, 'SUD', 3), ('A', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('B', 1, FALSE, FALSE, NULL, 'SUD', 3), ('B', 2, FALSE, FALSE, NULL, 'SUD', 3), ('B', 3, FALSE, FALSE, NULL, 'SUD', 3), ('B', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('B', 5, FALSE, FALSE, NULL, 'SUD', 3), ('B', 6, FALSE, FALSE, NULL, 'SUD', 3), ('B', 7, FALSE, FALSE, NULL, 'SUD', 3), ('B', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('B', 9, FALSE, FALSE, NULL, 'SUD', 3), ('B', 10, FALSE, FALSE, NULL, 'SUD', 3), ('B', 11, FALSE, FALSE, NULL, 'SUD', 3), ('B', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('C', 1, FALSE, FALSE, NULL, 'SUD', 3), ('C', 2, FALSE, FALSE, NULL, 'SUD', 3), ('C', 3, FALSE, FALSE, NULL, 'SUD', 3), ('C', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('C', 5, FALSE, FALSE, NULL, 'SUD', 3), ('C', 6, FALSE, FALSE, NULL, 'SUD', 3), ('C', 7, FALSE, FALSE, NULL, 'SUD', 3), ('C', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('C', 9, FALSE, FALSE, NULL, 'SUD', 3), ('C', 10, FALSE, FALSE, NULL, 'SUD', 3), ('C', 11, FALSE, FALSE, NULL, 'SUD', 3), ('C', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('D', 1, FALSE, FALSE, NULL, 'SUD', 3), ('D', 2, FALSE, FALSE, NULL, 'SUD', 3), ('D', 3, FALSE, FALSE, NULL, 'SUD', 3), ('D', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('D', 5, FALSE, FALSE, NULL, 'SUD', 3), ('D', 6, FALSE, FALSE, NULL, 'SUD', 3), ('D', 7, FALSE, FALSE, NULL, 'SUD', 3), ('D', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('D', 9, FALSE, FALSE, NULL, 'SUD', 3), ('D', 10, FALSE, FALSE, NULL, 'SUD', 3), ('D', 11, FALSE, FALSE, NULL, 'SUD', 3), ('D', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('E', 1, FALSE, FALSE, NULL, 'SUD', 3), ('E', 2, FALSE, FALSE, NULL, 'SUD', 3), ('E', 3, FALSE, FALSE, NULL, 'SUD', 3), ('E', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('E', 5, FALSE, FALSE, NULL, 'SUD', 3), ('E', 6, FALSE, FALSE, NULL, 'SUD', 3), ('E', 7, FALSE, FALSE, NULL, 'SUD', 3), ('E', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('E', 9, FALSE, FALSE, NULL, 'SUD', 3), ('E', 10, FALSE, FALSE, NULL, 'SUD', 3), ('E', 11, FALSE, FALSE, NULL, 'SUD', 3), ('E', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('F', 1, FALSE, FALSE, NULL, 'SUD', 3), ('F', 2, FALSE, FALSE, NULL, 'SUD', 3), ('F', 3, FALSE, FALSE, NULL, 'SUD', 3), ('F', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('F', 5, FALSE, FALSE, NULL, 'SUD', 3), ('F', 6, FALSE, FALSE, NULL, 'SUD', 3), ('F', 7, FALSE, FALSE, NULL, 'SUD', 3), ('F', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('F', 9, FALSE, FALSE, NULL, 'SUD', 3), ('F', 10, FALSE, FALSE, NULL, 'SUD', 3), ('F', 11, FALSE, FALSE, NULL, 'SUD', 3), ('F', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('G', 1, FALSE, FALSE, NULL, 'SUD', 3), ('G', 2, FALSE, FALSE, NULL, 'SUD', 3), ('G', 3, FALSE, FALSE, NULL, 'SUD', 3), ('G', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('G', 5, FALSE, FALSE, NULL, 'SUD', 3), ('G', 6, FALSE, FALSE, NULL, 'SUD', 3), ('G', 7, FALSE, FALSE, NULL, 'SUD', 3), ('G', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('G', 9, FALSE, FALSE, NULL, 'SUD', 3), ('G', 10, FALSE, FALSE, NULL, 'SUD', 3), ('G', 11, FALSE, FALSE, NULL, 'SUD', 3), ('G', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('H', 1, FALSE, FALSE, NULL, 'SUD', 3), ('H', 2, FALSE, FALSE, NULL, 'SUD', 3), ('H', 3, FALSE, FALSE, NULL, 'SUD', 3), ('H', 4, FALSE, FALSE, NULL, 'SUD', 3),
+    ('H', 5, FALSE, FALSE, NULL, 'SUD', 3), ('H', 6, FALSE, FALSE, NULL, 'SUD', 3), ('H', 7, FALSE, FALSE, NULL, 'SUD', 3), ('H', 8, FALSE, FALSE, NULL, 'SUD', 3),
+    ('H', 9, FALSE, FALSE, NULL, 'SUD', 3), ('H', 10, FALSE, FALSE, NULL, 'SUD', 3), ('H', 11, FALSE, FALSE, NULL, 'SUD', 3), ('H', 12, FALSE, FALSE, NULL, 'SUD', 3),
+
+    ('I', 1, FALSE, FALSE, NULL, 'SUD', 3), ('I', 2, FALSE, FALSE, NULL, 'SUD', 3), ('I', 3, FALSE, FALSE, NULL, 'SUD', 3), ('I', 4, FALSE, FALSE, NULL, 'SUD', 3),
+
 
     
-    ('A', 1, FALSE, FALSE, NULL, 'SUD'), ('A', 2, FALSE, FALSE, NULL, 'SUD'), ('A', 3, FALSE, FALSE, NULL, 'SUD'), ('A', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('A', 5, FALSE, FALSE, NULL, 'SUD'), ('A', 6, FALSE, FALSE, NULL, 'SUD'), ('A', 7, FALSE, FALSE, NULL, 'SUD'), ('A', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('A', 9, FALSE, FALSE, NULL, 'SUD'), ('A', 10, FALSE, FALSE, NULL, 'SUD'), ('A', 11, FALSE, FALSE, NULL, 'SUD'), ('A', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('A', 1, FALSE, FALSE, NULL, 'SUD', 4), ('A', 2, FALSE, FALSE, NULL, 'SUD', 4), ('A', 3, FALSE, FALSE, NULL, 'SUD', 4), ('A', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('A', 5, FALSE, FALSE, NULL, 'SUD', 4), ('A', 6, FALSE, FALSE, NULL, 'SUD', 4), ('A', 7, FALSE, FALSE, NULL, 'SUD', 4), ('A', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('A', 9, FALSE, FALSE, NULL, 'SUD', 4), ('A', 10, FALSE, FALSE, NULL, 'SUD', 4), ('A', 11, FALSE, FALSE, NULL, 'SUD', 4), ('A', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('B', 1, FALSE, FALSE, NULL, 'SUD'), ('B', 2, FALSE, FALSE, NULL, 'SUD'), ('B', 3, FALSE, FALSE, NULL, 'SUD'), ('B', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('B', 5, FALSE, FALSE, NULL, 'SUD'), ('B', 6, FALSE, FALSE, NULL, 'SUD'), ('B', 7, FALSE, FALSE, NULL, 'SUD'), ('B', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('B', 9, FALSE, FALSE, NULL, 'SUD'), ('B', 10, FALSE, FALSE, NULL, 'SUD'), ('B', 11, FALSE, FALSE, NULL, 'SUD'), ('B', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('B', 1, FALSE, FALSE, NULL, 'SUD', 4), ('B', 2, FALSE, FALSE, NULL, 'SUD', 4), ('B', 3, FALSE, FALSE, NULL, 'SUD', 4), ('B', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('B', 5, FALSE, FALSE, NULL, 'SUD', 4), ('B', 6, FALSE, FALSE, NULL, 'SUD', 4), ('B', 7, FALSE, FALSE, NULL, 'SUD', 4), ('B', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('B', 9, FALSE, FALSE, NULL, 'SUD', 4), ('B', 10, FALSE, FALSE, NULL, 'SUD', 4), ('B', 11, FALSE, FALSE, NULL, 'SUD', 4), ('B', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('C', 1, FALSE, FALSE, NULL, 'SUD'), ('C', 2, FALSE, FALSE, NULL, 'SUD'), ('C', 3, FALSE, FALSE, NULL, 'SUD'), ('C', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('C', 5, FALSE, FALSE, NULL, 'SUD'), ('C', 6, FALSE, FALSE, NULL, 'SUD'), ('C', 7, FALSE, FALSE, NULL, 'SUD'), ('C', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('C', 9, FALSE, FALSE, NULL, 'SUD'), ('C', 10, FALSE, FALSE, NULL, 'SUD'), ('C', 11, FALSE, FALSE, NULL, 'SUD'), ('C', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('C', 1, FALSE, FALSE, NULL, 'SUD', 4), ('C', 2, FALSE, FALSE, NULL, 'SUD', 4), ('C', 3, FALSE, FALSE, NULL, 'SUD', 4), ('C', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('C', 5, FALSE, FALSE, NULL, 'SUD', 4), ('C', 6, FALSE, FALSE, NULL, 'SUD', 4), ('C', 7, FALSE, FALSE, NULL, 'SUD', 4), ('C', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('C', 9, FALSE, FALSE, NULL, 'SUD', 4), ('C', 10, FALSE, FALSE, NULL, 'SUD', 4), ('C', 11, FALSE, FALSE, NULL, 'SUD', 4), ('C', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('D', 1, FALSE, FALSE, NULL, 'SUD'), ('D', 2, FALSE, FALSE, NULL, 'SUD'), ('D', 3, FALSE, FALSE, NULL, 'SUD'), ('D', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('D', 5, FALSE, FALSE, NULL, 'SUD'), ('D', 6, FALSE, FALSE, NULL, 'SUD'), ('D', 7, FALSE, FALSE, NULL, 'SUD'), ('D', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('D', 9, FALSE, FALSE, NULL, 'SUD'), ('D', 10, FALSE, FALSE, NULL, 'SUD'), ('D', 11, FALSE, FALSE, NULL, 'SUD'), ('D', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('D', 1, FALSE, FALSE, NULL, 'SUD', 4), ('D', 2, FALSE, FALSE, NULL, 'SUD', 4), ('D', 3, FALSE, FALSE, NULL, 'SUD', 4), ('D', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('D', 5, FALSE, FALSE, NULL, 'SUD', 4), ('D', 6, FALSE, FALSE, NULL, 'SUD', 4), ('D', 7, FALSE, FALSE, NULL, 'SUD', 4), ('D', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('D', 9, FALSE, FALSE, NULL, 'SUD', 4), ('D', 10, FALSE, FALSE, NULL, 'SUD', 4), ('D', 11, FALSE, FALSE, NULL, 'SUD', 4), ('D', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('E', 1, FALSE, FALSE, NULL, 'SUD'), ('E', 2, FALSE, FALSE, NULL, 'SUD'), ('E', 3, FALSE, FALSE, NULL, 'SUD'), ('E', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('E', 5, FALSE, FALSE, NULL, 'SUD'), ('E', 6, FALSE, FALSE, NULL, 'SUD'), ('E', 7, FALSE, FALSE, NULL, 'SUD'), ('E', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('E', 9, FALSE, FALSE, NULL, 'SUD'), ('E', 10, FALSE, FALSE, NULL, 'SUD'), ('E', 11, FALSE, FALSE, NULL, 'SUD'), ('E', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('E', 1, FALSE, FALSE, NULL, 'SUD', 4), ('E', 2, FALSE, FALSE, NULL, 'SUD', 4), ('E', 3, FALSE, FALSE, NULL, 'SUD', 4), ('E', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('E', 5, FALSE, FALSE, NULL, 'SUD', 4), ('E', 6, FALSE, FALSE, NULL, 'SUD', 4), ('E', 7, FALSE, FALSE, NULL, 'SUD', 4), ('E', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('E', 9, FALSE, FALSE, NULL, 'SUD', 4), ('E', 10, FALSE, FALSE, NULL, 'SUD', 4), ('E', 11, FALSE, FALSE, NULL, 'SUD', 4), ('E', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('F', 1, FALSE, FALSE, NULL, 'SUD'), ('F', 2, FALSE, FALSE, NULL, 'SUD'), ('F', 3, FALSE, FALSE, NULL, 'SUD'), ('F', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('F', 5, FALSE, FALSE, NULL, 'SUD'), ('F', 6, FALSE, FALSE, NULL, 'SUD'), ('F', 7, FALSE, FALSE, NULL, 'SUD'), ('F', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('F', 9, FALSE, FALSE, NULL, 'SUD'), ('F', 10, FALSE, FALSE, NULL, 'SUD'), ('F', 11, FALSE, FALSE, NULL, 'SUD'), ('F', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('F', 1, FALSE, FALSE, NULL, 'SUD', 4), ('F', 2, FALSE, FALSE, NULL, 'SUD', 4), ('F', 3, FALSE, FALSE, NULL, 'SUD', 4), ('F', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('F', 5, FALSE, FALSE, NULL, 'SUD', 4), ('F', 6, FALSE, FALSE, NULL, 'SUD', 4), ('F', 7, FALSE, FALSE, NULL, 'SUD', 4), ('F', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('F', 9, FALSE, FALSE, NULL, 'SUD', 4), ('F', 10, FALSE, FALSE, NULL, 'SUD', 4), ('F', 11, FALSE, FALSE, NULL, 'SUD', 4), ('F', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('G', 1, FALSE, FALSE, NULL, 'SUD'), ('G', 2, FALSE, FALSE, NULL, 'SUD'), ('G', 3, FALSE, FALSE, NULL, 'SUD'), ('G', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('G', 5, FALSE, FALSE, NULL, 'SUD'), ('G', 6, FALSE, FALSE, NULL, 'SUD'), ('G', 7, FALSE, FALSE, NULL, 'SUD'), ('G', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('G', 9, FALSE, FALSE, NULL, 'SUD'), ('G', 10, FALSE, FALSE, NULL, 'SUD'), ('G', 11, FALSE, FALSE, NULL, 'SUD'), ('G', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('G', 1, FALSE, FALSE, NULL, 'SUD', 4), ('G', 2, FALSE, FALSE, NULL, 'SUD', 4), ('G', 3, FALSE, FALSE, NULL, 'SUD', 4), ('G', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('G', 5, FALSE, FALSE, NULL, 'SUD', 4), ('G', 6, FALSE, FALSE, NULL, 'SUD', 4), ('G', 7, FALSE, FALSE, NULL, 'SUD', 4), ('G', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('G', 9, FALSE, FALSE, NULL, 'SUD', 4), ('G', 10, FALSE, FALSE, NULL, 'SUD', 4), ('G', 11, FALSE, FALSE, NULL, 'SUD', 4), ('G', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('H', 1, FALSE, FALSE, NULL, 'SUD'), ('H', 2, FALSE, FALSE, NULL, 'SUD'), ('H', 3, FALSE, FALSE, NULL, 'SUD'), ('H', 4, FALSE, FALSE, NULL, 'SUD'),
-    ('H', 5, FALSE, FALSE, NULL, 'SUD'), ('H', 6, FALSE, FALSE, NULL, 'SUD'), ('H', 7, FALSE, FALSE, NULL, 'SUD'), ('H', 8, FALSE, FALSE, NULL, 'SUD'),
-    ('H', 9, FALSE, FALSE, NULL, 'SUD'), ('H', 10, FALSE, FALSE, NULL, 'SUD'), ('H', 11, FALSE, FALSE, NULL, 'SUD'), ('H', 12, FALSE, FALSE, NULL, 'SUD'),
+    ('H', 1, FALSE, FALSE, NULL, 'SUD', 4), ('H', 2, FALSE, FALSE, NULL, 'SUD', 4), ('H', 3, FALSE, FALSE, NULL, 'SUD', 4), ('H', 4, FALSE, FALSE, NULL, 'SUD', 4),
+    ('H', 5, FALSE, FALSE, NULL, 'SUD', 4), ('H', 6, FALSE, FALSE, NULL, 'SUD', 4), ('H', 7, FALSE, FALSE, NULL, 'SUD', 4), ('H', 8, FALSE, FALSE, NULL, 'SUD', 4),
+    ('H', 9, FALSE, FALSE, NULL, 'SUD', 4), ('H', 10, FALSE, FALSE, NULL, 'SUD', 4), ('H', 11, FALSE, FALSE, NULL, 'SUD', 4), ('H', 12, FALSE, FALSE, NULL, 'SUD', 4),
 
-    ('I', 1, FALSE, FALSE, NULL, 'SUD'), ('I', 2, FALSE, FALSE, NULL, 'SUD'), ('I', 3, FALSE, FALSE, NULL, 'SUD'), ('I', 4, FALSE, FALSE, NULL, 'SUD'),
+    ('I', 1, FALSE, FALSE, NULL, 'SUD', 4), ('I', 2, FALSE, FALSE, NULL, 'SUD', 4), ('I', 3, FALSE, FALSE, NULL, 'SUD', 4), ('I', 4, FALSE, FALSE, NULL, 'SUD', 4),
 
+    ('A', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('A', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('A', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('A', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('A', 1, FALSE, FALSE, NULL, 'OUEST'), ('A', 2, FALSE, FALSE, NULL, 'OUEST'), ('A', 3, FALSE, FALSE, NULL, 'OUEST'), ('A', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('A', 5, FALSE, FALSE, NULL, 'OUEST'), ('A', 6, FALSE, FALSE, NULL, 'OUEST'), ('A', 7, FALSE, FALSE, NULL, 'OUEST'), ('A', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('A', 9, FALSE, FALSE, NULL, 'OUEST'), ('A', 10, FALSE, FALSE, NULL, 'OUEST'), ('A', 11, FALSE, FALSE, NULL, 'OUEST'), ('A', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('B', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('B', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('B', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('B', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('B', 1, FALSE, FALSE, NULL, 'OUEST'), ('B', 2, FALSE, FALSE, NULL, 'OUEST'), ('B', 3, FALSE, FALSE, NULL, 'OUEST'), ('B', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('B', 5, FALSE, FALSE, NULL, 'OUEST'), ('B', 6, FALSE, FALSE, NULL, 'OUEST'), ('B', 7, FALSE, FALSE, NULL, 'OUEST'), ('B', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('B', 9, FALSE, FALSE, NULL, 'OUEST'), ('B', 10, FALSE, FALSE, NULL, 'OUEST'), ('B', 11, FALSE, FALSE, NULL, 'OUEST'), ('B', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('C', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('C', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('C', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('C', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('C', 1, FALSE, FALSE, NULL, 'OUEST'), ('C', 2, FALSE, FALSE, NULL, 'OUEST'), ('C', 3, FALSE, FALSE, NULL, 'OUEST'), ('C', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('C', 5, FALSE, FALSE, NULL, 'OUEST'), ('C', 6, FALSE, FALSE, NULL, 'OUEST'), ('C', 7, FALSE, FALSE, NULL, 'OUEST'), ('C', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('C', 9, FALSE, FALSE, NULL, 'OUEST'), ('C', 10, FALSE, FALSE, NULL, 'OUEST'), ('C', 11, FALSE, FALSE, NULL, 'OUEST'), ('C', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('D', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('D', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('D', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('D', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('D', 1, FALSE, FALSE, NULL, 'OUEST'), ('D', 2, FALSE, FALSE, NULL, 'OUEST'), ('D', 3, FALSE, FALSE, NULL, 'OUEST'), ('D', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('D', 5, FALSE, FALSE, NULL, 'OUEST'), ('D', 6, FALSE, FALSE, NULL, 'OUEST'), ('D', 7, FALSE, FALSE, NULL, 'OUEST'), ('D', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('D', 9, FALSE, FALSE, NULL, 'OUEST'), ('D', 10, FALSE, FALSE, NULL, 'OUEST'), ('D', 11, FALSE, FALSE, NULL, 'OUEST'), ('D', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('E', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('E', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('E', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('E', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('E', 1, FALSE, FALSE, NULL, 'OUEST'), ('E', 2, FALSE, FALSE, NULL, 'OUEST'), ('E', 3, FALSE, FALSE, NULL, 'OUEST'), ('E', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('E', 5, FALSE, FALSE, NULL, 'OUEST'), ('E', 6, FALSE, FALSE, NULL, 'OUEST'), ('E', 7, FALSE, FALSE, NULL, 'OUEST'), ('E', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('E', 9, FALSE, FALSE, NULL, 'OUEST'), ('E', 10, FALSE, FALSE, NULL, 'OUEST'), ('E', 11, FALSE, FALSE, NULL, 'OUEST'), ('E', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('F', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('F', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('F', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('F', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('F', 1, FALSE, FALSE, NULL, 'OUEST'), ('F', 2, FALSE, FALSE, NULL, 'OUEST'), ('F', 3, FALSE, FALSE, NULL, 'OUEST'), ('F', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('F', 5, FALSE, FALSE, NULL, 'OUEST'), ('F', 6, FALSE, FALSE, NULL, 'OUEST'), ('F', 7, FALSE, FALSE, NULL, 'OUEST'), ('F', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('F', 9, FALSE, FALSE, NULL, 'OUEST'), ('F', 10, FALSE, FALSE, NULL, 'OUEST'), ('F', 11, FALSE, FALSE, NULL, 'OUEST'), ('F', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('G', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('G', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('G', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('G', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('G', 1, FALSE, FALSE, NULL, 'OUEST'), ('G', 2, FALSE, FALSE, NULL, 'OUEST'), ('G', 3, FALSE, FALSE, NULL, 'OUEST'), ('G', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('G', 5, FALSE, FALSE, NULL, 'OUEST'), ('G', 6, FALSE, FALSE, NULL, 'OUEST'), ('G', 7, FALSE, FALSE, NULL, 'OUEST'), ('G', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('G', 9, FALSE, FALSE, NULL, 'OUEST'), ('G', 10, FALSE, FALSE, NULL, 'OUEST'), ('G', 11, FALSE, FALSE, NULL, 'OUEST'), ('G', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('H', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 4, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('H', 5, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 6, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 7, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 8, FALSE, FALSE, NULL, 'OUEST', 1),
+    ('H', 9, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 10, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 11, FALSE, FALSE, NULL, 'OUEST', 1), ('H', 12, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('H', 1, FALSE, FALSE, NULL, 'OUEST'), ('H', 2, FALSE, FALSE, NULL, 'OUEST'), ('H', 3, FALSE, FALSE, NULL, 'OUEST'), ('H', 4, FALSE, FALSE, NULL, 'OUEST'),
-    ('H', 5, FALSE, FALSE, NULL, 'OUEST'), ('H', 6, FALSE, FALSE, NULL, 'OUEST'), ('H', 7, FALSE, FALSE, NULL, 'OUEST'), ('H', 8, FALSE, FALSE, NULL, 'OUEST'),
-    ('H', 9, FALSE, FALSE, NULL, 'OUEST'), ('H', 10, FALSE, FALSE, NULL, 'OUEST'), ('H', 11, FALSE, FALSE, NULL, 'OUEST'), ('H', 12, FALSE, FALSE, NULL, 'OUEST'),
+    ('I', 1, FALSE, FALSE, NULL, 'OUEST', 1), ('I', 2, FALSE, FALSE, NULL, 'OUEST', 1), ('I', 3, FALSE, FALSE, NULL, 'OUEST', 1), ('I', 4, FALSE, FALSE, NULL, 'OUEST', 1),
 
-    ('I', 1, FALSE, FALSE, NULL, 'OUEST'), ('I', 2, FALSE, FALSE, NULL, 'OUEST'), ('I', 3, FALSE, FALSE, NULL, 'OUEST'), ('I', 4, FALSE, FALSE, NULL, 'OUEST');
     
+    ('A', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('A', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('A', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('A', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('B', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('B', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('B', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('B', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('C', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('C', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('C', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('C', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('D', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('D', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('D', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('D', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('E', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('E', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('E', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('E', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('F', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('F', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('F', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('F', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('G', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('G', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('G', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('G', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('H', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('H', 5, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 6, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 7, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 8, FALSE, FALSE, NULL, 'OUEST', 2),
+    ('H', 9, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 10, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 11, FALSE, FALSE, NULL, 'OUEST', 2), ('H', 12, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('I', 1, FALSE, FALSE, NULL, 'OUEST', 2), ('I', 2, FALSE, FALSE, NULL, 'OUEST', 2), ('I', 3, FALSE, FALSE, NULL, 'OUEST', 2), ('I', 4, FALSE, FALSE, NULL, 'OUEST', 2),
+
+    ('A', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('A', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('A', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('A', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('B', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('B', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('B', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('B', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('C', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('C', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('C', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('C', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('D', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('D', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('D', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('D', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('E', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('E', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('E', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('E', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('F', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('F', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('F', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('F', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('G', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('G', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('G', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('G', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('H', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('H', 5, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 6, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 7, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 8, FALSE, FALSE, NULL, 'OUEST', 3),
+    ('H', 9, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 10, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 11, FALSE, FALSE, NULL, 'OUEST', 3), ('H', 12, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('I', 1, FALSE, FALSE, NULL, 'OUEST', 3), ('I', 2, FALSE, FALSE, NULL, 'OUEST', 3), ('I', 3, FALSE, FALSE, NULL, 'OUEST', 3), ('I', 4, FALSE, FALSE, NULL, 'OUEST', 3),
+
+    ('A', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('A', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('A', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('A', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('B', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('B', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('B', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('B', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('C', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('C', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('C', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('C', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('D', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('D', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('D', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('D', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('E', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('E', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('E', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('E', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('F', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('F', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('F', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('F', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('G', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('G', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('G', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('G', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('H', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 4, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('H', 5, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 6, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 7, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 8, FALSE, FALSE, NULL, 'OUEST', 4),
+    ('H', 9, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 10, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 11, FALSE, FALSE, NULL, 'OUEST', 4), ('H', 12, FALSE, FALSE, NULL, 'OUEST', 4),
+
+    ('I', 1, FALSE, FALSE, NULL, 'OUEST', 4), ('I', 2, FALSE, FALSE, NULL, 'OUEST', 4), ('I', 3, FALSE, FALSE, NULL, 'OUEST', 4), ('I', 4, FALSE, FALSE, NULL, 'OUEST', 4);
 
 `;
     await pool.query(insertSiege);
