@@ -156,6 +156,9 @@ const pool = require("./db");
       titre_service JSONB,
       descri_service JSONB,
       visible_public BOOLEAN DEFAULT TRUE,
+      besoin JSONB,
+      prix NUMERIC(10,2),
+      nb_participants INTEGER,
       activate BOOLEAN,
       prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
     );
@@ -526,8 +529,7 @@ const pool = require("./db");
 
     const insertServices = `
       INSERT INTO Services 
-      (nom_service, titre_service, descri_service, activate, prestataire_id)
-      VALUES
+      (nom_service, titre_service, descri_service, visible_public, besoin, prix, nb_participants, activate, prestataire_id) VALUES
       (
         'Stand de burgers sur place',
         '{
@@ -538,6 +540,13 @@ const pool = require("./db");
           "fr": { "texte": "Profitez d’un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>." },
           "en": { "texte": "Enjoy a <b>freshly prepared burger stand</b> with quality ingredients.<br>An ideal solution for <b>quick and friendly catering</b>." }
         }',
+        true,
+        '{
+          "fr": "Accès à une prise électrique et un espace de 6m² minimum",
+          "en": "Access to a power outlet and minimum 6m² space"
+        }',
+        12.50,
+        150,
         true,
         1
       ),
@@ -552,6 +561,13 @@ const pool = require("./db");
           "fr": { "texte": "Un <b>service de boissons fraîches</b> pour désaltérer vos invités tout au long de la journée." },
           "en": { "texte": "A <b>cold drinks service</b> to keep your guests refreshed all day long." }
         }',
+        true,
+        '{
+          "fr": "Point d’eau requis à proximité",
+          "en": "Nearby water access required"
+        }',
+        3.00,
+        300,
         false,
         1
       ),
@@ -567,6 +583,13 @@ const pool = require("./db");
           "en": { "texte": "A <b>fast food catering solution designed for events</b>, even during high attendance." }
         }',
         false,
+        '{
+          "fr": "Zone de cuisson autorisée obligatoire",
+          "en": "Authorized cooking area required"
+        }',
+        9.90,
+        400,
+        false,
         1
       ),
 
@@ -581,6 +604,13 @@ const pool = require("./db");
           "en": { "texte": "A wide selection of <b>sweet and savory snacks</b> for all tastes." }
         }',
         true,
+        '{
+          "fr": "Table de service requise",
+          "en": "Service table required"
+        }',
+        4.50,
+        200,
+        true,
         1
       ),
 
@@ -594,6 +624,13 @@ const pool = require("./db");
           "fr": { "texte": "Une <b>animation musicale live</b> pour créer une ambiance festive et dynamique." },
           "en": { "texte": "A <b>live music performance</b> to create a festive and dynamic atmosphere." }
         }',
+        true,
+        '{
+          "fr": "Scène et système son requis",
+          "en": "Stage and sound system required"
+        }',
+        450.00,
+        1000,
         false,
         2
       ),
@@ -609,6 +646,13 @@ const pool = require("./db");
           "en": { "texte": "A host to <b>interact with the audience</b> and energize your event." }
         }',
         true,
+        '{
+          "fr": "Système audio requis",
+          "en": "Audio system required"
+        }',
+        250.00,
+        800,
+        true,
         2
       ),
 
@@ -622,6 +666,13 @@ const pool = require("./db");
           "fr": { "texte": "Des <b>animations participatives</b> pour engager le public et créer des moments mémorables." },
           "en": { "texte": "Interactive activities to engage the audience and create <b>memorable moments</b>." }
         }',
+        false,
+        '{
+          "fr": "Espace sécurisé requis",
+          "en": "Secure area required"
+        }',
+        180.00,
+        300,
         false,
         2
       ),
@@ -637,6 +688,13 @@ const pool = require("./db");
           "en": { "texte": "Fun and supervised activities to offer children a <b>safe and enjoyable experience</b>." }
         }',
         true,
+        '{
+          "fr": "Espace clos obligatoire",
+          "en": "Enclosed area required"
+        }',
+        200.00,
+        50,
+        true,
         2
       ),
 
@@ -650,6 +708,13 @@ const pool = require("./db");
           "fr": { "texte": "Un stand dédié à la <b>vente de produits sportifs</b> directement sur votre événement." },
           "en": { "texte": "A stand dedicated to the <b>sale of sports products</b> at your event." }
         }',
+        false,
+        '{
+          "fr": "Surface plane requise",
+          "en": "Flat surface required"
+        }',
+        0.00,
+        500,
         false,
         3
       ),
@@ -665,6 +730,13 @@ const pool = require("./db");
           "en": { "texte": "A <b>live customization service</b> to leave with a unique jersey." }
         }',
         false,
+        '{
+          "fr": "Accès électrique requis",
+          "en": "Power access required"
+        }',
+        15.00,
+        200,
+        false,
         3
       ),
 
@@ -679,6 +751,13 @@ const pool = require("./db");
           "en": { "texte": "A selection of <b>sports accessories</b> to complete your equipment." }
         }',
         false,
+        '{
+          "fr": "Stand couvert recommandé",
+          "en": "Covered stand recommended"
+        }',
+        0.00,
+        400,
+        false,
         3
       ),
 
@@ -692,6 +771,13 @@ const pool = require("./db");
           "fr": { "texte": "Une <b>boutique temporaire</b> pour offrir une expérience d’achat immersive lors de votre événement." },
           "en": { "texte": "A <b>temporary pop-up store</b> offering an immersive shopping experience." }
         }',
+        true,
+        '{
+          "fr": "Espace couvert requis",
+          "en": "Covered space required"
+        }',
+        0.00,
+        600,
         true,
         3
       );

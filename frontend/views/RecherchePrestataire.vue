@@ -1,6 +1,6 @@
 <template>
 
-    <section class="recherche">
+    <section class="recherche" id="liste_prestataires">
 
         <div class="titreFiltre">
             <span>Retrouvez les Prestataires de la Mintonette Cup 2026 !</span>
@@ -62,8 +62,8 @@
                         </div>
 
                         <div class="infosPrestataire">
-                            <span>Capacité : <span>{{ Number(item.nb_participants) }}</span></span>
-                            <span>Tarif : <span>{{ item.tarif_prestataire }}</span></span>
+                            <!-- <span>Capacité : <span>{{ Number(item.nb_participants) }}</span></span>
+                            <span>Tarif : <span>{{ item.tarif_prestataire }}</span></span> -->
                             <span>Nombre de services : <span>{{ item.nb_services }}</span></span>
                         </div>
 
@@ -92,9 +92,12 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+import { useNavigationStore } from '@/stores/navigation';
 
 const router = useRouter();
 const route = useRoute();
+const navStore = useNavigationStore();
+
 
 const type_prestataire = ref([]);
 const prestataires = ref([]);
@@ -135,6 +138,11 @@ function resetFilters() {
 }
 
 function goToSpecificPrestataire(idPresta) {
+    navStore.previousRoute = {
+        path: route.path,
+        query: route.query,
+        hash: '#liste_prestataires'
+    }
     router.push({
         name: "ShowPrestataire",
         params: {
