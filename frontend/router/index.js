@@ -10,6 +10,7 @@ import ModifyAccount from "@/views/ModifyAccount.vue";
 import ShowAccount from "@/views/ShowAccount.vue";
 import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
+import Checkout from "@/views/Checkout.vue";
 import Gradin from "@/views/Gradin.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
@@ -145,6 +146,11 @@ const routes = [
         path: "Panier",
         name: "Panier",
         component: Panier,
+      },
+      {
+        path: "Checkout",
+        name: "Checkout",
+        component: Checkout,
       },
     ],
   },
