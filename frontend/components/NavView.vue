@@ -81,6 +81,11 @@
             <span class="pointer">Panier</span>
           </router-link>
 
+          <router-link :to="{ name: 'MesBillets', params: { lang: locale } }"
+            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+            <span class="pointer">Mes billets</span>
+          </router-link>
+
           <div class="optionProfil optionProfil"  :class="{ blueBar: !isInIndex }" @click="handleLogout">
             <span>Se déconnecter</span>
           </div>

@@ -17,7 +17,20 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // Allow requests from any localhost origin (different dev ports)
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g., curl, server-to-server)
+      if (!origin) return callback(null, true);
+      try {
+        const url = new URL(origin);
+        if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+          return callback(null, true);
+        }
+      } catch (err) {
+        // if origin is not a valid URL, reject
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })

@@ -12,6 +12,7 @@ import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
 import Checkout from "@/views/Checkout.vue";
 import Gradin from "@/views/Gradin.vue";
+import MesBillets from "@/views/MesBillets.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
 import Evenement from "@/views/Administrateur/Evenement.vue";
@@ -113,6 +114,11 @@ const routes = [
             name: "ShowAccount",
             component: ShowAccount,
             props: true,
+          },
+          {
+            path: "billets",
+            name: "MesBillets",
+            component: MesBillets,
           },
           {
             path: "profil/modifier",
