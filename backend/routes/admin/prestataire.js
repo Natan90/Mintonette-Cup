@@ -185,6 +185,8 @@ router.delete("/delete/:id", async (req, res) => {
     }); 
 
   try {
+    await pool.query("DELETE FROM services WHERE prestataire_id = $1", [id_presta]);
+
     const result = await pool.query("DELETE FROM Prestataire WHERE id_prestataire = $1 RETURNING *", [id_presta]);
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Prestataire non trouvé" });

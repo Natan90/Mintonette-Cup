@@ -2,7 +2,9 @@
 
     <section class="recherche">
 
-        <span>Retrouvez les Prestataires de la Mintonette Cup 2026 !</span>
+        <div class="titreFiltre">
+            <span>Retrouvez les Prestataires de la Mintonette Cup 2026 !</span>
+        </div>
 
         <section class="filtreEtListe">
 
@@ -43,28 +45,41 @@
                 </div>
             </form>
 
+            <section class="listePrestataireBorder">
 
-            <section class="listePrestataire">
-                <div v-for="item in prestataires" :key="item.id_prestataire" class="card">
-                    <p class="title_presta">{{ item.nom_prestataire }}</p>
-                    <!-- <img src=""> -->
-                    <div class="description" v-html="item.descri_prestataire">
+                <div class="listePrestataire">
+                    <div v-for="item in prestatairesFiltres" :key="item.id_prestataire" class="blocListePrestatire">
+                        
+                        <div  class="enTetePrestataire">
+
+                            <div class="descriptionPrestataire" v-html="item.descri_prestataire">
+                            </div>
+
+                            <div  class="titrePrestataire">
+                                <!-- <img src=""> -->
+                                <span>{{ item.nom_prestataire }}</span>
+                            </div>
+                        </div>
+
+                        <div class="infosPrestataire">
+                            <span>Capacité : <span>{{ Number(item.nb_participants) }}</span></span>
+                            <span>Tarif : <span>{{ item.tarif_prestataire }}</span></span>
+                            <span>Nombre de services : <span>{{ item.nb_services }}</span></span>
+                        </div>
+
+                        <div class="contactPrestataire">
+                            <span>Contact</span>
+                            
+                            <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
+                            <span>{{ item.mail_prestataire }}</span>
+                            <span>{{ item.tel_prestataire }}</span>
+                        </div>
+
+                        <div class="boutonListe pointer" @click="goToSpecificPrestataire(item.id_prestataire)">
+                                <span>En savoir plus</span>
+                        </div>
+                        
                     </div>
-                    <p>Capacité : <span>{{ Number(item.nb_participants) }}</span></p>
-                    <p>Tarif : <span>{{ item.tarif_prestataire }}</span></p>
-                    <p>Nombre de services : <span>{{ item.nb_services }}</span></p>
-                    <div class="contact_presta">
-                        <p class="contact_title"><b>Contact</b></p>
-                        <p>{{ item.mail_prestataire }}</p>
-                        <p>{{ item.tel_prestataire }}</p>
-                    </div>
-                    <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
-                        <span>
-                            <button @click="goToSpecificPrestataire(item.id_prestataire)">
-                                En savoir plus
-                            </button>
-                        </span>
-                    </p>
                 </div>
             </section>
         </section>
@@ -74,7 +89,7 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
@@ -90,6 +105,9 @@ const filters = ref({
     prixMax: route.query.prixMax || null
 });
 
+const prestatairesFiltres = computed(() =>
+  prestataires.value.filter(p => !p.waitingforadmin)
+);
 
 onMounted(async () => {
     try {
@@ -168,35 +186,42 @@ async function searchPrestataires() {
 </script>
 
 
-<style></style>
-
 <style scoped>
 
 .recherche{
-    background-color: var(--jaune-logo);
-    opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+}
+
+.titreFiltre{
+    width: 100%;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
 }
 
-.recherche > span{
+.titreFiltre  span{
     font-size: 2.6em;
     font-weight: 800;
     color: #0a1d42;
     padding-top: 60px;
     margin: 50px 0;
     letter-spacing: 1px;
+    
 }
 
 .filtreEtListe{
     width: 100%;
     display: flex;
     justify-content: space-between;
-
-    margin-top: 30px;
 }
+
+/* FILTRE */
 
 .filtrePrestataire{
     width: 30%;
@@ -204,12 +229,15 @@ async function searchPrestataires() {
     flex-direction: column;
 
     padding: 15px calc(5px + 1%);
+    margin-bottom: 20px;
     gap: 1.5em;
+
 
     color: #0a1d42;
     background-color: var(--jaune-logo);
+    opacity: 0.9;
 
-    margin-bottom: 20px;
+    border-radius: 0 0 10px 10px;
 }
 
 .blocFiltre{
@@ -276,20 +304,91 @@ async function searchPrestataires() {
     transition: var(--transition-fast);
 }
 
+/* FILTRE */
 
+/* LISTE */
 
-
+.listePrestataireBorder{
+    width: 70%;
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
+}
 
 .listePrestataire {
-    width: 65%;
+    width: calc(100% - 40px);
+    height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 15px;
 
-    padding: 20px;
+    padding: 10px 20px;
 
-    background-color: white;
+    border-radius: 10px 10px 0 0;
+
+    background-color: var(--couleur-fond);
+
 }
+
+.blocListePrestatire{
+
+    width: 350px;
+
+    padding: 8px;
+
+    border-radius: 10px;
+
+    color: #0a1d42;
+
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
+}
+
+.enTetePrestataire{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    
+    margin-bottom: 2em;
+
+    font-weight: 500;
+
+    background-color: purple;
+}
+
+.descriptionPrestataire{
+    width: 60%;
+}
+
+.titrePrestataire{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+
+    background-color: red;
+}
+
+.infosPrestataire{
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: yellow;
+}
+
+.contactPrestataire{
+    display: flex;
+    flex-direction: column;
+
+    background-color: green;
+}
+
+.boutonListe {}
+
+
+/* LISTE */
+
 
 </style>
