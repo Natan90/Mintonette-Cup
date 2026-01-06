@@ -287,7 +287,7 @@ async function getValuesInscription() {
         });
         if (res.data && res.data.user) {
             userStore.setUser(res.data.user.id);
-            if (res.data.user.role) userStore.setRole(res.data.user.role);
+            userStore.setRole(res.data.user.role || 'user');
             message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
             inscription.value = true;
         } else {

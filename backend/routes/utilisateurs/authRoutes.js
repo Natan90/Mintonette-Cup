@@ -126,6 +126,7 @@ router.post("/inscription", async (req, res) => {
       message: "Utilisateur créé avec succès",
       user: {
         id: newUser.id_utilisateur,
+        role: 'user'
       }
     });
   } catch (err) {

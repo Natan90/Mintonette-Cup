@@ -19,6 +19,7 @@ export const useUserStore = defineStore("user", () => {
   function logout() {
     userId.value = 0;
     isConnected.value = false;
+    role.value = null;
     localStorage.clear();
   }
 
