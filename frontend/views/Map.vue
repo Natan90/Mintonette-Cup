@@ -1860,27 +1860,29 @@ const serviceLocation = ref([
   },
 ]);
 
-async function fetchPresta(id) {
+async function fetchPresta() {
   try {
-    const res = await axios.get(`http://localhost:3000/prestataire/show/${id}`);
-    const presta = res.data.prestataire;
+    const res = await axios.get(`http://localhost:3000/prestataire/show`);
+    prestataires.value = res.data;
 
-    nom_prestataire.value = presta.nom_prestataire;
-
-    // Trouver la zone correspondant à cet ID et mettre à jour le nom
-    const zone = serviceLocation.value.find((z) => z.id_zone === id);
-    if (zone) {
-      zone.name = nom_prestataire.value;
-    }
+    // Mettre à jour les noms des zones avec les noms des prestataires
+    prestataires.value.forEach((presta) => {
+      if (presta.id_zone && presta.waitingforadmin === false) {
+        const zone = serviceLocation.value.find(
+          (z) => z.id_zone === presta.id_zone
+        );
+        if (zone) {
+          zone.name = presta.nom_prestataire;
+        }
+      }
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Erreur lors de la récupération des prestataires:", err);
   }
 }
 
-onMounted(() => {
-  for (let i = 0; i < prestataires.length; i++) {
-    fetchPresta(i + 1);
-  }
+onMounted(async () => {
+  await fetchPresta();
 });
 
 //Pour créer les zones sur les maps
@@ -2161,7 +2163,14 @@ function changeMap(type, image = null, cote) {
   } else if (type === "terrains") {
     zone = landLocations;
   } else if (type === "prestataires") {
-    zone = serviceLocation.value.filter((z) => z.cote === cote);
+    // Filtrer pour n'afficher que les zones affectées à un prestataire validé
+    const prestasWithZone = prestataires.value.filter(
+      (p) => p.id_zone && p.waitingforadmin === false
+    );
+    const zoneIds = prestasWithZone.map((p) => p.id_zone);
+    zone = serviceLocation.value.filter(
+      (z) => z.cote === cote && zoneIds.includes(z.id_zone)
+    );
   } else if (type === "stand") {
     if (image === "/GradinNord.png") zone = NorthStand;
     else if (image === "/GradinEst.png") zone = EstStand;
