@@ -187,15 +187,4 @@ const router = createRouter({
   },
 });
 
-// Simple navigation guard : empêche l'accès aux routes /admin si l'utilisateur n'est pas admin
-router.beforeEach((to, from, next) => {
-  if (to.path.includes('/admin')) {
-    const userStore = useUserStore();
-    if (userStore.role !== 'admin') {
-      return next({ name: 'Home' });
-    }
-  }
-  next();
-});
-
 export default router;

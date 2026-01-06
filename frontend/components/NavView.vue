@@ -17,12 +17,12 @@
         <span class="pointer">Edit Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}" 
+      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}"  
         class="boutonNav">
         <span class="pointer">Become Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link v-if="userStore.role === 'admin'" :to="{ name: 'Evenement', params: { lang: locale } }"
+      <router-link :to="{ name: 'Evenement', params: { lang: locale } }" 
         class="boutonNav">
         <span class="pointer">Vue administrateur</span>
       </router-link>

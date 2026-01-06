@@ -59,7 +59,7 @@
 
             <div class="form_group">
                 <label>Description de l'évènement</label>
-                <Editor v-model="descri_evenement" api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo" :init="{
+                <Editor v-model="descri_evenement" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
                     height: 450,
                     menubar: false,
                     plugins: 'lists link image table media code preview anchor',
@@ -90,7 +90,6 @@
 
 
 <script setup>
-import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
 import Editor from "@tinymce/tinymce-vue";
 
@@ -99,6 +98,7 @@ import axios from 'axios';
 import { useI18n } from "vue-i18n";
 import { color } from 'motion';
 import Footer from '@/components/Footer.vue';
+import MenuAdmin from '@/components/MenuAdmin.vue';
 
 const { locale } = useI18n();
 

@@ -312,7 +312,7 @@ async function processPayment() {
     alert('Paiement réussi ! Vos billets ont été confirmés.');
 
     // Aller sur la page MesBillets pour voir les billets achetés
-    router.push({ name: 'MesBillets', params: { lang: route.params.lang || 'fr' } });
+    router.push({ name: 'MesBillets', params: { lang: route.params.lang} });
   } catch (error) {
     console.error('Erreur lors du paiement:', error);
     alert('Une erreur est survenue lors du paiement. Veuillez réessayer.');

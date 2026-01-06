@@ -89,7 +89,7 @@
                 <label>
                     {{ $t('prestataireInfo.formulaire.descri') }}
                 </label>
-                <Editor v-model="descri_presta" api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo" :init="{
+                <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
                     height: 600,
                     menubar: false,
                     plugins: 'lists link image table media code preview anchor',
