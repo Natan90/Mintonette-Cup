@@ -125,7 +125,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 
 const zones = ref([]);
@@ -134,12 +134,31 @@ const showModal = ref(false);
 const selectedZone = ref(null);
 const selectedPrestataire = ref(null);
 
-const leftZones = computed(() =>
-  zones.value.filter((z) => z.id_zone >= 1 && z.id_zone <= 16)
-);
-const rightZones = computed(() =>
-  zones.value.filter((z) => z.id_zone >= 17 && z.id_zone <= 32)
-);
+const leftZones = computed(() => {
+  const filtered = zones.value.filter((z) => z.id_zone >= 1 && z.id_zone <= 16);
+  const sorted = filtered.sort((a, b) => a.id_zone - b.id_zone);
+
+  const rows = [];
+  for (let i = 0; i < sorted.length; i += 4) {
+    rows.push(sorted.slice(i, i + 4));
+  }
+
+  return rows.reverse().flat();
+});
+
+const rightZones = computed(() => {
+  const filtered = zones.value.filter(
+    (z) => z.id_zone >= 17 && z.id_zone <= 32
+  );
+  const sorted = filtered.sort((a, b) => a.id_zone - b.id_zone);
+
+  const rows = [];
+  for (let i = 0; i < sorted.length; i += 4) {
+    rows.push(sorted.slice(i, i + 4));
+  }
+
+  return rows.reverse().flat();
+});
 
 const availablePrestataires = computed(() => {
   const available = prestataires.value.filter((p) => {
@@ -175,7 +194,7 @@ async function loadPrestataires() {
     console.error("Détails:", err.response?.data || err.message);
   }
 }
-
+watch(loadPrestataires);
 function selectZone(zone) {
   selectedZone.value = zone;
   selectedPrestataire.value = null;

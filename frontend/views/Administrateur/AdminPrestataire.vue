@@ -139,7 +139,7 @@
         </div>
 
         <div v-show="activeTab === 'map'" class="map-view">
-            <ZoneMap />
+            <ZoneMap :key="zoneMapKey" />
         </div>
     </div>
 </template>
@@ -164,7 +164,8 @@ const navStore = useNavigationStore();
 const isDelete = ref(false);
 const deleting = ref(false);
 const refusing = ref(false);
-const activeTab = ref('table'); // 'table' ou 'map'
+const activeTab = ref('table'); 
+const zoneMapKey = ref(0); 
 
 const prestataires = ref([]);
 const selectedPresta = ref(null);
@@ -269,6 +270,7 @@ async function validPrestataire(presta) {
 
         await changePresta(true, presta.id_utilisateur);
         await getPrestataires();
+        zoneMapKey.value++; // Force le rechargement de ZoneMap
     } catch (err) {
         console.error(err);
     }
