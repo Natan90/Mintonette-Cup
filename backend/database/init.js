@@ -74,8 +74,7 @@ const pool = require("./db");
     sexe_utilisateur VARCHAR(50),
     photo_profil_utilisateur BYTEA,
     date_creation_utilisateur TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ispresta BOOLEAN DEFAULT FALSE,
-    role_utilisateur VARCHAR(50) DEFAULT 'user'
+    ispresta BOOLEAN DEFAULT FALSE
   );
 
   CREATE TABLE IF NOT EXISTS Type_utilisateur(

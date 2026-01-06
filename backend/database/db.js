@@ -1,18 +1,12 @@
 const { Pool } = require("pg");
-const path = require('path');
-// Load the backend .env explicitly to avoid depending on process.cwd()
-require("dotenv").config({ path: path.join(__dirname, '..', '.env') });
+require("dotenv").config();
 
- 
-// Coerce env values to expec ted types and log non-sensitive info for debugging
-const dbPassword = process.env.DB_PASSWORD === undefined ? undefined : String(process.env.DB_PASSWORD);
-console.log(`DB config: user=${process.env.DB_USER}, host=${process.env.DB_HOST}, database=${process.env.DB_NAME}, port=${process.env.DB_PORT}, passwordLength=${dbPassword? dbPassword.length : 0}`);
 
 const pool = new Pool({
-  user: String(process.env.DB_USER),
-  host: String(process.env.DB_HOST),
-  database: String(process.env.DB_NAME),
-  password: dbPassword,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT) || 5432,
 });
 

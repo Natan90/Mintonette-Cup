@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../../database/db");
 const bcrypt = require("bcrypt");
-const crypto = require('crypto');
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * @swagger
@@ -113,7 +113,7 @@ router.post("/inscription", async (req, res) => {
         (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur) VALUES
         ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id_utilisateur`,
-      [nom, prenom, login, passwordHash, mail, tel_utilisateur, sexe]
+      [nom, prenom, login, mdp, mail, tel_utilisateur, sexe] // mettre passwordHash quand il faudra le crypter
     );
 
     const newUser = result.rows[0];
@@ -126,7 +126,6 @@ router.post("/inscription", async (req, res) => {
       message: "Utilisateur créé avec succès",
       user: {
         id: newUser.id_utilisateur,
-        role: 'user'
       }
     });
   } catch (err) {
@@ -258,7 +257,7 @@ router.post("/connexion", async (req, res) => {
     // }
 
     // Générer un token de session
-  const token = crypto.randomUUID();
+    const token = uuidv4();
     const expiresAt = new Date();
 
     expiresAt.setHours(expiresAt.getHours() + 24); // 24h
@@ -288,7 +287,6 @@ router.post("/connexion", async (req, res) => {
         login: user.login_utilisateur,
         nom: user.nom_utilisateur,
         prenom: user.prenom_utilisateur,
-        role: user.role_utilisateur || 'user'
       },
       expiresAt: expiresAt,
     });

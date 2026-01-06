@@ -134,7 +134,6 @@ router.put("/update", async (req, res) => {
   } = req.body;
 
   try {
-    console.log('Updating Siege with:', { est_reserve, dans_panier, numero_colonne, numero_ligne, zone, matchId, id_utilisateur });
     const result = await pool.query(
       `
       UPDATE Siege
@@ -159,12 +158,6 @@ router.put("/update", async (req, res) => {
       ]
     );
 
-    if (!result || result.rows.length === 0) {
-      console.warn('No seat updated for', { matchId, numero_colonne, numero_ligne, zone });
-      return res.status(404).json({ error: 'Siège non trouvé pour mise à jour' });
-    }
-
-    console.log('Seat updated:', result.rows[0]);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -289,38 +282,6 @@ router.get("/panier/show", async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-/**
- * @swagger
- * /siege/user/{userId}:
- *   get:
- *     summary: Récupère les sièges réservés pour un utilisateur
- *     tags: [Sieges]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Liste des sièges réservés pour l'utilisateur
- *       500:
- *         description: Erreur serveur
- */
-router.get('/user/:userId', async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const result = await pool.query(
-      'SELECT * FROM Siege WHERE est_reserve = true AND id_utilisateur = $1 ORDER BY match_id, zone, numero_colonne, numero_ligne',
-      [userId]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error('Erreur lors de la récupération des sièges réservés:', err);
     res.status(500).json({ error: err.message });
   }
 });
