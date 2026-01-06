@@ -34,11 +34,13 @@ import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
+import axios from "axios";
 
 const route = useRoute();
 
 let map;
 const currentMapType = ref("generalZone");
+const currentMapCote = ref(null);
 let coucheVecteur = null;
 let hoverStyle = null;
 let defaultStyle = null;
@@ -50,6 +52,9 @@ let standStyle;
 let standHoverStyle;
 let lastFeature = null;
 let label = null;
+
+const nom_prestataire = ref("");
+const prestataires = ref([]);
 
 const userStore = useUserStore();
 
@@ -64,7 +69,8 @@ const generalMap = [
   {
     type: "generalZone",
     name: "Zone prestataire",
-    image: "/MapPresta.png",
+    image: "/MapPrestaGauche.png",
+    cote: "gauche",
     coord: [
       [256.5421622483284, 1278.040658407219],
       [634.6179540408842, 1278.040658407219],
@@ -227,7 +233,8 @@ const generalMap = [
   {
     type: "generalZone",
     name: "Zone prestataire",
-    image: "/MapPresta.png",
+    image: "/MapPrestaDroite.png",
+    cote: "droite",
     coord: [
       [1238.103908122107, 1270.373182633889],
       [1269.3498248760498, 1270.373182633889],
@@ -702,10 +709,12 @@ const WestStand = [
   },
 ];
 //Prestataires  #########################################################################################################""
-const serviceLocation = [
+const serviceLocation = ref([
   {
-    name: "Presta 1",
+    id_zone: 1,
+    name: "",
     type: "service",
+    cote: "gauche",
     coord: [
       [236.429157771458, 881.2491765037553],
       [467.4825182979059, 878.5533441931505],
@@ -752,7 +761,8 @@ const serviceLocation = [
     url: "../PrestatairePublic",
   },
   {
-    name: "Presta 2",
+    id_zone: 2,
+    name: nom_prestataire.value,
     type: "service",
     coord: [
       [938.017278081694, 813.3549615037266],
@@ -793,6 +803,7 @@ const serviceLocation = [
     url: "../Presta2",
   },
   {
+    id_zone: 3,
     name: "Presta 3",
     type: "service",
     coord: [
@@ -832,6 +843,7 @@ const serviceLocation = [
     url: "../Presta3",
   },
   {
+    id_zone: 4,
     name: "Presta 4",
     type: "service",
     coord: [
@@ -880,7 +892,34 @@ const serviceLocation = [
     ],
     url: "../Presta4",
   },
-];
+]);
+
+
+async function fetchPresta(id) {
+  try {
+    const res = await axios.get(`http://localhost:3000/prestataire/show/${id}`);
+    const presta = res.data.prestataire;
+
+    nom_prestataire.value = presta.nom_prestataire;
+
+    // Trouver la zone correspondant à cet ID et mettre à jour le nom
+    const zone = serviceLocation.value.find(z => z.id_zone === id);
+    if (zone) {
+      zone.name = nom_prestataire.value;
+    }
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+onMounted(() => {
+    for (let i = 0; i < 32; i++) {       
+      fetchPresta(i + 1);                 
+    }
+  }
+);
+
 
 //Pour créer les zones sur les maps
 function features(location) {
@@ -1098,17 +1137,19 @@ onMounted(() => {
 
     if (type === "generalZone") {
       const image = clickedFeature.get("image");
+      const cote = clickedFeature.get("cote");
       currentMapType.value =
         image === "/mapTerrain.png" ? "terrains" : "prestataires";
-      changeMap(currentMapType.value, image);
+      changeMap(currentMapType.value, image, cote);
       return;
     }
   });
 });
 
-function changeMap(type, image = null) {
+function changeMap(type, image = null, cote) {
   if (!map) return;
   currentMapType.value = type; //Pour mémoriser le type de carte actif
+  currentMapCote.value = cote;
 
   // Supprime la couche de zones
   if (coucheVecteur) {
@@ -1122,10 +1163,17 @@ function changeMap(type, image = null) {
 
   // Définit l'image à afficher
   let imageUrl = "/MapTout.png";
-  if (type === "prestataires") imageUrl = "/MapPresta.png";
-  if (type === "stand" && image) imageUrl = image;
-  if (type === "generalZone" && image) imageUrl = image;
-  if (type === "terrains") imageUrl = "/mapTerrain.png";
+
+  if (image) {
+    imageUrl = image;
+  } else {
+    if (type === "prestataires") {
+      if (cote === "droite") imageUrl = "/MapPrestaDroite.png";
+      else if (cote === "gauche") imageUrl = "/MapPrestaGauche.png";
+    } else if (type === "terrains") {
+      imageUrl = "/mapTerrain.png";
+    }
+  }
 
   // Ajoute la nouvelle image
   const newImageLayer = new ImageLayer({
@@ -1145,13 +1193,13 @@ function changeMap(type, image = null) {
       zone = generalMap;
     } else if (image === "/mapTerrain.png") {
       zone = landLocations;
-    } else if (image === "/MapPresta.png") {
+    } else if (image === "/MapPrestaGauche.png") {
       zone = serviceLocation;
     }
   } else if (type === "terrains") {
     zone = landLocations;
   } else if (type === "prestataires") {
-    zone = serviceLocation;
+    zone = serviceLocation.value;
   } else if (type === "stand") {
     if (image === "/GradinNord.png") zone = NorthStand;
     else if (image === "/GradinEst.png") zone = EstStand;
@@ -1180,13 +1228,13 @@ function changeMap(type, image = null) {
 function goBack() {
   switch (currentMapType.value) {
     case "stand":
-      changeMap("terrains", "/mapTerrain.png");
+      changeMap("terrains", "/mapTerrain.png", null);
       break;
     case "terrains":
-      changeMap("generalZone", "/MapTout.png");
+      changeMap("generalZone", "/MapTout.png", null);
       break;
     case "prestataires":
-      changeMap("generalZone", "/MapTout.png");
+      changeMap("generalZone", "/MapTout.png", null);
       break;
     default:
       break;
