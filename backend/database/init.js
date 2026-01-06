@@ -25,6 +25,7 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Animation CASCADE;
   DROP TABLE IF EXISTS Restauration CASCADE;
   DROP TABLE IF EXISTS Stade CASCADE;
+  DROP TABLE IF EXISTS Panier_Siege CASCADE;
   DROP TABLE IF EXISTS Siege CASCADE;
   DROP TABLE IF EXISTS Match CASCADE;
   DROP TABLE IF EXISTS ClassementPoule CASCADE;
@@ -41,7 +42,9 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Date_du_jour CASCADE;
   DROP TABLE IF EXISTS Aliment CASCADE;
   DROP TABLE IF EXISTS Organisateur CASCADE;
+  DROP TABLE IF EXISTS Panier_Service CASCADE;
   DROP TABLE IF EXISTS Services CASCADE;
+  DROP TABLE IF EXISTS Panier CASCADE;  
   DROP TABLE IF EXISTS Prestataire CASCADE;
   DROP TABLE IF EXISTS Type_prestataire CASCADE;
   DROP TABLE IF EXISTS Type_utilisateur CASCADE;
@@ -148,7 +151,12 @@ const pool = require("./db");
     type_restauration_id INTEGER REFERENCES Type_restauration(id_type_restauration),
     type_boutique_id INTEGER REFERENCES Type_boutique(id_type_boutique)
     );
-    
+
+    CREATE TABLE IF NOT EXISTS Panier (
+      id_panier SERIAL PRIMARY KEY,
+      utilisateur_id INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
+      actif BOOLEAN DEFAULT TRUE
+    );
 
     CREATE TABLE IF NOT EXISTS Services(
       id_service SERIAL PRIMARY KEY,
@@ -162,6 +170,15 @@ const pool = require("./db");
       activate BOOLEAN,
       prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
     );
+
+    CREATE TABLE IF NOT EXISTS Panier_Service (
+      id_panier INTEGER NOT NULL REFERENCES Panier(id_panier) ON DELETE CASCADE,
+      service_id INTEGER NOT NULL REFERENCES Services(id_service),
+      quantite INTEGER DEFAULT 1,
+      prix_unitaire NUMERIC(10,2) NOT NULL,
+      PRIMARY KEY (id_panier, service_id)
+    );
+
 
 
   CREATE TABLE IF NOT EXISTS Pays(
@@ -256,12 +273,21 @@ const pool = require("./db");
     CHECK (id_equipe1 != id_equipe2)
   );
 
+  CREATE TABLE IF NOT EXISTS Panier_Siege (
+    id_panier INTEGER NOT NULL REFERENCES Panier(id_panier) ON DELETE CASCADE,
+    numero_colonne VARCHAR(2) NOT NULL,
+    numero_ligne INTEGER NOT NULL,
+    zone VARCHAR(20) NOT NULL,
+    match_id INTEGER NOT NULL REFERENCES Match(id_match),
+    PRIMARY KEY (id_panier, numero_colonne, numero_ligne, zone, match_id)
+  );
+
+
   CREATE TABLE IF NOT EXISTS Siege(
     numero_colonne VARCHAR(2) NOT NULL,
     numero_ligne INTEGER NOT NULL,
     match_id INTEGER NOT NULL,
-    est_reserve BOOLEAN DEFAULT FALSE, 
-    dans_panier BOOLEAN DEFAULT FALSE,
+    est_reserve BOOLEAN DEFAULT FALSE,
     zone VARCHAR(20) NOT NULL,
     id_utilisateur INTEGER NULL,
     PRIMARY KEY (numero_colonne, numero_ligne, zone, match_id),
@@ -1499,22 +1525,22 @@ const pool = require("./db");
     await pool.query(insertClassementPoule);
 
     const insertSiege = `
-    INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, dans_panier, id_utilisateur, zone, match_id) VALUES
-    ('A', 1, FALSE, FALSE, NULL, 'NORD', 1), ('A', 2, FALSE, FALSE, NULL, 'NORD', 1), ('A', 3, FALSE, FALSE, NULL, 'NORD', 1), ('A', 4, FALSE, FALSE, NULL, 'NORD', 1),
-    ('A', 5, FALSE, FALSE, NULL, 'NORD', 1), ('A', 6, FALSE, FALSE, NULL, 'NORD', 1), ('A', 7, FALSE, FALSE, NULL, 'NORD', 1), ('A', 8, FALSE, FALSE, NULL, 'NORD', 1),
-    ('A', 9, FALSE, FALSE, NULL, 'NORD', 1), ('A', 10, FALSE, FALSE, NULL, 'NORD', 1), ('A', 11, FALSE, FALSE, NULL, 'NORD', 1), ('A', 12, FALSE, FALSE, NULL, 'NORD', 1),
+    INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, id_utilisateur, zone, match_id) VALUES
+    ('A', 1,  FALSE, NULL, 'NORD', 1), ('A', 2, FALSE,  NULL, 'NORD', 1), ('A', 3, FALSE,  NULL, 'NORD', 1), ('A', 4,  FALSE, NULL, 'NORD', 1),
+    ('A', 5,  FALSE, NULL, 'NORD', 1), ('A', 6,  FALSE, NULL, 'NORD', 1), ('A', 7,  FALSE, NULL, 'NORD', 1), ('A', 8,  FALSE, NULL, 'NORD', 1),
+    ('A', 9,  FALSE, NULL, 'NORD', 1), ('A', 10,  FALSE, NULL, 'NORD', 1), ('A', 11,  FALSE, NULL, 'NORD', 1), ('A', 12, FALSE, NULL, 'NORD', 1),
 
-    ('B', 1, FALSE, FALSE, NULL, 'NORD', 1), ('B', 2, FALSE, FALSE, NULL, 'NORD', 1), ('B', 3, FALSE, FALSE, NULL, 'NORD', 1), ('B', 4, FALSE, FALSE, NULL, 'NORD', 1),
-    ('B', 5, FALSE, FALSE, NULL, 'NORD', 1), ('B', 6, FALSE, FALSE, NULL, 'NORD', 1), ('B', 7, FALSE, FALSE, NULL, 'NORD', 1), ('B', 8, FALSE, FALSE, NULL, 'NORD', 1),
-    ('B', 9, FALSE, FALSE, NULL, 'NORD', 1), ('B', 10, FALSE, FALSE, NULL, 'NORD', 1), ('B', 11, FALSE, FALSE, NULL, 'NORD', 1), ('B', 12, FALSE, FALSE, NULL, 'NORD', 1),
+    ('B', 1,  FALSE, NULL, 'NORD', 1), ('B', 2,  FALSE, NULL, 'NORD', 1), ('B', 3,  FALSE, NULL, 'NORD', 1), ('B', 4,  FALSE, NULL, 'NORD', 1),
+    ('B', 5,  FALSE, NULL, 'NORD', 1), ('B', 6,  FALSE, NULL, 'NORD', 1), ('B', 7,  FALSE, NULL, 'NORD', 1), ('B', 8,  FALSE, NULL, 'NORD', 1),
+    ('B', 9, FALSE, NULL, 'NORD', 1), ('B', 10,  FALSE, NULL, 'NORD', 1), ('B', 11,  FALSE, NULL, 'NORD', 1), ('B', 12,  FALSE, NULL, 'NORD', 1),
 
-    ('C', 1, FALSE, FALSE, NULL, 'NORD', 1), ('C', 2, FALSE, FALSE, NULL, 'NORD', 1), ('C', 3, FALSE, FALSE, NULL, 'NORD', 1), ('C', 4, FALSE, FALSE, NULL, 'NORD', 1),
-    ('C', 5, FALSE, FALSE, NULL, 'NORD', 1), ('C', 6, FALSE, FALSE, NULL, 'NORD', 1), ('C', 7, FALSE, FALSE, NULL, 'NORD', 1), ('C', 8, FALSE, FALSE, NULL, 'NORD', 1),
-    ('C', 9, FALSE, FALSE, NULL, 'NORD', 1), ('C', 10, FALSE, FALSE, NULL, 'NORD', 1), ('C', 11, FALSE, FALSE, NULL, 'NORD', 1), ('C', 12, FALSE, FALSE, NULL, 'NORD', 1),
+    ('C', 1,  FALSE, NULL, 'NORD', 1), ('C', 2,  FALSE, NULL, 'NORD', 1), ('C', 3,  FALSE, NULL, 'NORD', 1), ('C', 4,  FALSE, NULL, 'NORD', 1),
+    ('C', 5,  FALSE, NULL, 'NORD', 1), ('C', 6,  FALSE, NULL, 'NORD', 1), ('C', 7,  FALSE, NULL, 'NORD', 1), ('C', 8,  FALSE, NULL, 'NORD', 1),
+    ('C', 9,  FALSE, NULL, 'NORD', 1), ('C', 10,  FALSE, NULL, 'NORD', 1), ('C', 11,  FALSE, NULL, 'NORD', 1), ('C', 12,  FALSE, NULL, 'NORD', 1),
 
-    ('D', 1, FALSE, FALSE, NULL, 'NORD', 1), ('D', 2, FALSE, FALSE, NULL, 'NORD', 1), ('D', 3, FALSE, FALSE, NULL, 'NORD', 1), ('D', 4, FALSE, FALSE, NULL, 'NORD', 1),
-    ('D', 5, FALSE, FALSE, NULL, 'NORD', 1), ('D', 6, FALSE, FALSE, NULL, 'NORD', 1), ('D', 7, FALSE, FALSE, NULL, 'NORD', 1), ('D', 8, FALSE, FALSE, NULL, 'NORD', 1),
-    ('D', 9, FALSE, FALSE, NULL, 'NORD', 1), ('D', 10, FALSE, FALSE, NULL, 'NORD', 1), ('D', 11, FALSE, FALSE, NULL, 'NORD', 1), ('D', 12, FALSE, FALSE, NULL, 'NORD', 1),
+    ('D', 1,  FALSE, NULL, 'NORD', 1), ('D', 2,  FALSE, NULL, 'NORD', 1), ('D', 3,  FALSE, NULL, 'NORD', 1), ('D', 4,  FALSE, NULL, 'NORD', 1),
+    ('D', 5,  FALSE, NULL, 'NORD', 1), ('D', 6,  FALSE, NULL, 'NORD', 1), ('D', 7,  FALSE, NULL, 'NORD', 1), ('D', 8,  FALSE, NULL, 'NORD', 1),
+    ('D', 9,  FALSE, NULL, 'NORD', 1), ('D', 10,  FALSE, NULL, 'NORD', 1), ('D', 11,  FALSE, NULL, 'NORD', 1), ('D', 12,  FALSE, NULL, 'NORD', 1),
 
     ('E', 1, FALSE, FALSE, NULL, 'NORD', 1), ('E', 2, FALSE, FALSE, NULL, 'NORD', 1), ('E', 3, FALSE, FALSE, NULL, 'NORD', 1), ('E', 4, FALSE, FALSE, NULL, 'NORD', 1),
     ('E', 5, FALSE, FALSE, NULL, 'NORD', 1), ('E', 6, FALSE, FALSE, NULL, 'NORD', 1), ('E', 7, FALSE, FALSE, NULL, 'NORD', 1), ('E', 8, FALSE, FALSE, NULL, 'NORD', 1),

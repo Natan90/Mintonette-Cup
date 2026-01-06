@@ -8,7 +8,7 @@
 
         <p class="service_description" v-html="descri_service"></p>
 
-        <div class="service_besoin">
+        <div class="service_besoin" v-if="!oneService.visible_public">
           <h3>Besoin</h3>
           <p v-html="besoin_service"></p>
         </div>
@@ -24,6 +24,9 @@
             <span class="info_value">{{ oneService.nb_participants }}</span>
           </div>
         </div>
+        <button>
+          Réserver
+        </button>
       </div>
 
     </div>
