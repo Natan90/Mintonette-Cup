@@ -24,10 +24,10 @@
           </button>
         </div>
         <div class="legend">
-          <img src="/AvailableSeat.svg" alt=""><p>Siège disponible</p>
-          <img src="/ReservedSeat.svg" alt=""><p>Siège réservé </p>
-          <img src="/OwnedSeat.svg" alt=""><p>Siège acheté par vous </p>
-          <img src="/SelectionnedSeat.svg" alt=""><p>Siège sélectionnés</p>
+          <img src="/AvailableSeat.svg" alt=""><p>{{ $t('gradin.siegeDispo')}}</p>
+          <img src="/ReservedSeat.svg" alt=""><p>{{ $t('gradin.siegeReserv')}} </p>
+          <img src="/OwnedSeat.svg" alt=""><p>{{ $t('gradin.siegeproprio')}} </p>
+          <img src="/SelectionnedSeat.svg" alt=""><p>{{ $t('gradin.siegeSelec')}}</p>
         </div>
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
