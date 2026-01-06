@@ -819,4 +819,25 @@ router.patch("/activateService/:id", async (req, res) => {
   }
 });
 
+router.get("/service/show/:id", async (req, res) => {
+  const id_service = req.params.id;
+
+  try {
+    const result = await pool.query(
+      `SELECT * FROM Services
+        WHERE id_service = $1`,
+      [id_service]
+    );
+    if (result.rows.length === 0)
+      return res.status(404).json({ message: "Service non trouvé" });
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+
+
+})
+
 module.exports = router;
