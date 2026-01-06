@@ -23,7 +23,12 @@
             <span class="matchTime">{{ getMatchTime(match) }}</span>
           </button>
         </div>
-
+        <div class="legend">
+          <img src="/AvailableSeat.svg" alt=""><p>Siège disponible</p>
+          <img src="/ReservedSeat.svg" alt=""><p>Siège réservé </p>
+          <img src="/OwnedSeat.svg" alt=""><p>Siège acheté par vous </p>
+          <img src="/SelectionnedSeat.svg" alt=""><p>Siège sélectionnés</p>
+        </div>
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
         </div>
@@ -101,7 +106,7 @@
                 </button>
               </router-link>
               <button class="button reset" @click="resetSelection">
-                Réinitialiser la sélection pour ce match
+                <b>Réinitialiser la sélection pour ce match</b>
               </button>
             </div>
           </div>
@@ -353,7 +358,13 @@ onMounted(async () => {
   font-size: 1.5em;
   margin: 20px 0;
 }
-
+.legend{
+  display: flex;
+  gap: 10px;
+}
+.legend img{
+  width: 40px;
+}
 .sectionTitle {
   text-align: center;
   color: #00167a;
