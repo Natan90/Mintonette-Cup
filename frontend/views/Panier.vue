@@ -20,11 +20,14 @@
       <div class="montant">{{ total }} €</div>
     </div>
   </div>
-  <button @click="pay">payer</button>
-  <button @click="reset">Vider le panier</button>
-  <button v-if="fromZone" @click="backToBleacher">
-    Retour au gradin {{ fromZone }}
-  </button>
+  <div class="button-group">
+    <button @click="goToCheckout" class="btn btn-checkout">Procéder au paiement</button>
+    <button @click="reset" class="btn btn-danger">Vider le panier</button>
+    <button @click="addTestSeats" class="btn btn-test" title="Pour développement uniquement">+ Ajouter places test</button>
+    <button v-if="fromZone" @click="backToBleacher" class="btn btn-secondary">
+      Retour au gradin {{ fromZone }}
+    </button>
+  </div>
   <Footer />
 </template>
 
@@ -106,7 +109,7 @@ async function reset() {
 
   await fetchPanier();
 }
-//Bleacher = gradin
+
 function backToBleacher() {
   router.push({
     name: "Gradin",
@@ -114,8 +117,28 @@ function backToBleacher() {
   });
 }
 
+function goToCheckout() {
+  router.push({
+    name: "Checkout",
+  });
+}
+
+// Fonction pour ajouter des places de test (développement uniquement)
+function addTestSeats() {
+  const testSeats = [
+    { numero_colonne: "A", numero_ligne: 1, zone: "Nord" },
+    { numero_colonne: "B", numero_ligne: 2, zone: "Nord" },
+    { numero_colonne: "H", numero_ligne: 5, zone: "Est" },
+  ];
+  panier.value = testSeats;
+  alert(`${testSeats.length} places de test ajoutées au panier`);
+}
+
 onMounted(() => {
   fetchPanier();
+  
+  // Optionnel : Décommenter la ligne suivante pour charger automatiquement des places de test
+  // addTestSeats();
 });
 </script>
 
@@ -140,5 +163,99 @@ onMounted(() => {
 .montant {
   font-size: 1.6em;
   font-weight: bold;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-checkout {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(40, 167, 69, 0.3);
+}
+
+.btn-legacy {
+  background: #007bff;
+  color: white;
+}
+
+.btn-legacy:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.3);
+}
+
+.btn-test {
+  background: #ffc107;
+  color: #333;
+  font-size: 0.9em;
+}
+
+.btn-test:hover {
+  background: #ffb300;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3);
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.3);
+}
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .panier,
+  .total {
+    width: 100%;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
 }
 </style>
