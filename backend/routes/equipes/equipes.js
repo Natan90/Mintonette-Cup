@@ -11,7 +11,7 @@ router.get("/show", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
-});
+}); 
 
 router.get("/showPlayer", async (req, res) => {
   try {

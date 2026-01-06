@@ -1,6 +1,6 @@
 <template>
   <NavView></NavView>
-  <div class="back-arrow pointer" @click="router.back()">
+  <div class="back-arrow pointer" @click="goBack">
       &#8592; Retour
   </div>
   <div class="page">
@@ -56,18 +56,18 @@
         </div>
 
         <div class="boutons">
-          <router-link :to="{ name: 'ModifyAccount', params: { lang: t } }"
+          <router-link :to="{ name: 'ModifyAccount', params: { lang: t.value } }"
            class="pointer">
             {{ $t('account.modify') }}
           </router-link>
-          <router-link :to="{ name: 'Panier', params: { lang: t } }" 
+          <router-link :to="{ name: 'Panier', params: { lang: t.value } }" 
           class="pointer">
             {{ $t('account.viewCart') }}
           </router-link>
           <button @click="deleteAccount(userData.id_user)" class="pointer delete-btn" :disabled="isDeleting">
             {{ isDeleting ? $t('account.deleting') : $t('account.deleteAccount') }}
           </button>
-          <router-link :to="{ name: 'Home', params: { lang: t } }" >
+          <router-link :to="{ name: 'Home', params: { lang: t.value } }" >
             {{ $t('pageLog.annuler') }}
           </router-link>
         </div>
@@ -79,10 +79,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import { useNavigationStore } from "@/stores/navigation";
 import NavView from '@/components/NavView.vue';
 import Footer from '@/components/Footer.vue';
 
@@ -95,7 +96,10 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const route = useRoute();
 const userStore = useUserStore();
+const navStore = useNavigationStore();
+
 const { t } = useI18n();
 
 const loading = ref(true);
@@ -121,6 +125,12 @@ onMounted(async () => {
     console.error(err);
   }
 });
+
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 async function getValuesUtilisateurs(id) {
   if (!userStore.isConnected) {
@@ -194,22 +204,6 @@ async function deleteAccount(id) {
 </script>
 
 <style scoped>
-.back-arrow {
-  margin: 20px 0;
-  font-size: 18px;
-  font-weight: 500;
-  text-decoration: none;
-  color: black;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.back-arrow:hover {
-  color: var(--jaune-logo);
-  transition: var(--transition-fast);
-}
-
 .page {
   display: flex;
   flex-direction: column;

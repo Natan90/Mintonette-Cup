@@ -17,15 +17,10 @@
 
             <!-- Liste des types de prestataires disponibles -->
             <div class="type_prestataire">
-                <div
-                    v-for="(item, index) in type_prestataire"
-                    :key="index"
-                    class="boite_type_presta"
+                <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta"
                     :id="`p-${index}`">
                     <!-- Bouton de sélection du type de prestataire -->
-                    <button
-                        class="button_type_presta"
-                        @click="selectTypePresta(index)">
+                    <button class="button_type_presta" @click="selectTypePresta(index)">
                         {{ item.nom_type_prestataire }}
                     </button>
                 </div>
@@ -40,19 +35,12 @@
                 <table class="table_type_presta">
                     <tbody>
                         <!-- Liste des options possibles -->
-                        <tr
-                            v-for="(item, index) in selectedItems"
-                            :key="index"
-                            class="table-row">
+                        <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
                             <td>
                                 <!-- Checkbox (une seule sélection autorisée) -->
-                                <input
-                                    type="checkbox"
-                                    :id="`item-${index}`"
-                                    :value="index"
+                                <input type="checkbox" :id="`item-${index}`" :value="index"
                                     @change="onCheckChange($event, item.nom, index)"
-                                    :checked="isCheckedWithIndex(index)"
-                                    :disabled="continueInscription"/>
+                                    :checked="isCheckedWithIndex(index)" :disabled="continueInscription" />
                                 <label :for="`item-${index}`">
                                     {{ item.nom }}
                                 </label>
@@ -71,9 +59,7 @@
 
     <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
     <div class="button_container" v-if="!continueInscription && pathAdd">
-        <button
-            @click.prevent="showContinueInscription"
-            :disabled="!isSelectionValid"
+        <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
             :class="{ disabled: !isSelectionValid }">
             {{ $t('prestataireInfo.btnContinueInscription') }}
         </button>
@@ -87,10 +73,7 @@
     </div>
 
     <!-- Formulaire de création / modification du prestataire -->
-    <div
-        class="prestataire_container"
-        v-if="continueInscription || !pathAdd"
-        id="presta_container">
+    <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
         <div class="editor_container">
 
             <!-- Champ : nom du prestataire -->
@@ -106,17 +89,13 @@
                 <label>
                     {{ $t('prestataireInfo.formulaire.descri') }}
                 </label>
-                <Editor
-                    v-model="descri_presta"
-                    api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo"
-                    :init="{
-                        height: 600,
-                        menubar: false,
-                        plugins: 'lists link image table media code preview anchor',
-                        toolbar: 'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-                        branding: false
-                    }"
-                />
+                <Editor v-model="descri_presta" api-key="sd8q04ss2q9ej9zg4jvcgu10p2mxdckx4rgnbbhdrojqrgpo" :init="{
+                    height: 600,
+                    menubar: false,
+                    plugins: 'lists link image table media code preview anchor',
+                    toolbar: 'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+                    branding: false
+                }" />
             </div>
 
             <!-- Champ : nombre de participants -->
@@ -124,12 +103,7 @@
                 <label for="participants">
                     {{ $t('prestataireInfo.formulaire.nbParticipants') }}
                 </label>
-                <input
-                    type="number"
-                    id="participants"
-                    v-model="nb_participants"
-                    min="1"
-                />
+                <input type="number" id="participants" v-model="nb_participants" min="1" />
             </div>
 
             <!-- Champ : tarif -->
@@ -145,12 +119,7 @@
                 <label for="contact">
                     {{ $t('user.mail') }}
                 </label>
-                <input
-                    type="text"
-                    id="contact"
-                    v-model="mail_presta"
-                    placeholder="mail@example.com"
-                />
+                <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
             </div>
 
             <!-- Champ : téléphone -->
@@ -158,34 +127,57 @@
                 <label for="contact">
                     {{ $t('user.tel_utilisateur') }}
                 </label>
-                <input
-                    type="tel"
-                    id="contact"
-                    v-model="tel_presta"
-                    pattern="^0[1-9][0-9]{8}$"
-                    placeholder="0123456789"
-                />
+                <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$"
+                    placeholder="0123456789" />
+            </div>
+
+            <div class="form_group">
+                <div class="ajout_services">
+                    <label>{{ $t('prestataireInfo.services', {gotS : services.length > 1 ? 's' : ''}) }}</label>
+                    <button @click="addServiceField" class="pointer">+ Ajouter</button>
+                </div>
+
+                <div class="service_input">
+                    <div v-for="(service, index) in services" :key="index" class="service_row">
+                        <input 
+                            type="text" 
+                            v-model="service.nom_service" 
+                            placeholder="Nom du service" 
+                        />
+                        <span v-if="service.activate" class="active-icon" title="Actif">&#10003;</span>
+                        <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
+                        <button class="btn_activate" v-if="!service.activate" @click="activateService(service)">
+                            Activer
+                        </button>
+                        <button class="btn_desactivate" v-else @click="desactivatingService(service)">
+                            Désactiver
+                        </button>
+                        <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">&times;</button>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Message de succès ou d’erreur après action -->
-            <div
-                v-if="message"
-                class="message"
-                :class="messageType === 'error'
-                    ? 'message-error'
-                    : 'message-success'">
+            <div v-if="message" class="message" :class="messageType === 'error'
+                ? 'message-error'
+                : 'message-success'">
                 <span class="text">{{ message }}</span>
             </div>
 
             <!-- Bouton de modification (mode édition) -->
             <div class="button_container" v-if="!pathAdd">
-                <button
-                    @click="updatePresta"
-                    :disabled="!isSelectionValid"
-                    :class="{ disabled: !isSelectionValid }">
+                <button @click="updatePresta" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
                     {{ $t('prestataireInfo.formulaire.btnModifier') }}
                 </button>
             </div>
+
+
+            <!-- ===================== Faire un show en fonction de l'id_utilisateur ============================== -->
+            <!-- ============================== Faire pour qu'un utilisateur peut avoir plusieurs prestations ============================== -->
+            <!-- ===================== Donc surement changer le show en fonction de l'id_utilisateur ============================== -->
+
+
 
             <!-- Bouton d'inscription (mode ajout) -->
             <div class="button_container" v-else>
@@ -228,6 +220,9 @@ const pathAdd = computed(() => route.name === "AddPrestataire");
 const message = ref('');
 const messageType = ref('success');
 
+const services = ref([]);
+const gotManyServices = ref(false);
+
 
 //=========================
 //=== Type prestataire ====
@@ -255,6 +250,9 @@ const mail_presta = ref('');
 const tel_presta = ref('');
 
 
+const activate = ref(false);
+const desactivate = ref(false);
+const deleting = ref(false);
 
 const selectedNames = computed(() => checkedItems.value.map(item => item.nom));
 
@@ -310,6 +308,42 @@ const selectedTypeLabel = computed(() => {
             return "";
     }
 });
+
+function addServiceField() {
+    services.value.push({
+        nom_service: '',
+        activate: false
+    });
+}
+
+
+function removeServiceField(index) {
+    services.value.splice(index, 1);
+}
+
+async function desactivatingService(service) {
+  desactivate.value = true;
+  actionsService(service);
+}
+
+async function activateService(service) {
+  activate.value = true;
+  actionsService(service);
+}
+
+async function actionsService(service) {
+  try {
+    const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
+
+    const index = services.value.findIndex(s => s.id_service === service.id_service);
+    if (index !== -1) {
+      services.value[index].activate = !services.value[index].activate;
+    }
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
+}
 
 
 //=========================
@@ -395,7 +429,7 @@ async function getValuesPrestataire() {
 
     try {
         const res = await axios.get(`http://localhost:3000/prestataire/show/${prestaId.value}`);
-        const presta = res.data;
+        const presta = res.data.prestataire;
 
         nom_presta.value = presta.nom_prestataire;
         descri_presta.value = presta.descri_prestataire;
@@ -403,6 +437,13 @@ async function getValuesPrestataire() {
         tarif_presta.value = presta.tarif_prestataire;
         mail_presta.value = presta.mail_prestataire;
         tel_presta.value = presta.tel_prestataire;
+
+        const getServices = res.data.services;
+        services.value = getServices.map(s => ({
+            id_service: s.id_service,
+            nom_service: s.nom_service,
+            activate: s.activate
+        }));
 
         const typeObj = type_prestataire.value.find(t => t.id_type_prestataire === presta.type_prestataire_id);
         if (typeObj) {
@@ -445,9 +486,11 @@ async function addPrestataire() {
             mail: mail_presta.value,
             tel: tel_presta.value,
             specificite: selectedNames.value,
-            type: Number(selectedTypeId.value)
+            type: Number(selectedTypeId.value),
+            services: services.value.filter(s => s.nom_service && s.nom_service.trim() !== '')
         });
-        // changePresta(true);
+        userStore.prestaId = res.data.user.prestaId;
+
         message.value = res.data.message;
         messageType.value = "success";
     } catch (err) {
@@ -631,20 +674,68 @@ async function updatePresta() {
     border: 1px solid #ccc;
 }
 
-.form_group button {
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #f7c325, #ffdb59);
-    color: #0a1d42;
-    font-weight: 700;
+.ajout_services {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ajout_services button {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
     border: none;
+    font-weight: 700;
+    padding: 12px 22px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(41, 128, 185, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ajout_services button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 18px rgba(41, 128, 185, 0.6), 0 0 10px rgba(41, 128, 185, 0.3) inset;
+}
+
+.ajout_services button:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 3px 10px rgba(41, 128, 185, 0.4);
+}
+
+.service_input {
+    display: flex;
+    flex-direction: column;
+}
+
+.service_row {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.service_row input {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.remove_btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    margin-left: 10px;
     border-radius: 10px;
-    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.form_group button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(247, 195, 37, 0.4);
+.remove_btn:hover {
+    background: #c0392b;
+    transform: scale(1.1);
 }
-
 
 </style>

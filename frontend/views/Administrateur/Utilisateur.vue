@@ -7,7 +7,7 @@
       <div>
         <p>
           {{ $t('adminPage.user.modal.confirmation') }}
-          <span class="name_presta background_name" v-if="selectedUser">{{ selectedUser.nom_utilisateur }}</span> ?
+          <span class="name_delete background_name" v-if="selectedUser">{{ selectedUser.nom_utilisateur }}</span> ?
         </p>
 
       </div>
@@ -27,7 +27,7 @@
     </p>
     <div class="textAndFiltre">
       <p class="nb_presta toValidate" v-if="utilisateurs.filter(p => p.ispresta).length > 0">
-        {{ $t('adminPage.user.nb_users', { count: utilisateurs.length }) }}
+        {{ $t('adminPage.user.nb_users', { count: utilisateurs.length, gotS: utilisateurs.length > 1 ? 's' : '' }) }}
       </p>
       <p class="nb_presta valid" v-else>
         {{ $t('adminPage.user.nb_userVide') }}
@@ -104,15 +104,18 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminStore } from "@/stores/admin";
+import { useNavigationStore } from "@/stores/navigation";
 
 const router = useRouter();
+const route = useRoute();
 const { locale } = useI18n();
 const adminStore = useAdminStore();
+const navStore = useNavigationStore();
 
 //==========================
 //====== Utilisateurs ======
@@ -136,6 +139,7 @@ const closeMessageSuppr = () =>{
 };
 
 function showProfil(id_user) {
+  navStore.previousRoute = route.fullPath;
   router.push({ 
     name: 'ShowAccount',
     params: { 
@@ -205,6 +209,7 @@ const utilisateursFiltres = computed(() => {
 onMounted(async () => {
   try {
     await getValuesUtilisateurs();
+    if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
   } catch (err) {
     console.error(err);
   }

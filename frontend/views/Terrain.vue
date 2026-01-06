@@ -181,7 +181,7 @@ const terrainId = computed(() => Number(route.params.id));
 
 const players = ref([]);
 const matches = ref([]);
-const selectedItem = ref(0);
+const selectedItem = ref(1);
 const selectedPlayer = ref(null);
 const cardSide = ref("right");
 
@@ -194,8 +194,8 @@ const matchTime = computed(() => {
   if (!selectedMatch.value) return "";
   const date = new Date(selectedMatch.value.date_match);
   //padStart force à avoir deux valeurs et comble avec un 0: "5" -> "05"
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const hours = date.getUTCHours().toString().padStart(2, "0");
+  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 });
 

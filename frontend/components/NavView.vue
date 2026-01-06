@@ -2,113 +2,92 @@
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <!-- Logo -->
     <router-link :to="{ name: 'Home', params: { lang: locale } }">
-      <img class="pointer" src="../images/logo.png" alt="logo" id="logo" />
+      <img src="../images/logo.png" class="logo pointer" alt="logo" />
     </router-link>
 
-    <div class="routeurLink">
-      <!-- <router-link
-        :to="{ name: 'ShowPrestataire', params: { lang: locale } }">
-        <span class="pointer optionNav">Prestataire (mode public)</span>
+    <div class="optionNav">
+
+      <!-- <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
+        class="boutonNav">
+        <span class="pointer">Prestataire (mode public)</span>
       </router-link> -->
 
-      <router-link
-        v-if="utilisateur.ispresta"
-        :to="{
-          name: 'EditPrestataire',
-          params: { id: userStore.userId, lang: locale },
-        }">
-        <span class="pointer optionNav">Edit Prestataire (mode presta)</span>
-      </router-link>
-      <router-link
-        v-else
-        :to="{
-          name: 'AddPrestataire',
-          params: { id: userStore.userId, lang: locale },
-        }">
-        <span class="pointer optionNav">Become Prestataire (mode presta)</span>
+      <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
+        class="boutonNav">
+        <span class="pointer">Edit Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link :to="{ name: 'Evenement', params: { lang: locale } }">
-        <span class="pointer optionNav">Vue administrateur</span>
+      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}" 
+        class="boutonNav">
+        <span class="pointer">Become Prestataire (mode presta)</span>
       </router-link>
 
+      <router-link :to="{ name: 'Evenement', params: { lang: locale } }"
+        class="boutonNav">
+        <span class="pointer">Vue administrateur</span>
+      </router-link>
 
-      <span>
-        <button @click="changeLanguage('fr')" class="langue pointer optionNav"
-        v-if="locale === 'en'">
-          Français
-        </button
-        >
-        <button @click="changeLanguage('en')" class="langue pointer optionNav"
-        v-else-if="locale === 'fr'">
-          English
-        </button>
-      </span>
+      <div class="langue">
+        <div v-if="locale === 'en'" @click="changeLanguage('fr')"  class="boutonNav pointer">
+          <span>Français</span>
+        </div>
+        <div v-else-if="locale === 'fr'" @click="changeLanguage('en')"  class="boutonNav pointer">
+          <span>English</span>
+        </div>
+      </div>
 
-      <span v-if="!userStore.isConnected">
-        <strong>
-          <router-link
-            :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }">
-            <span class="pointer optionNav">{{
-              $t("user.buttonConnexion")
-            }}</span>
-          </router-link>
+      <div v-if="!userStore.isConnected" class="partieProfil" >
+        <router-link :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
+           class="boutonNav">
+          <span class="pointer">{{ $t("user.buttonConnexion")}}</span>
+        </router-link>
+
+        <div class="default">
           /
-          <router-link
-            :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }">
-            <span class="pointer optionNav">{{
-              $t("user.buttonInscription")
-            }}</span>
-          </router-link>
-        </strong>
-      </span>
+        </div>
 
-      <span v-else class="user-buttons">
-        <div class="profile-button" @click="toggleBloc">
-          <img
-            v-if="userProfilePhoto"
-            :src="userProfilePhoto"
-            alt="Photo de profil"
-            class="profile-photo pointer" />
+        <router-link :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
+           class="boutonNav">
+          <span class="pointer">{{$t("user.buttonInscription")}}</span>
+        </router-link>
+      </div>
+
+      <div v-else class="userButtons pointer">
+
+        <div class="photoUser">
+
+          <img v-if="userProfilePhoto" :src="userProfilePhoto" alt="Photo de profil" class="profile-photo" />
+          
           <div v-else class="profile-placeholder pointer">
             <span>{{ userInitials }}</span>
           </div>
+
         </div>
-        <div class="dropdown-block" :class="{ open: showBloc }">
-          <div>
-            <router-link
-              :to="{ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } }"
-              class="pointer optionProfil">
-              Mon profil
-            </router-link>
 
-            <router-link
-              v-if="utilisateur.ispresta"
-              :to="{
-                name: 'EditPrestataire',
-                params: { id: userStore.userId, lang: locale },
-              }"
-              class="pointer optionProfil">
-              Mes prestations
-            </router-link>
+        <div class="optionsUser">
 
-            <router-link
-              :to="{ name: 'Panier', params: { lang: locale } }"
-              class="pointer optionProfil">
-              Panier
-            </router-link>
+          <router-link :to="{ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } }" 
+            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+            <span class="pointer">Mon profil</span>
+          </router-link>
 
-            <router-link
-              :to="{ name: 'ModifyAccount', params: { lang: locale } }"
-              class="pointer optionProfil">
-              Paramètres
-            </router-link>
+          <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
+            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+            <span class="pointer">Mes prestations</span>
+          </router-link>
 
-            <div class="optionProfil" @click="handleLogout">Se déconnecter</div>
+          <router-link :to="{ name: 'Panier', params: { lang: locale } }" 
+            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+            <span class="pointer">Panier</span>
+          </router-link>
+
+          <div class="optionProfil optionProfil"  :class="{ blueBar: !isInIndex }" @click="handleLogout">
+            <span>Se déconnecter</span>
           </div>
+
         </div>
-      </span>
     </div>
+  </div>
   </nav>
 </template>
 
@@ -125,7 +104,6 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const isInIndex = ref(route.name === "Home");
-const showBloc = ref(false);
 const showMiniCart = ref(false);
 const cartSeats = ref([]);
 const userProfilePhoto = ref(null);
@@ -166,9 +144,6 @@ watch(
   }
 );
 
-function toggleBloc() {
-  showBloc.value = !showBloc.value;
-}
 
 function toggleMiniCart() {
   showMiniCart.value = !showMiniCart.value;
@@ -177,7 +152,6 @@ function toggleMiniCart() {
 
 function handleLogout() {
   userStore.logout();
-  showBloc.value = false;
   router.push({ name: "Home" });
 }
 
@@ -216,10 +190,40 @@ async function getValuesUser() {
   }
 }
 
+// Pour que la barre de nav apparaisse/disparaisse lorsqu'on scroll
+
+// :style="{ top: navbar }"
+
+// const navbar = ref("0px");
+
+
+// const handleScroll = () => {
+//   if (window.scrollY > 500) {
+//     navbar.value = "-100px";
+//   } else {
+//     navbar.value = "0px";
+//   }
+// };
+
+// onMounted(async () => {
+//   window.addEventListener("scroll", handleScroll);
+//   try {
+//     await getValuesEvenement();
+//     await getValuesUser();
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
+
+// onBeforeUnmount(() => {
+//   window.removeEventListener("scroll", handleScroll);
+// });
+
 
 </script>
 
 <style scoped>
+
 .barre-nav {
   padding: 0;
   color: white;
@@ -227,29 +231,26 @@ async function getValuesUser() {
   align-items: center;
   font-size: 1.2em;
   width: 100%;
+  
+  left: 0;
+  right: 0;
+  height: 100px;
 }
 
-.barre-nav.blueBar {
-  background-color: #00167a;
+.blueBar {
+  background-color: var(--primary-color);
 }
 
-#logo {
+.logo {
   height: var(--barreNav-height);
 }
 
-.routeurLink {
+.optionNav {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: calc(100% - 100px);
-  height: 1.2em;
-  font-weight: 500;
-}
-
-.langue {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 20px;
+  height: 50%;
+  margin-left: 100px;
   font-weight: 500;
 }
 
@@ -259,87 +260,109 @@ async function getValuesUser() {
   cursor: default;
 }
 
-.optionNav:hover {
+.boutonNav {
+  display: flex;
+  align-items: center;      /* centrage vertical */
+  justify-content: center;  /* centrage horizontal */
+
+  height: 100%;
+}
+
+.boutonNav:hover {
   color: #ffff00;
 }
 
-.user-buttons {
-  position: relative;
-  display: inline-block;
+a span{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
 }
 
-.dropdown-block {
-  position: absolute;
-  top: 35px;
-  right: 0;
-  background-color: #00167a;
-  border-radius: 5px;
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-  width: 200px;
-  z-index: 1000;
+.langue {
+  display: flex;
+  flex-direction: row;
+
+  gap: 4px;
+  font-size: 20px;
+  font-weight: 500;
 }
 
-.dropdown-block.open {
-  max-height: 300px;
-  border: 1px solid white;
+.partieProfil div{
+  display: flex;
+  align-items: center;
+}
+
+.default{
+  cursor: default;
+  height: 100%;
+}
+
+.partieProfil{
+  height: 100%;
+  display: flex;
+  flex-direction:row;
+  align-items: center;
+  gap: 4px;
+  margin-right: 0.6em;
+}
+
+.userButtons {
+  width: 8.5em;
+  max-width: 17%;
+  
+  margin-right: 0.6em;
+}
+
+.userButtons:hover{
+
+  .profile-placeholder,
+  .profile-photo {
+    transform: scale(1.1);
+    border-color: var(--jaune-logo);
+  }
+
+  .optionProfil{
+    transform: scaleX(1);
+    height: 2.5em;
+    font-size: 1em;
+  }
+}
+
+.optionsUser{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .optionProfil {
   width: 100%;
-  color: white;
-  height: 2.5em;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  transform: scaleX(0);
+  transform-origin: right;
 
-  padding-left: 0.5em;
+  font-size: 0;
+  text-indent: 0.5em;
+  align-content: center;
+
+  transition: var(--transition-fast);
 }
 
 .optionProfil:hover {
-  padding-left: 0.8em;
+  text-indent: 0.8em;
   background-color: var(--jaune-logo);
   color: black;
-  transition: var(--transition-fast);
-
-  cursor: pointer;
 }
 
-.cartWrapper {
-  display: inline-block;
-  position: relative;
-}
-
-.miniCart {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 220px;
-  background: white;
-  color: black;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-}
-
-.miniCart h4 {
-  margin-top: 0;
-}
-
-.miniCart ul {
-  padding-left: 16px;
-  margin: 8px 0;
-}
-
-.miniCart button {
-  margin-top: 8px;
+.photoUser{
   width: 100%;
-  padding: 6px;
-}
-.textePanier {
-  color: black;
+
+  padding-bottom: 1em;
+
+  display: flex;
+  justify-content: flex-end;
 }
 
 .profile-button {
@@ -357,11 +380,6 @@ async function getValuesUser() {
   transition: all 0.3s ease;
 }
 
-.profile-photo:hover {
-  transform: scale(1.1);
-  border-color: var(--jaune-logo);
-}
-
 .profile-placeholder {
   width: 50px;
   height: 50px;
@@ -377,13 +395,4 @@ async function getValuesUser() {
   transition: all 0.3s ease;
 }
 
-.profile-placeholder:hover {
-  transform: scale(1.1);
-  border-color: var(--jaune-logo);
-}
-
-.user-buttons {
-  position: relative;
-  display: inline-block;
-}
 </style>
