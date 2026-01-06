@@ -287,6 +287,7 @@ router.post("/connexion", async (req, res) => {
         login: user.login_utilisateur,
         nom: user.nom_utilisateur,
         prenom: user.prenom_utilisateur,
+        role: user.role_utilisateur || 'user'
       },
       expiresAt: expiresAt,
     });

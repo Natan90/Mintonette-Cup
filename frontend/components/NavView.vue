@@ -22,7 +22,7 @@
         <span class="pointer">Become Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link :to="{ name: 'Evenement', params: { lang: locale } }"
+      <router-link v-if="userStore.role === 'admin'" :to="{ name: 'Evenement', params: { lang: locale } }"
         class="boutonNav">
         <span class="pointer">Vue administrateur</span>
       </router-link>

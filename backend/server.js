@@ -8,6 +8,7 @@ const authRoutes = require("./routes/utilisateurs/authRoutes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
 const adminRoutes = require("./routes/admin/index");
+const { isAdmin } = require("./middleware/roleCheck");
 const equipesRoutes = require("./routes/equipes/equipes");
 
 
@@ -39,7 +40,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/admin", adminRoutes);
+// Protect admin routes with role check middleware
+app.use("/admin", isAdmin, adminRoutes);
 app.use("/utilisateur/auth", authRoutes);
 // app.use("/pays", paysRoutes);
 app.use("/prestataire", prestataireRoutes);

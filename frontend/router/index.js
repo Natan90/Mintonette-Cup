@@ -15,6 +15,7 @@ import Gradin from "@/views/Gradin.vue";
 import MesBillets from "@/views/MesBillets.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
+import { useUserStore } from '@/stores/user';
 import Evenement from "@/views/Administrateur/Evenement.vue";
 import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
 import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
@@ -184,6 +185,17 @@ const router = createRouter({
     }
     return { top: 0 };
   },
+});
+
+// Simple navigation guard : empêche l'accès aux routes /admin si l'utilisateur n'est pas admin
+router.beforeEach((to, from, next) => {
+  if (to.path.includes('/admin')) {
+    const userStore = useUserStore();
+    if (userStore.role !== 'admin') {
+      return next({ name: 'Home' });
+    }
+  }
+  next();
 });
 
 export default router;
