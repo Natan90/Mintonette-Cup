@@ -125,7 +125,12 @@ router.get("/show/:id", async (req, res) => {
   const idPresta = req.params.id;
   try {
     const result = await pool.query(
-      `SELECT * FROM Prestataire
+      `SELECT 
+        p.*,
+        u.ispresta
+        FROM Prestataire p
+        JOIN Utilisateur u
+          ON p.id_utilisateur = u.id_utilisateur
         WHERE id_prestataire = $1`,
       [idPresta]
     );

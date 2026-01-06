@@ -138,18 +138,18 @@
                 </div>
 
                 <div class="service_input">
-                    <div v-for="(service, index) in services" :key="index" class="service_row">
+                    <div v-for="(item, index) in services" :key="index" class="service_row">
                         <input 
                             type="text" 
-                            v-model="service.nom_service" 
+                            v-model="item.nom_service" 
                             placeholder="Nom du service" 
                         />
-                        <span v-if="service.activate" class="active-icon" title="Actif">&#10003;</span>
+                        <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
                         <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
-                        <button class="btn_activate" v-if="!service.activate" @click="activateService(service)">
+                        <button class="btn_activate" v-if="!item.activate && !pathAdd" @click="activateService(item)">
                             Activer
                         </button>
-                        <button class="btn_desactivate" v-else @click="desactivatingService(service)">
+                        <button class="btn_desactivate" v-else-if="item.activate && !pathAdd" @click="desactivatingService(item)">
                             Désactiver
                         </button>
                         <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">&times;</button>
@@ -221,7 +221,6 @@ const message = ref('');
 const messageType = ref('success');
 
 const services = ref([]);
-const gotManyServices = ref(false);
 
 
 //=========================
@@ -310,8 +309,13 @@ const selectedTypeLabel = computed(() => {
 });
 
 function addServiceField() {
-    services.value.push('');
+    services.value.push({
+        nom_service: '',
+        activate: false
+    });
 }
+
+
 
 function removeServiceField(index) {
     services.value.splice(index, 1);
@@ -426,6 +430,7 @@ async function getValuesPrestataire() {
     try {
         const res = await axios.get(`http://localhost:3000/prestataire/show/${prestaId.value}`);
         const presta = res.data.prestataire;
+        const prestaServices = res.data.services;
 
         nom_presta.value = presta.nom_prestataire;
         descri_presta.value = presta.descri_prestataire;
@@ -433,13 +438,6 @@ async function getValuesPrestataire() {
         tarif_presta.value = presta.tarif_prestataire;
         mail_presta.value = presta.mail_prestataire;
         tel_presta.value = presta.tel_prestataire;
-
-        const getServices = res.data.services;
-        services.value = getServices.map(s => ({
-            id_service: s.id_service,
-            nom_service: s.nom_service,
-            activate: s.activate
-        }));
 
         const typeObj = type_prestataire.value.find(t => t.id_type_prestataire === presta.type_prestataire_id);
         if (typeObj) {
@@ -464,6 +462,15 @@ async function getValuesPrestataire() {
             checkedItems.value = [];
         }
 
+        services.value = prestaServices.map(s => ({
+            id_service: s.id_service,
+            nom_service: s.nom_service,
+            activate: s.activate || false
+        }));
+
+        console.log("Prestataire récupéré :", presta);
+        console.log("Services récupérés :", services.value);
+
         console.log("checkedItems :", checkedItems.value);
         console.log(presta.specificite);
 
@@ -474,6 +481,10 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
     try {
+        const servicesPayload = services.value
+            .map(s => s.nom_service)
+            .filter(s => s && s.trim() !== '');
+            
         const res = await axios.post(`http://localhost:3000/prestataire/becomePrestataire/${prestaId.value}`, {
             nom: nom_presta.value,
             descri: descri_presta.value,
@@ -483,7 +494,7 @@ async function addPrestataire() {
             tel: tel_presta.value,
             specificite: selectedNames.value,
             type: Number(selectedTypeId.value),
-            services: services.value.filter(s => s.trim() !== '')
+            services: servicesPayload
         });
         userStore.prestaId = res.data.user.prestaId;
 

@@ -102,7 +102,14 @@ router.get("/show", async (req, res) => {
 router.get("/show/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const result = await pool.query("SELECT * FROM Utilisateur WHERE id_utilisateur=$1", [id]);
+    const result = await pool.query(`
+      SELECT u.*,
+      p.waitingforadmin 
+      FROM Utilisateur u
+      LEFT JOIN Prestataire p
+      ON p.id_utilisateur = u.id_utilisateur
+      WHERE u.id_utilisateur=$1`, 
+    [id]);
     if (result.rows.length === 0) return res.status(404).json({ message: "Utilisateur non trouvé" });
     res.json(result.rows[0]);
   } catch (err) {
