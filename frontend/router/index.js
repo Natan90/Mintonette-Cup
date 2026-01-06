@@ -15,7 +15,7 @@ import Gradin from "@/views/Gradin.vue";
 import MesBillets from "@/views/MesBillets.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from "@/stores/user";
 import Evenement from "@/views/Administrateur/Evenement.vue";
 import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
 import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
@@ -23,6 +23,7 @@ import Statistiques from "@/views/Administrateur/Statistiques.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import Terrain from "@/views/Terrain.vue";
 import ShowServices from "@/views/ShowServices.vue";
+import ZoneMap from "@/components/ZoneMap.vue";
 
 const routes = [
   {
@@ -163,8 +164,8 @@ const routes = [
       {
         path: "services/show/:id",
         name: "ShowServices",
-        component: ShowServices
-      }
+        component: ShowServices,
+      },
     ],
   },
   {

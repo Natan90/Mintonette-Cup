@@ -57,13 +57,32 @@
                 $t('adminPage.prestataire.messageRefus') }}
             <span class="modal-close" @click="closeMessageRefus">&times;</span>
         </p>
-        <div class="all_data">
+
+        <!-- Onglets -->
+        <div class="tabs-container">
+            <button 
+                :class="['tab-button', { active: activeTab === 'table' }]"
+                @click="activeTab = 'table'"
+            >
+                <span>📋</span> Liste des prestataires
+            </button>
+            <button 
+                :class="['tab-button', { active: activeTab === 'map' }]"
+                @click="activeTab = 'map'"
+            >
+                <span>🗺️</span> Carte des zones
+            </button>
+        </div>
+
+        <!-- Contenu selon l'onglet -->
+        <div v-show="activeTab === 'table'" class="all_data">
             <table class="adminTable">
                 <thead>
                     <tr>
                         <th>{{ $t('adminPage.prestataire.prestation') }}</th>
                         <th>{{ $t('user.prenom') }}</th>
                         <th>{{ $t('user.nom') }}</th>
+                        <th>Zone</th>
                         <th>{{ $t('adminPage.prestataire.statuts.nom') }}</th>
                         <th>{{ $t('adminPage.prestataire.action') }}</th>
                     </tr>
@@ -78,6 +97,14 @@
                         </td>
                         <td>
                             {{ item.nom_utilisateur }}
+                        </td>
+                        <td>
+                            <span v-if="item.id_zone" class="zone-badge assigned">
+                                Zone {{ item.id_zone }}
+                            </span>
+                            <span v-else class="zone-badge unassigned">
+                                Non attribuée
+                            </span>
                         </td>
                         <td :class="item.refused ? 'refused' : (item.waitingforadmin ? 'waiting' : 'notWaiting')">
                             {{ item.refused ? $t('adminPage.prestataire.statuts.refuse')
@@ -110,16 +137,21 @@
                 </tbody>
             </table>
         </div>
+
+        <div v-show="activeTab === 'map'" class="map-view">
+            <ZoneMap />
+        </div>
     </div>
 </template>
 
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from "vue-router";
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
+import ZoneMap from '@/components/ZoneMap.vue';
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
 
@@ -132,6 +164,7 @@ const navStore = useNavigationStore();
 const isDelete = ref(false);
 const deleting = ref(false);
 const refusing = ref(false);
+const activeTab = ref('table'); // 'table' ou 'map'
 
 const prestataires = ref([]);
 const selectedPresta = ref(null);
@@ -147,6 +180,14 @@ onMounted(async () => {
         if (!adminStore.typeTriPresta) adminStore.typeTriPresta = "az";
     } catch (err) {
         console.error(err);
+    }
+});
+
+// Recharger les prestataires quand on revient sur l'onglet tableau
+watch(activeTab, async (newTab) => {
+    if (newTab === 'table') {
+        console.log('🔄 Rechargement des prestataires...');
+        await getPrestataires();
     }
 });
 
@@ -220,7 +261,8 @@ async function getPrestataires() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/show");
         prestataires.value = res.data;
-
+        console.log("✅ Prestataires rechargés:", prestataires.value.length);
+        console.log("Avec zones:", prestataires.value.filter(p => p.id_zone).map(p => ({ nom: p.nom_prestataire, zone: p.id_zone })));
     } catch (err) {
         console.error(err);
     }
@@ -288,5 +330,66 @@ async function changePresta(newValue, idPresta) {
     padding: 30px;
     background-color: #f5f7fa;
     min-height: 100vh;
+}
+
+.tabs-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-button {
+    padding: 12px 24px;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-button span {
+    font-size: 18px;
+}
+
+.tab-button:hover {
+    color: #00167a;
+    background: #f3f4f6;
+}
+
+.tab-button.active {
+    color: #00167a;
+    border-bottom-color: #00167a;
+    background: #e0e7ff;
+}
+
+.map-view {
+    margin-top: 20px;
+}
+
+.zone-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.zone-badge.assigned {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.zone-badge.unassigned {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #f59e0b;
 }
 </style>
