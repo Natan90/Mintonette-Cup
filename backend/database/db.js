@@ -3,8 +3,8 @@ const path = require('path');
 // Load the backend .env explicitly to avoid depending on process.cwd()
 require("dotenv").config({ path: path.join(__dirname, '..', '.env') });
 
-
-// Coerce env values to expected types and log non-sensitive info for debugging
+ 
+// Coerce env values to expec ted types and log non-sensitive info for debugging
 const dbPassword = process.env.DB_PASSWORD === undefined ? undefined : String(process.env.DB_PASSWORD);
 console.log(`DB config: user=${process.env.DB_USER}, host=${process.env.DB_HOST}, database=${process.env.DB_NAME}, port=${process.env.DB_PORT}, passwordLength=${dbPassword? dbPassword.length : 0}`);
 
