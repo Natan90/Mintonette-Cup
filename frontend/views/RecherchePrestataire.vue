@@ -74,21 +74,19 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
-const { locale } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
 const type_prestataire = ref([]);
 const prestataires = ref([]);
 const filters = ref({
-  nom: route.query.nom || '',
-  category: route.query.category ? Number(route.query.category) : 0,
-  prixMin: route.query.prixMin || null,
-  prixMax: route.query.prixMax || null
+    nom: route.query.nom || '',
+    category: route.query.category ? Number(route.query.category) : 0,
+    prixMin: route.query.prixMin || null,
+    prixMax: route.query.prixMax || null
 });
 
 
@@ -101,17 +99,17 @@ onMounted(async () => {
         } else {
             await getValuesPrestataire();
         }
-  } catch (err) {
-    console.error(err);
-  }
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 function resetFilters() {
     filters.value = {
-    nom: '',
-    category: null,
-    prixMin: null,
-    prixMax: null
+        nom: '',
+        category: null,
+        prixMin: null,
+        prixMax: null
     }
     router.push({ path: "/", query: {} });
     getValuesPrestataire();
@@ -120,8 +118,7 @@ function resetFilters() {
 function goToSpecificPrestataire(idPresta) {
     router.push({
         name: "ShowPrestataire",
-        params: { 
-            lang: locale, 
+        params: {
             id: idPresta
         }
     });
@@ -150,12 +147,12 @@ async function getValuesTypePrestataire() {
 
 async function searchPrestataires() {
     router.push({
-        path: "/", 
+        path: "/",
         query: {
-        nom: filters.value.nom || undefined,
-        category: filters.value.category || undefined,
-        prixMin: filters.value.prixMin || undefined,
-        prixMax: filters.value.prixMax || undefined,
+            nom: filters.value.nom || undefined,
+            category: filters.value.category || undefined,
+            prixMin: filters.value.prixMin || undefined,
+            prixMax: filters.value.prixMax || undefined,
         },
     });
 

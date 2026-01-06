@@ -54,18 +54,11 @@
   <br /><br /> -->
     <section v-if="userStore.isConnected && !utilisateur.ispresta">
       <div class="presta_texte">
-        <h2>Envie de faire partie de l’aventure ?</h2>
-        <p>
-          Que vous proposiez une animation, une boutique ou de la restauration,<br>
-          <strong>devenez prestataire officiel de la Mintonette Cup !</strong>
-        </p>
-        <p>
-          Rejoignez l'équipe et apportez votre savoir-faire à l’événement :
-        </p>
+        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="presta_content"></div>
 
         <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
         class="btn_presta">
-          Je deviens prestataire
+          {{ $t('mintonetteCup.prestataire.boutonDevenir') }}
         </router-link>
       </div>
 
@@ -73,37 +66,21 @@
 
     <section v-if="userStore.isConnected && utilisateur.ispresta">
       <div class="presta_texte">
-        <h2>Bienvenue parmi nos prestataires !</h2>
-        <p>
-          Merci de contribuer à la Mintonette Cup avec votre savoir-faire.<br>
-          Vous pouvez gérer vos prestations et mettre à jour vos informations ci-dessous :
-        </p>
+        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="presta_content"></div>
 
-        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
+        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.prestaId } }"
         class="btn_presta">
-          Gérer mes prestations
+          {{ $t('mintonetteCup.prestataire.boutonGerer') }}
         </router-link>
       </div>
     </section>
 
     <section>
       <div class="teams_texte">
-
-        <h2>Plongez dans la compétition !</h2>
-
-        <p>
-          Plongez au cœur de la compétition et explorez les pays engagés dans la
-          Mintonette Cup.<br>
-          <strong>Compositions, photos et infos essentielles : tout est là !</strong>
-        </p>
-
-        <p>
-          Que vous soyez joueur, supporter ou simple curieux, découvrez tous les
-          pays du tournoi :
-        </p>
+        <div v-html="$t('mintonetteCup.competition.descri')" class="team_content"></div>
 
         <router-link to="/Equipes" class="btn_teams">
-          Voir les pays
+          {{ $t('mintonetteCup.competition.boutonMatchs') }}
         </router-link>
       </div>
     </section>
@@ -376,7 +353,7 @@ body::-webkit-scrollbar {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-.presta_texte h2 {
+.presta_content :deep(h2) {
   font-size: 2.6em;
   font-weight: 800;
   color: #0a1d42;
@@ -384,7 +361,7 @@ body::-webkit-scrollbar {
   letter-spacing: 1px;
 }
 
-.presta_texte p {
+.presta_content :deep(p) {
   font-size: 1.2em;
   color: #0a1d42;
   margin-bottom: 12px;
@@ -425,7 +402,7 @@ body::-webkit-scrollbar {
   /* box-shadow: 0 10px 30px rgba(0,0,0,0.15); */
 }
 
-.teams_texte h2 {
+.team_content :deep(h2) {
   font-size: 2.6em;
   font-weight: 800;
   color: white;
@@ -433,7 +410,7 @@ body::-webkit-scrollbar {
   letter-spacing: 1px;
 }
 
-.teams_texte p {
+.team_content :deep(p) {
   font-size: 1.2em;
   color: white;
   margin-bottom: 12px;

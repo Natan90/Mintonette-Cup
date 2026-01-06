@@ -1,74 +1,146 @@
 <template>
   <NavView />
+  <div class="back-arrow pointer" @click="goBack">
+    &#8592; Retour
+  </div>
+  <div class="main_container">
+    <div class="bloc_texte">
+      <h1 class="page_title">
+        {{ $t('adminPage.prestataire.service.title') }}
+      </h1>
+      <p v-html="$t('adminPage.prestataire.service.descri', { nom_prestataire: onePresta.nom_prestataire })"
+        class="backgroundBorderL page_subtitle"></p>
 
-  <section>
-    <div class="container">
-      <div class="container_cards">
-        <p class="title_presta">{{ onePresta.nom_prestataire }}</p>
-        <!-- <img src=""> -->
-        <div class="description" v-html="onePresta.descri_prestataire">
-            </div>
-            <p>Capacité : <span>{{ Number(onePresta.nb_participants) }}</span></p>
-            <p>Tarif : <span>{{ onePresta.tarif_prestataire }}</span></p>
-            <div class="contact_presta">
-                <p class="contact_title"><b>Contact</b></p>
-                <p>{{ onePresta.mail_prestataire }}</p>
-                <p>{{ onePresta.tel_prestataire }}</p>
-            </div>
-            <p>{{ onePresta.prenom_utilisateur }} {{ onePresta.nom_utilisateur }}
-                <span>
-                    <button>
-                        En savoir plus
-                    </button>
-                </span>
-            </p>
-      </div>
     </div>
-  </section>
 
-
-  <!-- <div class="routeurLink">
-    <router-link to="/" class="btnLink">Home</router-link>
-  </div>
-  <div class="Titre">
-    <h1>{{ $t("burgerStand.title") }}</h1>
-  </div>
-  <div class="route">
-    <div class="ConteneurTexte">
-      <p style="white-space: pre-line">
-        {{ $t("burgerStand.description") }}
+    <div class="textAndFiltre paddingSides">
+      <p class="nb_presta valid" v-if="services.filter(p => p.activate).length > 0">
+        {{$t('adminPage.prestataire.service.nb_services', {
+          count: services.filter(p => p.activate).length,
+          gotS: services.filter(p => p.activate).length > 1 ? 's' : ''
+        })}}
+      </p>
+      <p class="nb_presta toValidate" v-else>
+        {{ $t('adminPage.prestataire.service.nb_servicesVide') }}
+      </p>
+      <p>
+      <div class="filtre">
+        <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
+        <select id="triAlpha" v-model="adminStore.services">
+          <option value="az">{{ $t('adminPage.tri.az') }}</option>
+          <option value="za">{{ $t('adminPage.tri.za') }}</option>
+          <option value="activer">{{ $t('adminPage.tri.activeFirst') }}</option>
+          <option value="desactiver">{{ $t('adminPage.tri.inactiveFirst') }}</option>
+        </select>
+      </div>
       </p>
     </div>
-    <div class="ConteneurImageBurger">
-      <div class="imageBurger">
-        <img src="../images/burgerImage.png" alt="Burger" />
+    <div class="backgroundBorderL message valid" v-if="activate">
+      <p v-html="$t('adminPage.prestataire.service.messageActiver', { nomService: desactivateService?.nom_service })">
+      </p>
+      <span class="modal-close" @click="closeMessageActivate">&times;</span>
+    </div>
+
+    <div class="backgroundBorderL message refus" v-else-if="desactivate">
+      <p
+        v-html="$t('adminPage.prestataire.service.messageDesactiver', { nomService: desactivateService?.nom_service })">
+      </p>
+      <span class="modal-close" @click="closeMessageDesactivate">&times;</span>
+    </div>
+
+    <div class="backgroundBorderL message suppr" v-else-if="deleting">
+      <p v-html="$t('adminPage.prestataire.service.messageSuppr', { nomService: desactivateService?.nom_service })"></p>
+      <span class="modal-close" @click="closeMessageSuppr">&times;</span>
+    </div>
+
+    <section>
+      <div class="container">
+        <div class="container_cards">
+          <p class="title_presta">{{ onePresta.nom_prestataire }}</p>
+          <!-- <img src=""> -->
+          <div class="description" v-html="onePresta.descri_prestataire">
+          </div>
+          <p>Capacité : <span>{{ Number(onePresta.nb_participants) }}</span></p>
+          <p>Tarif : <span>{{ onePresta.tarif_prestataire }}</span></p>
+          <div class="contact_presta">
+            <p class="contact_title"><b>Contact</b></p>
+            <p>{{ onePresta.mail_prestataire }}</p>
+            <p>{{ onePresta.tel_prestataire }}</p>
+          </div>
+          <p>{{ onePresta.prenom_utilisateur }} {{ onePresta.nom_utilisateur }}
+          </p>
+        </div>
+        <div>
+          <div class="services_container">
+            <p>
+              <b>
+                {{ $t('prestataireInfo.services', { gotS: services.length > 1 ? 's' : '' }) }}
+              </b>
+            </p>
+            <ul>
+              <li v-for="(item, index) in servicesFiltres" :key="index" class="service_item"
+                style="padding-bottom: 10px;">
+                <div class="serviceWithButtons">
+                  {{ item.nom_service }}
+                  <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
+                  <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
+                  <span class="diff_button">
+                    <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
+                      Activer
+                    </button>
+                    <button class="btn_desactivate" v-else @click="desactivatingService(item)">
+                      Désactiver
+                    </button>
+                    <button class="btn_supprimer">
+                      Supprimer
+                    </button>
+                  </span>
+                </div>
+
+              </li>
+            </ul>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </section>
   </div>
-  <div class="SuiteTexte">
-    <h2>{{ $t("services.title") }}</h2>
-    <div class="cards-section">
-      <router-link v-for="(elt, index) in photo" :key="index" :to="elt.link" class="card">
-        <img :src="elt.chemin" :alt="`Photo ${index}`" />
-        <h3>{{ $t(`services.actions.${index}`) }}</h3>
-      </router-link>
-    </div>
-  </div>
-  <br> -->
+
   <Footer></Footer>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import axios from "axios";
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useNavigationStore } from "@/stores/navigation";
+import NavView from "@/components/NavView.vue";
+import Footer from "@/components/Footer.vue";
+import { useAdminStore } from "@/stores/admin";
 
 
 const route = useRoute();
+const router = useRouter();
+const navStore = useNavigationStore();
+const adminStore = useAdminStore();
 
-import NavView from "@/components/NavView.vue";
-import Footer from "@/components/Footer.vue";
+const desactivateService = ref(null);
 
+const activate = ref(false);
+const desactivate = ref(false);
+const deleting = ref(false);
+
+const closeMessageActivate = () => {
+  activate.value = false;
+};
+
+const closeMessageDesactivate = () => {
+  desactivate.value = false;
+};
+
+const closeMessageSuppr = () => {
+  deleting.value = false;
+};
 
 const onePresta = ref({
   nom_prestataire: "",
@@ -81,29 +153,95 @@ const onePresta = ref({
   nom_utilisateur: ""
 });
 
+const services = ref([]);
 const idPresta = route.params.id;
 
 onMounted(async () => {
-    try {
-        await getValuesPrestataire(idPresta);
-    } catch (err) {
-        console.error(err);
-    }
+  try {
+    await getValuesPrestataire(idPresta);
+    if (!adminStore.services) adminStore.services = "az";
+  } catch (err) {
+    console.error(err);
+  }
 });
 
+const servicesFiltres = computed(() => {
+  let liste = [...services.value];
+
+  // Tri alphabétique
+  liste.sort((a, b) => {
+    if (adminStore.services === "activer") {
+      if (a.activate && !b.activate) return -1;
+      if (!a.activate && b.activate) return 1;
+    }
+
+    if (adminStore.services === "desactiver") {
+      if (a.activate && !b.activate) return 1;
+      if (!a.activate && b.activate) return -1;
+    }
+
+
+    const nomA = a.nom_service?.toLowerCase() || "";
+    const nomB = b.nom_service?.toLowerCase() || "";
+
+    if (adminStore.services === "za")
+      return nomB.localeCompare(nomA);
+
+    return nomA.localeCompare(nomB);
+
+  });
+
+  return liste;
+});
+
+
+
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 
 //==========================
 //= Async functions presta =
 //==========================
 async function getValuesPrestataire() {
-    try {
-        const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
-        onePresta.value = res.data;
+  try {
+    const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
+    onePresta.value = res.data.prestataire;
 
-    } catch (err) {
-        console.error("Erreur lors de la récupération des données :", err);
+    services.value = res.data.services;
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
+}
+
+async function desactivatingService(service) {
+  desactivate.value = true;
+  actionsService(service);
+}
+
+async function activateService(service) {
+  activate.value = true;
+  actionsService(service);
+}
+
+async function actionsService(service) {
+  try {
+    desactivateService.value = service;
+
+    const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
+
+    const index = services.value.findIndex(s => s.id_service === service.id_service);
+    if (index !== -1) {
+      services.value[index].activate = !services.value[index].activate;
     }
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
 }
 
 </script>
@@ -112,134 +250,48 @@ async function getValuesPrestataire() {
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  gap: 20px;
+  margin-left: 250px;
+  gap: 200px;
 }
+
 .container_cards {
+  min-width: 600px;
   background-color: yellow;
 }
-/* body::-webkit-scrollbar {
-  display: none;
-}
 
-.Service {
-  display: flex;
-  text-align: center;
-  gap: 15px;
-  border: solid black 1px;
-}
-
-[id^="servicePrestataire"] {
-  padding: 25px;
-  font-size: 25px;
-}
-
-.link {
-  text-decoration: none;
-  color: black;
-}
-
-.Service :hover {
-  -webkit-transition: all 1s ease;
-  -webkit-transform: scale(1.05);
-}
-
-.servicePrestataire1,
-.servicePrestataire2 {
-  border: solid 1px black;
-  border-radius: 15px;
-}
-
-.SuiteTexte {
-  margin-left: 35px;
-}
-
-.routeurLink {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 15px;
-  border-radius: 20px;
-}
-
-.btnLink {
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  background: #f8e16c;
-  color: black;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btnLink:hover {
-  background: var(--primary-color);
-  color: white;
-}
-
-.Titre {
-  margin-left: 35px;
-}
-
-.route {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-.ConteneurTexte {
-  max-width: 800px;
-  margin-left: 35px;
-  line-height: 1.5;
-  text-align: justify;
-}
-
-.ConteneurImageBurger {
-  max-width: 500px;
-  align-items: end;
-}
-
-.imageBurger {
-  width: 350px;
-}
-
-.cards-section {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 30px;
-}
-
-.card {
+.bloc_texte {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  background: #f8e16c;
-  border-radius: 15px;
-  padding: 20px;
-  width: 250px;
-  transition: transform 0.3s, box-shadow 0.3s;
-  color: black;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 50px;
 }
 
-.card img {
-  width: 200px;
-  height: auto;
+.services_container {
+  padding: 10px 20px;
+  border: 3px solid black;
   border-radius: 10px;
-  margin-bottom: 15px;
+  background-color: aqua;
 }
 
-.card h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  text-align: center;
+.serviceWithButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.card:hover {
-  transform: translateY(-5px) scale(1.05);
-} */
+.paddingSides {
+  padding-left: 50px;
+  padding-right: 90px;
+}
+
+span[title="Actif"] {
+  color: green;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+span[title="Inactif"] {
+  color: red;
+  font-weight: bold;
+  margin-left: 10px;
+}
 </style>

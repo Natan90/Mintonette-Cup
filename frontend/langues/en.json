@@ -1,7 +1,17 @@
 {
   "mintonetteCup": {
     "title": "Mintonette Cup",
-    "descri": "Montpellier hosts the Mintonette Cup, the world volleyball tournament bringing together the best players!\n"
+    "descri": "Montpellier hosts the Mintonette Cup, the world volleyball tournament that brings together the best players!\n",
+    "prestataire": {
+      "devenir": "<h2>Want to be part of the adventure?</h2><br><p>Whether you offer entertainment, a shop, or catering services,<br><strong>become an official Mintonette Cup provider!</strong></p><p>Join the team and bring your expertise to the event:</p>",
+      "boutonDevenir": "Become a provider",
+      "estDeja": "<h2>Welcome to our providers!</h2><p>Thank you for contributing to the Mintonette Cup with your expertise.<br>You can manage your services and update your information below:</p>",
+      "boutonGerer": "Manage my services"
+    },
+    "competition": {
+      "descri": "<h2>Dive into the competition!</h2><p>Dive into the heart of the competition and explore the countries competing in the Mintonette Cup.<br><strong>Lineups, photos, and key information: it’s all here!</strong></p><p>Whether you're a player, a supporter, or just curious, discover all the tournament countries:</p>",
+      "boutonMatchs": "View countries"
+    }
   },
   "pageLog": {
     "mdpOublie": "Forgot password?",
@@ -114,7 +124,8 @@
       "nbParticipants": "Maximum Number of Participants",
       "tarif": "Price",
       "btnModifier": "Edit"
-    }
+    },
+    "services": "Service{gotS}"
   },
   "adminPage": {
     "evenement": {
@@ -141,12 +152,14 @@
       "presta": "Providers first",
       "nonPresta": "Providers last",
       "attente": "Waiting first",
-      "valide": "Validated first"
+      "valide": "Validated first",
+      "activeFirst": "Active services first",
+      "inactiveFirst": "Inactive services first"
     },
     "prestataire": {
       "title": "Competition Service Providers Management",
       "descri": "Welcome to the administration area dedicated to service providers involved in our volleyball events. \nHere, you can view all the services offered: catering, entertainment, shops, and services for teams and spectators. Pending requests must be approved before the provider can operate on the field or in event areas. \nThis management ensures an optimal and safe experience for all participants.",
-      "nb_presta": "There are {count} service provider(s) pending approval.",
+      "nb_presta": "There {verbe} {count} service provider{gotS} pending approval.",
       "nb_prestaVide": "All service providers are ready for the field and event areas: the competition can proceed smoothly!",
       "messageSuppr": "is no longer part of the competition’s service providers.",
       "messageRefus": "The provider has been declined and marked as inactive in the competition.",
@@ -161,13 +174,24 @@
         "nom": "Status",
         "valider": "Approved",
         "enAttente": "Pending approval",
+        "messageModif": "Account modification \n {changement}",
+        "messageAjout": "Account creation",
         "refuse": "Refuse"
+      },
+      "service": {
+        "title": "Discover this provider",
+        "descri": "Find here all the information about <span class='name_delete background_name'>{nom_prestataire}</span> : the services offered, pricing, number of participants accommodated, as well as contact details. This provider takes part in the event and puts their expertise at your disposal.",
+        "nb_services": "This provider offers {count} service{gotS}.",
+        "nb_servicesVide": "No services are available for this provider.",
+        "messageActiver": "The service <span class='name_delete'>{nomService}</span> has been activated.",
+        "messageDesactiver": "The service <span class='name_delete'>{nomService}</span> has been deactivated.",
+        "messageSuppr": "The service <span class='name_delete'>{nomService}</span> has been deleted."
       }
     },
     "user": {
       "title": "User Management",
       "descri": "Welcome to the user administration area. Here, you can view, manage, and delete registered accounts. This page ensures platform security and proper functionality by allowing only valid users to access its features. Deleting a user is permanent, so please double-check the information before confirming.",
-      "nb_users": "There are {count} user(s) in the system.",
+      "nb_users": "There are {count} user{gotS} in the system.",
       "nb_userVide": "No users at the moment.",
       "messageSuppr": "is no longer part of the users.",
       "modal": {

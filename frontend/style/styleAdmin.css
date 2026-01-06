@@ -95,7 +95,6 @@
 .adminTable td {
     padding: 14px;
     font-size: 15px;
-    color: #333;
     vertical-align: middle;
     word-wrap: break-word;
 }
@@ -106,7 +105,7 @@
 /* ============================= */
 
 .adminTable td button,
-.btn_modal {
+.btn_modal, .diff_button button {
     color: white;
     margin-left: 8px;
     padding: 6px 12px;
@@ -117,19 +116,19 @@
     transition: all 0.2s ease;
 }
 
-.btn_valider {
+.btn_valider, .btn_activate {
     background-color: #10b981;
 }
 
-.btn_valider:hover {
+.btn_valider:hover, .btn_activate:hover {
     background-color: #059669;
 }
 
-.btn_refuser {
+.btn_refuser, .btn_desactivate {
     background-color: #f59e0b;
 }
 
-.btn_refuser:hover {
+.btn_refuser:hover, .btn_desactivate:hover {
     background-color: #d97706;
 }
 
@@ -175,7 +174,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-right: 40px;
+    padding-right: 50px;
     align-items: center;
 }
 
@@ -389,4 +388,53 @@
     color: red;
     font-weight: bold;
     font-size: 1.2em;
+}
+
+.page_title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #1e3a8a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.page_subtitle {
+    color: #374151;
+    background: #e0f2fe;
+    border-left: 4px solid #3b82f6;
+}
+
+.nb_presta {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.toValidate {
+    color: #d97706;
+    background-color: #fef3c7;
+}
+
+.valid {
+    color: #059669;
+    background-color: #d1fae5;
+}
+
+.refused {
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+.waiting {
+    color: #d97706;
+    font-weight: 600;
+}
+
+.notWaiting {
+    color: #059669;
+    font-weight: 600;
 }

@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 
 export const useUserStore = defineStore("user", () => {
   const userId = ref(Number(localStorage.getItem("userId")) || null);
+  const prestaId = ref(Number(localStorage.getItem("prestaId")) || null);
   const isConnected = ref(localStorage.getItem("isConnected") === "true");
 
   function setUser(id) {
@@ -18,6 +19,7 @@ export const useUserStore = defineStore("user", () => {
 
   watch(userId, (v) => localStorage.setItem("userId", v));
   watch(isConnected, (v) => localStorage.setItem("isConnected", v));
+  watch(prestaId, (v) => localStorage.setItem("prestaId", v));
 
-  return { userId, isConnected, setUser, logout };
+  return { userId, isConnected, prestaId, setUser, logout };
 });

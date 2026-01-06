@@ -28,7 +28,9 @@
         </p>
         <div class="textAndFiltre">
             <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
-                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length }) }}
+                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length, 
+                    gotS : prestataires.filter(p => p.waitingforadmin).length > 1  ? 's' : '',
+                    verbe : prestataires.filter(p => p.waitingforadmin).length > 1  ? 'are' : 'is' }) }}
             </p>
             <p class="nb_presta valid" v-else>
                 {{ $t('adminPage.prestataire.nb_prestaVide') }}
@@ -80,12 +82,15 @@
                         <td :class="item.refused ? 'refused' : (item.waitingforadmin ? 'waiting' : 'notWaiting')">
                             {{ item.refused ? $t('adminPage.prestataire.statuts.refuse')
                                 : (item.waitingforadmin
-                                    ? $t('adminPage.prestataire.statuts.enAttente')
+                                    ? $t('adminPage.prestataire.statuts.enAttente', { changement : item.message_ajout 
+                                                                                                        ? $t('adminPage.prestataire.statuts.messageAjout') 
+                                                                                                        : $t('adminPage.prestataire.statuts.messageModif') 
+                                                                                                    })
                                     : $t('adminPage.prestataire.statuts.valider')) }}
                         </td>
                         <td>
                             <span v-if="!item.waitingforadmin">
-                                <button class="btn_info">
+                                <button class="btn_info" @click="goToSpecificPrestataire(item.id_prestataire)">
                                     {{ $t('adminPage.bouton.btn_voir') }}
                                 </button>
                                 <button class="btn_supprimer" @click="ModalShow(item)">
@@ -112,14 +117,17 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
 import { useAdminStore } from "@/stores/admin";
+import { useNavigationStore } from "@/stores/navigation";
 
 
+const route = useRoute();
 const router = useRouter();
 const adminStore = useAdminStore();
+const navStore = useNavigationStore();
 
 const isDelete = ref(false);
 const deleting = ref(false);
@@ -136,6 +144,7 @@ const id_prestataire = ref(0);
 onMounted(async () => {
     try {
         await getPrestataires();
+        if (!adminStore.typeTriPresta) adminStore.typeTriPresta = "az";
     } catch (err) {
         console.error(err);
     }
@@ -160,6 +169,18 @@ function ModalShow(presta) {
     isDelete.value = true;
 };
 
+function goToSpecificPrestataire(idPresta) {
+    navStore.previousRoute = route.fullPath;
+    router.push({
+        name: "ShowPrestataire",
+        params: {
+            id: idPresta
+        },
+        state: {
+            from: route.fullPath
+        }
+    });
+}
 
 const prestatairesFiltres = computed(() => {
   let liste = [...prestataires.value];
@@ -267,54 +288,5 @@ async function changePresta(newValue, idPresta) {
     padding: 30px;
     background-color: #f5f7fa;
     min-height: 100vh;
-}
-
-.page_title {
-    font-size: 32px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: #1e3a8a;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.page_subtitle {
-    color: #374151;
-    background: #e0f2fe;
-    border-left: 4px solid #3b82f6;
-}
-
-.nb_presta {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 6px;
-}
-
-.toValidate {
-    color: #d97706;
-    background-color: #fef3c7;
-}
-
-.valid {
-    color: #059669;
-    background-color: #d1fae5;
-}
-
-.refused {
-    color: #b91c1c;
-    font-weight: 600;
-}
-
-.waiting {
-    color: #d97706;
-    font-weight: 600;
-}
-
-.notWaiting {
-    color: #059669;
-    font-weight: 600;
 }
 </style>
