@@ -85,6 +85,9 @@
                   <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
                   <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
                   <span class="diff_button">
+                    <button class="btn_info" @click="voirService(item.id_service)">
+                      Voir
+                    </button>
                     <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
                       Activer
                     </button>
@@ -211,11 +214,18 @@ function goBack() {
   }
 }
 
+function voirService(idService) {
+  router.push({
+    name: "ShowServices",
+    params: { id: idService }
+  });
+}
+
 function goToEditPrestataire() {
   router.push({
     name: "EditPrestataire",
     params: { id: idPresta }
-  })
+  });
 }
 
 
