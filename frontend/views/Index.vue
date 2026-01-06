@@ -52,7 +52,7 @@
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
-    <section v-if="userStore.isConnected && !utilisateur.ispresta">
+    <section v-if="userStore.isConnected && !utilisateur.ispresta && !utilisateur.waitingforadmin">
       <div class="presta_texte">
         <div v-html="$t('mintonetteCup.prestataire.devenir')" class="presta_content"></div>
 
@@ -72,6 +72,12 @@
         class="btn_presta">
           {{ $t('mintonetteCup.prestataire.boutonGerer') }}
         </router-link>
+      </div>
+    </section>
+
+    <section v-if="userStore.isConnected && utilisateur.waitingforadmin">
+      <div class="presta_texte">
+        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="presta_content"></div>
       </div>
     </section>
 

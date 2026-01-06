@@ -6,7 +6,8 @@
       "devenir": "<h2>Want to be part of the adventure?</h2><br><p>Whether you offer entertainment, a shop, or catering services,<br><strong>become an official Mintonette Cup provider!</strong></p><p>Join the team and bring your expertise to the event:</p>",
       "boutonDevenir": "Become a provider",
       "estDeja": "<h2>Welcome to our providers!</h2><p>Thank you for contributing to the Mintonette Cup with your expertise.<br>You can manage your services and update your information below:</p>",
-      "boutonGerer": "Manage my services"
+      "boutonGerer": "Manage my services",
+      "enAttente": "<p>Your <strong>service provider request</strong> has been received.<br>It will be <strong>reviewed by an administrator</strong> and you will be <strong>notified as soon as it is approved</strong>.</p>"
     },
     "competition": {
       "descri": "<h2>Dive into the competition!</h2><p>Dive into the heart of the competition and explore the countries competing in the Mintonette Cup.<br><strong>Lineups, photos, and key information: it’s all here!</strong></p><p>Whether you're a player, a supporter, or just curious, discover all the tournament countries:</p>",

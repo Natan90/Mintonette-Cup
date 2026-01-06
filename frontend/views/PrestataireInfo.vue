@@ -310,8 +310,12 @@ const selectedTypeLabel = computed(() => {
 });
 
 function addServiceField() {
-    services.value.push('');
+    services.value.push({
+        nom_service: '',
+        activate: false
+    });
 }
+
 
 function removeServiceField(index) {
     services.value.splice(index, 1);
@@ -483,7 +487,7 @@ async function addPrestataire() {
             tel: tel_presta.value,
             specificite: selectedNames.value,
             type: Number(selectedTypeId.value),
-            services: services.value.filter(s => s.trim() !== '')
+            services: services.value.filter(s => s.nom_service && s.nom_service.trim() !== '')
         });
         userStore.prestaId = res.data.user.prestaId;
 
