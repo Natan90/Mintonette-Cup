@@ -1,7 +1,17 @@
 {
   "mintonetteCup": {
     "title": "Mintonette Cup",
-    "descri": "Montpellier hosts the Mintonette Cup, the world volleyball tournament bringing together the best players!\n"
+    "descri": "Montpellier hosts the Mintonette Cup, the world volleyball tournament that brings together the best players!\n",
+    "prestataire": {
+      "devenir": "<h2>Want to be part of the adventure?</h2><br><p>Whether you offer entertainment, a shop, or catering services,<br><strong>become an official Mintonette Cup provider!</strong></p><p>Join the team and bring your expertise to the event:</p>",
+      "boutonDevenir": "Become a provider",
+      "estDeja": "<h2>Welcome to our providers!</h2><p>Thank you for contributing to the Mintonette Cup with your expertise.<br>You can manage your services and update your information below:</p>",
+      "boutonGerer": "Manage my services"
+    },
+    "competition": {
+      "descri": "<h2>Dive into the competition!</h2><p>Dive into the heart of the competition and explore the countries competing in the Mintonette Cup.<br><strong>Lineups, photos, and key information: it’s all here!</strong></p><p>Whether you're a player, a supporter, or just curious, discover all the tournament countries:</p>",
+      "boutonMatchs": "View countries"
+    }
   },
   "pageLog": {
     "mdpOublie": "Forgot password?",
