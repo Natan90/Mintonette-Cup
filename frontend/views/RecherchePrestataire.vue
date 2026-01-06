@@ -52,6 +52,7 @@
                     </div>
                     <p>Capacité : <span>{{ Number(item.nb_participants) }}</span></p>
                     <p>Tarif : <span>{{ item.tarif_prestataire }}</span></p>
+                    <p>Nombre de services : <span>{{ item.nb_services }}</span></p>
                     <div class="contact_presta">
                         <p class="contact_title"><b>Contact</b></p>
                         <p>{{ item.mail_prestataire }}</p>
