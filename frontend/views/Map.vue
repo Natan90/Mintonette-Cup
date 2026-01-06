@@ -48,6 +48,10 @@ let providerStyle = null;
 let providerHoverStyle = null;
 let generalStyle = null;
 let generalHoverStyle = null;
+let restorationStyle = null;
+let restorationHoverStyle = null;
+let animationlStyle = null;
+let animationlHoverStyle = null;
 let standStyle;
 let standHoverStyle;
 let lastFeature = null;
@@ -1934,6 +1938,22 @@ onMounted(() => {
     stroke: new Stroke({ color: "#FF6600", width: 2 }),
     fill: new Fill({ color: "rgba(255,102,0,0.6)" }),
   });
+  restorationStyle = new Style({
+    stroke: new Stroke({ color: "#6d071a", width: 2 }),
+    fill: new Fill({ color: "rgba(124,21,41,0.7)" }),
+  });
+  restorationHoverStyle = new Style({
+    stroke: new Stroke({ color: "#8e273b", width: 2 }),
+    fill: new Fill({ color: "rgba(124,21,41,0.6)" }),
+  });
+  animationlStyle = new Style({
+    stroke: new Stroke({ color: "#5a189a", width: 2 }),
+    fill: new Fill({ color: "rgba(90, 24, 154, 0.7)" }),
+  });
+  animationlHoverStyle = new Style({
+    stroke: new Stroke({ color: "#9d4edd", width: 2 }),
+    fill: new Fill({ color: "rgba(157, 78, 221, 0.6)" }),
+  });
 
   featuresList.forEach((f) => {
     if (f.get("type") === "stand") f.setStyle(standStyle);
@@ -1965,13 +1985,24 @@ onMounted(() => {
     // Remet le style normal si on quitte une feature
     if (searchFeature !== lastFeature) {
       if (lastFeature) {
-        if (lastFeature.get("type") === "stand")
+        const lastZone = serviceLocation.value.find(
+          (z) => z.name === lastFeature.get("name")
+        );
+        if (lastFeature.get("type") === "stand") {
           lastFeature.setStyle(standStyle);
-        else if (lastFeature.get("type") === "service")
-          lastFeature.setStyle(providerStyle);
-        else if (lastFeature.get("type") === "generalZone")
+        } else if (lastFeature.get("type") === "service") {
+          if (lastZone && lastZone.type_prestataire === "Restauration") {
+            lastFeature.setStyle(restorationStyle);
+          } else if (lastZone && lastZone.type_prestataire === "Animation") {
+            lastFeature.setStyle(animationlStyle);
+          } else {
+            lastFeature.setStyle(providerStyle);
+          }
+        } else if (lastFeature.get("type") === "generalZone") {
           lastFeature.setStyle(generalStyle);
-        else lastFeature.setStyle(defaultStyle);
+        } else {
+          lastFeature.setStyle(defaultStyle);
+        }
       }
     }
 
@@ -2010,13 +2041,27 @@ onMounted(() => {
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
 
-      // Styles selon le type
+      // Styles selon le type du backgroud lab
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
         label.style.backgroundColor = "#000000";
       } else if (searchFeature.get("type") === "service") {
-        searchFeature.setStyle(providerHoverStyle);
-        label.style.backgroundColor = "#1F5E00";
+        const zone = serviceLocation.value.find((z) => z.name === name);
+        if (zone && zone.type_prestataire) {
+          if (zone.type_prestataire === "Restauration") {
+            searchFeature.setStyle(restorationHoverStyle);
+            label.style.backgroundColor = "#800020";
+          } else if (zone.type_prestataire === "Animation") {
+            searchFeature.setStyle(animationlHoverStyle);
+            label.style.backgroundColor = "#5a189a";
+          } else {
+            searchFeature.setStyle(providerHoverStyle);
+            label.style.backgroundColor = "#1F5E00";
+          }
+        } else {
+          searchFeature.setStyle(providerHoverStyle);
+          label.style.backgroundColor = "#1F5E00";
+        }
       } else if (searchFeature.get("type") === "generalZone") {
         searchFeature.setStyle(generalHoverStyle);
         label.style.backgroundColor = "#FF6600";
@@ -2189,10 +2234,29 @@ function changeMap(type, image = null, cote) {
   // Crée les polygones pour chaque zone
   const featuresList = features(zone);
   featuresList.forEach((f) => {
-    if (f.get("type") === "stand") f.setStyle(standStyle);
-    else if (f.get("type") === "service") f.setStyle(providerStyle);
-    else if (f.get("type") === "generalZone") f.setStyle(generalStyle);
-    else f.setStyle(defaultStyle);
+    if (f.get("type") === "stand") {
+      f.setStyle(standStyle);
+    } else if (f.get("type") === "service") {
+      const zoneName = f.get("name");
+      const serviceZone = serviceLocation.value.find(
+        (z) => z.name === zoneName
+      );
+      if (serviceZone && serviceZone.type_prestataire) {
+        if (serviceZone.type_prestataire === "Restauration") {
+          f.setStyle(restorationStyle);
+        } else if (serviceZone.type_prestataire === "Animation") {
+          f.setStyle(animationlStyle);
+        } else {
+          f.setStyle(providerStyle);
+        }
+      } else {
+        f.setStyle(providerStyle);
+      }
+    } else if (f.get("type") === "generalZone") {
+      f.setStyle(generalStyle);
+    } else {
+      f.setStyle(defaultStyle);
+    }
   });
 
   // Crée la couche vectorielle contenant les polygones
