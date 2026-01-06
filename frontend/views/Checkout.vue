@@ -301,7 +301,6 @@ async function processPayment() {
           numero_ligne: seat.numero_ligne,
           zone: seat.zone,
           est_reserve: true,
-          dans_panier: false,
           id_utilisateur: userStore.userId
         });
         console.log('Update response:', res && res.data ? res.data : res.status);

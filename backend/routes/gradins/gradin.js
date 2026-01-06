@@ -129,7 +129,6 @@ router.put("/update", async (req, res) => {
     numero_ligne,
     zone,
     est_reserve,
-    dans_panier,
     id_utilisateur,
   } = req.body;
 
@@ -139,17 +138,15 @@ router.put("/update", async (req, res) => {
       UPDATE Siege
       SET 
         est_reserve = $1,
-        dans_panier = $2,
-        id_utilisateur = COALESCE($7, id_utilisateur)
-      WHERE match_id = $6
-        AND numero_colonne = $3
-        AND numero_ligne = $4
-        AND zone = $5
+        id_utilisateur = COALESCE($6, id_utilisateur)
+      WHERE match_id = $5
+        AND numero_colonne = $2
+        AND numero_ligne = $3
+        AND zone = $4
       RETURNING *
       `,
       [
         est_reserve,
-        dans_panier,
         numero_colonne,
         numero_ligne,
         zone,

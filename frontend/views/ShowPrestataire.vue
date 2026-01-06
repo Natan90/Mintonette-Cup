@@ -24,8 +24,8 @@
             <span class="info_value">{{ oneService.nb_participants }}</span>
           </div>
         </div>
-        <button>
-          Réserver
+        <button @click="addService(oneService)">
+          S'inscrire
         </button>
       </div>
 
@@ -325,6 +325,26 @@ async function getOneService(service) {
     console.error(err);
   }
 }
+
+async function addService(service) {
+  if (!userStore.userId) {
+    console.error("Utilisateur non connecté !");
+    return;
+  }
+
+  try {
+    const res = await axios.post(`http://localhost:3000/panier/addService`, {
+      id_user: userStore.userId,
+      service_id: service.id_service,
+      quantite: 1
+    });
+
+    showService.value = false;
+  } catch (err) {
+    console.error("Erreur lors de l'ajout au panier :", err);
+  }
+}
+
 
 function updateDescription() {
   if (oneService.value?.titre_service?.[locale.value] || oneService.value?.descri_service?.[locale.value] || oneService.value?.besoin?.[locale.value]) {

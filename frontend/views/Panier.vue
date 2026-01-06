@@ -6,12 +6,15 @@
       <div v-if="panier.length === 0">Aucun article dans le panier</div>
       <div v-else>
         <div v-for="(item, index) in panier" :key="index" class="item">
-          <div>
-            {{ item.numero_colonne }}{{ item.numero_ligne }} (Zone
-            {{ item.zone }})
-          </div>
-          <div>{{ getPrice(item) }} €</div>
-        </div>
+  <div v-if="item.siege_colonne">
+    Siège : {{ item.siege_colonne }}{{ item.siege_ligne }} (Zone {{ item.siege_zone }})
+  </div>
+  <div v-else-if="item.nom_service">
+    Service : {{ item.nom_service }} <span style="color: red; font-weight: 400;">x{{ item.quantite_service }}</span>
+  </div>
+  <div style="color: red; font-weight: 700;">{{ getItemPrice(item) }} €</div>
+</div>
+
       </div>
     </div>
 
@@ -47,19 +50,27 @@ const fromZone = route.query.fromZone;
 const userStore = useUserStore();
 const panier = ref([]);
 
+
+function getItemPrice(item) {
+  if (item.siege_colonne) {
+    // prix siège selon la colonne
+    if (["I", "H", "G"].includes(item.siege_colonne)) return 25;
+    if (["F", "E", "D"].includes(item.siege_colonne)) return 18;
+    return 12;
+  } else if (item.nom_service) {
+    return (item.prix_unitaire_service || 0) * (item.quantite_service || 1);
+  }
+  return 0;
+}
+
 const total = computed(() => {
-  return panier.value.reduce((sum, seat) => sum + getPrice(seat), 0);
+  return panier.value.reduce((sum, item) => sum + getItemPrice(item), 0);
 });
 
-function getPrice(seat) {
-  if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
-  if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
-  return 12;
-}
 
 async function fetchPanier() {
   try {
-    const res = await axios.get("http://localhost:3000/gradin/panier/show");
+    const res = await axios.get(`http://localhost:3000/panier/show/${userStore.userId}`);
     panier.value = res.data;
   } catch (err) {
     console.error(err);
@@ -81,7 +92,6 @@ async function pay() {
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
       est_reserve: true,
-      dans_panier: false,
       id_utilisateur: userStore.userId,
     });
   }
@@ -103,7 +113,6 @@ async function reset() {
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
       est_reserve: false,
-      dans_panier: false,
     });
   }
 
