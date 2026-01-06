@@ -4,7 +4,7 @@
     "descri": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \n",
     "prestataire": {
       "devenir": "<h2>Envie de faire partie de l’aventure ?</h2><br> <p>Que vous proposiez une animation, une boutique ou de la restauration,<br><strong>devenez prestataire officiel de la Mintonette Cup !</strong></p><p>Rejoignez l'équipe et apportez votre savoir-faire à l’événement :</p>",
-      "boutonDevenir": "Je deviens prestataire", 
+      "boutonDevenir": "Je deviens prestataire",
       "estDeja": "<h2>Bienvenue parmi nos prestataires !</h2> <p>Merci de contribuer à la Mintonette Cup avec votre savoir-faire.<br> Vous pouvez gérer vos prestations et mettre à jour vos informations ci-dessous :</p>",
       "boutonGerer": "Gérer mes prestations",
       "enAttente": "<p>Votre <strong>demande de prestataire</strong> a été reçue.<br>Elle sera <strong>examinée par un administrateur</strong> et vous serez <strong>informé dès qu’elle sera validée</strong>.</p>"
@@ -69,10 +69,7 @@
   },
   "services": {
     "title": "Services du prestataire",
-    "actions": [
-      "Commander repas",
-      "Réserver table"
-    ]
+    "actions": ["Commander repas", "Réserver table"]
   },
   "homeLink": "Accueil",
   "modal": {
@@ -112,38 +109,38 @@
     "infoContact2": "Où nous trouver ?",
     "infoContact3": "Nous contacter"
   },
-  "prestataireInfo" : {
-    "titleAdd" : "Devenez membre à part de la Mintonette Cup !",
-    "titleEdit" : "Perfectionnez votre profil de prestataire Mintonette Cup !",
-    "role" : "Votre rôle dans l’événement : choisissez votre catégorie :",
-    "type" : "Quel est votre type",
-    "btnContinueInscription" : "Continuer l'inscription",
-    "btnRetour" : "Retour",
-    "formulaire" : {
-      "nom" : "Nom de la prestation ",
-      "descri" : "Description détaillée ",
-      "nbParticipants" : "Nombre maximum de participants ",
-      "tarif" : "Tarif ",
-      "btnModifier" : "Modifier"
+  "prestataireInfo": {
+    "titleAdd": "Devenez membre à part de la Mintonette Cup !",
+    "titleEdit": "Perfectionnez votre profil de prestataire Mintonette Cup !",
+    "role": "Votre rôle dans l’événement : choisissez votre catégorie :",
+    "type": "Quel est votre type",
+    "btnContinueInscription": "Continuer l'inscription",
+    "btnRetour": "Retour",
+    "formulaire": {
+      "nom": "Nom de la prestation ",
+      "descri": "Description détaillée ",
+      "nbParticipants": "Nombre maximum de participants ",
+      "tarif": "Tarif ",
+      "btnModifier": "Modifier"
     },
-    "services" : "Service{gotS}"
+    "services": "Service{gotS}"
   },
   "adminPage": {
-    "evenement" : {
-      "nom" : "Nom de l'évènement",
-      "couleur" : "Couleur du titre",
-      "police" : "Police du texte",
-      "imageCouverture" : "Image de couverture",
-      "typeImage" : "(JPG, JPEG, PNG ou WebP)",
-      "choisirFichier" : "Choisir une image",
-      "choisirAutreFichier" : "Choisir une autre image",
-      "descri" : "Description de l'évènement"
+    "evenement": {
+      "nom": "Nom de l'évènement",
+      "couleur": "Couleur du titre",
+      "police": "Police du texte",
+      "imageCouverture": "Image de couverture",
+      "typeImage": "(JPG, JPEG, PNG ou WebP)",
+      "choisirFichier": "Choisir une image",
+      "choisirAutreFichier": "Choisir une autre image",
+      "descri": "Description de l'évènement"
     },
     "bouton": {
       "btn_voir": "Aller voir",
-      "btn_suppr" : "Supprimer",
-      "btn_valid" : "Valider",
-      "btn_refuser" : "Refuser",
+      "btn_suppr": "Supprimer",
+      "btn_valid": "Valider",
+      "btn_refuser": "Refuser",
       "btn_retirer": "Retirer"
     },
     "tri": {
@@ -159,29 +156,29 @@
     },
     "prestataire": {
       "title": "Gestion des prestataires de la compétition",
-      "descri" : "Bienvenue dans l’espace d’administration dédié aux prestataires intervenant sur nos événements de volley. \n Ici, vous pouvez consulter toutes les prestations proposées : restauration, animations, boutiques et services pour les équipes et spectateurs.Les demandes en attente doivent être validées avant que le prestataire ne puisse intervenir sur le terrain ou dans les espaces événementiels. \n Cette gestion vous permet de garantir une expérience optimale et sécurisée pour tous les participants.",
-      "nb_presta" : "Il y a {count} prestataire{gotS} en attente de validation.",
-      "nb_prestaVide" : "Tous les prestataires sont prêts pour le terrain et les espaces événementiels : la compétition peut se dérouler en toute sérénité !",
-      "messageSuppr" : "ne fait désormais plus partie des prestataires de la compétition.",
+      "descri": "Bienvenue dans l’espace d’administration dédié aux prestataires intervenant sur nos événements de volley. \n Ici, vous pouvez consulter toutes les prestations proposées : restauration, animations, boutiques et services pour les équipes et spectateurs.Les demandes en attente doivent être validées avant que le prestataire ne puisse intervenir sur le terrain ou dans les espaces événementiels. \n Cette gestion vous permet de garantir une expérience optimale et sécurisée pour tous les participants.",
+      "nb_presta": "Il y a {count} prestataire{gotS} en attente de validation.",
+      "nb_prestaVide": "Tous les prestataires sont prêts pour le terrain et les espaces événementiels : la compétition peut se dérouler en toute sérénité !",
+      "messageSuppr": "ne fait désormais plus partie des prestataires de la compétition.",
       "messageRefus": "Le prestataire a été refusé et marqué comme inactif dans la compétition.",
-      "prestation" : "Prestation",
+      "prestation": "Prestation",
       "prestataire": "Prestataire",
-      "action" : "Actions",
-      "modal" : {
-        "confirmation" : "Êtes-vous sûr de vouloir supprimer le prestataire ",
-        "btn_confirmer" : "Confirmer"
+      "action": "Actions",
+      "modal": {
+        "confirmation": "Êtes-vous sûr de vouloir supprimer le prestataire ",
+        "btn_confirmer": "Confirmer"
       },
-      "statuts" : {
-        "nom" : "Statut",
-        "valider" : "Validé",
-        "enAttente" : "En attente de validation \n {changement}",
-        "messageModif" : "Modification du compte",
-        "messageAjout" : "Création du compte",
+      "statuts": {
+        "nom": "Statut",
+        "valider": "Validé",
+        "enAttente": "En attente de validation \n {changement}",
+        "messageModif": "Modification du compte",
+        "messageAjout": "Création du compte",
         "refuse": "Refuser"
       },
       "service": {
-        "title" : "Découvrez ce prestataire",
-        "descri" : "Retrouvez ici toutes les informations concernant <span class='name_delete background_name'>{nom_prestataire}</span> : ses services proposés, ses tarifs, le nombre de participants pris en charge ainsi que ses coordonnées. Ce prestataire participe à l’événement et met son expertise à votre disposition.",
+        "title": "Découvrez ce prestataire",
+        "descri": "Retrouvez ici toutes les informations concernant <span class='name_delete background_name'>{nom_prestataire}</span> : ses services proposés, ses tarifs, le nombre de participants pris en charge ainsi que ses coordonnées. Ce prestataire participe à l’événement et met son expertise à votre disposition.",
         "nb_services": "Ce prestataire propose {count} service{gotS}.",
         "nb_servicesVide": "Aucun service n'est disponible pour ce prestataire.",
         "messageActiver": "Le service <span class='name_delete'>{nomService}</span> a été activé.",
@@ -199,5 +196,11 @@
         "confirmation": "Êtes-vous sûr de vouloir supprimer l'utilisateur"
       }
     }
+  },
+  "gradin": {
+    "siegeDispo": "Siège diponible",
+    "siegeReserv": "Siège réservé",
+    "siegeproprio": "Siège acheté par vous",
+    "siegeSelec": "Siège sélectionné"
   }
 }
