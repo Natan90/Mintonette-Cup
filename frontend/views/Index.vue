@@ -53,11 +53,11 @@
   >
   <br /><br /> -->
     <section v-if="userStore.isConnected && !utilisateur.ispresta && !utilisateur.waitingforadmin">
-      <div class="presta_texte">
-        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="presta_content"></div>
+      <div class="teams_texte">
+        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="team_content"></div>
 
         <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
-        class="btn_presta">
+        class="btn_teams">
           {{ $t('mintonetteCup.prestataire.boutonDevenir') }}
         </router-link>
       </div>
@@ -65,22 +65,22 @@
     </section>
 
     <section v-if="userStore.isConnected && utilisateur.ispresta">
-      <div class="presta_texte">
-        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="presta_content"></div>
+      <div class="teams_texte">
+        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="team_content"></div>
 
         <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.prestaId } }"
-        class="btn_presta">
+        class="btn_teams">
           {{ $t('mintonetteCup.prestataire.boutonGerer') }}
         </router-link>
       </div>
     </section>
 
     <section v-if="userStore.isConnected && utilisateur.waitingforadmin">
-      <div class="presta_texte">
-        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="presta_content"></div>
+      <div class="teams_texte">
+        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="team_content"></div>
       </div>
     </section>
-
+<!-- 
     <section>
       <div class="teams_texte">
         <div v-html="$t('mintonetteCup.competition.descri')" class="team_content"></div>
@@ -89,7 +89,7 @@
           {{ $t('mintonetteCup.competition.boutonMatchs') }}
         </router-link>
       </div>
-    </section>
+    </section> -->
 
 
     <RecherchePrestataire></RecherchePrestataire>

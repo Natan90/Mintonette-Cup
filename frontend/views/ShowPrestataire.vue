@@ -104,6 +104,12 @@
         </div>
       </div>
     </section>
+
+    <div>
+      <button @click="goToEditPrestataire" v-if="userStore.isConnected && onePresta.ispresta && userStore.prestaId === idPresta">
+        Modifier mon profil
+      </button>
+    </div>
   </div>
 
   <Footer></Footer>
@@ -117,12 +123,14 @@ import { useNavigationStore } from "@/stores/navigation";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminStore } from "@/stores/admin";
+import { useUserStore } from "@/stores/user";
 
 
 const route = useRoute();
 const router = useRouter();
 const navStore = useNavigationStore();
 const adminStore = useAdminStore();
+const userStore = useUserStore();
 
 const desactivateService = ref(null);
 
@@ -155,6 +163,7 @@ const onePresta = ref({
 
 const services = ref([]);
 const idPresta = route.params.id;
+
 
 onMounted(async () => {
   try {
@@ -200,6 +209,13 @@ function goBack() {
   if (navStore.previousRoute) {
     router.push(navStore.previousRoute);
   }
+}
+
+function goToEditPrestataire() {
+  router.push({
+    name: "EditPrestataire",
+    params: { id: idPresta }
+  })
 }
 
 
