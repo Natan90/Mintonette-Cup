@@ -5,7 +5,8 @@
       <h1>Finaliser votre commande</h1>
 
       <div class="checkout-grid">
-        <!-- Résumé du panier -->
+
+
         <div class="order-summary">
           <h2>Résumé de commande</h2>
           <div class="summary-items">
@@ -21,11 +22,11 @@
           </div>
         </div>
 
-        <!-- Formulaire de paiement -->
+
+
         <div class="payment-form">
           <h2>Informations de paiement</h2>
           
-          <!-- Informations personnelles -->
           <div class="form-section">
             <h3>Vos coordonnées</h3>
             <div class="form-group">
@@ -69,7 +70,6 @@
             </div>
           </div>
 
-          <!-- Adresse de facturation -->
           <div class="form-section">
             <h3>Adresse de facturation</h3>
             <div class="form-group">
@@ -303,13 +303,10 @@ async function processPayment() {
       });
     }
 
-    // Nettoyer le localStorage
     localStorage.removeItem('selectedSeats');
 
-    // Afficher un message de succès
     alert('Paiement réussi ! Vos billets ont été confirmés.');
 
-    // Rediriger vers le profil pour voir les billets
     router.push('/utilisateur/profil');
   } catch (error) {
     console.error('Erreur lors du paiement:', error);
@@ -323,7 +320,8 @@ function goBackToCart() {
   router.back();
 }
 
-// Ajouter des places de test (développement)
+
+
 function addTestSeats() {
   const testSeats = [
     { numero_colonne: "A", numero_ligne: 1, zone: "Nord" },
@@ -336,8 +334,6 @@ function addTestSeats() {
 
 onMounted(() => {
   fetchPanier();
-  
-  // Pré-remplir les coordonnées de l'utilisateur s'il est connecté
   if (userStore.userId) {
     // Les données devraient être chargées depuis le userStore ou depuis l'API
     // Pour l'instant, c'est une placeholder
@@ -371,7 +367,6 @@ h1 {
   align-items: start;
 }
 
-/* Résumé de commande */
 .order-summary {
   background: white;
   padding: 30px;
@@ -428,7 +423,6 @@ h1 {
   font-size: 1.5em;
 }
 
-/* Formulaire */
 .payment-form {
   background: white;
   padding: 30px;
@@ -515,7 +509,8 @@ h1 {
   gap: 15px;
 }
 
-/* Boutons */
+
+
 .button-group {
   display: flex;
   gap: 15px;
@@ -574,7 +569,6 @@ h1 {
   box-shadow: 0 6px 16px rgba(108, 117, 125, 0.3);
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .checkout-grid {
     grid-template-columns: 1fr;
