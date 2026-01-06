@@ -1,63 +1,73 @@
 <template>
-    <form class="search_form" @submit.prevent="searchPrestataires" id="filtre_presta">
-        <p class="title_form">Prestataires – Coupe du Monde de Volley</p>
-        <p>
-            Retrouvez tous les prestataires officiels présents lors de la Coupe du Monde de volley
-            et utilisez les filtres pour organiser votre expérience autour des matchs.
-        </p>
 
-        <input v-model="filters.nom" type="text" placeholder="Rechercher par nom..." />
+    <section class="recherche">
 
-        <p>Catégorie de services</p>
-        <ul>
-            <li v-for="item in type_prestataire" :key="item.id_type_prestataire">
-                <label>
-                    <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
-                        v-model="filters.category" />
-                    {{ item.nom_type_prestataire }}
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" name="categorie" :value="0" v-model="filters.category" />
-                    Tous
-                </label>
-            </li>
-        </ul>
+        <span>Retrouvez les Prestataires de la Mintonette Cup 2026 !</span>
 
-        <p>Choisir par prix</p>
-        <div class="prix">
-            <input type="number" v-model="filters.prixMin" placeholder="Prix min" />
-            <input type="number" v-model="filters.prixMax" placeholder="Prix max" />
-        </div>
+        <section class="filtreEtListe">
 
-        <button type="submit">Rechercher</button>
-    </form>
-    <button type="submit" @click="resetFilters">Réinitilaiser</button>
+            <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
+                
+                <div class="blocFiltre">
+                    <span>Nom</span>
+                    <input v-model="filters.nom" type="text" placeholder="Nom de Prestataire" />
+                </div>
 
-    <div class="affichage_presta">
-        <div v-for="item in prestataires" :key="item.id_prestataire" class="card">
-            <p class="title_presta">{{ item.nom_prestataire }}</p>
-            <!-- <img src=""> -->
-            <div class="description" v-html="item.descri_prestataire">
-            </div>
-            <p>Capacité : <span>{{ Number(item.nb_participants) }}</span></p>
-            <p>Tarif : <span>{{ item.tarif_prestataire }}</span></p>
-            <div class="contact_presta">
-                <p class="contact_title"><b>Contact</b></p>
-                <p>{{ item.mail_prestataire }}</p>
-                <p>{{ item.tel_prestataire }}</p>
-            </div>
-            <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
-                <span>
-                    <button @click="goToSpecificPrestataire(item.id_prestataire)">
-                        En savoir plus
-                    </button>
-                </span>
-            </p>
-        </div>
-    </div>
+                <div class="blocFiltre">
+                <span>Catégorie de services</span>
+                        <div v-for="item in type_prestataire" :key="item.id_type_prestataire">
+                            <label class="pointer">
+                                <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
+                                    v-model="filters.category" />
+                                {{ item.nom_type_prestataire }}
+                            </label>
+                        </div>
 
+                        <label class="pointer">
+                            <input type="radio" name="categorie" :value="0" v-model="filters.category"/>
+                            Tous
+                        </label>
+                </div>
+
+                <div class="blocFiltre">
+                    <span>prix</span>
+                    <div class="prix">
+                        <input type="number" v-model="filters.prixMin" placeholder="Prix min" />
+                        <input type="number" v-model="filters.prixMax" placeholder="Prix max" />
+                    </div>
+                </div>
+
+                <div class="boutonsFiltre">
+                    <button class="pointer" type="submit">Rechercher</button>
+                    <button class="pointer" type="submit" @click="resetFilters">Réinitilaiser</button>
+                </div>
+            </form>
+
+
+            <section class="listePrestataire">
+                <div v-for="item in prestataires" :key="item.id_prestataire" class="card">
+                    <p class="title_presta">{{ item.nom_prestataire }}</p>
+                    <!-- <img src=""> -->
+                    <div class="description" v-html="item.descri_prestataire">
+                    </div>
+                    <p>Capacité : <span>{{ Number(item.nb_participants) }}</span></p>
+                    <p>Tarif : <span>{{ item.tarif_prestataire }}</span></p>
+                    <div class="contact_presta">
+                        <p class="contact_title"><b>Contact</b></p>
+                        <p>{{ item.mail_prestataire }}</p>
+                        <p>{{ item.tel_prestataire }}</p>
+                    </div>
+                    <p>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}
+                        <span>
+                            <button @click="goToSpecificPrestataire(item.id_prestataire)">
+                                En savoir plus
+                            </button>
+                        </span>
+                    </p>
+                </div>
+            </section>
+        </section>
+    </section>
 </template>
 
 
@@ -164,18 +174,124 @@ async function searchPrestataires() {
 
 <style scoped>
 
+.recherche{
+    background-color: var(--jaune-logo);
+    opacity: 0.9;
 
-.affichage_presta {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
+    flex-direction: column;
+    align-items: center;
 }
 
+.recherche > span{
+    font-size: 2.6em;
+    font-weight: 800;
+    color: #0a1d42;
+    padding-top: 60px;
+    margin: 50px 0;
+    letter-spacing: 1px;
+}
 
+.filtreEtListe{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 30px;
+}
+
+.filtrePrestataire{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+
+    padding: 15px calc(5px + 1%);
+    gap: 1.5em;
+
+    color: #0a1d42;
+    background-color: var(--jaune-logo);
+
+    margin-bottom: 20px;
+}
+
+.blocFiltre{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 3px;
+}
+
+.blocFiltre span{
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.blocFiltre input{
+    border:none;
+    border-radius: 10px;
+    padding: 4px;
+
+    max-width: 17em;
+}
 
 .prix {
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
 }
+
+.boutonsFiltre{
+    display: flex;
+    justify-content: space-around;
+}
+
+.boutonsFiltre{
+  font-size: 15px;
+  text-align: center;
+  align-items: baseline;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px;
+
+  border-radius: 0 0 10px 10px;
+}
+
+.boutonsFiltre button{
+
+  font-size: 16px;
+
+  font-weight: bolder;
+
+  color:#0a1d42;
+  background-color: var(--jaune-logo);
+  border: none;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.boutonsFiltre button:hover{
+    background-color: var(--jaune-logo);
+    color: black;
+    background-color: white;
+    opacity: 0.9;
+    transition: var(--transition-fast);
+}
+
+
+
+
+
+.listePrestataire {
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+
+    padding: 20px;
+
+    background-color: white;
+}
+
 </style>
