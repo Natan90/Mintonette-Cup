@@ -254,15 +254,10 @@ const prestatairesFiltres = computed(() => {
 
 
 
-//==========================
-//= Async functions presta =
-//==========================
 async function getPrestataires() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/show");
         prestataires.value = res.data;
-        console.log("✅ Prestataires rechargés:", prestataires.value.length);
-        console.log("Avec zones:", prestataires.value.filter(p => p.id_zone).map(p => ({ nom: p.nom_prestataire, zone: p.id_zone })));
     } catch (err) {
         console.error(err);
     }
