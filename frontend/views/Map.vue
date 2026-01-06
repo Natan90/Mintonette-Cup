@@ -1878,7 +1878,7 @@ async function fetchPresta(id) {
 }
 
 onMounted(() => {
-  for (let i = 0; i < 32; i++) {
+  for (let i = 0; i < prestataires.length; i++) {
     fetchPresta(i + 1);
   }
 });
@@ -2162,11 +2162,6 @@ function changeMap(type, image = null, cote) {
     zone = landLocations;
   } else if (type === "prestataires") {
     zone = serviceLocation.value.filter((z) => z.cote === cote);
-    console.log(`Filtrage côté "${cote}":`, zone.length, "zones trouvées");
-    console.log(
-      "IDs des zones:",
-      zone.map((z) => z.id_zone)
-    );
   } else if (type === "stand") {
     if (image === "/GradinNord.png") zone = NorthStand;
     else if (image === "/GradinEst.png") zone = EstStand;
