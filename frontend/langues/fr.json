@@ -1,7 +1,17 @@
 {
   "mintonetteCup": {
     "title": "Mintonette Cup",
-    "descri": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \n"
+    "descri": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \n",
+    "prestataire": {
+      "devenir": "<h2>Envie de faire partie de l’aventure ?</h2><br> <p>Que vous proposiez une animation, une boutique ou de la restauration,<br><strong>devenez prestataire officiel de la Mintonette Cup !</strong></p><p>Rejoignez l'équipe et apportez votre savoir-faire à l’événement :</p>",
+      "boutonDevenir": "Je deviens prestataire", 
+      "estDeja": "<h2>Bienvenue parmi nos prestataires !</h2> <p>Merci de contribuer à la Mintonette Cup avec votre savoir-faire.<br> Vous pouvez gérer vos prestations et mettre à jour vos informations ci-dessous :</p>",
+      "boutonGerer": "Gérer mes prestations"
+    },
+    "competition": {
+      "descri": "<h2>Plongez dans la compétition !</h2> <p>Plongez au cœur de la compétition et explorez les pays engagés dans la Mintonette Cup.<br> <strong>Compositions, photos et infos essentielles : tout est là !</strong></p><p>Que vous soyez joueur, supporter ou simple curieux, découvrez tous les pays du tournoi :</p>",
+      "boutonMatchs": "Voir les pays"
+    }
   },
   "pageLog": {
     "mdpOublie": "Mot de passe oublié ?",
