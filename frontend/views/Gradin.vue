@@ -27,7 +27,7 @@
           <img src="/AvailableSeat.svg" alt=""><p>{{ $t('gradin.siegeDispo')}}</p>
           <img src="/ReservedSeat.svg" alt=""><p>{{ $t('gradin.siegeReserv')}} </p>
           <img src="/OwnedSeat.svg" alt=""><p>{{ $t('gradin.siegeproprio')}} </p>
-          <img src="/SelectionnedSeat.svg" alt=""><p>{{ $t('gradin.siegeSelec')}}</p>
+          <img src="/SelectionnedSeat.svg" alt=""><p>{{ $t('gradin.siegeDispo')}}</p>
         </div>
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
