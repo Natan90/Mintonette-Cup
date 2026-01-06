@@ -58,7 +58,6 @@
             <span class="modal-close" @click="closeMessageRefus">&times;</span>
         </p>
 
-        <!-- Onglets -->
         <div class="tabs-container">
             <button 
                 :class="['tab-button', { active: activeTab === 'table' }]"
@@ -74,7 +73,6 @@
             </button>
         </div>
 
-        <!-- Contenu selon l'onglet -->
         <div v-show="activeTab === 'table'" class="all_data">
             <table class="adminTable">
                 <thead>
@@ -183,10 +181,8 @@ onMounted(async () => {
     }
 });
 
-// Recharger les prestataires quand on revient sur l'onglet tableau
 watch(activeTab, async (newTab) => {
     if (newTab === 'table') {
-        console.log('🔄 Rechargement des prestataires...');
         await getPrestataires();
     }
 });
