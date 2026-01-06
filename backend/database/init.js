@@ -74,7 +74,8 @@ const pool = require("./db");
     sexe_utilisateur VARCHAR(50),
     photo_profil_utilisateur BYTEA,
     date_creation_utilisateur TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ispresta BOOLEAN DEFAULT FALSE
+    ispresta BOOLEAN DEFAULT FALSE,
+    role_utilisateur VARCHAR(50) DEFAULT 'user'
   );
 
   CREATE TABLE IF NOT EXISTS Type_utilisateur(
@@ -141,6 +142,7 @@ const pool = require("./db");
     refused BOOLEAN DEFAULT FALSE,
     message_ajout BOOLEAN,
     specificite VARCHAR(100),
+    id_zone INTEGER,
     id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
     type_prestataire_id INTEGER NOT NULL REFERENCES Type_prestataire(id_type_prestataire),
     type_animation_id INTEGER REFERENCES Type_animation(id_type_animation),
@@ -152,6 +154,8 @@ const pool = require("./db");
     CREATE TABLE IF NOT EXISTS Services(
       id_service SERIAL PRIMARY KEY,
       nom_service VARCHAR(100),
+      titre_service JSONB,
+      descri_service JSONB,
       visible_public BOOLEAN DEFAULT TRUE,
       activate BOOLEAN,
       prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
@@ -522,20 +526,178 @@ const pool = require("./db");
     await pool.query(insertPrestataire);
 
     const insertServices = `
-    INSERT INTO Services (nom_service, activate, prestataire_id) VALUES
-      ('Stand de burgers sur place', true, 1),
-      ('Service de boissons fraîches', false, 1),
-      ('Restauration rapide événementielle', false, 1),
-      ('Snacking sucré et salé', true, 1),
-      ('Animation musicale sur scène', false, 2),
-      ('Animation micro et public', true, 2),
-      ('Jeux et animations interactives', false, 2),
-      ('Animation pour enfants sur place', true, 2),
-      ('Stand de vente de produits sportifs', false, 3),
-      ('Personnalisation de maillots sur place', false, 3),
-      ('Vente d’accessoires sportifs', false, 3),
-      ('Boutique éphémère événementielle', true, 3);
-    `;
+      INSERT INTO Services 
+      (nom_service, titre_service, descri_service, activate, prestataire_id)
+      VALUES
+      (
+        'Stand de burgers sur place',
+        '{
+          "fr": { "texte": "Stand de <b>burgers gourmands</b>" },
+          "en": { "texte": "<b>Gourmet burger stand</b>" }
+        }',
+        '{
+          "fr": { "texte": "Profitez d’un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>." },
+          "en": { "texte": "Enjoy a <b>freshly prepared burger stand</b> with quality ingredients.<br>An ideal solution for <b>quick and friendly catering</b>." }
+        }',
+        true,
+        1
+      ),
+
+      (
+        'Service de boissons fraîches',
+        '{
+          "fr": { "texte": "Service de <b>boissons fraîches</b>" },
+          "en": { "texte": "<b>Cold drinks</b> service" }
+        }',
+        '{
+          "fr": { "texte": "Un <b>service de boissons fraîches</b> pour désaltérer vos invités tout au long de la journée." },
+          "en": { "texte": "A <b>cold drinks service</b> to keep your guests refreshed all day long." }
+        }',
+        false,
+        1
+      ),
+
+      (
+        'Restauration rapide événementielle',
+        '{
+          "fr": { "texte": "<b>Restauration rapide</b> événementielle" },
+          "en": { "texte": "Event <b>fast food catering</b>" }
+        }',
+        '{
+          "fr": { "texte": "Une solution de <b>restauration rapide pensée pour l’événementiel</b>, efficace même lors de fortes affluences." },
+          "en": { "texte": "A <b>fast food catering solution designed for events</b>, even during high attendance." }
+        }',
+        false,
+        1
+      ),
+
+      (
+        'Snacking sucré et salé',
+        '{
+          "fr": { "texte": "Snacking <b>sucré & salé</b>" },
+          "en": { "texte": "<b>Sweet & savory</b> snacking" }
+        }',
+        '{
+          "fr": { "texte": "Un large choix de <b>snacks sucrés et salés</b> pour satisfaire toutes les envies." },
+          "en": { "texte": "A wide selection of <b>sweet and savory snacks</b> for all tastes." }
+        }',
+        true,
+        1
+      ),
+
+      (
+        'Animation musicale sur scène',
+        '{
+          "fr": { "texte": "<b>Animation musicale</b> sur scène" },
+          "en": { "texte": "<b>Live music</b> performance" }
+        }',
+        '{
+          "fr": { "texte": "Une <b>animation musicale live</b> pour créer une ambiance festive et dynamique." },
+          "en": { "texte": "A <b>live music performance</b> to create a festive and dynamic atmosphere." }
+        }',
+        false,
+        2
+      ),
+
+      (
+        'Animation micro et public',
+        '{
+          "fr": { "texte": "Animation <b>micro & public</b>" },
+          "en": { "texte": "<b>Host & audience</b> animation" }
+        }',
+        '{
+          "fr": { "texte": "Un animateur pour <b>interagir avec le public</b> et rythmer votre événement." },
+          "en": { "texte": "A host to <b>interact with the audience</b> and energize your event." }
+        }',
+        true,
+        2
+      ),
+
+      (
+        'Jeux et animations interactives',
+        '{
+          "fr": { "texte": "Jeux & <b>animations interactives</b>" },
+          "en": { "texte": "<b>Interactive games</b> & activities" }
+        }',
+        '{
+          "fr": { "texte": "Des <b>animations participatives</b> pour engager le public et créer des moments mémorables." },
+          "en": { "texte": "Interactive activities to engage the audience and create <b>memorable moments</b>." }
+        }',
+        false,
+        2
+      ),
+
+      (
+        'Animation pour enfants sur place',
+        '{
+          "fr": { "texte": "Animation <b>pour enfants</b>" },
+          "en": { "texte": "<b>Children’s</b> entertainment" }
+        }',
+        '{
+          "fr": { "texte": "Des animations ludiques et encadrées pour offrir aux enfants un <b>moment sûr et amusant</b>." },
+          "en": { "texte": "Fun and supervised activities to offer children a <b>safe and enjoyable experience</b>." }
+        }',
+        true,
+        2
+      ),
+
+      (
+        'Stand de vente de produits sportifs',
+        '{
+          "fr": { "texte": "Stand de <b>produits sportifs</b>" },
+          "en": { "texte": "<b>Sports products</b> stand" }
+        }',
+        '{
+          "fr": { "texte": "Un stand dédié à la <b>vente de produits sportifs</b> directement sur votre événement." },
+          "en": { "texte": "A stand dedicated to the <b>sale of sports products</b> at your event." }
+        }',
+        false,
+        3
+      ),
+
+      (
+        'Personnalisation de maillots sur place',
+        '{
+          "fr": { "texte": "<b>Personnalisation</b> de maillots" },
+          "en": { "texte": "<b>Jersey customization</b>" }
+        }',
+        '{
+          "fr": { "texte": "Un service de <b>personnalisation en direct</b> pour repartir avec un maillot unique." },
+          "en": { "texte": "A <b>live customization service</b> to leave with a unique jersey." }
+        }',
+        false,
+        3
+      ),
+
+      (
+        'Vente d’accessoires sportifs',
+        '{
+          "fr": { "texte": "Vente d’<b>accessoires sportifs</b>" },
+          "en": { "texte": "<b>Sports accessories</b> sales" }
+        }',
+        '{
+          "fr": { "texte": "Une sélection d’<b>accessoires sportifs</b> pour compléter votre équipement." },
+          "en": { "texte": "A selection of <b>sports accessories</b> to complete your equipment." }
+        }',
+        false,
+        3
+      ),
+
+      (
+        'Boutique éphémère événementielle',
+        '{
+          "fr": { "texte": "<b>Boutique éphémère</b>" },
+          "en": { "texte": "<b>Pop-up store</b>" }
+        }',
+        '{
+          "fr": { "texte": "Une <b>boutique temporaire</b> pour offrir une expérience d’achat immersive lors de votre événement." },
+          "en": { "texte": "A <b>temporary pop-up store</b> offering an immersive shopping experience." }
+        }',
+        true,
+        3
+      );
+      `;
+
     await pool.query(insertServices);
 
     const insertPays = `

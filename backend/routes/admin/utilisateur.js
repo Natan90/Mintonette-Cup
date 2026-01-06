@@ -195,6 +195,67 @@ router.patch("/changePresta/:id", async (req, res) => {
 
 /**
  * @swagger
+ * /admin/utilisateur/setRole/{id}:
+ *   patch:
+ *     summary: Définit le rôle d'un utilisateur (ex: admin)
+ *     tags: [Administrateur]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de l'utilisateur
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - role
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 example: admin
+ *     responses:
+ *       200:
+ *         description: Rôle mis à jour
+ *       400:
+ *         description: Requête invalide
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+
+router.patch("/setRole/:id", async (req, res) => {
+  const idUser = req.params.id;
+  const { role } = req.body;
+
+  if (!idUser || !role) return res.status(400).json({ error: "Paramètres manquants" });
+
+  try {
+    const result = await pool.query(
+      `UPDATE Utilisateur
+       SET role_utilisateur = $1
+       WHERE id_utilisateur = $2
+       RETURNING *`,
+      [role, idUser]
+    );
+
+    if (result.rows.length === 0)
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+
+    res.status(200).json({ message: `Rôle mis à jour`, utilisateur: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+/**
+ * @swagger
  * /admin/utilisateur/delete/{id}:
  *   delete:
  *     summary: Supprime un utilisateur par son ID

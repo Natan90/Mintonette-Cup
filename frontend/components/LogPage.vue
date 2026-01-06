@@ -248,6 +248,10 @@ async function getValuesConnexion() {
             mdp: mdp_utilisateur_connexion.value,
         });
         userStore.setUser(res.data.user.id);
+        // store role if provided
+        if (res.data.user.role) {
+            userStore.setRole(res.data.user.role);
+        }
         userId.value = userStore.userId;
         message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
         connexion.value = true;
@@ -283,6 +287,7 @@ async function getValuesInscription() {
         });
         if (res.data && res.data.user) {
             userStore.setUser(res.data.user.id);
+            userStore.setRole(res.data.user.role || 'user');
             message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
             inscription.value = true;
         } else {

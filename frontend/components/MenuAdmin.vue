@@ -1,5 +1,5 @@
 <template>
-  <div class="barre_menu">
+  <div v-if="isAdmin" class="barre_menu">
     <router-link v-for="(item, index) in menu" :key="index" :to="{ name: item.linkName, params: { lang: locale } }">
       {{ item.name }}
     </router-link>
@@ -7,12 +7,13 @@
 </template>
 
 
-
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useUserStore } from '@/stores/user';
 
 const { locale } = useI18n();
+const userStore = useUserStore();
 
 const menu = ref([
   { name: "Évènement", linkName: "Evenement" },
@@ -20,6 +21,8 @@ const menu = ref([
   { name: "Prestataire", linkName: "Prestataires" },
   { name: "Statistiques", linkName: "Statistiques" }
 ]);
+
+const isAdmin = computed(() => userStore.role === 'admin');
 
 </script>
 

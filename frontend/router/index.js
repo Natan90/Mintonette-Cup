@@ -12,14 +12,17 @@ import PrestataireInfo from "@/views/PrestataireInfo.vue";
 import Panier from "@/views/Panier.vue";
 import Checkout from "@/views/Checkout.vue";
 import Gradin from "@/views/Gradin.vue";
+import MesBillets from "@/views/MesBillets.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
+import { useUserStore } from '@/stores/user';
 import Evenement from "@/views/Administrateur/Evenement.vue";
 import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
 import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
 import Statistiques from "@/views/Administrateur/Statistiques.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import Terrain from "@/views/Terrain.vue";
+import ShowServices from "@/views/ShowServices.vue";
 
 const routes = [
   {
@@ -115,6 +118,11 @@ const routes = [
             props: true,
           },
           {
+            path: "billets",
+            name: "MesBillets",
+            component: MesBillets,
+          },
+          {
             path: "profil/modifier",
             name: "ModifyAccount",
             component: ModifyAccount,
@@ -152,6 +160,11 @@ const routes = [
         name: "Checkout",
         component: Checkout,
       },
+      {
+        path: "services/show/:id",
+        name: "ShowServices",
+        component: ShowServices
+      }
     ],
   },
   {
@@ -172,6 +185,17 @@ const router = createRouter({
     }
     return { top: 0 };
   },
+});
+
+// Simple navigation guard : empêche l'accès aux routes /admin si l'utilisateur n'est pas admin
+router.beforeEach((to, from, next) => {
+  if (to.path.includes('/admin')) {
+    const userStore = useUserStore();
+    if (userStore.role !== 'admin') {
+      return next({ name: 'Home' });
+    }
+  }
+  next();
 });
 
 export default router;
