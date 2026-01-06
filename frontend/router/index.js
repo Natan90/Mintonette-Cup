@@ -21,6 +21,7 @@ import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
 import Statistiques from "@/views/Administrateur/Statistiques.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import Terrain from "@/views/Terrain.vue";
+import ShowServices from "@/views/ShowServices.vue";
 
 const routes = [
   {
@@ -158,6 +159,11 @@ const routes = [
         name: "Checkout",
         component: Checkout,
       },
+      {
+        path: "services/show/:id",
+        name: "ShowServices",
+        component: ShowServices
+      }
     ],
   },
   {
