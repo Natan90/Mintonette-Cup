@@ -758,7 +758,6 @@ const serviceLocation = ref([
       [192.2309131462069, 818.0352200689243],
       [236.429157771458, 881.2491765037553],
     ],
-    url: "../PrestatairePublic",
   },
   {
     id_zone: 2,
@@ -801,7 +800,6 @@ const serviceLocation = ref([
       [925.4181245913594, 810.4900845078682],
       [938.017278081694, 813.3549615037266],
     ],
-    url: "../Presta2",
   },
   {
     id_zone: 3,
@@ -842,7 +840,6 @@ const serviceLocation = ref([
       [1090.7103756091801, 788.7376897102777],
       [1071.5517918290284, 787.5010493297331],
     ],
-    url: "../Presta3",
   },
   {
     id_zone: 4,
@@ -893,7 +890,6 @@ const serviceLocation = ref([
       [1502.2957875621248, 785.756895366039],
       [1478.9744570365215, 785.3943024419352],
     ],
-    url: "../Presta4",
   },
   {
     id_zone: 5,
@@ -921,7 +917,6 @@ const serviceLocation = ref([
       [346.83852487493795, 1088.2077480621358],
       [355.37995618413174, 1087.6228543690916],
     ],
-    url: "../Presta4",
   },
   {
     id_zone: 6,
@@ -954,7 +949,6 @@ const serviceLocation = ref([
       [952.8491853872529, 843.1765913787954],
       [897.2330945740439, 841.6614699027841],
     ],
-    url: "../Presta6",
   },
   {
     id_zone: 7,
@@ -982,7 +976,6 @@ const serviceLocation = ref([
       [1114.9504745286486, 880.6992410765807],
       [1115.3086360192272, 839.2040625731644],
     ],
-    url: "../Presta7",
   },
   {
     id_zone: 8,
@@ -1020,7 +1013,6 @@ const serviceLocation = ref([
       [1556.7573111709407, 854.0070078528369],
       [1554.4355986560506, 840.0166484032214],
     ],
-    url: "../Presta8",
   },
   {
     id_zone: 9,
@@ -1050,7 +1042,6 @@ const serviceLocation = ref([
       [561.3214637630601, 1027.3604417341144],
       [558.5921502241332, 1088.4957999996634],
     ],
-    url: "../Presta9",
   },
   {
     id_zone: 10,
@@ -1069,7 +1060,6 @@ const serviceLocation = ref([
       [960.3051273430693, 1145.2487568623508],
       [951.2630334703656, 1029.1025783920554],
     ],
-    url: "../Presta10",
   },
   {
     id_zone: 11,
@@ -1103,7 +1093,6 @@ const serviceLocation = ref([
       [1092.1616693233736, 1088.5045410080622],
       [1089.8633147499086, 1029.320969487104],
     ],
-    url: "../Presta11",
   },
   {
     id_zone: 12,
@@ -1132,7 +1121,6 @@ const serviceLocation = ref([
       [1465.3663906238544, 1066.8552118274683],
       [1462.0849199483368, 1051.6753016676641],
     ],
-    url: "../Presta12",
   },
   {
     id_zone: 13,
@@ -1165,7 +1153,6 @@ const serviceLocation = ref([
       [628.2276679811099, 1248.2858581099376],
       [511.7771491766284, 1246.63763591478],
     ],
-    url: "../Presta13",
   },
   {
     id_zone: 15,
@@ -1202,7 +1189,6 @@ const serviceLocation = ref([
       [1077.5230631354711, 1248.1950702509062],
       [1076.6453257130363, 1173.5770677593334],
     ],
-    url: "../Presta15",
   },
   {
     id_zone: 16,
@@ -1236,7 +1222,6 @@ const serviceLocation = ref([
       [1393.0713592956479, 1249.030180707957],
       [1391.8506561706479, 1219.9714961864918],
     ],
-    url: "../Presta16",
   },
   {
     id_zone: 14,
@@ -1266,7 +1251,6 @@ const serviceLocation = ref([
       [934.1708694218378, 1249.080361735218],
       [770.7138256604105, 1246.4649902448489],
     ],
-    url: "../Presta14",
   },
   {
     id_zone: 17,
@@ -1311,7 +1295,6 @@ const serviceLocation = ref([
       [151.8140185336192, 636.1872516544745],
       [150.1851648875062, 612.5567138118583],
     ],
-    url: "../Presta17",
   },
   {
     id_zone: 18,
@@ -1349,7 +1332,6 @@ const serviceLocation = ref([
       [732.759156630388, 613.2249252107952],
       [581.5535091729033, 610.8681879882264],
     ],
-    url: "../Presta18",
   },
   {
     id_zone: 19,
@@ -1392,7 +1374,6 @@ const serviceLocation = ref([
       [1161.2660409053804, 614.8435131200978],
       [1067.0784072556935, 615.3375688589288],
     ],
-    url: "../Presta19",
   },
   {
     id_zone: 20,
@@ -1432,7 +1413,6 @@ const serviceLocation = ref([
       [1593.8162619534123, 615.2016807182479],
       [1513.3925666883354, 613.190676557165],
     ],
-    url: "../Presta20",
   },
   {
     id_zone: 21,
@@ -1461,7 +1441,6 @@ const serviceLocation = ref([
       [447.1631362358909, 882.9296752333529],
       [284.3710912358909, 881.3640465253576],
     ],
-    url: "../Presta21",
   },
   {
     id_zone: 22,
@@ -1493,7 +1472,6 @@ const serviceLocation = ref([
       [882.4641380231283, 880.4036073911882],
       [661.6485815828293, 881.4967082964886],
     ],
-    url: "../Presta22",
   },
   {
     id_zone: 23,
@@ -1530,7 +1508,6 @@ const serviceLocation = ref([
       [1105.7399522764947, 884.253012529402],
       [1106.4614692566583, 841.3139598759319],
     ],
-    url: "../Presta23",
   },
   {
     id_zone: 24,
@@ -1565,7 +1542,6 @@ const serviceLocation = ref([
       [1536.6530818875576, 851.3479686353049],
       [1533.0864718828093, 837.2995131601178],
     ],
-    url: "../Presta24",
   },
   {
     id_zone: 25,
@@ -1604,7 +1580,6 @@ const serviceLocation = ref([
       [641.2260478697501, 1030.0557038104344],
       [595.9319079321108, 1030.9762214964721],
     ],
-    url: "../Presta25",
   },
   {
     id_zone: 26,
@@ -1647,7 +1622,6 @@ const serviceLocation = ref([
       [863.7054188164748, 1087.7602635873534],
       [714.7052596446629, 1087.27060496777],
     ],
-    url: "../Presta26",
   },
   {
     id_zone: 27,
@@ -1683,7 +1657,6 @@ const serviceLocation = ref([
       [1085.4073737185809, 1039.5299848845166],
       [1082.926909375865, 1029.10301796032],
     ],
-    url: "../Presta27",
   },
   {
     id_zone: 28,
@@ -1730,7 +1703,6 @@ const serviceLocation = ref([
       [1377.6996346353862, 1035.6923105942926],
       [1392.1048095479796, 1029.0257516363013],
     ],
-    url: "../Presta28",
   },
   {
     id_zone: 29,
@@ -1766,7 +1738,6 @@ const serviceLocation = ref([
       [608.772053622035, 1247.8399205647434],
       [604.012496663684, 1252.0993437001844],
     ],
-    url: "../Presta29",
   },
   {
     id_zone: 30,
@@ -1794,7 +1765,6 @@ const serviceLocation = ref([
       [953.6166916212487, 1252.4207309976907],
       [948.4965636122938, 1174.5002352533052],
     ],
-    url: "../Presta30",
   },
   {
     id_zone: 31,
@@ -1821,7 +1791,6 @@ const serviceLocation = ref([
       [1066.7194825700226, 1248.6535328133734],
       [1066.1031549739916, 1176.5284355188705],
     ],
-    url: "../Presta31",
   },
   {
     id_zone: 32,
@@ -1856,16 +1825,15 @@ const serviceLocation = ref([
       [1324.7021571057048, 1201.8975843420262],
       [1332.8430892354709, 1193.1347425389713],
     ],
-    url: "../Presta32",
   },
 ]);
+const nomType = ref("");
 
 async function fetchPresta() {
   try {
     const res = await axios.get(`http://localhost:3000/prestataire/show`);
     prestataires.value = res.data;
-
-    // Mettre à jour les noms des zones avec les noms des prestataires
+    nomType.value = res.nom_type_prestataire;
     prestataires.value.forEach((presta) => {
       if (presta.id_zone && presta.waitingforadmin === false) {
         const zone = serviceLocation.value.find(
@@ -1873,6 +1841,8 @@ async function fetchPresta() {
         );
         if (zone) {
           zone.name = presta.nom_prestataire;
+          zone.id_prestataire = presta.id_prestataire;
+          zone.type_prestataire = presta.nom_type_prestataire;
         }
       }
     });
@@ -1880,7 +1850,6 @@ async function fetchPresta() {
     console.error("Erreur lors de la récupération des prestataires:", err);
   }
 }
-
 onMounted(async () => {
   await fetchPresta();
 });
@@ -1980,6 +1949,15 @@ onMounted(() => {
   // Hover name
   lastFeature = null;
   label = document.getElementById("hoverName");
+
+  // Masquer le label lors du scroll (il réapparaîtra au prochain mouvement de souris) ca règle a moitié mais toujours un probleme
+  // quand je scroll ca s'enleve alors que je suis encore sur le poly
+  window.addEventListener("wheel", () => {
+    if (label) {
+      label.style.display = "none";
+    }
+  });
+
   map.on("pointermove", (event) => {
     const searchFeature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
     const mapContainer = document.getElementById("map");
@@ -1999,6 +1977,7 @@ onMounted(() => {
 
     if (searchFeature) {
       const name = searchFeature.get("name");
+      const type = searchFeature.get("type");
       //C'est pour récupérer la position et les dimensions de la carte ( pour afficher le label au bon endroit )
       const bounds = mapContainer.getBoundingClientRect();
 
@@ -2017,7 +1996,17 @@ onMounted(() => {
       label.style.left = x + "px";
       label.style.top = y + "px";
 
-      label.innerText = name;
+      if (type === "service") {
+        const zone = serviceLocation.value.find((z) => z.name === name);
+        if (zone && zone.type_prestataire) {
+          label.innerHTML = `<div class="contentContener"><span class="title">${name}</span><br/><span class="subtitle">${zone.type_prestataire}</span></div>`;
+        } else {
+          label.innerText = name;
+        }
+      } else {
+        label.innerText = name;
+      }
+
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
 
@@ -2098,6 +2087,22 @@ onMounted(() => {
           zone: zone,
         },
       });
+      return;
+    }
+
+    if (type === "service") {
+      const zoneName = clickedFeature.get("name");
+      const zone = serviceLocation.value.find((z) => z.name === zoneName);
+
+      if (zone && zone.id_prestataire) {
+        router.push({
+          name: "ShowPrestataire",
+          params: {
+            lang: route.params.lang,
+            id: zone.id_prestataire,
+          },
+        });
+      }
       return;
     }
 
@@ -2264,6 +2269,20 @@ body::-webkit-scrollbar {
   color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
+
+.contentContener {
+  text-align: center;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
 .mapContainer {
   display: flex;
   justify-content: center;
