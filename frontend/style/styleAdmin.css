@@ -105,7 +105,8 @@
 /* ============================= */
 
 .adminTable td button,
-.btn_modal, .diff_button button {
+.btn_modal, .diff_button button,
+.service_row button {
     color: white;
     margin-left: 8px;
     padding: 6px 12px;

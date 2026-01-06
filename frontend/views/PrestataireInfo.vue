@@ -141,10 +141,18 @@
                     <div v-for="(service, index) in services" :key="index" class="service_row">
                         <input 
                             type="text" 
-                            v-model="services[index]" 
+                            v-model="service.nom_service" 
                             placeholder="Nom du service" 
                         />
-                        <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">✖</button>
+                        <span v-if="service.activate" class="active-icon" title="Actif">&#10003;</span>
+                        <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
+                        <button class="btn_activate" v-if="!service.activate" @click="activateService(service)">
+                            Activer
+                        </button>
+                        <button class="btn_desactivate" v-else @click="desactivatingService(service)">
+                            Désactiver
+                        </button>
+                        <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">&times;</button>
                     </div>
                 </div>
 
@@ -242,6 +250,9 @@ const mail_presta = ref('');
 const tel_presta = ref('');
 
 
+const activate = ref(false);
+const desactivate = ref(false);
+const deleting = ref(false);
 
 const selectedNames = computed(() => checkedItems.value.map(item => item.nom));
 
@@ -304,6 +315,30 @@ function addServiceField() {
 
 function removeServiceField(index) {
     services.value.splice(index, 1);
+}
+
+async function desactivatingService(service) {
+  desactivate.value = true;
+  actionsService(service);
+}
+
+async function activateService(service) {
+  activate.value = true;
+  actionsService(service);
+}
+
+async function actionsService(service) {
+  try {
+    const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
+
+    const index = services.value.findIndex(s => s.id_service === service.id_service);
+    if (index !== -1) {
+      services.value[index].activate = !services.value[index].activate;
+    }
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
 }
 
 
@@ -400,7 +435,11 @@ async function getValuesPrestataire() {
         tel_presta.value = presta.tel_prestataire;
 
         const getServices = res.data.services;
-        services.value = getServices.map(s => s.nom_service);
+        services.value = getServices.map(s => ({
+            id_service: s.id_service,
+            nom_service: s.nom_service,
+            activate: s.activate
+        }));
 
         const typeObj = type_prestataire.value.find(t => t.id_type_prestataire === presta.type_prestataire_id);
         if (typeObj) {

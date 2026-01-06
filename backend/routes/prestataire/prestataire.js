@@ -40,16 +40,29 @@ router.get("/show", async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT
-        p.*,
+        p.id_prestataire,
+        p.nom_prestataire,
+        p.descri_prestataire,
+        p.nb_participants,
+        p.tarif_prestataire,
+        p.mail_prestataire,
+        p.tel_prestataire,
+        p.waitingforadmin,
+        p.specificite,
+        p.type_prestataire_id,
         u.id_utilisateur,
         u.prenom_utilisateur,
         u.nom_utilisateur,
-        t.nom_type_prestataire
+        t.nom_type_prestataire,
+        COUNT(s.id_service) AS nb_services
       FROM Prestataire p
-      JOIN Utilisateur u
-        ON p.id_utilisateur = u.id_utilisateur
-      JOIN Type_prestataire t
-        ON p.type_prestataire_id = t.id_type_prestataire
+      JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
+      JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
+      LEFT JOIN Services s ON p.id_prestataire = s.prestataire_id
+      GROUP BY
+        p.id_prestataire,
+        u.id_utilisateur,
+        t.nom_type_prestataire
       ORDER BY p.waitingforadmin, p.nom_prestataire;
       `
     );
