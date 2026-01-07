@@ -118,9 +118,6 @@ const { locale } = useI18n();
 const adminStore = useAdminStore();
 const navStore = useNavigationStore();
 
-//==========================
-//====== Utilisateurs ======
-//==========================
 const utilisateurs = ref([]);
 const selectedUser = ref(null);
 const deletedUser = ref(null);
@@ -213,9 +210,7 @@ onMounted(() => {
 });
 
 
-//==========================
-//== Async functions user ==
-//==========================
+
 // async function getValuesUtilisateurs() {
 //   try {
 //     const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
