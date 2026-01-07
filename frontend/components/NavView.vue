@@ -29,7 +29,7 @@
         class="boutonNav pointer">
         {{ $t("barreNav.prestataire") }}
       </div>
-      
+
       <div @click="scrollToSection('footer')" class="boutonNav pointer">
         {{ $t("barreNav.partenaire") }}
       </div>
@@ -148,7 +148,8 @@ import { ref, watch, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
-import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
+import localData from "../../backend/database/localData.js";
+// import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
 // import axios from "axios";
 
 const scrollToSection = (id) => {
@@ -165,11 +166,12 @@ const userStore = useUserStore();
 const isInIndex = ref(route.name === "Home");
 const userProfilePhoto = ref(null);
 const userInitials = ref("");
-const utilisateur = ref([]);
+const utilisateur = ref({});
 const admin = ref(false);
 
 const loadProfilePhoto = () => {
   if (userStore.isConnected) {
+    const utilisateursData = localData.getAll("utilisateurs");
     const userData = utilisateursData.find(
       (u) => u.id_utilisateur === userStore.userId
     );
@@ -183,6 +185,28 @@ const loadProfilePhoto = () => {
         userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
       }
       utilisateur.value = userData;
+      console.log(
+        "Profil utilisateur chargé depuis localStorage:",
+        userData.prenom_utilisateur,
+        userData.nom_utilisateur,
+        "Initiales:",
+        userInitials.value,
+        "ispresta:",
+        userData.ispresta,
+        "id_utilisateur:",
+        userData.id_utilisateur,
+        "userStore.userId:",
+        userStore.userId,
+        "Afficher panier/billets?",
+        userStore.userId != 1,
+        "Données complètes:",
+        userData
+      );
+    } else {
+      console.error(
+        "Utilisateur non trouvé dans localStorage, ID:",
+        userStore.userId
+      );
     }
   }
 };
@@ -209,9 +233,18 @@ const loadProfilePhoto = () => {
 // };
 
 function isadmin() {
-  const user = utilisateursData.find((u) => u.id_utilisateur === 1);
+  const utilisateursData = localData.getAll("utilisateurs");
+  const user = utilisateursData.find(
+    (u) => u.id_utilisateur === userStore.userId
+  );
   if (user) {
     admin.value = user.isadmin || false;
+    console.log(
+      "Vérification admin pour userId",
+      userStore.userId,
+      ":",
+      admin.value
+    );
   }
 }
 
@@ -271,7 +304,6 @@ if (savedLang) locale.value = savedLang;
 //     console.error(err);
 //   }
 // }
-
 
 // onMounted(async () => {
 //   window.addEventListener("scroll", handleScroll);

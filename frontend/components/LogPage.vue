@@ -203,11 +203,11 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
 // import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
+import localData from "../../backend/database/localData.js";
 
 const route = useRoute();
 const showRegister = ref(route.name === "Inscription_utilisateur");
@@ -282,6 +282,8 @@ function getValuesConnexion() {
     return;
   }
 
+  const utilisateursData = localData.getAll("utilisateurs");
+
   const user = utilisateursData.find(
     (u) =>
       u.login_utilisateur === login_utilisateur_connexion.value &&
@@ -290,7 +292,7 @@ function getValuesConnexion() {
 
   if (user) {
     userStore.setUser(user.id_utilisateur);
-    if (user.id_utilisateur === 1) {
+    if (user.isadmin || user.id_utilisateur === 1) {
       userStore.setRole("admin");
     } else {
       userStore.setRole("user");
@@ -298,6 +300,8 @@ function getValuesConnexion() {
     userId.value = user.id_utilisateur;
     message.value = `Utilisateur connecté avec l'ID : ${user.id_utilisateur}`;
     connexion.value = true;
+
+    console.log("Utilisateur connecté depuis localStorage:", user);
 
     if (connexion.value) {
       ModalShow(false);
@@ -347,6 +351,8 @@ function getValuesInscription() {
     return;
   }
 
+  const utilisateursData = localData.getAll("utilisateurs");
+
   const existingUser = utilisateursData.find(
     (u) =>
       u.login_utilisateur === login_utilisateur.value ||
@@ -358,12 +364,36 @@ function getValuesInscription() {
     return;
   }
 
-  const newUserId =
-    Math.max(...utilisateursData.map((u) => u.id_utilisateur)) + 1;
+  let newUserId = 2; 
+  if (utilisateursData.length > 0) {
+    const maxId = Math.max(...utilisateursData.map((u) => u.id_utilisateur));
+    newUserId = Math.max(maxId + 1, 2); 
+  }
+
+  // Créer le nouvel utilisateur
+  const newUser = {
+    id_utilisateur: newUserId,
+    nom_utilisateur: nom_utilisateur.value,
+    prenom_utilisateur: prenom_utilisateur.value,
+    login_utilisateur: login_utilisateur.value,
+    mdp_utilisateur: mdp_utilisateur.value,
+    mail_utilisateur: mail_utilisateur.value,
+    tel_utilisateur: tel_utilisateur.value || null,
+    sexe_utilisateur: sexe_utilisateur.value || null,
+    date_creation_utilisateur: new Date().toISOString(),
+    ispresta: false,
+    waitingforadmin: false,
+    isadmin: false,
+  };
+
+  // Ajouter l'utilisateur à localStorage
+  localData.add("utilisateurs", newUser);
+
+  console.log("Nouvel utilisateur créé et ajouté à localStorage:", newUser);
 
   userStore.setUser(newUserId);
   userStore.setRole("user");
-  message.value = `Utilisateur créé avec l'ID : ${newUserId}`;
+  message.value = `Utilisateur créé avec succès ! ID : ${newUserId}`;
   inscription.value = true;
 
   if (inscription.value) {

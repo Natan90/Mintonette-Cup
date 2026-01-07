@@ -42,7 +42,7 @@ onMounted(() => {
 function getValuesEvenement() {
   const events = localData.getAll("evenements");
   const data = events.length > 0 ? events[0] : null;
-  
+
   if (!data) {
     console.error("Aucun événement trouvé dans localStorage");
     return;
