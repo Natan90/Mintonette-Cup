@@ -10,12 +10,12 @@
 
             <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
                 <div class="content_slider">
-                    <p>Prestataire</p>
+                    <span>{{ $t('filter.slider.prestataire') }}</span>
                     <label class="switch">
                         <input type="checkbox" v-model="isServiceView">
                         <span class="slider round"></span>
                     </label>
-                    <p>Services</p>
+                    <span>{{ $t('filter.slider.service') }}</span>
                 </div>
 
                 <div class="blocFiltre">
@@ -85,10 +85,10 @@
                             {{ $t('filter.info.service') }} : {{ item.nb_services }}
                             </span>
                             <span v-else>
-                            {{ $t('filter.info.price') }} : {{ item.prix }} €
+                            {{ $t('filter.info.tarif') }} : {{ item.prix }} €
                             </span>
                             <span v-if="isServiceView">
-                            {{ $t('filter.info.participants') }} : {{ item.nb_participants }}
+                            {{ $t('filter.info.capacite') }} : {{ item.nb_participants }} {{ $t('filter.info.people') }}
                             </span>
                         </div>
 
@@ -252,7 +252,12 @@ async function searchPrestataires() {
 .content_slider {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
+}
+
+.content_slider span{
+    font-weight: 500;
 }
 
 .switch {
@@ -277,7 +282,7 @@ async function searchPrestataires() {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--couleur-fond);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -289,17 +294,17 @@ async function searchPrestataires() {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--jaune-logo);
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: var(--bleu-logo);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px var(--bleu-logo);
 }
 
 input:checked + .slider:before {
@@ -316,6 +321,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
 .recherche{
     display: flex;
     flex-direction: column;
