@@ -83,15 +83,13 @@ const pool = require("./db");
 
   CREATE TABLE IF NOT EXISTS Type_prestataire(
     id_type_prestataire SERIAL PRIMARY KEY,
-    nom_type_prestataire VARCHAR(50)
+    nom_type_prestataire JSONB
   );
  
   CREATE TABLE IF NOT EXISTS Prestataire(
     id_prestataire SERIAL PRIMARY KEY,
     nom_prestataire VARCHAR(50),
     descri_prestataire VARCHAR(500),
-    nb_participants INTEGER,
-    tarif_prestataire NUMERIC(10, 2),
     mail_prestataire VARCHAR(255) NOT NULL,
     tel_prestataire VARCHAR(10) NOT NULL,
     waitingforadmin BOOLEAN DEFAULT FALSE,
@@ -309,17 +307,26 @@ const pool = require("./db");
 
     const insertTypePrestataire = `
     INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
-      ('Animation'),
-      ('Boutique'),
-      ('Restauration');
+      ('{
+        "fr": "Animation",
+        "en": "Activity"
+      }'),
+      ('{
+        "fr": "Boutique",
+        "en": "Shop"
+      }'),
+      ('{
+        "fr": "Restauration",
+        "en": "Restoration"
+      }');
     `;
     await pool.query(insertTypePrestataire);
 
     const insertPrestataire = `
-    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingforadmin, specificite, message_ajout, id_utilisateur, type_prestataire_id, id_zone) VALUES
-      ('FoodExpress', 'Service de restauration rapide pour événements', 50, 5.00, 'contact@foodexpress.com', '0123456789', false, 'Animation festive', true, 2, 3, 1),
-      ('AnimEvent', 'Animations pour tous types d’événements', 100, 15.00, 'contact@animevent.com', '0987654321', false, 'Livres et supports média', true, 3, 1, 22),
-      ('SportMerch', 'Boutique spécialisée en articles sportifs', 20, 0.00, 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', true, 4, 2, 4);
+    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, mail_prestataire, tel_prestataire, waitingforadmin, specificite, message_ajout, id_utilisateur, type_prestataire_id, id_zone) VALUES
+      ('FoodExpress', 'Service de restauration rapide pour événements', 'contact@foodexpress.com', '0123456789', false, 'Animation festive', true, 2, 3, 1),
+      ('AnimEvent', 'Animations pour tous types d’événements', 'contact@animevent.com', '0987654321', false, 'Livres et supports média', true, 3, 1, 22),
+      ('SportMerch', 'Boutique spécialisée en articles sportifs', 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', true, 4, 2, 4);
     `;
     await pool.query(insertPrestataire);
 

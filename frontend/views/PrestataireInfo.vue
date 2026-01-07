@@ -159,22 +159,6 @@
                 }" />
             </div>
 
-            <!-- Champ : nombre de participants -->
-            <div class="form_group">
-                <label for="participants">
-                    {{ $t('prestataireInfo.formulaire.nbParticipants') }}
-                </label>
-                <input type="number" id="participants" v-model="nb_participants" min="1" />
-            </div>
-
-            <!-- Champ : tarif -->
-            <div class="form_group">
-                <label for="tarif">
-                    {{ $t('prestataireInfo.formulaire.tarif') }}
-                </label>
-                <input type="number" id="tarif" v-model="tarif_presta" />
-            </div>
-
             <!-- Champ : email de contact -->
             <div class="form_group">
                 <label for="contact">
@@ -261,11 +245,13 @@ import { ref, onMounted, computed, nextTick } from "vue";
 import { useUserStore } from '@/stores/user';
 import { useRoute } from "vue-router";
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
 import Editor from "@tinymce/tinymce-vue";
 import Footer from '@/components/Footer.vue';
 
 
+const { t } = useI18n();
 const userStore = useUserStore();
 const route = useRoute();
 
@@ -314,8 +300,6 @@ const checkedItems = ref([]);
 //=========================
 const nom_presta = ref('');
 const descri_presta = ref('');
-const nb_participants = ref(1);
-const tarif_presta = ref(0);
 const mail_presta = ref('');
 const tel_presta = ref('');
 
@@ -446,15 +430,15 @@ function getMissingLangMessage(service) {
     const enEmpty = isLangEmpty(service, 'en');
 
     if (frEmpty && enEmpty) {
-        return "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?";
+        return t('messagesServices.aucuneLangues');
     }
-    
+
     if (frEmpty) {
-        return "La version française du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+        return t('messagesServices.queEN');
     }
 
     if (enEmpty) {
-        return "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+        return t('messagesServices.queFR');
     }
 
     return null;
@@ -615,8 +599,6 @@ async function getValuesPrestataire() {
 
         nom_presta.value = presta.nom_prestataire;
         descri_presta.value = presta.descri_prestataire;
-        nb_participants.value = presta.nb_participants;
-        tarif_presta.value = presta.tarif_prestataire;
         mail_presta.value = presta.mail_prestataire;
         tel_presta.value = presta.tel_prestataire;
 
@@ -678,8 +660,6 @@ async function addPrestataire() {
         const res = await axios.post(`http://localhost:3000/prestataire/becomePrestataire/${prestaId.value}`, {
             nom: nom_presta.value,
             descri: descri_presta.value,
-            nb_participants: Number(nb_participants.value),
-            tarif: Number(tarif_presta.value),
             mail: mail_presta.value,
             tel: tel_presta.value,
             specificite: selectedNames.value,
@@ -723,8 +703,6 @@ async function updatePresta() {
         const res = await axios.put(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
             nom: nom_presta.value,
             descri: descri_presta.value,
-            nb_participants: Number(nb_participants.value),
-            tarif: Number(tarif_presta.value),
             mail: mail_presta.value,
             tel: tel_presta.value,
             specificite: selectedNames.value,

@@ -91,8 +91,6 @@
           <!-- <img src=""> -->
           <div class="description" v-html="onePresta.descri_prestataire">
           </div>
-          <p>Capacité : <span>{{ Number(onePresta.nb_participants) }}</span></p>
-          <p>Tarif : <span>{{ onePresta.tarif_prestataire }}</span></p>
           <div class="contact_presta">
             <p class="contact_title"><b>Contact</b></p>
             <p>{{ onePresta.mail_prestataire }}</p>
@@ -212,8 +210,6 @@ const closeMessageSuppr = () => {
 const onePresta = ref({
   nom_prestataire: "",
   descri_prestataire: "",
-  nb_participants: 0,
-  tarif_prestataire: "",
   mail_prestataire: "",
   tel_prestataire: "",
   prenom_utilisateur: "",
