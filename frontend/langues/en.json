@@ -69,10 +69,7 @@
   },
   "services": {
     "title": "Provider Services",
-    "actions": [
-      "Order Meal",
-      "Reserve Table"
-    ]
+    "actions": ["Order Meal", "Reserve Table"]
   },
   "homeLink": "Home",
   "modal": {
@@ -131,12 +128,12 @@
   "adminPage": {
     "evenement": {
       "nom": "Event Name",
-      "couleur" : "Title color",
-      "police" : "Text font",
+      "couleur": "Title color",
+      "police": "Text font",
       "imageCouverture": "Cover Image",
       "typeImage": "(JPG, JPEG, PNG or WebP)",
-      "choisirFichier" : "Choose an Image",
-      "choisirAutreFichier" : "Choose another Image",
+      "choisirFichier": "Choose an Image",
+      "choisirAutreFichier": "Choose another Image",
       "descri": "Event Description"
     },
     "bouton": {
@@ -199,6 +196,40 @@
         "confirmation": "Are you sure you want to delete the user"
       }
     }
+  },
+  "filter": {
+    "titleFilter": "Find the Service Providers of the Mintonette Cup 2026!",
+    "name": {
+      "title": "Name",
+      "nameInput": "Service provider name"
+    },
+    "categorie": {
+      "title": "Service category",
+      "all": "All"
+    },
+    "price": {
+      "title": "Price",
+      "minPrice": "Min price",
+      "maxPrice": "Max price"
+    },
+    "button": {
+      "search": "Search",
+      "reset": "Reset"
+    },
+    "description": "Description",
+    "info": {
+      "title": "Information",
+      "capacite": "Capacity",
+      "people": "ppl",
+      "tarif": "Price",
+      "service": "Services"
+    },
+    "contact": "Contacts",
+    "more": "Learn more"
+  },
+  "messagesServices": {
+    "aucuneLangues": "Neither the French nor the English versions are filled in.\n\nDo you want to continue anyway?",
+    "queFR": "The English version of the service is not filled in.\n\nDo you want to continue?",
+    "queEN": "The French version of the service is not filled in.\n\nDo you want to continue?"
   }
-
 }

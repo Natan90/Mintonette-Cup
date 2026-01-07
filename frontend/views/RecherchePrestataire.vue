@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="blocFiltre">
-                <span>Catégorie de services</span>
+                <span>{{ $t('filter.categorie.title') }}</span>
                         <div v-for="item in type_prestataire" :key="item.id_type_prestataire">
                             <label class="pointer">
                                 <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
@@ -27,21 +27,21 @@
 
                         <label class="pointer">
                             <input type="radio" name="categorie" :value="0" v-model="filters.category"/>
-                            Tous
+                            {{ $t('filter.categorie.all') }}
                         </label>
                 </div>
 
                 <div class="blocFiltre">
-                    <span>prix</span>
+                    <span>{{ $t('filter.price.title') }}</span>
                     <div class="prix">
-                        <input type="number" v-model="filters.prixMin" placeholder="Prix min" />
-                        <input type="number" v-model="filters.prixMax" placeholder="Prix max" />
+                        <input type="number" v-model="filters.prixMin" v-bind:placeholder="$t('filter.price.minPrice')" />
+                        <input type="number" v-model="filters.prixMax" v-bind:placeholder="$t('filter.price.maxPrice')" />
                     </div>
                 </div>
 
                 <div class="boutonsFiltre">
-                    <button class="pointer" type="submit">Rechercher</button>
-                    <button class="pointer" type="submit" @click="resetFilters">Réinitilaiser</button>
+                    <button class="pointer" type="submit">{{ $t('filter.button.search') }}</button>
+                    <button class="pointer" type="submit" @click="resetFilters">{{ $t('filter.button.reset') }}</button>
                 </div>
             </form>
 
@@ -65,21 +65,21 @@
                         </div>
 
                         <div class="descriptionPrestataire">
-                            <span>Description</span>
+                            <span>{{ $t('filter.description') }}</span>
                             <div v-html="item.descri_prestataire">
                             </div>
                         </div>
 
                         <div class="blocBasPrestataire">
                             <div class="infosPrestataire">
-                                <span>informations</span>
-                                <span>Capacité : {{ Number(item.nb_participants) }} pers.</span>
-                                <span>Tarif : {{ item.tarif_prestataire }} €</span>
-                                <span>Services : {{ item.nb_services }}</span>
+                                <span>{{ $t('filter.info.title') }}</span>
+                                <span>{{ $t('filter.info.capacite') }} : {{ Number(item.nb_participants) }} {{ $t('filter.info.people') }}</span>
+                                <span>{{ $t('filter.info.tarif') }} : {{ item.tarif_prestataire }} €</span>
+                                <span>{{ $t('filter.info.service') }} : {{ item.nb_services }}</span>
                             </div>
 
                             <div class="contactPrestataire">
-                                <span>Contact</span>
+                                <span>{{ $t('filter.contact') }}</span>
                                 
                                 <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
                                 <span>{{ item.mail_prestataire }}</span>
@@ -88,7 +88,7 @@
                         </div>
 
                         <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire)">
-                            <span class="pointer">En savoir plus</span>
+                            <span class="pointer">{{ $t('filter.more') }}</span>
                         </div>
                         
                     </div>

@@ -1,6 +1,67 @@
 <template>
     <!-- Barre de navigation principale -->
     <NavView id="nav_bar"></NavView>
+    <div class="modal-backdrop" v-if="showService">
+        <div class="modal-content bigger">
+            <span class="modal-close" @click="closeModal">&times;</span>
+            <div class=" service_details">
+                <span>
+                        <button @click="changeDescriLang">
+                            <span v-if="isFrench">Passer en anglais</span>
+                            <span v-else>Go in French</span>
+                        </button>
+                    </span>
+                <div>
+                    <label for="nom_service">Nom du service</label>
+                    <input class="page_title" v-model="oneService.nom_service" id="nom_service">
+                </div>
+                <div>
+                    <label for="titre_service">Titre du service</label>
+                    <input class="page_title" v-model="currentTitre" id="titre_service">
+                </div>
+
+
+                <label>
+                    Description du service
+                    
+                </label>
+                <Editor v-model="currentDescri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+                    height: 200,
+                    menubar: false,
+                    plugins: 'lists link image table media code preview anchor',
+                    toolbar: 'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+                    branding: false
+                }" />
+
+                <div class="service_besoin">
+                    <h3>Besoin</h3>
+                    <input v-model="currentBesoin">
+                </div>
+
+                <div class="service_infos">
+                    <div class="info_item">
+                        <span class="info_label">Prix (en €)</span>
+                        <input class="info_value" v-model="oneService.prix_service">
+                    </div>
+
+                    <div class="info_item">
+                        <span class="info_label">Participants max</span>
+                        <input class="info_value" v-model="oneService.nbParticipants_service">
+                    </div>
+                </div>
+                <div v-if="message && showService && messageType === 'error'" class="message" :class="messageType === 'error'
+                    ? 'message-error'
+                    : 'message-success'">
+                    <span class="text">{{ message }}</span>
+                    <span class="modal-close" @click="closeMessage">&times;</span>
+                </div>
+                <button @click="addServiceToPrestataire()">
+                    Ajouter le service
+                </button>
+            </div>
+
+        </div>
+    </div>
 
     <div class="container">
         <!-- Titre principal de la page -->
@@ -133,36 +194,37 @@
 
             <div class="form_group">
                 <div class="ajout_services">
-                    <label>{{ $t('prestataireInfo.services', {gotS : services.length > 1 ? 's' : ''}) }}</label>
-                    <button @click="addServiceField" class="pointer">+ Ajouter</button>
+                    <label>{{ $t('prestataireInfo.services', { gotS: services.length > 1 ? 's' : '' }) }}</label>
+                    <button @click="showService = true" class="pointer">+ Ajouter</button>
                 </div>
 
                 <div class="service_input">
                     <div v-for="(item, index) in services" :key="index" class="service_row">
-                        <input 
-                            type="text" 
-                            v-model="item.nom_service" 
-                            placeholder="Nom du service" 
-                        />
+                        <button @click="showOneService(item.id_service)">
+                            {{ item.nom_service }}
+                            </button>
                         <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
                         <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
                         <button class="btn_activate" v-if="!item.activate && !pathAdd" @click="activateService(item)">
                             Activer
                         </button>
-                        <button class="btn_desactivate" v-else-if="item.activate && !pathAdd" @click="desactivatingService(item)">
+                        <button class="btn_desactivate" v-else-if="item.activate && !pathAdd"
+                            @click="desactivatingService(item)">
                             Désactiver
                         </button>
-                        <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">&times;</button>
+                        <button type="button" class="remove_btn pointer"
+                            @click="removeServiceField(index)">&times;</button>
                     </div>
                 </div>
 
             </div>
 
             <!-- Message de succès ou d’erreur après action -->
-            <div v-if="message" class="message" :class="messageType === 'error'
+            <div v-if="message && !showService" class="message" :class="messageType === 'error'
                 ? 'message-error'
                 : 'message-success'">
                 <span class="text">{{ message }}</span>
+                <span class="modal-close" @click="closeMessage">&times;</span>
             </div>
 
             <!-- Bouton de modification (mode édition) -->
@@ -171,13 +233,6 @@
                     {{ $t('prestataireInfo.formulaire.btnModifier') }}
                 </button>
             </div>
-
-
-            <!-- ===================== Faire un show en fonction de l'id_utilisateur ============================== -->
-            <!-- ============================== Faire pour qu'un utilisateur peut avoir plusieurs prestations ============================== -->
-            <!-- ===================== Donc surement changer le show en fonction de l'id_utilisateur ============================== -->
-
-
 
             <!-- Bouton d'inscription (mode ajout) -->
             <div class="button_container" v-else>
@@ -220,7 +275,23 @@ const pathAdd = computed(() => route.name === "AddPrestataire");
 const message = ref('');
 const messageType = ref('success');
 
+const isFrench = ref(true);
+
+//=========================
+//======= Services ========
+//=========================
+const showService = ref(false);
 const services = ref([]);
+const oneService = ref({
+    nom_service: '',
+    titre_service: { fr: '', en: '' },
+    descri_service: { fr: '', en: '' },
+    besoin: { fr: '', en: '' },
+    prix: 0,
+    nb_participants: 0,
+    activate: false,
+    visible_public: true
+});
 
 
 //=========================
@@ -253,6 +324,7 @@ const activate = ref(false);
 const desactivate = ref(false);
 const deleting = ref(false);
 
+
 const selectedNames = computed(() => checkedItems.value.map(item => item.nom));
 
 const isSelectionValid = computed(() => {
@@ -270,6 +342,46 @@ onMounted(async () => {
     }
 });
 
+const closeModal = () => {
+    showService.value = false;
+};
+
+const closeMessage = () => {
+    message.value = '';
+};
+
+const changeDescriLang = () => {
+    isFrench.value = !isFrench.value;
+};
+
+const currentTitre = computed({
+    get() {
+        return isFrench.value ? oneService.value.titre_service.fr : oneService.value.titre_service.en;
+    },
+    set(value) {
+        if (isFrench.value) {
+            oneService.value.titre_service.fr = value;
+        } else {
+            oneService.value.titre_service.en = value;
+        }
+    }
+});
+
+
+const currentDescri = computed({
+    get() {
+        return isFrench.value ? oneService.value.descri_service.fr : oneService.value.descri_service.en;
+    },
+    set(value) {
+        if (isFrench.value) {
+            oneService.value.descri_service.fr = value;
+        } else {
+            oneService.value.descri_service.en = value;
+        }
+    }
+});
+
+
 
 const errorMessageCheckBox = computed(() => {
     if (checkedItems.value.length === 0) {
@@ -279,7 +391,20 @@ const errorMessageCheckBox = computed(() => {
         return 'Veuillez sélectionner une seule option.'
     }
     return ''
-})
+});
+
+const currentBesoin = computed({
+    get() {
+        return isFrench.value ? oneService.value.besoin.fr : oneService.value.besoin.en;
+    },
+    set(value) {
+        if (isFrench.value) {
+            oneService.value.besoin.fr = value;
+        } else {
+            oneService.value.besoin.en = value;
+        }
+    }
+});
 
 
 const selectedItems = computed(() => {
@@ -308,12 +433,69 @@ const selectedTypeLabel = computed(() => {
     }
 });
 
-function addServiceField() {
-    services.value.push({
-        nom_service: '',
-        activate: false
-    });
+function isLangEmpty(service, lang) {
+    return (
+        !service.titre_service[lang]?.trim() &&
+        !service.descri_service[lang]?.trim() &&
+        !service.besoin[lang]?.trim()
+    );
 }
+
+function getMissingLangMessage(service) {
+    const frEmpty = isLangEmpty(service, 'fr');
+    const enEmpty = isLangEmpty(service, 'en');
+
+    if (frEmpty && enEmpty) {
+        return "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?";
+    }
+    
+    if (frEmpty) {
+        return "La version française du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+    }
+
+    if (enEmpty) {
+        return "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+    }
+
+    return null;
+}
+
+
+function addServiceToPrestataire() {
+    if (!oneService.value.nom_service || oneService.value.nom_service.trim() === '') {
+        message.value = "Le nom du service est obligatoire.";
+        messageType.value = "error";
+        return;
+    }
+    const confirmMessage = getMissingLangMessage(oneService.value);
+
+    if (confirmMessage) {
+        const confirmAdd = window.confirm(confirmMessage);
+        if (!confirmAdd) return;
+    }
+
+    oneService.value.prix = Number(oneService.value.prix_service || 0);
+    oneService.value.nb_participants = Number(oneService.value.nbParticipants_service || 0);
+
+
+    services.value.push({...oneService.value});
+
+
+    oneService.value = {
+        nom_service: '',
+        titre_service: { fr: '', en: '' },
+        descri_service: { fr: '', en: '' },
+        besoin: { fr: '', en: '' },
+        prix: 0,
+        nb_participants: 0,
+        activate: false,
+        visible_public: true
+    };
+    showService.value = false;
+    message.value = "Service ajouté avec succès !";
+    messageType.value = "success";
+}
+
 
 
 
@@ -322,27 +504,27 @@ function removeServiceField(index) {
 }
 
 async function desactivatingService(service) {
-  desactivate.value = true;
-  actionsService(service);
+    desactivate.value = true;
+    actionsService(service);
 }
 
 async function activateService(service) {
-  activate.value = true;
-  actionsService(service);
+    activate.value = true;
+    actionsService(service);
 }
 
 async function actionsService(service) {
-  try {
-    const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
+    try {
+        const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
 
-    const index = services.value.findIndex(s => s.id_service === service.id_service);
-    if (index !== -1) {
-      services.value[index].activate = !services.value[index].activate;
+        const index = services.value.findIndex(s => s.id_service === service.id_service);
+        if (index !== -1) {
+            services.value[index].activate = !services.value[index].activate;
+        }
+
+    } catch (err) {
+        console.error("Erreur lors de la récupération des données :", err);
     }
-
-  } catch (err) {
-    console.error("Erreur lors de la récupération des données :", err);
-  }
 }
 
 
@@ -359,7 +541,6 @@ function onCheckChange(event, nom, index) {
     } else {
         checkedItems.value = checkedItems.value.filter(i => i.index !== index);
     }
-    console.log("checkedItems :", checkedItems.value);
 }
 
 function showContinueInscription() {
@@ -468,11 +649,6 @@ async function getValuesPrestataire() {
             activate: s.activate || false
         }));
 
-        console.log("Prestataire récupéré :", presta);
-        console.log("Services récupérés :", services.value);
-
-        console.log("checkedItems :", checkedItems.value);
-        console.log(presta.specificite);
 
     } catch (err) {
         console.error("Erreur lors de la récupération des données :", err);
@@ -481,10 +657,24 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
     try {
-        const servicesPayload = services.value
-            .map(s => s.nom_service)
-            .filter(s => s && s.trim() !== '');
-            
+        const servicesPayload = services.value.map(s => ({
+            nom_service: s.nom_service,
+            titre_service: {
+                fr: { texte: s.titre_service.fr },
+                en: { texte: s.titre_service.en }
+            },
+            descri_service: {
+                fr: { texte: s.descri_service.fr },
+                en: { texte: s.descri_service.en }
+            },
+            besoin: s.besoin,
+            prix: s.prix,
+            nb_participants: s.nb_participants,
+            activate: s.activate,
+            visible_public: s.visible_public
+        }));
+
+
         const res = await axios.post(`http://localhost:3000/prestataire/becomePrestataire/${prestaId.value}`, {
             nom: nom_presta.value,
             descri: descri_presta.value,
@@ -512,6 +702,24 @@ async function addPrestataire() {
 
 async function updatePresta() {
     try {
+        const servicesPayload = services.value.map(s => ({
+            nom_service: s.nom_service,
+            titre_service: {
+                fr: { texte: s.titre_service.fr },
+                en: { texte: s.titre_service.en }
+            },
+            descri_service: {
+                fr: { texte: s.descri_service.fr },
+                en: { texte: s.descri_service.en }
+            },
+            besoin: s.besoin,
+            prix: s.prix,
+            nb_participants: s.nb_participants,
+            activate: s.activate,
+            visible_public: s.visible_public
+        }));
+
+
         const res = await axios.put(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
             nom: nom_presta.value,
             descri: descri_presta.value,
@@ -520,7 +728,8 @@ async function updatePresta() {
             mail: mail_presta.value,
             tel: tel_presta.value,
             specificite: selectedNames.value,
-            type: Number(selectedTypeId.value)
+            type: Number(selectedTypeId.value),
+            services: servicesPayload
         });
         message.value = res.data.message;
         messageType.value = "success";
@@ -533,6 +742,46 @@ async function updatePresta() {
         messageType.value = 'error';
     }
 }
+
+async function showOneService(id_service) {
+    try {
+        const res = await axios.get(`http://localhost:3000/prestataire/service/show/${id_service}`) ;
+        const s = res.data;
+        console.log("res.data", res.data)
+
+        oneService.value = {
+            id_service: s.id_service,
+            nom_service: s.nom_service,
+
+            titre_service: {
+                fr: s.titre_service?.fr?.texte ?? '',
+                en: s.titre_service?.en?.texte ?? ''
+            },
+
+            descri_service: {
+                fr: s.descri_service?.fr?.texte ?? '',
+                en: s.descri_service?.en?.texte ?? ''
+            },
+
+            besoin: {
+                fr: s.besoin?.fr ?? '',
+                en: s.besoin?.en ?? ''
+            },
+
+            prix: s.prix ?? 0,
+            nb_participants: s.nb_participants ?? 0,
+            activate: s.activate ?? false,
+            visible_public: s.visible_public ?? true
+        };
+
+        showService.value = true;
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
 </script>
 
 <style scoped>
@@ -744,5 +993,4 @@ async function updatePresta() {
     background: #c0392b;
     transform: scale(1.1);
 }
-
 </style>

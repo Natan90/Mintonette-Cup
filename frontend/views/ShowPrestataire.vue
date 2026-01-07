@@ -177,7 +177,17 @@ const desactivate = ref(false);
 const deleting = ref(false);
 const showService = ref(false);
 
-const oneService = ref([]);
+const oneService = ref({
+  id_service: null,
+  nom_service: '',
+  titre_service: { fr: '', en: '' },
+  descri_service: { fr: '', en: '' },
+  besoin: { fr: '', en: '' },
+  prix: 0,
+  nb_participants: 0,
+  visible_public: true
+});
+
 const titre_service = ref('');
 const descri_service = ref('');
 const besoin_service = ref('');
@@ -318,6 +328,10 @@ async function getOneService(service) {
   try {
     const res = await axios.get(`http://localhost:3000/prestataire/service/show/${service.id_service}`)
     oneService.value = res.data;
+    console.log("Res.data" ,res.data);
+
+
+    console.log(oneService)
 
     updateDescription();
 
@@ -347,16 +361,17 @@ async function addService(service) {
 
 
 function updateDescription() {
-  if (oneService.value?.titre_service?.[locale.value] || oneService.value?.descri_service?.[locale.value] || oneService.value?.besoin?.[locale.value]) {
-    titre_service.value = oneService.value.titre_service[locale.value].texte;
-    descri_service.value = oneService.value.descri_service[locale.value].texte;
-    besoin_service.value = oneService.value.besoin[locale.value];
-  } else {
-    titre_service.value = '';
-    descri_service.value = '';
-    besoin_service.value = '';
+  if (oneService.value) {
+    const titre = oneService.value.titre_service;
+    const descri = oneService.value.descri_service;
+    const besoin = oneService.value.besoin;
+
+    titre_service.value = titre[locale.value]?.texte || '';
+    descri_service.value = descri[locale.value]?.texte || '';
+    besoin_service.value = besoin[locale.value] || '';
   }
 }
+
 
 </script>
 
