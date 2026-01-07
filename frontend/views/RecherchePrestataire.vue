@@ -9,7 +9,15 @@
         <section class="filtreEtListe">
 
             <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
-                
+                <div class="content_slider">
+                    <p>Prestataire</p>
+                    <label class="switch">
+                        <input type="checkbox" v-model="isServiceView">
+                        <span class="slider round"></span>
+                    </label>
+                    <p>Services</p>
+                </div>
+
                 <div class="blocFiltre">
                     <span>{{ $t('filter.name.title') }}</span>
                     <input v-model="filters.nom" type="text" v-bind:placeholder="$t('filter.name.nameInput')" />
@@ -31,7 +39,7 @@
                         </label>
                 </div>
 
-                <div class="blocFiltre">
+                <div class="blocFiltre" v-if="isServiceView">
                     <span>{{ $t('filter.price.title') }}</span>
                     <div class="prix">
                         <input type="number" v-model="filters.prixMin" v-bind:placeholder="$t('filter.price.minPrice')" />
@@ -48,49 +56,56 @@
             <section class="listePrestataireBorder">
 
                 <div class="listePrestataire">
-                    <div v-for="item in prestatairesFiltres" :key="item.id_prestataire" 
-                    class="blocListePrestataire">
+                    <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service" 
+                        class="blocListePrestataire">
                         
-                        <div  class="enTetePrestataire">
+                        <div class="enTetePrestataire">
+                        <div class="titrePrestataire">
+                            <span>
+                            {{ isServiceView ? item.nom_service : item.nom_prestataire }}
+                            </span>
+                        </div>
 
-                            <div  class="titrePrestataire">
-                                <!-- <img src=""> -->
-                                <span>{{ item.nom_prestataire }}</span>
-                            </div>
-
-                            <div class="typePrestataire">
-                                <span>{{ item.nom_type_prestataire }}</span>
-                            </div>
-
+                        <div class="typePrestataire">
+                            <span>
+                            {{ isServiceView ? item.nom_type_prestataire : item.nom_type_prestataire }}
+                            </span>
+                        </div>
                         </div>
 
                         <div class="descriptionPrestataire">
-                            <span>{{ $t('filter.description') }}</span>
-                            <div v-html="item.descri_prestataire">
-                            </div>
+                        <span>{{ $t('filter.description') }}</span>
+                        <div v-html="isServiceView ? item.descri_service : item.descri_prestataire"></div>
                         </div>
 
                         <div class="blocBasPrestataire">
-                            <div class="infosPrestataire">
-                                <span>{{ $t('filter.info.title') }}</span>
-                                <span>{{ $t('filter.info.service') }} : {{ item.nb_services }}</span>
-                            </div>
-
-                            <div class="contactPrestataire">
-                                <span>{{ $t('filter.contact') }}</span>
-                                
-                                <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
-                                <span>{{ item.mail_prestataire }}</span>
-                                <span>{{ item.tel_prestataire }}</span>
-                            </div>
+                        <div class="infosPrestataire">
+                            <span>{{ $t('filter.info.title') }}</span>
+                            <span v-if="!isServiceView">
+                            {{ $t('filter.info.service') }} : {{ item.nb_services }}
+                            </span>
+                            <span v-else>
+                            {{ $t('filter.info.price') }} : {{ item.prix }} €
+                            </span>
+                            <span v-if="isServiceView">
+                            {{ $t('filter.info.participants') }} : {{ item.nb_participants }}
+                            </span>
                         </div>
 
-                        <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire)">
-                            <span class="pointer">{{ $t('filter.more') }}</span>
+                        <div class="contactPrestataire" v-if="!isServiceView">
+                            <span>{{ $t('filter.contact') }}</span>
+                            <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
+                            <span>{{ item.mail_prestataire }}</span>
+                            <span>{{ item.tel_prestataire }}</span>
                         </div>
-                        
+                        </div>
+
+                        <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire || item.id_service)">
+                        <span class="pointer">{{ $t('filter.more') }}</span>
+                        </div>
                     </div>
-                </div>
+                    </div>
+
             </section>
         </section>
     </section>
@@ -99,7 +114,7 @@
 
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useNavigationStore } from '@/stores/navigation';
@@ -112,6 +127,18 @@ const navStore = useNavigationStore();
 const { t } = useI18n();
 
 
+const isServiceView = ref(false);
+watch(isServiceView, async (newValue) => {
+  try {
+    if (newValue) {
+      await getValuesServices();
+    } else {
+      await getValuesPrestataire();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
 const type_prestataire = ref([]);
 const prestataires = ref([]);
 const filters = ref({
@@ -167,6 +194,15 @@ function goToSpecificPrestataire(idPresta) {
 //=========================
 //==== Async functions ====
 //=========================
+async function getValuesServices() {
+  try {
+    const res = await axios.get('http://localhost:3000/prestataire/services/show');
+    prestataires.value = res.data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 async function getValuesPrestataire() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/show");
@@ -198,7 +234,10 @@ async function searchPrestataires() {
     });
 
     const res = await axios.get('http://localhost:3000/prestataire/showFilter', {
-        params: filters.value
+        params: {
+            ...filters.value,
+            type: isServiceView.value ? 'services' : 'prestataires'
+        }
     });
 
     prestataires.value = res.data;
@@ -209,7 +248,73 @@ async function searchPrestataires() {
 
 
 <style scoped>
+.content_slider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 .recherche{
     display: flex;
     flex-direction: column;
