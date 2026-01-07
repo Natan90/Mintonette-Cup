@@ -124,10 +124,10 @@
 /* ********************
         IMPORTS 
 ******************** */
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, onActivated, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import evenementData from "../../backend/database/jsonData/Evenement.json";
-import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
+// import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
 // import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import localData from "../../backend/database/localData.js";
@@ -221,6 +221,11 @@ onMounted(() => {
   getValuesUser();
 });
 
+// Recharger l'utilisateur quand on revient sur la page
+onActivated(() => {
+  getValuesUser();
+});
+
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
@@ -239,11 +244,16 @@ function getValuesEvenement() {
 }
 
 function getValuesUser() {
+  const utilisateursData = localData.getAll("utilisateurs");
   const user = utilisateursData.find(
     (u) => u.id_utilisateur === userStore.userId
   );
   if (user) {
     utilisateur.value = user;
+    console.log("Index.vue - Utilisateur chargé:", {
+      ispresta: user.ispresta,
+      waitingforadmin: user.waitingforadmin
+    });
   }
 }
 

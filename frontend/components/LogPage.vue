@@ -257,7 +257,10 @@ function ModalShow(isInscription) {
 }
 
 function goToAddPrestataire() {
-  router.push({ name: "AddPrtestataire" });
+  router.push({ 
+    name: "AddPrestataire",
+    params: { id: userStore.userId }
+  });
 }
 
 const valueTexts = computed(() => {

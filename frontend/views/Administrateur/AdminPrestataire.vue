@@ -356,7 +356,15 @@ function deletePrestataire(idPresta) {
         // Récupérer le prestataire avant de le supprimer pour obtenir l'id_utilisateur
         const presta = localData.getById("prestataires", idPresta, "id_prestataire");
         
-        // Supprimer le prestataire
+        // Supprimer tous les services associés au prestataire
+        const services = localData.getAll("services");
+        const servicesAssocie = services.filter(s => s.id_prestataire === idPresta);
+        servicesAssocie.forEach(service => {
+            localData.delete("services", service.id_service, "id_service");
+        });
+        console.log(`${servicesAssocie.length} service(s) du prestataire supprimé(s)`);
+        
+        // Supprimer le prestataire (libère automatiquement la zone)
         localData.delete("prestataires", idPresta, "id_prestataire");
         
         // Mettre à jour l'utilisateur (ispresta = false)
@@ -371,7 +379,7 @@ function deletePrestataire(idPresta) {
         getPrestataires();
         zoneMapKey.value++; // Force le rechargement de ZoneMap
         
-        console.log("Prestataire supprimé:", deletedPresta.value.nom_prestataire);
+        console.log("Prestataire supprimé (zone libérée):", deletedPresta.value.nom_prestataire);
     } catch (err) {
         console.error(err);
     }
