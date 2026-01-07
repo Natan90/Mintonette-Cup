@@ -614,7 +614,7 @@ const pool = require("./db");
     ('Thaïlande', 'Bleu / Rouge', 'Le Garuda Bleu', false, 1),
     ('Kazakhstan', 'Bleu ciel / Jaune', 'L’Aigle d’Or', false, 1),
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
-    ('Australie', 'Vert / Or', 'Le Kangourou Vert', false, 1),
+    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1)
     ('Paraguay', 'Rouge / Blanc', 'Le Guarani Rouge', false, 1),
     ('Uruguay', 'Bleu ciel / Blanc', 'Le Carrousel Bleu', false, 1),
     ('Afrique du Sud', 'Vert / Or', 'Le Springbok Jaune‑Vert', false, 1),
@@ -660,7 +660,7 @@ const pool = require("./db");
     ('Homme', 14, 22, 'Supajirakul Monchai'), -- Thaïlande
     ('Homme', 14, 23, 'Genadijs Parsins'), -- Kazakhstan
     ('Homme', 14, 24, 'Issanayê Ramires Ferraz'), -- Corée du Sud
-    ('Homme', 14, 25, 'Russell Borgeaud'), -- Australie
+    ('Homme', 14, 25, 'Zlatko Dalić'), -- Croatie
     ('Homme', 14, 26, 'Gustavo Alfaro'), -- Paraguay
     ('Homme', 14, 27, 'Alejandro Matoso'), -- Uruguay
     ('Homme', 14, 28, 'H. El Wassimy'), -- Afrique du Sud
@@ -692,7 +692,7 @@ const pool = require("./db");
     ('Femme', 12, 22, NULL), -- Thaïlande
     ('Femme', 12, 23, NULL), -- Kazakhstan
     ('Femme', 12, 24, NULL), -- Corée du Sud
-    ('Femme', 12, 25, NULL), -- Australie
+    ('Femme', 12, 25, NULL), -- Croatie
     ('Femme', 12, 26, NULL), -- Paraguay
     ('Femme', 12, 27, NULL), -- Uruguay
     ('Femme', 12, 28, NULL), -- Afrique du Sud
@@ -719,7 +719,7 @@ const pool = require("./db");
       (2, 8, 24, '2026-01-01 21:00:00'),   -- Cuba vs Corée du Sud
       
       -- Terrain 3 (4 matchs)
-      (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Australie
+      (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Croatie
       (3, 10, 26, '2026-01-01 14:00:00'),  -- Slovénie vs Paraguay
       (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Uruguay
       (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs Afrique du Sud 
@@ -983,12 +983,12 @@ const pool = require("./db");
     ('Okolić', 'Aleksandar', 'Masculin', '1993-01-01', 2.06, 1, 'Serbie', 'Central', 16, 'Okolic.png'),
     ('Kovačević', 'Uroš', 'Masculin', '1993-01-01', 1.98, 2, 'Serbie', 'Attaquant', 16, 'Kovacevic.png'),
     ('Peković', 'Nikola', 'Masculin', '1990-01-01', 1.76, 6, 'Serbie', 'Libero', 16, NULL),
-    ('Krsmаnović', 'Petar', 'Masculin', '1990-01-01', 2.04, 7, 'Serbie', 'Central', 16, 'Krsmanovic.png'),
-    ('Ivović', 'Marko', 'Masculin', '1990-01-01', 1.94, 8, 'Serbie', 'Attaquant', 16, 'Ivovic.png'),
+    ('Krsmаnović', 'Petar', 'Masculin', '1990-01-01', 2.04, 7, 'Serbie', 'Libero', 16, 'Krsmanovic.png'),
+    ('Ivović', 'Marko', 'Masculin', '1990-01-01', 1.94, 8, 'Serbie', 'Receveur-Attaquant', 16, 'Ivovic.png'),
     ('Jovović', 'Nikola', 'Masculin', '1992-01-01', 1.99, 9, 'Serbie', 'Passeur', 16, 'Jovovic.png'),
     ('Perić', 'Pavle', 'Masculin', '1998-01-01', 2.07, 12, 'Serbie', 'Attaquant', 16, NULL),
     ('Atanasijević', 'Aleksandar', 'Masculin', '1991-01-01', 2.02, 14, 'Serbie', 'Opposé', 16, NULL),
-    ('Luburić', 'Dražen', 'Masculin', '1993-01-01', 2.02, 16, 'Serbie', 'Opposé', 16, 'Luburic.png'),
+    ('Luburić', 'Dražen', 'Masculin', '1993-01-01', 2.02, 16, 'Serbie', 'Receveur-Attaquant', 16, 'Luburic.png'),
     ('Majstorović', 'Neven', 'Masculin', '1989-01-01', 1.93, 17, 'Serbie', 'Libero', 16, NULL),
     ('Podraščanin', 'Marko', 'Masculin', '1987-10-29', 2.04, 18, 'Serbie', 'Central', 16, NULL),
     ('Lisinac', 'Srećko', 'Masculin', '1992-01-01', 2.05, 20, 'Serbie', 'Central', 16, NULL),
@@ -1128,21 +1128,21 @@ const pool = require("./db");
     ('Park', 'Chul-Woo', 'Masculin', '1985-07-25', 1.98, 13, 'Corée du Sud', 'Attaquant', 24, 'Park.png'),
     ('Kim', 'Yo-Han', 'Masculin', '1985-08-16', 1.98, 14, 'Corée du Sud', 'Receveur-Attaquant', 24, NULL),
 
-    -- Australie
-    ('Smith', 'Liam', 'Masculin', '1992-04-12', 1.98, 1, 'Australie', 'Passeur', 25, NULL),
-    ('Brown', 'Ethan', 'Masculin', '1993-07-18', 1.97, 2, 'Australie', 'Attaquant', 25, NULL),
-    ('Wilson', 'Jack', 'Masculin', '1991-10-22', 2.00, 3, 'Australie', 'Central', 25, NULL),
-    ('Taylor', 'Noah', 'Masculin', '1994-01-15', 1.96, 4, 'Australie', 'Receveur-Attaquant', 25, NULL),
-    ('Johnson', 'Lucas', 'Masculin', '1995-05-10', 2.01, 5, 'Australie', 'Central', 25, NULL),
-    ('Evans', 'Mason', 'Masculin', '1993-03-04', 1.95, 6, 'Australie', 'Attaquant', 25, NULL),
-    ('Martin', 'Ryan', 'Masculin', '1994-08-21', 1.97, 7, 'Australie', 'Receveur-Attaquant', 25, NULL),
-    ('Lee', 'Owen', 'Masculin', '1992-12-09', 1.90, 8, 'Australie', 'Libero', 25, NULL),
-    ('Harris', 'Thomas', 'Masculin', '1991-07-25', 2.00, 9, 'Australie', 'Attaquant', 25, NULL),
-    ('Walker', 'Cameron', 'Masculin', '1994-04-18', 1.98, 10, 'Australie', 'Receveur-Attaquant', 25, NULL),
-    ('King', 'Samuel', 'Masculin', '1993-11-11', 1.95, 11, 'Australie', 'Central', 25, NULL),
-    ('Wright', 'Benjamin', 'Masculin', '1995-09-05', 1.97, 12, 'Australie', 'Attaquant', 25, NULL),
-    ('Scott', 'Alexander', 'Masculin', '1992-05-02', 1.99, 13, 'Australie', 'Libero', 25, NULL),
-    ('Adams', 'Nathan', 'Masculin', '1994-06-28', 2.01, 14, 'Australie', 'Central', 25, NULL),
+    -- Croatie
+    ('Zhukouski', 'Tsimafei', 'Masculin', '1989-12-18', 1.96, 1, 'Croatie', 'Passeur', 25, NULL),
+    ('Bakonji', 'Bernard', 'Masculin', '1994-03-22', 1.92, 2, 'Croatie', 'Passeur', 25, 'Bakonji.png'),
+    ('Brčić', 'Dominik', 'Masculin', '1996-09-14', 2.02, 3, 'Croatie', 'Central', 25, NULL),
+    ('Hanžić', 'Tino', 'Masculin', '2000-01-01', 1.98, 4, 'Croatie', 'Attaquant', 25, NULL),
+    ('Mitrašinović', 'Tomislav', 'Masculin', '1993-06-11', 2.04, 5, 'Croatie', 'Central', 25, 'Mitrasinovic.png'),
+    ('Raič', 'Ivan', 'Masculin', '1992-02-08', 2.01, 6, 'Croatie', 'Opposé', 25, NULL),
+    ('Sedlaček', 'Marko', 'Masculin', '1996-07-29', 2.02, 7, 'Croatie', 'Libero', 25, 'Sedlacek.png'),
+    ('Sarčević', 'Sven', 'Masculin', '1990-01-01', 1.80, 8, 'Croatie', 'Receveur-Attaquant', 25, 'Sarcevic.png'),
+    ('Dukić', 'Sandro', 'Masculin', '1997-11-05', 1.97, 9, 'Croatie', 'Attaquant', 25, 'Dukic.png'),
+    ('Šestan', 'Filip', 'Masculin', '1995-04-19', 1.99, 10, 'Croatie', 'Receveur-Attaquant', 25, NULL),
+    ('Pervan', 'Hrvoje', 'Masculin', '1991-08-27', 1.83, 13, 'Croatie', 'Libero', 25, NULL),
+    ('Andrić', 'Leo', 'Masculin', '1996-12-03', 2.02, 16, 'Croatie', 'Receveur-Attaquant', 25, 'Andric.png'),
+    ('Zeljković', 'Ivan', 'Masculin', '1994-05-16', 1.98, 19, 'Croatie', 'Receveur-Attaquant', 25, NULL),
+    ('Nikačević', 'Kruno', 'Masculin', '1992-10-09', 2.05, 20, 'Croatie', 'Central', 25, NULL);
 
     -- Paraguay
     ('Gonzalez', 'Luis', 'Masculin', '1992-02-14', 1.97, 1, 'Paraguay', 'Passeur', 26, NULL),
