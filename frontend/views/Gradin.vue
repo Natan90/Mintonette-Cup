@@ -24,10 +24,14 @@
           </button>
         </div>
         <div class="legend">
-          <img src="/AvailableSeat.svg" alt=""><p>{{ $t('gradin.siegeDispo')}}</p>
-          <img src="/ReservedSeat.svg" alt=""><p>{{ $t('gradin.siegeReserv')}} </p>
-          <img src="/OwnedSeat.svg" alt=""><p>{{ $t('gradin.siegeproprio')}} </p>
-          <img src="/SelectionnedSeat.svg" alt=""><p>{{ $t('gradin.siegeDispo')}}</p>
+          <img src="/AvailableSeat.svg" alt="" />
+          <p>{{ $t("gradin.siegeDispo") }}</p>
+          <img src="/ReservedSeat.svg" alt="" />
+          <p>{{ $t("gradin.siegeReserv") }}</p>
+          <img src="/OwnedSeat.svg" alt="" />
+          <p>{{ $t("gradin.siegeproprio") }}</p>
+          <img src="/SelectionnedSeat.svg" alt="" />
+          <p>{{ $t("gradin.siegeDispo") }}</p>
         </div>
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
@@ -128,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import NavBar from "../components/NavView.vue";
 import Footer from "../components/Footer.vue";
 import { useUserStore } from "@/stores/user";
@@ -143,9 +147,19 @@ import paysData from "../../backend/database/jsonData/Pays.json";
 
 const route = useRoute();
 const router = useRouter();
-const zone = route.params.zone;
 const userStore = useUserStore();
 const navStore = useNavigationStore();
+
+const zone = computed(() => route.params.zone);
+const terrainId = computed(() => {
+  const zoneToTerrain = {
+    nord: 1,
+    est: 2,
+    sud: 3,
+    ouest: 4,
+  };
+  return zoneToTerrain[zone.value];
+});
 
 const matches = ref([]);
 const seats = ref([]);
@@ -154,13 +168,8 @@ const estAjoute = ref(false);
 const idMatch = ref(null);
 const seatsByMatch = ref({});
 
-const zoneToTerrain = {
-  nord: 1,
-  est: 2,
-  sud: 3,
-  ouest: 4,
-};
-const terrainId = zoneToTerrain[zone];
+console.log("Zone:", zone.value);
+console.log("Total matches in data:", matchesData.length);
 
 const globalSelectedSeats = ref(
   JSON.parse(localStorage.getItem("selectedSeats") || "[]")
@@ -169,7 +178,6 @@ const globalSelectedSeats = ref(
 const globalTotalPrice = computed(() =>
   globalSelectedSeats.value.reduce((sum, seat) => sum + getSeatPrice(seat), 0)
 );
-
 
 function getMatchTime(match) {
   const date = new Date(match.date_match);
@@ -300,11 +308,26 @@ function getSeatPrice(seat) {
 //     await selectMatch(matches.value[0]);
 //   }
 // });
+
 function fetchGradin() {
+  console.log(
+    "fetchGradin called for match:",
+    idMatch.value,
+    "zone:",
+    zone.value?.toUpperCase()
+  );
+
+  const matchIndex = matches.value.findIndex(
+    (m) => m.id_match === idMatch.value
+  );
+  const seatMatchId = matchIndex !== -1 ? matchIndex + 1 : 1;
+
+  console.log("Using seat data for match_id:", seatMatchId);
+
   const seatsForZone = siegesData
     .filter(
       (seat) =>
-        seat.match_id === idMatch.value && seat.zone === zone.toUpperCase()
+        seat.match_id === seatMatchId && seat.zone === zone.value?.toUpperCase()
     )
     .map((seat) => {
       let state = "available";
@@ -328,15 +351,26 @@ function fetchGradin() {
       return { ...seat, state };
     });
 
+  console.log("Seats found:", seatsForZone.length);
+
   seatsByMatch.value[idMatch.value] = seatsForZone;
   seats.value = seatsByMatch.value[idMatch.value];
+
+  console.log("Seats set:", seats.value.length);
 }
-
-
 
 function fetchMatches() {
   const matchesForTerrain = matchesData.filter(
-    (match) => match.id_terrain === terrainId
+    (match) => match.id_terrain === terrainId.value
+  );
+
+  console.log(
+    "Matches for terrain",
+    terrainId.value,
+    "(zone",
+    zone.value,
+    "):",
+    matchesForTerrain.length
   );
 
   matches.value = matchesForTerrain.map((match) => {
@@ -405,9 +439,6 @@ function UpdateSeatStatus(index) {
   );
 }
 
-
-
-
 function AddToCart() {
   if (!globalSelectedSeats.value.length) return;
   const panier = JSON.parse(localStorage.getItem("panier") || "[]");
@@ -467,6 +498,19 @@ function resetAllSelection() {
   localStorage.setItem("selectedSeats", "[]");
 }
 
+watch(
+  () => route.params.zone,
+  () => {
+    seatsByMatch.value = {};
+    idMatch.value = null;
+    seats.value = [];
+    fetchMatches();
+    if (matches.value.length > 0) {
+      selectMatch(matches.value[0]);
+    }
+  }
+);
+
 onMounted(() => {
   fetchMatches();
   if (matches.value.length > 0) {
@@ -498,11 +542,11 @@ onMounted(() => {
   font-size: 1.5em;
   margin: 20px 0;
 }
-.legend{
+.legend {
   display: flex;
   gap: 10px;
 }
-.legend img{
+.legend img {
   width: 40px;
 }
 .sectionTitle {
