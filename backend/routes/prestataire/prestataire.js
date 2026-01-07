@@ -53,15 +53,15 @@ router.get("/show", async (req, res) => {
         u.prenom_utilisateur,
         u.nom_utilisateur,
         t.nom_type_prestataire,
-        COUNT(s.id_service) AS nb_services
+        COALESCE(s.nb_services, 0) AS nb_services
       FROM Prestataire p
       JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
       JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
-      LEFT JOIN Services s ON p.id_prestataire = s.prestataire_id
-      GROUP BY
-        p.id_prestataire,
-        u.id_utilisateur,
-        t.nom_type_prestataire
+      LEFT JOIN (
+        SELECT prestataire_id, COUNT(*) AS nb_services
+        FROM Services
+        GROUP BY prestataire_id) s 
+        ON p.id_prestataire = s.prestataire_id
       ORDER BY p.waitingforadmin, p.nom_prestataire;
       `
     );
@@ -231,48 +231,96 @@ router.get("/show/:id", async (req, res) => {
  *         description: Erreur serveur
  */
 router.get("/showFilter", async (req, res) => {
-  const { nom, category, prixMin, prixMax } = req.query;
+  const { nom, category, prixMin, prixMax, type } = req.query;
   try {
-    let sql = `
-      SELECT
-        p.*,
-        t.nom_type_prestataire
-      FROM Prestataire p
-      JOIN Type_prestataire t
-        ON p.type_prestataire_id = t.id_type_prestataire
-      JOIN Services s
-        ON s.prestataire_id = p.id_prestataire
-      WHERE 1 = 1 `;
+    let sql = '';
     const values = [];
     let index = 1;
 
-    if (nom) {
-      sql += ` AND p.nom_prestataire ILIKE $${index}`;
-      values.push(`%${nom}%`);
-      index++;
-    }
+    if (type === 'services') {
+      // Si le slider est sur "Services" : on retourne les services filtrés
+      sql = `
+        SELECT
+          s.*,
+          p.nom_prestataire,
+          t.nom_type_prestataire
+        FROM Services s
+        JOIN Prestataire p ON s.prestataire_id = p.id_prestataire
+        JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
+        WHERE 1=1
+      `;
 
-    if (category && category !== "0") {
-      sql += ` AND p.type_prestataire_id = $${index}`;
-      values.push(Number(category));
-      index++;
-    }
+      if (nom) {
+        sql += ` AND p.nom_prestataire ILIKE $${index}`;
+        values.push(`%${nom}%`);
+        index++;
+      }
 
-    if (prixMin) {
-      sql += ` AND s.prix >= $${index}`;
-      values.push(prixMin);
-      index++;
-    }
+      if (category && category !== "0") {
+        sql += ` AND p.type_prestataire_id = $${index}`;
+        values.push(Number(category));
+        index++;
+      }
 
-    if (prixMax) {
-      sql += ` AND s.prix <= $${index}`;
-      values.push(prixMax);
-      index++;
-    }
+      if (prixMin) {
+        sql += ` AND s.prix >= $${index}`;
+        values.push(prixMin);
+        index++;
+      }
 
-    sql += ` ORDER BY p.nom_prestataire`;
+      if (prixMax) {
+        sql += ` AND s.prix <= $${index}`;
+        values.push(prixMax);
+        index++;
+      }
+
+      sql += ` ORDER BY s.nom_service`;
+
+    } else {
+      // Si le slider est sur "Prestataire" : on retourne les prestataires filtrés
+      sql = `
+        SELECT
+          p.*,
+          t.nom_type_prestataire,
+          COUNT(s.id_service) AS nb_services
+        FROM Prestataire p
+        JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
+        LEFT JOIN Services s ON s.prestataire_id = p.id_prestataire
+        WHERE 1=1
+      `;
+
+      if (nom) {
+        sql += ` AND p.nom_prestataire ILIKE $${index}`;
+        values.push(`%${nom}%`);
+        index++;
+      }
+
+      if (category && category !== "0") {
+        sql += ` AND p.type_prestataire_id = $${index}`;
+        values.push(Number(category));
+        index++;
+      }
+
+      if (prixMin) {
+        sql += ` AND s.prix >= $${index}`;
+        values.push(prixMin);
+        index++;
+      }
+
+      if (prixMax) {
+        sql += ` AND s.prix <= $${index}`;
+        values.push(prixMax);
+        index++;
+      }
+
+      sql += `
+        GROUP BY p.id_prestataire, t.nom_type_prestataire
+        ORDER BY p.nom_prestataire
+      `;
+    }
 
     const result = await pool.query(sql, values);
+    res.json(result.rows);
 
     res.json(result.rows);
   } catch (err) {
@@ -889,6 +937,21 @@ router.patch("/activateService/:id", async (req, res) => {
   }
 });
 
+router.get("/services/show", async (req, res) => {
+  const id_service = req.params.id;
+
+  try {
+    const result = await pool.query(
+      `SELECT * FROM Services`
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+})
+
 router.get("/service/show/:id", async (req, res) => {
   const id_service = req.params.id;
 
@@ -906,8 +969,6 @@ router.get("/service/show/:id", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
-
-
 })
 
 module.exports = router;
