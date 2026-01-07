@@ -1,0 +1,258 @@
+[
+  {
+    "id_pays": 1,
+    "nom_pays": "France",
+    "couleur_maillot": "Bleu / Blanc",
+    "nom_mascotte": "José le portemanteau",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 2,
+    "nom_pays": "Allemagne",
+    "couleur_maillot": "Noir / Rouge",
+    "nom_mascotte": "Adler",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 3,
+    "nom_pays": "Argentine",
+    "couleur_maillot": "Bleu ciel / Blanc",
+    "nom_mascotte": "El Cóndor",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 4,
+    "nom_pays": "Italie",
+    "couleur_maillot": "Bleu (Azzurro)",
+    "nom_mascotte": "Il Leone Azzurro",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 5,
+    "nom_pays": "Canada",
+    "couleur_maillot": "Rouge / Blanc",
+    "nom_mascotte": "Maple Leaf",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 6,
+    "nom_pays": "Bulgarie",
+    "couleur_maillot": "Vert / Blanc",
+    "nom_mascotte": "Le Lion Vert",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 7,
+    "nom_pays": "Brésil",
+    "couleur_maillot": "Jaune / Vert",
+    "nom_mascotte": "Curupira",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 8,
+    "nom_pays": "Cuba",
+    "couleur_maillot": "Rouge / Bleu",
+    "nom_mascotte": "Le Taureau Cubain",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 9,
+    "nom_pays": "États-Unis",
+    "couleur_maillot": "Bleu marine / Rouge",
+    "nom_mascotte": "Stars & Stripes Eagle",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 10,
+    "nom_pays": "Slovénie",
+    "couleur_maillot": "Bleu‑clair / Blanc",
+    "nom_mascotte": "Le Lynx Slovène",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 11,
+    "nom_pays": "Iran",
+    "couleur_maillot": "Vert / Blanc",
+    "nom_mascotte": "Le Lion Perse",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 12,
+    "nom_pays": "Ukraine",
+    "couleur_maillot": "Bleu / Jaune",
+    "nom_mascotte": "L’Ourson Bleu‑Jaune",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 13,
+    "nom_pays": "Chine",
+    "couleur_maillot": "Rouge / Jaune",
+    "nom_mascotte": "Le Dragon Rouge",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 14,
+    "nom_pays": "Japon",
+    "couleur_maillot": "Blanc / Rouge",
+    "nom_mascotte": "Le Samouraï Rouge",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 15,
+    "nom_pays": "Pologne",
+    "couleur_maillot": "Blanc / Rouge",
+    "nom_mascotte": "La Bête Blanche",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 16,
+    "nom_pays": "Serbie",
+    "couleur_maillot": "Bleu / Rouge",
+    "nom_mascotte": "Le Faucon Serbe",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 17,
+    "nom_pays": "Pays‑Bas",
+    "couleur_maillot": "Orange",
+    "nom_mascotte": "Le Lion Orange",
+    "qualifie": true,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 18,
+    "nom_pays": "Turquie",
+    "couleur_maillot": "Rouge / Blanc",
+    "nom_mascotte": "Le Croissant Rouge",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 19,
+    "nom_pays": "Belgique",
+    "couleur_maillot": "Noir / Jaune",
+    "nom_mascotte": "Le Tricolore",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 20,
+    "nom_pays": "Espagne",
+    "couleur_maillot": "Rouge / Jaune",
+    "nom_mascotte": "Le Taureau Furia",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 21,
+    "nom_pays": "Angleterre",
+    "couleur_maillot": "Blanc / Bleu",
+    "nom_mascotte": "Le Lion Britannique",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 22,
+    "nom_pays": "Thaïlande",
+    "couleur_maillot": "Bleu / Rouge",
+    "nom_mascotte": "Le Garuda Bleu",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 23,
+    "nom_pays": "Kazakhstan",
+    "couleur_maillot": "Bleu ciel / Jaune",
+    "nom_mascotte": "L’Aigle d’Or",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 24,
+    "nom_pays": "Corée du Sud",
+    "couleur_maillot": "Blanc / Rouge",
+    "nom_mascotte": "Le Tigre Blanc",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 25,
+    "nom_pays": "Australie",
+    "couleur_maillot": "Vert / Or",
+    "nom_mascotte": "Le Kangourou Vert",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 26,
+    "nom_pays": "Paraguay",
+    "couleur_maillot": "Rouge / Blanc",
+    "nom_mascotte": "Le Guarani Rouge",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 27,
+    "nom_pays": "Uruguay",
+    "couleur_maillot": "Bleu ciel / Blanc",
+    "nom_mascotte": "Le Carrousel Bleu",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 28,
+    "nom_pays": "Afrique du Sud",
+    "couleur_maillot": "Vert / Or",
+    "nom_mascotte": "Le Springbok Jaune‑Vert",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 29,
+    "nom_pays": "Maroc",
+    "couleur_maillot": "Rouge / Vert",
+    "nom_mascotte": "Le Lion de l’Atlas",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 30,
+    "nom_pays": "Arabie Saoudite",
+    "couleur_maillot": "Vert / Blanc",
+    "nom_mascotte": "Le Faucon Saoudien",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 31,
+    "nom_pays": "Tunisie",
+    "couleur_maillot": "Rouge / Blanc",
+    "nom_mascotte": "Le Scorpion Rouge",
+    "qualifie": false,
+    "id_utilisateur": 1
+  },
+  {
+    "id_pays": 32,
+    "nom_pays": "Saint‑Marin",
+    "couleur_maillot": "Bleu / Blanc",
+    "nom_mascotte": "Le Gardien du Roc",
+    "qualifie": false,
+    "id_utilisateur": 1
+  }
+]

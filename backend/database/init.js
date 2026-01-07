@@ -5,26 +5,6 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
-  DROP TABLE IF EXISTS prend_une_place CASCADE;
-  DROP TABLE IF EXISTS a_pour_ingredient CASCADE;
-  DROP TABLE IF EXISTS a_la_carte CASCADE;
-  DROP TABLE IF EXISTS est_affecte CASCADE;
-  DROP TABLE IF EXISTS nb_secouristes CASCADE;
-  DROP TABLE IF EXISTS utilisateur_de_type CASCADE;
-  DROP TABLE IF EXISTS prix_article_boutique CASCADE;
-  DROP TABLE IF EXISTS article_vendu CASCADE;
-  DROP TABLE IF EXISTS commandes_resto CASCADE;
-  DROP TABLE IF EXISTS client_boutique CASCADE;
-  DROP TABLE IF EXISTS present_dans_boutique CASCADE;
-  DROP TABLE IF EXISTS visiteurs_animation CASCADE;
-  DROP TABLE IF EXISTS clients_restaurant CASCADE;
-  DROP TABLE IF EXISTS present_dans_restaurant CASCADE;
-  DROP TABLE IF EXISTS Reservation CASCADE;
-  DROP TABLE IF EXISTS Boutique CASCADE;
-  DROP TABLE IF EXISTS Poste_secouriste CASCADE;
-  DROP TABLE IF EXISTS Animation CASCADE;
-  DROP TABLE IF EXISTS Restauration CASCADE;
-  DROP TABLE IF EXISTS Stade CASCADE;
   DROP TABLE IF EXISTS Panier_Siege CASCADE;
   DROP TABLE IF EXISTS Siege CASCADE;
   DROP TABLE IF EXISTS Match CASCADE;
@@ -32,21 +12,16 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Joueur CASCADE;
   DROP TABLE IF EXISTS Equipe CASCADE;
   DROP TABLE IF EXISTS Pays CASCADE;
-  DROP TABLE IF EXISTS Plat CASCADE;
   DROP TABLE IF EXISTS Zone CASCADE;
-  DROP TABLE IF EXISTS Article CASCADE;
-  DROP TABLE IF EXISTS Agent_securite CASCADE;
-  DROP TABLE IF EXISTS Type_boutique CASCADE;
-  DROP TABLE IF EXISTS Type_restauration CASCADE;
-  DROP TABLE IF EXISTS Type_animation CASCADE;
-  DROP TABLE IF EXISTS Date_du_jour CASCADE;
-  DROP TABLE IF EXISTS Aliment CASCADE;
   DROP TABLE IF EXISTS Organisateur CASCADE;
   DROP TABLE IF EXISTS Panier_Service CASCADE;
   DROP TABLE IF EXISTS Services CASCADE;
   DROP TABLE IF EXISTS Panier CASCADE;  
   DROP TABLE IF EXISTS Prestataire CASCADE;
   DROP TABLE IF EXISTS Type_prestataire CASCADE;
+  DROP TABLE IF EXISTS Type_boutique CASCADE;
+  DROP TABLE IF EXISTS Type_restauration CASCADE;
+  DROP TABLE IF EXISTS Type_animation CASCADE;
   DROP TABLE IF EXISTS Type_utilisateur CASCADE;
   DROP TABLE IF EXISTS Utilisateur CASCADE;
   DROP TABLE IF EXISTS Evenement CASCADE;
@@ -91,11 +66,6 @@ const pool = require("./db");
     nom_zone VARCHAR(50)
   );
 
-  CREATE TABLE IF NOT EXISTS Date_du_jour(
-    JJ_MM_AAAA DATE PRIMARY KEY,
-    hh_mm TIME
-  );
-
   CREATE TABLE IF NOT EXISTS Type_animation(
     id_type_animation SERIAL PRIMARY KEY,
     nom_type_animation VARCHAR(50)
@@ -114,22 +84,6 @@ const pool = require("./db");
   CREATE TABLE IF NOT EXISTS Type_prestataire(
     id_type_prestataire SERIAL PRIMARY KEY,
     nom_type_prestataire VARCHAR(50)
-  );
-
-  CREATE TABLE IF NOT EXISTS Aliment(
-    id_aliment SERIAL PRIMARY KEY,
-    nom_aliment VARCHAR(50)
-  );
-
-  CREATE TABLE IF NOT EXISTS Article(
-    id_article SERIAL PRIMARY KEY,
-    nom_article VARCHAR(50)
-  );
-
-  CREATE TABLE IF NOT EXISTS Plat(
-    id_plat SERIAL PRIMARY KEY,
-    nom_plat VARCHAR(50),
-    description_plat VARCHAR(50)
   );
  
   CREATE TABLE IF NOT EXISTS Prestataire(
@@ -190,55 +144,6 @@ const pool = require("./db");
     id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
   );
 
-  CREATE TABLE IF NOT EXISTS Stade(
-    id_stade SERIAL PRIMARY KEY,
-    nom_stade VARCHAR(50),
-    id_zone INTEGER NOT NULL REFERENCES Zone(id_zone)
-  );
-
-  CREATE TABLE IF NOT EXISTS Restauration(
-    id_restauration SERIAL PRIMARY KEY,
-    nom_restaurant VARCHAR(50),
-    nb_tables INTEGER,
-    id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
-    id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
-  );
-
-  CREATE TABLE IF NOT EXISTS Animation(
-    id_animation SERIAL PRIMARY KEY,
-    nom_animation VARCHAR(50),
-    capacite_animation INTEGER,
-    animation_dans_un_stade BOOLEAN,
-    id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
-    id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
-    id_type_animation INTEGER NOT NULL REFERENCES Type_animation(id_type_animation)
-  );
-
-  CREATE TABLE IF NOT EXISTS Boutique(
-    id_boutique SERIAL PRIMARY KEY,
-    nom_boutique VARCHAR(50),
-    commande_disponnible BOOLEAN,
-    capacite_boutique INTEGER,
-    id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
-    id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
-    id_type_boutique INTEGER NOT NULL REFERENCES Type_boutique(id_type_boutique)
-  );
-
-  CREATE TABLE IF NOT EXISTS Poste_secouriste(
-    id_poste_secouriste VARCHAR(50) PRIMARY KEY,
-    nb_lits_occupes INTEGER,
-    nb_lits_disponibles INTEGER,
-    id_zone INTEGER NOT NULL REFERENCES Zone(id_zone),
-    id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
-  );
-
-  CREATE TABLE IF NOT EXISTS Agent_securite(
-    id_agent_securite SERIAL PRIMARY KEY,
-    nom_agent_securite VARCHAR(50),
-    prenom_agent_securite VARCHAR(50),
-    id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
-  );
-
   CREATE TABLE IF NOT EXISTS Organisateur(
     id_organisateur SERIAL PRIMARY KEY,
     id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
@@ -250,15 +155,6 @@ const pool = require("./db");
     nb_joueurs INTEGER,
     entraineur VARCHAR(50),
     id_pays INTEGER NOT NULL REFERENCES Pays(id_pays)
-  );
-
-  CREATE TABLE IF NOT EXISTS Reservation(
-    id_reservation SERIAL PRIMARY KEY,
-    jour_reservation DATE,
-    nb_couverts_reservation INTEGER,
-    nom_reservation VARCHAR(50),
-    heure_reservation TIME,
-    id_restauration INTEGER NOT NULL REFERENCES Restauration(id_restauration)
   );
 
   CREATE TABLE IF NOT EXISTS Match(
@@ -323,132 +219,6 @@ const pool = require("./db");
     points_pour INTEGER,
     points_contre INTEGER,
     qualifie BOOLEAN DEFAULT FALSE
-  );
-
-  -- 5. Tables de liaison
-  CREATE TABLE IF NOT EXISTS present_dans_restaurant(
-    id_restauration INTEGER,
-    id_aliment INTEGER,
-    stock_aliment INTEGER,
-    PRIMARY KEY(id_restauration, id_aliment),
-    FOREIGN KEY(id_restauration) REFERENCES Restauration(id_restauration),
-    FOREIGN KEY(id_aliment) REFERENCES Aliment(id_aliment)
-  );
-
-  CREATE TABLE IF NOT EXISTS clients_restaurant(
-    id_restauration INTEGER,
-    JJ_MM_AAAA DATE,
-    PRIMARY KEY(id_restauration, JJ_MM_AAAA),
-    FOREIGN KEY(id_restauration) REFERENCES Restauration(id_restauration),
-    FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA)
-  );
-  
-  CREATE TABLE IF NOT EXISTS visiteurs_animation(
-    JJ_MM_AAAA DATE,
-    id_animation INTEGER,
-    nb_visiteurs_animation INTEGER,
-    PRIMARY KEY(JJ_MM_AAAA, id_animation),
-    FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA),
-    FOREIGN KEY(id_animation) REFERENCES Animation(id_animation)
-  );
-
-  CREATE TABLE IF NOT EXISTS present_dans_boutique(
-    id_boutique INTEGER,
-    id_article INTEGER,
-    stock_article INTEGER,
-    PRIMARY KEY(id_boutique, id_article),
-    FOREIGN KEY(id_boutique) REFERENCES Boutique(id_boutique),
-    FOREIGN KEY(id_article) REFERENCES Article(id_article)
-  );
-
-  CREATE TABLE IF NOT EXISTS client_boutique(
-    JJ_MM_AAAA DATE,
-    id_boutique INTEGER,
-    nb_clients_boutique INTEGER,
-    PRIMARY KEY(JJ_MM_AAAA, id_boutique),
-    FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA),
-    FOREIGN KEY(id_boutique) REFERENCES Boutique(id_boutique)
-  );
-
-  CREATE TABLE IF NOT EXISTS commandes_resto(
-    id_restauration INTEGER,
-    JJ_MM_AAAA DATE,
-    id_plat INTEGER,
-    PRIMARY KEY(id_restauration, JJ_MM_AAAA, id_plat),
-    FOREIGN KEY(id_restauration) REFERENCES Restauration(id_restauration),
-    FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA),
-    FOREIGN KEY(id_plat) REFERENCES Plat(id_plat)
-  );
-
-  CREATE TABLE IF NOT EXISTS article_vendu(
-    id_boutique INTEGER,
-    id_article INTEGER,
-    nb_article_vendu INTEGER,
-    PRIMARY KEY(id_boutique, id_article),
-    FOREIGN KEY(id_boutique) REFERENCES Boutique(id_boutique),
-    FOREIGN KEY(id_article) REFERENCES Article(id_article)
-  );
-
-  CREATE TABLE IF NOT EXISTS prix_article_boutique(
-    id_boutique INTEGER,
-    id_article INTEGER,
-    prix_article NUMERIC(19,4),
-    PRIMARY KEY(id_boutique, id_article),
-    FOREIGN KEY(id_boutique) REFERENCES Boutique(id_boutique),
-    FOREIGN KEY(id_article) REFERENCES Article(id_article)
-  );
-
-  CREATE TABLE IF NOT EXISTS utilisateur_de_type(
-    id_utilisateur INTEGER,
-    id_utilisateur_1 INTEGER,
-    PRIMARY KEY(id_utilisateur, id_utilisateur_1),
-    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
-    FOREIGN KEY(id_utilisateur_1) REFERENCES Type_utilisateur(id_utilisateur)
-  );
-
-  CREATE TABLE IF NOT EXISTS nb_secouristes(
-    JJ_MM_AAAA DATE,
-    id_poste_secouriste VARCHAR(50),
-    nb_secouristes_affectes INTEGER,
-    PRIMARY KEY(JJ_MM_AAAA, id_poste_secouriste),
-    FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA),
-    FOREIGN KEY(id_poste_secouriste) REFERENCES Poste_secouriste(id_poste_secouriste)
-  );
-
-  CREATE TABLE IF NOT EXISTS est_affecte(
-    JJ_MM_AAAA DATE,
-    id_agent_securite INTEGER,
-    id_zone INTEGER,
-    PRIMARY KEY(JJ_MM_AAAA, id_agent_securite, id_zone),
-    FOREIGN KEY(JJ_MM_AAAA) REFERENCES Date_du_jour(JJ_MM_AAAA),
-    FOREIGN KEY(id_agent_securite) REFERENCES Agent_securite(id_agent_securite),
-    FOREIGN KEY(id_zone) REFERENCES Zone(id_zone)
-  );
-
-  CREATE TABLE IF NOT EXISTS a_la_carte(
-    id_restauration INTEGER,
-    id_plat INTEGER,
-    prix_plat NUMERIC(19,4),
-    PRIMARY KEY(id_restauration, id_plat),
-    FOREIGN KEY(id_restauration) REFERENCES Restauration(id_restauration),
-    FOREIGN KEY(id_plat) REFERENCES Plat(id_plat)
-  );
-
-  CREATE TABLE IF NOT EXISTS a_pour_ingredient(
-    id_aliment INTEGER,
-    id_plat INTEGER,
-    quantite VARCHAR(50),
-    PRIMARY KEY(id_aliment, id_plat),
-    FOREIGN KEY(id_aliment) REFERENCES Aliment(id_aliment),
-    FOREIGN KEY(id_plat) REFERENCES Plat(id_plat)
-  );
-
-  CREATE TABLE IF NOT EXISTS prend_une_place(
-    id_utilisateur INTEGER,
-    id_match INTEGER,
-    PRIMARY KEY(id_utilisateur, id_match),
-    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
-    FOREIGN KEY(id_match) REFERENCES Match(id_match)
   );
 `;
 
