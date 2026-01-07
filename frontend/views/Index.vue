@@ -24,7 +24,7 @@
         <!-- #############################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
 
         <section class="infos" id="Info">
-          <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
+          <div class="bloc" v-for="(item, index) in informationArray" :key="index">
             <img class="illustration" :src="item.image" />
             <span class="title">
               <countUp
@@ -41,7 +41,7 @@
               <router-link
                 :to="{ name: 'Information', params: { id: userStore.userId } }"
                 class="voirPlus pointer">
-                <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
+                <span class="pointer">{{ $t("information.voirPlus") }}</span>
               </router-link>
             </div>
           </div>
@@ -49,7 +49,7 @@
 
         <!-- <BounceCard
           class="custom-bounceCards"
-          :images="blocInfoArray.map((b) => b.image)"
+          :images="informationArray.map((b) => b.image)"
           :containerWidth="500"
           :containerHeight="250"
           :animationDelay="1"
@@ -167,33 +167,33 @@ const imagePreview = ref(null);
 const selectedFont = ref(null);
 
 const { t } = useI18n();
-const blocInfoArray = computed(() => [
+const informationArray = computed(() => [
   {
-    title: t("blocInfo.titleEdition"),
-    descri: t("blocInfo.descriEdition"),
+    title: t("information.titleEdition"),
+    descri: t("information.descriEdition"),
     image: logoCouleur,
   },
   {
-    title: t("blocInfo.titleMillions"),
-    descri: t("blocInfo.descriPratiquants"),
+    title: t("information.titleMillions"),
+    descri: t("information.descriPratiquants"),
     image: photoFond,
     countUp: 760,
   },
   {
-    title: t("blocInfo.titlePays"),
-    descri: t("blocInfo.descriPays"),
+    title: t("information.titlePays"),
+    descri: t("information.descriPays"),
     image: photoFoule,
     countUp: 200,
   },
   {
-    title: t("blocInfo.titleMillions"),
-    descri: t("blocInfo.descriAudience"),
+    title: t("information.titleMillions"),
+    descri: t("information.descriAudience"),
     image: photoStade,
     countUp: 24,
   },
   {
-    title: t("blocInfo.titleReseauxSociaux"),
-    descri: t("blocInfo.descriReseauxSociaux"),
+    title: t("information.titleReseauxSociaux"),
+    descri: t("information.descriReseauxSociaux"),
     image: photoReseaux,
   },
 ]);
