@@ -155,7 +155,7 @@ const zoneToTerrain = {
   sud: 3,
   ouest: 4,
 };
-
+//CHANGER Lid des terrains avec 1 2 34 5 6 7 8  9 10 11 12 13
 const terrainId = zoneToTerrain[zone];
 
 const globalSelectedSeats = ref(
