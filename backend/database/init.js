@@ -859,7 +859,7 @@ const pool = require("./db");
     ('DeFalco', 'TJ', 'Masculin', '1997-04-10', 1.98, 8, 'États-Unis', 'Receveur-Attaquant', 9, 'DeFalco.png'),
     ('Christenson', 'Micah', 'Masculin', '1993-05-08', 1.98, 11, 'États-Unis', 'Central', 9, NULL),
     ('Holt', 'Max', 'Masculin', '1987-03-12', 2.08, 12, 'États-Unis', 'Attaquant', 9, NULL),
-    ('Ma\'a', 'Micah', 'Masculin', '1997-01-26', 1.91, 14, 'États-Unis', 'Receveur-Attaquant', 9, 'Maa.png'),
+    ('Ma''a', 'Micah', 'Masculin', '1997-01-26', 1.91, 14, 'États-Unis', 'Receveur-Attaquant', 9, 'Maa.png'),
     ('Jaeschke', 'Thomas', 'Masculin', '1993-08-15', 2.01, 17, 'États-Unis', 'Libero', 9, 'Jaeschke.png'),
     ('Muagututia', 'Garrett', 'Masculin', '1994-11-09', 1.88, 18, 'États-Unis', 'Attaquant', 9, NULL),
     ('Averill', 'Taylor', 'Masculin', '1993-03-28', 2.06, 19, 'États-Unis', 'Receveur-Attaquant', 9, NULL),
@@ -1241,7 +1241,6 @@ const pool = require("./db");
     ('Canti', 'Lorenzo', 'Masculin', '1995-09-20', 1.97, 12, 'Saint-Marin', 'Attaquant', 32, NULL),
     ('Tomassini', 'Alberto', 'Masculin', '1992-05-07', 1.99, 13, 'Saint-Marin', 'Libero', 32, NULL),
     ('Fabbri', 'Riccardo', 'Masculin', '1994-06-26', 2.01, 14, 'Saint-Marin', 'Central', 32, NULL);
-
     `;
 
     await pool.query(insertJoueurEquipe);
