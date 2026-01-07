@@ -164,12 +164,10 @@
 import NavView from "@/components/NavView.vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
-// Import des données JSON locales
 import joueursData from "../../backend/database/jsonData/Joueur.json";
 import matchesData from "../../backend/database/jsonData/Match.json";
 import equipesData from "../../backend/database/jsonData/Equipe.json";
 import paysData from "../../backend/database/jsonData/Pays.json";
-// import axios from "axios";
 import logoPersonne from "@/images/LogoPersonne.png";
 import terrainImage from "@/images/TerrainSans.png";
 import Footer from "@/components/Footer.vue";
@@ -204,19 +202,15 @@ const matchTime = computed(() => {
   return `${hours}:${minutes}`;
 });
 
-// Version JSON locale (sans axios)
 function fetchPlayers() {
-  // Utiliser directement les données JSON locales
   players.value = joueursData;
 }
 
 function fetchMatches() {
-  // Filtrer les matchs pour le terrain sélectionné
   const matchesForTerrain = matchesData.filter(
     (match) => match.id_terrain === terrainId.value
   );
 
-  // Enrichir les matchs avec les noms des pays et coaches
   matches.value = matchesForTerrain.map((match) => {
     const equipe1 = equipesData.find((e) => e.id_equipe === match.id_equipe1);
     const equipe2 = equipesData.find((e) => e.id_equipe === match.id_equipe2);

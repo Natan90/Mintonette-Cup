@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "@/views/Index.vue";
 import ShowPrestataire from "@/views/ShowPrestataire.vue";
-import Commander from "@/views/Commander.vue";
 import Reserver from "@/views/Reserver.vue";
 import PresentationMintonette from "@/views/PresentationMintonette.vue";
 import PolygonCreation from "@/views/PolygonCreation.vue";
@@ -59,12 +58,6 @@ const routes = [
         name: "EditPrestataire",
         component: PrestataireInfo,
         props: true,
-      },
-
-      {
-        path: "Commander",
-        name: "Commander",
-        component: Commander,
       },
       {
         path: "Reserver",
