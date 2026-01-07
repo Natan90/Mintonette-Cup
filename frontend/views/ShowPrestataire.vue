@@ -150,7 +150,7 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
-import axios from "axios";
+// import axios from "axios";
 import { useRoute, useRouter } from 'vue-router';
 import { useNavigationStore } from "@/stores/navigation";
 import NavView from "@/components/NavView.vue";
@@ -158,6 +158,9 @@ import Footer from "@/components/Footer.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
+import PrestataireData from "../../backend/database/jsonData/Prestataire.json";
+import UtilisateurData from "../../backend/database/jsonData/Utilisateur.json";
+import ServicesData from "../../backend/database/jsonData/Services.json";
 
 
 
@@ -224,13 +227,9 @@ watch(() => locale.value,
     updateDescription();
   })
 
-onMounted(async () => {
-  try {
-    await getValuesPrestataire(idPresta);
-    if (!adminStore.services) adminStore.services = "az";
-  } catch (err) {
-    console.error(err);
-  }
+onMounted(() => {
+  getValuesPrestataire(idPresta);
+  if (!adminStore.services) adminStore.services = "az";
 });
 
 const servicesFiltres = computed(() => {
@@ -281,78 +280,142 @@ function goToEditPrestataire() {
 //==========================
 //= Async functions presta =
 //==========================
-async function getValuesPrestataire() {
-  try {
-    const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
-    onePresta.value = res.data.prestataire;
+// async function getValuesPrestataire() {
+//   try {
+//     const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
+//     onePresta.value = res.data.prestataire;
 
-    services.value = res.data.services;
+//     services.value = res.data.services;
 
-  } catch (err) {
-    console.error("Erreur lors de la récupération des données :", err);
+//   } catch (err) {
+//     console.error("Erreur lors de la récupération des données :", err);
+//   }
+// }
+
+function getValuesPrestataire() {
+  console.log('idPresta:', idPresta, 'Type:', typeof idPresta);
+  console.log('ServicesData:', ServicesData);
+  console.log('Premier service:', ServicesData[0]);
+  
+  const presta = PrestataireData.find(p => p.id_prestataire === Number(idPresta));
+  if (presta) {
+    const utilisateur = UtilisateurData.find(u => u.id_utilisateur === presta.id_utilisateur);
+    onePresta.value = {
+      ...presta,
+      nom_utilisateur: utilisateur?.nom_utilisateur || '',
+      prenom_utilisateur: utilisateur?.prenom_utilisateur || ''
+    };
   }
+  
+  const filtered = ServicesData.filter(s => {
+    console.log('Service:', s.id_service, 'prestataire_id:', s.prestataire_id, 'Type:', typeof s.prestataire_id, 'Match:', s.prestataire_id === Number(idPresta));
+    return s.prestataire_id === Number(idPresta);
+  });
+  
+  console.log('Services filtrés:', filtered.length);
+  services.value = filtered;
 }
 
-async function desactivatingService(service) {
+function desactivatingService(service) {
   desactivate.value = true;
   actionsService(service);
 }
 
-async function activateService(service) {
+function activateService(service) {
   activate.value = true;
   actionsService(service);
 }
 
-async function actionsService(service) {
-  try {
-    desactivateService.value = service;
+// async function actionsService(service) {
+//   try {
+//     desactivateService.value = service;
 
-    const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
+//     const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
 
-    const index = services.value.findIndex(s => s.id_service === service.id_service);
-    if (index !== -1) {
-      services.value[index].activate = !services.value[index].activate;
-    }
+//     const index = services.value.findIndex(s => s.id_service === service.id_service);
+//     if (index !== -1) {
+//       services.value[index].activate = !services.value[index].activate;
+//     }
 
-  } catch (err) {
-    console.error("Erreur lors de la récupération des données :", err);
+//   } catch (err) {
+//     console.error("Erreur lors de la récupération des données :", err);
+//   }
+// }
+
+function actionsService(service) {
+  desactivateService.value = service;
+  const index = services.value.findIndex(s => s.id_service === service.id_service);
+  if (index !== -1) {
+    services.value[index].activate = !services.value[index].activate;
   }
 }
 
-async function getOneService(service) {
+// async function getOneService(service) {
+//   showService.value = true;
+//   try {
+//     const res = await axios.get(`http://localhost:3000/prestataire/service/show/${service.id_service}`)
+//     oneService.value = res.data;
+//     console.log("Res.data" ,res.data);
+
+
+//     console.log(oneService)
+
+//     updateDescription();
+
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+function getOneService(service) {
   showService.value = true;
-  try {
-    const res = await axios.get(`http://localhost:3000/prestataire/service/show/${service.id_service}`)
-    oneService.value = res.data;
-    console.log("Res.data" ,res.data);
-
-
-    console.log(oneService)
-
-    updateDescription();
-
-  } catch (err) {
-    console.error(err);
+  const serviceData = ServicesData.find(s => s.id_service === service.id_service);
+  if (serviceData) {
+    oneService.value = serviceData;
   }
+  updateDescription();
 }
 
-async function addService(service) {
+// async function addService(service) {
+//   if (!userStore.userId) {
+//     console.error("Utilisateur non connecté !");
+//     return;
+//   }
+
+//   try {
+//     const res = await axios.post(`http://localhost:3000/panier/addService`, {
+//       id_user: userStore.userId,
+//       service_id: service.id_service,
+//       quantite: 1
+//     });
+
+//     showService.value = false;
+//   } catch (err) {
+//     console.error("Erreur lors de l'ajout au panier :", err);
+//   }
+// }
+
+function addService(service) {
   if (!userStore.userId) {
     console.error("Utilisateur non connecté !");
     return;
   }
 
-  try {
-    const res = await axios.post(`http://localhost:3000/panier/addService`, {
+  const panier = JSON.parse(localStorage.getItem('panier')) || [];
+  const existingItem = panier.find(item => item.service_id === service.id_service && item.id_user === userStore.userId);
+  
+  if (existingItem) {
+    existingItem.quantite += 1;
+  } else {
+    panier.push({
       id_user: userStore.userId,
       service_id: service.id_service,
       quantite: 1
     });
-
-    showService.value = false;
-  } catch (err) {
-    console.error("Erreur lors de l'ajout au panier :", err);
   }
+  
+  localStorage.setItem('panier', JSON.stringify(panier));
+  showService.value = false;
 }
 
 

@@ -103,13 +103,14 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import axios from "axios";
+// import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
+import UtilisateurData from "../../../backend/database/jsonData/Utilisateur.json";
 
 const router = useRouter();
 const route = useRoute();
@@ -117,9 +118,6 @@ const { locale } = useI18n();
 const adminStore = useAdminStore();
 const navStore = useNavigationStore();
 
-//==========================
-//====== Utilisateurs ======
-//==========================
 const utilisateurs = ref([]);
 const selectedUser = ref(null);
 const deletedUser = ref(null);
@@ -206,45 +204,51 @@ const utilisateursFiltres = computed(() => {
 
 
 
-onMounted(async () => {
-  try {
-    await getValuesUtilisateurs();
-    if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
-  } catch (err) {
-    console.error(err);
-  }
+onMounted(() => {
+  getValuesUtilisateurs();
+  if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
 });
 
 
-//==========================
-//== Async functions user ==
-//==========================
-async function getValuesUtilisateurs() {
-  try {
-    const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
-    utilisateurs.value = res.data;
-    console.log(utilisateurs.value);
 
-  } catch (err) {
-    console.error("Erreur fetch utilisateurs:", err);
-  }
+// async function getValuesUtilisateurs() {
+//   try {
+//     const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
+//     utilisateurs.value = res.data;
+//     console.log(utilisateurs.value);
+
+//   } catch (err) {
+//     console.error("Erreur fetch utilisateurs:", err);
+//   }
+// };
+
+function getValuesUtilisateurs() {
+  utilisateurs.value = UtilisateurData;
 };
 
 
-async function deleteUtilisateur(idUser) {
-  try {
-    deletedUser.value = { ...selectedUser.value };
+// async function deleteUtilisateur(idUser) {
+//   try {
+//     deletedUser.value = { ...selectedUser.value };
 
-    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${idUser}`);
+//     await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${idUser}`);
 
-    isDelete.value = false;
-    deleting.value = true;
-    utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
-    router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
+//     isDelete.value = false;
+//     deleting.value = true;
+//     utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
+//     router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
 
-  } catch (err) {
-    console.error("Erreur suppression utilisateur:", err);
-  }
+//   } catch (err) {
+//     console.error("Erreur suppression utilisateur:", err);
+//   }
+// };
+
+function deleteUtilisateur(idUser) {
+  deletedUser.value = { ...selectedUser.value };
+  isDelete.value = false;
+  deleting.value = true;
+  utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
+  router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
 };
 </script>
 

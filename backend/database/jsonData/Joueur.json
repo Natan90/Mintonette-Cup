@@ -2731,154 +2731,89 @@
   },
   {
     "id_joueur": 211,
-    "nom_joueur": "Podrascanin",
-    "prenom_joueur": "Marko",
+    "nom_joueur": "Okolić",
+    "prenom_joueur": "Aleksandar",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1987-10-28T23:00:00.000Z",
-    "taille": 2.04,
+    "date_naissance_joueur": "1992-12-31T23:00:00.000Z",
+    "taille": 2.06,
     "numero_joueur": 1,
     "pays": "Serbie",
     "poste": "Central",
-    "photo": null,
+    "photo": "Okolic.png",
     "id_equipe": 16
   },
   {
     "id_joueur": 212,
-    "nom_joueur": "Kovacevic",
-    "prenom_joueur": "Aleksandar",
+    "nom_joueur": "Kovačević",
+    "prenom_joueur": "Uroš",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1995-06-10T22:00:00.000Z",
+    "date_naissance_joueur": "1992-12-31T23:00:00.000Z",
     "taille": 1.98,
     "numero_joueur": 2,
     "pays": "Serbie",
     "poste": "Attaquant",
-    "photo": null,
+    "photo": "Kovacevic.png",
     "id_equipe": 16
   },
   {
     "id_joueur": 213,
-    "nom_joueur": "Atanasijevic",
-    "prenom_joueur": "Nemanja",
+    "nom_joueur": "Peković",
+    "prenom_joueur": "Nikola",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1987-08-13T22:00:00.000Z",
-    "taille": 2.03,
-    "numero_joueur": 3,
-    "pays": "Serbie",
-    "poste": "Receveur-Attaquant",
-    "photo": null,
-    "id_equipe": 16
-  },
-  {
-    "id_joueur": 214,
-    "nom_joueur": "Lisinac",
-    "prenom_joueur": "Marko",
-    "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1990-06-02T22:00:00.000Z",
-    "taille": 2.06,
-    "numero_joueur": 4,
-    "pays": "Serbie",
-    "poste": "Central",
-    "photo": null,
-    "id_equipe": 16
-  },
-  {
-    "id_joueur": 215,
-    "nom_joueur": "Petkovic",
-    "prenom_joueur": "Aleksa",
-    "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1992-09-19T22:00:00.000Z",
-    "taille": 1.97,
-    "numero_joueur": 5,
-    "pays": "Serbie",
-    "poste": "Attaquant",
-    "photo": null,
-    "id_equipe": 16
-  },
-  {
-    "id_joueur": 216,
-    "nom_joueur": "Milenkovic",
-    "prenom_joueur": "Uros",
-    "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1994-05-13T22:00:00.000Z",
-    "taille": 1.96,
+    "date_naissance_joueur": "1989-12-31T23:00:00.000Z",
+    "taille": 1.76,
     "numero_joueur": 6,
-    "pays": "Serbie",
-    "poste": "Receveur-Attaquant",
-    "photo": null,
-    "id_equipe": 16
-  },
-  {
-    "id_joueur": 217,
-    "nom_joueur": "Aleksic",
-    "prenom_joueur": "Vuk",
-    "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1993-02-20T23:00:00.000Z",
-    "taille": 1.95,
-    "numero_joueur": 7,
-    "pays": "Serbie",
-    "poste": "Central",
-    "photo": null,
-    "id_equipe": 16
-  },
-  {
-    "id_joueur": 218,
-    "nom_joueur": "Kovacevic",
-    "prenom_joueur": "Marko",
-    "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1991-08-17T22:00:00.000Z",
-    "taille": 1.9,
-    "numero_joueur": 8,
     "pays": "Serbie",
     "poste": "Libero",
     "photo": null,
     "id_equipe": 16
   },
   {
-    "id_joueur": 219,
-    "nom_joueur": "Tomic",
-    "prenom_joueur": "Sasa",
+    "id_joueur": 214,
+    "nom_joueur": "Krsmаnović",
+    "prenom_joueur": "Petar",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1995-04-09T22:00:00.000Z",
-    "taille": 2.01,
-    "numero_joueur": 9,
+    "date_naissance_joueur": "1989-12-31T23:00:00.000Z",
+    "taille": 2.04,
+    "numero_joueur": 7,
+    "pays": "Serbie",
+    "poste": "Central",
+    "photo": "Krsmanovic.png",
+    "id_equipe": 16
+  },
+  {
+    "id_joueur": 215,
+    "nom_joueur": "Ivović",
+    "prenom_joueur": "Marko",
+    "sexe_joueur": "Masculin",
+    "date_naissance_joueur": "1989-12-31T23:00:00.000Z",
+    "taille": 1.94,
+    "numero_joueur": 8,
     "pays": "Serbie",
     "poste": "Attaquant",
-    "photo": null,
+    "photo": "Ivovic.png",
     "id_equipe": 16
   },
   {
-    "id_joueur": 220,
-    "nom_joueur": "Stevanovic",
+    "id_joueur": 216,
+    "nom_joueur": "Jovović",
     "prenom_joueur": "Nikola",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1992-07-06T22:00:00.000Z",
-    "taille": 1.98,
-    "numero_joueur": 10,
-    "pays": "Serbie",
-    "poste": "Receveur-Attaquant",
-    "photo": null,
-    "id_equipe": 16
-  },
-  {
-    "id_joueur": 221,
-    "nom_joueur": "Gocic",
-    "prenom_joueur": "Uros",
-    "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1993-03-21T23:00:00.000Z",
-    "taille": 1.97,
-    "numero_joueur": 11,
+    "date_naissance_joueur": "1991-12-31T23:00:00.000Z",
+    "taille": 1.99,
+    "numero_joueur": 9,
     "pays": "Serbie",
     "poste": "Passeur",
-    "photo": null,
+    "photo": "Jovovic.png",
     "id_equipe": 16
   },
   {
-    "id_joueur": 222,
-    "nom_joueur": "Mitic",
-    "prenom_joueur": "Aleksandar",
+    "id_joueur": 217,
+    "nom_joueur": "Perić",
+    "prenom_joueur": "Pavle",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1994-05-18T22:00:00.000Z",
-    "taille": 1.99,
+    "date_naissance_joueur": "1997-12-31T23:00:00.000Z",
+    "taille": 2.07,
     "numero_joueur": 12,
     "pays": "Serbie",
     "poste": "Attaquant",
@@ -2886,33 +2821,85 @@
     "id_equipe": 16
   },
   {
-    "id_joueur": 223,
-    "nom_joueur": "Petrovic",
-    "prenom_joueur": "Nikola",
+    "id_joueur": 218,
+    "nom_joueur": "Atanasijević",
+    "prenom_joueur": "Aleksandar",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1990-12-02T23:00:00.000Z",
-    "taille": 1.98,
-    "numero_joueur": 13,
+    "date_naissance_joueur": "1990-12-31T23:00:00.000Z",
+    "taille": 2.02,
+    "numero_joueur": 14,
+    "pays": "Serbie",
+    "poste": "Opposé",
+    "photo": null,
+    "id_equipe": 16
+  },
+  {
+    "id_joueur": 219,
+    "nom_joueur": "Luburić",
+    "prenom_joueur": "Dražen",
+    "sexe_joueur": "Masculin",
+    "date_naissance_joueur": "1992-12-31T23:00:00.000Z",
+    "taille": 2.02,
+    "numero_joueur": 16,
+    "pays": "Serbie",
+    "poste": "Opposé",
+    "photo": "Luburic.png",
+    "id_equipe": 16
+  },
+  {
+    "id_joueur": 220,
+    "nom_joueur": "Majstorović",
+    "prenom_joueur": "Neven",
+    "sexe_joueur": "Masculin",
+    "date_naissance_joueur": "1988-12-31T23:00:00.000Z",
+    "taille": 1.93,
+    "numero_joueur": 17,
     "pays": "Serbie",
     "poste": "Libero",
     "photo": null,
     "id_equipe": 16
   },
   {
-    "id_joueur": 224,
-    "nom_joueur": "Zivkovic",
-    "prenom_joueur": "Milan",
+    "id_joueur": 221,
+    "nom_joueur": "Podraščanin",
+    "prenom_joueur": "Marko",
     "sexe_joueur": "Masculin",
-    "date_naissance_joueur": "1995-09-24T23:00:00.000Z",
-    "taille": 2,
-    "numero_joueur": 14,
+    "date_naissance_joueur": "1987-10-28T23:00:00.000Z",
+    "taille": 2.04,
+    "numero_joueur": 18,
     "pays": "Serbie",
     "poste": "Central",
     "photo": null,
     "id_equipe": 16
   },
   {
-    "id_joueur": 225,
+    "id_joueur": 222,
+    "nom_joueur": "Lisinac",
+    "prenom_joueur": "Srećko",
+    "sexe_joueur": "Masculin",
+    "date_naissance_joueur": "1991-12-31T23:00:00.000Z",
+    "taille": 2.05,
+    "numero_joueur": 20,
+    "pays": "Serbie",
+    "poste": "Central",
+    "photo": null,
+    "id_equipe": 16
+  },
+  {
+    "id_joueur": 223,
+    "nom_joueur": "Todorović",
+    "prenom_joueur": "Vuk",
+    "sexe_joueur": "Masculin",
+    "date_naissance_joueur": "1997-12-31T23:00:00.000Z",
+    "taille": 1.91,
+    "numero_joueur": 21,
+    "pays": "Serbie",
+    "poste": "Passeur",
+    "photo": null,
+    "id_equipe": 16
+  },
+  {
+    "id_joueur": 224,
     "nom_joueur": "Jorna",
     "prenom_joueur": "Gijs",
     "sexe_joueur": "Masculin",
@@ -2925,7 +2912,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 226,
+    "id_joueur": 225,
     "nom_joueur": "Ter Horst",
     "prenom_joueur": "Thijs",
     "sexe_joueur": "Masculin",
@@ -2938,7 +2925,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 227,
+    "id_joueur": 226,
     "nom_joueur": "Wiltenburg",
     "prenom_joueur": "Twan",
     "sexe_joueur": "Masculin",
@@ -2951,7 +2938,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 228,
+    "id_joueur": 227,
     "nom_joueur": "Klok",
     "prenom_joueur": "Jeffrey",
     "sexe_joueur": "Masculin",
@@ -2964,7 +2951,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 229,
+    "id_joueur": 228,
     "nom_joueur": "Tuinstra",
     "prenom_joueur": "Bennie",
     "sexe_joueur": "Masculin",
@@ -2977,7 +2964,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 230,
+    "id_joueur": 229,
     "nom_joueur": "Wijkstra",
     "prenom_joueur": "Jasper",
     "sexe_joueur": "Masculin",
@@ -2990,7 +2977,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 231,
+    "id_joueur": 230,
     "nom_joueur": "Van Der Ent",
     "prenom_joueur": "Luuc",
     "sexe_joueur": "Masculin",
@@ -3003,7 +2990,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 232,
+    "id_joueur": 231,
     "nom_joueur": "Plak",
     "prenom_joueur": "Fabian",
     "sexe_joueur": "Masculin",
@@ -3016,7 +3003,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 233,
+    "id_joueur": 232,
     "nom_joueur": "Ahyi",
     "prenom_joueur": "Michiel",
     "sexe_joueur": "Masculin",
@@ -3029,7 +3016,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 234,
+    "id_joueur": 233,
     "nom_joueur": "Berkhout",
     "prenom_joueur": "Joris",
     "sexe_joueur": "Masculin",
@@ -3042,7 +3029,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 235,
+    "id_joueur": 234,
     "nom_joueur": "Meijs",
     "prenom_joueur": "Sil",
     "sexe_joueur": "Masculin",
@@ -3055,7 +3042,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 236,
+    "id_joueur": 235,
     "nom_joueur": "Keemink",
     "prenom_joueur": "Wessel",
     "sexe_joueur": "Masculin",
@@ -3068,7 +3055,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 237,
+    "id_joueur": 236,
     "nom_joueur": "Wortelboer",
     "prenom_joueur": "Beau",
     "sexe_joueur": "Masculin",
@@ -3081,7 +3068,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 238,
+    "id_joueur": 237,
     "nom_joueur": "Van Dijk",
     "prenom_joueur": "Ferdy",
     "sexe_joueur": "Masculin",
@@ -3094,7 +3081,7 @@
     "id_equipe": 17
   },
   {
-    "id_joueur": 239,
+    "id_joueur": 238,
     "nom_joueur": "Lagumdzija",
     "prenom_joueur": "Adis",
     "sexe_joueur": "Masculin",
@@ -3107,7 +3094,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 240,
+    "id_joueur": 239,
     "nom_joueur": "Gulmezoglu",
     "prenom_joueur": "Yigit",
     "sexe_joueur": "Masculin",
@@ -3120,7 +3107,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 241,
+    "id_joueur": 240,
     "nom_joueur": "Bülbül",
     "prenom_joueur": "Bedirhan",
     "sexe_joueur": "Masculin",
@@ -3133,7 +3120,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 242,
+    "id_joueur": 241,
     "nom_joueur": "Done",
     "prenom_joueur": "Volkan",
     "sexe_joueur": "Masculin",
@@ -3146,7 +3133,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 243,
+    "id_joueur": 242,
     "nom_joueur": "Eksi",
     "prenom_joueur": "Arslan",
     "sexe_joueur": "Masculin",
@@ -3159,7 +3146,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 244,
+    "id_joueur": 243,
     "nom_joueur": "Gunes",
     "prenom_joueur": "Faik",
     "sexe_joueur": "Masculin",
@@ -3172,7 +3159,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 245,
+    "id_joueur": 244,
     "nom_joueur": "Lagumdzija",
     "prenom_joueur": "Mirza",
     "sexe_joueur": "Masculin",
@@ -3185,7 +3172,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 246,
+    "id_joueur": 245,
     "nom_joueur": "Savas",
     "prenom_joueur": "Vahit Emre",
     "sexe_joueur": "Masculin",
@@ -3198,7 +3185,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 247,
+    "id_joueur": 246,
     "nom_joueur": "Bayram",
     "prenom_joueur": "Efe",
     "sexe_joueur": "Masculin",
@@ -3211,7 +3198,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 248,
+    "id_joueur": 247,
     "nom_joueur": "Bostan",
     "prenom_joueur": "Arda",
     "sexe_joueur": "Masculin",
@@ -3224,7 +3211,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 249,
+    "id_joueur": 248,
     "nom_joueur": "Gungor",
     "prenom_joueur": "Baturalp Burak",
     "sexe_joueur": "Masculin",
@@ -3237,7 +3224,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 250,
+    "id_joueur": 249,
     "nom_joueur": "Matic",
     "prenom_joueur": "Mert",
     "sexe_joueur": "Masculin",
@@ -3250,7 +3237,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 251,
+    "id_joueur": 250,
     "nom_joueur": "Bayraktar",
     "prenom_joueur": "Berkay",
     "sexe_joueur": "Masculin",
@@ -3263,7 +3250,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 252,
+    "id_joueur": 251,
     "nom_joueur": "Subasi",
     "prenom_joueur": "Burutay",
     "sexe_joueur": "Masculin",
@@ -3276,7 +3263,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 253,
+    "id_joueur": 252,
     "nom_joueur": "Gurbuz",
     "prenom_joueur": "Kaan",
     "sexe_joueur": "Masculin",
@@ -3289,7 +3276,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 254,
+    "id_joueur": 253,
     "nom_joueur": "Hatipoglu",
     "prenom_joueur": "Beytullah",
     "sexe_joueur": "Masculin",
@@ -3302,7 +3289,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 255,
+    "id_joueur": 254,
     "nom_joueur": "Ulu",
     "prenom_joueur": "Dogukan",
     "sexe_joueur": "Masculin",
@@ -3315,7 +3302,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 256,
+    "id_joueur": 255,
     "nom_joueur": "Toy",
     "prenom_joueur": "Metin",
     "sexe_joueur": "Masculin",
@@ -3328,7 +3315,7 @@
     "id_equipe": 18
   },
   {
-    "id_joueur": 257,
+    "id_joueur": 256,
     "nom_joueur": "Lecat",
     "prenom_joueur": "François",
     "sexe_joueur": "Masculin",
@@ -3341,7 +3328,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 258,
+    "id_joueur": 257,
     "nom_joueur": "Tuerlinckx",
     "prenom_joueur": "Hendrik",
     "sexe_joueur": "Masculin",
@@ -3354,7 +3341,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 259,
+    "id_joueur": 258,
     "nom_joueur": "Deroo",
     "prenom_joueur": "Sam",
     "sexe_joueur": "Masculin",
@@ -3367,7 +3354,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 260,
+    "id_joueur": 259,
     "nom_joueur": "Dhulst",
     "prenom_joueur": "Stijn",
     "sexe_joueur": "Masculin",
@@ -3380,7 +3367,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 261,
+    "id_joueur": 260,
     "nom_joueur": "Pieter",
     "prenom_joueur": "le mec cool",
     "sexe_joueur": "Masculin",
@@ -3393,7 +3380,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 262,
+    "id_joueur": 261,
     "nom_joueur": "Van Elsen",
     "prenom_joueur": "Lennert",
     "sexe_joueur": "Masculin",
@@ -3406,7 +3393,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 263,
+    "id_joueur": 262,
     "nom_joueur": "Verhanneman",
     "prenom_joueur": "Matthijs",
     "sexe_joueur": "Masculin",
@@ -3419,7 +3406,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 264,
+    "id_joueur": 263,
     "nom_joueur": "Dheer",
     "prenom_joueur": "Wout",
     "sexe_joueur": "Masculin",
@@ -3432,7 +3419,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 265,
+    "id_joueur": 264,
     "nom_joueur": "Cox",
     "prenom_joueur": "Jolan",
     "sexe_joueur": "Masculin",
@@ -3445,7 +3432,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 266,
+    "id_joueur": 265,
     "nom_joueur": "Van Hoyweghen",
     "prenom_joueur": "Seppe",
     "sexe_joueur": "Masculin",
@@ -3458,7 +3445,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 267,
+    "id_joueur": 266,
     "nom_joueur": "Rotty",
     "prenom_joueur": "Seppe",
     "sexe_joueur": "Masculin",
@@ -3471,7 +3458,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 268,
+    "id_joueur": 267,
     "nom_joueur": "Thys",
     "prenom_joueur": "Elias",
     "sexe_joueur": "Masculin",
@@ -3484,7 +3471,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 269,
+    "id_joueur": 268,
     "nom_joueur": "Côtes",
     "prenom_joueur": "Jelle",
     "sexe_joueur": "Masculin",
@@ -3497,7 +3484,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 270,
+    "id_joueur": 269,
     "nom_joueur": "Deroey",
     "prenom_joueur": "Dennis",
     "sexe_joueur": "Masculin",
@@ -3510,7 +3497,7 @@
     "id_equipe": 19
   },
   {
-    "id_joueur": 271,
+    "id_joueur": 270,
     "nom_joueur": "Ruiz",
     "prenom_joueur": "Borja",
     "sexe_joueur": "Masculin",
@@ -3523,7 +3510,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 272,
+    "id_joueur": 271,
     "nom_joueur": "Lorente",
     "prenom_joueur": "Ruben",
     "sexe_joueur": "Masculin",
@@ -3536,7 +3523,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 273,
+    "id_joueur": 272,
     "nom_joueur": "Villena",
     "prenom_joueur": "Andres",
     "sexe_joueur": "Masculin",
@@ -3549,7 +3536,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 274,
+    "id_joueur": 273,
     "nom_joueur": "Iribarne",
     "prenom_joueur": "Francisco",
     "sexe_joueur": "Masculin",
@@ -3562,7 +3549,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 275,
+    "id_joueur": 274,
     "nom_joueur": "Osorio",
     "prenom_joueur": "Gerard",
     "sexe_joueur": "Masculin",
@@ -3575,7 +3562,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 276,
+    "id_joueur": 275,
     "nom_joueur": "Vigil",
     "prenom_joueur": "Alejandro",
     "sexe_joueur": "Masculin",
@@ -3588,7 +3575,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 277,
+    "id_joueur": 276,
     "nom_joueur": "De Amo",
     "prenom_joueur": "Miguel Angel",
     "sexe_joueur": "Masculin",
@@ -3601,7 +3588,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 278,
+    "id_joueur": 277,
     "nom_joueur": "Larrañaga",
     "prenom_joueur": "Unai",
     "sexe_joueur": "Masculin",
@@ -3614,7 +3601,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 279,
+    "id_joueur": 278,
     "nom_joueur": "Noda",
     "prenom_joueur": "Sergio",
     "sexe_joueur": "Masculin",
@@ -3627,7 +3614,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 280,
+    "id_joueur": 279,
     "nom_joueur": "Ruiz",
     "prenom_joueur": "Francisco",
     "sexe_joueur": "Masculin",
@@ -3640,7 +3627,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 281,
+    "id_joueur": 280,
     "nom_joueur": "Forner",
     "prenom_joueur": "Miguel Angel",
     "sexe_joueur": "Masculin",
@@ -3653,7 +3640,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 282,
+    "id_joueur": 281,
     "nom_joueur": "Ramon",
     "prenom_joueur": "Jordi",
     "sexe_joueur": "Masculin",
@@ -3666,7 +3653,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 283,
+    "id_joueur": 282,
     "nom_joueur": "Gimeno",
     "prenom_joueur": "Alvaro",
     "sexe_joueur": "Masculin",
@@ -3679,7 +3666,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 284,
+    "id_joueur": 283,
     "nom_joueur": "Colito",
     "prenom_joueur": "Augusto",
     "sexe_joueur": "Masculin",
@@ -3692,7 +3679,7 @@
     "id_equipe": 20
   },
   {
-    "id_joueur": 285,
+    "id_joueur": 284,
     "nom_joueur": "Bakare",
     "prenom_joueur": "Peter",
     "sexe_joueur": "Masculin",
@@ -3705,7 +3692,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 286,
+    "id_joueur": 285,
     "nom_joueur": "Pipes",
     "prenom_joueur": "Ben",
     "sexe_joueur": "Masculin",
@@ -3718,7 +3705,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 287,
+    "id_joueur": 286,
     "nom_joueur": "Bakare",
     "prenom_joueur": "Dami",
     "sexe_joueur": "Masculin",
@@ -3731,7 +3718,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 288,
+    "id_joueur": 287,
     "nom_joueur": "Hunter",
     "prenom_joueur": "Daniel",
     "sexe_joueur": "Masculin",
@@ -3744,7 +3731,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 289,
+    "id_joueur": 288,
     "nom_joueur": "Plotyczer",
     "prenom_joueur": "Mark",
     "sexe_joueur": "Masculin",
@@ -3757,7 +3744,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 290,
+    "id_joueur": 289,
     "nom_joueur": "McGivern",
     "prenom_joueur": "Mark",
     "sexe_joueur": "Masculin",
@@ -3770,7 +3757,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 291,
+    "id_joueur": 290,
     "nom_joueur": "Haldane",
     "prenom_joueur": "Jason",
     "sexe_joueur": "Masculin",
@@ -3783,7 +3770,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 292,
+    "id_joueur": 291,
     "nom_joueur": "Pink",
     "prenom_joueur": "Andrew",
     "sexe_joueur": "Masculin",
@@ -3796,7 +3783,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 293,
+    "id_joueur": 292,
     "nom_joueur": "French",
     "prenom_joueur": "Nathan",
     "sexe_joueur": "Masculin",
@@ -3809,7 +3796,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 294,
+    "id_joueur": 293,
     "nom_joueur": "Miller",
     "prenom_joueur": "Joel",
     "sexe_joueur": "Masculin",
@@ -3822,7 +3809,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 295,
+    "id_joueur": 294,
     "nom_joueur": "Lamont",
     "prenom_joueur": "Christopher",
     "sexe_joueur": "Masculin",
@@ -3835,7 +3822,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 296,
+    "id_joueur": 295,
     "nom_joueur": "OMalley",
     "prenom_joueur": "Kieran",
     "sexe_joueur": "Masculin",
@@ -3848,7 +3835,7 @@
     "id_equipe": 21
   },
   {
-    "id_joueur": 297,
+    "id_joueur": 296,
     "nom_joueur": "Vaenpradab",
     "prenom_joueur": "Montri",
     "sexe_joueur": "Masculin",
@@ -3861,7 +3848,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 298,
+    "id_joueur": 297,
     "nom_joueur": "Tabwises",
     "prenom_joueur": "Wanchai",
     "sexe_joueur": "Masculin",
@@ -3874,7 +3861,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 299,
+    "id_joueur": 298,
     "nom_joueur": "Kesapan",
     "prenom_joueur": "Nattapong",
     "sexe_joueur": "Masculin",
@@ -3887,7 +3874,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 300,
+    "id_joueur": 299,
     "nom_joueur": "Tivsuwan",
     "prenom_joueur": "Shotivat",
     "sexe_joueur": "Masculin",
@@ -3900,7 +3887,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 301,
+    "id_joueur": 300,
     "nom_joueur": "Boudang",
     "prenom_joueur": "Uranan",
     "sexe_joueur": "Masculin",
@@ -3913,7 +3900,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 302,
+    "id_joueur": 301,
     "nom_joueur": "Sriutthawong",
     "prenom_joueur": "Kittikun",
     "sexe_joueur": "Masculin",
@@ -3926,7 +3913,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 303,
+    "id_joueur": 302,
     "nom_joueur": "Toontupthai",
     "prenom_joueur": "Piyarat",
     "sexe_joueur": "Masculin",
@@ -3939,7 +3926,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 304,
+    "id_joueur": 303,
     "nom_joueur": "Harnkhomtun",
     "prenom_joueur": "Pissanu",
     "sexe_joueur": "Masculin",
@@ -3952,7 +3939,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 305,
+    "id_joueur": 304,
     "nom_joueur": "Wannaprapa",
     "prenom_joueur": "Somporn",
     "sexe_joueur": "Masculin",
@@ -3965,7 +3952,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 306,
+    "id_joueur": 305,
     "nom_joueur": "Somkane",
     "prenom_joueur": "Kritsada",
     "sexe_joueur": "Masculin",
@@ -3978,7 +3965,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 307,
+    "id_joueur": 306,
     "nom_joueur": "Charoensuk",
     "prenom_joueur": "Saranchit",
     "sexe_joueur": "Masculin",
@@ -3991,7 +3978,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 308,
+    "id_joueur": 307,
     "nom_joueur": "Sripon",
     "prenom_joueur": "Theerayut",
     "sexe_joueur": "Masculin",
@@ -4004,7 +3991,7 @@
     "id_equipe": 22
   },
   {
-    "id_joueur": 309,
+    "id_joueur": 308,
     "nom_joueur": "Boken",
     "prenom_joueur": "Yerikzhan",
     "sexe_joueur": "Masculin",
@@ -4017,7 +4004,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 310,
+    "id_joueur": 309,
     "nom_joueur": "Kuznetsov",
     "prenom_joueur": "Sergey",
     "sexe_joueur": "Masculin",
@@ -4030,7 +4017,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 311,
+    "id_joueur": 310,
     "nom_joueur": "Stolnikov",
     "prenom_joueur": "Alexandr",
     "sexe_joueur": "Masculin",
@@ -4043,7 +4030,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 312,
+    "id_joueur": 311,
     "nom_joueur": "Pogrebnyak",
     "prenom_joueur": "Eduard",
     "sexe_joueur": "Masculin",
@@ -4056,7 +4043,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 313,
+    "id_joueur": 312,
     "nom_joueur": "Michshenko",
     "prenom_joueur": "Maxim",
     "sexe_joueur": "Masculin",
@@ -4069,7 +4056,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 314,
+    "id_joueur": 313,
     "nom_joueur": "Akimov",
     "prenom_joueur": "Damir",
     "sexe_joueur": "Masculin",
@@ -4082,7 +4069,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 315,
+    "id_joueur": 314,
     "nom_joueur": "Kadirkhanov",
     "prenom_joueur": "Nodirkhan",
     "sexe_joueur": "Masculin",
@@ -4095,7 +4082,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 316,
+    "id_joueur": 315,
     "nom_joueur": "Netalin",
     "prenom_joueur": "Aibat",
     "sexe_joueur": "Masculin",
@@ -4108,7 +4095,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 317,
+    "id_joueur": 316,
     "nom_joueur": "Ustinov",
     "prenom_joueur": "Mikhail",
     "sexe_joueur": "Masculin",
@@ -4121,7 +4108,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 318,
+    "id_joueur": 317,
     "nom_joueur": "Erdshtein",
     "prenom_joueur": "Vitaliy",
     "sexe_joueur": "Masculin",
@@ -4134,7 +4121,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 319,
+    "id_joueur": 318,
     "nom_joueur": "Vorivodin",
     "prenom_joueur": "Vitaliy",
     "sexe_joueur": "Masculin",
@@ -4147,7 +4134,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 320,
+    "id_joueur": 319,
     "nom_joueur": "Prokofyev",
     "prenom_joueur": "Vladimir",
     "sexe_joueur": "Masculin",
@@ -4160,7 +4147,7 @@
     "id_equipe": 23
   },
   {
-    "id_joueur": 321,
+    "id_joueur": 320,
     "nom_joueur": "Shin",
     "prenom_joueur": "Young-Soo",
     "sexe_joueur": "Masculin",
@@ -4173,7 +4160,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 322,
+    "id_joueur": 321,
     "nom_joueur": "Han",
     "prenom_joueur": "Sun-Soo",
     "sexe_joueur": "Masculin",
@@ -4186,7 +4173,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 323,
+    "id_joueur": 322,
     "nom_joueur": "Kwon",
     "prenom_joueur": "Young-Min",
     "sexe_joueur": "Masculin",
@@ -4199,7 +4186,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 324,
+    "id_joueur": 323,
     "nom_joueur": "Moon",
     "prenom_joueur": "Sung-Min",
     "sexe_joueur": "Masculin",
@@ -4212,7 +4199,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 325,
+    "id_joueur": 324,
     "nom_joueur": "Yeo",
     "prenom_joueur": "Oh-Hyun",
     "sexe_joueur": "Masculin",
@@ -4225,7 +4212,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 326,
+    "id_joueur": 325,
     "nom_joueur": "Choi",
     "prenom_joueur": "Tae-Woong",
     "sexe_joueur": "Masculin",
@@ -4238,7 +4225,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 327,
+    "id_joueur": 326,
     "nom_joueur": "Lee",
     "prenom_joueur": "Sun-Kyu",
     "sexe_joueur": "Masculin",
@@ -4251,7 +4238,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 328,
+    "id_joueur": 327,
     "nom_joueur": "Kim",
     "prenom_joueur": "Hak-Min",
     "sexe_joueur": "Masculin",
@@ -4264,7 +4251,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 329,
+    "id_joueur": 328,
     "nom_joueur": "Kang",
     "prenom_joueur": "Dong-Jin",
     "sexe_joueur": "Masculin",
@@ -4277,7 +4264,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 330,
+    "id_joueur": 329,
     "nom_joueur": "Ko",
     "prenom_joueur": "Hee-Jin",
     "sexe_joueur": "Masculin",
@@ -4290,7 +4277,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 331,
+    "id_joueur": 330,
     "nom_joueur": "Lee",
     "prenom_joueur": "Kyung-Soo",
     "sexe_joueur": "Masculin",
@@ -4303,7 +4290,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 332,
+    "id_joueur": 331,
     "nom_joueur": "Kim",
     "prenom_joueur": "Hyun-Soo",
     "sexe_joueur": "Masculin",
@@ -4316,7 +4303,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 333,
+    "id_joueur": 332,
     "nom_joueur": "Park",
     "prenom_joueur": "Chul-Woo",
     "sexe_joueur": "Masculin",
@@ -4329,7 +4316,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 334,
+    "id_joueur": 333,
     "nom_joueur": "Kim",
     "prenom_joueur": "Yo-Han",
     "sexe_joueur": "Masculin",
@@ -4342,7 +4329,7 @@
     "id_equipe": 24
   },
   {
-    "id_joueur": 335,
+    "id_joueur": 334,
     "nom_joueur": "Smith",
     "prenom_joueur": "Liam",
     "sexe_joueur": "Masculin",
@@ -4355,7 +4342,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 336,
+    "id_joueur": 335,
     "nom_joueur": "Brown",
     "prenom_joueur": "Ethan",
     "sexe_joueur": "Masculin",
@@ -4368,7 +4355,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 337,
+    "id_joueur": 336,
     "nom_joueur": "Wilson",
     "prenom_joueur": "Jack",
     "sexe_joueur": "Masculin",
@@ -4381,7 +4368,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 338,
+    "id_joueur": 337,
     "nom_joueur": "Taylor",
     "prenom_joueur": "Noah",
     "sexe_joueur": "Masculin",
@@ -4394,7 +4381,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 339,
+    "id_joueur": 338,
     "nom_joueur": "Johnson",
     "prenom_joueur": "Lucas",
     "sexe_joueur": "Masculin",
@@ -4407,7 +4394,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 340,
+    "id_joueur": 339,
     "nom_joueur": "Evans",
     "prenom_joueur": "Mason",
     "sexe_joueur": "Masculin",
@@ -4420,7 +4407,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 341,
+    "id_joueur": 340,
     "nom_joueur": "Martin",
     "prenom_joueur": "Ryan",
     "sexe_joueur": "Masculin",
@@ -4433,7 +4420,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 342,
+    "id_joueur": 341,
     "nom_joueur": "Lee",
     "prenom_joueur": "Owen",
     "sexe_joueur": "Masculin",
@@ -4446,7 +4433,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 343,
+    "id_joueur": 342,
     "nom_joueur": "Harris",
     "prenom_joueur": "Thomas",
     "sexe_joueur": "Masculin",
@@ -4459,7 +4446,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 344,
+    "id_joueur": 343,
     "nom_joueur": "Walker",
     "prenom_joueur": "Cameron",
     "sexe_joueur": "Masculin",
@@ -4472,7 +4459,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 345,
+    "id_joueur": 344,
     "nom_joueur": "King",
     "prenom_joueur": "Samuel",
     "sexe_joueur": "Masculin",
@@ -4485,7 +4472,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 346,
+    "id_joueur": 345,
     "nom_joueur": "Wright",
     "prenom_joueur": "Benjamin",
     "sexe_joueur": "Masculin",
@@ -4498,7 +4485,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 347,
+    "id_joueur": 346,
     "nom_joueur": "Scott",
     "prenom_joueur": "Alexander",
     "sexe_joueur": "Masculin",
@@ -4511,7 +4498,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 348,
+    "id_joueur": 347,
     "nom_joueur": "Adams",
     "prenom_joueur": "Nathan",
     "sexe_joueur": "Masculin",
@@ -4524,7 +4511,7 @@
     "id_equipe": 25
   },
   {
-    "id_joueur": 349,
+    "id_joueur": 348,
     "nom_joueur": "Gonzalez",
     "prenom_joueur": "Luis",
     "sexe_joueur": "Masculin",
@@ -4537,7 +4524,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 350,
+    "id_joueur": 349,
     "nom_joueur": "Lopez",
     "prenom_joueur": "Carlos",
     "sexe_joueur": "Masculin",
@@ -4550,7 +4537,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 351,
+    "id_joueur": 350,
     "nom_joueur": "Rodriguez",
     "prenom_joueur": "Miguel",
     "sexe_joueur": "Masculin",
@@ -4563,7 +4550,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 352,
+    "id_joueur": 351,
     "nom_joueur": "Fernandez",
     "prenom_joueur": "Jorge",
     "sexe_joueur": "Masculin",
@@ -4576,7 +4563,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 353,
+    "id_joueur": 352,
     "nom_joueur": "Martinez",
     "prenom_joueur": "Diego",
     "sexe_joueur": "Masculin",
@@ -4589,7 +4576,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 354,
+    "id_joueur": 353,
     "nom_joueur": "Vega",
     "prenom_joueur": "Antonio",
     "sexe_joueur": "Masculin",
@@ -4602,7 +4589,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 355,
+    "id_joueur": 354,
     "nom_joueur": "Silva",
     "prenom_joueur": "Juan",
     "sexe_joueur": "Masculin",
@@ -4615,7 +4602,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 356,
+    "id_joueur": 355,
     "nom_joueur": "Ortiz",
     "prenom_joueur": "Pedro",
     "sexe_joueur": "Masculin",
@@ -4628,7 +4615,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 357,
+    "id_joueur": 356,
     "nom_joueur": "Ramirez",
     "prenom_joueur": "Javier",
     "sexe_joueur": "Masculin",
@@ -4641,7 +4628,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 358,
+    "id_joueur": 357,
     "nom_joueur": "Torres",
     "prenom_joueur": "Victor",
     "sexe_joueur": "Masculin",
@@ -4654,7 +4641,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 359,
+    "id_joueur": 358,
     "nom_joueur": "Alvarez",
     "prenom_joueur": "Emilio",
     "sexe_joueur": "Masculin",
@@ -4667,7 +4654,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 360,
+    "id_joueur": 359,
     "nom_joueur": "Sanchez",
     "prenom_joueur": "Hector",
     "sexe_joueur": "Masculin",
@@ -4680,7 +4667,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 361,
+    "id_joueur": 360,
     "nom_joueur": "Gimenez",
     "prenom_joueur": "Felipe",
     "sexe_joueur": "Masculin",
@@ -4693,7 +4680,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 362,
+    "id_joueur": 361,
     "nom_joueur": "Diaz",
     "prenom_joueur": "Rafael",
     "sexe_joueur": "Masculin",
@@ -4706,7 +4693,7 @@
     "id_equipe": 26
   },
   {
-    "id_joueur": 363,
+    "id_joueur": 362,
     "nom_joueur": "Gomez",
     "prenom_joueur": "Matias",
     "sexe_joueur": "Masculin",
@@ -4719,7 +4706,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 364,
+    "id_joueur": 363,
     "nom_joueur": "Rodriguez",
     "prenom_joueur": "Diego",
     "sexe_joueur": "Masculin",
@@ -4732,7 +4719,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 365,
+    "id_joueur": 364,
     "nom_joueur": "Fernandez",
     "prenom_joueur": "Lucas",
     "sexe_joueur": "Masculin",
@@ -4745,7 +4732,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 366,
+    "id_joueur": 365,
     "nom_joueur": "Martinez",
     "prenom_joueur": "Nicolas",
     "sexe_joueur": "Masculin",
@@ -4758,7 +4745,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 367,
+    "id_joueur": 366,
     "nom_joueur": "Diaz",
     "prenom_joueur": "Joaquin",
     "sexe_joueur": "Masculin",
@@ -4771,7 +4758,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 368,
+    "id_joueur": 367,
     "nom_joueur": "Alvarez",
     "prenom_joueur": "Martin",
     "sexe_joueur": "Masculin",
@@ -4784,7 +4771,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 369,
+    "id_joueur": 368,
     "nom_joueur": "Silva",
     "prenom_joueur": "Facundo",
     "sexe_joueur": "Masculin",
@@ -4797,7 +4784,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 370,
+    "id_joueur": 369,
     "nom_joueur": "Perez",
     "prenom_joueur": "Santiago",
     "sexe_joueur": "Masculin",
@@ -4810,7 +4797,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 371,
+    "id_joueur": 370,
     "nom_joueur": "Gimenez",
     "prenom_joueur": "Federico",
     "sexe_joueur": "Masculin",
@@ -4823,7 +4810,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 372,
+    "id_joueur": 371,
     "nom_joueur": "Lopez",
     "prenom_joueur": "Andres",
     "sexe_joueur": "Masculin",
@@ -4836,7 +4823,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 373,
+    "id_joueur": 372,
     "nom_joueur": "Torres",
     "prenom_joueur": "Bruno",
     "sexe_joueur": "Masculin",
@@ -4849,7 +4836,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 374,
+    "id_joueur": 373,
     "nom_joueur": "Vega",
     "prenom_joueur": "Maximiliano",
     "sexe_joueur": "Masculin",
@@ -4862,7 +4849,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 375,
+    "id_joueur": 374,
     "nom_joueur": "Morales",
     "prenom_joueur": "Emiliano",
     "sexe_joueur": "Masculin",
@@ -4875,7 +4862,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 376,
+    "id_joueur": 375,
     "nom_joueur": "Castro",
     "prenom_joueur": "Diego",
     "sexe_joueur": "Masculin",
@@ -4888,7 +4875,7 @@
     "id_equipe": 27
   },
   {
-    "id_joueur": 377,
+    "id_joueur": 376,
     "nom_joueur": "Nkosi",
     "prenom_joueur": "Thabo",
     "sexe_joueur": "Masculin",
@@ -4901,7 +4888,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 378,
+    "id_joueur": 377,
     "nom_joueur": "van der Merwe",
     "prenom_joueur": "Johan",
     "sexe_joueur": "Masculin",
@@ -4914,7 +4901,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 379,
+    "id_joueur": 378,
     "nom_joueur": "Botha",
     "prenom_joueur": "Siyabonga",
     "sexe_joueur": "Masculin",
@@ -4927,7 +4914,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 380,
+    "id_joueur": 379,
     "nom_joueur": "Pieterse",
     "prenom_joueur": "Leroy",
     "sexe_joueur": "Masculin",
@@ -4940,7 +4927,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 381,
+    "id_joueur": 380,
     "nom_joueur": "Smith",
     "prenom_joueur": "Kagiso",
     "sexe_joueur": "Masculin",
@@ -4953,7 +4940,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 382,
+    "id_joueur": 381,
     "nom_joueur": "Mokoena",
     "prenom_joueur": "Sipho",
     "sexe_joueur": "Masculin",
@@ -4966,7 +4953,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 383,
+    "id_joueur": 382,
     "nom_joueur": "Mahlangu",
     "prenom_joueur": "Thulani",
     "sexe_joueur": "Masculin",
@@ -4979,7 +4966,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 384,
+    "id_joueur": 383,
     "nom_joueur": "Dlamini",
     "prenom_joueur": "Sabelo",
     "sexe_joueur": "Masculin",
@@ -4992,7 +4979,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 385,
+    "id_joueur": 384,
     "nom_joueur": "van Wyk",
     "prenom_joueur": "Hendrik",
     "sexe_joueur": "Masculin",
@@ -5005,7 +4992,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 386,
+    "id_joueur": 385,
     "nom_joueur": "Jansen",
     "prenom_joueur": "Ruan",
     "sexe_joueur": "Masculin",
@@ -5018,7 +5005,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 387,
+    "id_joueur": 386,
     "nom_joueur": "Steyn",
     "prenom_joueur": "Gerrit",
     "sexe_joueur": "Masculin",
@@ -5031,7 +5018,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 388,
+    "id_joueur": 387,
     "nom_joueur": "Coetzee",
     "prenom_joueur": "Dylan",
     "sexe_joueur": "Masculin",
@@ -5044,7 +5031,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 389,
+    "id_joueur": 388,
     "nom_joueur": "Botha",
     "prenom_joueur": "Riaan",
     "sexe_joueur": "Masculin",
@@ -5057,7 +5044,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 390,
+    "id_joueur": 389,
     "nom_joueur": "van der Westhuizen",
     "prenom_joueur": "Frans",
     "sexe_joueur": "Masculin",
@@ -5070,7 +5057,7 @@
     "id_equipe": 28
   },
   {
-    "id_joueur": 391,
+    "id_joueur": 390,
     "nom_joueur": "El Amrani",
     "prenom_joueur": "Youssef",
     "sexe_joueur": "Masculin",
@@ -5083,7 +5070,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 392,
+    "id_joueur": 391,
     "nom_joueur": "Bouazza",
     "prenom_joueur": "Mohamed",
     "sexe_joueur": "Masculin",
@@ -5096,7 +5083,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 393,
+    "id_joueur": 392,
     "nom_joueur": "Haddadi",
     "prenom_joueur": "Mehdi",
     "sexe_joueur": "Masculin",
@@ -5109,7 +5096,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 394,
+    "id_joueur": 393,
     "nom_joueur": "Benali",
     "prenom_joueur": "Rachid",
     "sexe_joueur": "Masculin",
@@ -5122,7 +5109,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 395,
+    "id_joueur": 394,
     "nom_joueur": "Bennani",
     "prenom_joueur": "Adil",
     "sexe_joueur": "Masculin",
@@ -5135,7 +5122,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 396,
+    "id_joueur": 395,
     "nom_joueur": "El Fassi",
     "prenom_joueur": "Yassine",
     "sexe_joueur": "Masculin",
@@ -5148,7 +5135,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 397,
+    "id_joueur": 396,
     "nom_joueur": "Zeroual",
     "prenom_joueur": "Amine",
     "sexe_joueur": "Masculin",
@@ -5161,7 +5148,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 398,
+    "id_joueur": 397,
     "nom_joueur": "Ouhaddou",
     "prenom_joueur": "Rayan",
     "sexe_joueur": "Masculin",
@@ -5174,7 +5161,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 399,
+    "id_joueur": 398,
     "nom_joueur": "Cherkaoui",
     "prenom_joueur": "Anas",
     "sexe_joueur": "Masculin",
@@ -5187,7 +5174,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 400,
+    "id_joueur": 399,
     "nom_joueur": "El Idrissi",
     "prenom_joueur": "Sofiane",
     "sexe_joueur": "Masculin",
@@ -5200,7 +5187,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 401,
+    "id_joueur": 400,
     "nom_joueur": "Boukadida",
     "prenom_joueur": "Hamid",
     "sexe_joueur": "Masculin",
@@ -5213,7 +5200,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 402,
+    "id_joueur": 401,
     "nom_joueur": "Bouhaddi",
     "prenom_joueur": "Yassir",
     "sexe_joueur": "Masculin",
@@ -5226,7 +5213,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 403,
+    "id_joueur": 402,
     "nom_joueur": "Amrani",
     "prenom_joueur": "Omar",
     "sexe_joueur": "Masculin",
@@ -5239,7 +5226,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 404,
+    "id_joueur": 403,
     "nom_joueur": "El Khalfi",
     "prenom_joueur": "Mohammed",
     "sexe_joueur": "Masculin",
@@ -5252,7 +5239,7 @@
     "id_equipe": 29
   },
   {
-    "id_joueur": 405,
+    "id_joueur": 404,
     "nom_joueur": "Al-Shehri",
     "prenom_joueur": "Fahad",
     "sexe_joueur": "Masculin",
@@ -5265,7 +5252,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 406,
+    "id_joueur": 405,
     "nom_joueur": "Al-Qahtani",
     "prenom_joueur": "Mohammed",
     "sexe_joueur": "Masculin",
@@ -5278,7 +5265,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 407,
+    "id_joueur": 406,
     "nom_joueur": "Al-Mutairi",
     "prenom_joueur": "Abdullah",
     "sexe_joueur": "Masculin",
@@ -5291,7 +5278,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 408,
+    "id_joueur": 407,
     "nom_joueur": "Al-Harbi",
     "prenom_joueur": "Nasser",
     "sexe_joueur": "Masculin",
@@ -5304,7 +5291,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 409,
+    "id_joueur": 408,
     "nom_joueur": "Al-Fahad",
     "prenom_joueur": "Saad",
     "sexe_joueur": "Masculin",
@@ -5317,7 +5304,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 410,
+    "id_joueur": 409,
     "nom_joueur": "Al-Rashid",
     "prenom_joueur": "Khalid",
     "sexe_joueur": "Masculin",
@@ -5330,7 +5317,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 411,
+    "id_joueur": 410,
     "nom_joueur": "Al-Jaber",
     "prenom_joueur": "Yousef",
     "sexe_joueur": "Masculin",
@@ -5343,7 +5330,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 412,
+    "id_joueur": 411,
     "nom_joueur": "Al-Zahrani",
     "prenom_joueur": "Omar",
     "sexe_joueur": "Masculin",
@@ -5356,7 +5343,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 413,
+    "id_joueur": 412,
     "nom_joueur": "Al-Hassan",
     "prenom_joueur": "Riyadh",
     "sexe_joueur": "Masculin",
@@ -5369,7 +5356,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 414,
+    "id_joueur": 413,
     "nom_joueur": "Al-Shammari",
     "prenom_joueur": "Fahad",
     "sexe_joueur": "Masculin",
@@ -5382,7 +5369,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 415,
+    "id_joueur": 414,
     "nom_joueur": "Al-Mansour",
     "prenom_joueur": "Sami",
     "sexe_joueur": "Masculin",
@@ -5395,7 +5382,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 416,
+    "id_joueur": 415,
     "nom_joueur": "Al-Khalid",
     "prenom_joueur": "Ahmed",
     "sexe_joueur": "Masculin",
@@ -5408,7 +5395,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 417,
+    "id_joueur": 416,
     "nom_joueur": "Al-Saud",
     "prenom_joueur": "Majed",
     "sexe_joueur": "Masculin",
@@ -5421,7 +5408,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 418,
+    "id_joueur": 417,
     "nom_joueur": "Al-Farsi",
     "prenom_joueur": "Tariq",
     "sexe_joueur": "Masculin",
@@ -5434,7 +5421,7 @@
     "id_equipe": 30
   },
   {
-    "id_joueur": 419,
+    "id_joueur": 418,
     "nom_joueur": "Ben Salah",
     "prenom_joueur": "Mohamed",
     "sexe_joueur": "Masculin",
@@ -5447,7 +5434,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 420,
+    "id_joueur": 419,
     "nom_joueur": "Khemiri",
     "prenom_joueur": "Ahmed",
     "sexe_joueur": "Masculin",
@@ -5460,7 +5447,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 421,
+    "id_joueur": 420,
     "nom_joueur": "Trabelsi",
     "prenom_joueur": "Sami",
     "sexe_joueur": "Masculin",
@@ -5473,7 +5460,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 422,
+    "id_joueur": 421,
     "nom_joueur": "Haddad",
     "prenom_joueur": "Youssef",
     "sexe_joueur": "Masculin",
@@ -5486,7 +5473,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 423,
+    "id_joueur": 422,
     "nom_joueur": "Ben Youssef",
     "prenom_joueur": "Amine",
     "sexe_joueur": "Masculin",
@@ -5499,7 +5486,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 424,
+    "id_joueur": 423,
     "nom_joueur": "Jaziri",
     "prenom_joueur": "Omar",
     "sexe_joueur": "Masculin",
@@ -5512,7 +5499,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 425,
+    "id_joueur": 424,
     "nom_joueur": "Masmoudi",
     "prenom_joueur": "Mohamed",
     "sexe_joueur": "Masculin",
@@ -5525,7 +5512,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 426,
+    "id_joueur": 425,
     "nom_joueur": "Bouazizi",
     "prenom_joueur": "Ali",
     "sexe_joueur": "Masculin",
@@ -5538,7 +5525,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 427,
+    "id_joueur": 426,
     "nom_joueur": "Ben Amor",
     "prenom_joueur": "Sofiene",
     "sexe_joueur": "Masculin",
@@ -5551,7 +5538,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 428,
+    "id_joueur": 427,
     "nom_joueur": "Gharbi",
     "prenom_joueur": "Anis",
     "sexe_joueur": "Masculin",
@@ -5564,7 +5551,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 429,
+    "id_joueur": 428,
     "nom_joueur": "Chakroun",
     "prenom_joueur": "Rami",
     "sexe_joueur": "Masculin",
@@ -5577,7 +5564,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 430,
+    "id_joueur": 429,
     "nom_joueur": "Ben Ali",
     "prenom_joueur": "Hatem",
     "sexe_joueur": "Masculin",
@@ -5590,7 +5577,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 431,
+    "id_joueur": 430,
     "nom_joueur": "Triki",
     "prenom_joueur": "Mohamed",
     "sexe_joueur": "Masculin",
@@ -5603,7 +5590,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 432,
+    "id_joueur": 431,
     "nom_joueur": "Khaldi",
     "prenom_joueur": "Firas",
     "sexe_joueur": "Masculin",
@@ -5616,7 +5603,7 @@
     "id_equipe": 31
   },
   {
-    "id_joueur": 433,
+    "id_joueur": 432,
     "nom_joueur": "Berti",
     "prenom_joueur": "Marco",
     "sexe_joueur": "Masculin",
@@ -5629,7 +5616,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 434,
+    "id_joueur": 433,
     "nom_joueur": "Pettinelli",
     "prenom_joueur": "Luca",
     "sexe_joueur": "Masculin",
@@ -5642,7 +5629,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 435,
+    "id_joueur": 434,
     "nom_joueur": "Gasperoni",
     "prenom_joueur": "Matteo",
     "sexe_joueur": "Masculin",
@@ -5655,7 +5642,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 436,
+    "id_joueur": 435,
     "nom_joueur": "Berardi",
     "prenom_joueur": "Alessandro",
     "sexe_joueur": "Masculin",
@@ -5668,7 +5655,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 437,
+    "id_joueur": 436,
     "nom_joueur": "Mancini",
     "prenom_joueur": "Fabio",
     "sexe_joueur": "Masculin",
@@ -5681,7 +5668,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 438,
+    "id_joueur": 437,
     "nom_joueur": "Toni",
     "prenom_joueur": "Daniele",
     "sexe_joueur": "Masculin",
@@ -5694,7 +5681,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 439,
+    "id_joueur": 438,
     "nom_joueur": "Cecchini",
     "prenom_joueur": "Andrea",
     "sexe_joueur": "Masculin",
@@ -5707,7 +5694,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 440,
+    "id_joueur": 439,
     "nom_joueur": "Battistini",
     "prenom_joueur": "Francesco",
     "sexe_joueur": "Masculin",
@@ -5720,7 +5707,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 441,
+    "id_joueur": 440,
     "nom_joueur": "Mularoni",
     "prenom_joueur": "Gabriele",
     "sexe_joueur": "Masculin",
@@ -5733,7 +5720,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 442,
+    "id_joueur": 441,
     "nom_joueur": "Baldacci",
     "prenom_joueur": "Stefano",
     "sexe_joueur": "Masculin",
@@ -5746,7 +5733,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 443,
+    "id_joueur": 442,
     "nom_joueur": "Guidi",
     "prenom_joueur": "Simone",
     "sexe_joueur": "Masculin",
@@ -5759,7 +5746,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 444,
+    "id_joueur": 443,
     "nom_joueur": "Canti",
     "prenom_joueur": "Lorenzo",
     "sexe_joueur": "Masculin",
@@ -5772,7 +5759,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 445,
+    "id_joueur": 444,
     "nom_joueur": "Tomassini",
     "prenom_joueur": "Alberto",
     "sexe_joueur": "Masculin",
@@ -5785,7 +5772,7 @@
     "id_equipe": 32
   },
   {
-    "id_joueur": 446,
+    "id_joueur": 445,
     "nom_joueur": "Fabbri",
     "prenom_joueur": "Riccardo",
     "sexe_joueur": "Masculin",
