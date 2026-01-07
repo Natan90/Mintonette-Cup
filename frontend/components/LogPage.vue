@@ -283,6 +283,12 @@ function getValuesConnexion() {
   }
 
   const utilisateursData = localData.getAll("utilisateurs");
+  console.log("🔍 Tous les utilisateurs dans localStorage:", utilisateursData);
+  console.log("🔍 Nombre d'utilisateurs:", utilisateursData.length);
+  console.log("🔑 Tentative de connexion avec:", {
+    login: login_utilisateur_connexion.value,
+    mdp: mdp_utilisateur_connexion.value
+  });
 
   const user = utilisateursData.find(
     (u) =>
@@ -290,7 +296,14 @@ function getValuesConnexion() {
       u.mdp_utilisateur === mdp_utilisateur_connexion.value
   );
 
+  console.log("✅ Utilisateur trouvé?", user ? "OUI" : "NON");
   if (user) {
+    console.log("👤 Utilisateur:", user);
+  }
+
+  if (user) {
+    console.log("✅ AVANT connexion - localStorage:", JSON.parse(localStorage.getItem('mintonette_utilisateurs')));
+    
     userStore.setUser(user.id_utilisateur);
     if (user.isadmin || user.id_utilisateur === 1) {
       userStore.setRole("admin");
@@ -302,6 +315,7 @@ function getValuesConnexion() {
     connexion.value = true;
 
     console.log("Utilisateur connecté depuis localStorage:", user);
+    console.log("✅ APRES connexion - localStorage:", JSON.parse(localStorage.getItem('mintonette_utilisateurs')));
 
     if (connexion.value) {
       ModalShow(false);
@@ -364,15 +378,8 @@ function getValuesInscription() {
     return;
   }
 
-  let newUserId = 2; 
-  if (utilisateursData.length > 0) {
-    const maxId = Math.max(...utilisateursData.map((u) => u.id_utilisateur));
-    newUserId = Math.max(maxId + 1, 2); 
-  }
-
-  // Créer le nouvel utilisateur
+  // Créer le nouvel utilisateur (l'ID sera généré automatiquement par localData.add)
   const newUser = {
-    id_utilisateur: newUserId,
     nom_utilisateur: nom_utilisateur.value,
     prenom_utilisateur: prenom_utilisateur.value,
     login_utilisateur: login_utilisateur.value,
@@ -386,14 +393,14 @@ function getValuesInscription() {
     isadmin: false,
   };
 
-  // Ajouter l'utilisateur à localStorage
-  localData.add("utilisateurs", newUser);
+  // Ajouter l'utilisateur à localStorage (l'ID sera généré automatiquement)
+  const addedUser = localData.add("utilisateurs", newUser);
 
-  console.log("Nouvel utilisateur créé et ajouté à localStorage:", newUser);
+  console.log("Nouvel utilisateur créé et ajouté à localStorage:", addedUser);
 
-  userStore.setUser(newUserId);
+  userStore.setUser(addedUser.id_utilisateur);
   userStore.setRole("user");
-  message.value = `Utilisateur créé avec succès ! ID : ${newUserId}`;
+  message.value = `Utilisateur créé avec succès ! ID : ${addedUser.id_utilisateur}`;
   inscription.value = true;
 
   if (inscription.value) {

@@ -20,7 +20,11 @@ export const useUserStore = defineStore("user", () => {
     userId.value = 0;
     isConnected.value = false;
     role.value = null;
-    localStorage.clear();
+    // Ne pas effacer TOUT le localStorage, juste les données de session
+    localStorage.removeItem("userId");
+    localStorage.removeItem("isConnected");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("prestaId");
   }
 
   watch(userId, (v) => localStorage.setItem("userId", v));

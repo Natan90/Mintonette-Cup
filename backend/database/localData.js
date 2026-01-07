@@ -1,9 +1,4 @@
-/**
- * Gestionnaire de données local avec localStorage
- * Permet de charger des données JSON de base et d'ajouter des données localement
- */
 
-// Import des données JSON de base
 import UtilisateurData from "../../backend/database/jsonData/Utilisateur.json";
 import PrestataireData from "../../backend/database/jsonData/Prestataire.json";
 import ServicesData from "../../backend/database/jsonData/Services.json";
