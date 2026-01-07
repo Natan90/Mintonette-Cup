@@ -1,6 +1,7 @@
 <template>
   <div>
     <NavView :style="{ top: navbar }" class="navbar" />
+
     <div class="all">
       <div class="image">
         <img src="../images/photo_fond.png" alt="" />
@@ -12,6 +13,7 @@
         </div>
       </div>
       <PresentationMintonette></PresentationMintonette>
+      <section id="Carte" class="section"></section>
       <Map> </Map>
 
       <!-- <TableauMatchs></TableauMatchs> -->
@@ -21,7 +23,7 @@
 
         <!-- #############################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
 
-        <section class="infos">
+        <section class="infos" id="Info">
           <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
             <img class="illustration" :src="item.image" />
             <span class="title">
@@ -36,7 +38,9 @@
             <div class="contenuTexte">
               <!-- <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span> -->
               <span class="descri" v-html="item.descri"></span>
-              <router-link to="/Informations" class="voirPlus pointer">
+              <router-link
+                :to="{ name: 'Information', params: { id: userStore.userId } }"
+                class="voirPlus pointer">
                 <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
               </router-link>
             </div>
@@ -110,9 +114,8 @@
       </div>
     </section> -->
 
-    <RecherchePrestataire></RecherchePrestataire>
+    <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-
     <Footer></Footer>
   </div>
 </template>

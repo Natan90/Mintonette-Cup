@@ -10,8 +10,31 @@
         class="boutonNav">
         <span class="pointer">Prestataire (mode public)</span>
       </router-link> -->
+      <div
+        v-if="isInIndex"
+        @click="scrollToSection('Carte')"
+        class="boutonNav pointer">
+        Carte
+      </div>
 
-      <router-link
+      <div
+        v-if="isInIndex"
+        @click="scrollToSection('liste_prestataires')"
+        class="boutonNav pointer">
+        Prestataires
+      </div>
+      <div
+        v-if="isInIndex"
+        @click="scrollToSection('Info')"
+        class="boutonNav pointer">
+        À propos
+      </div>
+       <div
+        @click="scrollToSection('footer')"
+        class="boutonNav pointer">
+        Nos partenaires
+      </div>
+      <!-- <router-link
         v-if="utilisateur.ispresta"
         :to="{
           name: 'EditPrestataire',
@@ -19,23 +42,9 @@
         }"
         class="boutonNav">
         <span class="pointer">Edit Prestataire (mode presta)</span>
-      </router-link>
+      </router-link> -->
 
-      <router-link
-        v-else
-        :to="{
-          name: 'AddPrestataire',
-          params: { id: userStore.userId, lang: locale },
-        }"
-        class="boutonNav">
-        <span class="pointer">Become Prestataire (mode presta)</span>
-      </router-link>
-
-      <router-link
-        :to="{ name: 'Evenement', params: { lang: locale } }"
-        class="boutonNav">
-        <span class="pointer">Vue administrateur</span>
-      </router-link>
+     
 
       <div class="langue">
         <div
@@ -91,7 +100,13 @@
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">Mon profil</span>
           </router-link>
-
+          <router-link
+            v-if="admin && userStore.userId == 1"
+            :to="{ name: 'Evenement', params: { lang: locale } }"
+            class="optionProfil pointer"
+            :class="{ blueBar: !isInIndex }">
+            <span class="pointer">Événement</span>
+          </router-link>
           <router-link
             v-if="utilisateur.ispresta"
             :to="{
@@ -135,19 +150,24 @@ import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
-// import axios from "axios";
+import axios from "axios";
 
+const scrollToSection = (id) => {
+  const section = document.getElementById(id);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
+};
 const { locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
 const isInIndex = ref(route.name === "Home");
-const showMiniCart = ref(false);
-const cartSeats = ref([]);
 const userProfilePhoto = ref(null);
 const userInitials = ref("");
 const utilisateur = ref([]);
+const admin = ref(false);
 
 const loadProfilePhoto = () => {
   if (userStore.isConnected) {
@@ -188,9 +208,21 @@ const loadProfilePhoto = () => {
 //     }
 //   }
 // };
+async function isadmin() {
+  try {
+    const res = await axios.get(
+      `http://localhost:3000/admin/utilisateur/show/1`
+    );
+    admin.value = res.data.isadmin;
+    console.log(admin.value + "Je suis la ");
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 onMounted(() => {
   loadProfilePhoto();
+  isadmin();
 });
 
 watch(
