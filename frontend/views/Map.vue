@@ -35,8 +35,8 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
 import localData from "../../backend/database/localData.js";
-// import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
-// import typesPrestataireData from "../../backend/database/jsonData/Type_prestataire.json";
+import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
+import typesPrestataireData from "../../backend/database/jsonData/Type_prestataire.json";
 
 // import axios from "axios";
 
@@ -1838,14 +1838,34 @@ const serviceLocation = ref([
 const nomType = ref("");
 
 function fetchPresta() {
-  const prestatairesData = localData.getAll("prestataires");
+  // Récupérer depuis localStorage
+  const prestatairesLocalStorage = localData.getAll("prestataires");
   const typesPrestataireData = localData.getAll("type_prestataire");
-  
-  console.log("🔍 Tous les prestataires:", prestatairesData);
-  
-  prestataires.value = prestatairesData.map((presta) => {
+
+  // Récupérer depuis les fichiers JSON
+  const prestatairesJSON = prestatairesData;
+
+  // Fusionner les deux sources en évitant les doublons
+  // Priorité au localStorage si un ID existe dans les deux sources
+  const localStorageIds = prestatairesLocalStorage.map((p) => p.id_prestataire);
+  const prestatairesJSONFiltered = prestatairesJSON.filter(
+    (p) => !localStorageIds.includes(p.id_prestataire)
+  );
+  const allPrestataires = [
+    ...prestatairesJSONFiltered,
+    ...prestatairesLocalStorage,
+  ];
+
+  console.log(
+    "🔍 Tous les prestataires (JSON + localStorage):",
+    allPrestataires
+  );
+
+  prestataires.value = allPrestataires.map((presta) => {
     const typePrestataire = typesPrestataireData.find(
-      (t) => t.id_type_prestataire === presta.type_prestataire_id
+      (t) =>
+        t.id_type_prestataire ===
+        (presta.id_type_prestataire || presta.type_prestataire_id)
     );
     return {
       ...presta,
@@ -1857,8 +1877,10 @@ function fetchPresta() {
   console.log("🔍 Prestataires avec types:", prestataires.value);
 
   prestataires.value.forEach((presta) => {
-    console.log(`🔍 Presta ${presta.nom_prestataire}: id_zone=${presta.id_zone}, waitingforadmin=${presta.waitingforadmin}`);
-    
+    console.log(
+      `🔍 Presta ${presta.nom_prestataire}: id_zone=${presta.id_zone}, waitingforadmin=${presta.waitingforadmin}`
+    );
+
     if (presta.id_zone && presta.waitingforadmin === false) {
       const zone = serviceLocation.value.find(
         (z) => z.id_zone === presta.id_zone
@@ -1871,7 +1893,7 @@ function fetchPresta() {
       }
     }
   });
-  
+
   console.log("🗺️ serviceLocation après màj:", serviceLocation.value);
 }
 
@@ -1928,9 +1950,9 @@ function fetchPresta() {
 
 onMounted(() => {
   fetchPresta();
-  
+
   // Recharger les données quand la fenêtre redevient active
-  window.addEventListener('focus', fetchPresta);
+  window.addEventListener("focus", fetchPresta);
 });
 
 // Recharger les données quand on revient sur la page
@@ -1940,7 +1962,7 @@ onActivated(() => {
 
 // Nettoyer le listener quand on quitte la page
 onBeforeUnmount(() => {
-  window.removeEventListener('focus', fetchPresta);
+  window.removeEventListener("focus", fetchPresta);
 });
 
 //Pour créer les zones sur les maps
@@ -2139,6 +2161,9 @@ onMounted(() => {
           } else if (zone.type_prestataire === "Animation") {
             searchFeature.setStyle(animationlHoverStyle);
             label.style.backgroundColor = "#5a189a";
+          } else if (zone.type_prestataire === "Boutique") {
+            searchFeature.setStyle(providerHoverStyle);
+            label.style.backgroundColor = "#1F5E00";
           } else {
             searchFeature.setStyle(providerHoverStyle);
             label.style.backgroundColor = "#1F5E00";

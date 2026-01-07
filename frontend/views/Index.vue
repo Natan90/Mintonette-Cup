@@ -24,7 +24,10 @@
         <!-- #############################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
 
         <section class="infos" id="Info">
-          <div class="bloc" v-for="(item, index) in informationArray" :key="index">
+          <div
+            class="bloc"
+            v-for="(item, index) in informationArray"
+            :key="index">
             <img class="illustration" :src="item.image" />
             <span class="title">
               <countUp
@@ -252,7 +255,7 @@ function getValuesUser() {
     utilisateur.value = user;
     console.log("Index.vue - Utilisateur chargé:", {
       ispresta: user.ispresta,
-      waitingforadmin: user.waitingforadmin
+      waitingforadmin: user.waitingforadmin,
     });
   }
 }

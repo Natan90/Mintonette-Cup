@@ -257,9 +257,9 @@ function ModalShow(isInscription) {
 }
 
 function goToAddPrestataire() {
-  router.push({ 
+  router.push({
     name: "AddPrestataire",
-    params: { id: userStore.userId }
+    params: { id: userStore.userId },
   });
 }
 

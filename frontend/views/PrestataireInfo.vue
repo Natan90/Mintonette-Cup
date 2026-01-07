@@ -89,8 +89,8 @@
           class="boite_type_presta"
           :id="`p-${index}`">
           <!-- Bouton de sélection du type de prestataire -->
-          <button 
-            class="button_type_presta" 
+          <button
+            class="button_type_presta"
             @click="selectTypePresta(index)"
             :disabled="continueInscription">
             {{ item.nom_type_prestataire[locale] }}
@@ -277,7 +277,7 @@
       <!-- Bouton d'inscription (mode ajout) -->
       <div class="button_container" v-else>
         <button @click="addPrestataire" :disabled="isSubmitting">
-          {{ isSubmitting ? 'En cours...' : $t("user.buttonInscription") }}
+          {{ isSubmitting ? "En cours..." : $t("user.buttonInscription") }}
         </button>
       </div>
 
@@ -637,7 +637,9 @@ function selectTypePresta(index) {
   const typeObj = type_prestataire.value[index];
   if (typeObj) {
     // nom_type_prestataire est un objet avec des langues { fr: "Animation", en: "Animation" }
-    const nomType = typeObj.nom_type_prestataire[locale.value] || typeObj.nom_type_prestataire.fr;
+    const nomType =
+      typeObj.nom_type_prestataire[locale.value] ||
+      typeObj.nom_type_prestataire.fr;
     selectedType.value = nomType.toLowerCase();
     selectedTypeId.value = typeObj.id_type_prestataire;
   }
@@ -736,7 +738,9 @@ function getValuesPrestataire() {
       (t) => t.id_type_prestataire === presta.type_prestataire_id
     );
     if (typeObj) {
-      const nomType = typeObj.nom_type_prestataire[locale.value] || typeObj.nom_type_prestataire.fr;
+      const nomType =
+        typeObj.nom_type_prestataire[locale.value] ||
+        typeObj.nom_type_prestataire.fr;
       selectedType.value = nomType.toLowerCase();
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
@@ -773,9 +777,9 @@ function addPrestataire() {
   if (isSubmitting.value) {
     return;
   }
-  
+
   isSubmitting.value = true;
-  
+
   try {
     const utilisateurs = localData.getAll("utilisateurs");
     const userIndex = utilisateurs.findIndex(
@@ -862,7 +866,7 @@ function addPrestataire() {
     messageType.value = "success";
 
     console.log("Nouveau prestataire créé:", newPrestataire);
-    
+
     isSubmitting.value = false;
   } catch (err) {
     message.value = "Erreur lors de la création: " + err.message;
