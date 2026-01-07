@@ -199,6 +199,36 @@
         "confirmation": "Are you sure you want to delete the user"
       }
     }
-  }
+  },
+  "filter": {
+  "titleFilter": "Find the Service Providers of the Mintonette Cup 2026!",
+  "name": {
+    "title": "Name",
+    "nameInput": "Service provider name"
+  },
+  "categorie": {
+    "title": "Service category",
+    "all": "All"
+  },
+  "price": {
+    "title": "Price",
+    "minPrice": "Min price",
+    "maxPrice": "Max price"
+  },
+  "button": {
+    "search": "Search",
+    "reset": "Reset"
+  },
+  "description": "Description",
+  "info": {
+    "title": "Information",
+    "capacite": "Capacity",
+    "people": "ppl",
+    "tarif": "Price",
+    "service": "Services"
+  },
+  "contact": "Contacts",
+  "more": "Learn more"
+}
 
 }
