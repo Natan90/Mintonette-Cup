@@ -10,12 +10,12 @@
 
             <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
                 <div class="content_slider">
-                    <p>Prestataire</p>
+                    <span>{{ $t('filter.slider.prestataire') }}</span>
                     <label class="switch">
                         <input type="checkbox" v-model="isServiceView">
                         <span class="slider round"></span>
                     </label>
-                    <p>Services</p>
+                    <span>{{ $t('filter.slider.service') }}</span>
                 </div>
 
                 <div class="blocFiltre">
@@ -59,25 +59,12 @@
                     <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service" 
                         class="blocListePrestataire">
                         
-<<<<<<< HEAD
-                        <div  class="enTetePrestataire">
-
-                            <div  class="titrePrestataire">
-                                <!-- <img src=""> -->
-                                <span>{{ item.nom_prestataire }}</span>
-                            </div>
-
-                            <div class="typePrestataire">
-                                <span>{{ oneTypePrestataire.nom_type_prestataire }}</span>
-                            </div>
-=======
                         <div class="enTetePrestataire">
                         <div class="titrePrestataire">
                             <span>
                             {{ isServiceView ? item.nom_service : item.nom_prestataire }}
                             </span>
                         </div>
->>>>>>> b5f1ec828cc49e8b133d855c392379c72582098e
 
                         <div class="typePrestataire">
                             <span>
@@ -280,7 +267,12 @@ async function searchPrestataires() {
 .content_slider {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
+}
+
+.content_slider span{
+    font-weight: 500;
 }
 
 .switch {
@@ -305,7 +297,7 @@ async function searchPrestataires() {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--couleur-fond);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -317,17 +309,17 @@ async function searchPrestataires() {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--jaune-logo);
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: var(--bleu-logo);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px var(--bleu-logo);
 }
 
 input:checked + .slider:before {
@@ -344,6 +336,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
 .recherche{
     display: flex;
     flex-direction: column;
