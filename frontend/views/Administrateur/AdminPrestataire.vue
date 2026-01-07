@@ -145,15 +145,13 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from 'vue';
-// import axios from 'axios';
+import axios from 'axios';
 import { useRouter, useRoute } from "vue-router";
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
 import ZoneMap from '@/components/ZoneMap.vue';
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
-import PrestataireData from "../../../backend/database/jsonData/Prestataire.json";
-import UtilisateurData from "../../../backend/database/jsonData/Utilisateur.json";
 
 
 const route = useRoute();
@@ -175,14 +173,18 @@ const refusedPresta = ref(null);
 
 const id_prestataire = ref(0);
 
-onMounted(() => {
-    getPrestataires();
-    if (!adminStore.typeTriPresta) adminStore.typeTriPresta = "az";
+onMounted(async () => {
+    try {
+        await getPrestataires();
+        if (!adminStore.typeTriPresta) adminStore.typeTriPresta = "az";
+    } catch (err) {
+        console.error(err);
+    }
 });
 
-watch(activeTab, (newTab) => {
+watch(activeTab, async (newTab) => {
     if (newTab === 'table') {
-        getPrestataires();
+        await getPrestataires();
     }
 });
 
@@ -249,112 +251,65 @@ const prestatairesFiltres = computed(() => {
 
 
 
-// async function getPrestataires() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/prestataire/show");
-//         prestataires.value = res.data;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function getPrestataires() {
-    prestataires.value = PrestataireData.map(presta => {
-        const utilisateur = UtilisateurData.find(u => u.id_utilisateur === presta.id_utilisateur);
-        return {
-            ...presta,
-            nom_utilisateur: utilisateur?.nom_utilisateur || '',
-            prenom_utilisateur: utilisateur?.prenom_utilisateur || ''
-        };
-    });
-}
-
-// async function validPrestataire(presta) {
-//     try {
-//         const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${presta.id_prestataire}`);
-
-//         await changePresta(true, presta.id_utilisateur);
-//         await getPrestataires();
-//         zoneMapKey.value++; // Force le rechargement de ZoneMap
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function validPrestataire(presta) {
-    const prestaIndex = prestataires.value.findIndex(p => p.id_prestataire === presta.id_prestataire);
-    if (prestaIndex !== -1) {
-        prestataires.value[prestaIndex].waitingforadmin = false;
+async function getPrestataires() {
+    try {
+        const res = await axios.get("http://localhost:3000/prestataire/show");
+        prestataires.value = res.data;
+    } catch (err) {
+        console.error(err);
     }
-    changePresta(true, presta.id_utilisateur);
-    getPrestataires();
-    zoneMapKey.value++;
 }
 
-// async function refuserPrestataire(presta) {
-//     try {
-//         refusedPresta.value = presta;
+async function validPrestataire(presta) {
+    try {
+        const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${presta.id_prestataire}`);
 
-//         const res = await axios.patch(`http://localhost:3000/admin/prestataire/refuser/${presta.id_prestataire}`);
-
-//         refusing.value = true;
-//         await getPrestataires();
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function refuserPrestataire(presta) {
-    refusedPresta.value = presta;
-    const prestaIndex = prestataires.value.findIndex(p => p.id_prestataire === presta.id_prestataire);
-    if (prestaIndex !== -1) {
-        prestataires.value[prestaIndex].refused = true;
-        prestataires.value[prestaIndex].waitingforadmin = false;
+        await changePresta(true, presta.id_utilisateur);
+        await getPrestataires();
+        zoneMapKey.value++; // Force le rechargement de ZoneMap
+    } catch (err) {
+        console.error(err);
     }
-    refusing.value = true;
-    getPrestataires();
 }
 
-// async function deletePrestataire(idPresta) {
-//     try {
-//         deletedPresta.value = { ...selectedPresta.value };
+async function refuserPrestataire(presta) {
+    try {
+        refusedPresta.value = presta;
 
-//         const res = await axios.delete(`http://localhost:3000/admin/prestataire/delete/${idPresta}`);
+        const res = await axios.patch(`http://localhost:3000/admin/prestataire/refuser/${presta.id_prestataire}`);
 
-//         isDelete.value = false;
-//         deleting.value = true;
-//         prestataires.value = prestataires.value.filter(u => u.id_prestataire !== idPresta);
-//         router.push({ name: 'Prestataires', params: { lang: locale.value } });
-
-//         await getPrestataires();
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function deletePrestataire(idPresta) {
-    deletedPresta.value = { ...selectedPresta.value };
-    isDelete.value = false;
-    deleting.value = true;
-    prestataires.value = prestataires.value.filter(u => u.id_prestataire !== idPresta);
-    getPrestataires();
+        refusing.value = true;
+        await getPrestataires();
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// async function changePresta(newValue, idPresta) {
-//     try {
-//         const res = await axios.patch(`http://localhost:3000/admin/utilisateur/changePresta/${idPresta}`, {
-//             valueChange: newValue
-//         });
-//         console.log(res.data.message);
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
+async function deletePrestataire(idPresta) {
+    try {
+        deletedPresta.value = { ...selectedPresta.value };
 
-function changePresta(newValue, idPresta) {
-    const utilisateurIndex = UtilisateurData.findIndex(u => u.id_utilisateur === idPresta);
-    if (utilisateurIndex !== -1) {
-        UtilisateurData[utilisateurIndex].ispresta = newValue;
+        const res = await axios.delete(`http://localhost:3000/admin/prestataire/delete/${idPresta}`);
+
+        isDelete.value = false;
+        deleting.value = true;
+        prestataires.value = prestataires.value.filter(u => u.id_prestataire !== idPresta);
+        router.push({ name: 'Prestataires', params: { lang: locale.value } });
+
+        await getPrestataires();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function changePresta(newValue, idPresta) {
+    try {
+        const res = await axios.patch(`http://localhost:3000/admin/utilisateur/changePresta/${idPresta}`, {
+            valueChange: newValue
+        });
+        console.log(res.data.message);
+    } catch (err) {
+        console.error(err);
     }
 }
 

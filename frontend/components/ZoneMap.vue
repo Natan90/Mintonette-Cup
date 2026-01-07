@@ -128,7 +128,7 @@
 import { ref, computed, onMounted, watch } from "vue";
 import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
 import zoneData from "../../backend/database/jsonData/Zone.json";
-// import axios from "axios";
+import axios from "axios";
 
 const zones = ref([]);
 const prestataires = ref([]);
@@ -226,73 +226,55 @@ function closeModal() {
   selectedPrestataire.value = null;
 }
 
-function assignZone() {
+async function assignZone() {
   if (!selectedPrestataire.value || !selectedZone.value) return;
 
-  loadPrestataires();
-  loadZones();
+  try {
+    const response = await axios.patch(
+      "http://localhost:3000/admin/prestataire/assignzone",
+      {
+        id_prestataire: selectedPrestataire.value,
+        id_zone: selectedZone.value.id_zone,
+      }
+    );
 
-  closeModal();
+    prestataires.value = [];
+    zones.value = [];
+
+    await loadPrestataires();
+    await loadZones();
+
+    closeModal();
+  } catch (err) {
+    console.error("Erreur attribution:", err);
+    if (err.response?.status === 409) {
+      alert("Cette zone est déjà occupée");
+    } else {
+      alert("Erreur lors de l'attribution");
+    }
+  }
 }
 
-function unassignZone() {
+async function unassignZone() {
   if (!selectedZone.value?.prestataire) return;
 
-  loadPrestataires();
-  loadZones();
+  try {
+    const response = await axios.patch(
+      `http://localhost:3000/admin/prestataire/unassignzone/${selectedZone.value.prestataire.id_prestataire}`
+    );
 
-  closeModal();
+    prestataires.value = [];
+    zones.value = [];
+
+    await loadPrestataires();
+    await loadZones();
+
+    closeModal();
+  } catch (err) {
+    console.error("Erreur libération zone:", err);
+    alert("Erreur lors de la libération de la zone");
+  }
 }
-
-// async function assignZone() {
-//   if (!selectedPrestataire.value || !selectedZone.value) return;
-
-//   try {
-//     const response = await axios.patch(
-//       "http://localhost:3000/admin/prestataire/assignzone",
-//       {
-//         id_prestataire: selectedPrestataire.value,
-//         id_zone: selectedZone.value.id_zone,
-//       }
-//     );
-
-//     prestataires.value = [];
-//     zones.value = [];
-
-//     await loadPrestataires();
-//     await loadZones();
-
-//     closeModal();
-//   } catch (err) {
-//     console.error("Erreur attribution:", err);
-//     if (err.response?.status === 409) {
-//       alert("Cette zone est déjà occupée");
-//     } else {
-//       alert("Erreur lors de l'attribution");
-//     }
-//   }
-// }
-
-// async function unassignZone() {
-//   if (!selectedZone.value?.prestataire) return;
-
-//   try {
-//     const response = await axios.patch(
-//       `http://localhost:3000/admin/prestataire/unassignzone/${selectedZone.value.prestataire.id_prestataire}`
-//     );
-
-//     prestataires.value = [];
-//     zones.value = [];
-
-//     await loadPrestataires();
-//     await loadZones();
-
-//     closeModal();
-//   } catch (err) {
-//     console.error("Erreur libération zone:", err);
-//     alert("Erreur lors de la libération de la zone");
-//   }
-// }
 </script>
 
 <style scoped>

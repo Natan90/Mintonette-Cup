@@ -1844,7 +1844,7 @@ function fetchPresta() {
     return {
       ...presta,
       nom_type_prestataire:
-        typePrestataire?.nom_type_prestataire || "Non défini",
+        typePrestataire?.nom_type_prestataire?.fr || "Non défini",
     };
   });
 
