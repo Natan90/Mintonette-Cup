@@ -318,7 +318,7 @@ const pool = require("./db");
       }'),
       ('{
         "fr": "Restauration",
-        "en": "Restoration"
+        "en": "Food"
       }');
     `;
     await pool.query(insertTypePrestataire);

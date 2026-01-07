@@ -110,7 +110,8 @@ import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
-import UtilisateurData from "../../../backend/database/jsonData/Utilisateur.json";
+import localData from "../../../backend/database/localData.js";
+// import UtilisateurData from "../../../backend/database/jsonData/Utilisateur.json";
 
 const router = useRouter();
 const route = useRoute();
@@ -223,7 +224,12 @@ onMounted(() => {
 // };
 
 function getValuesUtilisateurs() {
-  utilisateurs.value = UtilisateurData;
+  try {
+    utilisateurs.value = localData.getAll('utilisateurs');
+    console.log('Utilisateurs chargés depuis localStorage:', utilisateurs.value);
+  } catch (err) {
+    console.error('Erreur lors du chargement des utilisateurs:', err);
+  }
 };
 
 
@@ -244,11 +250,23 @@ function getValuesUtilisateurs() {
 // };
 
 function deleteUtilisateur(idUser) {
-  deletedUser.value = { ...selectedUser.value };
-  isDelete.value = false;
-  deleting.value = true;
-  utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
-  router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
+  try {
+    deletedUser.value = { ...selectedUser.value };
+    
+    // Supprimer de localStorage
+    localData.delete('utilisateurs', idUser, 'id_utilisateur');
+    
+    // Mettre à jour l'affichage
+    utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
+    
+    isDelete.value = false;
+    deleting.value = true;
+    
+    console.log('Utilisateur supprimé:', idUser);
+    router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
+  } catch (err) {
+    console.error('Erreur lors de la suppression:', err);
+  }
 };
 </script>
 

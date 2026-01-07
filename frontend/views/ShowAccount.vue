@@ -94,8 +94,9 @@ import { useI18n } from "vue-i18n";
 import { useNavigationStore } from "@/stores/navigation";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
+import localData from "../../backend/database/localData.js";
 
-import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
+// import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
 
 const props = defineProps({
   userId: {
@@ -152,7 +153,10 @@ function getValuesUtilisateurs(id) {
 
   try {
     console.log("Searching for user ID:", id);
+
+    const utilisateurData = localData.getAll("utilisateurs");
     console.log("Available users:", utilisateurData.length);
+
     const user = utilisateurData.find((u) => u.id_utilisateur === Number(id));
 
     if (!user) {
@@ -182,6 +186,8 @@ function getValuesUtilisateurs(id) {
       sexe: user.sexe_utilisateur || "",
       createdAt: formattedDate,
     };
+
+    console.log("Utilisateur chargé depuis localStorage:", userData.value);
   } catch (error) {
     console.error("Erreur lors de la récupération des données :", error);
     message.value = t("account.errorLoading");
@@ -242,8 +248,13 @@ function deleteAccount(id) {
   message.value = "";
 
   try {
+    // Supprimer l'utilisateur de localStorage
+    localData.delete("utilisateurs", id, "id_utilisateur");
+
     message.value = t("account.accountDeleted");
     messageType.value = "success";
+
+    console.log("Compte supprimé de localStorage:", id);
 
     userStore.logout();
 

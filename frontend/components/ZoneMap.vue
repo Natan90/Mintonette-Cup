@@ -126,9 +126,10 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
-import zoneData from "../../backend/database/jsonData/Zone.json";
-import axios from "axios";
+// import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
+// import zoneData from "../../backend/database/jsonData/Zone.json";
+// import axios from "axios";
+import localData from "../../backend/database/localData.js";
 
 const zones = ref([]);
 const prestataires = ref([]);
@@ -178,8 +179,11 @@ onMounted(() => {
 });
 
 function loadZones() {
-  zones.value = zoneData.map((zone) => {
-    const presta = prestatairesData.find(
+  const zonesData = localData.getAll("zones");
+  const prestasData = localData.getAll("prestataires");
+
+  zones.value = zonesData.map((zone) => {
+    const presta = prestasData.find(
       (p) => p.id_zone === zone.id_zone && !p.waitingforadmin
     );
     return {
@@ -188,14 +192,31 @@ function loadZones() {
       prestataire: presta || null,
     };
   });
+
+  console.log("Zones chargées depuis localStorage:", zones.value);
 }
 
 function loadPrestataires() {
-  prestataires.value = prestatairesData;
+  const prestasData = localData.getAll("prestataires");
+  const utilisateursData = localData.getAll("utilisateurs");
+
+  // Enrichir avec les infos utilisateurs
+  prestataires.value = prestasData.map((presta) => {
+    const user = utilisateursData.find(
+      (u) => u.id_utilisateur === presta.id_utilisateur
+    );
+    return {
+      ...presta,
+      prenom_utilisateur: user?.prenom_utilisateur || "",
+      nom_utilisateur: user?.nom_utilisateur || "",
+    };
+  });
+
+  console.log("Prestataires chargés depuis localStorage:", prestataires.value);
 }
 
 // async function loadZones() {
-//   try {
+
 //     const res = await axios.get(
 //       "http://localhost:3000/admin/prestataire/zones"
 //     );
@@ -226,55 +247,120 @@ function closeModal() {
   selectedPrestataire.value = null;
 }
 
-async function assignZone() {
+function assignZone() {
   if (!selectedPrestataire.value || !selectedZone.value) return;
 
   try {
-    const response = await axios.patch(
-      "http://localhost:3000/admin/prestataire/assignzone",
+    console.log("🔄 Début assignation zone...");
+    console.log("Prestataire ID:", selectedPrestataire.value);
+    console.log("Zone ID:", selectedZone.value.id_zone);
+
+    // Mettre à jour la zone du prestataire
+    localData.update(
+      "prestataires",
+      selectedPrestataire.value,
       {
-        id_prestataire: selectedPrestataire.value,
         id_zone: selectedZone.value.id_zone,
-      }
+      },
+      "id_prestataire"
     );
 
-    prestataires.value = [];
-    zones.value = [];
+    console.log("✅ Zone mise à jour dans localStorage");
+    console.log(
+      `✅ Zone ${selectedZone.value.id_zone} attribuée au prestataire ${selectedPrestataire.value}`
+    );
 
-    await loadPrestataires();
-    await loadZones();
+    // Recharger les données
+    loadPrestataires();
+    console.log("✅ Prestataires rechargés");
+
+    loadZones();
+    console.log("✅ Zones rechargées");
 
     closeModal();
+    console.log("✅ Modal fermée");
   } catch (err) {
-    console.error("Erreur attribution:", err);
-    if (err.response?.status === 409) {
-      alert("Cette zone est déjà occupée");
-    } else {
-      alert("Erreur lors de l'attribution");
-    }
+    console.error("❌ Erreur attribution:", err);
+    console.error("❌ Stack:", err.stack);
+    alert("Erreur lors de l'attribution");
   }
 }
 
-async function unassignZone() {
+// async function assignZone() {
+//   if (!selectedPrestataire.value || !selectedZone.value) return;
+//
+//   try {
+//     const response = await axios.patch(
+//       "http://localhost:3000/admin/prestataire/assignzone",
+//       {
+//         id_prestataire: selectedPrestataire.value,
+//         id_zone: selectedZone.value.id_zone,
+//       }
+//     );
+//
+//     prestataires.value = [];
+//     zones.value = [];
+//
+//     await loadPrestataires();
+//     await loadZones();
+//
+//     closeModal();
+//   } catch (err) {
+//     console.error("Erreur attribution:", err);
+//     if (err.response?.status === 409) {
+//       alert("Cette zone est déjà occupée");
+//     } else {
+//       alert("Erreur lors de l'attribution");
+//     }
+//   }
+// }
+
+function unassignZone() {
   if (!selectedZone.value?.prestataire) return;
 
   try {
-    const response = await axios.patch(
-      `http://localhost:3000/admin/prestataire/unassignzone/${selectedZone.value.prestataire.id_prestataire}`
+    // Retirer la zone du prestataire
+    localData.update(
+      "prestataires",
+      selectedZone.value.prestataire.id_prestataire,
+      {
+        id_zone: null,
+      },
+      "id_prestataire"
     );
 
-    prestataires.value = [];
-    zones.value = [];
+    // Recharger les données
+    loadPrestataires();
+    loadZones();
 
-    await loadPrestataires();
-    await loadZones();
-
+    console.log(`✅ Zone ${selectedZone.value.id_zone} libérée`);
     closeModal();
   } catch (err) {
-    console.error("Erreur libération zone:", err);
+    console.error("❌ Erreur libération zone:", err);
     alert("Erreur lors de la libération de la zone");
   }
 }
+
+// async function unassignZone() {
+//   if (!selectedZone.value?.prestataire) return;
+//
+//   try {
+//     const response = await axios.patch(
+//       `http://localhost:3000/admin/prestataire/unassignzone/${selectedZone.value.prestataire.id_prestataire}`
+//     );
+//
+//     prestataires.value = [];
+//     zones.value = [];
+//
+//     await loadPrestataires();
+//     await loadZones();
+//
+//     closeModal();
+//   } catch (err) {
+//     console.error("Erreur libération zone:", err);
+//     alert("Erreur lors de la libération de la zone");
+//   }
+// }
 </script>
 
 <style scoped>
