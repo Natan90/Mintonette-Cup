@@ -27,8 +27,9 @@
       "tel_utilisateur": "0763749895",
       "sexe_utilisateur": "M",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": true
     },
     {
       "id_utilisateur": 2,
@@ -40,8 +41,9 @@
       "tel_utilisateur": "0612345678",
       "sexe_utilisateur": "F",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": true
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": true,
+      "isadmin": false
     },
     {
       "id_utilisateur": 3,
@@ -53,8 +55,9 @@
       "tel_utilisateur": "0652437595",
       "sexe_utilisateur": "M",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": true
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": true,
+      "isadmin": false
     },
     {
       "id_utilisateur": 4,
@@ -66,8 +69,9 @@
       "tel_utilisateur": "0610423571",
       "sexe_utilisateur": "F",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": true
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": true,
+      "isadmin": false
     },
     {
       "id_utilisateur": 5,
@@ -79,8 +83,9 @@
       "tel_utilisateur": "0752435010",
       "sexe_utilisateur": "M",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     },
     {
       "id_utilisateur": 6,
@@ -92,8 +97,9 @@
       "tel_utilisateur": "0630102040",
       "sexe_utilisateur": "F",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     },
     {
       "id_utilisateur": 7,
@@ -105,8 +111,9 @@
       "tel_utilisateur": "0693759150",
       "sexe_utilisateur": "F",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     },
     {
       "id_utilisateur": 8,
@@ -118,8 +125,9 @@
       "tel_utilisateur": "0630102040",
       "sexe_utilisateur": "M",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     },
     {
       "id_utilisateur": 9,
@@ -131,8 +139,9 @@
       "tel_utilisateur": "0750402342",
       "sexe_utilisateur": "F",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     },
     {
       "id_utilisateur": 10,
@@ -144,8 +153,9 @@
       "tel_utilisateur": "0682759641",
       "sexe_utilisateur": "M",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     },
     {
       "id_utilisateur": 11,
@@ -157,8 +167,9 @@
       "tel_utilisateur": "0768401922",
       "sexe_utilisateur": "M",
       "photo_profil_utilisateur": null,
-      "date_creation_utilisateur": "2026-01-07T15:05:44.365Z",
-      "ispresta": false
+      "date_creation_utilisateur": "2026-01-07T16:10:41.034Z",
+      "ispresta": false,
+      "isadmin": false
     }
   ],
   "Type_utilisateur": [],

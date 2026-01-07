@@ -22,6 +22,7 @@ import Statistiques from "@/views/Administrateur/Statistiques.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import Terrain from "@/views/Terrain.vue";
 import ZoneMap from "@/components/ZoneMap.vue";
+import Information from "@/views/Information.vue";
 
 const routes = [
   {
@@ -153,6 +154,11 @@ const routes = [
         name: "Checkout",
         component: Checkout,
       },
+      {
+        path: "Information",
+        name: "Information",
+        component: Information,
+      }
     ],
   },
   {
