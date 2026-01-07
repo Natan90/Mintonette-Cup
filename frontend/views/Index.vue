@@ -4,7 +4,7 @@
 
     <div class="all">
       <div class="image">
-        <img src="../images/photo_fond.png" alt="" />
+        <img :src="imagePreview || '../images/photo_fond.png'" alt="" />
         <div
           class="texteImage"
           :style="{ color: colorTitle, fontFamily: selectedFont }">
@@ -130,6 +130,7 @@ import evenementData from "../../backend/database/jsonData/Evenement.json";
 import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
 // import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import localData from "../../backend/database/localData.js";
 
 /* ********************
     PAGES IMPORTS 
@@ -225,7 +226,12 @@ onBeforeUnmount(() => {
 });
 
 function getValuesEvenement() {
-  const evenement = evenementData[0];
+  // Charger depuis localStorage au lieu du JSON statique
+  const events = localData.getAll("evenements");
+  const evenement = events.length > 0 ? events[0] : evenementData[0];
+
+  console.log("Index.vue - Événement chargé depuis localStorage:", evenement);
+
   title_evenement.value = evenement.nom_evenement;
   colorTitle.value = evenement.color_title;
   selectedFont.value = evenement.text_font;

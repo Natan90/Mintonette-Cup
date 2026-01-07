@@ -108,8 +108,15 @@
       </div>
 
       <div class="button_container">
-        <button @click="updateEvent">
+        <button @click="updateEvent" class="btn-primary">
           {{ $t("prestataireInfo.formulaire.btnModifier") }}
+        </button>
+       
+        <button
+          @click="resetLocalStorage"
+          class="btn-reset"
+          style="margin-left: 10px; background: #dc2626">
+          Réinitialiser l'événement
         </button>
       </div>
     </div>
@@ -127,6 +134,7 @@ import { useI18n } from "vue-i18n";
 import { color } from "motion";
 import Footer from "@/components/Footer.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
+import localData from "../../../backend/database/localData.js";
 
 import evenementDataJSON from "../../../backend/database/jsonData/Evenement.json";
 
@@ -177,7 +185,12 @@ function onFileChange(event) {
 
   fileName.value = file.name;
   imageFile.value = file;
-  imagePreview.value = URL.createObjectURL(file);
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    imagePreview.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 onMounted(() => {
@@ -193,8 +206,14 @@ onMounted(() => {
 //=========================
 function getValuesEvenement() {
   try {
-    const event = evenementDataJSON[0];
+    // Charger depuis localStorage
+    const events = localData.getAll("evenements");
+    console.log("Événements chargés depuis localStorage:", events);
+
+    const event = events.length > 0 ? events[0] : null;
+
     if (event) {
+      console.log("Événement sélectionné:", event);
       evenementData.value = event;
       title_evenement.value = event.nom_evenement || "";
       colorTitle.value = event.color_title || "#000000";
@@ -203,9 +222,11 @@ function getValuesEvenement() {
       imageFile.value = null;
 
       updateDescription();
+    } else {
+      console.warn("Aucun événement trouvé dans localStorage");
     }
   } catch (err) {
-    console.error(err);
+    console.error("Erreur lors du chargement:", err);
   }
 }
 
@@ -227,29 +248,111 @@ function getValuesEvenement() {
 
 function updateEvent() {
   try {
-    evenementData.value = {
-      ...evenementData.value,
-      nom_evenement: title_evenement.value,
-      color_title: colorTitle.value,
-      text_font: selectedFont.value,
-      image_evenement: imagePreview.value,
-      descri_evenement: {
-        ...evenementData.value?.descri_evenement,
-        [locale.value]: {
-          texte: descri_evenement.value,
-        },
+    const currentEvent = evenementData.value;
+
+    const updatedDescription = {
+      ...currentEvent.descri_evenement,
+      [locale.value]: {
+        texte: descri_evenement.value,
       },
     };
 
-    message.value = "Événement mis à jour avec succès";
-    messageType.value = "success";
+    // Construire l'objet avec toutes les modifications
+    const updatedEvent = {
+      ...currentEvent, // Préserver toutes les propriétés existantes
+      nom_evenement: title_evenement.value,
+      color_title: colorTitle.value,
+      text_font: selectedFont.value,
+      image_evenement: imagePreview.value || currentEvent.image_evenement,
+      descri_evenement: updatedDescription,
+    };
 
+    console.log("Mise à jour de l'événement:", updatedEvent);
+
+    // Récupérer tous les événements
+    const events = localData.getAll("evenements");
+    console.log("Événements avant mise à jour:", events);
+
+    // Trouver l'index de l'événement à mettre à jour
+    const index = events.findIndex(
+      (e) => e.id_evenement === evenementData.value.id_evenement
+    );
+
+    if (index !== -1) {
+      // Remplacer l'événement
+      events[index] = updatedEvent;
+
+      // Sauvegarder directement dans localStorage
+      localStorage.setItem("mintonette_evenements", JSON.stringify(events));
+
+      console.log("Événements après mise à jour:", events);
+
+      evenementData.value = updatedEvent;
+
+      message.value = "Événement mis à jour avec succès dans localStorage";
+      messageType.value = "success";
+
+      setTimeout(() => {
+        message.value = "";
+      }, 3000);
+    } else {
+      throw new Error("Événement non trouvé");
+    }
+
+    // Version axios commentée :
+    // try {
+    //     const res = await axios.put("http://localhost:3000/admin/evenement/update", {
+    //         title: title_evenement.value,
+    //         descri_fr: descri_evenement.value,
+    //         descri_en: descri_evenement.value,
+    //         color: colorTitle.value,
+    //         font: selectedFont.value,
+    //         image: imagePreview.value
+    //     });
+    //     message.value = res.data.message;
+    //     messageType.value = "success";
+    // } catch (err) {
+    //     if (err.response && err.response.data) {
+    //         message.value = err.response.data.error;
+    //     } else {
+    //         message.value = "Erreur inconnue";
+    //     }
+    //     messageType.value = 'error';
+    // }
+  } catch (err) {
+    message.value = "Erreur lors de la mise à jour: " + err.message;
+    messageType.value = "error";
+    console.error("Erreur complète:", err);
+  }
+}
+
+function debugLocalStorage() {
+  console.log("=== DEBUG LOCALSTORAGE ===");
+  const events = localData.getAll("evenements");
+  console.log("Nombre d'événements:", events.length);
+  console.log("Contenu complet:", events);
+  console.log(
+    "localStorage brut:",
+    localStorage.getItem("mintonette_evenements")
+  );
+  alert(
+    `Événements dans localStorage: ${events.length}\nVoir la console (F12) pour les détails`
+  );
+}
+
+function resetLocalStorage() {
+  if (
+    confirm(
+      "Voulez-vous réinitialiser l'événement avec les données d'origine ?"
+    )
+  ) {
+    localData.reset("evenements");
+    getValuesEvenement();
+    message.value = "Événement réinitialisé avec succès";
+    messageType.value = "success";
     setTimeout(() => {
       message.value = "";
     }, 3000);
-  } catch (err) {
-    message.value = "Erreur lors de la mise à jour";
-    messageType.value = "error";
   }
 }
 
