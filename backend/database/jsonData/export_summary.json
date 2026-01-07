@@ -1,5 +1,5 @@
 {
-  "exportDate": "2026-01-07T18:36:54.491Z",
+  "exportDate": "2026-01-07T22:56:23.123Z",
   "totalTables": 22,
   "tables": [
     {
@@ -16,7 +16,7 @@
     },
     {
       "name": "Zone",
-      "count": 32
+      "count": 0
     },
     {
       "name": "Terrain",
@@ -24,7 +24,7 @@
     },
     {
       "name": "Prestataire",
-      "count": 4
+      "count": 3
     },
     {
       "name": "Panier",
@@ -32,7 +32,7 @@
     },
     {
       "name": "Services",
-      "count": 13
+      "count": 12
     },
     {
       "name": "Panier_Service",
@@ -40,7 +40,7 @@
     },
     {
       "name": "Pays",
-      "count": 32
+      "count": 0
     },
     {
       "name": "Organisateur",
@@ -48,11 +48,11 @@
     },
     {
       "name": "Equipe",
-      "count": 64
+      "count": 0
     },
     {
       "name": "Match",
-      "count": 16
+      "count": 0
     },
     {
       "name": "Panier_Siege",
@@ -60,15 +60,15 @@
     },
     {
       "name": "Siege",
-      "count": 1600
+      "count": 0
     },
     {
       "name": "Joueur",
-      "count": 445
+      "count": 0
     },
     {
       "name": "ClassementPoule",
-      "count": 32
+      "count": 0
     },
     {
       "name": "Type_restauration",
