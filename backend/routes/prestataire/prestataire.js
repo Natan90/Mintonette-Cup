@@ -562,7 +562,7 @@ router.post("/becomePrestataire/:id", async (req, res) => {
     const result = await client.query(
       `INSERT INTO Prestataire 
         (nom_prestataire, descri_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, message_ajout, id_utilisateur, type_prestataire_id) VALUES
-        ($1, $2, $3, $4, $5, $6, true, $7, true, $8, $9)
+        ($1, $2, $3, $4, true, $7, true, $5, $6)
         RETURNING id_prestataire`,
       [
         nom,
@@ -732,13 +732,13 @@ router.put("/updatePresta/:id", async (req, res) => {
         SET 
             nom_prestataire = $1,
             descri_prestataire = $2,
-            mail_prestataire = $5,
-            tel_prestataire = $6,
+            mail_prestataire = $3,
+            tel_prestataire = $4,
             waitingForAdmin = true,
-            specificite = $7,
+            specificite = $5,
             message_ajout = false,
-            type_prestataire_id = $8
-        WHERE id_utilisateur = $9
+            type_prestataire_id = $6
+        WHERE id_utilisateur = $7
         RETURNING id_prestataire;
         `,
       [
@@ -969,6 +969,30 @@ router.get("/service/show/:id", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
-})
+});
+
+router.get("/countServicesByType", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        t.id_type_prestataire,
+        t.nom_type_prestataire,
+        COUNT(s.id_service) AS nb_services
+      FROM Type_prestataire t
+      LEFT JOIN Prestataire p
+        ON p.type_prestataire_id = t.id_type_prestataire
+      LEFT JOIN Services s
+        ON s.prestataire_id = p.id_prestataire
+      GROUP BY t.id_type_prestataire, t.nom_type_prestataire
+      ORDER BY t.nom_type_prestataire;
+    `);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Erreur countServicesByType:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
