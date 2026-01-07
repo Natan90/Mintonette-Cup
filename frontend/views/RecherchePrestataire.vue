@@ -59,7 +59,7 @@
                             </div>
 
                             <div class="typePrestataire">
-                                <span>{{ item.nom_type_prestataire }}</span>
+                                <span>{{ oneTypePrestataire.nom_type_prestataire }}</span>
                             </div>
 
                         </div>
@@ -109,7 +109,7 @@ import { useI18n } from "vue-i18n";
 const router = useRouter();
 const route = useRoute();
 const navStore = useNavigationStore();
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 
 const type_prestataire = ref([]);
@@ -164,6 +164,21 @@ function goToSpecificPrestataire(idPresta) {
     });
 }
 
+const nom_type_prestataire=ref('');
+
+const oneTypePrestataire = ref({
+  id_type_prestataire: null,
+  nom_type_prestataire: { fr: '', en: '' }
+});
+
+function updateTypePrestataire() {
+  if (oneTypePrestataire.value) {
+    const nom = oneTypePrestataire.value.nom_type_prestataire;
+
+    nom_type_prestataire.value = nom[locale.value]?.texte || '';
+  }
+}
+
 //=========================
 //==== Async functions ====
 //=========================
@@ -180,6 +195,7 @@ async function getValuesTypePrestataire() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
         type_prestataire.value = res.data.result;
+        updateTypePrestataire();
     } catch (err) {
         console.error(err);
     }
