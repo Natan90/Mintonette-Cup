@@ -287,7 +287,7 @@ function getValuesConnexion() {
   console.log("🔍 Nombre d'utilisateurs:", utilisateursData.length);
   console.log("🔑 Tentative de connexion avec:", {
     login: login_utilisateur_connexion.value,
-    mdp: mdp_utilisateur_connexion.value
+    mdp: mdp_utilisateur_connexion.value,
   });
 
   const user = utilisateursData.find(
@@ -302,8 +302,11 @@ function getValuesConnexion() {
   }
 
   if (user) {
-    console.log("✅ AVANT connexion - localStorage:", JSON.parse(localStorage.getItem('mintonette_utilisateurs')));
-    
+    console.log(
+      "✅ AVANT connexion - localStorage:",
+      JSON.parse(localStorage.getItem("mintonette_utilisateurs"))
+    );
+
     userStore.setUser(user.id_utilisateur);
     if (user.isadmin || user.id_utilisateur === 1) {
       userStore.setRole("admin");
@@ -315,7 +318,10 @@ function getValuesConnexion() {
     connexion.value = true;
 
     console.log("Utilisateur connecté depuis localStorage:", user);
-    console.log("✅ APRES connexion - localStorage:", JSON.parse(localStorage.getItem('mintonette_utilisateurs')));
+    console.log(
+      "✅ APRES connexion - localStorage:",
+      JSON.parse(localStorage.getItem("mintonette_utilisateurs"))
+    );
 
     if (connexion.value) {
       ModalShow(false);
