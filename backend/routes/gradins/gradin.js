@@ -129,7 +129,6 @@ router.put("/update", async (req, res) => {
     numero_ligne,
     zone,
     est_reserve,
-    dans_panier,
     id_utilisateur,
   } = req.body;
 
@@ -139,17 +138,15 @@ router.put("/update", async (req, res) => {
       UPDATE Siege
       SET 
         est_reserve = $1,
-        dans_panier = $2,
-        id_utilisateur = COALESCE($7, id_utilisateur)
-      WHERE match_id = $6
-        AND numero_colonne = $3
-        AND numero_ligne = $4
-        AND zone = $5
+        id_utilisateur = COALESCE($6, id_utilisateur)
+      WHERE match_id = $5
+        AND numero_colonne = $2
+        AND numero_ligne = $3
+        AND zone = $4
       RETURNING *
       `,
       [
         est_reserve,
-        dans_panier,
         numero_colonne,
         numero_ligne,
         zone,
@@ -205,37 +202,75 @@ router.put("/update", async (req, res) => {
  *         description: Erreur serveur
  */
 
-router.put("/panier", async (req, res) => {
+router.post("/panier/add", async (req, res) => {
   const {
+    utilisateur_id,
     matchId,
     numero_colonne,
     numero_ligne,
-    zone,
-    dans_panier,
-    id_utilisateur,
+    zone
   } = req.body;
 
   try {
-    const result = await pool.query(
-      `UPDATE Siege 
-       SET dans_panier = $1, id_utilisateur = $2 
-       WHERE match_id = $3 
-         AND numero_colonne = $4 
-         AND numero_ligne = $5 
-         AND zone = $6 
-       RETURNING *`,
-      [dans_panier, id_utilisateur, matchId, numero_colonne, numero_ligne, zone]
+    const panierRes = await pool.query(
+      `SELECT id_panier FROM Panier
+       WHERE utilisateur_id = $1 AND actif = true`,
+      [utilisateur_id]
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Siège non trouvé" });
+    let id_panier;
+
+    if (panierRes.rows.length === 0) {
+      const newPanier = await pool.query(
+        `INSERT INTO Panier (utilisateur_id)
+         VALUES ($1) RETURNING id_panier`,
+        [utilisateur_id]
+      );
+      id_panier = newPanier.rows[0].id_panier;
+    } else {
+      id_panier = panierRes.rows[0].id_panier;
     }
 
-    res.status(200).json(result.rows[0]);
+    await pool.query(
+      `INSERT INTO Panier_Siege
+       (id_panier, numero_colonne, numero_ligne, zone, match_id)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT DO NOTHING`,
+      [id_panier, numero_colonne, numero_ligne, zone, matchId]
+    );
+
+    res.status(200).json({ message: "Siège ajouté au panier" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.delete("/panier/remove", async (req, res) => {
+  const {
+    id_panier,
+    numero_colonne,
+    numero_ligne,
+    zone,
+    matchId
+  } = req.body;
+
+  try {
+    await pool.query(
+      `DELETE FROM Panier_Siege
+       WHERE id_panier = $1
+         AND numero_colonne = $2
+         AND numero_ligne = $3
+         AND zone = $4
+         AND match_id = $5`,
+      [id_panier, numero_colonne, numero_ligne, zone, matchId]
+    );
+
+    res.json({ message: "Siège retiré du panier" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 /**
  * @swagger
@@ -276,14 +311,30 @@ router.put("/panier", async (req, res) => {
  */
 
 router.get("/panier/show", async (req, res) => {
+  const { utilisateur_id } = req.query;
+
   try {
     const result = await pool.query(
-      "SELECT * FROM Siege WHERE dans_panier = true"
+      `
+      SELECT s.*
+      FROM Panier p
+      JOIN Panier_Siege ps ON ps.id_panier = p.id_panier
+      JOIN Siege s ON 
+        s.numero_colonne = ps.numero_colonne
+        AND s.numero_ligne = ps.numero_ligne
+        AND s.zone = ps.zone
+        AND s.match_id = ps.match_id
+      WHERE p.utilisateur_id = $1
+        AND p.actif = true
+      `,
+      [utilisateur_id]
     );
+
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 module.exports = router;

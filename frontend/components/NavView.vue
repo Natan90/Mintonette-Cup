@@ -17,12 +17,12 @@
         <span class="pointer">Edit Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}" 
+      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}"  
         class="boutonNav">
         <span class="pointer">Become Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link :to="{ name: 'Evenement', params: { lang: locale } }"
+      <router-link :to="{ name: 'Evenement', params: { lang: locale } }" 
         class="boutonNav">
         <span class="pointer">Vue administrateur</span>
       </router-link>
@@ -79,6 +79,11 @@
           <router-link :to="{ name: 'Panier', params: { lang: locale } }" 
             class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
             <span class="pointer">Panier</span>
+          </router-link>
+
+          <router-link :to="{ name: 'MesBillets', params: { lang: locale } }"
+            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+            <span class="pointer">Mes billets</span>
           </router-link>
 
           <div class="optionProfil optionProfil"  :class="{ blueBar: !isInIndex }" @click="handleLogout">

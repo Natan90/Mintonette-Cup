@@ -182,13 +182,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 import NavView from '@/components/NavView.vue';
 import Footer from '@/components/Footer.vue';
 
 const router = useRouter();
+const route = useRoute();
 const userStore = useUserStore();
 
 const panier = ref([]);
@@ -292,22 +293,25 @@ async function processPayment() {
     
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    for (const seat of panier.value) {
-      await axios.put('http://localhost:3000/gradin/update', {
-        numero_colonne: seat.numero_colonne,
-        numero_ligne: seat.numero_ligne,
-        zone: seat.zone,
-        est_reserve: true,
-        dans_panier: false,
-        id_utilisateur: userStore.userId
-      });
-    }
+      for (const seat of panier.value) {
+        console.log('Mise à jour du siège:', JSON.parse(JSON.stringify(seat)));
+        const res = await axios.put('http://localhost:3000/gradin/update', {
+          matchId: seat.match_id ?? seat.matchId ?? null,
+          numero_colonne: seat.numero_colonne,
+          numero_ligne: seat.numero_ligne,
+          zone: seat.zone,
+          est_reserve: true,
+          id_utilisateur: userStore.userId
+        });
+        console.log('Update response:', res && res.data ? res.data : res.status);
+      }
 
     localStorage.removeItem('selectedSeats');
 
     alert('Paiement réussi ! Vos billets ont été confirmés.');
 
-    router.push('/utilisateur/profil');
+    // Aller sur la page MesBillets pour voir les billets achetés
+    router.push({ name: 'MesBillets', params: { lang: route.params.lang} });
   } catch (error) {
     console.error('Erreur lors du paiement:', error);
     alert('Une erreur est survenue lors du paiement. Veuillez réessayer.');

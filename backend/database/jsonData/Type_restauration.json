@@ -1,0 +1,22 @@
+[
+  {
+    "id_type_restauration": 1,
+    "nom_type_restauration": "Restauration chaude"
+  },
+  {
+    "id_type_restauration": 2,
+    "nom_type_restauration": "Restauration saine / végétarienne / vegan"
+  },
+  {
+    "id_type_restauration": 3,
+    "nom_type_restauration": "Boissons et rafraîchissements"
+  },
+  {
+    "id_type_restauration": 4,
+    "nom_type_restauration": "Desserts et gourmandises"
+  },
+  {
+    "id_type_restauration": 5,
+    "nom_type_restauration": "Food trucks / street food"
+  }
+]

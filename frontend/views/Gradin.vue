@@ -283,13 +283,12 @@ async function AddToCart() {
 
   try {
     for (const seat of globalSelectedSeats.value) {
-      await axios.put("http://localhost:3000/gradin/panier", {
+      await axios.post("http://localhost:3000/gradin/panier/add", {
+        utilisateur_id: userStore.userId,
         matchId: seat.matchId,
-        zone: seat.zone,
         numero_colonne: seat.numero_colonne,
         numero_ligne: seat.numero_ligne,
-        dans_panier: true,
-        id_utilisateur: userStore.userId,
+        zone: seat.zone
       });
     }
 

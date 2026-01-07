@@ -49,6 +49,7 @@ router.get("/show", async (req, res) => {
         p.tel_prestataire,
         p.waitingforadmin,
         p.specificite,
+        p.id_zone,
         p.type_prestataire_id,
         u.id_utilisateur,
         u.prenom_utilisateur,
@@ -144,9 +145,8 @@ router.get("/show/:id", async (req, res) => {
 
     res.json({
       prestataire: result.rows[0],
-      services: resultServices.rows
+      services: resultServices.rows,
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
@@ -469,8 +469,28 @@ router.get("/showEveryType", async (req, res) => {
  */
 router.post("/becomePrestataire/:id", async (req, res) => {
   const id_user = req.params.id;
-  const { nom, descri, nb_participants, tarif, mail, tel, specificite, type, services } = req.body;
-  if ( !nom || !descri || !tarif || !mail || !tel || !specificite || !type || !id_user || services.length === 0)
+  const {
+    nom,
+    descri,
+    nb_participants,
+    tarif,
+    mail,
+    tel,
+    specificite,
+    type,
+    services,
+  } = req.body;
+  if (
+    !nom ||
+    !descri ||
+    !tarif ||
+    !mail ||
+    !tel ||
+    !specificite ||
+    !type ||
+    !id_user ||
+    services.length === 0
+  )
     return res.status(400).json({
       error: "Champs obligatoires manquants",
     });
@@ -530,7 +550,7 @@ router.post("/becomePrestataire/:id", async (req, res) => {
       message: "Prestataire créé avec succès",
       user: {
         id: newPresta.id_utilisateur,
-        prestaId: newPresta.id_prestataire
+        prestaId: newPresta.id_prestataire,
       },
     });
   } catch (err) {
@@ -691,7 +711,6 @@ router.put("/updatePresta/:id", async (req, res) => {
   }
 });
 
-
 router.put("/updatePresta/:id", async (req, res) => {
   const id_user = req.params.id;
   const { nom, descri, nb_participants, tarif, mail, tel, specificite, type } =
@@ -786,7 +805,7 @@ router.patch("/activateService/:id", async (req, res) => {
     await client.query("COMMIT");
 
     res.status(201).json({
-      message: "Service modifié avec succès"
+      message: "Service modifié avec succès",
     });
   } catch (err) {
     await client.query("ROLLBACK");
@@ -799,5 +818,26 @@ router.patch("/activateService/:id", async (req, res) => {
     client.release();
   }
 });
+
+router.get("/service/show/:id", async (req, res) => {
+  const id_service = req.params.id;
+
+  try {
+    const result = await pool.query(
+      `SELECT * FROM Services
+        WHERE id_service = $1`,
+      [id_service]
+    );
+    if (result.rows.length === 0)
+      return res.status(404).json({ message: "Service non trouvé" });
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+
+
+})
 
 module.exports = router;

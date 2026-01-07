@@ -9,6 +9,7 @@ const prestataireRoutes = require("./routes/prestataire/prestataire");
 const gradins = require("./routes/gradins/gradin");
 const adminRoutes = require("./routes/admin/index");
 const equipesRoutes = require("./routes/equipes/equipes");
+const panierRoutes = require("./routes/panier/panier")
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/utilisateur/auth", authRoutes);
 app.use("/prestataire", prestataireRoutes);
 app.use("/gradin", gradins);
 app.use("/equipes", equipesRoutes);
+app.use("/panier", panierRoutes);
 
 
 // Swagger

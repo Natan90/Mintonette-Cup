@@ -1,0 +1,350 @@
+[
+  {
+    "id_service": 1,
+    "nom_service": "Stand de burgers sur place",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Gourmet burger stand</b>"
+      },
+      "fr": {
+        "texte": "Stand de <b>burgers gourmands</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "Enjoy a <b>freshly prepared burger stand</b> with quality ingredients.<br>An ideal solution for <b>quick and friendly catering</b>."
+      },
+      "fr": {
+        "texte": "Profitez d’un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Access to a power outlet and minimum 6m² space",
+      "fr": "Accès à une prise électrique et un espace de 6m² minimum"
+    },
+    "prix": "12.50",
+    "nb_participants": 150,
+    "activate": true,
+    "prestataire_id": 1
+  },
+  {
+    "id_service": 2,
+    "nom_service": "Service de boissons fraîches",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Cold drinks</b> service"
+      },
+      "fr": {
+        "texte": "Service de <b>boissons fraîches</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A <b>cold drinks service</b> to keep your guests refreshed all day long."
+      },
+      "fr": {
+        "texte": "Un <b>service de boissons fraîches</b> pour désaltérer vos invités tout au long de la journée."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Nearby water access required",
+      "fr": "Point d’eau requis à proximité"
+    },
+    "prix": "3.00",
+    "nb_participants": 300,
+    "activate": false,
+    "prestataire_id": 1
+  },
+  {
+    "id_service": 3,
+    "nom_service": "Restauration rapide événementielle",
+    "titre_service": {
+      "en": {
+        "texte": "Event <b>fast food catering</b>"
+      },
+      "fr": {
+        "texte": "<b>Restauration rapide</b> événementielle"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A <b>fast food catering solution designed for events</b>, even during high attendance."
+      },
+      "fr": {
+        "texte": "Une solution de <b>restauration rapide pensée pour l’événementiel</b>, efficace même lors de fortes affluences."
+      }
+    },
+    "visible_public": false,
+    "besoin": {
+      "en": "Authorized cooking area required",
+      "fr": "Zone de cuisson autorisée obligatoire"
+    },
+    "prix": "9.90",
+    "nb_participants": 400,
+    "activate": false,
+    "prestataire_id": 1
+  },
+  {
+    "id_service": 4,
+    "nom_service": "Snacking sucré et salé",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Sweet & savory</b> snacking"
+      },
+      "fr": {
+        "texte": "Snacking <b>sucré & salé</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A wide selection of <b>sweet and savory snacks</b> for all tastes."
+      },
+      "fr": {
+        "texte": "Un large choix de <b>snacks sucrés et salés</b> pour satisfaire toutes les envies."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Service table required",
+      "fr": "Table de service requise"
+    },
+    "prix": "4.50",
+    "nb_participants": 200,
+    "activate": true,
+    "prestataire_id": 1
+  },
+  {
+    "id_service": 5,
+    "nom_service": "Animation musicale sur scène",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Live music</b> performance"
+      },
+      "fr": {
+        "texte": "<b>Animation musicale</b> sur scène"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A <b>live music performance</b> to create a festive and dynamic atmosphere."
+      },
+      "fr": {
+        "texte": "Une <b>animation musicale live</b> pour créer une ambiance festive et dynamique."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Stage and sound system required",
+      "fr": "Scène et système son requis"
+    },
+    "prix": "450.00",
+    "nb_participants": 1000,
+    "activate": false,
+    "prestataire_id": 2
+  },
+  {
+    "id_service": 6,
+    "nom_service": "Animation micro et public",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Host & audience</b> animation"
+      },
+      "fr": {
+        "texte": "Animation <b>micro & public</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A host to <b>interact with the audience</b> and energize your event."
+      },
+      "fr": {
+        "texte": "Un animateur pour <b>interagir avec le public</b> et rythmer votre événement."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Audio system required",
+      "fr": "Système audio requis"
+    },
+    "prix": "250.00",
+    "nb_participants": 800,
+    "activate": true,
+    "prestataire_id": 2
+  },
+  {
+    "id_service": 7,
+    "nom_service": "Jeux et animations interactives",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Interactive games</b> & activities"
+      },
+      "fr": {
+        "texte": "Jeux & <b>animations interactives</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "Interactive activities to engage the audience and create <b>memorable moments</b>."
+      },
+      "fr": {
+        "texte": "Des <b>animations participatives</b> pour engager le public et créer des moments mémorables."
+      }
+    },
+    "visible_public": false,
+    "besoin": {
+      "en": "Secure area required",
+      "fr": "Espace sécurisé requis"
+    },
+    "prix": "180.00",
+    "nb_participants": 300,
+    "activate": false,
+    "prestataire_id": 2
+  },
+  {
+    "id_service": 8,
+    "nom_service": "Animation pour enfants sur place",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Children’s</b> entertainment"
+      },
+      "fr": {
+        "texte": "Animation <b>pour enfants</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "Fun and supervised activities to offer children a <b>safe and enjoyable experience</b>."
+      },
+      "fr": {
+        "texte": "Des animations ludiques et encadrées pour offrir aux enfants un <b>moment sûr et amusant</b>."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Enclosed area required",
+      "fr": "Espace clos obligatoire"
+    },
+    "prix": "200.00",
+    "nb_participants": 50,
+    "activate": true,
+    "prestataire_id": 2
+  },
+  {
+    "id_service": 9,
+    "nom_service": "Stand de vente de produits sportifs",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Sports products</b> stand"
+      },
+      "fr": {
+        "texte": "Stand de <b>produits sportifs</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A stand dedicated to the <b>sale of sports products</b> at your event."
+      },
+      "fr": {
+        "texte": "Un stand dédié à la <b>vente de produits sportifs</b> directement sur votre événement."
+      }
+    },
+    "visible_public": false,
+    "besoin": {
+      "en": "Flat surface required",
+      "fr": "Surface plane requise"
+    },
+    "prix": "0.00",
+    "nb_participants": 500,
+    "activate": false,
+    "prestataire_id": 3
+  },
+  {
+    "id_service": 10,
+    "nom_service": "Personnalisation de maillots sur place",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Jersey customization</b>"
+      },
+      "fr": {
+        "texte": "<b>Personnalisation</b> de maillots"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A <b>live customization service</b> to leave with a unique jersey."
+      },
+      "fr": {
+        "texte": "Un service de <b>personnalisation en direct</b> pour repartir avec un maillot unique."
+      }
+    },
+    "visible_public": false,
+    "besoin": {
+      "en": "Power access required",
+      "fr": "Accès électrique requis"
+    },
+    "prix": "15.00",
+    "nb_participants": 200,
+    "activate": false,
+    "prestataire_id": 3
+  },
+  {
+    "id_service": 11,
+    "nom_service": "Vente d’accessoires sportifs",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Sports accessories</b> sales"
+      },
+      "fr": {
+        "texte": "Vente d’<b>accessoires sportifs</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A selection of <b>sports accessories</b> to complete your equipment."
+      },
+      "fr": {
+        "texte": "Une sélection d’<b>accessoires sportifs</b> pour compléter votre équipement."
+      }
+    },
+    "visible_public": false,
+    "besoin": {
+      "en": "Covered stand recommended",
+      "fr": "Stand couvert recommandé"
+    },
+    "prix": "0.00",
+    "nb_participants": 400,
+    "activate": false,
+    "prestataire_id": 3
+  },
+  {
+    "id_service": 12,
+    "nom_service": "Boutique éphémère événementielle",
+    "titre_service": {
+      "en": {
+        "texte": "<b>Pop-up store</b>"
+      },
+      "fr": {
+        "texte": "<b>Boutique éphémère</b>"
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": "A <b>temporary pop-up store</b> offering an immersive shopping experience."
+      },
+      "fr": {
+        "texte": "Une <b>boutique temporaire</b> pour offrir une expérience d’achat immersive lors de votre événement."
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "Covered space required",
+      "fr": "Espace couvert requis"
+    },
+    "prix": "0.00",
+    "nb_participants": 600,
+    "activate": true,
+    "prestataire_id": 3
+  }
+]

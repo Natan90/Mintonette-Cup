@@ -1,0 +1,18 @@
+[
+  {
+    "id_terrain": 1,
+    "nom_terrain": "Terrain 1"
+  },
+  {
+    "id_terrain": 2,
+    "nom_terrain": "Terrain 2"
+  },
+  {
+    "id_terrain": 3,
+    "nom_terrain": "Terrain 3"
+  },
+  {
+    "id_terrain": 4,
+    "nom_terrain": "Terrain 4"
+  }
+]

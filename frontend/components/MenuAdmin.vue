@@ -7,12 +7,13 @@
 </template>
 
 
-
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useUserStore } from '@/stores/user';
 
 const { locale } = useI18n();
+const userStore = useUserStore();
 
 const menu = ref([
   { name: "Évènement", linkName: "Evenement" },
@@ -20,7 +21,6 @@ const menu = ref([
   { name: "Prestataire", linkName: "Prestataires" },
   { name: "Statistiques", linkName: "Statistiques" }
 ]);
-
 </script>
 
 

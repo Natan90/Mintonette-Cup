@@ -1,0 +1,18 @@
+[
+  {
+    "id_type_boutique": 1,
+    "nom_type_boutique": "Vêtements et accessoires"
+  },
+  {
+    "id_type_boutique": 2,
+    "nom_type_boutique": "Objets et souvenirs"
+  },
+  {
+    "id_type_boutique": 3,
+    "nom_type_boutique": "Livres et supports média"
+  },
+  {
+    "id_type_boutique": 4,
+    "nom_type_boutique": "Articles créatifs / personnalisables"
+  }
+]

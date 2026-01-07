@@ -1,0 +1,30 @@
+[
+  {
+    "id_type_animation": 1,
+    "nom_type_animation": "Animation musicale"
+  },
+  {
+    "id_type_animation": 2,
+    "nom_type_animation": "Show artistique"
+  },
+  {
+    "id_type_animation": 3,
+    "nom_type_animation": "Animation public"
+  },
+  {
+    "id_type_animation": 4,
+    "nom_type_animation": "Animation sportive"
+  },
+  {
+    "id_type_animation": 5,
+    "nom_type_animation": "Animation festive"
+  },
+  {
+    "id_type_animation": 6,
+    "nom_type_animation": "Média / Photo / Vidéo"
+  },
+  {
+    "id_type_animation": 7,
+    "nom_type_animation": "Technique / Son & lumière"
+  }
+]

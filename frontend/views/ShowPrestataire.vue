@@ -1,5 +1,36 @@
 <template>
   <NavView />
+  <div class="modal-backdrop" v-if="showService">
+    <div class="modal-content bigger">
+      <span class="modal-close" @click="closeModal">&times;</span>
+      <div class="bloc_texte service_details">
+        <h1 class="page_title" v-html="titre_service"></h1>
+
+        <p class="service_description" v-html="descri_service"></p>
+
+        <div class="service_besoin" v-if="!oneService.visible_public">
+          <h3>Besoin</h3>
+          <p v-html="besoin_service"></p>
+        </div>
+
+        <div class="service_infos">
+          <div class="info_item">
+            <span class="info_label">Prix</span>
+            <span class="info_value">{{ oneService.prix }} €</span>
+          </div>
+
+          <div class="info_item">
+            <span class="info_label">Participants max</span>
+            <span class="info_value">{{ oneService.nb_participants }}</span>
+          </div>
+        </div>
+        <button @click="addService(oneService)">
+          S'inscrire
+        </button>
+      </div>
+
+    </div>
+  </div>
   <div class="back-arrow pointer" @click="goBack">
     &#8592; Retour
   </div>
@@ -85,7 +116,7 @@
                   <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
                   <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
                   <span class="diff_button">
-                    <button class="btn_info" @click="voirService(item.id_service)">
+                    <button class="btn_info" @click="getOneService(item)">
                       Voir
                     </button>
                     <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
@@ -109,7 +140,8 @@
     </section>
 
     <div>
-      <button @click="goToEditPrestataire" v-if="userStore.isConnected && onePresta.ispresta && userStore.prestaId === idPresta">
+      <button @click="goToEditPrestataire"
+        v-if="userStore.isConnected && onePresta.ispresta && userStore.prestaId === idPresta">
         Modifier mon profil
       </button>
     </div>
@@ -119,7 +151,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from 'vue-router';
 import { useNavigationStore } from "@/stores/navigation";
@@ -127,8 +159,11 @@ import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useUserStore } from "@/stores/user";
+import { useI18n } from "vue-i18n";
 
 
+
+const { locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const navStore = useNavigationStore();
@@ -140,6 +175,17 @@ const desactivateService = ref(null);
 const activate = ref(false);
 const desactivate = ref(false);
 const deleting = ref(false);
+const showService = ref(false);
+
+const oneService = ref([]);
+const titre_service = ref('');
+const descri_service = ref('');
+const besoin_service = ref('');
+
+
+const closeModal = () => {
+  showService.value = false;
+};
 
 const closeMessageActivate = () => {
   activate.value = false;
@@ -167,6 +213,10 @@ const onePresta = ref({
 const services = ref([]);
 const idPresta = route.params.id;
 
+watch(() => locale.value,
+  (newLang) => {
+    updateDescription();
+  })
 
 onMounted(async () => {
   try {
@@ -212,13 +262,6 @@ function goBack() {
   if (navStore.previousRoute) {
     router.push(navStore.previousRoute);
   }
-}
-
-function voirService(idService) {
-  router.push({
-    name: "ShowServices",
-    params: { id: idService }
-  });
 }
 
 function goToEditPrestataire() {
@@ -270,9 +313,127 @@ async function actionsService(service) {
   }
 }
 
+async function getOneService(service) {
+  showService.value = true;
+  try {
+    const res = await axios.get(`http://localhost:3000/prestataire/service/show/${service.id_service}`)
+    oneService.value = res.data;
+
+    updateDescription();
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function addService(service) {
+  if (!userStore.userId) {
+    console.error("Utilisateur non connecté !");
+    return;
+  }
+
+  try {
+    const res = await axios.post(`http://localhost:3000/panier/addService`, {
+      id_user: userStore.userId,
+      service_id: service.id_service,
+      quantite: 1
+    });
+
+    showService.value = false;
+  } catch (err) {
+    console.error("Erreur lors de l'ajout au panier :", err);
+  }
+}
+
+
+function updateDescription() {
+  if (oneService.value?.titre_service?.[locale.value] || oneService.value?.descri_service?.[locale.value] || oneService.value?.besoin?.[locale.value]) {
+    titre_service.value = oneService.value.titre_service[locale.value].texte;
+    descri_service.value = oneService.value.descri_service[locale.value].texte;
+    besoin_service.value = oneService.value.besoin[locale.value];
+  } else {
+    titre_service.value = '';
+    descri_service.value = '';
+    besoin_service.value = '';
+  }
+}
+
 </script>
 
 <style>
+.bigger {
+  max-width: 900px;
+}
+
+.service_details {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.service_details .page_title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  line-height: 1.2;
+}
+
+.service_description {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+.service_besoin {
+  background: #f6f8fa;
+  padding: 15px 18px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
+
+.service_besoin h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.service_besoin p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.service_infos {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.info_item {
+  flex: 1;
+  min-width: 200px;
+  background: #f0f3f7;
+  padding: 15px 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info_label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.info_value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+
 .container {
   display: flex;
   flex-direction: row;
