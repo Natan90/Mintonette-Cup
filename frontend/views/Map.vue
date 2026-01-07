@@ -34,7 +34,10 @@ import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
-import axios from "axios";
+import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
+import typesPrestataireData from "../../backend/database/jsonData/Type_prestataire.json";
+
+// import axios from "axios";
 
 const route = useRoute();
 
@@ -1833,29 +1836,58 @@ const serviceLocation = ref([
 ]);
 const nomType = ref("");
 
-async function fetchPresta() {
-  try {
-    const res = await axios.get(`http://localhost:3000/prestataire/show`);
-    prestataires.value = res.data;
-    nomType.value = res.nom_type_prestataire;
-    prestataires.value.forEach((presta) => {
-      if (presta.id_zone && presta.waitingforadmin === false) {
-        const zone = serviceLocation.value.find(
-          (z) => z.id_zone === presta.id_zone
-        );
-        if (zone) {
-          zone.name = presta.nom_prestataire;
-          zone.id_prestataire = presta.id_prestataire;
-          zone.type_prestataire = presta.nom_type_prestataire;
-        }
+function fetchPresta() {
+  prestataires.value = prestatairesData.map((presta) => {
+    const typePrestataire = typesPrestataireData.find(
+      (t) => t.id_type_prestataire === presta.type_prestataire_id
+    );
+    return {
+      ...presta,
+      nom_type_prestataire:
+        typePrestataire?.nom_type_prestataire || "Non défini",
+    };
+  });
+
+  prestataires.value.forEach((presta) => {
+    if (presta.id_zone && presta.waitingforadmin === false) {
+      const zone = serviceLocation.value.find(
+        (z) => z.id_zone === presta.id_zone
+      );
+      if (zone) {
+        zone.name = presta.nom_prestataire;
+        zone.id_prestataire = presta.id_prestataire;
+        zone.type_prestataire = presta.nom_type_prestataire;
       }
-    });
-  } catch (err) {
-    console.error("Erreur lors de la récupération des prestataires:", err);
-  }
+    }
+  });
 }
-onMounted(async () => {
-  await fetchPresta();
+
+/*Avec la BDD ( axios )*/
+// ################################################################################################################### fetchPresta
+// async function fetchPresta() {
+//   try {
+//     const res = await axios.get(`http://localhost:3000/prestataire/show`);
+//     prestataires.value = res.data;
+//     nomType.value = res.nom_type_prestataire;
+//     prestataires.value.forEach((presta) => {
+//       if (presta.id_zone && presta.waitingforadmin === false) {
+//         const zone = serviceLocation.value.find(
+//           (z) => z.id_zone === presta.id_zone
+//         );
+//         if (zone) {
+//           zone.name = presta.nom_prestataire;
+//           zone.id_prestataire = presta.id_prestataire;
+//           zone.type_prestataire = presta.nom_type_prestataire;
+//         }
+//       }
+//     });
+//   } catch (err) {
+//     console.error("Erreur lors de la récupération des prestataires:", err);
+//   }
+// }
+
+onMounted(() => {
+  fetchPresta();
 });
 
 //Pour créer les zones sur les maps
