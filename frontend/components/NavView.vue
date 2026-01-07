@@ -19,16 +19,17 @@
 
       <div
         v-if="isInIndex"
-        @click="scrollToSection('liste_prestataires')"
-        class="boutonNav pointer">
-        {{ $t("barreNav.prestataire") }}
-      </div>
-      <div
-        v-if="isInIndex"
         @click="scrollToSection('Info')"
         class="boutonNav pointer">
         {{ $t("barreNav.aPropos") }}
       </div>
+      <div
+        v-if="isInIndex"
+        @click="scrollToSection('liste_prestataires')"
+        class="boutonNav pointer">
+        {{ $t("barreNav.prestataire") }}
+      </div>
+      
       <div @click="scrollToSection('footer')" class="boutonNav pointer">
         {{ $t("barreNav.partenaire") }}
       </div>
