@@ -2,13 +2,12 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../../database/db");
 
-
 router.get("/show/:id", async (req, res) => {
-    const id_user = req.params.id; 
+  const id_user = req.params.id;
 
-    try {
-
-        const result = await pool.query(` 
+  try {
+    const result = await pool.query(
+      ` 
         SELECT 
         p.id_panier,
         p.utilisateur_id,
@@ -19,6 +18,9 @@ router.get("/show/:id", async (req, res) => {
         ps.match_id AS siege_match_id,
         s.est_reserve,
         s.id_utilisateur AS siege_utilisateur_id,
+        m.id_match,
+        pays1.nom_pays AS equipe1_nom,
+        pays2.nom_pays AS equipe2_nom,
         psrv.service_id,
         srv.nom_service,
         srv.prix AS prix_service,
@@ -32,18 +34,30 @@ router.get("/show/:id", async (req, res) => {
             AND s.numero_ligne = ps.numero_ligne
             AND s.zone = ps.zone
             AND s.match_id = ps.match_id
+        LEFT JOIN Match m
+            ON m.id_match = ps.match_id
+        LEFT JOIN Equipe e1
+            ON e1.id_equipe = m.id_equipe1
+        LEFT JOIN Pays pays1
+            ON pays1.id_pays = e1.id_pays
+        LEFT JOIN Equipe e2
+            ON e2.id_equipe = m.id_equipe2
+        LEFT JOIN Pays pays2
+            ON pays2.id_pays = e2.id_pays
         LEFT JOIN Panier_Service psrv
             ON psrv.id_panier = p.id_panier
         LEFT JOIN Services srv
             ON srv.id_service = psrv.service_id
         WHERE p.utilisateur_id = $1;
-        `, [id_user])
+        `,
+      [id_user]
+    );
 
-        res.json(result.rows);
-    } catch (err) {
-        console.error(err);
-    }
-})
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 router.post("/addService", async (req, res) => {
   const { id_user, service_id, quantite } = req.body;
@@ -78,7 +92,8 @@ router.post("/addService", async (req, res) => {
         [panier_id, service_id, quantite || 1]
       );
     } else {
-      const nouvelleQuantite = serviceInPanier.rows[0].quantite + (quantite || 1);
+      const nouvelleQuantite =
+        serviceInPanier.rows[0].quantite + (quantite || 1);
       await pool.query(
         `UPDATE Panier_Service
          SET quantite = $1
@@ -93,7 +108,5 @@ router.post("/addService", async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 });
-
-
 
 module.exports = router;

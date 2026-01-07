@@ -5,13 +5,24 @@
       <h2>Votre panier</h2>
       <div v-if="panier.length === 0">Aucun article dans le panier</div>
       <div v-else>
-
         <h3>Sièges</h3>
         <div v-if="sieges.length === 0">Aucun siège</div>
 
-        <div v-for="(seat, index) in sieges" :key="'seat-' + index" class="item">
-          <p>Siège : {{ seat.siege_colonne }}{{ seat.siege_ligne }}<span>(Zone {{ seat.siege_zone }})</span></p>
-          <p style="color: red; font-weight: 700;">{{ getItemPrice(seat, false) }} €</p>
+        <div
+          v-for="(seat, index) in sieges"
+          :key="'seat-' + index"
+          class="item">
+          <p>
+            Siège : {{ seat.siege_colonne }}{{ seat.siege_ligne }}
+            <span v-if="seat.equipe1_nom && seat.equipe2_nom">
+              {{ seat.equipe1_nom.substring(0, 3) }} -
+              {{ seat.equipe2_nom.substring(0, 3) }}
+            </span>
+            <span> (Zone {{ seat.siege_zone }})</span>
+          </p>
+          <p style="color: red; font-weight: 700">
+            {{ getItemPrice(seat, false) }} €
+          </p>
         </div>
 
         <hr />
@@ -20,11 +31,18 @@
         <h3>Services</h3>
         <div v-if="services.length === 0">Aucun service</div>
 
-        <div v-for="(service, index) in services" :key="'service-' + index" class="item">
-          <p>Service : {{ service.nom_service }}<span style="color: red;"> x{{ service.quantite_service }}</span></p>
-          <p style="color: red; font-weight: 700;">{{ getItemPrice(service, true) }} €</p>
+        <div
+          v-for="(service, index) in services"
+          :key="'service-' + index"
+          class="item">
+          <p>
+            Service : {{ service.nom_service
+            }}<span style="color: red"> x{{ service.quantite_service }}</span>
+          </p>
+          <p style="color: red; font-weight: 700">
+            {{ getItemPrice(service, true) }} €
+          </p>
         </div>
-
       </div>
     </div>
 
@@ -34,10 +52,16 @@
     </div>
   </div>
   <div class="button-group">
-    <button @click="goToCheckout" class="btn btn-checkout">Procéder au paiement</button>
+    <button @click="goToCheckout" class="btn btn-checkout">
+      Procéder au paiement
+    </button>
     <button @click="reset" class="btn btn-danger">Vider le panier</button>
-    <button @click="addTestSeats" class="btn btn-test" title="Pour développement uniquement">+ Ajouter places
-      test</button>
+    <button
+      @click="addTestSeats"
+      class="btn btn-test"
+      title="Pour développement uniquement">
+      + Ajouter places test
+    </button>
     <button v-if="fromZone" @click="backToBleacher" class="btn btn-secondary">
       Retour au gradin {{ fromZone }}
     </button>
@@ -61,25 +85,47 @@ const fromZone = route.query.fromZone;
 const userStore = useUserStore();
 const panier = ref([]);
 
-const sieges = computed(() =>
-  panier.value.filter(item => item.siege_colonne)
-);
+const sieges = computed(() => {
+  const filtered = panier.value.filter((item) => item.siege_colonne);
 
-const services = computed(() =>
-  panier.value.filter(item => item.nom_service)
-);
+  // Dédupliquer les sièges par une clé unique (colonne + ligne + zone + match)
+  const uniqueMap = new Map();
+  filtered.forEach((siege) => {
+    const key = `${siege.siege_colonne}-${siege.siege_ligne}-${
+      siege.siege_zone
+    }-${siege.siege_match_id || ""}`;
+    if (!uniqueMap.has(key)) {
+      uniqueMap.set(key, siege);
+    }
+  });
+
+  const uniqueSieges = Array.from(uniqueMap.values());
+  return uniqueSieges;
+});
+
+const services = computed(() => {
+  const filtered = panier.value.filter((item) => item.nom_service);
+
+  // Dédupliquer les services par service_id
+  const uniqueMap = new Map();
+  filtered.forEach((service) => {
+    const key = service.service_id || service.nom_service;
+    if (!uniqueMap.has(key)) {
+      uniqueMap.set(key, service);
+    }
+  });
+
+  const uniqueServices = Array.from(uniqueMap.values());
+  return uniqueServices;
+});
 
 const prix = ref(0);
 
-
-
 function getItemPrice(item, isService) {
-  // SERVICE EN PREMIER
   if (item.nom_service && isService) {
-    return (item.prix_unitaire_service || 0) * (item.quantite_service || 1);
+    return item.prix_unitaire_service || 0;
   }
 
-  // SINON C’EST UN SIÈGE
   if (item.siege_colonne && !isService) {
     if (["I", "H", "G"].includes(item.siege_colonne)) return 25;
     if (["F", "E", "D"].includes(item.siege_colonne)) return 18;
@@ -90,13 +136,23 @@ function getItemPrice(item, isService) {
 }
 
 const total = computed(() => {
-  return panier.value.reduce((sum, item) => sum + getItemPrice(item, true) + getItemPrice(item, false), 0);
+  const totalSieges = sieges.value.reduce(
+    (sum, seat) => sum + getItemPrice(seat, false),
+    0
+  );
+  const totalServices = services.value.reduce(
+    (sum, service) =>
+      sum + getItemPrice(service, true) * (service.quantite_service || 1),
+    0
+  );
+  return totalSieges + totalServices;
 });
-
 
 async function fetchPanier() {
   try {
-    const res = await axios.get(`http://localhost:3000/panier/show/${userStore.userId}`);
+    const res = await axios.get(
+      `http://localhost:3000/panier/show/${userStore.userId}`
+    );
     panier.value = res.data;
   } catch (err) {
     console.error(err);
@@ -202,7 +258,6 @@ onMounted(() => {
   margin: 0;
   line-height: 1.2;
 }
-
 
 .montant {
   font-size: 1.6em;
