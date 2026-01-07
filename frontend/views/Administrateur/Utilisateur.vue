@@ -253,7 +253,25 @@ function deleteUtilisateur(idUser) {
   try {
     deletedUser.value = { ...selectedUser.value };
     
-    // Supprimer de localStorage
+    // Vérifier si l'utilisateur a un prestataire associé et le supprimer
+    const prestataires = localData.getAll('prestataires');
+    const prestataireAssocie = prestataires.find(p => p.id_utilisateur === idUser);
+    
+    if (prestataireAssocie) {
+      // Supprimer le prestataire (et libérer sa zone automatiquement)
+      localData.delete('prestataires', prestataireAssocie.id_prestataire, 'id_prestataire');
+      console.log('Prestataire associé supprimé:', prestataireAssocie.nom_prestataire);
+      
+      // Supprimer aussi tous les services du prestataire
+      const services = localData.getAll('services');
+      const servicesAssocie = services.filter(s => s.id_prestataire === prestataireAssocie.id_prestataire);
+      servicesAssocie.forEach(service => {
+        localData.delete('services', service.id_service, 'id_service');
+      });
+      console.log(`${servicesAssocie.length} service(s) du prestataire supprimé(s)`);
+    }
+    
+    // Supprimer l'utilisateur de localStorage
     localData.delete('utilisateurs', idUser, 'id_utilisateur');
     
     // Mettre à jour l'affichage

@@ -89,7 +89,10 @@
           class="boite_type_presta"
           :id="`p-${index}`">
           <!-- Bouton de sélection du type de prestataire -->
-          <button class="button_type_presta" @click="selectTypePresta(index)">
+          <button
+            class="button_type_presta"
+            @click="selectTypePresta(index)"
+            :disabled="continueInscription">
             {{ item.nom_type_prestataire[locale] }}
           </button>
         </div>
@@ -273,8 +276,8 @@
 
       <!-- Bouton d'inscription (mode ajout) -->
       <div class="button_container" v-else>
-        <button @click="addPrestataire">
-          {{ $t("user.buttonInscription") }}
+        <button @click="addPrestataire" :disabled="isSubmitting">
+          {{ isSubmitting ? "En cours..." : $t("user.buttonInscription") }}
         </button>
       </div>
 
@@ -355,6 +358,7 @@ const tel_presta = ref("");
 const activate = ref(false);
 const desactivate = ref(false);
 const deleting = ref(false);
+const isSubmitting = ref(false);
 
 const selectedNames = computed(() =>
   checkedItems.value.map((item) => item.nom)
@@ -451,7 +455,7 @@ const selectedItems = computed(() => {
       return type_boutique.value.map((item) => ({
         nom: item.nom_type_boutique,
       }));
-    case "reservation":
+    case "restauration":
       return type_restauration.value.map((item) => ({
         nom: item.nom_type_restauration,
       }));
@@ -466,7 +470,7 @@ const selectedTypeLabel = computed(() => {
       return "d'animation";
     case "boutique":
       return "de boutique";
-    case "reservation":
+    case "restauration":
       return "de restauration";
     default:
       return "";
@@ -632,7 +636,11 @@ function hideContinueInscription() {
 function selectTypePresta(index) {
   const typeObj = type_prestataire.value[index];
   if (typeObj) {
-    selectedType.value = typeObj.nom_type_prestataire.toLowerCase();
+    // nom_type_prestataire est un objet avec des langues { fr: "Animation", en: "Animation" }
+    const nomType =
+      typeObj.nom_type_prestataire[locale.value] ||
+      typeObj.nom_type_prestataire.fr;
+    selectedType.value = nomType.toLowerCase();
     selectedTypeId.value = typeObj.id_type_prestataire;
   }
 }
@@ -730,7 +738,10 @@ function getValuesPrestataire() {
       (t) => t.id_type_prestataire === presta.type_prestataire_id
     );
     if (typeObj) {
-      selectedType.value = typeObj.nom_type_prestataire.toLowerCase();
+      const nomType =
+        typeObj.nom_type_prestataire[locale.value] ||
+        typeObj.nom_type_prestataire.fr;
+      selectedType.value = nomType.toLowerCase();
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
     nextTick();
@@ -762,6 +773,13 @@ function getValuesPrestataire() {
 }
 
 function addPrestataire() {
+  // Empêcher les doubles clics
+  if (isSubmitting.value) {
+    return;
+  }
+
+  isSubmitting.value = true;
+
   try {
     const utilisateurs = localData.getAll("utilisateurs");
     const userIndex = utilisateurs.findIndex(
@@ -771,11 +789,24 @@ function addPrestataire() {
     if (userIndex === -1) {
       message.value = "Utilisateur non trouvé";
       messageType.value = "error";
+      isSubmitting.value = false;
+      return;
+    }
+
+    // Vérifier si un prestataire existe déjà pour cet utilisateur
+    const prestataires = localData.getAll("prestataires");
+    const existingPresta = prestataires.find(
+      (p) => p.id_utilisateur == prestaId.value
+    );
+
+    if (existingPresta) {
+      message.value = "Vous avez déjà une demande de prestataire en cours";
+      messageType.value = "error";
+      isSubmitting.value = false;
       return;
     }
 
     // Créer le nouveau prestataire
-    const prestataires = localData.getAll("prestataires");
     const newPrestaId =
       prestataires.length > 0
         ? Math.max(...prestataires.map((p) => p.id_prestataire)) + 1
@@ -790,6 +821,10 @@ function addPrestataire() {
       tel_prestataire: tel_presta.value,
       specificite: selectedNames.value.join(","),
       id_type_prestataire: Number(selectedTypeId.value),
+      waitingforadmin: true,
+      refused: false,
+      id_zone: null,
+      message_ajout: true,
     };
 
     localData.add("prestataires", newPrestataire);
@@ -815,13 +850,13 @@ function addPrestataire() {
       localData.add("services", newService);
     });
 
-    // Mettre à jour l'utilisateur
-    utilisateurs[userIndex].ispresta = true;
-    utilisateurs[userIndex].waitingforadmin = false;
+    // Mettre à jour l'utilisateur (ispresta reste false jusqu'à validation admin)
+    utilisateurs[userIndex].ispresta = false;
+    utilisateurs[userIndex].waitingforadmin = true;
     localData.update(
       "utilisateurs",
       prestaId.value,
-      { ispresta: true, waitingforadmin: false },
+      { ispresta: false, waitingforadmin: true },
       "id_utilisateur"
     );
 
@@ -831,10 +866,13 @@ function addPrestataire() {
     messageType.value = "success";
 
     console.log("Nouveau prestataire créé:", newPrestataire);
+
+    isSubmitting.value = false;
   } catch (err) {
     message.value = "Erreur lors de la création: " + err.message;
     messageType.value = "error";
     console.error("Erreur:", err);
+    isSubmitting.value = false;
   }
 }
 
