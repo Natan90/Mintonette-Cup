@@ -13,12 +13,12 @@
           :key="'seat-' + index"
           class="item">
           <p>
-            Siège : {{ seat.siege_colonne }}{{ seat.siege_ligne }}
-            <span v-if="seat.equipe1_nom && seat.equipe2_nom">
-              {{ seat.equipe1_nom.substring(0, 3) }} -
-              {{ seat.equipe2_nom.substring(0, 3) }}
+            Siège : {{ seat.numero_colonne }}{{ seat.numero_ligne }}
+            <span v-if="seat.team1 && seat.team2">
+              {{ seat.team1.substring(0, 3) }} -
+              {{ seat.team2.substring(0, 3) }}
             </span>
-            <span> (Zone {{ seat.siege_zone }})</span>
+            <span> (Zone {{ seat.zone }})</span>
           </p>
           <p style="color: red; font-weight: 700">
             {{ getItemPrice(seat, false) }} €
@@ -73,9 +73,12 @@
 import { ref, computed, onMounted } from "vue";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
-import axios from "axios";
+// import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
+import matchesData from "../../backend/database/jsonData/Match.json";
+import equipesData from "../../backend/database/jsonData/Equipe.json";
+import paysData from "../../backend/database/jsonData/Pays.json";
 
 const route = useRoute();
 const router = useRouter();
@@ -86,14 +89,13 @@ const userStore = useUserStore();
 const panier = ref([]);
 
 const sieges = computed(() => {
-  const filtered = panier.value.filter((item) => item.siege_colonne);
+  const filtered = panier.value.filter((item) => item.numero_colonne);
 
-  // Dédupliquer les sièges par une clé unique (colonne + ligne + zone + match)
   const uniqueMap = new Map();
   filtered.forEach((siege) => {
-    const key = `${siege.siege_colonne}-${siege.siege_ligne}-${
-      siege.siege_zone
-    }-${siege.siege_match_id || ""}`;
+    const key = `${siege.numero_colonne}-${siege.numero_ligne}-${siege.zone}-${
+      siege.matchId || ""
+    }`;
     if (!uniqueMap.has(key)) {
       uniqueMap.set(key, siege);
     }
@@ -126,9 +128,9 @@ function getItemPrice(item, isService) {
     return item.prix_unitaire_service || 0;
   }
 
-  if (item.siege_colonne && !isService) {
-    if (["I", "H", "G"].includes(item.siege_colonne)) return 25;
-    if (["F", "E", "D"].includes(item.siege_colonne)) return 18;
+  if (item.numero_colonne && !isService) {
+    if (["I", "H", "G"].includes(item.numero_colonne)) return 25;
+    if (["F", "E", "D"].includes(item.numero_colonne)) return 18;
     return 12;
   }
 
@@ -148,57 +150,94 @@ const total = computed(() => {
   return totalSieges + totalServices;
 });
 
-async function fetchPanier() {
-  try {
-    const res = await axios.get(
-      `http://localhost:3000/panier/show/${userStore.userId}`
-    );
-    panier.value = res.data;
-  } catch (err) {
-    console.error(err);
-  }
+// async function fetchPanier() {
+//   try {
+//     const res = await axios.get(
+//       `http://localhost:3000/panier/show/${userStore.userId}`
+//     );
+//     panier.value = res.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+// async function pay() {
+//   if (panier.value.length === 0) {
+//     alert("Aucun siège dans le panier.");
+//     return;
+//   }
+
+//   const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
+//   if (!confirmPay) return;
+
+//   for (const seat of panier.value) {
+//     await axios.put("http://localhost:3000/gradin/update", {
+//       numero_colonne: seat.numero_colonne,
+//       numero_ligne: seat.numero_ligne,
+//       zone: seat.zone,
+//       est_reserve: true,
+//       id_utilisateur: userStore.userId,
+//     });
+//   }
+
+//   localStorage.removeItem("selectedSeats");
+
+//   await fetchPanier();
+// }
+
+// async function reset() {
+//   if (panier.value.length === 0) {
+//     alert("Le panier est déjà vide");
+//     return;
+//   }
+
+//   for (const seat of panier.value) {
+//     await axios.put("http://localhost:3000/gradin/update", {
+//       numero_colonne: seat.numero_colonne,
+//       numero_ligne: seat.numero_ligne,
+//       zone: seat.zone,
+//       est_reserve: false,
+//     });
+//   }
+
+//   await fetchPanier();
+// }
+
+function fetchPanier() {
+  const panierData = JSON.parse(localStorage.getItem("panier") || "[]");
+
+  const enrichedPanier = panierData.map((item) => {
+    const match = matchesData.find((m) => m.id_match === item.matchId);
+
+    if (match) {
+      const equipe1 = equipesData.find((e) => e.id_equipe === match.id_equipe1);
+      const equipe2 = equipesData.find((e) => e.id_equipe === match.id_equipe2);
+
+      const pays1 = paysData.find((p) => p.id_pays === equipe1?.id_pays);
+      const pays2 = paysData.find((p) => p.id_pays === equipe2?.id_pays);
+
+      return {
+        ...item,
+        team1: pays1?.nom_pays || "Équipe 1",
+        team2: pays2?.nom_pays || "Équipe 2",
+      };
+    }
+
+    return item;
+  });
+
+  panier.value = enrichedPanier;
 }
 
-async function pay() {
-  if (panier.value.length === 0) {
-    alert("Aucun siège dans le panier.");
-    return;
-  }
-
-  const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
-  if (!confirmPay) return;
-
-  for (const seat of panier.value) {
-    await axios.put("http://localhost:3000/gradin/update", {
-      numero_colonne: seat.numero_colonne,
-      numero_ligne: seat.numero_ligne,
-      zone: seat.zone,
-      est_reserve: true,
-      id_utilisateur: userStore.userId,
-    });
-  }
-
-  localStorage.removeItem("selectedSeats");
-
-  await fetchPanier();
-}
-
-async function reset() {
+function reset() {
   if (panier.value.length === 0) {
     alert("Le panier est déjà vide");
     return;
   }
 
-  for (const seat of panier.value) {
-    await axios.put("http://localhost:3000/gradin/update", {
-      numero_colonne: seat.numero_colonne,
-      numero_ligne: seat.numero_ligne,
-      zone: seat.zone,
-      est_reserve: false,
-    });
-  }
-
-  await fetchPanier();
+  localStorage.setItem("panier", "[]");
+  panier.value = [];
+  alert("Le panier a été vidé");
 }
 
 function backToBleacher() {
@@ -227,9 +266,6 @@ function addTestSeats() {
 
 onMounted(() => {
   fetchPanier();
-
-  // Optionnel : Décommenter la ligne suivante pour charger automatiquement des places de test
-  // addTestSeats();
 });
 </script>
 
