@@ -168,9 +168,6 @@ const estAjoute = ref(false);
 const idMatch = ref(null);
 const seatsByMatch = ref({});
 
-console.log("Zone:", zone.value);
-console.log("Total matches in data:", matchesData.length);
-
 const globalSelectedSeats = ref(
   JSON.parse(localStorage.getItem("selectedSeats") || "[]")
 );
@@ -310,24 +307,11 @@ function getSeatPrice(seat) {
 // });
 
 function fetchGradin() {
-  console.log(
-    "fetchGradin called for match:",
-    idMatch.value,
-    "zone:",
-    zone.value?.toUpperCase()
-  );
-
-  const matchIndex = matches.value.findIndex(
-    (m) => m.id_match === idMatch.value
-  );
-  const seatMatchId = matchIndex !== -1 ? matchIndex + 1 : 1;
-
-  console.log("Using seat data for match_id:", seatMatchId);
-
   const seatsForZone = siegesData
     .filter(
       (seat) =>
-        seat.match_id === seatMatchId && seat.zone === zone.value?.toUpperCase()
+        seat.match_id === idMatch.value &&
+        seat.zone === zone.value?.toUpperCase()
     )
     .map((seat) => {
       let state = "available";
@@ -351,26 +335,13 @@ function fetchGradin() {
       return { ...seat, state };
     });
 
-  console.log("Seats found:", seatsForZone.length);
-
   seatsByMatch.value[idMatch.value] = seatsForZone;
   seats.value = seatsByMatch.value[idMatch.value];
-
-  console.log("Seats set:", seats.value.length);
 }
 
 function fetchMatches() {
   const matchesForTerrain = matchesData.filter(
     (match) => match.id_terrain === terrainId.value
-  );
-
-  console.log(
-    "Matches for terrain",
-    terrainId.value,
-    "(zone",
-    zone.value,
-    "):",
-    matchesForTerrain.length
   );
 
   matches.value = matchesForTerrain.map((match) => {
