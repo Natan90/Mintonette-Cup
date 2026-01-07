@@ -283,7 +283,7 @@ async function AddToCart() {
 
   try {
     for (const seat of globalSelectedSeats.value) {
-      await axios.put("http://localhost:3000/gradin/panier/add", {
+      await axios.post("http://localhost:3000/gradin/panier/add", {
         utilisateur_id: userStore.userId,
         matchId: seat.matchId,
         numero_colonne: seat.numero_colonne,

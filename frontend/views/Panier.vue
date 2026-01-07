@@ -5,15 +5,25 @@
       <h2>Votre panier</h2>
       <div v-if="panier.length === 0">Aucun article dans le panier</div>
       <div v-else>
-        <div v-for="(item, index) in panier" :key="index" class="item">
-  <div v-if="item.siege_colonne">
-    Siège : {{ item.siege_colonne }}{{ item.siege_ligne }} (Zone {{ item.siege_zone }})
-  </div>
-  <div v-else-if="item.nom_service">
-    Service : {{ item.nom_service }} <span style="color: red; font-weight: 400;">x{{ item.quantite_service }}</span>
-  </div>
-  <div style="color: red; font-weight: 700;">{{ getItemPrice(item) }} €</div>
-</div>
+
+        <h3>Sièges</h3>
+        <div v-if="sieges.length === 0">Aucun siège</div>
+
+        <div v-for="(seat, index) in sieges" :key="'seat-' + index" class="item">
+          <p>Siège : {{ seat.siege_colonne }}{{ seat.siege_ligne }}<span>(Zone {{ seat.siege_zone }})</span></p>
+          <p style="color: red; font-weight: 700;">{{ getItemPrice(seat, false) }} €</p>
+        </div>
+
+        <hr />
+
+        <!-- SERVICES -->
+        <h3>Services</h3>
+        <div v-if="services.length === 0">Aucun service</div>
+
+        <div v-for="(service, index) in services" :key="'service-' + index" class="item">
+          <p>Service : {{ service.nom_service }}<span style="color: red;"> x{{ service.quantite_service }}</span></p>
+          <p style="color: red; font-weight: 700;">{{ getItemPrice(service, true) }} €</p>
+        </div>
 
       </div>
     </div>
@@ -26,7 +36,8 @@
   <div class="button-group">
     <button @click="goToCheckout" class="btn btn-checkout">Procéder au paiement</button>
     <button @click="reset" class="btn btn-danger">Vider le panier</button>
-    <button @click="addTestSeats" class="btn btn-test" title="Pour développement uniquement">+ Ajouter places test</button>
+    <button @click="addTestSeats" class="btn btn-test" title="Pour développement uniquement">+ Ajouter places
+      test</button>
     <button v-if="fromZone" @click="backToBleacher" class="btn btn-secondary">
       Retour au gradin {{ fromZone }}
     </button>
@@ -50,21 +61,36 @@ const fromZone = route.query.fromZone;
 const userStore = useUserStore();
 const panier = ref([]);
 
+const sieges = computed(() =>
+  panier.value.filter(item => item.siege_colonne)
+);
 
-function getItemPrice(item) {
-  if (item.siege_colonne) {
-    // prix siège selon la colonne
+const services = computed(() =>
+  panier.value.filter(item => item.nom_service)
+);
+
+const prix = ref(0);
+
+
+
+function getItemPrice(item, isService) {
+  // SERVICE EN PREMIER
+  if (item.nom_service && isService) {
+    return (item.prix_unitaire_service || 0) * (item.quantite_service || 1);
+  }
+
+  // SINON C’EST UN SIÈGE
+  if (item.siege_colonne && !isService) {
     if (["I", "H", "G"].includes(item.siege_colonne)) return 25;
     if (["F", "E", "D"].includes(item.siege_colonne)) return 18;
     return 12;
-  } else if (item.nom_service) {
-    return (item.prix_unitaire_service || 0) * (item.quantite_service || 1);
   }
+
   return 0;
 }
 
 const total = computed(() => {
-  return panier.value.reduce((sum, item) => sum + getItemPrice(item), 0);
+  return panier.value.reduce((sum, item) => sum + getItemPrice(item, true) + getItemPrice(item, false), 0);
 });
 
 
@@ -145,7 +171,7 @@ function addTestSeats() {
 
 onMounted(() => {
   fetchPanier();
-  
+
   // Optionnel : Décommenter la ligne suivante pour charger automatiquement des places de test
   // addTestSeats();
 });
@@ -157,6 +183,7 @@ onMounted(() => {
   gap: 40px;
   padding: 20px;
 }
+
 .panier,
 .total {
   width: 50%;
@@ -164,11 +191,19 @@ onMounted(() => {
   padding: 20px;
   border-radius: 8px;
 }
+
 .item {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
+
+.item p {
+  margin: 0;
+  line-height: 1.2;
+}
+
+
 .montant {
   font-size: 1.6em;
   font-weight: bold;
