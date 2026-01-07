@@ -1,0 +1,14 @@
+[
+  {
+    "id_type_prestataire": 1,
+    "nom_type_prestataire": "Animation"
+  },
+  {
+    "id_type_prestataire": 2,
+    "nom_type_prestataire": "Boutique"
+  },
+  {
+    "id_type_prestataire": 3,
+    "nom_type_prestataire": "Restauration"
+  }
+]

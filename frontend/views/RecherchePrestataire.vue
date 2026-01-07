@@ -3,7 +3,7 @@
     <section class="recherche" id="liste_prestataires">
 
         <div class="titreFiltre">
-            <span>Retrouvez les Prestataires de la Mintonette Cup 2026 !</span>
+            <span>{{ $t('filter.titleFilter') }}</span>
         </div>
 
         <section class="filtreEtListe">
@@ -11,8 +11,8 @@
             <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
                 
                 <div class="blocFiltre">
-                    <span>Nom</span>
-                    <input v-model="filters.nom" type="text" placeholder="Nom de Prestataire" />
+                    <span>{{ $t('filter.name.title') }}</span>
+                    <input v-model="filters.nom" type="text" v-bind:placeholder="$t('filter.name.nameInput')" />
                 </div>
 
                 <div class="blocFiltre">
@@ -48,35 +48,47 @@
             <section class="listePrestataireBorder">
 
                 <div class="listePrestataire">
-                    <div v-for="item in prestatairesFiltres" :key="item.id_prestataire" class="blocListePrestatire">
+                    <div v-for="item in prestatairesFiltres" :key="item.id_prestataire" 
+                    class="blocListePrestataire">
                         
                         <div  class="enTetePrestataire">
-
-                            <div class="descriptionPrestataire" v-html="item.descri_prestataire">
-                            </div>
 
                             <div  class="titrePrestataire">
                                 <!-- <img src=""> -->
                                 <span>{{ item.nom_prestataire }}</span>
                             </div>
+
+                            <div class="typePrestataire">
+                                <span>{{ item.nom_type_prestataire }}</span>
+                            </div>
+
                         </div>
 
-                        <div class="infosPrestataire">
-                            <!-- <span>Capacité : <span>{{ Number(item.nb_participants) }}</span></span>
-                            <span>Tarif : <span>{{ item.tarif_prestataire }}</span></span> -->
-                            <span>Nombre de services : <span>{{ item.nb_services }}</span></span>
+                        <div class="descriptionPrestataire">
+                            <span>Description</span>
+                            <div v-html="item.descri_prestataire">
+                            </div>
                         </div>
 
-                        <div class="contactPrestataire">
-                            <span>Contact</span>
-                            
-                            <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
-                            <span>{{ item.mail_prestataire }}</span>
-                            <span>{{ item.tel_prestataire }}</span>
+                        <div class="blocBasPrestataire">
+                            <div class="infosPrestataire">
+                                <span>informations</span>
+                                <span>Capacité : {{ Number(item.nb_participants) }} pers.</span>
+                                <span>Tarif : {{ item.tarif_prestataire }} €</span>
+                                <span>Services : {{ item.nb_services }}</span>
+                            </div>
+
+                            <div class="contactPrestataire">
+                                <span>Contact</span>
+                                
+                                <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
+                                <span>{{ item.mail_prestataire }}</span>
+                                <span>{{ item.tel_prestataire }}</span>
+                            </div>
                         </div>
 
-                        <div class="boutonListe pointer" @click="goToSpecificPrestataire(item.id_prestataire)">
-                                <span>En savoir plus</span>
+                        <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire)">
+                            <span class="pointer">En savoir plus</span>
                         </div>
                         
                     </div>
@@ -93,10 +105,13 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useNavigationStore } from '@/stores/navigation';
+import { useI18n } from "vue-i18n";
+
 
 const router = useRouter();
 const route = useRoute();
 const navStore = useNavigationStore();
+const { t } = useI18n();
 
 
 const type_prestataire = ref([]);
@@ -211,6 +226,8 @@ async function searchPrestataires() {
 
     background-color: var(--jaune-logo);
     opacity: 0.9;
+
+    text-align: center;
 }
 
 .titreFiltre  span{
@@ -237,9 +254,9 @@ async function searchPrestataires() {
     flex-direction: column;
 
     padding: 15px calc(5px + 1%);
-    margin-bottom: 20px;
     gap: 1.5em;
 
+    height: fit-content; /* C'EST MERVEILLEUX */
 
     color: #0a1d42;
     background-color: var(--jaune-logo);
@@ -273,22 +290,24 @@ async function searchPrestataires() {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex-wrap: wrap;
+
+    row-gap: 1em;
+}
+
+.prix input{
+    min-width: 6em;
 }
 
 .boutonsFiltre{
+    font-size: 15px;
+    text-align: center;
+    align-items: baseline;
     display: flex;
-    justify-content: space-around;
-}
-
-.boutonsFiltre{
-  font-size: 15px;
-  text-align: center;
-  align-items: baseline;
-  display: flex;
-  justify-content: space-evenly;
-  padding: 10px;
-
-  border-radius: 0 0 10px 10px;
+    justify-content: space-evenly;
+    padding: 10px;
+    flex-wrap: wrap;
+    row-gap: 1em;
 }
 
 .boutonsFiltre button{
@@ -329,9 +348,9 @@ async function searchPrestataires() {
     flex-direction: row;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
 
-    padding: 10px 20px;
+    padding: 20px;
 
     border-radius: 10px 10px 0 0;
 
@@ -339,18 +358,64 @@ async function searchPrestataires() {
 
 }
 
-.blocListePrestatire{
+.blocListePrestataire{
 
-    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 
-    padding: 8px;
+    width: 430px;
+
+    padding: 12px 10px 0 10px;
 
     border-radius: 10px;
 
-    color: #0a1d42;
-
-    background-color: var(--jaune-logo);
     opacity: 0.9;
+}
+
+.blocListePrestataire:nth-child(2n+1){
+    color: #0a1d42;
+    background-color: var(--jaune-logo);
+}
+
+.blocListePrestataire:nth-child(2n){
+    color: #0a1d42;
+    background-color: var(--jaune-logo);
+
+    .typePrestataire{
+        color: var(--bleu-logo);
+        background-color: var(--jaune-logo);
+    }
+
+    .blocBasPrestataire{
+        color: var(--bleu-logo);
+        background-color: var(--jaune-logo);
+    }
+
+    .infosPrestataire :not(:first-child),
+    .contactPrestataire :not(:first-child){
+        border-left: 4px solid var(--bleu-logo);
+    }
+
+    .boutonListe span{
+        color: var(--jaune-logo);
+    }
+
+    .boutonListe span:hover{
+        color: orangered;
+        transition: var(--transition-fast);
+    }
+}
+
+.blocListePrestataire:nth-child(2n){
+    color: var(--jaune-logo);
+    background-color: var(--bleu-logo);
+}
+
+.blocListePrestataire:hover{
+    opacity: 1;
+    transform: scale(1.05);
+    transition: var(--transition-fast);
 }
 
 .enTetePrestataire{
@@ -359,15 +424,19 @@ async function searchPrestataires() {
     flex-direction: row;
     justify-content: space-between;
     
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 
     font-weight: 500;
-
-    background-color: purple;
 }
 
-.descriptionPrestataire{
-    width: 60%;
+.typePrestataire{
+    padding: 3px;
+    text-align: end;
+
+    border-radius: 2px;
+
+    color: var(--jaune-logo);
+    background-color: var(--bleu-logo);
 }
 
 .titrePrestataire{
@@ -375,25 +444,87 @@ async function searchPrestataires() {
     display: flex;
     flex-direction: column;
 
-    background-color: red;
+    font-size: 1.25em;
+    font-weight: 1000;
+    gap: 0.5em;
+    text-align: center;
 }
 
-.infosPrestataire{
+.titrePrestataire img{
+    width: 100%;
+    object-fit: contain;
+}
+
+.descriptionPrestataire{
+    margin-bottom: 1.3em;
+}
+
+.descriptionPrestataire div{
+    font-weight: 500;
+    padding-left: 1em;
+}
+
+.blocBasPrestataire{
+    width: 100%;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
-    background-color: yellow;
+    flex-wrap: wrap;
+
+
+    gap: 2em;
+
+    padding: 6px 0 10px 0;
+
+    border-radius: 2px;
+
+    color: var(--jaune-logo);
+    background-color: var(--bleu-logo);
 }
 
+.descriptionPrestataire,
+.infosPrestataire,
 .contactPrestataire{
     display: flex;
     flex-direction: column;
 
-    background-color: green;
+    padding: 0 0.2em 0 1em ;
 }
 
-.boutonListe {}
+.descriptionPrestataire :first-child,
+.infosPrestataire :first-child,
+.contactPrestataire :first-child{
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+}
+
+.infosPrestataire :not(:first-child),
+.contactPrestataire :not(:first-child){
+    font-weight: 500;
+    padding-left: 0.8em;
+    border-left: 4px solid var(--jaune-logo);
+}
+
+.boutonListe {
+    text-align: right;
+}
+
+.boutonListe span{
+
+    font-weight: 600;
+
+    text-decoration: underline;
+
+    color: #0a1d42;
+}
+
+.boutonListe span:hover{
+    color: purple;
+    transition: var(--transition-fast);
+}
+
 
 
 /* LISTE */

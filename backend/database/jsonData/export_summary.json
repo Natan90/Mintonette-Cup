@@ -1,0 +1,190 @@
+{
+  "exportDate": "2026-01-07T08:27:30.453Z",
+  "totalTables": 46,
+  "tables": [
+    {
+      "name": "Evenement",
+      "count": 1
+    },
+    {
+      "name": "Utilisateur",
+      "count": 11
+    },
+    {
+      "name": "Type_utilisateur",
+      "count": 0
+    },
+    {
+      "name": "Zone",
+      "count": 0
+    },
+    {
+      "name": "Date_du_jour",
+      "count": 0
+    },
+    {
+      "name": "Type_animation",
+      "count": 7
+    },
+    {
+      "name": "Type_boutique",
+      "count": 4
+    },
+    {
+      "name": "Type_restauration",
+      "count": 5
+    },
+    {
+      "name": "Type_prestataire",
+      "count": 3
+    },
+    {
+      "name": "Aliment",
+      "count": 0
+    },
+    {
+      "name": "Article",
+      "count": 0
+    },
+    {
+      "name": "Plat",
+      "count": 0
+    },
+    {
+      "name": "Terrain",
+      "count": 4
+    },
+    {
+      "name": "Prestataire",
+      "count": 3
+    },
+    {
+      "name": "Panier",
+      "count": 0
+    },
+    {
+      "name": "Services",
+      "count": 12
+    },
+    {
+      "name": "Panier_Service",
+      "count": 0
+    },
+    {
+      "name": "Pays",
+      "count": 32
+    },
+    {
+      "name": "Stade",
+      "count": 0
+    },
+    {
+      "name": "Restauration",
+      "count": 0
+    },
+    {
+      "name": "Animation",
+      "count": 0
+    },
+    {
+      "name": "Boutique",
+      "count": 0
+    },
+    {
+      "name": "Poste_secouriste",
+      "count": 0
+    },
+    {
+      "name": "Agent_securite",
+      "count": 0
+    },
+    {
+      "name": "Organisateur",
+      "count": 0
+    },
+    {
+      "name": "Equipe",
+      "count": 64
+    },
+    {
+      "name": "Reservation",
+      "count": 0
+    },
+    {
+      "name": "Match",
+      "count": 16
+    },
+    {
+      "name": "Panier_Siege",
+      "count": 0
+    },
+    {
+      "name": "Siege",
+      "count": 1600
+    },
+    {
+      "name": "Joueur",
+      "count": 446
+    },
+    {
+      "name": "ClassementPoule",
+      "count": 32
+    },
+    {
+      "name": "present_dans_restaurant",
+      "count": 0
+    },
+    {
+      "name": "clients_restaurant",
+      "count": 0
+    },
+    {
+      "name": "visiteurs_animation",
+      "count": 0
+    },
+    {
+      "name": "present_dans_boutique",
+      "count": 0
+    },
+    {
+      "name": "client_boutique",
+      "count": 0
+    },
+    {
+      "name": "commandes_resto",
+      "count": 0
+    },
+    {
+      "name": "article_vendu",
+      "count": 0
+    },
+    {
+      "name": "prix_article_boutique",
+      "count": 0
+    },
+    {
+      "name": "utilisateur_de_type",
+      "count": 0
+    },
+    {
+      "name": "nb_secouristes",
+      "count": 0
+    },
+    {
+      "name": "est_affecte",
+      "count": 0
+    },
+    {
+      "name": "a_la_carte",
+      "count": 0
+    },
+    {
+      "name": "a_pour_ingredient",
+      "count": 0
+    },
+    {
+      "name": "prend_une_place",
+      "count": 0
+    }
+  ]
+}

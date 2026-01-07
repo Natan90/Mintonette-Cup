@@ -202,5 +202,35 @@
     "siegeReserv": "Siège réservé",
     "siegeproprio": "Siège acheté par vous",
     "siegeSelec": "Siège sélectionné"
+  },
+  "filter": {
+    "titleFilter":"Retrouvez les Prestataires de la Mintonette Cup 2026 !",
+    "name":{
+      "title":"Nom",
+      "nameInput":"Nom de prestataire"
+    },
+    "categorie":{
+      "title":"Catégorie de service",
+      "all":"Tous"
+    },
+    "price":{
+      "title":"Prix",
+      "minPrice":"Prix min",
+      "maxPrice":"Prix max"
+    },
+    "button":{
+      "search":"Rechercher",
+      "reset":"Réinitialiser"
+    },
+    "description":"Description",
+    "info":{
+      "title":"Informations",
+      "capacite":"Capacité",
+      "people":"pers.",
+      "tarif":"Tarif",
+      "service":"Services"
+    },
+    "contact":"Contacts",
+    "more":"En savoir plus"
   }
 }
