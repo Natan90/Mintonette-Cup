@@ -13,6 +13,8 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
+import { useI18n } from "vue-i18n";
+
 
 import { Chart } from 'vue-chartjs';
 import {
@@ -29,6 +31,7 @@ import {
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, RadialLinearScale, ArcElement);
 
+const { locale } = useI18n();
 const utilisateurs = ref([]);
 const prestataires = ref([]);
 
@@ -131,7 +134,7 @@ onMounted(async () => {
         ]
     };
 
-    const labels = type_prestataire.value.map(t => t.nom_type_prestataire);
+    const labels = type_prestataire.value.map(t => t.nom_type_prestataire[locale.value]);
     const data = countType_presta.value.map(c => Number(c.nb_prestataires));
 
     // polarData.value = {
@@ -156,13 +159,13 @@ async function getCountServicesByType() {
     countServicesByType.value = res.data;
 
     polarData.value = {
-      labels: countServicesByType.value.map(c => c.nom_type_prestataire),
+      labels: countServicesByType.value.map(c => c.nom_type_prestataire[locale.value]),
       datasets: [
         {
           label: "Nombre de services par catégorie",
           data: countServicesByType.value.map(c => Number(c.nb_services)),
           backgroundColor: [
-            'red', 'blue', 'green', 'orange', 'purple'
+            'purple', 'red', 'green', 'orange', 'yellow'
           ],
           borderWidth: 1
         }

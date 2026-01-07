@@ -217,7 +217,6 @@ async function getValuesTypePrestataire() {
     try {
         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
         type_prestataire.value = res.data.result;
-        updateTypePrestataire();
     } catch (err) {
         console.error(err);
     }

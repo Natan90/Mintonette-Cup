@@ -82,7 +82,7 @@
                     :id="`p-${index}`">
                     <!-- Bouton de sélection du type de prestataire -->
                     <button class="button_type_presta" @click="selectTypePresta(index)">
-                        {{ item.nom_type_prestataire }}
+                        {{ item.nom_type_prestataire[locale] }}
                     </button>
                 </div>
             </div>
@@ -251,7 +251,7 @@ import Editor from "@tinymce/tinymce-vue";
 import Footer from '@/components/Footer.vue';
 
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const userStore = useUserStore();
 const route = useRoute();
 
