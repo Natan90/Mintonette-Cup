@@ -232,5 +232,10 @@
     },
     "contact":"Contacts",
     "more":"En savoir plus"
+  },
+  "messagesServices": {
+    "aucuneLangues": "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?",
+    "queFR": "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?",
+    "queEN": "La version française du service n’est pas remplie.\n\nSouhaitez-vous continuer ?"
   }
 }

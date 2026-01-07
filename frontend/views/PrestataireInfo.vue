@@ -433,12 +433,33 @@ const selectedTypeLabel = computed(() => {
     }
 });
 
-function addServiceField() {
-    services.value.push({
-        nom_service: '',
-        activate: false
-    });
+function isLangEmpty(service, lang) {
+    return (
+        !service.titre_service[lang]?.trim() &&
+        !service.descri_service[lang]?.trim() &&
+        !service.besoin[lang]?.trim()
+    );
 }
+
+function getMissingLangMessage(service) {
+    const frEmpty = isLangEmpty(service, 'fr');
+    const enEmpty = isLangEmpty(service, 'en');
+
+    if (frEmpty && enEmpty) {
+        return "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?";
+    }
+    
+    if (frEmpty) {
+        return "La version française du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+    }
+
+    if (enEmpty) {
+        return "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+    }
+
+    return null;
+}
+
 
 function addServiceToPrestataire() {
     if (!oneService.value.nom_service || oneService.value.nom_service.trim() === '') {
@@ -446,6 +467,13 @@ function addServiceToPrestataire() {
         messageType.value = "error";
         return;
     }
+    const confirmMessage = getMissingLangMessage(oneService.value);
+
+    if (confirmMessage) {
+        const confirmAdd = window.confirm(confirmMessage);
+        if (!confirmAdd) return;
+    }
+
     oneService.value.prix = Number(oneService.value.prix_service || 0);
     oneService.value.nb_participants = Number(oneService.value.nbParticipants_service || 0);
 
