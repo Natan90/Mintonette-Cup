@@ -981,21 +981,20 @@ const pool = require("./db");
     ('Bieniek', 'Mateusz', 'Masculin', '1994-01-01', 2.08, 20, 'Pologne', 'Central', 15, NULL),
 
     -- Serbie
-    ('Podrascanin', 'Marko', 'Masculin', '1987-10-29', 2.04, 1, 'Serbie', 'Central', 16, NULL),
-    ('Kovacevic', 'Aleksandar', 'Masculin', '1995-06-11', 1.98, 2, 'Serbie', 'Attaquant', 16, NULL),
-    ('Atanasijevic', 'Nemanja', 'Masculin', '1987-08-14', 2.03, 3, 'Serbie', 'Receveur-Attaquant', 16, NULL),
-    ('Lisinac', 'Marko', 'Masculin', '1990-06-03', 2.06, 4, 'Serbie', 'Central', 16, NULL),
-    ('Petkovic', 'Aleksa', 'Masculin', '1992-09-20', 1.97, 5, 'Serbie', 'Attaquant', 16, NULL),
-    ('Milenkovic', 'Uros', 'Masculin', '1994-05-14', 1.96, 6, 'Serbie', 'Receveur-Attaquant', 16, NULL),
-    ('Aleksic', 'Vuk', 'Masculin', '1993-02-21', 1.95, 7, 'Serbie', 'Central', 16, NULL),
-    ('Kovacevic', 'Marko', 'Masculin', '1991-08-18', 1.90, 8, 'Serbie', 'Libero', 16, NULL),
-    ('Tomic', 'Sasa', 'Masculin', '1995-04-10', 2.01, 9, 'Serbie', 'Attaquant', 16, NULL),
-    ('Stevanovic', 'Nikola', 'Masculin', '1992-07-07', 1.98, 10, 'Serbie', 'Receveur-Attaquant', 16, NULL),
-    ('Gocic', 'Uros', 'Masculin', '1993-03-22', 1.97, 11, 'Serbie', 'Passeur', 16, NULL),
-    ('Mitic', 'Aleksandar', 'Masculin', '1994-05-19', 1.99, 12, 'Serbie', 'Attaquant', 16, NULL),
-    ('Petrovic', 'Nikola', 'Masculin', '1990-12-03', 1.98, 13, 'Serbie', 'Libero', 16, NULL),
-    ('Zivkovic', 'Milan', 'Masculin', '1995-09-25', 2.00, 14, 'Serbie', 'Central', 16, NULL),
-
+    ('Okolić', 'Aleksandar', 'Masculin', '1993-01-01', 2.06, 1, 'Serbie', 'Central', 16, 'Okolic.png'),
+    ('Kovačević', 'Uroš', 'Masculin', '1993-01-01', 1.98, 2, 'Serbie', 'Attaquant', 16, 'Kovacevic.png'),
+    ('Peković', 'Nikola', 'Masculin', '1990-01-01', 1.76, 6, 'Serbie', 'Libero', 16, NULL),
+    ('Krsmаnović', 'Petar', 'Masculin', '1990-01-01', 2.04, 7, 'Serbie', 'Central', 16, 'Krsmanovic.png'),
+    ('Ivović', 'Marko', 'Masculin', '1990-01-01', 1.94, 8, 'Serbie', 'Attaquant', 16, 'Ivovic.png'),
+    ('Jovović', 'Nikola', 'Masculin', '1992-01-01', 1.99, 9, 'Serbie', 'Passeur', 16, 'Jovovic.png'),
+    ('Perić', 'Pavle', 'Masculin', '1998-01-01', 2.07, 12, 'Serbie', 'Attaquant', 16, NULL),
+    ('Atanasijević', 'Aleksandar', 'Masculin', '1991-01-01', 2.02, 14, 'Serbie', 'Opposé', 16, NULL),
+    ('Luburić', 'Dražen', 'Masculin', '1993-01-01', 2.02, 16, 'Serbie', 'Opposé', 16, 'Luburic.png'),
+    ('Majstorović', 'Neven', 'Masculin', '1989-01-01', 1.93, 17, 'Serbie', 'Libero', 16, NULL),
+    ('Podraščanin', 'Marko', 'Masculin', '1987-10-29', 2.04, 18, 'Serbie', 'Central', 16, NULL),
+    ('Lisinac', 'Srećko', 'Masculin', '1992-01-01', 2.05, 20, 'Serbie', 'Central', 16, NULL),
+    ('Todorović', 'Vuk', 'Masculin', '1998-01-01', 1.91, 21, 'Serbie', 'Passeur', 16, NULL);
+    
     -- Pays-Bas
     ('Jorna', 'Gijs', 'Masculin', '1989-05-30', 1.84, 7, 'Pays-Bas', 'Libero', 17, 'Jorna.png'),
     ('Ter Horst', 'Thijs', 'Masculin', '1991-09-18', 2.03, 4, 'Pays-Bas', 'Attaquant', 17, 'Ter Horst.png'),
