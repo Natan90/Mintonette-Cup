@@ -261,11 +261,13 @@ import { ref, onMounted, computed, nextTick } from "vue";
 import { useUserStore } from '@/stores/user';
 import { useRoute } from "vue-router";
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
 import Editor from "@tinymce/tinymce-vue";
 import Footer from '@/components/Footer.vue';
 
 
+const { t } = useI18n();
 const userStore = useUserStore();
 const route = useRoute();
 
@@ -446,15 +448,15 @@ function getMissingLangMessage(service) {
     const enEmpty = isLangEmpty(service, 'en');
 
     if (frEmpty && enEmpty) {
-        return "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?";
+        return t('messagesServices.aucuneLangues');
     }
-    
+
     if (frEmpty) {
-        return "La version française du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+        return t('messagesServices.queEN');
     }
 
     if (enEmpty) {
-        return "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?";
+        return t('messagesServices.queFR');
     }
 
     return null;
