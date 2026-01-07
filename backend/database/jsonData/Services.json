@@ -346,5 +346,34 @@
     "nb_participants": 600,
     "activate": true,
     "prestataire_id": 3
+  },
+  {
+    "id_service": 13,
+    "nom_service": "at",
+    "titre_service": {
+      "en": {
+        "texte": ""
+      },
+      "fr": {
+        "texte": ""
+      }
+    },
+    "descri_service": {
+      "en": {
+        "texte": ""
+      },
+      "fr": {
+        "texte": ""
+      }
+    },
+    "visible_public": true,
+    "besoin": {
+      "en": "",
+      "fr": ""
+    },
+    "prix": "0.00",
+    "nb_participants": 0,
+    "activate": false,
+    "prestataire_id": 4
   }
 ]

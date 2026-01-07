@@ -49,5 +49,22 @@
     "type_animation_id": null,
     "type_restauration_id": null,
     "type_boutique_id": null
+  },
+  {
+    "id_prestataire": 4,
+    "nom_prestataire": "azeraze",
+    "descri_prestataire": "<p>at</p>",
+    "mail_prestataire": "art",
+    "tel_prestataire": "4287",
+    "waitingforadmin": false,
+    "refused": false,
+    "message_ajout": true,
+    "specificite": "[\"Animation festive\"]",
+    "id_zone": null,
+    "id_utilisateur": 11,
+    "type_prestataire_id": 1,
+    "type_animation_id": null,
+    "type_restauration_id": null,
+    "type_boutique_id": null
   }
 ]
