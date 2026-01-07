@@ -15,48 +15,23 @@ const path = require("path");
       "Utilisateur",
       "Type_utilisateur",
       "Zone",
-      "Date_du_jour",
-      "Type_animation",
-      "Type_boutique",
-      "Type_restauration",
-      "Type_prestataire",
-      "Aliment",
-      "Article",
-      "Plat",
       "Terrain",
       "Prestataire",
       "Panier",
       "Services",
       "Panier_Service",
       "Pays",
-      "Stade",
-      "Restauration",
-      "Animation",
-      "Boutique",
-      "Poste_secouriste",
-      "Agent_securite",
       "Organisateur",
       "Equipe",
-      "Reservation",
       "Match",
       "Panier_Siege",
       "Siege",
       "Joueur",
       "ClassementPoule",
-      "present_dans_restaurant",
-      "clients_restaurant",
-      "visiteurs_animation",
-      "present_dans_boutique",
-      "client_boutique",
-      "commandes_resto",
-      "article_vendu",
-      "prix_article_boutique",
-      "utilisateur_de_type",
-      "nb_secouristes",
-      "est_affecte",
-      "a_la_carte",
-      "a_pour_ingredient",
-      "prend_une_place"
+      "Type_restauration",
+      "Type_animation",
+      "Type_utilisateur",
+      "Type_boutique",
     ];
 
     // Exporter chaque table
@@ -64,7 +39,9 @@ const path = require("path");
       try {
         const result = await pool.query(`SELECT * FROM ${table}`);
         data[table] = result.rows;
-        console.log(`✅ ${table}: ${result.rows.length} enregistrements exportés`);
+        console.log(
+          `✅ ${table}: ${result.rows.length} enregistrements exportés`
+        );
       } catch (err) {
         console.error(`❌ Erreur lors de l'export de ${table}:`, err.message);
         data[table] = [];
@@ -95,8 +72,8 @@ const path = require("path");
       totalTables: tables.length,
       tables: Object.entries(data).map(([name, rows]) => ({
         name,
-        count: rows.length
-      }))
+        count: rows.length,
+      })),
     };
 
     const summaryPath = path.join(outputDir, "export_summary.json");
@@ -104,7 +81,6 @@ const path = require("path");
     console.log(`✅ Résumé de l'export créé: ${summaryPath}`);
 
     console.log("\n🎉 Export terminé avec succès!");
-
   } catch (err) {
     console.error("❌ Erreur générale lors de l'export:", err);
   } finally {

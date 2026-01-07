@@ -4,7 +4,9 @@
     <div class="all">
       <div class="image">
         <img src="../images/photo_fond.png" alt="" />
-        <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }"> 
+        <div
+          class="texteImage"
+          :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
           <!-- {{ $t("mintonetteCup.title") }} -->
         </div>
@@ -23,15 +25,20 @@
           <div class="bloc" v-for="(item, index) in blocInfoArray" :key="index">
             <img class="illustration" :src="item.image" />
             <span class="title">
-              <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
+              <countUp
+                :from="0"
+                :to="item.countUp"
+                :duration="2"
+                class="count-up-text"
+                v-if="item.countUp" />
               {{ item.title }}
             </span>
             <div class="contenuTexte">
               <!-- <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span> -->
               <span class="descri" v-html="item.descri"></span>
-                <router-link to="/Informations" class="voirPlus pointer">
-                  <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
-                </router-link>
+              <router-link to="/Informations" class="voirPlus pointer">
+                <span class="pointer">{{ $t("blocInfo.voirPlus") }}</span>
+              </router-link>
             </div>
           </div>
         </section>
@@ -52,35 +59,47 @@
     >Truc pour les polygones</router-link
   >
   <br /><br /> -->
-    <section v-if="userStore.isConnected && !utilisateur.ispresta && !utilisateur.waitingforadmin">
+    <section
+      v-if="
+        userStore.isConnected &&
+        !utilisateur.ispresta &&
+        !utilisateur.waitingforadmin
+      ">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.devenir')"
+          class="team_content"></div>
 
-        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
-        class="btn_teams">
-          {{ $t('mintonetteCup.prestataire.boutonDevenir') }}
+        <router-link
+          :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
+          class="btn_teams">
+          {{ $t("mintonetteCup.prestataire.boutonDevenir") }}
         </router-link>
       </div>
-
     </section>
 
     <section v-if="userStore.isConnected && utilisateur.ispresta">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.estDeja')"
+          class="team_content"></div>
 
-        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.prestaId } }"
-        class="btn_teams">
-          {{ $t('mintonetteCup.prestataire.boutonGerer') }}
+        <router-link
+          :to="{ name: 'EditPrestataire', params: { id: userStore.prestaId } }"
+          class="btn_teams">
+          {{ $t("mintonetteCup.prestataire.boutonGerer") }}
         </router-link>
       </div>
     </section>
 
     <section v-if="userStore.isConnected && utilisateur.waitingforadmin">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.enAttente')"
+          class="team_content"></div>
       </div>
     </section>
-<!-- 
+    <!-- 
     <section>
       <div class="teams_texte">
         <div v-html="$t('mintonetteCup.competition.descri')" class="team_content"></div>
@@ -90,7 +109,6 @@
         </router-link>
       </div>
     </section> -->
-
 
     <RecherchePrestataire></RecherchePrestataire>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -105,9 +123,10 @@
 ******************** */
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import axios from "axios";
-import { useUserStore } from '@/stores/user';
-
+import evenementData from "../../backend/database/jsonData/Evenement.json";
+import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
+// import axios from "axios";
+import { useUserStore } from "@/stores/user";
 
 /* ********************
     PAGES IMPORTS 
@@ -139,8 +158,8 @@ const utilisateur = ref([]);
 /* ********************
     Evenement Values
 ******************** */
-const title_evenement = ref('');
-const colorTitle = ref('');
+const title_evenement = ref("");
+const colorTitle = ref("");
 const imagePreview = ref(null);
 const selectedFont = ref(null);
 
@@ -192,47 +211,53 @@ const handleScroll = () => {
   }
 };
 
-onMounted(async () => {
+onMounted(() => {
   window.addEventListener("scroll", handleScroll);
-  try {
-    await getValuesEvenement();
-    await getValuesUser();
-  } catch (err) {
-    console.error(err);
-  }
+  getValuesEvenement();
+  getValuesUser();
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
-
-//=========================
-//= Async functions event =
-//=========================
-async function getValuesEvenement() {
-    try {
-        const res = await axios.get("http://localhost:3000/admin/evenement/show");
-        title_evenement.value = res.data.nom_evenement;
-        colorTitle.value = res.data.color_title;
-        selectedFont.value = res.data.text_font;
-        imagePreview.value = res.data.image_evenement;
-
-    } catch (err) {
-        console.error(err);
-    }
+function getValuesEvenement() {
+  const evenement = evenementData[0];
+  title_evenement.value = evenement.nom_evenement;
+  colorTitle.value = evenement.color_title;
+  selectedFont.value = evenement.text_font;
+  imagePreview.value = evenement.image_evenement;
 }
 
-async function getValuesUser() {
-  try {
-    const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
-    utilisateur.value = res.data;
-
-  } catch (err) {
-    console.error(err);
+function getValuesUser() {
+  const user = utilisateursData.find(
+    (u) => u.id_utilisateur === userStore.userId
+  );
+  if (user) {
+    utilisateur.value = user;
   }
 }
 
+// async function getValuesEvenement() {
+//     try {
+//         const res = await axios.get("http://localhost:3000/admin/evenement/show");
+//         title_evenement.value = res.data.nom_evenement;
+//         colorTitle.value = res.data.color_title;
+//         selectedFont.value = res.data.text_font;
+//         imagePreview.value = res.data.image_evenement;
+//     } catch (err) {
+//         console.error(err);
+//     }
+// }
+
+// async function getValuesUser() {
+//   try {
+//     const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
+//     utilisateur.value = res.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 </script>
 
 <style>

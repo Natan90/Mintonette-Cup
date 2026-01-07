@@ -6,93 +6,126 @@
     </router-link>
 
     <div class="optionNav">
-
       <!-- <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
         class="boutonNav">
         <span class="pointer">Prestataire (mode public)</span>
       </router-link> -->
 
-      <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
+      <router-link
+        v-if="utilisateur.ispresta"
+        :to="{
+          name: 'EditPrestataire',
+          params: { id: userStore.userId, lang: locale },
+        }"
         class="boutonNav">
         <span class="pointer">Edit Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link v-else :to="{name: 'AddPrestataire',params: { id: userStore.userId, lang: locale }}"  
+      <router-link
+        v-else
+        :to="{
+          name: 'AddPrestataire',
+          params: { id: userStore.userId, lang: locale },
+        }"
         class="boutonNav">
         <span class="pointer">Become Prestataire (mode presta)</span>
       </router-link>
 
-      <router-link :to="{ name: 'Evenement', params: { lang: locale } }" 
+      <router-link
+        :to="{ name: 'Evenement', params: { lang: locale } }"
         class="boutonNav">
         <span class="pointer">Vue administrateur</span>
       </router-link>
 
       <div class="langue">
-        <div v-if="locale === 'en'" @click="changeLanguage('fr')"  class="boutonNav pointer">
+        <div
+          v-if="locale === 'en'"
+          @click="changeLanguage('fr')"
+          class="boutonNav pointer">
           <span>Français</span>
         </div>
-        <div v-else-if="locale === 'fr'" @click="changeLanguage('en')"  class="boutonNav pointer">
+        <div
+          v-else-if="locale === 'fr'"
+          @click="changeLanguage('en')"
+          class="boutonNav pointer">
           <span>English</span>
         </div>
       </div>
 
-      <div v-if="!userStore.isConnected" class="partieProfil" >
-        <router-link :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
-           class="boutonNav">
-          <span class="pointer">{{ $t("user.buttonConnexion")}}</span>
+      <div v-if="!userStore.isConnected" class="partieProfil">
+        <router-link
+          :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
+          class="boutonNav">
+          <span class="pointer">{{ $t("user.buttonConnexion") }}</span>
         </router-link>
 
-        <div class="default">
-          /
-        </div>
+        <div class="default">/</div>
 
-        <router-link :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
-           class="boutonNav">
-          <span class="pointer">{{$t("user.buttonInscription")}}</span>
+        <router-link
+          :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
+          class="boutonNav">
+          <span class="pointer">{{ $t("user.buttonInscription") }}</span>
         </router-link>
       </div>
 
       <div v-else class="userButtons pointer">
-
         <div class="photoUser">
+          <img
+            v-if="userProfilePhoto"
+            :src="userProfilePhoto"
+            alt="Photo de profil"
+            class="profile-photo" />
 
-          <img v-if="userProfilePhoto" :src="userProfilePhoto" alt="Photo de profil" class="profile-photo" />
-          
           <div v-else class="profile-placeholder pointer">
             <span>{{ userInitials }}</span>
           </div>
-
         </div>
 
         <div class="optionsUser">
-
-          <router-link :to="{ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } }" 
-            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+          <router-link
+            :to="{
+              name: 'ShowAccount',
+              params: { lang: locale, userId: userStore.userId },
+            }"
+            class="optionProfil pointer"
+            :class="{ blueBar: !isInIndex }">
             <span class="pointer">Mon profil</span>
           </router-link>
 
-          <router-link v-if="utilisateur.ispresta" :to="{name: 'EditPrestataire',params: { id: userStore.userId, lang: locale }}"
-            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+          <router-link
+            v-if="utilisateur.ispresta"
+            :to="{
+              name: 'EditPrestataire',
+              params: { id: userStore.userId, lang: locale },
+            }"
+            class="optionProfil pointer"
+            :class="{ blueBar: !isInIndex }">
             <span class="pointer">Mes prestations</span>
           </router-link>
 
-          <router-link :to="{ name: 'Panier', params: { lang: locale } }" 
-            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+          <router-link
+            :to="{ name: 'Panier', params: { lang: locale } }"
+            class="optionProfil pointer"
+            :class="{ blueBar: !isInIndex }">
             <span class="pointer">Panier</span>
           </router-link>
 
-          <router-link :to="{ name: 'MesBillets', params: { lang: locale } }"
-            class="optionProfil pointer" :class="{ blueBar: !isInIndex }">
+          <router-link
+            :to="{ name: 'MesBillets', params: { lang: locale } }"
+            class="optionProfil pointer"
+            :class="{ blueBar: !isInIndex }">
             <span class="pointer">Mes billets</span>
           </router-link>
 
-          <div class="optionProfil optionProfil"  :class="{ blueBar: !isInIndex }" @click="handleLogout">
+          <div
+            class="optionProfil optionProfil"
+            :class="{ blueBar: !isInIndex }"
+            @click="handleLogout">
             <span>Se déconnecter</span>
           </div>
-
         </div>
+      </div>
     </div>
-  </div>
   </nav>
 </template>
 
@@ -101,7 +134,8 @@ import { ref, watch, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
+// import axios from "axios";
 
 const { locale } = useI18n();
 const route = useRoute();
@@ -115,14 +149,13 @@ const userProfilePhoto = ref(null);
 const userInitials = ref("");
 const utilisateur = ref([]);
 
-const loadProfilePhoto = async () => {
+const loadProfilePhoto = () => {
   if (userStore.isConnected) {
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/admin/utilisateur/show/${userStore.userId}`
-      );
-      const userData = response.data;
+    const userData = utilisateursData.find(
+      (u) => u.id_utilisateur === userStore.userId
+    );
 
+    if (userData) {
       if (userData.photo_profil_utilisateur) {
         userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
       } else {
@@ -130,12 +163,33 @@ const loadProfilePhoto = async () => {
         const nom = userData.nom_utilisateur || "";
         userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
       }
-    } catch (error) {
-      console.error("Erreur lors du chargement du profil:", error);
+      utilisateur.value = userData;
     }
   }
 };
-onMounted(async () => {
+
+// const loadProfilePhoto = async () => {
+//   if (userStore.isConnected) {
+//     try {
+//       const response = await axios.get(
+//         `http://localhost:3000/admin/utilisateur/show/${userStore.userId}`
+//       );
+//       const userData = response.data;
+
+//       if (userData.photo_profil_utilisateur) {
+//         userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
+//       } else {
+//         const prenom = userData.prenom_utilisateur || "";
+//         const nom = userData.nom_utilisateur || "";
+//         userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
+//       }
+//     } catch (error) {
+//       console.error("Erreur lors du chargement du profil:", error);
+//     }
+//   }
+// };
+
+onMounted(() => {
   loadProfilePhoto();
 });
 
@@ -148,12 +202,6 @@ watch(
     }
   }
 );
-
-
-function toggleMiniCart() {
-  showMiniCart.value = !showMiniCart.value;
-  if (showMiniCart.value) fetchCart();
-}
 
 function handleLogout() {
   userStore.logout();
@@ -176,31 +224,20 @@ function changeLanguage(lang) {
 const savedLang = localStorage.getItem("lang");
 if (savedLang) locale.value = savedLang;
 
-async function fetchCart() {
-  try {
-    const res = await axios.get("http://localhost:3000/gradin/panier/show");
-    cartSeats.value = res.data;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function getValuesUser() {
-  try {
-    const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
-    utilisateur.value = res.data;
-
-  } catch (err) {
-    console.error(err);
-  }
-}
+// async function getValuesUser() {
+//   try {
+//     const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
+//     utilisateur.value = res.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 
 // Pour que la barre de nav apparaisse/disparaisse lorsqu'on scroll
 
 // :style="{ top: navbar }"
 
 // const navbar = ref("0px");
-
 
 // const handleScroll = () => {
 //   if (window.scrollY > 500) {
@@ -223,12 +260,9 @@ async function getValuesUser() {
 // onBeforeUnmount(() => {
 //   window.removeEventListener("scroll", handleScroll);
 // });
-
-
 </script>
 
 <style scoped>
-
 .barre-nav {
   padding: 0;
   color: white;
@@ -236,7 +270,7 @@ async function getValuesUser() {
   align-items: center;
   font-size: 1.2em;
   width: 100%;
-  
+
   left: 0;
   right: 0;
   height: 100px;
@@ -267,8 +301,8 @@ async function getValuesUser() {
 
 .boutonNav {
   display: flex;
-  align-items: center;      /* centrage vertical */
-  justify-content: center;  /* centrage horizontal */
+  align-items: center; /* centrage vertical */
+  justify-content: center; /* centrage horizontal */
 
   height: 100%;
 }
@@ -277,7 +311,7 @@ async function getValuesUser() {
   color: #ffff00;
 }
 
-a span{
+a span {
   width: 100%;
   height: 100%;
 
@@ -294,20 +328,20 @@ a span{
   font-weight: 500;
 }
 
-.partieProfil div{
+.partieProfil div {
   display: flex;
   align-items: center;
 }
 
-.default{
+.default {
   cursor: default;
   height: 100%;
 }
 
-.partieProfil{
+.partieProfil {
   height: 100%;
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   align-items: center;
   gap: 4px;
   margin-right: 0.6em;
@@ -316,26 +350,25 @@ a span{
 .userButtons {
   width: 8.5em;
   max-width: 17%;
-  
+
   margin-right: 0.6em;
 }
 
-.userButtons:hover{
-
+.userButtons:hover {
   .profile-placeholder,
   .profile-photo {
     transform: scale(1.1);
     border-color: var(--jaune-logo);
   }
 
-  .optionProfil{
+  .optionProfil {
     transform: scaleX(1);
     height: 2.5em;
     font-size: 1em;
   }
 }
 
-.optionsUser{
+.optionsUser {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -361,7 +394,7 @@ a span{
   color: black;
 }
 
-.photoUser{
+.photoUser {
   width: 100%;
 
   padding-bottom: 1em;
@@ -399,5 +432,4 @@ a span{
   border: 2px solid white;
   transition: all 0.3s ease;
 }
-
 </style>
