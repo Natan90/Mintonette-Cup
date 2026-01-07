@@ -29,7 +29,7 @@
                             <label class="pointer">
                                 <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
                                     v-model="filters.category" />
-                                {{ item.nom_type_prestataire }}
+                                {{ item.nom_type_prestataire[locale] }}
                             </label>
                         </div>
 
@@ -68,7 +68,7 @@
 
                         <div class="typePrestataire">
                             <span>
-                            {{ isServiceView ? item.nom_type_prestataire : item.nom_type_prestataire }}
+                            {{ item.nom_type_prestataire[locale] }}
                             </span>
                         </div>
                         </div>
@@ -85,10 +85,10 @@
                             {{ $t('filter.info.service') }} : {{ item.nb_services }}
                             </span>
                             <span v-else>
-                            {{ $t('filter.info.price') }} : {{ item.prix }} €
+                            {{ $t('filter.info.tarif') }} : {{ item.prix }} €
                             </span>
                             <span v-if="isServiceView">
-                            {{ $t('filter.info.participants') }} : {{ item.nb_participants }}
+                            {{ $t('filter.info.capacite') }} : {{ item.nb_participants }} {{ $t('filter.info.people') }}
                             </span>
                         </div>
 
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     </div>
-
+                    
             </section>
         </section>
     </section>
@@ -191,20 +191,6 @@ function goToSpecificPrestataire(idPresta) {
     });
 }
 
-const nom_type_prestataire=ref('');
-
-const oneTypePrestataire = ref({
-  id_type_prestataire: null,
-  nom_type_prestataire: { fr: '', en: '' }
-});
-
-function updateTypePrestataire() {
-  if (oneTypePrestataire.value) {
-    const nom = oneTypePrestataire.value.nom_type_prestataire;
-
-    nom_type_prestataire.value = nom[locale.value]?.texte || '';
-  }
-}
 
 //=========================
 //==== Async functions ====

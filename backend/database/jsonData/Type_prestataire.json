@@ -1,14 +1,23 @@
 [
   {
     "id_type_prestataire": 1,
-    "nom_type_prestataire": "Animation"
+    "nom_type_prestataire": {
+      "en": "Activity",
+      "fr": "Animation"
+    }
   },
   {
     "id_type_prestataire": 2,
-    "nom_type_prestataire": "Boutique"
+    "nom_type_prestataire": {
+      "en": "Shop",
+      "fr": "Boutique"
+    }
   },
   {
     "id_type_prestataire": 3,
-    "nom_type_prestataire": "Restauration"
+    "nom_type_prestataire": {
+      "en": "Restoration",
+      "fr": "Restauration"
+    }
   }
 ]

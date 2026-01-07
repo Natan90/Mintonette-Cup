@@ -199,6 +199,10 @@
   },
   "filter": {
     "titleFilter": "Find the Service Providers of the Mintonette Cup 2026!",
+    "slider": {
+      "prestataire":"Service Provider",
+      "service": "Service"
+    },
     "name": {
       "title": "Name",
       "nameInput": "Service provider name"

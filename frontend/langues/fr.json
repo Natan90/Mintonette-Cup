@@ -205,6 +205,10 @@
   },
   "filter": {
     "titleFilter":"Retrouvez les Prestataires de la Mintonette Cup 2026 !",
+    "slider": {
+      "prestataire":"Prestataire",
+      "service": "Service"
+    },
     "name":{
       "title":"Nom",
       "nameInput":"Nom de prestataire"
