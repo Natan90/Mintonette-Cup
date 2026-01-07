@@ -2022,7 +2022,7 @@ onMounted(() => {
 
       // Centrer horizontalement + décaler verticalement de 15px sous la souris
       const x = mouseX - label.offsetWidth / 2;
-      const y = mouseY - 40;
+      const y = mouseY - 52;
 
       label.style.left = x + "px";
       label.style.top = y + "px";
