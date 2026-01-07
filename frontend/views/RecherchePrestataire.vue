@@ -29,7 +29,7 @@
                             <label class="pointer">
                                 <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
                                     v-model="filters.category" />
-                                {{ item.nom_type_prestataire }}
+                                {{ item.nom_type_prestataire[locale] }}
                             </label>
                         </div>
 
@@ -59,29 +59,16 @@
                     <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service" 
                         class="blocListePrestataire">
                         
-<<<<<<< HEAD
-                        <div  class="enTetePrestataire">
-
-                            <div  class="titrePrestataire">
-                                <!-- <img src=""> -->
-                                <span>{{ item.nom_prestataire }}</span>
-                            </div>
-
-                            <div class="typePrestataire">
-                                <span>{{ oneTypePrestataire.nom_type_prestataire }}</span>
-                            </div>
-=======
                         <div class="enTetePrestataire">
                         <div class="titrePrestataire">
                             <span>
                             {{ isServiceView ? item.nom_service : item.nom_prestataire }}
                             </span>
                         </div>
->>>>>>> b5f1ec828cc49e8b133d855c392379c72582098e
 
                         <div class="typePrestataire">
                             <span>
-                            {{ isServiceView ? item.nom_type_prestataire : item.nom_type_prestataire }}
+                            {{ item.nom_type_prestataire[locale] }}
                             </span>
                         </div>
                         </div>
@@ -118,7 +105,7 @@
                         </div>
                     </div>
                     </div>
-
+                    
             </section>
         </section>
     </section>
@@ -204,20 +191,6 @@ function goToSpecificPrestataire(idPresta) {
     });
 }
 
-const nom_type_prestataire=ref('');
-
-const oneTypePrestataire = ref({
-  id_type_prestataire: null,
-  nom_type_prestataire: { fr: '', en: '' }
-});
-
-function updateTypePrestataire() {
-  if (oneTypePrestataire.value) {
-    const nom = oneTypePrestataire.value.nom_type_prestataire;
-
-    nom_type_prestataire.value = nom[locale.value]?.texte || '';
-  }
-}
 
 //=========================
 //==== Async functions ====

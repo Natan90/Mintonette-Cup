@@ -36,10 +36,12 @@ const prestataires = ref([]);
 //=== Type prestataire ====
 //=========================
 const type_prestataire = ref([]);
-const countType_presta = ref([]);
+const countServicesByType = ref([]);
+const countServices = ref([]);
 const type_animation = ref([]);
 const type_restauration = ref([]);
 const type_boutique = ref([]);
+const countType_presta = ref([]);
 
 
 //==========================
@@ -108,6 +110,7 @@ onMounted(async () => {
     await getValuesUtilisateurs();
     await getPrestataires();
     await getTypePresta();
+    await getCountServicesByType();
 
     const totalUsers = utilisateurs.value.length;
     const totalPrestataires = prestataires.value.length;
@@ -131,20 +134,45 @@ onMounted(async () => {
     const labels = type_prestataire.value.map(t => t.nom_type_prestataire);
     const data = countType_presta.value.map(c => Number(c.nb_prestataires));
 
-    polarData.value = {
-        labels,
-        datasets: [
-            {
-            label: 'Nombre de prestataire par type',
-            data,
-            backgroundColor: [
-                'red', 'blue', 'green', 'orange', 'purple'
-            ],
-            borderWidth: 1
-            }
-        ]
-    };
+    // polarData.value = {
+    //     labels,
+    //     datasets: [
+    //         {
+    //         label: 'Nombre de prestataire par type',
+    //         data,
+    //         backgroundColor: [
+    //             'red', 'blue', 'green', 'orange', 'purple'
+    //         ],
+    //         borderWidth: 1
+    //         }
+    //     ]
+    // };
 });
+
+
+async function getCountServicesByType() {
+  try {
+    const res = await axios.get("http://localhost:3000/prestataire/countServicesByType");
+    countServicesByType.value = res.data;
+
+    polarData.value = {
+      labels: countServicesByType.value.map(c => c.nom_type_prestataire),
+      datasets: [
+        {
+          label: "Nombre de services par catégorie",
+          data: countServicesByType.value.map(c => Number(c.nb_services)),
+          backgroundColor: [
+            'red', 'blue', 'green', 'orange', 'purple'
+          ],
+          borderWidth: 1
+        }
+      ]
+    };
+  } catch (err) {
+    console.error("Erreur fetch countServicesByType:", err);
+  }
+}
+
 
 async function getValuesUtilisateurs() {
     try {
