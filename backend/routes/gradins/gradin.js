@@ -234,7 +234,8 @@ router.post("/panier/add", async (req, res) => {
     await pool.query(
       `INSERT INTO Panier_Siege
        (id_panier, numero_colonne, numero_ligne, zone, match_id)
-       VALUES ($1, $2, $3, $4, $5)`,
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT DO NOTHING`,
       [id_panier, numero_colonne, numero_ligne, zone, matchId]
     );
 
