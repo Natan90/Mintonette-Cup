@@ -544,6 +544,8 @@ input:checked + .slider:before {
     padding: 3px;
     text-align: end;
 
+    height: fit-content;
+
     border-radius: 2px;
 
     color: var(--jaune-logo);
@@ -551,7 +553,7 @@ input:checked + .slider:before {
 }
 
 .titrePrestataire{
-    width: 30%;
+    width: 35%;
     display: flex;
     flex-direction: column;
 
