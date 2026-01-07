@@ -993,7 +993,7 @@ const pool = require("./db");
     ('Majstorović', 'Neven', 'Masculin', '1989-01-01', 1.93, 17, 'Serbie', 'Libero', 16, NULL),
     ('Podraščanin', 'Marko', 'Masculin', '1987-10-29', 2.04, 18, 'Serbie', 'Central', 16, NULL),
     ('Lisinac', 'Srećko', 'Masculin', '1992-01-01', 2.05, 20, 'Serbie', 'Central', 16, NULL),
-    ('Todorović', 'Vuk', 'Masculin', '1998-01-01', 1.91, 21, 'Serbie', 'Passeur', 16, NULL);
+    ('Todorović', 'Vuk', 'Masculin', '1998-01-01', 1.91, 21, 'Serbie', 'Passeur', 16, NULL),
     
     -- Pays-Bas
     ('Jorna', 'Gijs', 'Masculin', '1989-05-30', 1.84, 7, 'Pays-Bas', 'Libero', 17, 'Jorna.png'),
