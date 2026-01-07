@@ -43,8 +43,6 @@ router.get("/show", async (req, res) => {
         p.id_prestataire,
         p.nom_prestataire,
         p.descri_prestataire,
-        p.nb_participants,
-        p.tarif_prestataire,
         p.mail_prestataire,
         p.tel_prestataire,
         p.waitingforadmin,
@@ -242,6 +240,8 @@ router.get("/showFilter", async (req, res) => {
       FROM Prestataire p
       JOIN Type_prestataire t
         ON p.type_prestataire_id = t.id_type_prestataire
+      JOIN Services s
+        ON s.prestataire_id = p.id_prestataire
       WHERE 1 = 1 `;
     const values = [];
     let index = 1;
@@ -259,13 +259,13 @@ router.get("/showFilter", async (req, res) => {
     }
 
     if (prixMin) {
-      sql += ` AND p.tarif_prestataire >= $${index}`;
+      sql += ` AND s.prix >= $${index}`;
       values.push(prixMin);
       index++;
     }
 
     if (prixMax) {
-      sql += ` AND p.tarif_prestataire <= $${index}`;
+      sql += ` AND s.prix <= $${index}`;
       values.push(prixMax);
       index++;
     }
@@ -472,8 +472,6 @@ router.post("/becomePrestataire/:id", async (req, res) => {
   const {
     nom,
     descri,
-    nb_participants,
-    tarif,
     mail,
     tel,
     specificite,
@@ -483,7 +481,6 @@ router.post("/becomePrestataire/:id", async (req, res) => {
   if (
     !nom ||
     !descri ||
-    !tarif ||
     !mail ||
     !tel ||
     !specificite ||
@@ -516,14 +513,12 @@ router.post("/becomePrestataire/:id", async (req, res) => {
 
     const result = await client.query(
       `INSERT INTO Prestataire 
-        (nom_prestataire, descri_prestataire, nb_participants, tarif_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, message_ajout, id_utilisateur, type_prestataire_id) VALUES
+        (nom_prestataire, descri_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, message_ajout, id_utilisateur, type_prestataire_id) VALUES
         ($1, $2, $3, $4, $5, $6, true, $7, true, $8, $9)
         RETURNING id_prestataire`,
       [
         nom,
         descri,
-        nb_participants,
-        tarif,
         mail,
         tel,
         specificite,
@@ -661,7 +656,7 @@ router.post("/becomePrestataire/:id", async (req, res) => {
  */
 router.put("/updatePresta/:id", async (req, res) => {
   const id_user = req.params.id;
-  const { nom, descri, nb_participants, tarif, mail, tel, specificite, type, services } =
+  const { nom, descri, mail, tel, specificite, type, services } =
     req.body;
 
   const client = await pool.connect();
@@ -689,8 +684,6 @@ router.put("/updatePresta/:id", async (req, res) => {
         SET 
             nom_prestataire = $1,
             descri_prestataire = $2,
-            nb_participants = $3,
-            tarif_prestataire = $4,
             mail_prestataire = $5,
             tel_prestataire = $6,
             waitingForAdmin = true,
@@ -703,8 +696,6 @@ router.put("/updatePresta/:id", async (req, res) => {
       [
         nom,
         descri,
-        nb_participants,
-        tarif,
         mail,
         tel,
         specificite,
@@ -796,7 +787,7 @@ router.put("/updatePresta/:id", async (req, res) => {
 
 router.put("/updatePresta/:id", async (req, res) => {
   const id_user = req.params.id;
-  const { nom, descri, nb_participants, tarif, mail, tel, specificite, type } =
+  const { nom, descri, mail, tel, specificite, type } =
     req.body;
 
   const client = await pool.connect();
@@ -823,8 +814,6 @@ router.put("/updatePresta/:id", async (req, res) => {
         SET 
             nom_prestataire = $1,
             descri_prestataire = $2,
-            nb_participants = $3,
-            tarif_prestataire = $4,
             mail_prestataire = $5,
             tel_prestataire = $6,
             waitingForAdmin = true,
@@ -837,8 +826,6 @@ router.put("/updatePresta/:id", async (req, res) => {
       [
         nom,
         descri,
-        nb_participants,
-        tarif,
         mail,
         tel,
         specificite,

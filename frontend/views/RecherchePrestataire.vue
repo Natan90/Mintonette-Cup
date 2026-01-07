@@ -73,8 +73,6 @@
                         <div class="blocBasPrestataire">
                             <div class="infosPrestataire">
                                 <span>{{ $t('filter.info.title') }}</span>
-                                <span>{{ $t('filter.info.capacite') }} : {{ Number(item.nb_participants) }} {{ $t('filter.info.people') }}</span>
-                                <span>{{ $t('filter.info.tarif') }} : {{ item.tarif_prestataire }} €</span>
                                 <span>{{ $t('filter.info.service') }} : {{ item.nb_services }}</span>
                             </div>
 
@@ -148,7 +146,7 @@ function resetFilters() {
         prixMin: null,
         prixMax: null
     }
-    router.push({ path: "/", query: {} });
+    router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
     getValuesPrestataire();
 }
 
@@ -196,6 +194,7 @@ async function searchPrestataires() {
             prixMin: filters.value.prixMin || undefined,
             prixMax: filters.value.prixMax || undefined,
         },
+        hash: "#liste_prestataires"
     });
 
     const res = await axios.get('http://localhost:3000/prestataire/showFilter', {
