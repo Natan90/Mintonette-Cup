@@ -562,14 +562,14 @@ router.post("/becomePrestataire/:id", async (req, res) => {
     const result = await client.query(
       `INSERT INTO Prestataire 
         (nom_prestataire, descri_prestataire, mail_prestataire, tel_prestataire, waitingForAdmin, specificite, message_ajout, id_utilisateur, type_prestataire_id) VALUES
-        ($1, $2, $3, $4, true, $7, true, $5, $6)
+        ($1, $2, $3, $4, true, $5, true, $6, $7)
         RETURNING id_prestataire`,
       [
         nom,
         descri,
         mail,
         tel,
-        specificite,
+        JSON.stringify(specificite),
         id_user,
         type,
       ]
@@ -746,7 +746,7 @@ router.put("/updatePresta/:id", async (req, res) => {
         descri,
         mail,
         tel,
-        specificite,
+        JSON.stringify(specificite),
         type,
         id_user,
       ]
@@ -983,6 +983,7 @@ router.get("/countServicesByType", async (req, res) => {
         ON p.type_prestataire_id = t.id_type_prestataire
       LEFT JOIN Services s
         ON s.prestataire_id = p.id_prestataire
+      WHERE p.waitingforadmin = false
       GROUP BY t.id_type_prestataire, t.nom_type_prestataire
       ORDER BY t.nom_type_prestataire;
     `);
