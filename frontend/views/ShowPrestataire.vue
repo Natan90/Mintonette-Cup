@@ -161,6 +161,7 @@ import { useI18n } from "vue-i18n";
 import PrestataireData from "../../backend/database/jsonData/Prestataire.json";
 import UtilisateurData from "../../backend/database/jsonData/Utilisateur.json";
 import ServicesData from "../../backend/database/jsonData/Services.json";
+import localData from "../../backend/database/localData.js";
 
 
 
@@ -294,12 +295,31 @@ function goToEditPrestataire() {
 
 function getValuesPrestataire() {
   console.log('idPresta:', idPresta, 'Type:', typeof idPresta);
-  console.log('ServicesData:', ServicesData);
-  console.log('Premier service:', ServicesData[0]);
   
-  const presta = PrestataireData.find(p => p.id_prestataire === Number(idPresta));
+  // Récupérer depuis localStorage
+  const prestatairesLocalStorage = localData.getAll("prestataires");
+  const utilisateursLocalStorage = localData.getAll("utilisateurs");
+  const servicesLocalStorage = localData.getAll("services");
+  
+  // Fusionner prestataires JSON + localStorage (priorité au localStorage)
+  const localStoragePrestaIds = prestatairesLocalStorage.map(p => p.id_prestataire);
+  const prestatairesJSONFiltered = PrestataireData.filter(p => !localStoragePrestaIds.includes(p.id_prestataire));
+  const allPrestataires = [...prestatairesJSONFiltered, ...prestatairesLocalStorage];
+  
+  // Fusionner utilisateurs JSON + localStorage
+  const localStorageUserIds = utilisateursLocalStorage.map(u => u.id_utilisateur);
+  const utilisateursJSONFiltered = UtilisateurData.filter(u => !localStorageUserIds.includes(u.id_utilisateur));
+  const allUtilisateurs = [...utilisateursJSONFiltered, ...utilisateursLocalStorage];
+  
+  // Fusionner services JSON + localStorage
+  const localStorageServiceIds = servicesLocalStorage.map(s => s.id_service);
+  const servicesJSONFiltered = ServicesData.filter(s => !localStorageServiceIds.includes(s.id_service));
+  const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
+  
+  // Trouver le prestataire
+  const presta = allPrestataires.find(p => p.id_prestataire === Number(idPresta));
   if (presta) {
-    const utilisateur = UtilisateurData.find(u => u.id_utilisateur === presta.id_utilisateur);
+    const utilisateur = allUtilisateurs.find(u => u.id_utilisateur === presta.id_utilisateur);
     onePresta.value = {
       ...presta,
       nom_utilisateur: utilisateur?.nom_utilisateur || '',
@@ -307,9 +327,23 @@ function getValuesPrestataire() {
     };
   }
   
-  const filtered = ServicesData.filter(s => {
-    console.log('Service:', s.id_service, 'prestataire_id:', s.prestataire_id, 'Type:', typeof s.prestataire_id, 'Match:', s.prestataire_id === Number(idPresta));
-    return s.prestataire_id === Number(idPresta);
+  // Filtrer et normaliser les services pour ce prestataire
+  const filtered = allServices.filter(s => {
+    return s.prestataire_id === Number(idPresta) || s.id_prestataire === Number(idPresta);
+  }).map(s => {
+    // Normaliser la structure pour que tous les services aient les mêmes propriétés
+    return {
+      id_service: s.id_service,
+      nom_service: s.nom_service,
+      titre_service: s.titre_service,
+      descri_service: s.descri_service,
+      besoin: s.besoin,
+      prix: s.prix || s.prix_service,
+      nb_participants: s.nb_participants || s.nbParticipants_service,
+      activate: s.activate !== undefined ? s.activate : true,
+      prestataire_id: s.prestataire_id || s.id_prestataire,
+      visible_public: s.visible_public !== undefined ? s.visible_public : true
+    };
   });
   
   console.log('Services filtrés:', filtered.length);
@@ -347,6 +381,10 @@ function actionsService(service) {
   const index = services.value.findIndex(s => s.id_service === service.id_service);
   if (index !== -1) {
     services.value[index].activate = !services.value[index].activate;
+    
+    // Mettre à jour dans localStorage si le service y existe
+    const serviceToUpdate = { ...services.value[index] };
+    localData.update("services", service.id_service, serviceToUpdate);
   }
 }
 
@@ -369,7 +407,15 @@ function actionsService(service) {
 
 function getOneService(service) {
   showService.value = true;
-  const serviceData = ServicesData.find(s => s.id_service === service.id_service);
+  
+  // Chercher dans localStorage d'abord, puis dans JSON
+  const servicesLocalStorage = localData.getAll("services");
+  let serviceData = servicesLocalStorage.find(s => s.id_service === service.id_service);
+  
+  if (!serviceData) {
+    serviceData = ServicesData.find(s => s.id_service === service.id_service);
+  }
+  
   if (serviceData) {
     oneService.value = serviceData;
   }

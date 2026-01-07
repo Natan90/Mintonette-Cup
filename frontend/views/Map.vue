@@ -1856,10 +1856,7 @@ function fetchPresta() {
     ...prestatairesLocalStorage,
   ];
 
-  console.log(
-    "🔍 Tous les prestataires (JSON + localStorage):",
-    allPrestataires
-  );
+ 
 
   prestataires.value = allPrestataires.map((presta) => {
     const typePrestataire = typesPrestataireData.find(
@@ -1874,18 +1871,13 @@ function fetchPresta() {
     };
   });
 
-  console.log("🔍 Prestataires avec types:", prestataires.value);
 
   prestataires.value.forEach((presta) => {
-    console.log(
-      `🔍 Presta ${presta.nom_prestataire}: id_zone=${presta.id_zone}, waitingforadmin=${presta.waitingforadmin}`
-    );
 
     if (presta.id_zone && presta.waitingforadmin === false) {
       const zone = serviceLocation.value.find(
         (z) => z.id_zone === presta.id_zone
       );
-      console.log(`✅ Zone trouvée pour ${presta.nom_prestataire}:`, zone);
       if (zone) {
         zone.name = presta.nom_prestataire;
         zone.id_prestataire = presta.id_prestataire;
@@ -1894,7 +1886,6 @@ function fetchPresta() {
     }
   });
 
-  console.log("🗺️ serviceLocation après màj:", serviceLocation.value);
 }
 
 /*Avec le JSON statique*/

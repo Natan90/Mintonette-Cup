@@ -149,6 +149,7 @@ import prestataireData from "../../backend/database/jsonData/Prestataire.json";
 import typePrestaData from "../../backend/database/jsonData/Type_prestataire.json";
 import servicesData from "../../backend/database/jsonData/Services.json";
 import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
+import localData from "../../backend/database/localData.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -252,15 +253,35 @@ function getValuesServices() {
 
 function getValuesPrestataire() {
   try {
-    prestataires.value = prestataireData.map((presta) => {
+    // Récupérer depuis localStorage
+    const prestatairesLocalStorage = localData.getAll("prestataires");
+    const utilisateursLocalStorage = localData.getAll("utilisateurs");
+    const servicesLocalStorage = localData.getAll("services");
+    
+    // Fusionner prestataires JSON + localStorage (priorité au localStorage)
+    const localStoragePrestaIds = prestatairesLocalStorage.map(p => p.id_prestataire);
+    const prestatairesJSONFiltered = prestataireData.filter(p => !localStoragePrestaIds.includes(p.id_prestataire));
+    const allPrestataires = [...prestatairesJSONFiltered, ...prestatairesLocalStorage];
+    
+    // Fusionner utilisateurs JSON + localStorage
+    const localStorageUserIds = utilisateursLocalStorage.map(u => u.id_utilisateur);
+    const utilisateursJSONFiltered = utilisateurData.filter(u => !localStorageUserIds.includes(u.id_utilisateur));
+    const allUtilisateurs = [...utilisateursJSONFiltered, ...utilisateursLocalStorage];
+    
+    // Fusionner services JSON + localStorage
+    const localStorageServiceIds = servicesLocalStorage.map(s => s.id_service);
+    const servicesJSONFiltered = servicesData.filter(s => !localStorageServiceIds.includes(s.id_service));
+    const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
+    
+    prestataires.value = allPrestataires.map((presta) => {
       const typePresta = typePrestaData.find(
-        (t) => t.id_type_prestataire === presta.type_prestataire_id
+        (t) => t.id_type_prestataire === (presta.type_prestataire_id || presta.id_type_prestataire)
       );
-      const user = utilisateurData.find(
+      const user = allUtilisateurs.find(
         (u) => u.id_utilisateur === presta.id_utilisateur
       );
-      const nb_services = servicesData.filter(
-        (s) => s.id_prestataire === presta.id_prestataire
+      const nb_services = allServices.filter(
+        (s) => s.id_prestataire === presta.id_prestataire || s.prestataire_id === presta.id_prestataire
       ).length;
 
       return {
