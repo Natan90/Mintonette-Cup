@@ -57,7 +57,7 @@ const pool = require("./db");
   );
 
   CREATE TABLE IF NOT EXISTS Type_utilisateur(
-    id_utilisateur SERIAL PRIMARY KEY,
+    id_type_utilisateur SERIAL PRIMARY KEY,
     nom_type_utilisateur VARCHAR(50),
     droit_type_utilisateur VARCHAR(50)
   );
