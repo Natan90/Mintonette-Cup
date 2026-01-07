@@ -3,7 +3,7 @@
     <section class="recherche" id="liste_prestataires">
 
         <div class="titreFiltre">
-            <span>Retrouvez les Prestataires de la Mintonette Cup 2026 !</span>
+            <span>{{ $t('filter.titleFilter') }}</span>
         </div>
 
         <section class="filtreEtListe">
@@ -11,8 +11,8 @@
             <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
                 
                 <div class="blocFiltre">
-                    <span>Nom</span>
-                    <input v-model="filters.nom" type="text" placeholder="Nom de Prestataire" />
+                    <span>{{ $t('filter.name.title') }}</span>
+                    <input v-model="filters.nom" type="text" v-bind:placeholder="$t('filter.name.nameInput')" />
                 </div>
 
                 <div class="blocFiltre">
@@ -105,10 +105,13 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useNavigationStore } from '@/stores/navigation';
+import { useI18n } from "vue-i18n";
+
 
 const router = useRouter();
 const route = useRoute();
 const navStore = useNavigationStore();
+const { t } = useI18n();
 
 
 const type_prestataire = ref([]);
