@@ -14,23 +14,24 @@
         v-if="isInIndex"
         @click="scrollToSection('Carte')"
         class="boutonNav pointer">
-        Carte
+        {{ $t("barreNav.carte") }}
       </div>
 
       <div
         v-if="isInIndex"
-        @click="scrollToSection('liste_prestataires')"
+        @click="scrollToSection('Info')"
         class="boutonNav pointer">
-        Prestataires
+        {{ $t("barreNav.aPropos") }}
       </div>
       <div
         v-if="isInIndex"
-        @click="scrollToSection('Info')"
+        @click="scrollToSection('liste_prestataires')"
         class="boutonNav pointer">
-        À propos
+        {{ $t("barreNav.prestataire") }}
       </div>
+      
       <div @click="scrollToSection('footer')" class="boutonNav pointer">
-        Nos partenaires
+        {{ $t("barreNav.partenaire") }}
       </div>
       <!-- <router-link
         v-if="utilisateur.ispresta"
@@ -94,14 +95,14 @@
             }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
-            <span class="pointer">Mon profil</span>
+            <span class="pointer">{{ $t("barreNav.profil.profil") }}</span>
           </router-link>
           <router-link
             v-if="admin && userStore.userId == 1"
             :to="{ name: 'Evenement', params: { lang: locale } }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
-            <span class="pointer">Événement</span>
+            <span class="pointer">{{ $t("barreNav.profil.evenement") }}</span>
           </router-link>
           <router-link
             v-if="utilisateur.ispresta"
@@ -111,7 +112,7 @@
             }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
-            <span class="pointer">Mes prestations</span>
+            <span class="pointer">{{ $t("barreNav.profil.prestation") }}</span>
           </router-link>
 
           <router-link
@@ -119,7 +120,7 @@
             :to="{ name: 'Panier', params: { lang: locale } }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
-            <span class="pointer">Panier</span>
+            <span class="pointer">{{ $t("barreNav.profil.panier") }}</span>
           </router-link>
 
           <router-link
@@ -127,14 +128,14 @@
             :to="{ name: 'MesBillets', params: { lang: locale } }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
-            <span class="pointer">Mes billets</span>
+            <span class="pointer">{{ $t("barreNav.profil.billet") }}</span>
           </router-link>
 
           <div
             class="optionProfil optionProfil"
             :class="{ blueBar: !isInIndex }"
             @click="handleLogout">
-            <span>Se déconnecter</span>
+            <span>{{ $t("barreNav.profil.logOut") }}</span>
           </div>
         </div>
       </div>

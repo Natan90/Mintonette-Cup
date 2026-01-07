@@ -1,4 +1,18 @@
 {
+  "barreNav": {
+    "carte": "Map",
+    "prestataire": "Service Providers",
+    "aPropos": "About",
+    "partenaire": "Our Partners",
+    "profil": {
+      "prestation": "My Services",
+      "evenement": "Event",
+      "profil": "My Profile",
+      "panier": "My Cart",
+      "billet": "My Tickets",
+      "logOut": "Log out"
+    }
+  },
   "mintonetteCup": {
     "title": "Mintonette Cup",
     "descri": "Montpellier hosts the Mintonette Cup, the world volleyball tournament that brings together the best players!\n",
@@ -84,7 +98,8 @@
     "texte3": "On the agenda: <b>thrilling matches</b>, an <b>amazing audience</b> and a <b>bustling atmosphere</b>.",
     "texte4": "We look forward to seeing you in the stands!"
   },
-  "blocInfo": {
+  "information": {
+    "titre": "Mintonette Cup Information",
     "voirPlus": "See more",
     "titleEdition": "3rd edition",
     "descriEdition": "The Mintonette Cup, now hosted in <strong>Montpellier</strong>, has seen remarkable growth and has become one of the major events for amateur volleyball in the South of France. The previous edition gathered nearly <strong>15,000 spectators over three days</strong>, thanks to the appeal of Montpellier’s facilities and the city’s strong volleyball culture, notably supported by <strong>Montpellier Hérault Sport Club Volleyball</strong>.",
