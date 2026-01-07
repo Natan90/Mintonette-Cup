@@ -1,54 +1,55 @@
 <template>
   <NavView></NavView>
-  <div class="back-arrow pointer" @click="goBack">
-      &#8592; Retour
-  </div>
+  <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
   <div class="page">
     <div class="formulaire">
       <div class="titre_formulaire">
-        <h1>{{ $t('account.myAccount') }}</h1>
+        <h1>{{ $t("account.myAccount") }}</h1>
         <router-link to="/" class="croix pointer">&times;</router-link>
       </div>
 
       <div v-if="loading" class="loading">
-        <p>{{ $t('account.loading') }}</p>
+        <p>{{ $t("account.loading") }}</p>
       </div>
 
       <div v-else>
         <section class="infos_utilisateur">
           <div class="bloc_information">
-            <label>{{ $t('user.prenom') }}</label>
+            <label>{{ $t("user.prenom") }}</label>
             <p class="text-value">{{ userData.prenom }}</p>
           </div>
 
           <div class="bloc_information">
-            <label>{{ $t('user.nom') }}</label>
+            <label>{{ $t("user.nom") }}</label>
             <p class="text-value">{{ userData.nom }}</p>
           </div>
 
           <div class="bloc_information">
-            <label>{{ $t('user.login') }}</label>
+            <label>{{ $t("user.login") }}</label>
             <p class="text-value">{{ userData.login }}</p>
           </div>
 
           <div class="bloc_information">
-            <label>{{ $t('user.mail') }}</label>
+            <label>{{ $t("user.mail") }}</label>
             <p class="text-value">{{ userData.mail }}</p>
           </div>
 
           <div class="bloc_information">
-            <label>{{ $t('user.tel_utilisateur') }}</label>
-            <p class="text-value">{{ userData.tel_utilisateur || 'N/A' }}</p>
+            <label>{{ $t("user.tel_utilisateur") }}</label>
+            <p class="text-value">{{ userData.tel_utilisateur || "N/A" }}</p>
           </div>
 
           <div class="bloc_information">
-            <label>{{ $t('user.sexe') }}</label>
-            <p class="text-value">{{ userData.sexe || 'N/A' }}</p>
+            <label>{{ $t("user.sexe") }}</label>
+            <p class="text-value">{{ userData.sexe || "N/A" }}</p>
           </div>
         </section>
 
         <div class="created-at-info">
-          <p>{{ $t('account.createdAt') }} : <strong>{{ userData.createdAt || 'N/A' }}</strong></p>
+          <p>
+            {{ $t("account.createdAt") }} :
+            <strong>{{ userData.createdAt || "N/A" }}</strong>
+          </p>
         </div>
 
         <div v-if="message" :class="['message', messageType]">
@@ -56,19 +57,26 @@
         </div>
 
         <div class="boutons">
-          <router-link :to="{ name: 'ModifyAccount', params: { lang: t.value } }"
-           class="pointer">
-            {{ $t('account.modify') }}
+          <router-link
+            :to="{ name: 'ModifyAccount', params: { lang: t.value } }"
+            class="pointer">
+            {{ $t("account.modify") }}
           </router-link>
-          <router-link :to="{ name: 'Panier', params: { lang: t.value } }" 
-          class="pointer">
-            {{ $t('account.viewCart') }}
+          <router-link
+            :to="{ name: 'Panier', params: { lang: t.value } }"
+            class="pointer">
+            {{ $t("account.viewCart") }}
           </router-link>
-          <button @click="deleteAccount(userData.id_user)" class="pointer delete-btn" :disabled="isDeleting">
-            {{ isDeleting ? $t('account.deleting') : $t('account.deleteAccount') }}
+          <button
+            @click="deleteAccount(userData.id_user)"
+            class="pointer delete-btn"
+            :disabled="isDeleting">
+            {{
+              isDeleting ? $t("account.deleting") : $t("account.deleteAccount")
+            }}
           </button>
-          <router-link :to="{ name: 'Home', params: { lang: t.value } }" >
-            {{ $t('pageLog.annuler') }}
+          <router-link :to="{ name: 'Home', params: { lang: t.value } }">
+            {{ $t("pageLog.annuler") }}
           </router-link>
         </div>
       </div>
@@ -78,21 +86,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
-import { useI18n } from 'vue-i18n';
-import axios from 'axios';
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+import { useI18n } from "vue-i18n";
+// import axios from 'axios';
 import { useNavigationStore } from "@/stores/navigation";
-import NavView from '@/components/NavView.vue';
-import Footer from '@/components/Footer.vue';
+import NavView from "@/components/NavView.vue";
+import Footer from "@/components/Footer.vue";
 
+import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
 
 const props = defineProps({
-  userId: {         // L'id qu'on a besoin pour récupérer les données
+  userId: {
+    // L'id qu'on a besoin pour récupérer les données
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const router = useRouter();
@@ -103,24 +113,26 @@ const navStore = useNavigationStore();
 const { t } = useI18n();
 
 const loading = ref(true);
-const message = ref('');
-const messageType = ref('');
+const message = ref("");
+const messageType = ref("");
 const isDeleting = ref(false);
 
 const userData = ref({
-  id_user: '',
-  prenom: '',
-  nom: '',
-  login: '',
-  mail: '',
-  tel_utilisateur: '',
-  sexe: '',
-  createdAt: ''
+  id_user: "",
+  prenom: "",
+  nom: "",
+  login: "",
+  mail: "",
+  tel_utilisateur: "",
+  sexe: "",
+  createdAt: "",
 });
 
-onMounted(async () => {
+onMounted(() => {
   try {
-    await getValuesUtilisateurs(props.userId)
+    const userId = props.userId || userStore.userId;
+    console.log("Loading user with ID:", userId);
+    getValuesUtilisateurs(userId);
   } catch (err) {
     console.error(err);
   }
@@ -132,75 +144,148 @@ function goBack() {
   }
 }
 
-async function getValuesUtilisateurs(id) {
+function getValuesUtilisateurs(id) {
   if (!userStore.isConnected) {
-    router.push({ name: 'Connexion_utilisateur' });
+    router.push({ name: "Connexion_utilisateur" });
     return;
   }
 
   try {
-    console.log('Fetching user data for ID:', id);
-    const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${id}`);
-    console.log('User data received:', response.data);
-    
-    let formattedDate = '';
-    if (response.data.date_creation_utilisateur) {
-      const date = new Date(response.data.date_creation_utilisateur);
-      formattedDate = date.toLocaleDateString('fr-FR', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+    console.log("Searching for user ID:", id);
+    console.log("Available users:", utilisateurData.length);
+    const user = utilisateurData.find((u) => u.id_utilisateur === Number(id));
+
+    if (!user) {
+      message.value = t("account.errorLoading");
+      messageType.value = "error";
+      loading.value = false;
+      return;
+    }
+
+    let formattedDate = "";
+    if (user.date_creation_utilisateur) {
+      const date = new Date(user.date_creation_utilisateur);
+      formattedDate = date.toLocaleDateString("fr-FR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
-    
+
     userData.value = {
-      id_user: response.data.id_utilisateur || '',
-      prenom: response.data.prenom_utilisateur || '',
-      nom: response.data.nom_utilisateur || '',
-      login: response.data.login_utilisateur || '',
-      mail: response.data.mail_utilisateur || '',
-      tel_utilisateur: response.data.tel_utilisateur || '',
-      sexe: response.data.sexe_utilisateur || '',
-      createdAt: formattedDate
+      id_user: user.id_utilisateur || "",
+      prenom: user.prenom_utilisateur || "",
+      nom: user.nom_utilisateur || "",
+      login: user.login_utilisateur || "",
+      mail: user.mail_utilisateur || "",
+      tel_utilisateur: user.tel_utilisateur || "",
+      sexe: user.sexe_utilisateur || "",
+      createdAt: formattedDate,
     };
-    
-    console.log('User data updated:', userData.value);
   } catch (error) {
-    console.error('Erreur lors de la récupération des données :', error);
-    message.value = t('account.errorLoading');
-    messageType.value = 'error';
+    console.error("Erreur lors de la récupération des données :", error);
+    message.value = t("account.errorLoading");
+    messageType.value = "error";
   } finally {
     loading.value = false;
   }
 }
 
-async function deleteAccount(id) {
-  if (!confirm(t('account.confirmDelete'))) {
+// async function getValuesUtilisateurs(id) {
+//   if (!userStore.isConnected) {
+//     router.push({ name: 'Connexion_utilisateur' });
+//     return;
+//   }
+//
+//   try {
+//     console.log('Fetching user data for ID:', id);
+//     const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${id}`);
+//     console.log('User data received:', response.data);
+//
+//     let formattedDate = '';
+//     if (response.data.date_creation_utilisateur) {
+//       const date = new Date(response.data.date_creation_utilisateur);
+//       formattedDate = date.toLocaleDateString('fr-FR', {
+//         year: 'numeric',
+//         month: 'long',
+//         day: 'numeric'
+//       });
+//     }
+//
+//     userData.value = {
+//       id_user: response.data.id_utilisateur || '',
+//       prenom: response.data.prenom_utilisateur || '',
+//       nom: response.data.nom_utilisateur || '',
+//       login: response.data.login_utilisateur || '',
+//       mail: response.data.mail_utilisateur || '',
+//       tel_utilisateur: response.data.tel_utilisateur || '',
+//       sexe: response.data.sexe_utilisateur || '',
+//       createdAt: formattedDate
+//     };
+//
+//     console.log('User data updated:', userData.value);
+//   } catch (error) {
+//     console.error('Erreur lors de la récupération des données :', error);
+//     message.value = t('account.errorLoading');
+//     messageType.value = 'error';
+//   } finally {
+//     loading.value = false;
+//   }
+// }
+
+function deleteAccount(id) {
+  if (!confirm(t("account.confirmDelete"))) {
     return;
   }
 
   isDeleting.value = true;
-  message.value = '';
+  message.value = "";
 
   try {
-    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${id}`);
-    
-    message.value = t('account.accountDeleted');
-    messageType.value = 'success';
-    
+    message.value = t("account.accountDeleted");
+    messageType.value = "success";
+
     userStore.logout();
-    
+
     setTimeout(() => {
-      router.push({ name: 'Home' });
+      router.push({ name: "Home" });
     }, 2000);
   } catch (error) {
-    console.error('Erreur lors de la suppression du compte :', error);
-    message.value = t('account.deleteError');
-    messageType.value = 'error';
+    console.error("Erreur lors de la suppression du compte :", error);
+    message.value = t("account.deleteError");
+    messageType.value = "error";
   } finally {
     isDeleting.value = false;
   }
-};
+}
+
+// async function deleteAccount(id) {
+//   if (!confirm(t('account.confirmDelete'))) {
+//     return;
+//   }
+//
+//   isDeleting.value = true;
+//   message.value = '';
+//
+//   try {
+//     await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${id}`);
+//
+//     message.value = t('account.accountDeleted');
+//     messageType.value = 'success';
+//
+//     userStore.logout();
+//
+//     setTimeout(() => {
+//       router.push({ name: 'Home' });
+//     }, 2000);
+//   } catch (error) {
+//     console.error('Erreur lors de la suppression du compte :', error);
+//     message.value = t('account.deleteError');
+//     messageType.value = 'error';
+//   } finally {
+//     isDeleting.value = false;
+//   }
+// };
 </script>
 
 <style scoped>
