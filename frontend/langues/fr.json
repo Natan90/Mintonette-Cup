@@ -1,4 +1,18 @@
 {
+  "barreNav":{
+    "carte":"carte",
+    "prestataire":"Prestataire",
+    "aPropos":"À propos",
+    "partenaire":"Nos partenaires",
+    "profil":{
+      "prestation":"Mes Prestations",
+      "evenement": "Évènements",
+      "profil":"Mon Profil",
+      "panier": "Mon Panier",
+      "billet":"Mes Billets",
+      "logOut":"Se déconnecter"
+    }
+  },
   "mintonetteCup": {
     "title": "Mintonette Cup",
     "descri": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \n",
