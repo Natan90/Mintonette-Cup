@@ -615,7 +615,7 @@ const pool = require("./db");
     ('Thaïlande', 'Bleu / Rouge', 'Le Garuda Bleu', false, 1),
     ('Kazakhstan', 'Bleu ciel / Jaune', 'L’Aigle d’Or', false, 1),
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
-    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1)
+    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1),
     ('Russie', 'Blanc / Rouge', 'L’Ours Rouge', false, 1),    
     ('Uruguay', 'Bleu ciel / Blanc', 'Le Carrousel Bleu', false, 1),
     ('Afrique du Sud', 'Vert / Or', 'Le Springbok Jaune‑Vert', false, 1),
