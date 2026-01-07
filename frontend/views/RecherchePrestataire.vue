@@ -73,9 +73,9 @@
                         </div>
                         </div>
 
-                        <div class="descriptionPrestataire">
+                        <div class="descriptionPrestataire" v-if="!isServiceView">
                         <span>{{ $t('filter.description') }}</span>
-                        <div v-html="isServiceView ? item.descri_service : item.descri_prestataire"></div>
+                        <div v-html="item.descri_prestataire"></div>
                         </div>
 
                         <div class="blocBasPrestataire">
@@ -130,11 +130,10 @@ const { t , locale } = useI18n();
 const isServiceView = ref(false);
 watch(isServiceView, async (newValue) => {
   try {
-    if (newValue) {
-      await getValuesServices();
-    } else {
-      await getValuesPrestataire();
-    }
+    filters.value.prixMin = null;
+    filters.value.prixMax = null;
+
+    await searchPrestataires();
   } catch (err) {
     console.error(err);
   }
