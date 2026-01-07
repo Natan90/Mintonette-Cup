@@ -32,6 +32,7 @@ const path = require("path");
       "Type_animation",
       "Type_utilisateur",
       "Type_boutique",
+      "Type_prestataire",
     ];
 
     // Exporter chaque table
@@ -49,7 +50,7 @@ const path = require("path");
     }
 
     // Créer le dossier de sortie s'il n'existe pas
-    const outputDir = path.join(__dirname, "exported_data");
+    const outputDir = path.join(__dirname, "jsonData");
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir);
     }
