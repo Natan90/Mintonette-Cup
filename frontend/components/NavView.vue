@@ -148,7 +148,7 @@ import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
-import axios from "axios";
+// import axios from "axios";
 
 const scrollToSection = (id) => {
   const section = document.getElementById(id);
@@ -206,17 +206,25 @@ const loadProfilePhoto = () => {
 //     }
 //   }
 // };
-async function isadmin() {
-  try {
-    const res = await axios.get(
-      `http://localhost:3000/admin/utilisateur/show/1`
-    );
-    admin.value = res.data.isadmin;
-    console.log(admin.value + "Je suis la ");
-  } catch (err) {
-    console.log(err);
+
+function isadmin() {
+  const user = utilisateursData.find((u) => u.id_utilisateur === 1);
+  if (user) {
+    admin.value = user.isadmin || false;
   }
 }
+
+// async function isadmin() {
+//   try {
+//     const res = await axios.get(
+//       `http://localhost:3000/admin/utilisateur/show/1`
+//     );
+//     admin.value = res.data.isadmin;
+//     console.log(admin.value + "Je suis la ");
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
 onMounted(() => {
   loadProfilePhoto();
@@ -263,19 +271,6 @@ if (savedLang) locale.value = savedLang;
 //   }
 // }
 
-// Pour que la barre de nav apparaisse/disparaisse lorsqu'on scroll
-
-// :style="{ top: navbar }"
-
-// const navbar = ref("0px");
-
-// const handleScroll = () => {
-//   if (window.scrollY > 500) {
-//     navbar.value = "-100px";
-//   } else {
-//     navbar.value = "0px";
-//   }
-// };
 
 // onMounted(async () => {
 //   window.addEventListener("scroll", handleScroll);
