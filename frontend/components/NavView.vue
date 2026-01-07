@@ -29,9 +29,7 @@
         class="boutonNav pointer">
         À propos
       </div>
-       <div
-        @click="scrollToSection('footer')"
-        class="boutonNav pointer">
+      <div @click="scrollToSection('footer')" class="boutonNav pointer">
         Nos partenaires
       </div>
       <!-- <router-link
@@ -43,8 +41,6 @@
         class="boutonNav">
         <span class="pointer">Edit Prestataire (mode presta)</span>
       </router-link> -->
-
-     
 
       <div class="langue">
         <div
@@ -119,6 +115,7 @@
           </router-link>
 
           <router-link
+            v-if="userStore.userId != 1"
             :to="{ name: 'Panier', params: { lang: locale } }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
@@ -126,6 +123,7 @@
           </router-link>
 
           <router-link
+            v-if="userStore.userId != 1"
             :to="{ name: 'MesBillets', params: { lang: locale } }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
