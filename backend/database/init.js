@@ -83,7 +83,7 @@ const pool = require("./db");
 
   CREATE TABLE IF NOT EXISTS Type_prestataire(
     id_type_prestataire SERIAL PRIMARY KEY,
-    nom_type_prestataire VARCHAR(50)
+    nom_type_prestataire JSONB
   );
  
   CREATE TABLE IF NOT EXISTS Prestataire(
@@ -307,9 +307,18 @@ const pool = require("./db");
 
     const insertTypePrestataire = `
     INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
-      ('Animation'),
-      ('Boutique'),
-      ('Restauration');
+      ('{
+        "fr": "Animation",
+        "en": "Activity"
+      }'),
+      ('{
+        "fr": "Boutique",
+        "en": "Shop"
+      }'),
+      ('{
+        "fr": "Restauration",
+        "en": "Restoration"
+      }');
     `;
     await pool.query(insertTypePrestataire);
 

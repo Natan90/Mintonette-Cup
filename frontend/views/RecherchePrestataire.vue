@@ -364,8 +364,9 @@ async function searchPrestataires() {
     gap: 1em;
 
     width: 430px;
+    height: fit-content;
 
-    padding: 12px 10px 0 10px;
+    padding: 12px 10px 10px 10px;
 
     border-radius: 10px;
 
