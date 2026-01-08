@@ -54,7 +54,6 @@
       <p class="nb_presta toValidate" v-else>
         {{ $t('adminPage.prestataire.service.nb_servicesVide') }}
       </p>
-      <p>
       <div class="filtre">
         <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
         <select id="triAlpha" v-model="adminStore.services">
@@ -64,7 +63,6 @@
           <option value="desactiver">{{ $t('adminPage.tri.inactiveFirst') }}</option>
         </select>
       </div>
-      </p>
     </div>
     <div class="backgroundBorderL message valid" v-if="activate">
       <p v-html="$t('adminPage.prestataire.service.messageActiver', { nomService: desactivateService?.nom_service })">
