@@ -132,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import NavBar from "../components/NavView.vue";
 import Footer from "../components/Footer.vue";
 import { useUserStore } from "@/stores/user";
@@ -144,23 +144,12 @@ import matchesData from "../../backend/database/jsonData/Match.json";
 import siegesData from "../../backend/database/jsonData/Siege.json";
 import equipesData from "../../backend/database/jsonData/Equipe.json";
 import paysData from "../../backend/database/jsonData/Pays.json";
-import localData from "../../backend/database/localData.js";
 
 const route = useRoute();
 const router = useRouter();
+const zone = route.params.zone;
 const userStore = useUserStore();
 const navStore = useNavigationStore();
-
-const zone = computed(() => route.params.zone);
-const terrainId = computed(() => {
-  const zoneToTerrain = {
-    nord: 1,
-    est: 2,
-    sud: 3,
-    ouest: 4,
-  };
-  return zoneToTerrain[zone.value];
-});
 
 const matches = ref([]);
 const seats = ref([]);
@@ -168,6 +157,14 @@ const hoverIndex = ref(null);
 const estAjoute = ref(false);
 const idMatch = ref(null);
 const seatsByMatch = ref({});
+
+const zoneToTerrain = {
+  nord: 1,
+  est: 2,
+  sud: 3,
+  ouest: 4,
+};
+const terrainId = zoneToTerrain[zone];
 
 const globalSelectedSeats = ref(
   JSON.parse(localStorage.getItem("selectedSeats") || "[]")
@@ -306,43 +303,57 @@ function getSeatPrice(seat) {
 //     await selectMatch(matches.value[0]);
 //   }
 // });
-
 function fetchGradin() {
-  // Fusionner les sièges du JSON et du localStorage
-  const siegesLocalStorage = localData.getAll("sieges");
-  const localStorageSeatIds = siegesLocalStorage.map(s => `${s.match_id}-${s.zone}-${s.numero_colonne}-${s.numero_ligne}`);
-  const siegesJSONFiltered = siegesData.filter(
-    s => !localStorageSeatIds.includes(`${s.match_id}-${s.zone}-${s.numero_colonne}-${s.numero_ligne}`)
-  );
-  const allSeats = [...siegesJSONFiltered, ...siegesLocalStorage];
+  // Charger les sièges depuis localStorage
+  const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
 
-  const seatsForZone = allSeats
+  // Créer une Map pour déduplication par clé unique
+  const siegesMap = new Map();
+
+  // Ajouter d'abord les sièges du JSON
+  siegesData
     .filter(
       (seat) =>
-        seat.match_id === idMatch.value &&
-        seat.zone === zone.value?.toUpperCase()
+        seat.match_id === idMatch.value && seat.zone === zone.toUpperCase()
     )
-    .map((seat) => {
-      let state = "available";
-
-      if (seat.est_reserve && seat.id_utilisateur === userStore.userId) {
-        state = "owned";
-      } else if (seat.est_reserve) {
-        state = "reserved";
-      } else if (
-        globalSelectedSeats.value.some(
-          (s) =>
-            s.matchId === idMatch.value &&
-            s.zone === seat.zone &&
-            s.numero_colonne === seat.numero_colonne &&
-            s.numero_ligne === seat.numero_ligne
-        )
-      ) {
-        state = "selected";
-      }
-
-      return { ...seat, state };
+    .forEach((seat) => {
+      const key = `${seat.match_id}-${seat.zone}-${seat.numero_colonne}-${seat.numero_ligne}`;
+      siegesMap.set(key, seat);
     });
+
+  // Puis écraser avec les sièges de localStorage (priorité)
+  siegesLocal
+    .filter(
+      (seat) =>
+        seat.match_id === idMatch.value && seat.zone === zone.toUpperCase()
+    )
+    .forEach((seat) => {
+      const key = `${seat.match_id}-${seat.zone}-${seat.numero_colonne}-${seat.numero_ligne}`;
+      siegesMap.set(key, seat);
+    });
+
+  // Convertir la Map en tableau et mapper les états
+  const seatsForZone = Array.from(siegesMap.values()).map((seat) => {
+    let state = "available";
+
+    if (seat.est_reserve && seat.id_utilisateur === userStore.userId) {
+      state = "owned";
+    } else if (seat.est_reserve) {
+      state = "reserved";
+    } else if (
+      globalSelectedSeats.value.some(
+        (s) =>
+          s.matchId === idMatch.value &&
+          s.zone === seat.zone &&
+          s.numero_colonne === seat.numero_colonne &&
+          s.numero_ligne === seat.numero_ligne
+      )
+    ) {
+      state = "selected";
+    }
+
+    return { ...seat, state };
+  });
 
   seatsByMatch.value[idMatch.value] = seatsForZone;
   seats.value = seatsByMatch.value[idMatch.value];
@@ -350,7 +361,7 @@ function fetchGradin() {
 
 function fetchMatches() {
   const matchesForTerrain = matchesData.filter(
-    (match) => match.id_terrain === terrainId.value
+    (match) => match.id_terrain === terrainId
   );
 
   matches.value = matchesForTerrain.map((match) => {
@@ -373,11 +384,8 @@ function selectMatch(match) {
   hoverIndex.value = null;
   estAjoute.value = false;
 
-  if (!seatsByMatch.value[idMatch.value]) {
-    fetchGradin();
-  } else {
-    seats.value = seatsByMatch.value[idMatch.value];
-  }
+  // Toujours recharger les sièges pour refléter les changements de localStorage
+  fetchGradin();
 }
 
 function UpdateSeatStatus(index) {
@@ -477,19 +485,6 @@ function resetAllSelection() {
   });
   localStorage.setItem("selectedSeats", "[]");
 }
-
-watch(
-  () => route.params.zone,
-  () => {
-    seatsByMatch.value = {};
-    idMatch.value = null;
-    seats.value = [];
-    fetchMatches();
-    if (matches.value.length > 0) {
-      selectMatch(matches.value[0]);
-    }
-  }
-);
 
 onMounted(() => {
   fetchMatches();

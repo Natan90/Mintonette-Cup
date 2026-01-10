@@ -79,6 +79,8 @@ import { useRoute, useRouter } from "vue-router";
 import matchesData from "../../backend/database/jsonData/Match.json";
 import equipesData from "../../backend/database/jsonData/Equipe.json";
 import paysData from "../../backend/database/jsonData/Pays.json";
+import servicesData from "../../backend/database/jsonData/Services.json";
+import localData from "../../backend/database/localData.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -206,7 +208,29 @@ const total = computed(() => {
 function fetchPanier() {
   const panierData = JSON.parse(localStorage.getItem("panier") || "[]");
 
+  // Charger tous les services (localStorage + JSON fusionnés)
+  const servicesLocalStorage = localData.getAll("services");
+  const localStorageServiceIds = servicesLocalStorage.map((s) => s.id_service);
+  const servicesJSONFiltered = servicesData.filter(
+    (s) => !localStorageServiceIds.includes(s.id_service)
+  );
+  const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
+
   const enrichedPanier = panierData.map((item) => {
+    // Si c'est un service (a un service_id)
+    if (item.service_id) {
+      const service = allServices.find((s) => s.id_service === item.service_id);
+      if (service) {
+        return {
+          ...item,
+          nom_service: service.nom_service,
+          prix_unitaire_service: service.prix || service.prix_service || 0,
+          quantite_service: item.quantite || 1,
+        };
+      }
+    }
+
+    // Si c'est un siège (a un match_id)
     const match = matchesData.find((m) => m.id_match === item.matchId);
 
     if (match) {
@@ -248,9 +272,86 @@ function backToBleacher() {
 }
 
 function goToCheckout() {
-  router.push({
-    name: "Checkout",
-  });
+  if (panier.value.length === 0) {
+    alert("Aucun article dans le panier.");
+    return;
+  }
+
+  const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
+  if (!confirmPay) return;
+
+  try {
+    // === Gérer les sièges ===
+    const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
+
+    sieges.value.forEach((seat) => {
+      const seatIndex = siegesLocal.findIndex(
+        (s) =>
+          s.numero_colonne === seat.numero_colonne &&
+          s.numero_ligne === seat.numero_ligne &&
+          s.zone === seat.zone &&
+          s.match_id === seat.matchId
+      );
+
+      if (seatIndex !== -1) {
+        siegesLocal[seatIndex].est_reserve = true;
+        siegesLocal[seatIndex].id_utilisateur = userStore.userId;
+      } else {
+        siegesLocal.push({
+          match_id: seat.matchId,
+          numero_colonne: seat.numero_colonne,
+          numero_ligne: seat.numero_ligne,
+          zone: seat.zone,
+          est_reserve: true,
+          id_utilisateur: userStore.userId,
+        });
+      }
+    });
+
+    localStorage.setItem("sieges", JSON.stringify(siegesLocal));
+
+    // === Gérer les services (inscriptions) ===
+    // Créer une collection pour les inscriptions aux services si elle n'existe pas
+    const inscriptionsServices = JSON.parse(
+      localStorage.getItem("panier_service") || "[]"
+    );
+
+    services.value.forEach((service) => {
+      // Générer un nouvel ID pour l'inscription
+      const newId =
+        inscriptionsServices.length > 0
+          ? Math.max(...inscriptionsServices.map((i) => i.id || 0)) + 1
+          : 1;
+
+      // Ajouter l'inscription au service
+      inscriptionsServices.push({
+        id: newId,
+        id_utilisateur: userStore.userId,
+        id_service: service.service_id,
+        quantite: service.quantite_service || 1,
+        date_inscription: new Date().toISOString(),
+      });
+    });
+
+    localStorage.setItem(
+      "panier_service",
+      JSON.stringify(inscriptionsServices)
+    );
+
+    // Vider le panier
+    localStorage.setItem("panier", "[]");
+    panier.value = [];
+
+    alert(
+      "Paiement effectué avec succès ! Vos réservations ont été enregistrées."
+    );
+
+    // Rediriger vers "Mes Billets"
+    router.push({ name: "MesBillets" });
+  } catch (err) {
+    console.error("Erreur lors du paiement:", err);
+    alert("Une erreur est survenue lors du paiement.");
+  }
 }
 
 // Fonction pour ajouter des places de test (développement uniquement)

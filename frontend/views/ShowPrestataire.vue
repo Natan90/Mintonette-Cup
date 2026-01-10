@@ -512,7 +512,7 @@ function getOneService(service) {
 
 function addService(service) {
   if (!userStore.userId) {
-    console.error("Utilisateur non connecté !");
+    alert("Vous devez être connecté pour vous inscrire à un service.");
     return;
   }
 
@@ -525,12 +525,14 @@ function addService(service) {
 
   if (existingItem) {
     existingItem.quantite += 1;
+    alert(`Quantité augmentée pour "${service.nom_service}" dans le panier.`);
   } else {
     panier.push({
       id_user: userStore.userId,
       service_id: service.id_service,
       quantite: 1,
     });
+    alert(`Service "${service.nom_service}" ajouté au panier !`);
   }
 
   localStorage.setItem("panier", JSON.stringify(panier));
