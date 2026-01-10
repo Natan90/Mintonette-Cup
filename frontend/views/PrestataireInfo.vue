@@ -282,11 +282,11 @@
       </div>
 
       <!-- Bouton de suppression du prestataire -->
-      <div class="button_container">
+      <!-- <div class="button_container">
         <button @click="delPresta">
           {{ $t("adminPage.prestataire.btn_suppr") }}
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -372,7 +372,10 @@ onMounted(() => {
   try {
     getValuesTypePresta();
     getValuesEveryType();
-    if (!pathAdd.value) getValuesPrestataire();
+    if (!pathAdd.value) {
+      continueInscription.value = true; // Activer le formulaire en mode édition
+      getValuesPrestataire();
+    }
   } catch (err) {
     console.error(err);
   }
@@ -702,7 +705,7 @@ function getValuesEveryType() {
 //==========================
 //= Async functions presta =
 //==========================
-function getValuesPrestataire() {
+async function getValuesPrestataire() {
   if (prestaId.value === null) return;
 
   try {
@@ -735,7 +738,9 @@ function getValuesPrestataire() {
     tel_presta.value = presta.tel_prestataire;
 
     const typeObj = type_prestataire.value.find(
-      (t) => t.id_type_prestataire === presta.type_prestataire_id
+      (t) =>
+        t.id_type_prestataire ===
+        (presta.id_type_prestataire || presta.type_prestataire_id)
     );
     if (typeObj) {
       const nomType =
@@ -744,7 +749,9 @@ function getValuesPrestataire() {
       selectedType.value = nomType.toLowerCase();
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
-    nextTick();
+
+    // Attendre que Vue mette à jour selectedItems computed
+    await nextTick();
 
     let spec = presta.specificite;
 
@@ -753,9 +760,19 @@ function getValuesPrestataire() {
       spec = spec.replace(/[\{\}"]/g, "").trim();
     }
 
+    console.log(
+      "Recherche de la spécificité:",
+      spec,
+      "dans",
+      selectedItems.value
+    );
+
     const index = selectedItems.value.findIndex(
       (item) => item.nom.trim().toLowerCase() === spec.toLowerCase()
     );
+
+    console.log("Index trouvé:", index);
+
     if (index !== -1) {
       checkedItems.value = [{ nom: selectedItems.value[index].nom, index }];
     } else {

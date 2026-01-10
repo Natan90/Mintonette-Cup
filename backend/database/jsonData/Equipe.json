@@ -1,1 +1,450 @@
-[]
+[
+  {
+    "id_equipe": 1,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Andrea Giani",
+    "id_pays": 1
+  },
+  {
+    "id_equipe": 2,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Michał Winiarski",
+    "id_pays": 2
+  },
+  {
+    "id_equipe": 3,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Marcelo Méndez",
+    "id_pays": 3
+  },
+  {
+    "id_equipe": 4,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Ferdinando De Giorgi",
+    "id_pays": 4
+  },
+  {
+    "id_equipe": 5,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Daniel Lewis",
+    "id_pays": 5
+  },
+  {
+    "id_equipe": 6,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Gianlorenzo Blengini",
+    "id_pays": 6
+  },
+  {
+    "id_equipe": 7,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Bernardo Rezende",
+    "id_pays": 7
+  },
+  {
+    "id_equipe": 8,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Jesús Cruz",
+    "id_pays": 8
+  },
+  {
+    "id_equipe": 9,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Karch Kiraly",
+    "id_pays": 9
+  },
+  {
+    "id_equipe": 10,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Fabio Soli",
+    "id_pays": 10
+  },
+  {
+    "id_equipe": 11,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Roberto Piazza",
+    "id_pays": 11
+  },
+  {
+    "id_equipe": 12,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Raúl Lozano",
+    "id_pays": 12
+  },
+  {
+    "id_equipe": 13,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Vital Heynen",
+    "id_pays": 13
+  },
+  {
+    "id_equipe": 14,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Laurent Tillie",
+    "id_pays": 14
+  },
+  {
+    "id_equipe": 15,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Nikola Grbić",
+    "id_pays": 15
+  },
+  {
+    "id_equipe": 16,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Gheorghe Crețu",
+    "id_pays": 16
+  },
+  {
+    "id_equipe": 17,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Joel Banks",
+    "id_pays": 17
+  },
+  {
+    "id_equipe": 18,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Slobodan Kovač",
+    "id_pays": 18
+  },
+  {
+    "id_equipe": 19,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Emanuele Zanini",
+    "id_pays": 19
+  },
+  {
+    "id_equipe": 20,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Julio Velasco",
+    "id_pays": 20
+  },
+  {
+    "id_equipe": 21,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Harry Brokking",
+    "id_pays": 21
+  },
+  {
+    "id_equipe": 22,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Supajirakul Monchai",
+    "id_pays": 22
+  },
+  {
+    "id_equipe": 23,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Genadijs Parsins",
+    "id_pays": 23
+  },
+  {
+    "id_equipe": 24,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Issanayê Ramires Ferraz",
+    "id_pays": 24
+  },
+  {
+    "id_equipe": 25,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Zlatko Dalić",
+    "id_pays": 25
+  },
+  {
+    "id_equipe": 26,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Valeri Karpine",
+    "id_pays": 26
+  },
+  {
+    "id_equipe": 27,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Alejandro Matoso",
+    "id_pays": 27
+  },
+  {
+    "id_equipe": 28,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "H. El Wassimy",
+    "id_pays": 28
+  },
+  {
+    "id_equipe": 29,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Zouheir El Graoui",
+    "id_pays": 29
+  },
+  {
+    "id_equipe": 30,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Veselin Vuković",
+    "id_pays": 30
+  },
+  {
+    "id_equipe": 31,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Camillo Placi",
+    "id_pays": 31
+  },
+  {
+    "id_equipe": 32,
+    "sexe_equipe": "Homme",
+    "nb_joueurs": 14,
+    "entraineur": "Stefano Mascetti",
+    "id_pays": 32
+  },
+  {
+    "id_equipe": 33,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 1
+  },
+  {
+    "id_equipe": 34,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 2
+  },
+  {
+    "id_equipe": 35,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 3
+  },
+  {
+    "id_equipe": 36,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 4
+  },
+  {
+    "id_equipe": 37,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 5
+  },
+  {
+    "id_equipe": 38,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 6
+  },
+  {
+    "id_equipe": 39,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 7
+  },
+  {
+    "id_equipe": 40,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 8
+  },
+  {
+    "id_equipe": 41,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 9
+  },
+  {
+    "id_equipe": 42,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 10
+  },
+  {
+    "id_equipe": 43,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 11
+  },
+  {
+    "id_equipe": 44,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 12
+  },
+  {
+    "id_equipe": 45,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 13
+  },
+  {
+    "id_equipe": 46,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 14
+  },
+  {
+    "id_equipe": 47,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 15
+  },
+  {
+    "id_equipe": 48,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 16
+  },
+  {
+    "id_equipe": 49,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 17
+  },
+  {
+    "id_equipe": 50,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 18
+  },
+  {
+    "id_equipe": 51,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 19
+  },
+  {
+    "id_equipe": 52,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 20
+  },
+  {
+    "id_equipe": 53,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 21
+  },
+  {
+    "id_equipe": 54,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 22
+  },
+  {
+    "id_equipe": 55,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 23
+  },
+  {
+    "id_equipe": 56,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 24
+  },
+  {
+    "id_equipe": 57,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 25
+  },
+  {
+    "id_equipe": 58,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 26
+  },
+  {
+    "id_equipe": 59,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 27
+  },
+  {
+    "id_equipe": 60,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 28
+  },
+  {
+    "id_equipe": 61,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 29
+  },
+  {
+    "id_equipe": 62,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 30
+  },
+  {
+    "id_equipe": 63,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 31
+  },
+  {
+    "id_equipe": 64,
+    "sexe_equipe": "Femme",
+    "nb_joueurs": 12,
+    "entraineur": null,
+    "id_pays": 32
+  }
+]
