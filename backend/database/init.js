@@ -615,7 +615,7 @@ const pool = require("./db");
     ('Thaïlande', 'Bleu / Rouge', 'Le Garuda Bleu', false, 1),
     ('Kazakhstan', 'Bleu ciel / Jaune', 'L’Aigle d’Or', false, 1),
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
-    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1)
+    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1),
     ('Russie', 'Blanc / Rouge', 'L’Ours Rouge', false, 1),    
     ('Uruguay', 'Bleu ciel / Blanc', 'Le Carrousel Bleu', false, 1),
     ('Afrique du Sud', 'Vert / Or', 'Le Springbok Jaune‑Vert', false, 1),
@@ -1143,7 +1143,7 @@ const pool = require("./db");
     ('Pervan', 'Hrvoje', 'Masculin', '1991-08-27', 1.83, 13, 'Croatie', 'Libero', 25, NULL),
     ('Andrić', 'Leo', 'Masculin', '1996-12-03', 2.02, 16, 'Croatie', 'Receveur-Attaquant', 25, 'Andric.png'),
     ('Zeljković', 'Ivan', 'Masculin', '1994-05-16', 1.98, 19, 'Croatie', 'Receveur-Attaquant', 25, NULL),
-    ('Nikačević', 'Kruno', 'Masculin', '1992-10-09', 2.05, 20, 'Croatie', 'Central', 25, NULL);
+    ('Nikačević', 'Kruno', 'Masculin', '1992-10-09', 2.05, 20, 'Croatie', 'Central', 25, NULL),
 
     -- Russie
     ('Podlesnykh', 'Yaroslav', 'Masculin', '1994-01-01', 1.98, 1, 'Russie', 'Outside spiker', 26, 'Podlesnykh.png'),
@@ -1159,7 +1159,7 @@ const pool = require("./db");
     ('Pankov', 'Pavel', 'Masculin', '1995-01-01', 1.97, 11, 'Russie', 'Passeur', 26, 'Pankov.png'),
     ('Butko', 'Alexander', 'Masculin', '1986-01-01', 1.98, 12, 'Russie', 'Passeur', 26, NULL),
     ('Muserskiy', 'Dmitriy', 'Masculin', '1988-01-01', 2.18, 13, 'Russie', 'Opposé', 26, NULL),
-    ('Likhosherstov', 'Vadym', 'Masculin', '1989-01-01', 2.18, 14, 'Russie', 'Middle blocker', 26, 'Likhosherstov.png');
+    ('Likhosherstov', 'Vadym', 'Masculin', '1989-01-01', 2.18, 14, 'Russie', 'Middle blocker', 26, 'Likhosherstov.png'),
 
     -- Uruguay
     ('Gomez', 'Matias', 'Masculin', '1992-03-16', 1.98, 1, 'Uruguay', 'Passeur', 27, NULL),

@@ -32,7 +32,6 @@
       <p class="nb_presta valid" v-else>
         {{ $t('adminPage.user.nb_userVide') }}
       </p>
-      <p>
         <div class="filtre">
           <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
           <select id="triAlpha" v-model="adminStore.typeTriUser">
@@ -42,7 +41,6 @@
             <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
           </select>
         </div>
-      </p>
     </div>
     <p class="backgroundBorderL message suppr" v-if="deleting">
       <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{ $t('adminPage.user.messageSuppr') }}
