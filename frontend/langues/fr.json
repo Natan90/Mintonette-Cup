@@ -1,4 +1,18 @@
 {
+  "barreNav": {
+    "carte": "Carte interactive",
+    "prestataire": "Prestataire",
+    "aPropos": "À propos",
+    "partenaire": "Nos partenaires",
+    "profil": {
+      "prestation": "Mes Prestations",
+      "evenement": "Évènement",
+      "profil": "Mon Profil",
+      "panier": "Mon Panier",
+      "billet": "Mes Billets",
+      "logOut": "Se déconnecter"
+    }
+  },
   "mintonetteCup": {
     "title": "Mintonette Cup",
     "descri": "Montpellier accueille la Mintonette Cup, le tournoi mondial de volley-ball qui rassemble les meilleurs joueurs ! \n",
@@ -84,7 +98,8 @@
     "texte3": "Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une <b>ambiance débordante</b>.",
     "texte4": "On vous attends dans les gradins !"
   },
-  "blocInfo": {
+  "information": {
+    "titre": "Informations sur la Mintonette Cup",
     "voirPlus": "Voir plus",
     "titleEdition": "3ème édition",
     "descriEdition": "La Mintonette Cup, désormais accueillie à <strong>Montpellier</strong>, connaît un essor remarquable et s’impose comme l’un des rendez-vous majeurs du volley amateur dans le Sud de la France. L’édition précédente a rassemblé près de <strong>15 000 spectateurs sur trois jours</strong>, portée par l’attractivité des installations montpelliéraines et la forte culture volley de la ville, notamment grâce au <strong>Montpellier Hérault Sport Club Volley-Ball</strong>.",
@@ -204,38 +219,38 @@
     "siegeSelec": "Siège sélectionné"
   },
   "filter": {
-    "titleFilter":"Retrouvez les Prestataires de la Mintonette Cup 2026 !",
+    "titleFilter": "Retrouvez les Prestataires de la Mintonette Cup 2026 !",
     "slider": {
-      "prestataire":"Prestataire",
+      "prestataire": "Prestataire",
       "service": "Service"
     },
-    "name":{
-      "title":"Nom",
-      "nameInput":"Nom de prestataire"
+    "name": {
+      "title": "Nom",
+      "nameInput": "Nom de prestataire"
     },
-    "categorie":{
-      "title":"Catégorie de service",
-      "all":"Tous"
+    "categorie": {
+      "title": "Catégorie de service",
+      "all": "Tous"
     },
-    "price":{
-      "title":"Prix",
-      "minPrice":"Prix min",
-      "maxPrice":"Prix max"
+    "price": {
+      "title": "Prix",
+      "minPrice": "Prix min",
+      "maxPrice": "Prix max"
     },
-    "button":{
-      "search":"Rechercher",
-      "reset":"Réinitialiser"
+    "button": {
+      "search": "Rechercher",
+      "reset": "Réinitialiser"
     },
-    "description":"Description",
-    "info":{
-      "title":"Informations",
-      "capacite":"Capacité",
-      "people":"pers.",
-      "tarif":"Tarif",
-      "service":"Services"
+    "description": "Description",
+    "info": {
+      "title": "Informations",
+      "capacite": "Capacité",
+      "people": "pers.",
+      "tarif": "Tarif",
+      "service": "Services"
     },
-    "contact":"Contacts",
-    "more":"En savoir plus"
+    "contact": "Contacts",
+    "more": "En savoir plus"
   },
   "messagesServices": {
     "aucuneLangues": "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?",

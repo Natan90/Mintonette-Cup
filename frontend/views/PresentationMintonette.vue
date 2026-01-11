@@ -8,11 +8,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import evenementData from "../../backend/database/jsonData/Evenement.json";
 // import axios from "axios";
 
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import localData from "../../backend/database/localData.js";
 
 const { locale } = useI18n();
 
@@ -40,7 +40,16 @@ onMounted(() => {
 });
 
 function getValuesEvenement() {
-  const data = evenementData[0];
+  const events = localData.getAll("evenements");
+  const data = events.length > 0 ? events[0] : null;
+
+  if (!data) {
+    console.error("Aucun événement trouvé dans localStorage");
+    return;
+  }
+
+  console.log("PresentationMintonette.vue - Événement chargé:", data);
+
   evenement.value = data;
   title_evenement.value = data.nom_evenement;
   colorTitle.value = data.color_title;

@@ -27,7 +27,7 @@
             </thead>
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
-                <td>{{ b.match_id || '—' }}</td>
+                <td>{{ b.match_id || "—" }}</td>
                 <td>{{ b.zone }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
                 <td>{{ getPrice(b) }} €</td>
@@ -42,11 +42,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useUserStore } from '@/stores/user';
-import NavView from '@/components/NavView.vue';
-import Footer from '@/components/Footer.vue';
+import { ref, onMounted } from "vue";
+import siegesData from "../../backend/database/jsonData/Siege.json";
+// import axios from 'axios';
+import { useUserStore } from "@/stores/user";
+import NavView from "@/components/NavView.vue";
+import Footer from "@/components/Footer.vue";
 
 const userStore = useUserStore();
 const billets = ref([]);
@@ -55,25 +56,42 @@ const error = ref(null);
 
 function getPrice(seat) {
   // same pricing logic as Checkout
-  if (['I', 'H', 'G'].includes(seat.numero_colonne)) return 25;
-  if (['F', 'E', 'D'].includes(seat.numero_colonne)) return 18;
+  if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
+  if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
   return 12;
 }
 
-async function fetchBillets() {
+function fetchBillets() {
   if (!userStore.userId) return;
   loading.value = true;
   error.value = null;
+
   try {
-  const res = await axios.get(`http://localhost:3000/gradin/user/${userStore.userId}`);
-    billets.value = res.data;
+    billets.value = siegesData.filter(
+      (seat) => seat.est_reserve && seat.id_utilisateur === userStore.userId
+    );
   } catch (err) {
-    console.error('Erreur en récupérant les billets :', err);
-    error.value = 'Impossible de récupérer vos billets pour le moment.';
+    console.error("Erreur en récupérant les billets :", err);
+    error.value = "Impossible de récupérer vos billets pour le moment.";
   } finally {
     loading.value = false;
   }
 }
+
+// async function fetchBillets() {
+//   if (!userStore.userId) return;
+//   loading.value = true;
+//   error.value = null;
+//   try {
+//   const res = await axios.get(`http://localhost:3000/gradin/user/${userStore.userId}`);
+//     billets.value = res.data;
+//   } catch (err) {
+//     console.error('Erreur en récupérant les billets :', err);
+//     error.value = 'Impossible de récupérer vos billets pour le moment.';
+//   } finally {
+//     loading.value = false;
+//   }
+// }
 
 onMounted(() => {
   if (userStore.isConnected) fetchBillets();

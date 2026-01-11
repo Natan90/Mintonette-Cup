@@ -1,5 +1,5 @@
 {
-  "exportDate": "2026-01-07T16:11:12.659Z",
+  "exportDate": "2026-01-10T13:30:25.529Z",
   "totalTables": 22,
   "tables": [
     {
@@ -64,7 +64,7 @@
     },
     {
       "name": "Joueur",
-      "count": 446
+      "count": 445
     },
     {
       "name": "ClassementPoule",

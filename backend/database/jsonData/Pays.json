@@ -193,17 +193,17 @@
   },
   {
     "id_pays": 25,
-    "nom_pays": "Australie",
-    "couleur_maillot": "Vert / Or",
-    "nom_mascotte": "Le Kangourou Vert",
+    "nom_pays": "Croatie",
+    "couleur_maillot": "Rouge / Blanc",
+    "nom_mascotte": "Le Damier Croate",
     "qualifie": false,
     "id_utilisateur": 1
   },
   {
     "id_pays": 26,
-    "nom_pays": "Paraguay",
-    "couleur_maillot": "Rouge / Blanc",
-    "nom_mascotte": "Le Guarani Rouge",
+    "nom_pays": "Russie",
+    "couleur_maillot": "Blanc / Rouge",
+    "nom_mascotte": "L’Ours Rouge",
     "qualifie": false,
     "id_utilisateur": 1
   },

@@ -1,139 +1,168 @@
 <template>
+  <section class="recherche" id="liste_prestataires">
+    <div class="titreFiltre">
+      <span>{{ $t("filter.titleFilter") }}</span>
+    </div>
 
-    <section class="recherche" id="liste_prestataires">
-
-        <div class="titreFiltre">
-            <span>{{ $t('filter.titleFilter') }}</span>
+    <section class="filtreEtListe">
+      <form
+        class="filtrePrestataire"
+        @submit.prevent="searchPrestataires"
+        id="filtre_presta">
+        <div class="content_slider">
+          <span>{{ $t("filter.slider.prestataire") }}</span>
+          <label class="switch">
+            <input type="checkbox" v-model="isServiceView" />
+            <span class="slider round"></span>
+          </label>
+          <span>{{ $t("filter.slider.service") }}</span>
         </div>
 
-        <section class="filtreEtListe">
+        <div class="blocFiltre">
+          <span>{{ $t("filter.name.title") }}</span>
+          <input
+            v-model="filters.nom"
+            type="text"
+            v-bind:placeholder="$t('filter.name.nameInput')" />
+        </div>
 
-            <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
-                <div class="content_slider">
-                    <span>{{ $t('filter.slider.prestataire') }}</span>
-                    <label class="switch">
-                        <input type="checkbox" v-model="isServiceView">
-                        <span class="slider round"></span>
-                    </label>
-                    <span>{{ $t('filter.slider.service') }}</span>
-                </div>
+        <div class="blocFiltre">
+          <span>{{ $t("filter.categorie.title") }}</span>
+          <div v-for="item in type_prestataire" :key="item.id_type_prestataire">
+            <label class="pointer">
+              <input
+                type="radio"
+                name="categorie"
+                :value="Number(item.id_type_prestataire)"
+                v-model="filters.category" />
+              {{ item.nom_type_prestataire[locale] }}
+            </label>
+          </div>
 
-                <div class="blocFiltre">
-                    <span>{{ $t('filter.name.title') }}</span>
-                    <input v-model="filters.nom" type="text" v-bind:placeholder="$t('filter.name.nameInput')" />
-                </div>
+          <label class="pointer">
+            <input
+              type="radio"
+              name="categorie"
+              :value="0"
+              v-model="filters.category" />
+            {{ $t("filter.categorie.all") }}
+          </label>
+        </div>
 
-                <div class="blocFiltre">
-                <span>{{ $t('filter.categorie.title') }}</span>
-                        <div v-for="item in type_prestataire" :key="item.id_type_prestataire">
-                            <label class="pointer">
-                                <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
-                                    v-model="filters.category" />
-                                {{ item.nom_type_prestataire[locale] }}
-                            </label>
-                        </div>
+        <div class="blocFiltre" v-if="isServiceView">
+          <span>{{ $t("filter.price.title") }}</span>
+          <div class="prix">
+            <input
+              type="number"
+              v-model="filters.prixMin"
+              v-bind:placeholder="$t('filter.price.minPrice')" />
+            <input
+              type="number"
+              v-model="filters.prixMax"
+              v-bind:placeholder="$t('filter.price.maxPrice')" />
+          </div>
+        </div>
 
-                        <label class="pointer">
-                            <input type="radio" name="categorie" :value="0" v-model="filters.category"/>
-                            {{ $t('filter.categorie.all') }}
-                        </label>
-                </div>
+        <div class="boutonsFiltre">
+          <button class="pointer" type="submit">
+            {{ $t("filter.button.search") }}
+          </button>
+          <button class="pointer" type="submit" @click="resetFilters">
+            {{ $t("filter.button.reset") }}
+          </button>
+        </div>
+      </form>
 
-                <div class="blocFiltre" v-if="isServiceView">
-                    <span>{{ $t('filter.price.title') }}</span>
-                    <div class="prix">
-                        <input type="number" v-model="filters.prixMin" v-bind:placeholder="$t('filter.price.minPrice')" />
-                        <input type="number" v-model="filters.prixMax" v-bind:placeholder="$t('filter.price.maxPrice')" />
-                    </div>
-                </div>
+      <section class="listePrestataireBorder">
+        <div class="listePrestataire">
+          <div
+            v-for="item in prestatairesFiltres"
+            :key="item.id_prestataire || item.id_service"
+            class="blocListePrestataire">
+            <div class="enTetePrestataire">
+              <div class="titrePrestataire">
+                <span>
+                  {{ isServiceView ? item.nom_service : item.nom_prestataire }}
+                </span>
+              </div>
 
-                <div class="boutonsFiltre">
-                    <button class="pointer" type="submit">{{ $t('filter.button.search') }}</button>
-                    <button class="pointer" type="submit" @click="resetFilters">{{ $t('filter.button.reset') }}</button>
-                </div>
-            </form>
+              <div class="typePrestataire">
+                <span>
+                  {{ item.nom_type_prestataire[locale] }}
+                </span>
+              </div>
+            </div>
 
-            <section class="listePrestataireBorder">
+            <div class="descriptionPrestataire" v-if="!isServiceView">
+              <span>{{ $t("filter.description") }}</span>
+              <div v-html="item.descri_prestataire"></div>
+            </div>
 
-                <div class="listePrestataire">
-                    <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service" 
-                        class="blocListePrestataire">
-                        
-                        <div class="enTetePrestataire">
-                        <div class="titrePrestataire">
-                            <span>
-                            {{ isServiceView ? item.nom_service : item.nom_prestataire }}
-                            </span>
-                        </div>
+            <div class="blocBasPrestataire">
+              <div class="infosPrestataire">
+                <span>{{ $t("filter.info.title") }}</span>
+                <span v-if="!isServiceView">
+                  {{ $t("filter.info.service") }} : {{ item.nb_services }}
+                </span>
+                <span v-else>
+                  {{ $t("filter.info.tarif") }} : {{ item.prix }} €
+                </span>
+                <span v-if="isServiceView">
+                  {{ $t("filter.info.capacite") }} : {{ item.nb_participants }}
+                  {{ $t("filter.info.people") }}
+                </span>
+              </div>
 
-                        <div class="typePrestataire">
-                            <span>
-                            {{ item.nom_type_prestataire[locale] }}
-                            </span>
-                        </div>
-                        </div>
+              <div class="contactPrestataire" v-if="!isServiceView">
+                <span>{{ $t("filter.contact") }}</span>
+                <span
+                  >{{ item.prenom_utilisateur }}
+                  {{ item.nom_utilisateur }}</span
+                >
+                <span>{{ item.mail_prestataire }}</span>
+                <span>{{ item.tel_prestataire }}</span>
+              </div>
+            </div>
 
-                        <div class="descriptionPrestataire" v-if="!isServiceView">
-                        <span>{{ $t('filter.description') }}</span>
-                        <div v-html="item.descri_prestataire"></div>
-                        </div>
-
-                        <div class="blocBasPrestataire">
-                        <div class="infosPrestataire">
-                            <span>{{ $t('filter.info.title') }}</span>
-                            <span v-if="!isServiceView">
-                            {{ $t('filter.info.service') }} : {{ item.nb_services }}
-                            </span>
-                            <span v-else>
-                            {{ $t('filter.info.tarif') }} : {{ item.prix }} €
-                            </span>
-                            <span v-if="isServiceView">
-                            {{ $t('filter.info.capacite') }} : {{ item.nb_participants }} {{ $t('filter.info.people') }}
-                            </span>
-                        </div>
-
-                        <div class="contactPrestataire" v-if="!isServiceView">
-                            <span>{{ $t('filter.contact') }}</span>
-                            <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
-                            <span>{{ item.mail_prestataire }}</span>
-                            <span>{{ item.tel_prestataire }}</span>
-                        </div>
-                        </div>
-
-                        <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire || item.id_service)">
-                        <span class="pointer">{{ $t('filter.more') }}</span>
-                        </div>
-                    </div>
-                    </div>
-                    
-            </section>
-        </section>
+            <div
+              class="boutonListe"
+              @click="
+                goToSpecificPrestataire(item.id_prestataire || item.id_service)
+              ">
+              <span class="pointer">{{ $t("filter.more") }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </section>
+  </section>
 </template>
 
-
-
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
-import { useNavigationStore } from '@/stores/navigation';
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+// import axios from 'axios';
+import { useNavigationStore } from "@/stores/navigation";
 import { useI18n } from "vue-i18n";
 
+import prestataireData from "../../backend/database/jsonData/Prestataire.json";
+import typePrestaData from "../../backend/database/jsonData/Type_prestataire.json";
+import servicesData from "../../backend/database/jsonData/Services.json";
+import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
+import localData from "../../backend/database/localData.js";
 
 const router = useRouter();
 const route = useRoute();
 const navStore = useNavigationStore();
-const { t , locale } = useI18n();
-
+const { t, locale } = useI18n();
 
 const isServiceView = ref(false);
-watch(isServiceView, async (newValue) => {
+watch(isServiceView, (newValue) => {
   try {
     filters.value.prixMin = null;
     filters.value.prixMax = null;
 
-    await searchPrestataires();
+    searchPrestataires();
   } catch (err) {
     console.error(err);
   }
@@ -141,122 +170,302 @@ watch(isServiceView, async (newValue) => {
 const type_prestataire = ref([]);
 const prestataires = ref([]);
 const filters = ref({
-    nom: route.query.nom || '',
-    category: route.query.category ? Number(route.query.category) : 0,
-    prixMin: route.query.prixMin || null,
-    prixMax: route.query.prixMax || null
+  nom: route.query.nom || "",
+  category: route.query.category ? Number(route.query.category) : 0,
+  prixMin: route.query.prixMin || null,
+  prixMax: route.query.prixMax || null,
 });
 
 const prestatairesFiltres = computed(() =>
-  prestataires.value.filter(p => !p.waitingforadmin)
+  prestataires.value.filter((p) => !p.waitingforadmin)
 );
 
-onMounted(async () => {
-    try {
-        await getValuesTypePrestataire();
+onMounted(() => {
+  try {
+    getValuesTypePrestataire();
 
-        if (Object.keys(route.query).length > 0) {
-            await searchPrestataires();
-        } else {
-            await getValuesPrestataire();
-        }
-    } catch (err) {
-        console.error(err);
+    if (Object.keys(route.query).length > 0) {
+      searchPrestataires();
+    } else {
+      getValuesPrestataire();
     }
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 function resetFilters() {
-    filters.value = {
-        nom: '',
-        category: null,
-        prixMin: null,
-        prixMax: null
-    }
-    router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
-    getValuesPrestataire();
+  filters.value = {
+    nom: "",
+    category: null,
+    prixMin: null,
+    prixMax: null,
+  };
+  router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
+  getValuesPrestataire();
 }
 
 function goToSpecificPrestataire(idPresta) {
-    navStore.previousRoute = {
-        path: route.path,
-        query: route.query,
-        hash: '#liste_prestataires'
-    }
-    router.push({
-        name: "ShowPrestataire",
-        params: {
-            id: idPresta
-        }
-    });
+  navStore.previousRoute = {
+    path: route.path,
+    query: route.query,
+    hash: "#liste_prestataires",
+  };
+  router.push({
+    name: "ShowPrestataire",
+    params: {
+      id: idPresta,
+    },
+  });
 }
-
 
 //=========================
 //==== Async functions ====
 //=========================
-async function getValuesServices() {
+function getValuesServices() {
   try {
-    const res = await axios.get('http://localhost:3000/prestataire/services/show');
-    prestataires.value = res.data;
+    prestataires.value = servicesData.map((service) => {
+      const presta = prestataireData.find(
+        (p) => p.id_prestataire === service.id_prestataire
+      );
+      const typePresta = typePrestaData.find(
+        (t) => t.id_type_prestataire === presta?.type_prestataire_id
+      );
+
+      return {
+        ...service,
+        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
+      };
+    });
   } catch (err) {
     console.error(err);
   }
 }
 
-async function getValuesPrestataire() {
-    try {
-        const res = await axios.get("http://localhost:3000/prestataire/show");
-        prestataires.value = res.data;
-    } catch (err) {
-        console.error(err);
-    }
+// async function getValuesServices() {
+//   try {
+//     const res = await axios.get('http://localhost:3000/prestataire/services/show');
+//     prestataires.value = res.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+function getValuesPrestataire() {
+  try {
+    // Récupérer depuis localStorage
+    const prestatairesLocalStorage = localData.getAll("prestataires");
+    const utilisateursLocalStorage = localData.getAll("utilisateurs");
+    const servicesLocalStorage = localData.getAll("services");
+
+    // Fusionner prestataires JSON + localStorage (priorité au localStorage)
+    const localStoragePrestaIds = prestatairesLocalStorage.map(
+      (p) => p.id_prestataire
+    );
+    const prestatairesJSONFiltered = prestataireData.filter(
+      (p) => !localStoragePrestaIds.includes(p.id_prestataire)
+    );
+    const allPrestataires = [
+      ...prestatairesJSONFiltered,
+      ...prestatairesLocalStorage,
+    ];
+
+    // Fusionner utilisateurs JSON + localStorage
+    const localStorageUserIds = utilisateursLocalStorage.map(
+      (u) => u.id_utilisateur
+    );
+    const utilisateursJSONFiltered = utilisateurData.filter(
+      (u) => !localStorageUserIds.includes(u.id_utilisateur)
+    );
+    const allUtilisateurs = [
+      ...utilisateursJSONFiltered,
+      ...utilisateursLocalStorage,
+    ];
+
+    // Fusionner services JSON + localStorage
+    const localStorageServiceIds = servicesLocalStorage.map(
+      (s) => s.id_service
+    );
+    const servicesJSONFiltered = servicesData.filter(
+      (s) => !localStorageServiceIds.includes(s.id_service)
+    );
+    const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
+
+    prestataires.value = allPrestataires.map((presta) => {
+      const typePresta = typePrestaData.find(
+        (t) =>
+          t.id_type_prestataire ===
+          (presta.type_prestataire_id || presta.id_type_prestataire)
+      );
+      const user = allUtilisateurs.find(
+        (u) => u.id_utilisateur === presta.id_utilisateur
+      );
+      const nb_services = allServices.filter(
+        (s) =>
+          s.id_prestataire === presta.id_prestataire ||
+          s.prestataire_id === presta.id_prestataire
+      ).length;
+
+      return {
+        ...presta,
+        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
+        prenom_utilisateur: user?.prenom_utilisateur || "",
+        nom_utilisateur: user?.nom_utilisateur || "",
+        nb_services,
+      };
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-async function getValuesTypePrestataire() {
-    try {
-        const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
-        type_prestataire.value = res.data.result;
-    } catch (err) {
-        console.error(err);
-    }
+// async function getValuesPrestataire() {
+//     try {
+//         const res = await axios.get("http://localhost:3000/prestataire/show");
+//         prestataires.value = res.data;
+//     } catch (err) {
+//         console.error(err);
+//     }
+// }
+
+function getValuesTypePrestataire() {
+  try {
+    type_prestataire.value = typePrestaData;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-async function searchPrestataires() {
-    router.push({
-        path: "/",
-        query: {
-            nom: filters.value.nom || undefined,
-            category: filters.value.category || undefined,
-            prixMin: filters.value.prixMin || undefined,
-            prixMax: filters.value.prixMax || undefined,
-        },
-        hash: "#liste_prestataires"
+// async function getValuesTypePrestataire() {
+//     try {
+//         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
+//         type_prestataire.value = res.data.result;
+//     } catch (err) {
+//         console.error(err);
+//     }
+// }
+
+function searchPrestataires() {
+  router.push({
+    path: "/",
+    query: {
+      nom: filters.value.nom || undefined,
+      category: filters.value.category || undefined,
+      prixMin: filters.value.prixMin || undefined,
+      prixMax: filters.value.prixMax || undefined,
+    },
+    hash: "#liste_prestataires",
+  });
+
+  if (isServiceView.value) {
+    let filtered = servicesData.map((service) => {
+      const presta = prestataireData.find(
+        (p) => p.id_prestataire === service.id_prestataire
+      );
+      const typePresta = typePrestaData.find(
+        (t) => t.id_type_prestataire === presta?.type_prestataire_id
+      );
+
+      return {
+        ...service,
+        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
+        type_prestataire_id: presta?.type_prestataire_id,
+      };
     });
 
-    const res = await axios.get('http://localhost:3000/prestataire/showFilter', {
-        params: {
-            ...filters.value,
-            type: isServiceView.value ? 'services' : 'prestataires'
-        }
+    if (filters.value.nom) {
+      filtered = filtered.filter((s) =>
+        s.nom_service?.toLowerCase().includes(filters.value.nom.toLowerCase())
+      );
+    }
+    if (filters.value.category && filters.value.category !== 0) {
+      filtered = filtered.filter(
+        (s) => s.type_prestataire_id === filters.value.category
+      );
+    }
+    if (filters.value.prixMin !== null && filters.value.prixMin !== "") {
+      filtered = filtered.filter(
+        (s) => s.prix >= Number(filters.value.prixMin)
+      );
+    }
+    if (filters.value.prixMax !== null && filters.value.prixMax !== "") {
+      filtered = filtered.filter(
+        (s) => s.prix <= Number(filters.value.prixMax)
+      );
+    }
+
+    prestataires.value = filtered;
+  } else {
+    let filtered = prestataireData.map((presta) => {
+      const typePresta = typePrestaData.find(
+        (t) => t.id_type_prestataire === presta.type_prestataire_id
+      );
+      const user = utilisateurData.find(
+        (u) => u.id_utilisateur === presta.id_utilisateur
+      );
+      const nb_services = servicesData.filter(
+        (s) => s.id_prestataire === presta.id_prestataire
+      ).length;
+
+      return {
+        ...presta,
+        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
+        prenom_utilisateur: user?.prenom_utilisateur || "",
+        nom_utilisateur: user?.nom_utilisateur || "",
+        nb_services,
+      };
     });
 
-    prestataires.value = res.data;
+    if (filters.value.nom) {
+      filtered = filtered.filter((p) =>
+        p.nom_prestataire
+          ?.toLowerCase()
+          .includes(filters.value.nom.toLowerCase())
+      );
+    }
+    if (filters.value.category && filters.value.category !== 0) {
+      filtered = filtered.filter(
+        (p) => p.type_prestataire_id === filters.value.category
+      );
+    }
+
+    prestataires.value = filtered;
+  }
 }
 
-
+// async function searchPrestataires() {
+//     router.push({
+//         path: "/",
+//         query: {
+//             nom: filters.value.nom || undefined,
+//             category: filters.value.category || undefined,
+//             prixMin: filters.value.prixMin || undefined,
+//             prixMax: filters.value.prixMax || undefined,
+//         },
+//         hash: "#liste_prestataires"
+//     });
+//
+//     const res = await axios.get('http://localhost:3000/prestataire/showFilter', {
+//         params: {
+//             ...filters.value,
+//             type: isServiceView.value ? 'services' : 'prestataires'
+//         }
+//     });
+//
+//     prestataires.value = res.data;
+// }
 </script>
-
 
 <style scoped>
 .content_slider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.content_slider span{
-    font-weight: 500;
+.content_slider span {
+  font-weight: 500;
 }
 
 .switch {
@@ -282,8 +491,8 @@ async function searchPrestataires() {
   right: 0;
   bottom: 0;
   background-color: var(--couleur-fond);
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -294,8 +503,8 @@ async function searchPrestataires() {
   left: 4px;
   bottom: 4px;
   background-color: var(--jaune-logo);
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -321,326 +530,316 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.recherche{
-    display: flex;
-    flex-direction: column;
+.recherche {
+  display: flex;
+  flex-direction: column;
 }
 
-.titreFiltre{
-    width: 100%;
-    height: 100%;
+.titreFiltre {
+  width: 100%;
+  height: 100%;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    background-color: var(--jaune-logo);
-    opacity: 0.9;
+  background-color: var(--jaune-logo);
+  opacity: 0.9;
 
-    text-align: center;
+  text-align: center;
 }
 
-.titreFiltre  span{
-    font-size: 2.6em;
-    font-weight: 800;
-    color: #0a1d42;
-    padding-top: 60px;
-    margin: 50px 0;
-    letter-spacing: 1px;
-    
+.titreFiltre span {
+  font-size: 2.6em;
+  font-weight: 800;
+  color: #0a1d42;
+  padding-top: 60px;
+  margin: 50px 0;
+  letter-spacing: 1px;
 }
 
-.filtreEtListe{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.filtreEtListe {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* FILTRE */
 
-.filtrePrestataire{
-    width: 30%;
-    display: flex;
-    flex-direction: column;
+.filtrePrestataire {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
 
-    padding: 15px calc(5px + 1%);
-    gap: 1.5em;
+  padding: 15px calc(5px + 1%);
+  gap: 1.5em;
 
-    height: fit-content; /* C'EST MERVEILLEUX */
+  height: fit-content; /* C'EST MERVEILLEUX */
 
-    color: #0a1d42;
-    background-color: var(--jaune-logo);
-    opacity: 0.9;
+  color: #0a1d42;
+  background-color: var(--jaune-logo);
+  opacity: 0.9;
 
-    border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
 }
 
-.blocFiltre{
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    padding: 3px;
+.blocFiltre {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 3px;
 }
 
-.blocFiltre span{
-    text-transform: uppercase;
-    font-size: 16px;
-    font-weight: 500;
+.blocFiltre span {
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.blocFiltre input{
-    border:none;
-    border-radius: 10px;
-    padding: 4px;
+.blocFiltre input {
+  border: none;
+  border-radius: 10px;
+  padding: 4px;
 
-    max-width: 17em;
+  max-width: 17em;
 }
 
 .prix {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
 
-    row-gap: 1em;
+  row-gap: 1em;
 }
 
-.prix input{
-    min-width: 6em;
+.prix input {
+  min-width: 6em;
 }
 
-.boutonsFiltre{
-    font-size: 15px;
-    text-align: center;
-    align-items: baseline;
-    display: flex;
-    justify-content: space-evenly;
-    padding: 10px;
-    flex-wrap: wrap;
-    row-gap: 1em;
+.boutonsFiltre {
+  font-size: 15px;
+  text-align: center;
+  align-items: baseline;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px;
+  flex-wrap: wrap;
+  row-gap: 1em;
 }
 
-.boutonsFiltre button{
-
+.boutonsFiltre button {
   font-size: 16px;
 
   font-weight: bolder;
 
-  color:#0a1d42;
+  color: #0a1d42;
   background-color: var(--jaune-logo);
   border: none;
   border-radius: 10px;
   padding: 6px;
 }
 
-.boutonsFiltre button:hover{
-    background-color: var(--jaune-logo);
-    color: black;
-    background-color: white;
-    opacity: 0.9;
-    transition: var(--transition-fast);
+.boutonsFiltre button:hover {
+  background-color: var(--jaune-logo);
+  color: black;
+  background-color: white;
+  opacity: 0.9;
+  transition: var(--transition-fast);
 }
 
 /* FILTRE */
 
 /* LISTE */
 
-.listePrestataireBorder{
-    width: 70%;
-    background-color: var(--jaune-logo);
-    opacity: 0.9;
+.listePrestataireBorder {
+  width: 70%;
+  background-color: var(--jaune-logo);
+  opacity: 0.9;
 }
 
 .listePrestataire {
-    width: calc(100% - 40px);
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    gap: 20px;
+  width: calc(100% - 40px);
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 20px;
 
-    padding: 20px;
+  padding: 20px;
 
-    border-radius: 10px 10px 0 0;
+  border-radius: 10px 10px 0 0;
 
-    background-color: var(--couleur-fond);
-
+  background-color: var(--couleur-fond);
 }
 
-.blocListePrestataire{
+.blocListePrestataire {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
+  width: 430px;
+  height: fit-content;
 
-    width: 430px;
-    height: fit-content;
+  padding: 12px 10px 10px 10px;
 
-    padding: 12px 10px 10px 10px;
+  border-radius: 10px;
 
-    border-radius: 10px;
-
-    opacity: 0.9;
+  opacity: 0.9;
 }
 
-.blocListePrestataire:nth-child(2n+1){
-    color: #0a1d42;
+.blocListePrestataire:nth-child(2n + 1) {
+  color: #0a1d42;
+  background-color: var(--jaune-logo);
+}
+
+.blocListePrestataire:nth-child(2n) {
+  color: #0a1d42;
+  background-color: var(--jaune-logo);
+
+  .typePrestataire {
+    color: var(--bleu-logo);
     background-color: var(--jaune-logo);
-}
+  }
 
-.blocListePrestataire:nth-child(2n){
-    color: #0a1d42;
+  .blocBasPrestataire {
+    color: var(--bleu-logo);
     background-color: var(--jaune-logo);
+  }
 
-    .typePrestataire{
-        color: var(--bleu-logo);
-        background-color: var(--jaune-logo);
-    }
+  .infosPrestataire :not(:first-child),
+  .contactPrestataire :not(:first-child) {
+    border-left: 4px solid var(--bleu-logo);
+  }
 
-    .blocBasPrestataire{
-        color: var(--bleu-logo);
-        background-color: var(--jaune-logo);
-    }
-
-    .infosPrestataire :not(:first-child),
-    .contactPrestataire :not(:first-child){
-        border-left: 4px solid var(--bleu-logo);
-    }
-
-    .boutonListe span{
-        color: var(--jaune-logo);
-    }
-
-    .boutonListe span:hover{
-        color: orangered;
-        transition: var(--transition-fast);
-    }
-}
-
-.blocListePrestataire:nth-child(2n){
+  .boutonListe span {
     color: var(--jaune-logo);
-    background-color: var(--bleu-logo);
-}
+  }
 
-.blocListePrestataire:hover{
-    opacity: 1;
-    transform: scale(1.05);
+  .boutonListe span:hover {
+    color: orangered;
     transition: var(--transition-fast);
+  }
 }
 
-.enTetePrestataire{
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    
-    margin-bottom: 1em;
-
-    font-weight: 500;
+.blocListePrestataire:nth-child(2n) {
+  color: var(--jaune-logo);
+  background-color: var(--bleu-logo);
 }
 
-.typePrestataire{
-    padding: 3px;
-    text-align: end;
-
-    height: fit-content;
-
-    border-radius: 2px;
-
-    color: var(--jaune-logo);
-    background-color: var(--bleu-logo);
+.blocListePrestataire:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  transition: var(--transition-fast);
 }
 
-.titrePrestataire{
-    width: 35%;
-    display: flex;
-    flex-direction: column;
+.enTetePrestataire {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
 
-    font-size: 1.25em;
-    font-weight: 1000;
-    gap: 0.5em;
-    text-align: center;
+  margin-bottom: 1em;
+
+  font-weight: 500;
 }
 
-.titrePrestataire img{
-    width: 100%;
-    object-fit: contain;
+.typePrestataire {
+  padding: 3px;
+  text-align: end;
+
+  height: fit-content;
+
+  border-radius: 2px;
+
+  color: var(--jaune-logo);
+  background-color: var(--bleu-logo);
 }
 
-.descriptionPrestataire{
-    margin-bottom: 1.3em;
+.titrePrestataire {
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+
+  font-size: 1.25em;
+  font-weight: 1000;
+  gap: 0.5em;
+  text-align: center;
 }
 
-.descriptionPrestataire div{
-    font-weight: 500;
-    padding-left: 1em;
+.titrePrestataire img {
+  width: 100%;
+  object-fit: contain;
 }
 
-.blocBasPrestataire{
-    width: 100%;
+.descriptionPrestataire {
+  margin-bottom: 1.3em;
+}
 
-    display: flex;
-    flex-direction: row;
+.descriptionPrestataire div {
+  font-weight: 500;
+  padding-left: 1em;
+}
 
-    flex-wrap: wrap;
+.blocBasPrestataire {
+  width: 100%;
 
+  display: flex;
+  flex-direction: row;
 
-    gap: 2em;
+  flex-wrap: wrap;
 
-    padding: 6px 0 10px 0;
+  gap: 2em;
 
-    border-radius: 2px;
+  padding: 6px 0 10px 0;
 
-    color: var(--jaune-logo);
-    background-color: var(--bleu-logo);
+  border-radius: 2px;
+
+  color: var(--jaune-logo);
+  background-color: var(--bleu-logo);
 }
 
 .descriptionPrestataire,
 .infosPrestataire,
-.contactPrestataire{
-    display: flex;
-    flex-direction: column;
+.contactPrestataire {
+  display: flex;
+  flex-direction: column;
 
-    padding: 0 0.2em 0 1em ;
+  padding: 0 0.2em 0 1em;
 }
 
 .descriptionPrestataire :first-child,
 .infosPrestataire :first-child,
-.contactPrestataire :first-child{
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 0.5em;
+.contactPrestataire :first-child {
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.5em;
 }
 
 .infosPrestataire :not(:first-child),
-.contactPrestataire :not(:first-child){
-    font-weight: 500;
-    padding-left: 0.8em;
-    border-left: 4px solid var(--jaune-logo);
+.contactPrestataire :not(:first-child) {
+  font-weight: 500;
+  padding-left: 0.8em;
+  border-left: 4px solid var(--jaune-logo);
 }
 
 .boutonListe {
-    text-align: right;
+  text-align: right;
 }
 
-.boutonListe span{
+.boutonListe span {
+  font-weight: 600;
 
-    font-weight: 600;
+  text-decoration: underline;
 
-    text-decoration: underline;
-
-    color: #0a1d42;
+  color: #0a1d42;
 }
 
-.boutonListe span:hover{
-    color: purple;
-    transition: var(--transition-fast);
+.boutonListe span:hover {
+  color: purple;
+  transition: var(--transition-fast);
 }
-
-
 
 /* LISTE */
-
-
 </style>

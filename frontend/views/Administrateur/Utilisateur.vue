@@ -32,7 +32,6 @@
       <p class="nb_presta valid" v-else>
         {{ $t('adminPage.user.nb_userVide') }}
       </p>
-      <p>
         <div class="filtre">
           <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
           <select id="triAlpha" v-model="adminStore.typeTriUser">
@@ -42,7 +41,6 @@
             <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
           </select>
         </div>
-      </p>
     </div>
     <p class="backgroundBorderL message suppr" v-if="deleting">
       <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{ $t('adminPage.user.messageSuppr') }}
@@ -103,13 +101,15 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import axios from "axios";
+// import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
+import localData from "../../../backend/database/localData.js";
+// import UtilisateurData from "../../../backend/database/jsonData/Utilisateur.json";
 
 const router = useRouter();
 const route = useRoute();
@@ -117,9 +117,6 @@ const { locale } = useI18n();
 const adminStore = useAdminStore();
 const navStore = useNavigationStore();
 
-//==========================
-//====== Utilisateurs ======
-//==========================
 const utilisateurs = ref([]);
 const selectedUser = ref(null);
 const deletedUser = ref(null);
@@ -206,44 +203,85 @@ const utilisateursFiltres = computed(() => {
 
 
 
-onMounted(async () => {
-  try {
-    await getValuesUtilisateurs();
-    if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
-  } catch (err) {
-    console.error(err);
-  }
+onMounted(() => {
+  getValuesUtilisateurs();
+  if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
 });
 
 
-//==========================
-//== Async functions user ==
-//==========================
-async function getValuesUtilisateurs() {
-  try {
-    const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
-    utilisateurs.value = res.data;
-    console.log(utilisateurs.value);
 
+// async function getValuesUtilisateurs() {
+//   try {
+//     const res = await axios.get("http://localhost:3000/admin/utilisateur/show");
+//     utilisateurs.value = res.data;
+//     console.log(utilisateurs.value);
+
+//   } catch (err) {
+//     console.error("Erreur fetch utilisateurs:", err);
+//   }
+// };
+
+function getValuesUtilisateurs() {
+  try {
+    utilisateurs.value = localData.getAll('utilisateurs');
+    console.log('Utilisateurs chargés depuis localStorage:', utilisateurs.value);
   } catch (err) {
-    console.error("Erreur fetch utilisateurs:", err);
+    console.error('Erreur lors du chargement des utilisateurs:', err);
   }
 };
 
 
-async function deleteUtilisateur(idUser) {
+// async function deleteUtilisateur(idUser) {
+//   try {
+//     deletedUser.value = { ...selectedUser.value };
+
+//     await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${idUser}`);
+
+//     isDelete.value = false;
+//     deleting.value = true;
+//     utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
+//     router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
+
+//   } catch (err) {
+//     console.error("Erreur suppression utilisateur:", err);
+//   }
+// };
+
+function deleteUtilisateur(idUser) {
   try {
     deletedUser.value = { ...selectedUser.value };
-
-    await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${idUser}`);
-
+    
+    // Vérifier si l'utilisateur a un prestataire associé et le supprimer
+    const prestataires = localData.getAll('prestataires');
+    const prestataireAssocie = prestataires.find(p => p.id_utilisateur === idUser);
+    
+    if (prestataireAssocie) {
+      // Supprimer le prestataire (et libérer sa zone automatiquement)
+      localData.delete('prestataires', prestataireAssocie.id_prestataire, 'id_prestataire');
+      console.log('Prestataire associé supprimé:', prestataireAssocie.nom_prestataire);
+      
+      // Supprimer aussi tous les services du prestataire
+      const services = localData.getAll('services');
+      const servicesAssocie = services.filter(s => s.id_prestataire === prestataireAssocie.id_prestataire);
+      servicesAssocie.forEach(service => {
+        localData.delete('services', service.id_service, 'id_service');
+      });
+      console.log(`${servicesAssocie.length} service(s) du prestataire supprimé(s)`);
+    }
+    
+    // Supprimer l'utilisateur de localStorage
+    localData.delete('utilisateurs', idUser, 'id_utilisateur');
+    
+    // Mettre à jour l'affichage
+    utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
+    
     isDelete.value = false;
     deleting.value = true;
-    utilisateurs.value = utilisateurs.value.filter(u => u.id_utilisateur !== idUser);
+    
+    console.log('Utilisateur supprimé:', idUser);
     router.push({ name: 'Utilisateurs', params: { lang: locale.value } });
-
   } catch (err) {
-    console.error("Erreur suppression utilisateur:", err);
+    console.error('Erreur lors de la suppression:', err);
   }
 };
 </script>

@@ -144,6 +144,7 @@ import matchesData from "../../backend/database/jsonData/Match.json";
 import siegesData from "../../backend/database/jsonData/Siege.json";
 import equipesData from "../../backend/database/jsonData/Equipe.json";
 import paysData from "../../backend/database/jsonData/Pays.json";
+import localData from "../../backend/database/localData.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -307,7 +308,15 @@ function getSeatPrice(seat) {
 // });
 
 function fetchGradin() {
-  const seatsForZone = siegesData
+  // Fusionner les sièges du JSON et du localStorage
+  const siegesLocalStorage = localData.getAll("sieges");
+  const localStorageSeatIds = siegesLocalStorage.map(s => `${s.match_id}-${s.zone}-${s.numero_colonne}-${s.numero_ligne}`);
+  const siegesJSONFiltered = siegesData.filter(
+    s => !localStorageSeatIds.includes(`${s.match_id}-${s.zone}-${s.numero_colonne}-${s.numero_ligne}`)
+  );
+  const allSeats = [...siegesJSONFiltered, ...siegesLocalStorage];
+
+  const seatsForZone = allSeats
     .filter(
       (seat) =>
         seat.match_id === idMatch.value &&

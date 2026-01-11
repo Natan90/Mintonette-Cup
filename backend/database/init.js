@@ -57,7 +57,7 @@ const pool = require("./db");
   );
 
   CREATE TABLE IF NOT EXISTS Type_utilisateur(
-    id_utilisateur SERIAL PRIMARY KEY,
+    id_type_utilisateur SERIAL PRIMARY KEY,
     nom_type_utilisateur VARCHAR(50),
     droit_type_utilisateur VARCHAR(50)
   );
@@ -318,7 +318,7 @@ const pool = require("./db");
       }'),
       ('{
         "fr": "Restauration",
-        "en": "Restoration"
+        "en": "Food"
       }');
     `;
     await pool.query(insertTypePrestataire);
@@ -615,7 +615,7 @@ const pool = require("./db");
     ('Thaïlande', 'Bleu / Rouge', 'Le Garuda Bleu', false, 1),
     ('Kazakhstan', 'Bleu ciel / Jaune', 'L’Aigle d’Or', false, 1),
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
-    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1)
+    ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1),
     ('Russie', 'Blanc / Rouge', 'L’Ours Rouge', false, 1),    
   ('Égypte', 'Rouge / Blanc / Noir', 'Le Faucon du Nil', false, 1),
   ('République tchèque', 'Rouge / Blanc / Bleu', 'Le Lion de Bohême', false, 1),
@@ -993,7 +993,7 @@ const pool = require("./db");
     ('Majstorović', 'Neven', 'Masculin', '1989-01-01', 1.93, 17, 'Serbie', 'Libero', 16, NULL),
     ('Podraščanin', 'Marko', 'Masculin', '1987-10-29', 2.04, 18, 'Serbie', 'Central', 16, NULL),
     ('Lisinac', 'Srećko', 'Masculin', '1992-01-01', 2.05, 20, 'Serbie', 'Central', 16, NULL),
-    ('Todorović', 'Vuk', 'Masculin', '1998-01-01', 1.91, 21, 'Serbie', 'Passeur', 16, NULL);
+    ('Todorović', 'Vuk', 'Masculin', '1998-01-01', 1.91, 21, 'Serbie', 'Passeur', 16, NULL),
     
     -- Pays-Bas
     ('Jorna', 'Gijs', 'Masculin', '1989-05-30', 1.84, 7, 'Pays-Bas', 'Libero', 17, 'Jorna.png'),
@@ -1143,7 +1143,7 @@ const pool = require("./db");
     ('Pervan', 'Hrvoje', 'Masculin', '1991-08-27', 1.83, 13, 'Croatie', 'Libero', 25, NULL),
     ('Andrić', 'Leo', 'Masculin', '1996-12-03', 2.02, 16, 'Croatie', 'Receveur-Attaquant', 25, 'Andric.png'),
     ('Zeljković', 'Ivan', 'Masculin', '1994-05-16', 1.98, 19, 'Croatie', 'Receveur-Attaquant', 25, NULL),
-    ('Nikačević', 'Kruno', 'Masculin', '1992-10-09', 2.05, 20, 'Croatie', 'Central', 25, NULL);
+    ('Nikačević', 'Kruno', 'Masculin', '1992-10-09', 2.05, 20, 'Croatie', 'Central', 25, NULL),
 
     -- Russie
     ('Podlesnykh', 'Yaroslav', 'Masculin', '1994-01-01', 1.98, 1, 'Russie', 'Outside spiker', 26, 'Podlesnykh.png'),
@@ -1159,7 +1159,7 @@ const pool = require("./db");
     ('Pankov', 'Pavel', 'Masculin', '1995-01-01', 1.97, 11, 'Russie', 'Passeur', 26, 'Pankov.png'),
     ('Butko', 'Alexander', 'Masculin', '1986-01-01', 1.98, 12, 'Russie', 'Passeur', 26, NULL),
     ('Muserskiy', 'Dmitriy', 'Masculin', '1988-01-01', 2.18, 13, 'Russie', 'Opposé', 26, NULL),
-    ('Likhosherstov', 'Vadym', 'Masculin', '1989-01-01', 2.18, 14, 'Russie', 'Middle blocker', 26, 'Likhosherstov.png');
+    ('Likhosherstov', 'Vadym', 'Masculin', '1989-01-01', 2.18, 14, 'Russie', 'Middle blocker', 26, 'Likhosherstov.png'),
 
     --Égypte
     ('Hamada', 'Mohamed', 'Masculin', '1998-06-14', 2.06, 1, 'Égypte', 'Central', 27, NULL),
