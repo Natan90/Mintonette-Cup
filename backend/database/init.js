@@ -617,9 +617,9 @@ const pool = require("./db");
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
     ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1),
     ('Russie', 'Blanc / Rouge', 'L’Ours Rouge', false, 1),    
-  ('Égypte', 'Rouge / Blanc / Noir', 'Le Faucon du Nil', false, 1),
-  ('République tchèque', 'Rouge / Blanc / Bleu', 'Le Lion de Bohême', false, 1),
-    ('Maroc', 'Rouge / Vert', 'Le Lion de l’Atlas', false, 1),
+    ('Égypte', 'Rouge / Blanc ', 'Le Faucon du Nil', false, 1),
+    ('République tchèque', 'Rouge / Blanc', 'Le Lion de Bohême', false, 1),
+    ('Estonie', 'Bleu / Noir', 'L’Hirondelle Baltique', false, 1),
     ('Arabie Saoudite', 'Vert / Blanc', 'Le Faucon Saoudien', false, 1),
     ('Tunisie', 'Rouge / Blanc', 'Le Scorpion Rouge', false, 1),
     ('Saint‑Marin', 'Bleu / Blanc', 'Le Gardien du Roc', false, 1);
@@ -665,7 +665,7 @@ const pool = require("./db");
     ('Homme', 14, 26, 'Valeri Karpine'), -- Russie
     ('Homme', 14, 27, 'Hossam Hassan'), -- Égypte
     ('Homme', 14, 28, 'Ivan Hašek'), -- République Tchèque
-    ('Homme', 14, 29, 'Zouheir El Graoui'), -- Maroc
+    ('Homme', 14, 29, 'Jürgen Henn'), -- Estonie
     ('Homme', 14, 30, 'Veselin Vuković'), -- Arabie Saoudite
     ('Homme', 14, 31, 'Camillo Placi'), -- Tunisie
     ('Homme', 14, 32, 'Stefano Mascetti'), -- Saint Marin 
@@ -697,7 +697,7 @@ const pool = require("./db");
     ('Femme', 12, 26, NULL), -- Russie
     ('Femme', 12, 27, NULL), -- Égypte
     ('Femme', 12, 28, NULL), -- République Tchèque
-    ('Femme', 12, 29, NULL), -- Maroc
+    ('Femme', 12, 29, NULL), -- Estonie
     ('Femme', 12, 30, NULL), -- Arabie Saoudite
     ('Femme', 12, 31, NULL), -- Tunisie
     ('Femme', 12, 32, NULL); -- Saint Marin
@@ -726,7 +726,7 @@ const pool = require("./db");
       (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs République Tchèque 
       
       -- Terrain 4 (4 matchs)
-      (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Maroc
+      (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Estonie
       (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Arabie Saoudite
       (4, 15, 31, '2026-01-01 18:00:00'),  -- Pologne vs Tunisie
       (4, 16, 32, '2026-01-01 21:00:00');  -- Serbie vs Saint-Marin
@@ -1193,21 +1193,21 @@ const pool = require("./db");
   ('Klimes', 'Antonin', 'Masculin', '2005-03-12', 2.07, 39, 'République Tchèque', 'Central', 28, NULL),
   ('Benda', 'Vilem', 'Masculin', '2001-06-22', 2.00, 95, 'République Tchèque', 'Receveur-Attaquant', 28, NULL),
 
--- République Tchèque (ID équipe: 29)
-('Michalek', 'Lukas', 'Masculin', '1992-04-12', 1.95, 1, 'République Tchèque', 'Passeur', 29, NULL),
-('Hadrava', 'Jakub', 'Masculin', '1993-07-25', 2.04, 11, 'République Tchèque', 'Central', 29, NULL),
-('Patocka', 'Jan', 'Masculin', '1994-10-18', 1.98, 8, 'République Tchèque', 'Attaquant', 29, NULL),
-('Kroutil', 'David', 'Masculin', '1991-02-08', 1.87, 3, 'République Tchèque', 'Libero', 29, NULL),
-('Zajicek', 'Petr', 'Masculin', '1996-05-14', 2.00, 5, 'République Tchèque', 'Receveur-Attaquant', 29, NULL),
-('Stoilov', 'Donovan', 'Masculin', '1997-08-22', 2.06, 12, 'République Tchèque', 'Central', 29, NULL),
-('Indra', 'Milan', 'Masculin', '1995-11-30', 1.96, 7, 'République Tchèque', 'Attaquant', 29, NULL),
-('Mach', 'Matej', 'Masculin', '1994-03-16', 1.90, 2, 'République Tchèque', 'Passeur', 29, NULL),
-('Novak', 'Tomas', 'Masculin', '1998-06-20', 2.02, 13, 'République Tchèque', 'Central', 29, NULL),
-('Krizan', 'Lukas', 'Masculin', '1993-09-08', 1.99, 10, 'République Tchèque', 'Receveur-Attaquant', 29, NULL),
-('Sobotka', 'Martin', 'Masculin', '1996-12-04', 1.94, 4, 'République Tchèque', 'Attaquant', 29, NULL),
-('Bartos', 'Jakub', 'Masculin', '1992-01-25', 1.88, 6, 'République Tchèque', 'Libero', 29, NULL),
-('Kocian', 'Filip', 'Masculin', '1997-04-11', 2.01, 9, 'République Tchèque', 'Receveur-Attaquant', 29, NULL),
-('Urban', 'Daniel', 'Masculin', '1995-07-19', 2.03, 14, 'République Tchèque', 'Central', 29, NULL),
+  -- Estonie 
+  ('Treial', 'Henri', 'Masculin', '1992-03-15', 2.02, 1, 'Estonie', 'Central', 29, 'Treial.png'),
+  ('Vanker', 'Renet', 'Masculin', '1998-05-22', 1.93, 2, 'Estonie', 'Passeur', 29, NULL),
+  ('Allik', 'Karli', 'Masculin', '1996-08-12', 1.92, 3, 'Estonie', 'Receveur-Attaquant', 29, 'Allik.png'),
+  ('Juhkami', 'Martti', 'Masculin', '1988-04-18', 1.95, 6, 'Estonie', 'Receveur-Attaquant', 29, 'Juhkami.png'),
+  ('Teppan', 'Renee', 'Masculin', '1993-07-25', 1.98, 7, 'Estonie', 'Attaquant', 29, NULL),
+  ('Tammearu', 'Märt', 'Masculin', '2001-02-14', 1.98, 8, 'Estonie', 'Passeur', 29, 'Tammearu.png'),
+  ('Täht', 'Robert', 'Masculin', '1993-11-08', 1.92, 9, 'Estonie', 'Libero', 29, 'Taht.png'),
+  ('Maar', 'Silver', 'Masculin', '1999-06-20', 1.84, 10, 'Estonie', 'Attaquant, 29, 'Maar.png'),
+  ('Venno', 'Oliver', 'Masculin', '1990-09-12', 2.10, 11, 'Estonie', 'Attaquant', 29, NULL),
+  ('Saar', 'Alari', 'Masculin', '1996-01-28', 1.77, 12, 'Estonie', 'Libero', 29, NULL),
+  ('Viiber', 'Robert', 'Masculin', '1997-05-16', 2.05, 16, 'Estonie', 'Passeur', 29, NULL),
+  ('Tammemaa', 'Timo', 'Masculin', '1991-08-30', 2.04, 17, 'Estonie', 'Central', 29, NULL),
+  ('Saaremaa', 'Alex', 'Masculin', '2000-03-22', 2.08, 18, 'Estonie', 'Central', 29, NULL),
+  ('Aganits', 'Andri', 'Masculin', '1993-12-15', 2.07, 19, 'Estonie', 'Central', 29, NULL),
 
 -- Égypte (ID équipe: 30)
 ('Abdel-Aziz', 'Ahmed', 'Masculin', '1988-03-20', 1.98, 1, 'Égypte', 'Passeur', 30, NULL),
