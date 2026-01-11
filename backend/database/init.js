@@ -663,8 +663,8 @@ const pool = require("./db");
     ('Homme', 14, 24, 'Issanayê Ramires Ferraz'), -- Corée du Sud
     ('Homme', 14, 25, 'Zlatko Dalić'), -- Croatie
     ('Homme', 14, 26, 'Valeri Karpine'), -- Russie
-    ('Homme', 14, 27, 'Alejandro Matoso'), -- Uruguay
-    ('Homme', 14, 28, 'H. El Wassimy'), -- Afrique du Sud
+    ('Homme', 14, 27, 'Hossam Hassan'), -- Égypte
+    ('Homme', 14, 28, 'Ivan Hašek'), -- République Tchèque
     ('Homme', 14, 29, 'Zouheir El Graoui'), -- Maroc
     ('Homme', 14, 30, 'Veselin Vuković'), -- Arabie Saoudite
     ('Homme', 14, 31, 'Camillo Placi'), -- Tunisie
@@ -695,8 +695,8 @@ const pool = require("./db");
     ('Femme', 12, 24, NULL), -- Corée du Sud
     ('Femme', 12, 25, NULL), -- Croatie
     ('Femme', 12, 26, NULL), -- Russie
-    ('Femme', 12, 27, NULL), -- Uruguay
-    ('Femme', 12, 28, NULL), -- Afrique du Sud
+    ('Femme', 12, 27, NULL), -- Égypte
+    ('Femme', 12, 28, NULL), -- République Tchèque
     ('Femme', 12, 29, NULL), -- Maroc
     ('Femme', 12, 30, NULL), -- Arabie Saoudite
     ('Femme', 12, 31, NULL), -- Tunisie
@@ -722,8 +722,8 @@ const pool = require("./db");
       -- Terrain 3 (4 matchs)
       (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Croatie
       (3, 10, 26, '2026-01-01 14:00:00'),  -- Slovénie vs Russie
-      (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Uruguay
-      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs Afrique du Sud 
+      (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Égypte
+      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs République Tchèque 
       
       -- Terrain 4 (4 matchs)
       (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Maroc
@@ -1162,17 +1162,17 @@ const pool = require("./db");
     ('Likhosherstov', 'Vadym', 'Masculin', '1989-01-01', 2.18, 14, 'Russie', 'Middle blocker', 26, 'Likhosherstov.png'),
 
     --Égypte
-    ('Hamada', 'Mohamed', 'Masculin', '1998-06-14', 2.06, 1, 'Égypte', 'Central', 27, NULL),
-    ('Seoudy', 'Mohamed', 'Masculin', '1997-11-22', 2.08, 5, 'Égypte', 'Central', 27, NULL),
+    ('Hamada', 'Mohamed', 'Masculin', '1998-06-14', 2.06, 1, 'Égypte', 'Central', 27, 'Hamada.png'),
+    ('Seoudy', 'Mohamed', 'Masculin', '1997-11-22', 2.08, 5, 'Égypte', 'Libero', 27, 'Seoudy.png'),
     ('Reda', 'Mohamed', 'Masculin', '1996-05-28', 1.88, 6, 'Égypte', 'Libero', 27, NULL),
     ('Ramadan', 'Mohamed', 'Masculin', '1995-03-15', 1.86, 7, 'Égypte', 'Libero', 27, NULL),
     ('Elhossiny', 'Abd El-Aziz', 'Masculin', '1999-07-18', 2.00, 8, 'Égypte', 'Receveur-Attaquant', 27, NULL),
-    ('Asran', 'Mohamed', 'Masculin', '1993-08-14', 2.01, 9, 'Égypte', 'Receveur-Attaquant', 27, NULL),
+    ('Asran', 'Mohamed', 'Masculin', '1993-08-14', 2.01, 9, 'Égypte', 'Receveur-Attaquant', 27, 'Asran.png'),
     ('Yasso', 'Youssef', 'Masculin', '1998-01-10', 1.91, 11, 'Égypte', 'Passeur', 27, NULL),
-    ('Seif Abed', 'Mohamed', 'Masculin', '1997-04-12', 2.06, 14, 'Égypte', 'Attaquant', 27, NULL),
+    ('Seif Abed', 'Mohamed', 'Masculin', '1997-04-12', 2.06, 14, 'Égypte', 'Attaquant', 27, 'SeifAbed.png'),
     ('Said', 'Ahmed', 'Masculin', '1990-09-25', 2.02, 18, 'Égypte', 'Receveur-Attaquant', 27, NULL),
-    ('Deyo', 'Omar', 'Masculin', '1996-02-18', 2.03, 19, 'Égypte', 'Receveur-Attaquant', 27, NULL),
-    ('Azab', 'Ahmed', 'Masculin', '1997-03-17', 2.04, 22, 'Égypte', 'Receveur-Attaquant', 27, NULL),
+    ('Deyo', 'Omar', 'Masculin', '1996-02-18', 2.03, 19, 'Égypte', 'Receveur-Attaquant', 27, 'Deyo.png'),
+    ('Azab', 'Ahmed', 'Masculin', '1997-03-17', 2.04, 22, 'Égypte', '¨Passeur', 27, 'Azab.png'),
     ('Ellakany', 'Ahmed', 'Masculin', '1989-12-20', 1.92, 23, 'Égypte', 'Passeur', 27, NULL),
     ('Elshahat', 'Ahmed', 'Masculin', '1999-08-11', 2.07, 24, 'Égypte', 'Central', 27, NULL),
     ('Osama', 'Zeyad', 'Masculin', '2000-05-28', 2.05, 4, 'Égypte', 'Attaquant', 27, NULL),
