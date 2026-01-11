@@ -620,7 +620,7 @@ const pool = require("./db");
     ('Égypte', 'Rouge / Blanc ', 'Le Faucon du Nil', false, 1),
     ('République tchèque', 'Rouge / Blanc', 'Le Lion de Bohême', false, 1),
     ('Estonie', 'Bleu / Noir', 'L’Hirondelle Baltique', false, 1),
-    ('Arabie Saoudite', 'Vert / Blanc', 'Le Faucon Saoudien', false, 1),
+    ('Grèce', 'Bleu / Blanc', 'Le Phénix Hellénique', false, 1),
     ('Tunisie', 'Rouge / Blanc', 'Le Scorpion Rouge', false, 1),
     ('Saint‑Marin', 'Bleu / Blanc', 'Le Gardien du Roc', false, 1);
     `;
@@ -666,7 +666,7 @@ const pool = require("./db");
     ('Homme', 14, 27, 'Hossam Hassan'), -- Égypte
     ('Homme', 14, 28, 'Ivan Hašek'), -- République Tchèque
     ('Homme', 14, 29, 'Jürgen Henn'), -- Estonie
-    ('Homme', 14, 30, 'Veselin Vuković'), -- Arabie Saoudite
+    ('Homme', 14, 30, 'Gustavo Poyet'), -- Grèce
     ('Homme', 14, 31, 'Camillo Placi'), -- Tunisie
     ('Homme', 14, 32, 'Stefano Mascetti'), -- Saint Marin 
     ('Femme', 12, 1, NULL),  -- France
@@ -698,7 +698,7 @@ const pool = require("./db");
     ('Femme', 12, 27, NULL), -- Égypte
     ('Femme', 12, 28, NULL), -- République Tchèque
     ('Femme', 12, 29, NULL), -- Estonie
-    ('Femme', 12, 30, NULL), -- Arabie Saoudite
+    ('Femme', 12, 30, NULL), -- Grèce
     ('Femme', 12, 31, NULL), -- Tunisie
     ('Femme', 12, 32, NULL); -- Saint Marin
     `;
@@ -727,7 +727,7 @@ const pool = require("./db");
       
       -- Terrain 4 (4 matchs)
       (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Estonie
-      (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Arabie Saoudite
+      (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Grèce
       (4, 15, 31, '2026-01-01 18:00:00'),  -- Pologne vs Tunisie
       (4, 16, 32, '2026-01-01 21:00:00');  -- Serbie vs Saint-Marin
   `;
@@ -1209,21 +1209,21 @@ const pool = require("./db");
   ('Saaremaa', 'Alex', 'Masculin', '2000-03-22', 2.08, 18, 'Estonie', 'Central', 29, NULL),
   ('Aganits', 'Andri', 'Masculin', '1993-12-15', 2.07, 19, 'Estonie', 'Central', 29, NULL),
 
--- Égypte (ID équipe: 30)
-('Abdel-Aziz', 'Ahmed', 'Masculin', '1988-03-20', 1.98, 1, 'Égypte', 'Passeur', 30, NULL),
-('Salah', 'Mohamed', 'Masculin', '1992-06-15', 2.02, 10, 'Égypte', 'Attaquant', 30, NULL),
-('Hassan', 'Omar', 'Masculin', '1994-09-22', 2.05, 11, 'Égypte', 'Central', 30, NULL),
-('Ibrahim', 'Karim', 'Masculin', '1993-11-08', 1.96, 7, 'Égypte', 'Receveur-Attaquant', 30, NULL),
-('Mahmoud', 'Ali', 'Masculin', '1991-02-14', 1.85, 5, 'Égypte', 'Libero', 30, NULL),
-('Farouk', 'Youssef', 'Masculin', '1995-04-30', 2.00, 8, 'Égypte', 'Attaquant', 30, NULL),
-('Mostafa', 'Hossam', 'Masculin', '1996-07-18', 2.04, 12, 'Égypte', 'Central', 30, NULL),
-('Ramadan', 'Khaled', 'Masculin', '1992-10-05', 1.90, 3, 'Égypte', 'Passeur', 30, NULL),
-('Sayed', 'Amr', 'Masculin', '1997-01-22', 1.99, 9, 'Égypte', 'Receveur-Attaquant', 30, NULL),
-('Fathy', 'Tamer', 'Masculin', '1994-05-11', 2.01, 13, 'Égypte', 'Central', 30, NULL),
-('Nasr', 'Mahmoud', 'Masculin', '1993-08-27', 1.95, 4, 'Égypte', 'Attaquant', 30, NULL),
-('Khalil', 'Eslam', 'Masculin', '1995-12-16', 1.87, 6, 'Égypte', 'Libero', 30, NULL),
-('Younes', 'Sherif', 'Masculin', '1998-03-09', 1.98, 2, 'Égypte', 'Receveur-Attaquant', 30, NULL),
-('Nasser', 'Ahmed', 'Masculin', '1996-06-25', 2.03, 14, 'Égypte', 'Central', 30, NULL),
+-- Grèce 
+('Kasampalis', 'Stavros', 'Masculin', '1995-04-15', 1.88, 1, 'Grèce', 'Passeur', 30, 'Kasampalis.png'),
+('Pitakoudis', 'Lampros', 'Masculin', '2002-08-22', 2.02, 2, 'Grèce', 'Central', 30, 'Pitakoudis.png'),
+('Chakas', 'Spyridon', 'Masculin', '2002-05-14', 1.87, 3, 'Grèce', 'Receveur-Attaquant', 30, 'Chakas.png'),
+('Dalakouras', 'Anestis', 'Masculin', '1993-08-12', 1.96, 6, 'Grèce', 'Receveur-Attaquant', 30, 'Dalakouras.png'),
+('Protopsaltis', 'Athanasios', 'Masculin', '1993-03-20', 1.85, 7, 'Grèce', 'Receveur-Attaquant', 30, 'Protopsaltis.png'),
+('Kotsakis', 'Froixos', 'Masculin', '1999-06-18', 1.95, 8, 'Grèce', 'Receveur-Attaquant', 30, NULL),
+('Petsias', 'Apostolos', 'Masculin', '2003-09-25', 1.93, 9, 'Grèce', 'Passeur', 30, NULL),
+('Mouchlias', 'Dimitrios', 'Masculin', '2001-01-12', 2.00, 11, 'Grèce', 'Attaquant', 30, NULL),
+('Voulkidis', 'Theodoros', 'Masculin', '1996-07-20', 2.01, 12, 'Grèce', 'Central', 30, 'Voulkidis.png'),
+('Galiotos', 'Markos', 'Masculin', '1996-12-04', 1.94, 14, 'Grèce', 'Passeur', 30, NULL),
+('Folias', 'Eleftherios', 'Masculin', '2003-03-25', 1.86, 16, 'Grèce', 'Libero', 30, NULL),
+('Vaiopoulos', 'Evangelos', 'Masculin', '1997-08-14', 2.03, 17, 'Grèce', 'Central', 30, NULL),
+('Aspiotis', 'Anastasios-Stamatios', 'Masculin', '1991-11-22', 2.00, 18, 'Grèce', 'Attaquant', 30, NULL),
+('Tziavras', 'Dimitrios', 'Masculin', '1999-05-08', 1.76, 33, 'Grèce', 'Libero', 30, NULL),
 
 -- Porto Rico (ID équipe: 31)
 ('Rivera', 'Maurice', 'Masculin', '1990-05-12', 1.93, 1, 'Porto Rico', 'Passeur', 31, NULL),
