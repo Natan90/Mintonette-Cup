@@ -617,10 +617,10 @@ const pool = require("./db");
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
     ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1),
     ('Russie', 'Blanc / Rouge', 'L’Ours Rouge', false, 1),    
-    ('Uruguay', 'Bleu ciel / Blanc', 'Le Carrousel Bleu', false, 1),
-    ('Afrique du Sud', 'Vert / Or', 'Le Springbok Jaune‑Vert', false, 1),
-    ('Maroc', 'Rouge / Vert', 'Le Lion de l’Atlas', false, 1),
-    ('Arabie Saoudite', 'Vert / Blanc', 'Le Faucon Saoudien', false, 1),
+    ('Égypte', 'Rouge / Blanc ', 'Le Faucon du Nil', false, 1),
+    ('République tchèque', 'Rouge / Blanc', 'Le Lion de Bohême', false, 1),
+    ('Estonie', 'Bleu / Noir', 'L’Hirondelle Baltique', false, 1),
+    ('Grèce', 'Bleu / Blanc', 'Le Phénix Hellénique', false, 1),
     ('Tunisie', 'Rouge / Blanc', 'Le Scorpion Rouge', false, 1),
     ('Saint‑Marin', 'Bleu / Blanc', 'Le Gardien du Roc', false, 1);
     `;
@@ -663,10 +663,10 @@ const pool = require("./db");
     ('Homme', 14, 24, 'Issanayê Ramires Ferraz'), -- Corée du Sud
     ('Homme', 14, 25, 'Zlatko Dalić'), -- Croatie
     ('Homme', 14, 26, 'Valeri Karpine'), -- Russie
-    ('Homme', 14, 27, 'Alejandro Matoso'), -- Uruguay
-    ('Homme', 14, 28, 'H. El Wassimy'), -- Afrique du Sud
-    ('Homme', 14, 29, 'Zouheir El Graoui'), -- Maroc
-    ('Homme', 14, 30, 'Veselin Vuković'), -- Arabie Saoudite
+    ('Homme', 14, 27, 'Hossam Hassan'), -- Égypte
+    ('Homme', 14, 28, 'Ivan Hašek'), -- République Tchèque
+    ('Homme', 14, 29, 'Jürgen Henn'), -- Estonie
+    ('Homme', 14, 30, 'Gustavo Poyet'), -- Grèce
     ('Homme', 14, 31, 'Camillo Placi'), -- Tunisie
     ('Homme', 14, 32, 'Stefano Mascetti'), -- Saint Marin 
     ('Femme', 12, 1, NULL),  -- France
@@ -695,10 +695,10 @@ const pool = require("./db");
     ('Femme', 12, 24, NULL), -- Corée du Sud
     ('Femme', 12, 25, NULL), -- Croatie
     ('Femme', 12, 26, NULL), -- Russie
-    ('Femme', 12, 27, NULL), -- Uruguay
-    ('Femme', 12, 28, NULL), -- Afrique du Sud
-    ('Femme', 12, 29, NULL), -- Maroc
-    ('Femme', 12, 30, NULL), -- Arabie Saoudite
+    ('Femme', 12, 27, NULL), -- Égypte
+    ('Femme', 12, 28, NULL), -- République Tchèque
+    ('Femme', 12, 29, NULL), -- Estonie
+    ('Femme', 12, 30, NULL), -- Grèce
     ('Femme', 12, 31, NULL), -- Tunisie
     ('Femme', 12, 32, NULL); -- Saint Marin
     `;
@@ -722,12 +722,12 @@ const pool = require("./db");
       -- Terrain 3 (4 matchs)
       (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Croatie
       (3, 10, 26, '2026-01-01 14:00:00'),  -- Slovénie vs Russie
-      (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Uruguay
-      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs Afrique du Sud 
+      (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Égypte
+      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs République Tchèque 
       
       -- Terrain 4 (4 matchs)
-      (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Maroc
-      (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Arabie Saoudite
+      (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Estonie
+      (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Grèce
       (4, 15, 31, '2026-01-01 18:00:00'),  -- Pologne vs Tunisie
       (4, 16, 32, '2026-01-01 21:00:00');  -- Serbie vs Saint-Marin
   `;
@@ -1161,102 +1161,102 @@ const pool = require("./db");
     ('Muserskiy', 'Dmitriy', 'Masculin', '1988-01-01', 2.18, 13, 'Russie', 'Opposé', 26, NULL),
     ('Likhosherstov', 'Vadym', 'Masculin', '1989-01-01', 2.18, 14, 'Russie', 'Middle blocker', 26, 'Likhosherstov.png'),
 
-    -- Uruguay
-    ('Gomez', 'Matias', 'Masculin', '1992-03-16', 1.98, 1, 'Uruguay', 'Passeur', 27, NULL),
-    ('Rodriguez', 'Diego', 'Masculin', '1993-07-21', 1.97, 2, 'Uruguay', 'Attaquant', 27, NULL),
-    ('Fernandez', 'Lucas', 'Masculin', '1991-10-28', 2.00, 3, 'Uruguay', 'Central', 27, NULL),
-    ('Martinez', 'Nicolas', 'Masculin', '1994-01-11', 1.96, 4, 'Uruguay', 'Receveur-Attaquant', 27, NULL),
-    ('Diaz', 'Joaquin', 'Masculin', '1995-05-20', 2.01, 5, 'Uruguay', 'Central', 27, NULL),
-    ('Alvarez', 'Martin', 'Masculin', '1993-03-19', 1.95, 6, 'Uruguay', 'Attaquant', 27, NULL),
-    ('Silva', 'Facundo', 'Masculin', '1994-08-25', 1.97, 7, 'Uruguay', 'Receveur-Attaquant', 27, NULL),
-    ('Perez', 'Santiago', 'Masculin', '1992-12-05', 1.90, 8, 'Uruguay', 'Libero', 27, NULL),
-    ('Gimenez', 'Federico', 'Masculin', '1991-07-17', 2.00, 9, 'Uruguay', 'Attaquant', 27, NULL),
-    ('Lopez', 'Andres', 'Masculin', '1994-04-24', 1.98, 10, 'Uruguay', 'Receveur-Attaquant', 27, NULL),
-    ('Torres', 'Bruno', 'Masculin', '1993-11-07', 1.95, 11, 'Uruguay', 'Central', 27, NULL),
-    ('Vega', 'Maximiliano', 'Masculin', '1995-09-20', 1.97, 12, 'Uruguay', 'Attaquant', 27, NULL),
-    ('Morales', 'Emiliano', 'Masculin', '1992-05-13', 1.99, 13, 'Uruguay', 'Libero', 27, NULL),
-    ('Castro', 'Diego', 'Masculin', '1994-06-27', 2.01, 14, 'Uruguay', 'Central', 27, NULL),
+    --Égypte
+    ('Hamada', 'Mohamed', 'Masculin', '1998-06-14', 2.06, 1, 'Égypte', 'Central', 27, 'Hamada.png'),
+    ('Seoudy', 'Mohamed', 'Masculin', '1997-11-22', 2.08, 5, 'Égypte', 'Libero', 27, 'Seoudy.png'),
+    ('Reda', 'Mohamed', 'Masculin', '1996-05-28', 1.88, 6, 'Égypte', 'Libero', 27, NULL),
+    ('Ramadan', 'Mohamed', 'Masculin', '1995-03-15', 1.86, 7, 'Égypte', 'Libero', 27, NULL),
+    ('Elhossiny', 'Abd El-Aziz', 'Masculin', '1999-07-18', 2.00, 8, 'Égypte', 'Receveur-Attaquant', 27, NULL),
+    ('Asran', 'Mohamed', 'Masculin', '1993-08-14', 2.01, 9, 'Égypte', 'Receveur-Attaquant', 27, 'Asran.png'),
+    ('Yasso', 'Youssef', 'Masculin', '1998-01-10', 1.91, 11, 'Égypte', 'Passeur', 27, NULL),
+    ('Seif Abed', 'Mohamed', 'Masculin', '1997-04-12', 2.06, 14, 'Égypte', 'Attaquant', 27, 'SeifAbed.png'),
+    ('Said', 'Ahmed', 'Masculin', '1990-09-25', 2.02, 18, 'Égypte', 'Receveur-Attaquant', 27, NULL),
+    ('Deyo', 'Omar', 'Masculin', '1996-02-18', 2.03, 19, 'Égypte', 'Receveur-Attaquant', 27, 'Deyo.png'),
+    ('Azab', 'Ahmed', 'Masculin', '1997-03-17', 2.04, 22, 'Égypte', '¨Passeur', 27, 'Azab.png'),
+    ('Ellakany', 'Ahmed', 'Masculin', '1989-12-20', 1.92, 23, 'Égypte', 'Passeur', 27, NULL),
+    ('Elshahat', 'Ahmed', 'Masculin', '1999-08-11', 2.07, 24, 'Égypte', 'Central', 27, NULL),
+    ('Osama', 'Zeyad', 'Masculin', '2000-05-28', 2.05, 4, 'Égypte', 'Attaquant', 27, NULL),
 
-    -- Afrique du Sud
-    ('Nkosi', 'Thabo', 'Masculin', '1992-04-22', 1.98, 1, 'Afrique du Sud', 'Passeur', 28, NULL),
-    ('van der Merwe', 'Johan', 'Masculin', '1993-07-30', 1.97, 2, 'Afrique du Sud', 'Attaquant', 28, NULL),
-    ('Botha', 'Siyabonga', 'Masculin', '1991-10-15', 2.00, 3, 'Afrique du Sud', 'Central', 28, NULL),
-    ('Pieterse', 'Leroy', 'Masculin', '1994-01-19', 1.96, 4, 'Afrique du Sud', 'Receveur-Attaquant', 28, NULL),
-    ('Smith', 'Kagiso', 'Masculin', '1995-05-14', 2.01, 5, 'Afrique du Sud', 'Central', 28, NULL),
-    ('Mokoena', 'Sipho', 'Masculin', '1993-03-23', 1.95, 6, 'Afrique du Sud', 'Attaquant', 28, NULL),
-    ('Mahlangu', 'Thulani', 'Masculin', '1994-08-08', 1.97, 7, 'Afrique du Sud', 'Receveur-Attaquant', 28, NULL),
-    ('Dlamini', 'Sabelo', 'Masculin', '1992-12-11', 1.90, 8, 'Afrique du Sud', 'Libero', 28, NULL),
-    ('van Wyk', 'Hendrik', 'Masculin', '1991-07-21', 2.00, 9, 'Afrique du Sud', 'Attaquant', 28, NULL),
-    ('Jansen', 'Ruan', 'Masculin', '1994-04-25', 1.98, 10, 'Afrique du Sud', 'Receveur-Attaquant', 28, NULL),
-    ('Steyn', 'Gerrit', 'Masculin', '1993-11-12', 1.95, 11, 'Afrique du Sud', 'Central', 28, NULL),
-    ('Coetzee', 'Dylan', 'Masculin', '1995-09-08', 1.97, 12, 'Afrique du Sud', 'Attaquant', 28, NULL),
-    ('Botha', 'Riaan', 'Masculin', '1992-05-21', 1.99, 13, 'Afrique du Sud', 'Libero', 28, NULL),
-    ('van der Westhuizen', 'Frans', 'Masculin', '1994-06-29', 2.01, 14, 'Afrique du Sud', 'Central', 28, NULL),
+  -- République Tchèque 
+  ('Galabov', 'Donco', 'Masculin', '1997-03-08', 1.96, 3, 'République Tchèque', 'Attaquant', 28, 'Galabov.png'),
+  ('Drahonovsky', 'Jan', 'Masculin', '1999-10-08', 1.97, 4, 'République Tchèque', 'Receveur-Attaquant', 28, 'Drahonovsky.png'),
+  ('Zajicek', 'Adam', 'Masculin', '1995-01-20', 2.05, 5, 'République Tchèque', 'Central', 28, 'Zajicek.png'),
+  ('Monik', 'Jan', 'Masculin', '1998-02-14', 1.87, 6, 'République Tchèque', 'Libero', 28, 'Monik.png'),
+  ('Bartunek', 'Lubos', 'Masculin', '1991-05-18', 1.95, 9, 'République Tchèque', 'Passeur', 28, 'Bartunek.png'),
+  ('Vasina', 'Lukas', 'Masculin', '1996-08-14', 1.98, 11, 'République Tchèque', 'Receveur-Attaquant', 28, 'Vasina.png'),
+  ('Licek', 'Martin', 'Masculin', '1993-07-12', 1.99, 12, 'République Tchèque', 'Receveur-Attaquant', 28, NULL),
+  ('Srb', 'Filip', 'Masculin', '1999-06-18', 1.93, 16, 'République Tchèque', 'Passeur', 28, NULL),
+  ('Sotola', 'Martin', 'Masculin', '1996-04-30', 2.06, 17, 'République Tchèque', 'Attaquant', 28, NULL),
+  ('Kovarik', 'Adam', 'Masculin', '2001-08-25', 1.85, 19, 'République Tchèque', 'Libero', 28, NULL),
+  ('Indra', 'Patrik', 'Masculin', '1993-09-22', 2.03, 23, 'République Tchèque', 'Attaquant', 28, NULL),
+  ('Polak', 'Lukas', 'Masculin', '1995-11-25', 2.08, 25, 'République Tchèque', 'Central', 28, NULL),
+  ('Klimes', 'Antonin', 'Masculin', '2005-03-12', 2.07, 39, 'République Tchèque', 'Central', 28, NULL),
+  ('Benda', 'Vilem', 'Masculin', '2001-06-22', 2.00, 95, 'République Tchèque', 'Receveur-Attaquant', 28, NULL),
 
-    -- Maroc
-    ('El Amrani', 'Youssef', 'Masculin', '1992-04-18', 1.97, 1, 'Maroc', 'Passeur', 29, NULL),
-    ('Bouazza', 'Mohamed', 'Masculin', '1993-07-23', 1.96, 2, 'Maroc', 'Attaquant', 29, NULL),
-    ('Haddadi', 'Mehdi', 'Masculin', '1991-10-12', 2.00, 3, 'Maroc', 'Central', 29, NULL),
-    ('Benali', 'Rachid', 'Masculin', '1994-01-21', 1.96, 4, 'Maroc', 'Receveur-Attaquant', 29, NULL),
-    ('Bennani', 'Adil', 'Masculin', '1995-05-17', 2.01, 5, 'Maroc', 'Central', 29, NULL),
-    ('El Fassi', 'Yassine', 'Masculin', '1993-03-21', 1.95, 6, 'Maroc', 'Attaquant', 29, NULL),
-    ('Zeroual', 'Amine', 'Masculin', '1994-08-13', 1.97, 7, 'Maroc', 'Receveur-Attaquant', 29, NULL),
-    ('Ouhaddou', 'Rayan', 'Masculin', '1992-12-07', 1.90, 8, 'Maroc', 'Libero', 29, NULL),
-    ('Cherkaoui', 'Anas', 'Masculin', '1991-07-17', 2.00, 9, 'Maroc', 'Attaquant', 29, NULL),
-    ('El Idrissi', 'Sofiane', 'Masculin', '1994-04-22', 1.98, 10, 'Maroc', 'Receveur-Attaquant', 29, NULL),
-    ('Boukadida', 'Hamid', 'Masculin', '1993-11-09', 1.95, 11, 'Maroc', 'Central', 29, NULL),
-    ('Bouhaddi', 'Yassir', 'Masculin', '1995-09-25', 1.97, 12, 'Maroc', 'Attaquant', 29, NULL),
-    ('Amrani', 'Omar', 'Masculin', '1992-05-05', 1.99, 13, 'Maroc', 'Libero', 29, NULL),
-    ('El Khalfi', 'Mohammed', 'Masculin', '1994-06-20', 2.01, 14, 'Maroc', 'Central', 29, NULL),
+  -- Estonie 
+  ('Treial', 'Henri', 'Masculin', '1992-03-15', 2.02, 1, 'Estonie', 'Central', 29, 'Treial.png'),
+  ('Vanker', 'Renet', 'Masculin', '1998-05-22', 1.93, 2, 'Estonie', 'Passeur', 29, NULL),
+  ('Allik', 'Karli', 'Masculin', '1996-08-12', 1.92, 3, 'Estonie', 'Receveur-Attaquant', 29, 'Allik.png'),
+  ('Juhkami', 'Martti', 'Masculin', '1988-04-18', 1.95, 6, 'Estonie', 'Receveur-Attaquant', 29, 'Juhkami.png'),
+  ('Teppan', 'Renee', 'Masculin', '1993-07-25', 1.98, 7, 'Estonie', 'Attaquant', 29, NULL),
+  ('Tammearu', 'Märt', 'Masculin', '2001-02-14', 1.98, 8, 'Estonie', 'Passeur', 29, 'Tammearu.png'),
+  ('Täht', 'Robert', 'Masculin', '1993-11-08', 1.92, 9, 'Estonie', 'Libero', 29, 'Taht.png'),
+  ('Maar', 'Silver', 'Masculin', '1999-06-20', 1.84, 10, 'Estonie', 'Attaquant, 29, 'Maar.png'),
+  ('Venno', 'Oliver', 'Masculin', '1990-09-12', 2.10, 11, 'Estonie', 'Attaquant', 29, NULL),
+  ('Saar', 'Alari', 'Masculin', '1996-01-28', 1.77, 12, 'Estonie', 'Libero', 29, NULL),
+  ('Viiber', 'Robert', 'Masculin', '1997-05-16', 2.05, 16, 'Estonie', 'Passeur', 29, NULL),
+  ('Tammemaa', 'Timo', 'Masculin', '1991-08-30', 2.04, 17, 'Estonie', 'Central', 29, NULL),
+  ('Saaremaa', 'Alex', 'Masculin', '2000-03-22', 2.08, 18, 'Estonie', 'Central', 29, NULL),
+  ('Aganits', 'Andri', 'Masculin', '1993-12-15', 2.07, 19, 'Estonie', 'Central', 29, NULL),
 
-    -- Arabie Saoudite
-    ('Al-Shehri', 'Fahad', 'Masculin', '1992-03-14', 1.97, 1, 'Arabie Saoudite', 'Passeur', 30, NULL),
-    ('Al-Qahtani', 'Mohammed', 'Masculin', '1993-07-19', 1.96, 2, 'Arabie Saoudite', 'Attaquant', 30, NULL),
-    ('Al-Mutairi', 'Abdullah', 'Masculin', '1991-10-11', 2.00, 3, 'Arabie Saoudite', 'Central', 30, NULL),
-    ('Al-Harbi', 'Nasser', 'Masculin', '1994-01-19', 1.96, 4, 'Arabie Saoudite', 'Receveur-Attaquant', 30, NULL),
-    ('Al-Fahad', 'Saad', 'Masculin', '1995-05-21', 2.01, 5, 'Arabie Saoudite', 'Central', 30, NULL),
-    ('Al-Rashid', 'Khalid', 'Masculin', '1993-03-15', 1.95, 6, 'Arabie Saoudite', 'Attaquant', 30, NULL),
-    ('Al-Jaber', 'Yousef', 'Masculin', '1994-08-09', 1.97, 7, 'Arabie Saoudite', 'Receveur-Attaquant', 30, NULL),
-    ('Al-Zahrani', 'Omar', 'Masculin', '1992-12-08', 1.90, 8, 'Arabie Saoudite', 'Libero', 30, NULL),
-    ('Al-Hassan', 'Riyadh', 'Masculin', '1991-07-17', 2.00, 9, 'Arabie Saoudite', 'Attaquant', 30, NULL),
-    ('Al-Shammari', 'Fahad', 'Masculin', '1994-04-23', 1.98, 10, 'Arabie Saoudite', 'Receveur-Attaquant', 30, NULL),
-    ('Al-Mansour', 'Sami', 'Masculin', '1993-11-07', 1.95, 11, 'Arabie Saoudite', 'Central', 30, NULL),
-    ('Al-Khalid', 'Ahmed', 'Masculin', '1995-09-19', 1.97, 12, 'Arabie Saoudite', 'Attaquant', 30, NULL),
-    ('Al-Saud', 'Majed', 'Masculin', '1992-05-07', 1.99, 13, 'Arabie Saoudite', 'Libero', 30, NULL),
-    ('Al-Farsi', 'Tariq', 'Masculin', '1994-06-25', 2.01, 14, 'Arabie Saoudite', 'Central', 30, NULL),
+-- Grèce 
+('Kasampalis', 'Stavros', 'Masculin', '1995-04-15', 1.88, 1, 'Grèce', 'Passeur', 30, 'Kasampalis.png'),
+('Pitakoudis', 'Lampros', 'Masculin', '2002-08-22', 2.02, 2, 'Grèce', 'Central', 30, 'Pitakoudis.png'),
+('Chakas', 'Spyridon', 'Masculin', '2002-05-14', 1.87, 3, 'Grèce', 'Receveur-Attaquant', 30, 'Chakas.png'),
+('Dalakouras', 'Anestis', 'Masculin', '1993-08-12', 1.96, 6, 'Grèce', 'Receveur-Attaquant', 30, 'Dalakouras.png'),
+('Protopsaltis', 'Athanasios', 'Masculin', '1993-03-20', 1.85, 7, 'Grèce', 'Receveur-Attaquant', 30, 'Protopsaltis.png'),
+('Kotsakis', 'Froixos', 'Masculin', '1999-06-18', 1.95, 8, 'Grèce', 'Receveur-Attaquant', 30, NULL),
+('Petsias', 'Apostolos', 'Masculin', '2003-09-25', 1.93, 9, 'Grèce', 'Passeur', 30, NULL),
+('Mouchlias', 'Dimitrios', 'Masculin', '2001-01-12', 2.00, 11, 'Grèce', 'Attaquant', 30, NULL),
+('Voulkidis', 'Theodoros', 'Masculin', '1996-07-20', 2.01, 12, 'Grèce', 'Central', 30, 'Voulkidis.png'),
+('Galiotos', 'Markos', 'Masculin', '1996-12-04', 1.94, 14, 'Grèce', 'Passeur', 30, NULL),
+('Folias', 'Eleftherios', 'Masculin', '2003-03-25', 1.86, 16, 'Grèce', 'Libero', 30, NULL),
+('Vaiopoulos', 'Evangelos', 'Masculin', '1997-08-14', 2.03, 17, 'Grèce', 'Central', 30, NULL),
+('Aspiotis', 'Anastasios-Stamatios', 'Masculin', '1991-11-22', 2.00, 18, 'Grèce', 'Attaquant', 30, NULL),
+('Tziavras', 'Dimitrios', 'Masculin', '1999-05-08', 1.76, 33, 'Grèce', 'Libero', 30, NULL),
 
-    -- Tunisie
-    ('Ben Salah', 'Mohamed', 'Masculin', '1992-03-19', 1.97, 1, 'Tunisie', 'Passeur', 31, NULL),
-    ('Khemiri', 'Ahmed', 'Masculin', '1993-07-22', 1.96, 2, 'Tunisie', 'Attaquant', 31, NULL),
-    ('Trabelsi', 'Sami', 'Masculin', '1991-10-13', 2.00, 3, 'Tunisie', 'Central', 31, NULL),
-    ('Haddad', 'Youssef', 'Masculin', '1994-01-18', 1.96, 4, 'Tunisie', 'Receveur-Attaquant', 31, NULL),
-    ('Ben Youssef', 'Amine', 'Masculin', '1995-05-16', 2.01, 5, 'Tunisie', 'Central', 31, NULL),
-    ('Jaziri', 'Omar', 'Masculin', '1993-03-12', 1.95, 6, 'Tunisie', 'Attaquant', 31, NULL),
-    ('Masmoudi', 'Mohamed', 'Masculin', '1994-08-14', 1.97, 7, 'Tunisie', 'Receveur-Attaquant', 31, NULL),
-    ('Bouazizi', 'Ali', 'Masculin', '1992-12-09', 1.90, 8, 'Tunisie', 'Libero', 31, NULL),
-    ('Ben Amor', 'Sofiene', 'Masculin', '1991-07-21', 2.00, 9, 'Tunisie', 'Attaquant', 31, NULL),
-    ('Gharbi', 'Anis', 'Masculin', '1994-04-20', 1.98, 10, 'Tunisie', 'Receveur-Attaquant', 31, NULL),
-    ('Chakroun', 'Rami', 'Masculin', '1993-11-08', 1.95, 11, 'Tunisie', 'Central', 31, NULL),
-    ('Ben Ali', 'Hatem', 'Masculin', '1995-09-19', 1.97, 12, 'Tunisie', 'Attaquant', 31, NULL),
-    ('Triki', 'Mohamed', 'Masculin', '1992-05-06', 1.99, 13, 'Tunisie', 'Libero', 31, NULL),
-    ('Khaldi', 'Firas', 'Masculin', '1994-06-24', 2.01, 14, 'Tunisie', 'Central', 31, NULL),
+-- Porto Rico (ID équipe: 31)
+('Rivera', 'Maurice', 'Masculin', '1990-05-12', 1.93, 1, 'Porto Rico', 'Passeur', 31, NULL),
+('Morales', 'Gabriel', 'Masculin', '1993-08-20', 2.01, 10, 'Porto Rico', 'Attaquant', 31, NULL),
+('Torres', 'Victor', 'Masculin', '1995-11-15', 2.05, 11, 'Porto Rico', 'Central', 31, NULL),
+('Rodriguez', 'Eddie', 'Masculin', '1992-02-28', 1.98, 7, 'Porto Rico', 'Receveur-Attaquant', 31, NULL),
+('Gonzalez', 'Hector', 'Masculin', '1994-06-18', 1.82, 5, 'Porto Rico', 'Libero', 31, NULL),
+('Cruz', 'Pablo', 'Masculin', '1996-09-25', 1.99, 8, 'Porto Rico', 'Attaquant', 31, NULL),
+('Santiago', 'Luis', 'Masculin', '1991-12-04', 2.03, 12, 'Porto Rico', 'Central', 31, NULL),
+('Diaz', 'Jose', 'Masculin', '1997-03-14', 1.90, 3, 'Porto Rico', 'Passeur', 31, NULL),
+('Figueroa', 'Ramon', 'Masculin', '1993-07-22', 2.00, 9, 'Porto Rico', 'Receveur-Attaquant', 31, NULL),
+('Delgado', 'Carlos', 'Masculin', '1995-10-08', 2.04, 13, 'Porto Rico', 'Central', 31, NULL),
+('Colon', 'Angel', 'Masculin', '1994-01-30', 1.96, 4, 'Porto Rico', 'Attaquant', 31, NULL),
+('Ramos', 'Miguel', 'Masculin', '1992-04-16', 1.85, 6, 'Porto Rico', 'Libero', 31, NULL),
+('Vazquez', 'Christian', 'Masculin', '1998-08-11', 1.97, 2, 'Porto Rico', 'Receveur-Attaquant', 31, NULL),
+('Pagan', 'Jorge', 'Masculin', '1996-11-28', 2.02, 14, 'Porto Rico', 'Central', 31, NULL),
 
-    -- Saint-Marin
-    ('Berti', 'Marco', 'Masculin', '1992-03-20', 1.97, 1, 'Saint-Marin', 'Passeur', 32, NULL),
-    ('Pettinelli', 'Luca', 'Masculin', '1993-07-24', 1.96, 2, 'Saint-Marin', 'Attaquant', 32, NULL),
-    ('Gasperoni', 'Matteo', 'Masculin', '1991-10-14', 2.00, 3, 'Saint-Marin', 'Central', 32, NULL),
-    ('Berardi', 'Alessandro', 'Masculin', '1994-01-20', 1.96, 4, 'Saint-Marin', 'Receveur-Attaquant', 32, NULL),
-    ('Mancini', 'Fabio', 'Masculin', '1995-05-18', 2.01, 5, 'Saint-Marin', 'Central', 32, NULL),
-    ('Toni', 'Daniele', 'Masculin', '1993-03-14', 1.95, 6, 'Saint-Marin', 'Attaquant', 32, NULL),
-    ('Cecchini', 'Andrea', 'Masculin', '1994-08-15', 1.97, 7, 'Saint-Marin', 'Receveur-Attaquant', 32, NULL),
-    ('Battistini', 'Francesco', 'Masculin', '1992-12-10', 1.90, 8, 'Saint-Marin', 'Libero', 32, NULL),
-    ('Mularoni', 'Gabriele', 'Masculin', '1991-07-22', 2.00, 9, 'Saint-Marin', 'Attaquant', 32, NULL),
-    ('Baldacci', 'Stefano', 'Masculin', '1994-04-21', 1.98, 10, 'Saint-Marin', 'Receveur-Attaquant', 32, NULL),
-    ('Guidi', 'Simone', 'Masculin', '1993-11-09', 1.95, 11, 'Saint-Marin', 'Central', 32, NULL),
-    ('Canti', 'Lorenzo', 'Masculin', '1995-09-20', 1.97, 12, 'Saint-Marin', 'Attaquant', 32, NULL),
-    ('Tomassini', 'Alberto', 'Masculin', '1992-05-07', 1.99, 13, 'Saint-Marin', 'Libero', 32, NULL),
-    ('Fabbri', 'Riccardo', 'Masculin', '1994-06-26', 2.01, 14, 'Saint-Marin', 'Central', 32, NULL);
-    `;
+-- Grèce (ID équipe: 32)
+('Christoforidis', 'Nikos', 'Masculin', '1992-03-18', 1.94, 1, 'Grèce', 'Passeur', 32, NULL),
+('Papadopoulos', 'Dimitris', 'Masculin', '1993-06-25', 2.03, 10, 'Grèce', 'Attaquant', 32, NULL),
+('Kazazis', 'Georgios', 'Masculin', '1994-09-14', 2.06, 11, 'Grèce', 'Central', 32, NULL),
+('Fragkos', 'Angelos', 'Masculin', '1991-11-22', 1.98, 7, 'Grèce', 'Receveur-Attaquant', 32, NULL),
+('Zisimos', 'Michalis', 'Masculin', '1995-02-08', 1.84, 5, 'Grèce', 'Libero', 32, NULL),
+('Tzioumakas', 'Kostas', 'Masculin', '1996-05-16', 2.00, 8, 'Grèce', 'Attaquant', 32, NULL),
+('Athanasiadis', 'Mitar', 'Masculin', '1992-08-30', 2.05, 12, 'Grèce', 'Central', 32, NULL),
+('Raptis', 'Theodoros', 'Masculin', '1997-12-04', 1.91, 3, 'Grèce', 'Passeur', 32, NULL),
+('Manoloudis', 'Alexandros', 'Masculin', '1994-03-20', 2.01, 9, 'Grèce', 'Receveur-Attaquant', 32, NULL),
+('Kagialis', 'Dimitrios', 'Masculin', '1993-07-12', 2.04, 13, 'Grèce', 'Central', 32, NULL),
+('Spanos', 'Ioannis', 'Masculin', '1995-10-25', 1.97, 4, 'Grèce', 'Attaquant', 32, NULL),
+('Masoutis', 'Thodoris', 'Masculin', '1996-01-18', 1.86, 6, 'Grèce', 'Libero', 32, NULL),
+('Petreas', 'Andreas', 'Masculin', '1998-04-09', 1.99, 2, 'Grèce', 'Receveur-Attaquant', 32, NULL),
+('Mouchlias', 'Stefanos', 'Masculin', '1994-06-28', 2.02, 14, 'Grèce', 'Central', 32, NULL);
+    `;  
 
     await pool.query(insertJoueurEquipe);
 
