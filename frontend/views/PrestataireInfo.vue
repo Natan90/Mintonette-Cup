@@ -235,13 +235,13 @@
             <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
             <button
               class="btn_activate"
-              v-if="!item.activate && !pathAdd"
+              v-if="!item.activate"
               @click="activateService(item)">
               Activer
             </button>
             <button
               class="btn_desactivate"
-              v-else-if="item.activate && !pathAdd"
+              v-else-if="item.activate "
               @click="desactivatingService(item)">
               Désactiver
             </button>

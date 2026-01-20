@@ -24,7 +24,12 @@
             <span class="info_value">{{ oneService.nb_participants }}</span>
           </div>
         </div>
-        <button @click="addService(oneService)">S'inscrire</button>
+        <!-- Bouton S'inscrire uniquement pour les services des autres prestataires -->
+        <button
+          v-if="!(userStore.isConnected && userStore.prestaId == idPresta)"
+          @click="addService(oneService)">
+          S'inscrire
+        </button>
       </div>
     </div>
   </div>
@@ -143,31 +148,22 @@
                     <button class="btn_info" @click="getOneService(item)">
                       Voir
                     </button>
+                    <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
                     <button
                       class="btn_activate"
-                      v-if="
-                        !item.activate &&
-                        userStore.isConnected &&
-                        userStore.prestaId == idPresta
-                      "
+                      v-if="!item.activate && userStore.isConnected && userStore.prestaId == idPresta"
                       @click="activateService(item)">
                       Activer
                     </button>
                     <button
                       class="btn_desactivate"
-                      v-else-if="
-                        item.activate &&
-                        userStore.isConnected &&
-                        userStore.prestaId == idPresta
-                      "
+                      v-else-if="item.activate && userStore.isConnected && userStore.prestaId == idPresta"
                       @click="desactivatingService(item)">
                       Désactiver
                     </button>
-                    <button
+                    <button 
                       class="btn_supprimer"
-                      v-if="
-                        userStore.isConnected && userStore.prestaId == idPresta
-                      ">
+                      v-if="userStore.isConnected && userStore.prestaId == idPresta">
                       Supprimer
                     </button>
                   </span>
@@ -448,11 +444,23 @@ function actionsService(service) {
     (s) => s.id_service === service.id_service
   );
   if (index !== -1) {
-    services.value[index].activate = !services.value[index].activate;
+    // Inverser l'état activate
+    const newActivateState = !services.value[index].activate;
+    services.value[index].activate = newActivateState;
 
-    // Mettre à jour dans localStorage si le service y existe
-    const serviceToUpdate = { ...services.value[index] };
-    localData.update("services", service.id_service, serviceToUpdate);
+    // Mettre à jour dans localStorage
+    localData.update(
+      "services",
+      service.id_service,
+      { activate: newActivateState },
+      "id_service"
+    );
+
+    console.log(
+      `Service ${service.id_service} ${
+        newActivateState ? "activé" : "désactivé"
+      }`
+    );
   }
 }
 
