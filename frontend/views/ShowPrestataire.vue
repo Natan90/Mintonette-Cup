@@ -151,19 +151,29 @@
                     <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
                     <button
                       class="btn_activate"
-                      v-if="!item.activate && userStore.isConnected && userStore.prestaId == idPresta"
+                      v-if="
+                        !item.activate &&
+                        userStore.isConnected &&
+                        userStore.prestaId == idPresta
+                      "
                       @click="activateService(item)">
                       Activer
                     </button>
                     <button
                       class="btn_desactivate"
-                      v-else-if="item.activate && userStore.isConnected && userStore.prestaId == idPresta"
+                      v-else-if="
+                        item.activate &&
+                        userStore.isConnected &&
+                        userStore.prestaId == idPresta
+                      "
                       @click="desactivatingService(item)">
                       Désactiver
                     </button>
-                    <button 
+                    <button
                       class="btn_supprimer"
-                      v-if="userStore.isConnected && userStore.prestaId == idPresta">
+                      v-if="
+                        userStore.isConnected && userStore.prestaId == idPresta
+                      ">
                       Supprimer
                     </button>
                   </span>
@@ -267,7 +277,7 @@ watch(
   () => locale.value,
   (newLang) => {
     updateDescription();
-  }
+  },
 );
 
 onMounted(() => {
@@ -339,10 +349,10 @@ function getValuesPrestataire() {
 
   // Fusionner prestataires JSON + localStorage (priorité au localStorage)
   const localStoragePrestaIds = prestatairesLocalStorage.map(
-    (p) => p.id_prestataire
+    (p) => p.id_prestataire,
   );
   const prestatairesJSONFiltered = PrestataireData.filter(
-    (p) => !localStoragePrestaIds.includes(p.id_prestataire)
+    (p) => !localStoragePrestaIds.includes(p.id_prestataire),
   );
   const allPrestataires = [
     ...prestatairesJSONFiltered,
@@ -351,10 +361,10 @@ function getValuesPrestataire() {
 
   // Fusionner utilisateurs JSON + localStorage
   const localStorageUserIds = utilisateursLocalStorage.map(
-    (u) => u.id_utilisateur
+    (u) => u.id_utilisateur,
   );
   const utilisateursJSONFiltered = UtilisateurData.filter(
-    (u) => !localStorageUserIds.includes(u.id_utilisateur)
+    (u) => !localStorageUserIds.includes(u.id_utilisateur),
   );
   const allUtilisateurs = [
     ...utilisateursJSONFiltered,
@@ -364,17 +374,17 @@ function getValuesPrestataire() {
   // Fusionner services JSON + localStorage
   const localStorageServiceIds = servicesLocalStorage.map((s) => s.id_service);
   const servicesJSONFiltered = ServicesData.filter(
-    (s) => !localStorageServiceIds.includes(s.id_service)
+    (s) => !localStorageServiceIds.includes(s.id_service),
   );
   const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
 
   // Trouver le prestataire
   const presta = allPrestataires.find(
-    (p) => p.id_prestataire === Number(idPresta)
+    (p) => p.id_prestataire === Number(idPresta),
   );
   if (presta) {
     const utilisateur = allUtilisateurs.find(
-      (u) => u.id_utilisateur === presta.id_utilisateur
+      (u) => u.id_utilisateur === presta.id_utilisateur,
     );
     onePresta.value = {
       ...presta,
@@ -441,7 +451,7 @@ function activateService(service) {
 function actionsService(service) {
   desactivateService.value = service;
   const index = services.value.findIndex(
-    (s) => s.id_service === service.id_service
+    (s) => s.id_service === service.id_service,
   );
   if (index !== -1) {
     // Inverser l'état activate
@@ -453,13 +463,13 @@ function actionsService(service) {
       "services",
       service.id_service,
       { activate: newActivateState },
-      "id_service"
+      "id_service",
     );
 
     console.log(
       `Service ${service.id_service} ${
         newActivateState ? "activé" : "désactivé"
-      }`
+      }`,
     );
   }
 }
@@ -486,7 +496,7 @@ function getOneService(service) {
   // Chercher dans localStorage d'abord, puis dans JSON
   const servicesLocalStorage = localData.getAll("services");
   let serviceData = servicesLocalStorage.find(
-    (s) => s.id_service === service.id_service
+    (s) => s.id_service === service.id_service,
   );
 
   if (!serviceData) {
@@ -528,7 +538,7 @@ function addService(service) {
   const existingItem = panier.find(
     (item) =>
       item.service_id === service.id_service &&
-      item.id_user === userStore.userId
+      item.id_user === userStore.userId,
   );
 
   if (existingItem) {
