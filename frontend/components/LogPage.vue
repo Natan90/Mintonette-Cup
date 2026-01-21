@@ -286,12 +286,7 @@ function getValuesConnexion() {
   }
 
   const utilisateursData = localData.getAll("utilisateurs");
-  console.log("🔍 Tous les utilisateurs dans localStorage:", utilisateursData);
-  console.log("🔍 Nombre d'utilisateurs:", utilisateursData.length);
-  console.log("🔑 Tentative de connexion avec:", {
-    login: login_utilisateur_connexion.value,
-    mdp: mdp_utilisateur_connexion.value,
-  });
+ 
 
   const user = utilisateursData.find(
     (u) =>
@@ -299,16 +294,10 @@ function getValuesConnexion() {
       u.mdp_utilisateur === mdp_utilisateur_connexion.value
   );
 
-  console.log("✅ Utilisateur trouvé?", user ? "OUI" : "NON");
-  if (user) {
-    console.log("👤 Utilisateur:", user);
-  }
+ 
 
   if (user) {
-    console.log(
-      "✅ AVANT connexion - localStorage:",
-      JSON.parse(localStorage.getItem("mintonette_utilisateurs"))
-    );
+   
 
     userStore.setUser(user.id_utilisateur);
     if (user.isadmin || user.id_utilisateur === 1) {
@@ -316,13 +305,23 @@ function getValuesConnexion() {
     } else {
       userStore.setRole("user");
     }
+
+    if (user.ispresta) {
+      const prestataireData = localData.getAll("prestataires");
+      const prestataire = prestataireData.find(
+        (p) => p.id_utilisateur == user.id_utilisateur
+      );
+      if (prestataire) {
+        userStore.prestaId = prestataire.id_prestataire;
+      }
+    }
+
     userId.value = user.id_utilisateur;
     message.value = `Utilisateur connecté avec l'ID : ${user.id_utilisateur}`;
     connexion.value = true;
 
     console.log("Utilisateur connecté depuis localStorage:", user);
     console.log(
-      "✅ APRES connexion - localStorage:",
       JSON.parse(localStorage.getItem("mintonette_utilisateurs"))
     );
 

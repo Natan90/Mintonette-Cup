@@ -1,6 +1,6 @@
 {
   "barreNav": {
-    "carte": "Map",
+    "carte": "Interactive Map",
     "prestataire": "Service Providers",
     "aPropos": "About",
     "partenaire": "Our Partners",
@@ -215,7 +215,7 @@
   "filter": {
     "titleFilter": "Find the Service Providers of the Mintonette Cup 2026!",
     "slider": {
-      "prestataire":"Service Provider",
+      "prestataire": "Service Provider",
       "service": "Service"
     },
     "name": {

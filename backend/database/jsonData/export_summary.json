@@ -1,5 +1,5 @@
 {
-  "exportDate": "2026-01-07T18:36:54.491Z",
+  "exportDate": "2026-01-10T13:30:25.529Z",
   "totalTables": 22,
   "tables": [
     {
@@ -24,7 +24,7 @@
     },
     {
       "name": "Prestataire",
-      "count": 4
+      "count": 3
     },
     {
       "name": "Panier",
@@ -32,7 +32,7 @@
     },
     {
       "name": "Services",
-      "count": 13
+      "count": 12
     },
     {
       "name": "Panier_Service",
