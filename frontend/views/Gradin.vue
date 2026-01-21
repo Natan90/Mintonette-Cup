@@ -429,6 +429,11 @@ function UpdateSeatStatus(index) {
 
 function AddToCart() {
   if (!globalSelectedSeats.value.length) return;
+  if (!userStore.isConnected) {
+    router.push({
+      name: "Connexion_utilisateur"
+    })
+  }
   const panier = JSON.parse(localStorage.getItem("panier") || "[]");
 
   globalSelectedSeats.value.forEach((seat) => {
