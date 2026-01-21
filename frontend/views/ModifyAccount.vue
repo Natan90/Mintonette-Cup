@@ -143,10 +143,10 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
-import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
 // import axios from 'axios';
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
+import localData from "../../backend/database/localData.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -176,24 +176,29 @@ onMounted(() => {
     return;
   }
 
-  const user = utilisateursData.find(
-    (u) => u.id_utilisateur === userId
-  );
+  try {
+    const utilisateursData = localData.getAll('utilisateurs');
+    const user = utilisateursData.find((u) => u.id_utilisateur === userId);
 
-  if (user) {
-    formData.value = {
-      prenom: user.prenom_utilisateur || "",
-      nom: user.nom_utilisateur || "",
-      login: user.login_utilisateur || "",
-      mail: user.mail_utilisateur || "",
-      tel_utilisateur: user.tel_utilisateur || "",
-      sexe: user.sexe_utilisateur || "",
-    };
+    if (user) {
+      formData.value = {
+        prenom: user.prenom_utilisateur || "",
+        nom: user.nom_utilisateur || "",
+        login: user.login_utilisateur || "",
+        mail: user.mail_utilisateur || "",
+        tel_utilisateur: user.tel_utilisateur || "",
+        sexe: user.sexe_utilisateur || "",
+      };
 
-    if (user.photo_profil_utilisateur) {
-      photoPreview.value = `data:image/jpeg;base64,${user.photo_profil_utilisateur}`;
+      if (user.photo_profil_utilisateur) {
+        photoPreview.value = `data:image/jpeg;base64,${user.photo_profil_utilisateur}`;
+      }
+    } else {
+      message.value = t("account.errorLoading");
+      messageType.value = "error";
     }
-  } else {
+  } catch (error) {
+    console.error('Erreur lors du chargement:', error);
     message.value = t("account.errorLoading");
     messageType.value = "error";
   }
@@ -265,13 +270,39 @@ const updateUserInfo = () => {
   isSubmitting.value = true;
   message.value = "";
 
-  message.value = t("account.updateSuccess");
-  messageType.value = "success";
+  try {
+    // Mettre à jour l'utilisateur dans le localStorage
+    const updates = {
+      prenom_utilisateur: formData.value.prenom,
+      nom_utilisateur: formData.value.nom,
+      login_utilisateur: formData.value.login,
+      mail_utilisateur: formData.value.mail,
+      tel_utilisateur: formData.value.tel_utilisateur,
+      sexe_utilisateur: formData.value.sexe
+    };
 
-  setTimeout(() => {
-    router.push({ name: "Home" });
+    const updatedUser = localData.update('utilisateurs', userId, updates, 'id_utilisateur');
+
+    if (updatedUser) {
+      message.value = t("account.updateSuccess");
+      messageType.value = "success";
+      console.log('Utilisateur mis à jour dans localStorage:', updatedUser);
+
+      setTimeout(() => {
+        router.push({ name: "ShowAccount", params: { userId: userId, lang: route.params.lang } });
+        isSubmitting.value = false;
+      }, 2000);
+    } else {
+      message.value = t("account.updateError");
+      messageType.value = "error";
+      isSubmitting.value = false;
+    }
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour:', error);
+    message.value = t("account.updateError");
+    messageType.value = "error";
     isSubmitting.value = false;
-  }, 2000);
+  }
 };
 
 // const updateUserInfo = async () => {
