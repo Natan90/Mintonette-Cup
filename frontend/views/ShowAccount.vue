@@ -58,7 +58,10 @@
 
         <div class="boutons">
           <router-link
-            :to="{ name: 'ModifyAccount', params: { lang: t.value } }"
+            :to="{ name: 'ModifyAccount', params: { 
+              userId: userId,
+              lang: locale
+              } }"
             class="pointer">
             {{ $t("account.modify") }}
           </router-link>
@@ -111,7 +114,7 @@ const route = useRoute();
 const userStore = useUserStore();
 const navStore = useNavigationStore();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const loading = ref(true);
 const message = ref("");

@@ -31,7 +31,7 @@
           <img src="/OwnedSeat.svg" alt="" />
           <p>{{ $t("gradin.siegeproprio") }}</p>
           <img src="/SelectionnedSeat.svg" alt="" />
-          <p>{{ $t("gradin.siegeDispo") }}</p>
+          <p>{{ $t("gradin.siegeSelec") }}</p>
         </div>
         <div v-if="idMatch" class="matchHeader">
           <h3>Réservation de place</h3>
@@ -304,13 +304,10 @@ function getSeatPrice(seat) {
 //   }
 // });
 function fetchGradin() {
-  // Charger les sièges depuis localStorage
   const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
 
-  // Créer une Map pour déduplication par clé unique
   const siegesMap = new Map();
 
-  // Ajouter d'abord les sièges du JSON
   siegesData
     .filter(
       (seat) =>
@@ -321,7 +318,6 @@ function fetchGradin() {
       siegesMap.set(key, seat);
     });
 
-  // Puis écraser avec les sièges de localStorage (priorité)
   siegesLocal
     .filter(
       (seat) =>
@@ -332,7 +328,6 @@ function fetchGradin() {
       siegesMap.set(key, seat);
     });
 
-  // Convertir la Map en tableau et mapper les états
   const seatsForZone = Array.from(siegesMap.values()).map((seat) => {
     let state = "available";
 

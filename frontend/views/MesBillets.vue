@@ -67,8 +67,10 @@ function fetchBillets() {
   error.value = null;
 
   try {
-    billets.value = siegesData.filter(
-      (seat) => seat.est_reserve && seat.id_utilisateur === userStore.userId
+    const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
+    billets.value = siegesLocal.filter(
+      (seat) =>
+        seat.est_reserve === true && seat.id_utilisateur === userStore.userId,
     );
   } catch (err) {
     console.error("Erreur en récupérant les billets :", err);

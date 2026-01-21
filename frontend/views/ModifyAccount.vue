@@ -140,7 +140,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
 import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
@@ -148,6 +148,7 @@ import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 
+const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const { t } = useI18n();
@@ -158,6 +159,8 @@ const message = ref("");
 const messageType = ref("");
 const photoPreview = ref(null);
 const photoFile = ref(null);
+
+const userId = Number(route.params.userId);
 
 const formData = ref({
   prenom: "",
@@ -174,7 +177,7 @@ onMounted(() => {
   }
 
   const user = utilisateursData.find(
-    (u) => u.id_utilisateur === userStore.userId
+    (u) => u.id_utilisateur === userId
   );
 
   if (user) {

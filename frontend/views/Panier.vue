@@ -56,12 +56,12 @@
       Procéder au paiement
     </button>
     <button @click="reset" class="btn btn-danger">Vider le panier</button>
-    <button
+    <!-- <button
       @click="addTestSeats"
       class="btn btn-test"
       title="Pour développement uniquement">
       + Ajouter places test
-    </button>
+    </button> -->
     <button v-if="fromZone" @click="backToBleacher" class="btn btn-secondary">
       Retour au gradin {{ fromZone }}
     </button>

@@ -117,7 +117,7 @@ const routes = [
             component: MesBillets,
           },
           {
-            path: "profil/modifier",
+            path: "profil/modifier/:userId",
             name: "ModifyAccount",
             component: ModifyAccount,
           },
@@ -158,7 +158,7 @@ const routes = [
         path: "Information",
         name: "Information",
         component: Information,
-      }
+      },
     ],
   },
   {
