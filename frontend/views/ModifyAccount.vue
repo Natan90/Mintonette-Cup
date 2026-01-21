@@ -177,7 +177,7 @@ onMounted(() => {
   }
 
   try {
-    const utilisateursData = localData.getAll('utilisateurs');
+    const utilisateursData = localData.getAll("utilisateurs");
     const user = utilisateursData.find((u) => u.id_utilisateur === userId);
 
     if (user) {
@@ -198,7 +198,7 @@ onMounted(() => {
       messageType.value = "error";
     }
   } catch (error) {
-    console.error('Erreur lors du chargement:', error);
+    console.error("Erreur lors du chargement:", error);
     message.value = t("account.errorLoading");
     messageType.value = "error";
   }
@@ -278,18 +278,26 @@ const updateUserInfo = () => {
       login_utilisateur: formData.value.login,
       mail_utilisateur: formData.value.mail,
       tel_utilisateur: formData.value.tel_utilisateur,
-      sexe_utilisateur: formData.value.sexe
+      sexe_utilisateur: formData.value.sexe,
     };
 
-    const updatedUser = localData.update('utilisateurs', userId, updates, 'id_utilisateur');
+    const updatedUser = localData.update(
+      "utilisateurs",
+      userId,
+      updates,
+      "id_utilisateur",
+    );
 
     if (updatedUser) {
       message.value = t("account.updateSuccess");
       messageType.value = "success";
-      console.log('Utilisateur mis à jour dans localStorage:', updatedUser);
+      console.log("Utilisateur mis à jour dans localStorage:", updatedUser);
 
       setTimeout(() => {
-        router.push({ name: "ShowAccount", params: { userId: userId, lang: route.params.lang } });
+        router.push({
+          name: "ShowAccount",
+          params: { userId: userId, lang: route.params.lang },
+        });
         isSubmitting.value = false;
       }, 2000);
     } else {
@@ -298,7 +306,7 @@ const updateUserInfo = () => {
       isSubmitting.value = false;
     }
   } catch (error) {
-    console.error('Erreur lors de la mise à jour:', error);
+    console.error("Erreur lors de la mise à jour:", error);
     message.value = t("account.updateError");
     messageType.value = "error";
     isSubmitting.value = false;
