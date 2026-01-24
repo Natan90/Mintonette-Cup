@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../../database/db");
-const { log } = require("node:console");
 
 /**
  * @swagger
@@ -12,7 +11,7 @@ const { log } = require("node:console");
 
 /**
  * @swagger
- * /siege/show:
+ * /gradin/show:
  *   get:
  *     summary: Récupère tous les sièges
  *     tags: [Sieges]
@@ -75,7 +74,7 @@ router.get("/show", async (req, res) => {
 
 /**
  * @swagger
- * /siege/update:
+ * /gradin/update:
  *   put:
  *     summary: Met à jour l’état d’un siège
  *     tags: [Sieges]
@@ -163,7 +162,7 @@ router.put("/update", async (req, res) => {
 
 /**
  * @swagger
- * /siege/panier:
+ * /gradin/panier:
  *   put:
  *     summary: Met à jour le panier d’un siège
  *     tags: [Sieges]
@@ -274,7 +273,7 @@ router.delete("/panier/remove", async (req, res) => {
 
 /**
  * @swagger
- * /siege/panier/show:
+ * /gradin/panier/show:
  *   get:
  *     summary: Récupère les sièges présents dans le panier
  *     tags: [Sieges]

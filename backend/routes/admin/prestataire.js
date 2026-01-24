@@ -48,7 +48,7 @@ router.patch("/validate/:id", async (req, res) => {
     const checkPresta = await client.query(
       "SELECT id_utilisateur FROM Prestataire WHERE id_prestataire = $1 AND waitingforadmin = true",
       [id_presta]
-    );
+    );  
 
     if (checkPresta.rows.length === 0) {
       await client.query("ROLLBACK");
