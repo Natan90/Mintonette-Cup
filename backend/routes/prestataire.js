@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const prestataireController = require("../controllers/prestataire/prestataire.controller");
-const prestataireMiddleware = require("../middlewares/prestataire/prestataire.middlware");
+const prestataireController = require("../controllers/prestataire.controller");
+const prestataireMiddleware = require("../middlewares/prestataire.middlware");
 
 // GET prestataire
 router.get("/show");

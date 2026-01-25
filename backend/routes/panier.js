@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const panierController = require("../controllers/panier/panier.controller");
-const panierMiddleware = require("../middlewares/panier/panier.middleware");
+const panierController = require("../controllers/panier.controller");
+const panierMiddleware = require("../middlewares/panier.middleware");
 
 // GET panier par utilisateur
 router.get("/show/:id_user", panierController.getPanier);

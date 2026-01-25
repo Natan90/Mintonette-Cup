@@ -3,8 +3,6 @@ const router = express.Router();
 const pool = require("../../database/db");
 
 router.get("/show", async (req, res) => {
-  const id_service = req.params.id;
-
   try {
     const result = await pool.query(
       `SELECT * FROM Services`

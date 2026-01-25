@@ -1,10 +1,10 @@
-const panierService = require("../../services/panier/panier.service");
+const panierService = require("../services/panier.service");
 
 exports.getPanier = async (req, res) => {
   try {
     const { id_user } = req.params;
     const result = await panierService.getPanierByUser(id_user);
-    res.json(result);
+    return res.status(201).json(result);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
