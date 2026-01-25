@@ -1,12 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 
-const authRoutes = require("./routes/utilisateurs/authRoutes");
+const authRoutes = require("./routes/utilisateur");
 // const paysRoutes = require("./routes/equipes/equipes");
 const prestataireRoutes = require("./routes/prestataire/prestataire");
 const type_prestataireRoutes = require("./routes/type_prestataire");
 const serviceRoute = require("./routes/service");
-const gradins = require("./routes/gradins/gradin");
+const gradins = require("./routes/gradin");
 const adminRoutes = require("./routes/admin/index");
 const equipesRoutes = require("./routes/equipes/equipes");
 const panierRoutes = require("./routes/panier");

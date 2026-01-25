@@ -1,8 +1,9 @@
-const prestataireService = require("../../services/prestataire.service");
+const prestataireService = require("../services/prestataire.service");
 
 exports.getPrestataire = async (req, res) => {
   try {
-    const result = await prestataireService.res.json(result);
+    const result = await prestataireService.getPrestataire();
+    return res.status(201).json(result);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur interne" });
@@ -54,7 +55,6 @@ exports.becomePrestataire = async (req, res) => {
       user: newPresta,
     });
   } catch (err) {
-    m;
     if (err.status && err.message) {
       return res.status(err.status).json({ error: err.message });
     }

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import apiAxios from "./axios.service";
 
-export const userPanierStore = defineStore("panier", () => {
+export const usePanierStore = defineStore("panier", () => {
 
     async function GetPanierByUser(id_user) {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
