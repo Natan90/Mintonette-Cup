@@ -10,6 +10,8 @@ async function getGradinByMatchId(id_match) {
 };
 
 async function updateGradin(gradin) {
+    const { est_reserve, numero_colonne, numero_ligne, zone, matchId, id_utilisateur, } = gradin;
+
     const result = await pool.query(
       `
       UPDATE Siege

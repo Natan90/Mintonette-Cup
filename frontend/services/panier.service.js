@@ -19,7 +19,7 @@ export const usePanierStore = defineStore("panier", () => {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
 
         try {
-            const res = await apiAxios.get("/panier/add", {
+            const res = await apiAxios.post("/panier/add", {
                 type: type,
                 id_user: id_user
             });
@@ -34,7 +34,7 @@ export const usePanierStore = defineStore("panier", () => {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
 
         try {
-            const res = await apiAxios.get("/panier/delete", {
+            const res = await apiAxios.delete("/panier/delete", {
                 type: type,
                 id_user: id_user
             });
