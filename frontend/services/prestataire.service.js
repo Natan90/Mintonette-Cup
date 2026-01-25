@@ -13,11 +13,11 @@ export const usePrestataireStore = defineStore("prestataire", () => {
         }
     }
 
-    async function GetPrestataireById(idPresta) {
-        if (!idPresta) handleError("L'id du prestataire est obligatoire");
+    async function GetPrestataireById(id_presta) {
+        if (!id_presta) handleError("L'id du prestataire est obligatoire");
 
         try {
-            const res = await apiAxios.get(`/prestataire/show/${idPresta}`);
+            const res = await apiAxios.get(`/prestataire/show/${id_presta}`);
 
             return res.data;
         } catch (error) {
@@ -42,11 +42,21 @@ export const usePrestataireStore = defineStore("prestataire", () => {
         }
     }
 
-    async function BecomePrestataire(idPresta) {
-        if (!idPresta) handleError("L'id du prestataire est obligatoire");
+    async function BecomePrestataire(prestataire, services) {
+        const id_presta = prestataire.id_prestataire;
+        if (!id_presta) handleError("L'id du prestataire est obligatoire");
 
         try {
-            const res = await apiAxios.post(`/prestataire/becomePrestataire/${idPresta}`);
+            const res = await apiAxios.post(`/prestataire/becomePrestataire/${id_presta}`, {
+                nom: prestataire.nom_prestataire,
+                descri: prestataire.descri_prestataire,
+                mail: prestataire.mail_prestataire,
+                tel: prestataire.tel_prestataire,
+                specificite: prestataire.specificite,
+                type: Number(prestataire.id_type_prestataire),
+                services: services
+
+            });
 
             return res.data;
         } catch (error) {
@@ -54,11 +64,12 @@ export const usePrestataireStore = defineStore("prestataire", () => {
         }
     }
 
-    async function UpdatePrestataire(idPresta, prestataire, services) {
-        if (!idPresta) handleError("L'id du prestataire est obligatoire");
+    async function UpdatePrestataire(prestataire, services) {
+        const id_presta = prestataire.id_prestataire;
+        if (!id_presta) handleError("L'id du prestataire est obligatoire");
 
         try {
-            const res = await apiAxios.put(`/prestataire/updatePresta/${idPresta}`, {
+            const res = await apiAxios.put(`/prestataire/updatePresta/${id_presta}`, {
                 nom: prestataire.nom_prestataire,
                 descri: prestataire.descri_prestataire,
                 mail: prestataire.mail_prestataire,
@@ -67,6 +78,8 @@ export const usePrestataireStore = defineStore("prestataire", () => {
                 type: Number(prestataire.id_type_prestataire),
                 services: services
             })
+            
+            return res.data;
         } catch (error) {
             handleError(error);
         }

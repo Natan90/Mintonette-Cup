@@ -5,7 +5,7 @@ export const useTypePrestataireStore = defineStore("type_pestataire", () => {
 
     async function GetTypePrestataires() {
         try {
-            const res = await apiAxios.get("/prestataire/showTypePrestataire");
+            const res = await apiAxios.get("/prestataire/type_prestataire/showTypePrestataire");
 
             return res.data;
         } catch (error) {
@@ -15,7 +15,7 @@ export const useTypePrestataireStore = defineStore("type_pestataire", () => {
 
     async function GetEveryType() {
         try {
-            const res = await apiAxios.get("/prestataire/showEveryType");
+            const res = await apiAxios.get("/prestataire/type_prestataire/showEveryType");
 
             return res.data;
         } catch (error) {

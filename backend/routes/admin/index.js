@@ -4,6 +4,7 @@ const router = express.Router();
 const utilisateurRoutes = require("./utilisateur");
 const prestataireRoutes = require("./prestataire");
 const evenementRoutes = require("./evenement");
+const statistiquesRoutes = require("./statistiques");
 
 /**
  * @swagger
@@ -16,5 +17,6 @@ const evenementRoutes = require("./evenement");
 router.use("/utilisateur", utilisateurRoutes);
 router.use("/prestataire", prestataireRoutes);
 router.use("/evenement", evenementRoutes);
+router.use("/dashboard", statistiquesRoutes);
 
 module.exports = router;
