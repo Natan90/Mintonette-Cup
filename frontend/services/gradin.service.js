@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { getRequest, putRequest } from "./axios.service";
 
-export const useGRadinStore = defineStore("gradin", () => {
+export const useGradinStore = defineStore("gradin", () => {
 
     async function GetGradinByMatchId(id_match) {
         if (!id_match) handleError("L'id du match est obligatoire");
