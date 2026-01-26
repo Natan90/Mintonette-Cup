@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const utilisateurRoutes = require("./utilisateur");
-const prestataireRoutes = require("./prestataire");
 const evenementRoutes = require("./evenement");
 const statistiquesRoutes = require("./statistiques");
 
