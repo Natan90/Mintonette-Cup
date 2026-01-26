@@ -1,4 +1,4 @@
-exports.validateAddPanier = (req, res, next) => {
+exports.validateAdd = (req, res, next) => {
   const { type, id_user } = req.body;
 
   if (!type || !["siege", "service"].includes(type)) {

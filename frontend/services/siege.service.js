@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import apiAxios from "./axios.service";
+import { getRequest } from "./axios.service";
 
 export const useSiegeStore = defineStore("siege", () => {
 
     async function GetSieges() {
         try {
-            const res = await apiAxios.get("/siege/show");
+            const res = await getRequest("/siege/show");
 
             return res.data;
         } catch (error) {
@@ -15,7 +15,7 @@ export const useSiegeStore = defineStore("siege", () => {
 
     async function GetEveryType() {
         try {
-            const res = await apiAxios.get("/siege/panier/show");
+            const res = await getRequest("/siege/panier/show");
 
             return res.data;
         } catch (error) {

@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/utilisateur");
 // const paysRoutes = require("./routes/equipes/equipes");
-const prestataireRoutes = require("./routes/prestataire/prestataire");
+const prestataireRoutes = require("./routes/prestataire");
 const type_prestataireRoutes = require("./routes/type_prestataire");
 const serviceRoute = require("./routes/service");
 const gradins = require("./routes/gradin");

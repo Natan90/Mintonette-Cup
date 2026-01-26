@@ -1,43 +1,23 @@
-const express = require("express");
-const router = express.Router();
-const pool = require("../../database/db");
+const pool = require("../database/db");
 
-router.get("/show", async (req, res) => {
-  try {
+async function getPays() {
     const result = await pool.query("SELECT * FROM Pays ORDER BY id_pays");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-}); 
+    return result.rows;
+};
 
-router.get("/showPlayer", async (req, res) => {
-  try {
+async function getPlayer() {
     const result = await pool.query(
       "SELECT * FROM Joueur ORDER BY id_equipe, poste, numero_joueur"
     );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
+    return result.rows;
+};
 
-router.get("/showMatch", async (req, res) => {
-  try {
+async function getMatch() {
     const result = await pool.query("SELECT * FROM Match ORDER BY id_terrain ");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
+    return result.rows;
+};
 
-router.get("/match/terrain/:idTerrain", async (req, res) => {
-  try {
-    const { idTerrain } = req.params;
-
+async function getMatchById(id_terrain) {
     const result = await pool.query(
       `
       SELECT 
@@ -63,14 +43,16 @@ router.get("/match/terrain/:idTerrain", async (req, res) => {
       WHERE m.id_terrain = $1
       ORDER BY m.date_match
     `,
-      [idTerrain]
+      [id_terrain]
     );
 
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+    return result.rows;
+};
 
 
-module.exports = router;
+module.exports = {
+    getPays,
+    getPlayer,
+    getMatch,
+    getMatchById
+}

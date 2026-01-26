@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import apiAxios from "./axios.service";
+import { getRequest, patchRequest } from "./axios.service";
 
 export const useServiceStore = defineStore("service", () => {
 
     async function GetServices() {
         try {
-            const res = await apiAxios.get("/prestataire/service/show");
+            const res = await getRequest("/prestataire/service/show");
 
             return res.data;
         } catch (error) {
@@ -17,7 +17,7 @@ export const useServiceStore = defineStore("service", () => {
         if (!id_service) handleError("L'id du service est obligatoire");
 
         try {
-            const res = await apiAxios.get(`/prestataire/service/show/${id_service}`);
+            const res = await getRequest(`/prestataire/service/show/${id_service}`);
 
             return res.data;
         } catch (error) {
@@ -29,7 +29,7 @@ export const useServiceStore = defineStore("service", () => {
         if (!id_service) handleError("L'id du service est obligatoire");
 
         try {
-            const res = await apiAxios.patch(`/prestataire/service/activate/${id_service}`)
+            const res = await patchRequest(`/prestataire/service/activate/${id_service}`)
 
         } catch (error) {
             handleError(error);

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const prestataireController = require("../controllers/prestataire.controller");
-const prestataireMiddleware = require("../middlewares/prestataire.middlware");
+const prestataireMiddleware = require("../middlewares/prestataire.middleware");
 
 // GET prestataire
-router.get("/show");
+router.get("/show", prestataireController.getPrestataire);
 
 // GET prestataire par type (utilisateur ou prestataire)
 router.get("/show/:id", prestataireController.getPrestataireById);

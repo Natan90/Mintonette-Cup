@@ -23,7 +23,7 @@ exports.validateFilter = (req, res, next) => {
 exports.validateBecomePresta = (req, res, next) => {
     const { nom, descri, mail, tel, specificite, type, services } = req.body;
 
-    if (!nom || !descri || !mail || !tel || !specificite || !type || services.length === 0) {
+    if (!nom || !descri || !mail || !tel || !specificite || !type || !Array.isArray(services) || services.length === 0) {
         return res.status(400).json({ error: "Champs obligatoires manquants" });
     }
 

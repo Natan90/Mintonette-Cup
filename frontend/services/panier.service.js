@@ -1,13 +1,17 @@
 import { defineStore } from "pinia";
-import apiAxios from "./axios.service";
+import { getRequest, postRequest, deleteRequest } from "./axios.service";
 
 export const usePanierStore = defineStore("panier", () => {
+
+    // Mettre des tableaux avec des refs quand on récupère les valeurs depuis les fonctions, 
+    // Créer un store en créant des fonctions qui appellent des fonctions qui récupèrent les valeurs depuis l'API
+
 
     async function GetPanierByUser(id_user) {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
 
         try {
-            const res = await apiAxios.get(`/panier/show/${id_user}`);
+            const res = await getRequest(`/panier/show/${id_user}`);
 
             return res.data;
         } catch (error) {
@@ -19,7 +23,7 @@ export const usePanierStore = defineStore("panier", () => {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
 
         try {
-            const res = await apiAxios.post("/panier/add", {
+            const res = await postRequest("/panier/add", {
                 type: type,
                 id_user: id_user
             });
@@ -34,7 +38,7 @@ export const usePanierStore = defineStore("panier", () => {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
 
         try {
-            const res = await apiAxios.delete("/panier/delete", {
+            const res = await deleteRequest("/panier/delete", {
                 type: type,
                 id_user: id_user
             });

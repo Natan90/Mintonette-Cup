@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import apiAxios from "./axios.service";
+import { postRequest } from "./axios.service";
 
 export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
 
     async function InscriptionUtilisateur(utilisateur) {
         try {
-            const res = await apiAxios.post("/utilisateur/auth/inscription", {
+            const res = await postRequest("/utilisateur/auth/inscription", {
                 ...utilisateur,
             });
 
@@ -17,7 +17,7 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
 
     async function ConnexionUtilisateur(utilisateur) {
         try {
-            const res = await apiAxios.post("/utilisateur/auth/connexion", {
+            const res = await postRequest("/utilisateur/auth/connexion", {
                 ...utilisateur
             });
 
@@ -31,7 +31,7 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
         if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
 
         try {
-            const res = await apiAxios.post(`/utilisateur/auth/update/${id_user}`, {
+            const res = await postRequest(`/utilisateur/auth/update/${id_user}`, {
                 ...utilisateur
             });
 
