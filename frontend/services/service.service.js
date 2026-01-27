@@ -7,7 +7,7 @@ export const useServiceStore = defineStore("service", () => {
         try {
             const res = await getRequest("/prestataire/service/show");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -19,7 +19,7 @@ export const useServiceStore = defineStore("service", () => {
         try {
             const res = await getRequest(`/prestataire/service/show/${id_service}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }

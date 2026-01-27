@@ -138,7 +138,7 @@ import Footer from "../components/Footer.vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
-
+import { useGradinStore } from "@/services/gradin.service";
 // import axios from "axios";
 import matchesData from "../../backend/database/jsonData/Match.json";
 import siegesData from "../../backend/database/jsonData/Siege.json";
@@ -150,6 +150,7 @@ const router = useRouter();
 const zone = route.params.zone;
 const userStore = useUserStore();
 const navStore = useNavigationStore();
+const gradinStore = useGradinStore();
 
 const matches = ref([]);
 const seats = ref([]);
@@ -167,11 +168,11 @@ const zoneToTerrain = {
 const terrainId = zoneToTerrain[zone];
 
 const globalSelectedSeats = ref(
-  JSON.parse(localStorage.getItem("selectedSeats") || "[]")
+  JSON.parse(localStorage.getItem("selectedSeats") || "[]"),
 );
 
 const globalTotalPrice = computed(() =>
-  globalSelectedSeats.value.reduce((sum, seat) => sum + getSeatPrice(seat), 0)
+  globalSelectedSeats.value.reduce((sum, seat) => sum + getSeatPrice(seat), 0),
 );
 
 function getMatchTime(match) {
@@ -188,200 +189,111 @@ function getSeatPrice(seat) {
   return 12;
 }
 
-/*Avec la BDD ( axios )*/
-// ################################################################################################################### fetchGradin
-// async function fetchGradin() {
-//   const res = await axios.get("http://localhost:3000/gradin/show", {
-//     params: { matchId: idMatch.value },
-//   });
+async function fetchGradin() {
+  const res = await gradinStore.GetGradinByMatchId(idMatch.value);
 
-//   const seatsForZone = res.data
-//     .filter((seat) => seat.zone === zone.toUpperCase())
-//     .map((seat) => {
-//       let state = "available";
+  const seatsForZone = res.data
+    .filter((seat) => seat.zone === zone.toUpperCase())
+    .map((seat) => {
+      let state = "available";
 
-//       if (seat.est_reserve && seat.id_utilisateur === userStore.userId) {
-//         state = "owned";
-//       } else if (seat.est_reserve) {
-//         state = "reserved";
-//       } else if (
-//         globalSelectedSeats.value.some(
-//           (s) =>
-//             s.matchId === idMatch.value &&
-//             s.zone === seat.zone &&
-//             s.numero_colonne === seat.numero_colonne &&
-//             s.numero_ligne === seat.numero_ligne
-//         )
-//       ) {
-//         state = "selected";
-//       }
+      if (seat.est_reserve && seat.id_utilisateur === userStore.userId) {
+        state = "owned";
+      } else if (seat.est_reserve) {
+        state = "reserved";
+      } else if (
+        globalSelectedSeats.value.some(
+          (s) =>
+            s.matchId === idMatch.value &&
+            s.zone === seat.zone &&
+            s.numero_colonne === seat.numero_colonne &&
+            s.numero_ligne === seat.numero_ligne,
+        )
+      ) {
+        state = "selected";
+      }
 
-//       return { ...seat, state };
-//     });
-
-//   seatsByMatch.value[idMatch.value] = seatsForZone;
-//   seats.value = seatsByMatch.value[idMatch.value];
-// }
-
-// ################################################################################################################### fetchMatch
-// async function fetchMatches() {
-//   const res = await axios.get(
-//     `http://localhost:3000/equipes/match/terrain/${terrainId}`
-//   );
-//   matches.value = res.data;
-// }
-
-// ################################################################################################################### selectMatch
-
-// async function selectMatch(match) {
-//   idMatch.value = match.id_match;
-//   hoverIndex.value = null;
-//   estAjoute.value = false;
-
-//   if (!seatsByMatch.value[idMatch.value]) {
-//     await fetchGradin();
-//   } else {
-//     seats.value = seatsByMatch.value[idMatch.value];
-//   }
-// }
-
-// ################################################################################################################### AddToCart
-
-// async function AddToCart() {
-//   if (!globalSelectedSeats.value.length) return;
-
-//   try {
-//     for (const seat of globalSelectedSeats.value) {
-//       await axios.post("http://localhost:3000/gradin/panier/add", {
-//         utilisateur_id: userStore.userId,
-//         matchId: seat.matchId,
-//         numero_colonne: seat.numero_colonne,
-//         numero_ligne: seat.numero_ligne,
-//         zone: seat.zone
-//       });
-//     }
-
-//     estAjoute.value = true;
-//     setTimeout(() => {
-//       estAjoute.value = false;
-//     }, 3000);
-//   } catch (error) {
-//     console.error("Erreur lors de l'ajout au panier:", error);
-//   }
-// }
-// ################################################################################################################### resetSelection
-
-// function resetSelection() {
-//   globalSelectedSeats.value = globalSelectedSeats.value.filter(
-//     (s) => s.matchId !== idMatch.value
-//   );
-
-//   localStorage.setItem(
-//     "selectedSeats",
-//     JSON.stringify(globalSelectedSeats.value)
-//   );
-
-//   seats.value.forEach((seat) => {
-//     if (seat.state === "selected") {
-//       seat.state = seat.est_reserve ? "reserved" : "available";
-//     }
-//   });
-// }
-// ################################################################################################################### resetAllSelection
-
-// function resetAllSelection() {
-//   globalSelectedSeats.value = [];
-//   seats.value.forEach((seat) => {
-//     if (seat.state === "selected") seat.state = "available";
-//   });
-//   localStorage.setItem("selectedSeats", "[]");
-// }
-
-// onMounted(async () => {
-//   await fetchMatches();
-//   if (matches.value.length > 0) {
-//     await selectMatch(matches.value[0]);
-//   }
-// });
-function fetchGradin() {
-  const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
-
-  const siegesMap = new Map();
-
-  siegesData
-    .filter(
-      (seat) =>
-        seat.match_id === idMatch.value && seat.zone === zone.toUpperCase()
-    )
-    .forEach((seat) => {
-      const key = `${seat.match_id}-${seat.zone}-${seat.numero_colonne}-${seat.numero_ligne}`;
-      siegesMap.set(key, seat);
+      return { ...seat, state };
     });
-
-  siegesLocal
-    .filter(
-      (seat) =>
-        seat.match_id === idMatch.value && seat.zone === zone.toUpperCase()
-    )
-    .forEach((seat) => {
-      const key = `${seat.match_id}-${seat.zone}-${seat.numero_colonne}-${seat.numero_ligne}`;
-      siegesMap.set(key, seat);
-    });
-
-  const seatsForZone = Array.from(siegesMap.values()).map((seat) => {
-    let state = "available";
-
-    if (seat.est_reserve && seat.id_utilisateur === userStore.userId) {
-      state = "owned";
-    } else if (seat.est_reserve) {
-      state = "reserved";
-    } else if (
-      globalSelectedSeats.value.some(
-        (s) =>
-          s.matchId === idMatch.value &&
-          s.zone === seat.zone &&
-          s.numero_colonne === seat.numero_colonne &&
-          s.numero_ligne === seat.numero_ligne
-      )
-    ) {
-      state = "selected";
-    }
-
-    return { ...seat, state };
-  });
 
   seatsByMatch.value[idMatch.value] = seatsForZone;
   seats.value = seatsByMatch.value[idMatch.value];
 }
 
-function fetchMatches() {
-  const matchesForTerrain = matchesData.filter(
-    (match) => match.id_terrain === terrainId
+async function fetchMatches() {
+  const res = await axios.get(
+    `http://localhost:3000/equipes/match/terrain/${terrainId}`,
   );
-
-  matches.value = matchesForTerrain.map((match) => {
-    const equipe1 = equipesData.find((e) => e.id_equipe === match.id_equipe1);
-    const equipe2 = equipesData.find((e) => e.id_equipe === match.id_equipe2);
-
-    const pays1 = paysData.find((p) => p.id_pays === equipe1?.id_pays);
-    const pays2 = paysData.find((p) => p.id_pays === equipe2?.id_pays);
-
-    return {
-      ...match,
-      team1_country: pays1?.nom_pays || "Équipe 1",
-      team2_country: pays2?.nom_pays || "Équipe 2",
-    };
-  });
+  matches.value = res.data;
 }
 
-function selectMatch(match) {
+async function selectMatch(match) {
   idMatch.value = match.id_match;
   hoverIndex.value = null;
   estAjoute.value = false;
 
-  // Toujours recharger les sièges pour refléter les changements de localStorage
-  fetchGradin();
+  if (!seatsByMatch.value[idMatch.value]) {
+    await fetchGradin();
+  } else {
+    seats.value = seatsByMatch.value[idMatch.value];
+  }
 }
+
+async function AddToCart() {
+  if (!globalSelectedSeats.value.length) return;
+
+  try {
+    for (const seat of globalSelectedSeats.value) {
+      await axios.post("http://localhost:3000/gradin/panier/add", {
+        utilisateur_id: userStore.userId,
+        matchId: seat.matchId,
+        numero_colonne: seat.numero_colonne,
+        numero_ligne: seat.numero_ligne,
+        zone: seat.zone,
+      });
+    }
+
+    estAjoute.value = true;
+    setTimeout(() => {
+      estAjoute.value = false;
+    }, 3000);
+  } catch (error) {
+    console.error("Erreur lors de l'ajout au panier:", error);
+  }
+}
+
+function resetSelection() {
+  globalSelectedSeats.value = globalSelectedSeats.value.filter(
+    (s) => s.matchId !== idMatch.value,
+  );
+
+  localStorage.setItem(
+    "selectedSeats",
+    JSON.stringify(globalSelectedSeats.value),
+  );
+
+  seats.value.forEach((seat) => {
+    if (seat.state === "selected") {
+      seat.state = seat.est_reserve ? "reserved" : "available";
+    }
+  });
+}
+
+function resetAllSelection() {
+  globalSelectedSeats.value = [];
+  seats.value.forEach((seat) => {
+    if (seat.state === "selected") seat.state = "available";
+  });
+  localStorage.setItem("selectedSeats", "[]");
+}
+
+onMounted(async () => {
+  await fetchMatches();
+  if (matches.value.length > 0) {
+    await selectMatch(matches.value[0]);
+  }
+});
+
 
 function UpdateSeatStatus(index) {
   const seat = seats.value[index];
@@ -394,7 +306,7 @@ function UpdateSeatStatus(index) {
       s.matchId === idMatch.value &&
       s.zone === seat.zone &&
       s.numero_colonne === seat.numero_colonne &&
-      s.numero_ligne === seat.numero_ligne
+      s.numero_ligne === seat.numero_ligne,
   );
 
   if (seat.state === "available") {
@@ -418,73 +330,20 @@ function UpdateSeatStatus(index) {
 
   localStorage.setItem(
     "selectedSeats",
-    JSON.stringify(globalSelectedSeats.value)
+    JSON.stringify(globalSelectedSeats.value),
   );
 }
 
-function AddToCart() {
-  if (!globalSelectedSeats.value.length) return;
-  if (!userStore.isConnected) {
-    router.push({
-      name: "Connexion_utilisateur"
-    })
-  }
-  const panier = JSON.parse(localStorage.getItem("panier") || "[]");
 
-  globalSelectedSeats.value.forEach((seat) => {
-    const existe = panier.some(
-      (item) =>
-        item.matchId === seat.matchId &&
-        item.zone === seat.zone &&
-        item.numero_colonne === seat.numero_colonne &&
-        item.numero_ligne === seat.numero_ligne
-    );
 
-    if (!existe) {
-      panier.push({
-        utilisateur_id: userStore.userId,
-        matchId: seat.matchId,
-        numero_colonne: seat.numero_colonne,
-        numero_ligne: seat.numero_ligne,
-        zone: seat.zone,
-        team1: seat.team1,
-        team2: seat.team2,
-        prix: getSeatPrice(seat),
-      });
-    }
-  });
 
-  localStorage.setItem("panier", JSON.stringify(panier));
-
-  estAjoute.value = true;
-  setTimeout(() => {
-    estAjoute.value = false;
-  }, 3000);
-}
-function resetSelection() {
-  globalSelectedSeats.value = globalSelectedSeats.value.filter(
-    (s) => s.matchId !== idMatch.value
-  );
-
-  localStorage.setItem(
-    "selectedSeats",
-    JSON.stringify(globalSelectedSeats.value)
-  );
-
-  seats.value.forEach((seat) => {
-    if (seat.state === "selected") {
-      seat.state = seat.est_reserve ? "reserved" : "available";
-    }
-  });
-}
-
-function resetAllSelection() {
-  globalSelectedSeats.value = [];
-  seats.value.forEach((seat) => {
-    if (seat.state === "selected") seat.state = "available";
-  });
-  localStorage.setItem("selectedSeats", "[]");
-}
+// function resetAllSelection() {
+//   globalSelectedSeats.value = [];
+//   seats.value.forEach((seat) => {
+//     if (seat.state === "selected") seat.state = "available";
+//   });
+//   localStorage.setItem("selectedSeats", "[]");
+// }
 
 onMounted(() => {
   fetchMatches();

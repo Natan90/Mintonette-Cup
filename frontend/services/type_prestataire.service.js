@@ -7,7 +7,7 @@ export const useTypePrestataireStore = defineStore("type_pestataire", () => {
         try {
             const res = await getRequest("/prestataire/type_prestataire/showTypePrestataire");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -17,7 +17,7 @@ export const useTypePrestataireStore = defineStore("type_pestataire", () => {
         try {
             const res = await getRequest("/prestataire/type_prestataire/showEveryType");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }

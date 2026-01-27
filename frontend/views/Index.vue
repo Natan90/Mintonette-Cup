@@ -9,20 +9,14 @@
           class="texteImage"
           :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
-          <!-- {{ $t("mintonetteCup.title") }} -->
         </div>
       </div>
       <PresentationMintonette></PresentationMintonette>
       <section id="Carte" class="section"></section>
       <Map> </Map>
 
-      <!-- <TableauMatchs></TableauMatchs> -->
 
       <section class="infos">
-        <!--Ca c'est pour le truc de Natan que je n'ai pas compris (quand il veut hover un truc ca agrandi pour mettre plus de texte je ne sais pas quoi la ...)-->
-
-        <!-- #############################################SI C'EST POSSIBLE, FAUDRAIT QUE CA COMMENCE A AUGMENTER LORSQU'ON VOIT LES NOMBRES ##########################################################################-->
-
         <section class="infos" id="Info">
           <div
             class="bloc"
@@ -39,7 +33,6 @@
               {{ item.title }}
             </span>
             <div class="contenuTexte">
-              <!-- <span v-if="index === 0">C'est trop vieillot ! (ça fait 2008)</span> -->
               <span class="descri" v-html="item.descri"></span>
               <router-link
                 :to="{ name: 'Information', params: { id: userStore.userId } }"
@@ -49,23 +42,9 @@
             </div>
           </div>
         </section>
-
-        <!-- <BounceCard
-          class="custom-bounceCards"
-          :images="informationArray.map((b) => b.image)"
-          :containerWidth="500"
-          :containerHeight="250"
-          :animationDelay="1"
-          :animationStagger="0.08"
-          easeType="elastic.out(1, 0.5)"
-          :transformStyles="transformStyles"
-          :enableHover="false" /> -->
       </section>
     </div>
-    <!-- <router-link to="/PolygoneCreation" class="btnLink"
-    >Truc pour les polygones</router-link
-  >
-  <br /><br /> -->
+
     <section
       v-if="
         userStore.isConnected &&
@@ -106,16 +85,7 @@
           class="team_content"></div>
       </div>
     </section>
-    <!-- 
-    <section>
-      <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.competition.descri')" class="team_content"></div>
-
-        <router-link to="/Equipes" class="btn_teams">
-          {{ $t('mintonetteCup.competition.boutonMatchs') }}
-        </router-link>
-      </div>
-    </section> -->
+   
 
     <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -130,11 +100,8 @@
 import { ref, onMounted, onBeforeUnmount, onActivated, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import evenementData from "../../backend/database/jsonData/Evenement.json";
-// import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
-// import axios from "axios";
+import axios from "axios";
 import { useUserStore } from "@/stores/user";
-import localData from "../../backend/database/localData.js";
-
 /* ********************
     PAGES IMPORTS 
 ******************** */
@@ -146,6 +113,7 @@ import TableauMatchs from "../views/TableauMatchs.vue";
 import RecherchePrestataire from "./RecherchePrestataire.vue";
 import CountUp from "../components/CountUp.vue";
 import PresentationMintonette from "./PresentationMintonette.vue";
+import { useAdminAPIStore } from "@/services/admin.service";
 
 /* ********************
     IMAGES IMPORTS 
@@ -233,53 +201,26 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
-function getValuesEvenement() {
-  // Charger depuis localStorage au lieu du JSON statique
-  const events = localData.getAll("evenements");
-  const evenement = events.length > 0 ? events[0] : evenementData[0];
-
-  console.log("Index.vue - Événement chargé depuis localStorage:", evenement);
-
-  title_evenement.value = evenement.nom_evenement;
-  colorTitle.value = evenement.color_title;
-  selectedFont.value = evenement.text_font;
-  imagePreview.value = evenement.image_evenement;
+async function getValuesEvenement() {
+    try {
+        const res = await useAdminAPIStore.GetEvenement();
+        title_evenement.value = res.data.nom_evenement;
+        colorTitle.value = res.data.color_title;
+        selectedFont.value = res.data.text_font;
+        imagePreview.value = res.data.image_evenement;
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-function getValuesUser() {
-  const utilisateursData = localData.getAll("utilisateurs");
-  const user = utilisateursData.find(
-    (u) => u.id_utilisateur === userStore.userId
-  );
-  if (user) {
-    utilisateur.value = user;
-    console.log("Index.vue - Utilisateur chargé:", {
-      ispresta: user.ispresta,
-      waitingforadmin: user.waitingforadmin,
-    });
+async function getValuesUser() {
+  try {
+    const res = await useAdminAPIStore.GetUtilisateurById(userStore.userId)
+    utilisateur.value = res.data;
+  } catch (err) {
+    console.error(err);
   }
 }
-
-// async function getValuesEvenement() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/admin/evenement/show");
-//         title_evenement.value = res.data.nom_evenement;
-//         colorTitle.value = res.data.color_title;
-//         selectedFont.value = res.data.text_font;
-//         imagePreview.value = res.data.image_evenement;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-// async function getValuesUser() {
-//   try {
-//     const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
-//     utilisateur.value = res.data;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
 </script>
 
 <style>

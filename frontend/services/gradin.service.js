@@ -9,7 +9,7 @@ export const useGradinStore = defineStore("gradin", () => {
         try {
             const res = await getRequest(`/gradin/show/${id_match}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -21,16 +21,15 @@ export const useGradinStore = defineStore("gradin", () => {
                 ...gradin
             });
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
     }
 
-
-})
-
-export default {
+return {
     GetGradinByMatchId,
     UpdateGradin
 }
+})
+
