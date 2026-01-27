@@ -11,7 +11,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await getRequest("/admin/utilisateur/show");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -23,7 +23,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await getRequest(`/admin/utilisateur/show/${id_user}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -35,7 +35,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await patchRequest(`/admin/utilisateur/changePresta/${id_user}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -47,7 +47,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await deleteRequest(`/admin/utilisateur/delete/${id_user}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -61,7 +61,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await getRequest("/admin/evenement/show");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -71,7 +71,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await putRequest("/admin/evenement/update");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -85,7 +85,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await getRequest("/admin/dashboard/stats");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -101,7 +101,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await patchRequest(`/admin/prestataire/validate/${id_presta}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -113,7 +113,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await patchRequest(`/admin/prestataire/refuser/${id_presta}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -125,7 +125,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await deleteRequest(`/admin/prestataire/delete/${id_presta}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -135,7 +135,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await getRequest("/admin/prestataire/zones");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -147,7 +147,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await patchRequest(`/admin/prestataire/assignZone/${id_presta}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -159,28 +159,26 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         try {
             const res = await patchRequest(`/admin/prestataire/unassignZone/${id_presta}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
     }
 
-
+    return {
+        GetUtilisateurs,
+        GetUtilisateurById,
+        ChangePrestaUtilisateur,
+        DeleteUtilisateur,
+        GetEvenement,
+        UpdateEvenement,
+        GetStatistiques,
+        ValidePrestataire,
+        RefuserPrestataire,
+        DeletePrestataire,
+        GetZones,
+        AssignPrestataireZone,
+        UnassignPrestataireZone,
+    }
 
 })
-
-export default {
-    GetUtilisateurs,
-    GetUtilisateurById,
-    ChangePrestaUtilisateur,
-    DeleteUtilisateur,
-    GetEvenement,
-    UpdateEvenement, 
-    GetStatistiques,
-    ValidePrestataire,
-    RefuserPrestataire,
-    DeletePrestataire,
-    GetZones,
-    AssignPrestataireZone,
-    UnassignPrestataireZone,
-}
