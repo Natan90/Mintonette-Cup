@@ -1,50 +1,48 @@
 import { defineStore } from "pinia";
-import { postRequest } from "./axios.service";
+import { postRequest, handleError } from "./axios.service";
 
 export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
-
-    async function InscriptionUtilisateur(utilisateur) {
-        try {
-            const res = await postRequest("/utilisateur/auth/inscription", {
-                ...utilisateur,
-            });
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+  async function InscriptionUtilisateur(utilisateur) {
+    const res = null;
+    try {
+      res = await postRequest("/utilisateur/auth/inscription", {
+        ...utilisateur,
+      });
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-    async function ConnexionUtilisateur(utilisateur) {
-        try {
-            const res = await postRequest("/utilisateur/auth/connexion", {
-                ...utilisateur
-            });
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+  async function ConnexionUtilisateur(utilisateur) {
+    const res = null;
+    try {
+      res = await postRequest("/utilisateur/auth/connexion", {
+        ...utilisateur,
+      });
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-    async function UpdateUtilisateur(id_user, utilisateur) {
-        if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
+  async function UpdateUtilisateur(id_user, utilisateur) {
+    if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
+    const res = null;
 
-        try {
-            const res = await postRequest(`/utilisateur/auth/update/${id_user}`, {
-                ...utilisateur
-            });
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+    try {
+      res = await postRequest(`/utilisateur/auth/update/${id_user}`, {
+        ...utilisateur,
+      });
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-})
-
-export default {
-    inscriptionUtilisateur,
-    connexionUtilisateur,
-    UpdateUtilisateur
-}
+  return {
+    InscriptionUtilisateur,
+    ConnexionUtilisateur,
+    UpdateUtilisateur,
+  };
+});

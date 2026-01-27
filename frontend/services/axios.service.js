@@ -6,7 +6,7 @@ export const axiosInstance = axios.create({
 });
 
 
-async function handleError(url, typeReq, error) {
+export async function handleError(url, typeReq, error) {
     if (error.response) {
         console.error(`[${typeReq}] ${url} - Erreur serveur :`, error.response.data);
         throw error.response;

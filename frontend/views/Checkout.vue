@@ -8,14 +8,9 @@
         <div class="order-summary">
           <h2>Résumé de commande</h2>
           <div class="summary-items">
-            <div
-              v-for="(item, index) in panier"
-              :key="index"
-              class="summary-item">
-              <span
-                >{{ item.numero_colonne }}{{ item.numero_ligne }} (Zone
-                {{ item.zone }})</span
-              >
+            <div v-for="(item, index) in panier" :key="index" class="summary-item">
+              <span>{{ item.numero_colonne }}{{ item.numero_ligne }} (Zone
+                {{ item.zone }})</span>
               <span class="price">{{ getPrice(item) }} €</span>
             </div>
           </div>
@@ -33,38 +28,22 @@
             <h3>Vos coordonnées</h3>
             <div class="form-group">
               <label for="prenom">Prénom</label>
-              <input
-                v-model="form.prenom"
-                type="text"
-                id="prenom"
-                placeholder="Jean" />
+              <input v-model="form.prenom" type="text" id="prenom" placeholder="Jean" />
             </div>
 
             <div class="form-group">
               <label for="nom">Nom</label>
-              <input
-                v-model="form.nom"
-                type="text"
-                id="nom"
-                placeholder="Dupont" />
+              <input v-model="form.nom" type="text" id="nom" placeholder="Dupont" />
             </div>
 
             <div class="form-group">
               <label for="email">Email</label>
-              <input
-                v-model="form.email"
-                type="email"
-                id="email"
-                placeholder="jean.dupont@email.com" />
+              <input v-model="form.email" type="email" id="email" placeholder="jean.dupont@email.com" />
             </div>
 
             <div class="form-group">
               <label for="tel">Téléphone</label>
-              <input
-                v-model="form.tel"
-                type="tel"
-                id="tel"
-                placeholder="06 12 34 56 78" />
+              <input v-model="form.tel" type="tel" id="tel" placeholder="06 12 34 56 78" />
             </div>
           </div>
 
@@ -72,30 +51,18 @@
             <h3>Adresse de facturation</h3>
             <div class="form-group">
               <label for="adresse">Adresse</label>
-              <input
-                v-model="form.adresse"
-                type="text"
-                id="adresse"
-                placeholder="123 Rue de la Paix" />
+              <input v-model="form.adresse" type="text" id="adresse" placeholder="123 Rue de la Paix" />
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="codepostal">Code postal</label>
-                <input
-                  v-model="form.codepostal"
-                  type="text"
-                  id="codepostal"
-                  placeholder="75000" />
+                <input v-model="form.codepostal" type="text" id="codepostal" placeholder="75000" />
               </div>
 
               <div class="form-group">
                 <label for="ville">Ville</label>
-                <input
-                  v-model="form.ville"
-                  type="text"
-                  id="ville"
-                  placeholder="Paris" />
+                <input v-model="form.ville" type="text" id="ville" placeholder="Paris" />
               </div>
             </div>
           </div>
@@ -105,70 +72,43 @@
             <h3>Informations bancaires</h3>
             <div class="form-group">
               <label for="nomcarte">Nom du titulaire de la carte</label>
-              <input
-                v-model="form.nomcarte"
-                type="text"
-                id="nomcarte"
-                placeholder="JEAN DUPONT" />
+              <input v-model="form.nomcarte" type="text" id="nomcarte" placeholder="JEAN DUPONT" />
             </div>
 
             <div class="form-group">
               <label for="numerocarte">Numéro de carte</label>
-              <input
-                v-model="form.numerocarte"
-                type="text"
-                id="numerocarte"
-                placeholder="1234 5678 9012 3456"
-                maxlength="19"
-                @input="formatCardNumber" />
+              <input v-model="form.numerocarte" type="text" id="numerocarte" placeholder="1234 5678 9012 3456"
+                maxlength="19" @input="formatCardNumber" />
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="expiration">Date d'expiration</label>
-                <input
-                  v-model="form.expiration"
-                  type="text"
-                  id="expiration"
-                  placeholder="MM/YY"
-                  maxlength="5"
+                <input v-model="form.expiration" type="text" id="expiration" placeholder="MM/YY" maxlength="5"
                   @input="formatExpiration" />
               </div>
 
               <div class="form-group">
                 <label for="cvv">CVV</label>
-                <input
-                  v-model="form.cvv"
-                  type="text"
-                  id="cvv"
-                  placeholder="123"
-                  maxlength="3" />
+                <input v-model="form.cvv" type="text" id="cvv" placeholder="123" maxlength="3" />
               </div>
             </div>
           </div>
 
           <div class="form-group checkbox">
             <input v-model="form.termsAccepted" type="checkbox" id="terms" />
-            <label for="terms"
-              >J'accepte les conditions d'utilisation et la politique de
-              confidentialité</label
-            >
+            <label for="terms">J'accepte les conditions d'utilisation et la politique de
+              confidentialité</label>
           </div>
 
           <div class="button-group">
             <button @click="goBackToCart" class="btn btn-secondary">
               Retour au panier
             </button>
-            <button
-              @click="addTestSeats"
-              class="btn btn-test"
-              title="Ajouter des places de test (dev)">
+            <button @click="addTestSeats" class="btn btn-test" title="Ajouter des places de test (dev)">
               + Test
             </button>
-            <button
-              @click="processPayment"
-              class="btn btn-primary"
-              :disabled="!isFormValid">
+            <button @click="processPayment" class="btn btn-primary" :disabled="!isFormValid">
               {{ isProcessing ? "Traitement en cours..." : `Payer ${total} €` }}
             </button>
           </div>
@@ -183,13 +123,16 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user";
-// import axios from 'axios';
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
+import { usePanierStore } from "@/services/panier.service";
+import { useGradinStore } from "@/services/gradin.service";
 
 const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
+const panierStore = usePanierStore();
+const gradinStore = useGradinStore();
 
 const panier = ref([]);
 const isProcessing = ref(false);
@@ -236,44 +179,29 @@ function getPrice(seat) {
   return 12;
 }
 
-function fetchPanier() {
-  const savedPanier = localStorage.getItem("panier");
-  if (savedPanier) {
-    try {
-      panier.value = JSON.parse(savedPanier);
-      console.log("Panier chargé depuis localStorage:", panier.value);
-    } catch (e) {
-      console.error("Erreur lors du parsing de localStorage:", e);
-      panier.value = [];
+
+async function fetchPanier() {
+  try {
+    const res = await panierStore.GetPanierByUser(userStore.userId);
+    panier.value = res.data;
+    console.log('Panier chargé:', panier.value);
+
+    if (panier.value.length === 0) {
+      console.warn('Le panier est vide');
     }
-  } else {
-    console.warn("Le panier est vide");
-    panier.value = [];
+  } catch (err) {
+    console.error('Erreur lors de la récupération du panier:', err);
+    const savedSeats = localStorage.getItem('selectedSeats');
+    if (savedSeats) {
+      try {
+        panier.value = JSON.parse(savedSeats);
+        console.log('Panier chargé depuis localStorage:', panier.value);
+      } catch (e) {
+        console.error('Erreur lors du parsing de localStorage:', e);
+      }
+    }
   }
 }
-
-// async function fetchPanier() {
-//   try {
-//     const res = await axios.get('http://localhost:3000/gradin/panier/show');
-//     panier.value = res.data;
-//     console.log('Panier chargé:', panier.value);
-//
-//     if (panier.value.length === 0) {
-//       console.warn('Le panier est vide');
-//     }
-//   } catch (err) {
-//     console.error('Erreur lors de la récupération du panier:', err);
-//     const savedSeats = localStorage.getItem('selectedSeats');
-//     if (savedSeats) {
-//       try {
-//         panier.value = JSON.parse(savedSeats);
-//         console.log('Panier chargé depuis localStorage:', panier.value);
-//       } catch (e) {
-//         console.error('Erreur lors du parsing de localStorage:', e);
-//       }
-//     }
-//   }
-// }
 
 function formatCardNumber(event) {
   let value = form.value.numerocarte.replace(/\s/g, "");
@@ -289,75 +217,49 @@ function formatExpiration(event) {
   form.value.expiration = value;
 }
 
-function processPayment() {
+async function processPayment() {
   if (!isFormValid.value) {
-    alert("Veuillez remplir tous les champs obligatoires");
+    alert('Veuillez remplir tous les champs obligatoires');
     return;
   }
 
   if (panier.value.length === 0) {
-    alert("Votre panier est vide");
+    alert('Votre panier est vide');
     return;
   }
 
   isProcessing.value = true;
 
-  setTimeout(() => {
-    console.log("Traitement du paiement avec les informations:", form.value);
+  try {
+    console.log('Traitement du paiement avec les informations:', form.value);
 
-    localStorage.removeItem("selectedSeats");
-    localStorage.removeItem("panier");
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-    alert("Paiement réussi ! Vos billets ont été confirmés.");
+    for (const seat of panier.value) {
+      console.log('Mise à jour du siège:', JSON.parse(JSON.stringify(seat)));
+      const res = await gradinStore.UpdateGradin({
+        matchId: seat.match_id ?? seat.matchId ?? null,
+        numero_colonne: seat.numero_colonne,
+        numero_ligne: seat.numero_ligne,
+        zone: seat.zone,
+        est_reserve: true,
+        id_utilisateur: userStore.userId
+      });
+      console.log('Update response:', res && res.data ? res.data : res.status);
+    }
 
-    router.push({ name: "MesBillets", params: { lang: route.params.lang } });
+    localStorage.removeItem('selectedSeats');
+
+    alert('Paiement réussi ! Vos billets ont été confirmés.');
+
+    router.push({ name: 'MesBillets', params: { lang: route.params.lang } });
+  } catch (error) {
+    console.error('Erreur lors du paiement:', error);
+    alert('Une erreur est survenue lors du paiement. Veuillez réessayer.');
+  } finally {
     isProcessing.value = false;
-  }, 2000);
+  }
 }
-
-// async function processPayment() {
-//   if (!isFormValid.value) {
-//     alert('Veuillez remplir tous les champs obligatoires');
-//     return;
-//   }
-
-//   if (panier.value.length === 0) {
-//     alert('Votre panier est vide');
-//     return;
-//   }
-
-//   isProcessing.value = true;
-
-//   try {
-//     console.log('Traitement du paiement avec les informations:', form.value);
-//
-//     await new Promise(resolve => setTimeout(resolve, 2000));
-
-//       for (const seat of panier.value) {
-//         console.log('Mise à jour du siège:', JSON.parse(JSON.stringify(seat)));
-//         const res = await axios.put('http://localhost:3000/gradin/update', {
-//           matchId: seat.match_id ?? seat.matchId ?? null,
-//           numero_colonne: seat.numero_colonne,
-//           numero_ligne: seat.numero_ligne,
-//           zone: seat.zone,
-//           est_reserve: true,
-//           id_utilisateur: userStore.userId
-//         });
-//         console.log('Update response:', res && res.data ? res.data : res.status);
-//       }
-
-//     localStorage.removeItem('selectedSeats');
-
-//     alert('Paiement réussi ! Vos billets ont été confirmés.');
-
-//     router.push({ name: 'MesBillets', params: { lang: route.params.lang} });
-//   } catch (error) {
-//     console.error('Erreur lors du paiement:', error);
-//     alert('Une erreur est survenue lors du paiement. Veuillez réessayer.');
-//   } finally {
-//     isProcessing.value = false;
-//   }
-// }
 
 function goBackToCart() {
   router.back();

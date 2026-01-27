@@ -76,14 +76,13 @@ import Footer from "@/components/Footer.vue";
 // import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
-import matchesData from "../../backend/database/jsonData/Match.json";
-import equipesData from "../../backend/database/jsonData/Equipe.json";
-import paysData from "../../backend/database/jsonData/Pays.json";
-import servicesData from "../../backend/database/jsonData/Services.json";
-import localData from "../../backend/database/localData.js";
+import { usePanierStore } from "@/services/panier.service";
+import { useGradinStore } from "@/services/gradin.service";
 
 const route = useRoute();
 const router = useRouter();
+const panierStore = usePanierStore();
+const gradinStore = useGradinStore();
 
 const fromZone = route.query.fromZone;
 
@@ -152,117 +151,57 @@ const total = computed(() => {
   return totalSieges + totalServices;
 });
 
-// async function fetchPanier() {
-//   try {
-//     const res = await axios.get(
-//       `http://localhost:3000/panier/show/${userStore.userId}`
-//     );
-//     panier.value = res.data;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-// async function pay() {
-//   if (panier.value.length === 0) {
-//     alert("Aucun siège dans le panier.");
-//     return;
-//   }
-
-//   const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
-//   if (!confirmPay) return;
-
-//   for (const seat of panier.value) {
-//     await axios.put("http://localhost:3000/gradin/update", {
-//       numero_colonne: seat.numero_colonne,
-//       numero_ligne: seat.numero_ligne,
-//       zone: seat.zone,
-//       est_reserve: true,
-//       id_utilisateur: userStore.userId,
-//     });
-//   }
-
-//   localStorage.removeItem("selectedSeats");
-
-//   await fetchPanier();
-// }
-
-// async function reset() {
-//   if (panier.value.length === 0) {
-//     alert("Le panier est déjà vide");
-//     return;
-//   }
-
-//   for (const seat of panier.value) {
-//     await axios.put("http://localhost:3000/gradin/update", {
-//       numero_colonne: seat.numero_colonne,
-//       numero_ligne: seat.numero_ligne,
-//       zone: seat.zone,
-//       est_reserve: false,
-//     });
-//   }
-
-//   await fetchPanier();
-// }
-
-function fetchPanier() {
-  const panierData = JSON.parse(localStorage.getItem("panier") || "[]");
-
-  // Charger tous les services (localStorage + JSON fusionnés)
-  const servicesLocalStorage = localData.getAll("services");
-  const localStorageServiceIds = servicesLocalStorage.map((s) => s.id_service);
-  const servicesJSONFiltered = servicesData.filter(
-    (s) => !localStorageServiceIds.includes(s.id_service)
-  );
-  const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
-
-  const enrichedPanier = panierData.map((item) => {
-    // Si c'est un service (a un service_id)
-    if (item.service_id) {
-      const service = allServices.find((s) => s.id_service === item.service_id);
-      if (service) {
-        return {
-          ...item,
-          nom_service: service.nom_service,
-          prix_unitaire_service: service.prix || service.prix_service || 0,
-          quantite_service: item.quantite || 1,
-        };
-      }
-    }
-
-    // Si c'est un siège (a un match_id)
-    const match = matchesData.find((m) => m.id_match === item.matchId);
-
-    if (match) {
-      const equipe1 = equipesData.find((e) => e.id_equipe === match.id_equipe1);
-      const equipe2 = equipesData.find((e) => e.id_equipe === match.id_equipe2);
-
-      const pays1 = paysData.find((p) => p.id_pays === equipe1?.id_pays);
-      const pays2 = paysData.find((p) => p.id_pays === equipe2?.id_pays);
-
-      return {
-        ...item,
-        team1: pays1?.nom_pays || "Équipe 1",
-        team2: pays2?.nom_pays || "Équipe 2",
-      };
-    }
-
-    return item;
-  });
-
-  panier.value = enrichedPanier;
+async function fetchPanier() {
+  try {
+    const res = await panierStore.GetPanierByUser(userStore.userId);
+    panier.value = res.data;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-function reset() {
+async function pay() {
+  if (panier.value.length === 0) {
+    alert("Aucun siège dans le panier.");
+    return;
+  }
+
+  const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
+  if (!confirmPay) return;
+
+  for (const seat of panier.value) {
+    await gradinStore.UpdateGradin({
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      est_reserve: true,
+      id_utilisateur: userStore.userId,
+    });
+  }
+
+  localStorage.removeItem("selectedSeats");
+
+  await fetchPanier();
+}
+
+async function reset() {
   if (panier.value.length === 0) {
     alert("Le panier est déjà vide");
     return;
   }
 
-  localStorage.setItem("panier", "[]");
-  panier.value = [];
-  alert("Le panier a été vidé");
+  for (const seat of panier.value) {
+    await gradinStore.UpdateGradin({
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      est_reserve: false,
+    });
+  }
+
+  await fetchPanier();
 }
+
 
 function backToBleacher() {
   router.push({
@@ -354,16 +293,6 @@ function goToCheckout() {
   }
 }
 
-// Fonction pour ajouter des places de test (développement uniquement)
-function addTestSeats() {
-  const testSeats = [
-    { numero_colonne: "A", numero_ligne: 1, zone: "Nord" },
-    { numero_colonne: "B", numero_ligne: 2, zone: "Nord" },
-    { numero_colonne: "H", numero_ligne: 5, zone: "Est" },
-  ];
-  panier.value = testSeats;
-  alert(`${testSeats.length} places de test ajoutées au panier`);
-}
 
 onMounted(() => {
   fetchPanier();

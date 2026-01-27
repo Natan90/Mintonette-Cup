@@ -8,7 +8,7 @@ const type_prestataireRoutes = require("./routes/type_prestataire");
 const serviceRoute = require("./routes/service");
 const gradins = require("./routes/gradin");
 const adminRoutes = require("./routes/admin");
-const equipesRoutes = require("./routes/equipes/equipes");
+const equipesRoutes = require("./routes/equipe");
 const panierRoutes = require("./routes/panier");
 
 const app = express();

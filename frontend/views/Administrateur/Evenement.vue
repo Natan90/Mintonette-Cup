@@ -101,12 +101,9 @@ import NavView from "@/components/NavView.vue";
 import Editor from "@tinymce/tinymce-vue";
 
 import { ref, onMounted, watch } from "vue";
-// import axios from 'axios';
 import { useI18n } from "vue-i18n";
-import { color } from "motion";
 import Footer from "@/components/Footer.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
-import localData from "../../../backend/database/localData.js";
 import { useAdminAPIStore } from "@/services/admin.service.js";
 
 const { locale } = useI18n();

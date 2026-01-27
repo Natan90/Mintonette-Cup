@@ -1,5 +1,5 @@
 exports.validateGetGradinByMatchId = (req, res, next) => {
-  const id_match = req.params;
+  const id_match = req.params.id;
 
   if (!id_match) {
     return res.status(400).json({ error: "id_match requis" });

@@ -17,69 +17,40 @@
             <div class="bloc_information photo-upload">
               <label for="photo">{{ $t("account.profilePhoto") }}</label>
               <div class="photo-preview-container">
-                <img
-                  v-if="photoPreview"
-                  :src="photoPreview"
-                  alt="Aperçu photo"
-                  class="photo-preview" />
+                <img v-if="photoPreview" :src="photoPreview" alt="Aperçu photo" class="photo-preview" />
                 <div v-else class="photo-placeholder">
                   <span>{{ $t("account.noPhoto") }}</span>
                 </div>
               </div>
-              <input
-                id="photo"
-                type="file"
-                accept="image/*"
-                @change="handlePhotoUpload"
-                class="photo-input" />
+              <input id="photo" type="file" accept="image/*" @change="handlePhotoUpload" class="photo-input" />
               <label for="photo" class="upload-btn">{{
                 $t("account.choosePhoto")
-              }}</label>
+                }}</label>
             </div>
 
             <div class="bloc_information">
               <label for="prenom">{{ $t("user.prenom") }}</label>
-              <input
-                id="prenom"
-                v-model="formData.prenom"
-                type="text"
-                :placeholder="$t('user.prenom')" />
+              <input id="prenom" v-model="formData.prenom" type="text" :placeholder="$t('user.prenom')" />
             </div>
 
             <div class="bloc_information">
               <label for="nom">{{ $t("user.nom") }}</label>
-              <input
-                id="nom"
-                v-model="formData.nom"
-                type="text"
-                :placeholder="$t('user.nom')" />
+              <input id="nom" v-model="formData.nom" type="text" :placeholder="$t('user.nom')" />
             </div>
 
             <div class="bloc_information">
               <label for="login">{{ $t("user.login") }}</label>
-              <input
-                id="login"
-                v-model="formData.login"
-                type="text"
-                :placeholder="$t('user.login')" />
+              <input id="login" v-model="formData.login" type="text" :placeholder="$t('user.login')" />
             </div>
 
             <div class="bloc_information">
               <label for="mail">{{ $t("user.mail") }}</label>
-              <input
-                id="mail"
-                v-model="formData.mail"
-                type="email"
-                :placeholder="$t('user.mail')" />
+              <input id="mail" v-model="formData.mail" type="email" :placeholder="$t('user.mail')" />
             </div>
 
             <div class="bloc_information">
               <label for="tel">{{ $t("user.tel_utilisateur") }}</label>
-              <input
-                id="tel"
-                v-model="formData.tel_utilisateur"
-                type="tel"
-                pattern="^0[1-9][0-9]{8}$"
+              <input id="tel" v-model="formData.tel_utilisateur" type="tel" pattern="^0[1-9][0-9]{8}$"
                 :placeholder="$t('user.tel_utilisateur')" />
             </div>
 
@@ -87,31 +58,19 @@
               <label>{{ $t("user.sexe") }}</label>
               <div class="sexe">
                 <div>
-                  <input
-                    id="sexe-h"
-                    v-model="formData.sexe"
-                    type="radio"
-                    :value="$t('user.typeSexe.homme')"
+                  <input id="sexe-h" v-model="formData.sexe" type="radio" :value="$t('user.typeSexe.homme')"
                     name="sexe" />
                   <label for="sexe-h">{{ $t("user.typeSexe.homme") }}</label>
                 </div>
 
                 <div>
-                  <input
-                    id="sexe-f"
-                    v-model="formData.sexe"
-                    type="radio"
-                    :value="$t('user.typeSexe.femme')"
+                  <input id="sexe-f" v-model="formData.sexe" type="radio" :value="$t('user.typeSexe.femme')"
                     name="sexe" />
                   <label for="sexe-f">{{ $t("user.typeSexe.femme") }}</label>
                 </div>
 
                 <div>
-                  <input
-                    id="sexe-a"
-                    v-model="formData.sexe"
-                    type="radio"
-                    :value="$t('user.typeSexe.autre')"
+                  <input id="sexe-a" v-model="formData.sexe" type="radio" :value="$t('user.typeSexe.autre')"
                     name="sexe" />
                   <label for="sexe-a">{{ $t("user.typeSexe.autre") }}</label>
                 </div>
@@ -146,11 +105,14 @@ import { useI18n } from "vue-i18n";
 // import axios from 'axios';
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
-import localData from "../../backend/database/localData.js";
+import { useAdminAPIStore } from "@/services/admin.service";
+import { useUtilisateurAuthStore } from "@/services/utilisateur.service";
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
+const amdinAPIStore = useAdminAPIStore();
+const utilisateurAuthStore = useUtilisateurAuthStore();
 const { t } = useI18n();
 
 const loading = ref(true);
@@ -170,75 +132,42 @@ const formData = ref({
   tel_utilisateur: "",
   sexe: "",
 });
+
 onMounted(() => {
+  GetUtilisateurById();
+});
+
+async function GetUtilisateurById() {
   if (!userStore.isConnected) {
-    router.push({ name: "Connexion_utilisateur" });
+    router.push({ name: 'Connexion_utilisateur' });
     return;
   }
 
   try {
-    const utilisateursData = localData.getAll("utilisateurs");
-    const user = utilisateursData.find((u) => u.id_utilisateur === userId);
+    const response = await amdinAPIStore.GetUtilisateurById(userStore.userId);
 
-    if (user) {
-      formData.value = {
-        prenom: user.prenom_utilisateur || "",
-        nom: user.nom_utilisateur || "",
-        login: user.login_utilisateur || "",
-        mail: user.mail_utilisateur || "",
-        tel_utilisateur: user.tel_utilisateur || "",
-        sexe: user.sexe_utilisateur || "",
-      };
+    formData.value = {
+      prenom: response.data.prenom_utilisateur || '',
+      nom: response.data.nom_utilisateur || '',
+      login: response.data.login_utilisateur || '',
+      mail: response.data.mail_utilisateur || '',
+      tel_utilisateur: response.data.tel_utilisateur || '',
+      sexe: response.data.sexe_utilisateur || ''
+    };
 
-      if (user.photo_profil_utilisateur) {
-        photoPreview.value = `data:image/jpeg;base64,${user.photo_profil_utilisateur}`;
-      }
-    } else {
-      message.value = t("account.errorLoading");
-      messageType.value = "error";
+    if (response.data.photo_profil_utilisateur) {
+      photoPreview.value = `data:image/jpeg;base64,${response.data.photo_profil_utilisateur}`;
     }
+
   } catch (error) {
-    console.error("Erreur lors du chargement:", error);
-    message.value = t("account.errorLoading");
-    messageType.value = "error";
+    console.error('Erreur lors de la récupération des données :', error);
+    message.value = t('account.errorLoading');
+    messageType.value = 'error';
+  } finally {
+    loading.value = false;
   }
+}
 
-  loading.value = false;
-});
-
-// async onMounted(() => {
-//   if (!userStore.isConnected) {
-//     router.push({ name: 'Connexion_utilisateur' });
-//     return;
-//   }
-
-//   try {
-//     console.log('Fetching user data for ID:', userStore.userId);
-//     const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`);
-//     console.log('User data received:', response.data);
-//
-//     formData.value = {
-//       prenom: response.data.prenom_utilisateur || '',
-//       nom: response.data.nom_utilisateur || '',
-//       login: response.data.login_utilisateur || '',
-//       mail: response.data.mail_utilisateur || '',
-//       tel_utilisateur: response.data.tel_utilisateur || '',
-//       sexe: response.data.sexe_utilisateur || ''
-//     };
-//
-//     if (response.data.photo_profil_utilisateur) {
-//       photoPreview.value = `data:image/jpeg;base64,${response.data.photo_profil_utilisateur}`;
-//     }
-//
-//     console.log('Form data updated:', formData.value);
-//   } catch (error) {
-//     console.error('Erreur lors de la récupération des données :', error);
-//     message.value = t('account.errorLoading');
-//     messageType.value = 'error';
-//   } finally {
-//     loading.value = false;
-//   }
-// });
 
 const handlePhotoUpload = (event) => {
   const file = event.target.files[0];
@@ -253,120 +182,61 @@ const handlePhotoUpload = (event) => {
   }
 };
 
-const updateUserInfo = () => {
+
+const updateUserInfo = async () => {
   if (isSubmitting.value) return;
 
-  if (
-    !formData.value.prenom ||
-    !formData.value.nom ||
-    !formData.value.login ||
-    !formData.value.mail
-  ) {
-    message.value = t("account.requiredFields");
-    messageType.value = "error";
+  if (!formData.value.prenom || !formData.value.nom || !formData.value.login || !formData.value.mail) {
+    message.value = t('account.requiredFields');
+    messageType.value = 'error';
     return;
   }
 
   isSubmitting.value = true;
-  message.value = "";
+  message.value = '';
 
   try {
-    // Mettre à jour l'utilisateur dans le localStorage
-    const updates = {
-      prenom_utilisateur: formData.value.prenom,
-      nom_utilisateur: formData.value.nom,
-      login_utilisateur: formData.value.login,
-      mail_utilisateur: formData.value.mail,
-      tel_utilisateur: formData.value.tel_utilisateur,
-      sexe_utilisateur: formData.value.sexe,
-    };
-
-    const updatedUser = localData.update(
-      "utilisateurs",
-      userId,
-      updates,
-      "id_utilisateur",
-    );
-
-    if (updatedUser) {
-      message.value = t("account.updateSuccess");
-      messageType.value = "success";
-      console.log("Utilisateur mis à jour dans localStorage:", updatedUser);
-
-      setTimeout(() => {
-        router.push({
-          name: "ShowAccount",
-          params: { userId: userId, lang: route.params.lang },
-        });
-        isSubmitting.value = false;
-      }, 2000);
-    } else {
-      message.value = t("account.updateError");
-      messageType.value = "error";
-      isSubmitting.value = false;
+    let photoData = null;
+    if (photoFile.value) {
+      const reader = new FileReader();
+      photoData = await new Promise((resolve) => {
+        reader.onload = (e) => {
+          const base64String = e.target.result.split(',')[1];
+          resolve(base64String);
+        };
+        reader.readAsDataURL(photoFile.value);
+      });
     }
+
+    const response = await utilisateurAuthStore.UpdateUtilisateur(userStore.userId, {
+      prenom: formData.value.prenom,
+      nom: formData.value.nom,
+      login: formData.value.login,
+      mail: formData.value.mail,
+      tel_utilisateur: formData.value.tel_utilisateur,
+      sexe: formData.value.sexe,
+      photo_profil: photoData
+    });
+
+    message.value = t('account.updateSuccess');
+    messageType.value = 'success';
+
+    setTimeout(() => {
+      router.push({ name: 'Home' });
+    }, 2000);
   } catch (error) {
-    console.error("Erreur lors de la mise à jour:", error);
-    message.value = t("account.updateError");
-    messageType.value = "error";
+    console.error('Erreur lors de la mise à jour :', error);
+
+    if (error.response?.status === 409) {
+      message.value = t('account.emailAlreadyUsed');
+    } else {
+      message.value = t('account.updateError');
+    }
+    messageType.value = 'error';
+  } finally {
     isSubmitting.value = false;
   }
 };
-
-// const updateUserInfo = async () => {
-//   if (isSubmitting.value) return;
-
-//   if (!formData.value.prenom || !formData.value.nom || !formData.value.login || !formData.value.mail) {
-//     message.value = t('account.requiredFields');
-//     messageType.value = 'error';
-//     return;
-//   }
-
-//   isSubmitting.value = true;
-//   message.value = '';
-
-//   try {
-//     let photoData = null;
-//     if (photoFile.value) {
-//       const reader = new FileReader();
-//       photoData = await new Promise((resolve) => {
-//         reader.onload = (e) => {
-//           const base64String = e.target.result.split(',')[1];
-//           resolve(base64String);
-//         };
-//         reader.readAsDataURL(photoFile.value);
-//       });
-//     }
-
-//     const response = await axios.put(`http://localhost:3000/utilisateur/auth/update/${userStore.userId}`, {
-//       prenom: formData.value.prenom,
-//       nom: formData.value.nom,
-//       login: formData.value.login,
-//       mail: formData.value.mail,
-//       tel_utilisateur: formData.value.tel_utilisateur,
-//       sexe: formData.value.sexe,
-//       photo_profil: photoData
-//     });
-
-//     message.value = t('account.updateSuccess');
-//     messageType.value = 'success';
-
-//     setTimeout(() => {
-//       router.push({ name: 'Home' });
-//     }, 2000);
-//   } catch (error) {
-//     console.error('Erreur lors de la mise à jour :', error);
-//
-//     if (error.response?.status === 409) {
-//       message.value = t('account.emailAlreadyUsed');
-//     } else {
-//       message.value = t('account.updateError');
-//     }
-//     messageType.value = 'error';
-//   } finally {
-//     isSubmitting.value = false;
-//   }
-// };
 </script>
 
 <style scoped>
@@ -423,13 +293,13 @@ const updateUserInfo = () => {
   gap: 8px;
 }
 
-.bloc_information > label {
+.bloc_information>label {
   text-transform: uppercase;
   font-size: 15px;
   font-weight: 500;
 }
 
-.bloc_information > input {
+.bloc_information>input {
   width: 40%;
   border: none;
   border-radius: 10px;

@@ -1,53 +1,54 @@
 import { defineStore } from "pinia";
-import { getRequest, postRequest, putRequest } from "./axios.service";
+import { getRequest, postRequest, putRequest, handleError } from "./axios.service";
 
 export const usePrestataireStore = defineStore("prestataire", () => {
   async function GetPrestataires() {
+    const res = null;
     try {
-      const res = await getRequest("/prestataire/show");
-
-      return res;
+      res = await getRequest("/prestataire/show");
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
   async function GetPrestataireById(id_presta) {
     if (!id_presta) handleError("L'id du prestataire est obligatoire");
+    const res = null;
 
     try {
-      const res = await getRequest(`/prestataire/show/${id_presta}`);
-
-      return res;
+      res = await getRequest(`/prestataire/show/${id_presta}`);
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
   async function GetValuesFilter(valueFilter, isServiceView) {
     if (valueFilter.prixMin < 0)
       handleError("Le prix minimum ne peut pas être négatif");
+    const res = null;
 
     try {
-      const res = await getRequest("/prestataire/showFilter", {
+      res = await getRequest("/prestataire/showFilter", {
         params: {
           ...valueFilter,
           type: isServiceView ? "services" : "prestataires",
         },
       });
-
-      return res;
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
   async function BecomePrestataire(prestataire, services) {
     const id_presta = prestataire.id_prestataire;
     if (!id_presta) handleError("L'id du prestataire est obligatoire");
+    const res = null;
 
     try {
-      const res = await postRequest(
+      res = await postRequest(
         `/prestataire/becomePrestataire/${id_presta}`,
         {
           nom: prestataire.nom_prestataire,
@@ -59,19 +60,19 @@ export const usePrestataireStore = defineStore("prestataire", () => {
           services: services,
         },
       );
-
-      return res;
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
   async function UpdatePrestataire(prestataire, services) {
     const id_presta = prestataire.id_prestataire;
     if (!id_presta) handleError("L'id du prestataire est obligatoire");
+    const res = null;
 
     try {
-      const res = await putRequest(`/prestataire/updatePresta/${id_presta}`, {
+      res = await putRequest(`/prestataire/updatePresta/${id_presta}`, {
         nom: prestataire.nom_prestataire,
         descri: prestataire.descri_prestataire,
         mail: prestataire.mail_prestataire,
@@ -80,11 +81,10 @@ export const usePrestataireStore = defineStore("prestataire", () => {
         type: Number(prestataire.id_type_prestataire),
         services: services,
       });
-
-      return res;
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
   return {

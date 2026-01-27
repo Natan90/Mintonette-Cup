@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getRequest, postRequest, deleteRequest } from "./axios.service";
+import { getRequest, postRequest, deleteRequest, handleError } from "./axios.service";
 
 export const usePanierStore = defineStore("panier", () => {
   // Mettre des tableaux avec des refs quand on récupère les valeurs depuis les fonctions,
@@ -7,44 +7,45 @@ export const usePanierStore = defineStore("panier", () => {
 
   async function GetPanierByUser(id_user) {
     if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
+    const res = null;
 
     try {
-      const res = await getRequest(`/panier/show/${id_user}`);
-
-      return res;
+      res = await getRequest(`/panier/show/${id_user}`);
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
-  async function AddToPanier(type, id_user) {
+  async function AddToPanier(type, addValue, id_user) {
     if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
+    const res = null;
 
     try {
-      const res = await postRequest("/panier/add", {
+      res = await postRequest("/panier/add", {
         type: type,
         id_user: id_user,
+        ...addValue
       });
-
-      return res;
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
 
   async function RemoveFromPanier(type, id_user) {
     if (!id_user) handleError("L'id de l'utilisateur est obligatoire");
+    const res = null;
 
     try {
-      const res = await deleteRequest("/panier/delete", {
+      res = await deleteRequest("/panier/delete", {
         type: type,
         id_user: id_user,
       });
-
-      return res;
     } catch (error) {
-      handleError(error);
+      res = handleError(error);
     }
+    return res;
   }
   return {
     GetPanierByUser,

@@ -127,6 +127,7 @@ import photoReseaux from "./../images/reseaux.jpg";
 const navbar = ref("0px");
 
 const userStore = useUserStore();
+const adminAPIStore = useAdminAPIStore();
 
 const utilisateur = ref([]);
 
@@ -203,7 +204,7 @@ onBeforeUnmount(() => {
 
 async function getValuesEvenement() {
     try {
-        const res = await useAdminAPIStore.GetEvenement();
+        const res = await adminAPIStore.GetEvenement();
         title_evenement.value = res.data.nom_evenement;
         colorTitle.value = res.data.color_title;
         selectedFont.value = res.data.text_font;
@@ -215,7 +216,7 @@ async function getValuesEvenement() {
 
 async function getValuesUser() {
   try {
-    const res = await useAdminAPIStore.GetUtilisateurById(userStore.userId)
+    const res = await adminAPIStore.GetUtilisateurById(userStore.userId)
     utilisateur.value = res.data;
   } catch (err) {
     console.error(err);

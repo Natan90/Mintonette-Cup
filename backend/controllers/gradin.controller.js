@@ -2,7 +2,7 @@ const gradinService = require("../services/gradin.service");
 
 exports.getGradin = async (req, res) => {
   try {
-    const id_match = req.params;
+    const id_match = req.params.id;
     const result = await gradinService.getGradinByMatchId(id_match);
     return res.status(201).json(result);
   } catch (err) {

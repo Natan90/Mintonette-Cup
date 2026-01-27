@@ -1,31 +1,33 @@
 import { defineStore } from "pinia";
-import { getRequest } from "./axios.service";
+import { getRequest, handleError } from "./axios.service";
 
 export const useTypePrestataireStore = defineStore("type_pestataire", () => {
-
-    async function GetTypePrestataires() {
-        try {
-            const res = await getRequest("/prestataire/type_prestataire/showTypePrestataire");
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+  async function GetTypePrestataires() {
+    const res = null;
+    try {
+      res = await getRequest(
+        "/prestataire/type_prestataire/showTypePrestataire",
+      );
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-    async function GetEveryType() {
-        try {
-            const res = await getRequest("/prestataire/type_prestataire/showEveryType");
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+  async function GetEveryType() {
+    const res = null;
+    try {
+      res = await getRequest(
+        "/prestataire/type_prestataire/showEveryType",
+      );
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-})
-
-export default {
+  return {
     GetTypePrestataires,
-    GetEveryType
-}
+    GetEveryType,
+  };
+});

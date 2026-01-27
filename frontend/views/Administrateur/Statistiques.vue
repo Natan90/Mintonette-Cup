@@ -13,6 +13,7 @@ import { ref, onMounted } from "vue";
 import axios from 'axios';
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import NavView from "@/components/NavView.vue";
+import { useAdminAPIStore } from "@/services/admin.service";
 import { useI18n } from "vue-i18n";
 import { Chart } from "vue-chartjs";
 import {
@@ -39,6 +40,7 @@ ChartJS.register(
 );
 
 const { locale } = useI18n();
+const adminAPIStore = useAdminAPIStore();
 
 //==========================
 //======== BarChat =========
@@ -106,9 +108,7 @@ onMounted(() => {
 
 async function getDashboardStats() {
   try {
-    const res = await axios.get(
-      "http://localhost:3000/admin/dashboard/stats"
-    );
+    const res = await adminAPIStore.GetStatistiques();
 
     const { totalUsers, totalPrestataires, servicesByType } = res.data;
 

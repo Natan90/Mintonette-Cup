@@ -7,14 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
-// import axios from "axios";
-
-import { computed } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import localData from "../../backend/database/localData.js";
+import { useAdminAPIStore } from "@/services/admin.service.js";
 
 const { locale } = useI18n();
+const adminAPIStore = useAdminAPIStore();
 
 const content = ref("");
 const selectedItem = ref(0);
@@ -39,40 +37,23 @@ onMounted(() => {
   getValuesEvenement();
 });
 
-function getValuesEvenement() {
-  const events = localData.getAll("evenements");
-  const data = events.length > 0 ? events[0] : null;
 
-  if (!data) {
-    console.error("Aucun événement trouvé dans localStorage");
-    return;
-  }
+async function getValuesEvenement() {
+    try {
+        const res = await adminAPIStore.GetEvenement();
+        evenement.value = res.data;
+        title_evenement.value = res.data.nom_evenement;
+        colorTitle.value = res.data.color_title;
+        selectedFont.value = res.data.text_font;
+        imagePreview.value = res.data.image_evenement;
 
-  console.log("PresentationMintonette.vue - Événement chargé:", data);
-
-  evenement.value = data;
-  title_evenement.value = data.nom_evenement;
-  colorTitle.value = data.color_title;
-  selectedFont.value = data.text_font;
-  imagePreview.value = data.image_evenement;
-
-  updateDescription();
+        updateDescription();
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// async function getValuesEvenement() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/admin/evenement/show");
-//         evenement.value = res.data;
-//         title_evenement.value = res.data.nom_evenement;
-//         colorTitle.value = res.data.color_title;
-//         selectedFont.value = res.data.text_font;
-//         imagePreview.value = res.data.image_evenement;
 
-//         updateDescription();
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
 
 function updateDescription() {
   if (evenement.value?.descri_evenement?.[locale.value]) {

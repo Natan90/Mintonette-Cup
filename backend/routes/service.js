@@ -7,9 +7,9 @@ const serviceMiddleware = require("../middlewares/service.middleware");
 router.get("/show", serviceController.getServices);
 
 // GET service par id
-router.get("/show/:id_service", serviceController.getServiceById);
+router.get("/show/:id", serviceController.getServiceById);
 
 // PATCH activer / désactiver le service
-router.patch("/activate/:id_service", serviceMiddleware.validateActivateService, serviceController.activateServiceById);
+router.patch("/activate/:id", serviceMiddleware.validateActivateService, serviceController.activateServiceById);
 
 module.exports = router;

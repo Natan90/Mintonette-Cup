@@ -28,7 +28,8 @@ async function updateEvenement(evenement) {
             text_font = $3,
             image_evenement = $4,
             descri_evenement = $5
-        WHERE id_evenement = 1;
+        WHERE id_evenement = 1
+        RETURNING *;
         `,
       [title, color, font, image, descriJson]
     );
@@ -36,8 +37,8 @@ async function updateEvenement(evenement) {
     await client.query("COMMIT");
 
     return {
-        result: result.rows,
-        message: "Évènement modifié avce succès"
+        result: result.rows[0],
+        message: "Évènement modifié avec succès"
     }
   } catch (err) {
     await client.query("ROLLBACK");

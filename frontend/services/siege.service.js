@@ -1,31 +1,29 @@
 import { defineStore } from "pinia";
-import { getRequest } from "./axios.service";
+import { getRequest, handleError } from "./axios.service";
 
 export const useSiegeStore = defineStore("siege", () => {
-
-    async function GetSieges() {
-        try {
-            const res = await getRequest("/siege/show");
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+  async function GetSieges() {
+    const res = null;
+    try {
+      res = await getRequest("/siege/show");
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-    async function GetEveryType() {
-        try {
-            const res = await getRequest("/siege/panier/show");
-
-            return res;
-        } catch (error) {
-            handleError(error);
-        }
+  async function GetEveryType() {
+    const res = null;
+    try {
+      res = await getRequest("/siege/panier/show");
+    } catch (error) {
+      res = handleError(error);
     }
+    return res;
+  }
 
-})
-
-export default {
+  return {
     GetTypePrestataire,
-    GetEveryType
-}
+    GetEveryType,
+  };
+});

@@ -139,11 +139,7 @@ import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import { useGradinStore } from "@/services/gradin.service";
-// import axios from "axios";
-import matchesData from "../../backend/database/jsonData/Match.json";
-import siegesData from "../../backend/database/jsonData/Siege.json";
-import equipesData from "../../backend/database/jsonData/Equipe.json";
-import paysData from "../../backend/database/jsonData/Pays.json";
+import { usePanierStore } from "@/services/panier.service";
 
 const route = useRoute();
 const router = useRouter();
@@ -151,6 +147,7 @@ const zone = route.params.zone;
 const userStore = useUserStore();
 const navStore = useNavigationStore();
 const gradinStore = useGradinStore();
+const panierStore = usePanierStore();
 
 const matches = ref([]);
 const seats = ref([]);
@@ -244,13 +241,13 @@ async function AddToCart() {
 
   try {
     for (const seat of globalSelectedSeats.value) {
-      await axios.post("http://localhost:3000/gradin/panier/add", {
+      await panierStore.AddToPanier("siege", {
         utilisateur_id: userStore.userId,
         matchId: seat.matchId,
         numero_colonne: seat.numero_colonne,
         numero_ligne: seat.numero_ligne,
         zone: seat.zone,
-      });
+      }, userStore.userId);
     }
 
     estAjoute.value = true;

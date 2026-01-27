@@ -34,13 +34,11 @@ import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
-import localData from "../../backend/database/localData.js";
-import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
-import typesPrestataireData from "../../backend/database/jsonData/Type_prestataire.json";
+import { usePrestataireStore } from "@/services/prestataire.service";
 
-// import axios from "axios";
 
 const route = useRoute();
+const prestataireStore = usePrestataireStore();
 
 let map;
 const currentMapType = ref("generalZone");
@@ -1837,107 +1835,28 @@ const serviceLocation = ref([
 ]);
 const nomType = ref("");
 
-function fetchPresta() {
-  // Récupérer depuis localStorage
-  const prestatairesLocalStorage = localData.getAll("prestataires");
-  const typesPrestataireData = localData.getAll("type_prestataire");
 
-  // Récupérer depuis les fichiers JSON
-  const prestatairesJSON = prestatairesData;
-
-  // Fusionner les deux sources en évitant les doublons
-  // Priorité au localStorage si un ID existe dans les deux sources
-  const localStorageIds = prestatairesLocalStorage.map((p) => p.id_prestataire);
-  const prestatairesJSONFiltered = prestatairesJSON.filter(
-    (p) => !localStorageIds.includes(p.id_prestataire)
-  );
-  const allPrestataires = [
-    ...prestatairesJSONFiltered,
-    ...prestatairesLocalStorage,
-  ];
-
- 
-
-  prestataires.value = allPrestataires.map((presta) => {
-    const typePrestataire = typesPrestataireData.find(
-      (t) =>
-        t.id_type_prestataire ===
-        (presta.id_type_prestataire || presta.type_prestataire_id)
-    );
-    return {
-      ...presta,
-      nom_type_prestataire:
-        typePrestataire?.nom_type_prestataire?.fr || "Non défini",
-    };
-  });
-
-
-  prestataires.value.forEach((presta) => {
-
-    if (presta.id_zone && presta.waitingforadmin === false) {
-      const zone = serviceLocation.value.find(
-        (z) => z.id_zone === presta.id_zone
-      );
-      if (zone) {
-        zone.name = presta.nom_prestataire;
-        zone.id_prestataire = presta.id_prestataire;
-        zone.type_prestataire = presta.nom_type_prestataire;
+async function fetchPresta() {
+  try {
+    const res = await prestataireStore.GetPrestataires();
+    prestataires.value = res.data;
+    nomType.value = res.nom_type_prestataire;
+    prestataires.value.forEach((presta) => {
+      if (presta.id_zone && presta.waitingforadmin === false) {
+        const zone = serviceLocation.value.find(
+          (z) => z.id_zone === presta.id_zone
+        );
+        if (zone) {
+          zone.name = presta.nom_prestataire;
+          zone.id_prestataire = presta.id_prestataire;
+          zone.type_prestataire = presta.nom_type_prestataire;
+        }
       }
-    }
-  });
-
+    });
+  } catch (err) {
+    console.error("Erreur lors de la récupération des prestataires:", err);
+  }
 }
-
-/*Avec le JSON statique*/
-// function fetchPresta() {
-//   prestataires.value = prestatairesData.map((presta) => {
-//     const typePrestataire = typesPrestataireData.find(
-//       (t) => t.id_type_prestataire === presta.type_prestataire_id
-//     );
-//     return {
-//       ...presta,
-//       nom_type_prestataire:
-//         typePrestataire?.nom_type_prestataire?.fr || "Non défini",
-//     };
-//   });
-//
-//   prestataires.value.forEach((presta) => {
-//     if (presta.id_zone && presta.waitingforadmin === false) {
-//       const zone = serviceLocation.value.find(
-//         (z) => z.id_zone === presta.id_zone
-//       );
-//       if (zone) {
-//         zone.name = presta.nom_prestataire;
-//         zone.id_prestataire = presta.id_prestataire;
-//         zone.type_prestataire = presta.nom_type_prestataire;
-//       }
-//     }
-//   });
-// }
-
-/*Avec la BDD ( axios )*/
-// ################################################################################################################### fetchPresta
-// async function fetchPresta() {
-//   try {
-//     const res = await axios.get(`http://localhost:3000/prestataire/show`);
-//     prestataires.value = res.data;
-//     nomType.value = res.nom_type_prestataire;
-//     prestataires.value.forEach((presta) => {
-//       if (presta.id_zone && presta.waitingforadmin === false) {
-//         const zone = serviceLocation.value.find(
-//           (z) => z.id_zone === presta.id_zone
-//         );
-//         if (zone) {
-//           zone.name = presta.nom_prestataire;
-//           zone.id_prestataire = presta.id_prestataire;
-//           zone.type_prestataire = presta.nom_type_prestataire;
-//         }
-//       }
-//     });
-//   } catch (err) {
-//     console.error("Erreur lors de la récupération des prestataires:", err);
-//   }
-// }
 
 onMounted(() => {
   fetchPresta();

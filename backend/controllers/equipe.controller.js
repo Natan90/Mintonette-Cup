@@ -1,4 +1,4 @@
-const matchService = require("../services/match.service");
+const matchService = require("../services/equipe.service");
 
 exports.showPays = async (req, res) => {
   try {
@@ -31,7 +31,7 @@ exports.showMatches = async (req, res) => {
 };
 
 exports.showMatchByTerrain = async (req, res) => {
-  const { idTerrain } = req.params;
+  const { idTerrain } = req.params.id;
 
   try {
     const result = await matchService.getMatchById(idTerrain);

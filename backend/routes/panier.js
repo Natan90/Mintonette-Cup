@@ -4,7 +4,7 @@ const panierController = require("../controllers/panier.controller");
 const panierMiddleware = require("../middlewares/panier.middleware");
 
 // GET panier par utilisateur
-router.get("/show/:id_user", panierController.getPanier);
+router.get("/show/:id", panierController.getPanier);
 
 // POST ajouter au panier (siège ou service)
 router.post("/add", panierMiddleware.validateAdd, panierController.addPanier);

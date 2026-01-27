@@ -1,5 +1,5 @@
 exports.validateActivateService = (req, res, next) => {
-  const { id_service } = req.params; 
+  const { id_service } = req.params.id; 
 
   if (!id_service) {
     return res.status(400).json({ error: "id_service est requis" });

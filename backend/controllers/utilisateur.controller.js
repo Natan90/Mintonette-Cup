@@ -28,7 +28,7 @@ exports.connexionUtilisateur = async (req, res) => {
 
 exports.updateUtilisateur = async (req, res) => {
   try {
-    const id_user = req.params;
+    const id_user = req.params.id;
     const result = await utilisateurService.updateUtilisateur(id_user, req.body);
     return res.status(201).json(result);
   } catch (err) {

@@ -61,39 +61,21 @@ function getPrice(seat) {
   return 12;
 }
 
-function fetchBillets() {
+
+async function fetchBillets() {
   if (!userStore.userId) return;
   loading.value = true;
   error.value = null;
-
   try {
-    const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
-    billets.value = siegesLocal.filter(
-      (seat) =>
-        seat.est_reserve === true && seat.id_utilisateur === userStore.userId,
-    );
+  const res = await axios.get(`http://localhost:3000/gradin/user/${userStore.userId}`);
+    billets.value = res.data;
   } catch (err) {
-    console.error("Erreur en récupérant les billets :", err);
-    error.value = "Impossible de récupérer vos billets pour le moment.";
+    console.error('Erreur en récupérant les billets :', err);
+    error.value = 'Impossible de récupérer vos billets pour le moment.';
   } finally {
     loading.value = false;
   }
 }
-
-// async function fetchBillets() {
-//   if (!userStore.userId) return;
-//   loading.value = true;
-//   error.value = null;
-//   try {
-//   const res = await axios.get(`http://localhost:3000/gradin/user/${userStore.userId}`);
-//     billets.value = res.data;
-//   } catch (err) {
-//     console.error('Erreur en récupérant les billets :', err);
-//     error.value = 'Impossible de récupérer vos billets pour le moment.';
-//   } finally {
-//     loading.value = false;
-//   }
-// }
 
 onMounted(() => {
   if (userStore.isConnected) fetchBillets();
