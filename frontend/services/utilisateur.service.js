@@ -9,7 +9,7 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
                 ...utilisateur,
             });
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -21,7 +21,7 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
                 ...utilisateur
             });
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -35,7 +35,7 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
                 ...utilisateur
             });
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }

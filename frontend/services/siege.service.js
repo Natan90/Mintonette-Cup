@@ -7,7 +7,7 @@ export const useSiegeStore = defineStore("siege", () => {
         try {
             const res = await getRequest("/siege/show");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -17,7 +17,7 @@ export const useSiegeStore = defineStore("siege", () => {
         try {
             const res = await getRequest("/siege/panier/show");
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }

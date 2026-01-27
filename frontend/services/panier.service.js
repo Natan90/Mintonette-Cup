@@ -13,7 +13,7 @@ export const usePanierStore = defineStore("panier", () => {
         try {
             const res = await getRequest(`/panier/show/${id_user}`);
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -28,7 +28,7 @@ export const usePanierStore = defineStore("panier", () => {
                 id_user: id_user
             });
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
@@ -43,7 +43,7 @@ export const usePanierStore = defineStore("panier", () => {
                 id_user: id_user
             });
 
-            return res.data;
+            return res;
         } catch (error) {
             handleError(error);
         }
