@@ -27,10 +27,9 @@ export const useGradinStore = defineStore("gradin", () => {
         }
     }
 
-
-})
-
-export default {
+return {
     GetGradinByMatchId,
     UpdateGradin
 }
+})
+
