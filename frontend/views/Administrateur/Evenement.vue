@@ -5,10 +5,7 @@
     <div class="editor_container">
       <div class="preview_container" v-if="imagePreview">
         <div class="image_preview_with_text">
-          <img
-            v-if="imagePreview"
-            :src="imagePreview"
-            alt="Aperçu de l'image" />
+          <img v-if="imagePreview" :src="imagePreview" alt="Aperçu de l'image" />
           <div class="texte_sur_image">
             <h2 :style="{ color: colorTitle, fontFamily: selectedFont }">
               {{ title_evenement }}
@@ -19,11 +16,7 @@
 
       <div class="form_group">
         <label for="title">{{ $t("adminPage.evenement.nom") }}</label>
-        <input
-          type="text"
-          id="title"
-          v-model="title_evenement"
-          placeholder="Ex: Mintonette Cup" />
+        <input type="text" id="title" v-model="title_evenement" placeholder="Ex: Mintonette Cup" />
       </div>
       <div class="form_group">
         <label for="color">{{ $t("adminPage.evenement.couleur") }}</label>
@@ -32,11 +25,7 @@
       <div class="form_group">
         <label for="police">{{ $t("adminPage.evenement.police") }}</label>
         <select id="police" v-model="selectedFont">
-          <option
-            v-for="(font, index) in fonts"
-            :key="index"
-            :value="font"
-            :style="{ fontFamily: font }">
+          <option v-for="(font, index) in fonts" :key="index" :value="font" :style="{ fontFamily: font }">
             {{ font }}
           </option>
         </select>
@@ -46,21 +35,13 @@
         <div class="chooseFile">
           <label for="image">{{
             $t("adminPage.evenement.imageCouverture")
-          }}</label>
+            }}</label>
           <span class="label_hint">{{
             $t("adminPage.evenement.typeImage")
-          }}</span>
-          <input
-            type="file"
-            ref="fileInput"
-            id="fileInput"
-            @change="onFileChange"
-            accept=".jpg,.jpeg,.png,.webp"
+            }}</span>
+          <input type="file" ref="fileInput" id="fileInput" @change="onFileChange" accept=".jpg,.jpeg,.png,.webp"
             hidden />
-          <button
-            type="button"
-            class="btn_chooseFile"
-            @click="triggerFileSelect">
+          <button type="button" class="btn_chooseFile" @click="triggerFileSelect">
             {{
               !imagePreview
                 ? $t("adminPage.evenement.choisirFichier")
@@ -87,23 +68,17 @@
 
       <div class="form_group">
         <label>Description de l'évènement</label>
-        <Editor
-          v-model="descri_evenement"
-          api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
-          :init="{
-            height: 450,
-            menubar: false,
-            plugins: 'lists link image table media code preview anchor',
-            toolbar:
-              'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-            branding: false,
-          }" />
+        <Editor v-model="descri_evenement" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+          height: 450,
+          menubar: false,
+          plugins: 'lists link image table media code preview anchor',
+          toolbar:
+            'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+          branding: false,
+        }" />
       </div>
 
-      <div
-        v-if="message"
-        class="message"
-        :class="messageType === 'error' ? 'message-error' : 'message-success'">
+      <div v-if="message" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
         <span class="text">{{ message }}</span>
       </div>
 
@@ -111,11 +86,8 @@
         <button @click="updateEvent" class="btn-primary">
           {{ $t("prestataireInfo.formulaire.btnModifier") }}
         </button>
-       
-        <button
-          @click="resetLocalStorage"
-          class="btn-reset"
-          style="margin-left: 10px; background: #dc2626">
+
+        <button @click="resetLocalStorage" class="btn-reset" style="margin-left: 10px; background: #dc2626">
           Réinitialiser l'événement
         </button>
       </div>
@@ -135,10 +107,10 @@ import { color } from "motion";
 import Footer from "@/components/Footer.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import localData from "../../../backend/database/localData.js";
-
-import evenementDataJSON from "../../../backend/database/jsonData/Evenement.json";
+import { useAdminAPIStore } from "@/services/admin.service.js";
 
 const { locale } = useI18n();
+const adminAPIStore = useAdminAPIStore();
 
 const evenementData = ref(null);
 const title_evenement = ref("");
@@ -204,127 +176,22 @@ onMounted(() => {
 //=========================
 //= Async functions event =
 //=========================
-function getValuesEvenement() {
+async function getValuesEvenement() {
   try {
-    // Charger depuis localStorage
-    const events = localData.getAll("evenements");
-    console.log("Événements chargés depuis localStorage:", events);
+    const res = await adminAPIStore.GetEvenement();
+    evenementData.value = res.data;
+    title_evenement.value = res.data.nom_evenement;
+    colorTitle.value = res.data.color_title;
+    selectedFont.value = res.data.text_font;
+    imagePreview.value = res.data.image_evenement;
+    imageFile.value = null;
 
-    const event = events.length > 0 ? events[0] : null;
-
-    if (event) {
-      console.log("Événement sélectionné:", event);
-      evenementData.value = event;
-      title_evenement.value = event.nom_evenement || "";
-      colorTitle.value = event.color_title || "#000000";
-      selectedFont.value = event.text_font || "Arial";
-      imagePreview.value = event.image_evenement || null;
-      imageFile.value = null;
-
-      updateDescription();
-    } else {
-      console.warn("Aucun événement trouvé dans localStorage");
-    }
+    updateDescription();
   } catch (err) {
-    console.error("Erreur lors du chargement:", err);
+    console.error(err);
   }
 }
 
-// async function getValuesEvenement() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/admin/evenement/show");
-//         evenementData.value = res.data;
-//         title_evenement.value = res.data.nom_evenement;
-//         colorTitle.value = res.data.color_title;
-//         selectedFont.value = res.data.text_font;
-//         imagePreview.value = res.data.image_evenement;
-//         imageFile.value = null;
-//
-//         updateDescription();
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function updateEvent() {
-  try {
-    const currentEvent = evenementData.value;
-
-    const updatedDescription = {
-      ...currentEvent.descri_evenement,
-      [locale.value]: {
-        texte: descri_evenement.value,
-      },
-    };
-
-    // Construire l'objet avec toutes les modifications
-    const updatedEvent = {
-      ...currentEvent, // Préserver toutes les propriétés existantes
-      nom_evenement: title_evenement.value,
-      color_title: colorTitle.value,
-      text_font: selectedFont.value,
-      image_evenement: imagePreview.value || currentEvent.image_evenement,
-      descri_evenement: updatedDescription,
-    };
-
-    console.log("Mise à jour de l'événement:", updatedEvent);
-
-    // Récupérer tous les événements
-    const events = localData.getAll("evenements");
-    console.log("Événements avant mise à jour:", events);
-
-    // Trouver l'index de l'événement à mettre à jour
-    const index = events.findIndex(
-      (e) => e.id_evenement === evenementData.value.id_evenement
-    );
-
-    if (index !== -1) {
-      // Remplacer l'événement
-      events[index] = updatedEvent;
-
-      // Sauvegarder directement dans localStorage
-      localStorage.setItem("mintonette_evenements", JSON.stringify(events));
-
-      console.log("Événements après mise à jour:", events);
-
-      evenementData.value = updatedEvent;
-
-      message.value = "Événement mis à jour avec succès dans localStorage";
-      messageType.value = "success";
-
-      setTimeout(() => {
-        message.value = "";
-      }, 3000);
-    } else {
-      throw new Error("Événement non trouvé");
-    }
-
-    // Version axios commentée :
-    // try {
-    //     const res = await axios.put("http://localhost:3000/admin/evenement/update", {
-    //         title: title_evenement.value,
-    //         descri_fr: descri_evenement.value,
-    //         descri_en: descri_evenement.value,
-    //         color: colorTitle.value,
-    //         font: selectedFont.value,
-    //         image: imagePreview.value
-    //     });
-    //     message.value = res.data.message;
-    //     messageType.value = "success";
-    // } catch (err) {
-    //     if (err.response && err.response.data) {
-    //         message.value = err.response.data.error;
-    //     } else {
-    //         message.value = "Erreur inconnue";
-    //     }
-    //     messageType.value = 'error';
-    // }
-  } catch (err) {
-    message.value = "Erreur lors de la mise à jour: " + err.message;
-    messageType.value = "error";
-    console.error("Erreur complète:", err);
-  }
-}
 
 function debugLocalStorage() {
   console.log("=== DEBUG LOCALSTORAGE ===");
@@ -356,27 +223,27 @@ function resetLocalStorage() {
   }
 }
 
-// async function updateEvent() {
-//     try {
-//         const res = await axios.put("http://localhost:3000/admin/evenement/update", {
-//             title: title_evenement.value,
-//             descri_fr: descri_evenement.value,
-//             descri_en: descri_evenement.value,
-//             color: colorTitle.value,
-//             font: selectedFont.value,
-//             image: imagePreview.value
-//         });
-//         message.value = res.data.message;
-//         messageType.value = "success";
-//     } catch (err) {
-//         if (err.response && err.response.data) {
-//             message.value = err.response.data.error;
-//         } else {
-//             message.value = "Erreur inconnue";
-//         }
-//         messageType.value = 'error';
-//     }
-// }
+async function updateEvent() {
+  try {
+    const res = await adminAPIStore.UpdateEvenement({
+      title: title_evenement.value,
+      descri_fr: descri_evenement.value,
+      descri_en: descri_evenement.value,
+      color: colorTitle.value,
+      font: selectedFont.value,
+      image: imagePreview.value
+    });
+    message.value = res.data.message;
+    messageType.value = "success";
+  } catch (err) {
+    if (err.response && err.response.data) {
+      message.value = err.response.data.error;
+    } else {
+      message.value = "Erreur inconnue";
+    }
+    messageType.value = 'error';
+  }
+}
 
 function updateDescription() {
   if (evenementData.value?.descri_evenement?.[locale.value]) {

@@ -67,9 +67,11 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
         }
     }
 
-    async function UpdateEvenement() {
+    async function UpdateEvenement(evenement) {
         try {
-            const res = await putRequest("/admin/evenement/update");
+            const res = await putRequest("/admin/evenement/update", {
+                ...evenement
+            });
 
             return res;
         } catch (error) {
