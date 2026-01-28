@@ -7,11 +7,11 @@ export const axiosInstance = axios.create({
 
 
 export async function handleError(url, typeReq, error) {
-    if (error.response) {
+    if (error?.response) {
         console.error(`[${typeReq}] ${url} - Erreur serveur :`, error.response.data);
         throw error.response;
     }
-    else if (error.request) {
+    else if (error?.request) {
         console.error(`[${typeReq}] ${url} - Aucune réponse du serveur`);
         throw { message: "Serveur injoignable" }
     }
@@ -24,53 +24,41 @@ export async function handleError(url, typeReq, error) {
 
 
 export const getRequest = async (url) => {
-    let response = null;
     try {
-        response = await axiosInstance.get(url);
+        return await axiosInstance.get(url);
     } catch (error) {
-        response = await handleError(url, 'get', error);
+        handleError(url, 'get', error);
     }
-
-    return response;
 }
 
 export const postRequest = async (url, data, config = {}) => {
-    let response = null;
     try {
-        response = await axiosInstance.post(url, data, config);
+        return await axiosInstance.post(url, data, config);
     } catch (error) {
-        response = await handleError(url, 'post', error);
+        handleError(url, 'post', error);
     }
-    return response;
-
 }
 
 export const putRequest = async (url, data, config = {}) => {
-    let response = null;
     try {
-        response = await axiosInstance.put(url, data, config);
+        return await axiosInstance.put(url, data, config);
     } catch (error) {
-        response = await handleError(url, 'put', error);
+        handleError(url, 'put', error);
     }
-    return response;
 }
 
 export const patchRequest = async (url, data, config = {}) => {
-    let response = null;
     try {
-        response = await axiosInstance.patch(url, data, config);
+        return await axiosInstance.patch(url, data, config);
     } catch (error) {
-        response = await handleError(url, 'patch', error);
+        handleError(url, 'patch', error);
     }
-    return response;
 }
 
 export const deleteRequest = async (url, data, config = {}) => {
-    let response = null;
     try {
-        response = await axiosInstance.delete(url, data, config);
+        return await axiosInstance.delete(url, data, config);
     } catch (error) {
-        response = await handleError(url, 'delete', error);
+        handleError(url, 'delete', error);
     }
-    return response;
 }

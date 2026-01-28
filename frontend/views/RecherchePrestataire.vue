@@ -141,19 +141,19 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-// import axios from 'axios';
 import { useNavigationStore } from "@/stores/navigation";
 import { useI18n } from "vue-i18n";
+import { useServiceStore } from "@/services/service.service";
+import { usePrestataireStore } from "@/services/prestataire.service";
+import { useTypePrestataireStore } from "@/services/type_prestataire.service";
 
-import prestataireData from "../../backend/database/jsonData/Prestataire.json";
-import typePrestaData from "../../backend/database/jsonData/Type_prestataire.json";
-import servicesData from "../../backend/database/jsonData/Services.json";
-import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
-import localData from "../../backend/database/localData.js";
 
 const router = useRouter();
 const route = useRoute();
 const navStore = useNavigationStore();
+const serviceStore = useServiceStore();
+const prestataireStore = usePrestataireStore();
+const typePrestataireStore = useTypePrestataireStore();
 const { t, locale } = useI18n();
 
 const isServiceView = ref(false);
@@ -222,238 +222,50 @@ function goToSpecificPrestataire(idPresta) {
 //=========================
 //==== Async functions ====
 //=========================
-function getValuesServices() {
+async function getValuesServices() {
   try {
-    prestataires.value = servicesData.map((service) => {
-      const presta = prestataireData.find(
-        (p) => p.id_prestataire === service.id_prestataire
-      );
-      const typePresta = typePrestaData.find(
-        (t) => t.id_type_prestataire === presta?.type_prestataire_id
-      );
-
-      return {
-        ...service,
-        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
-      };
-    });
+    const res = await serviceStore.GetServices();
+    prestataires.value = res.data;
   } catch (err) {
     console.error(err);
   }
 }
 
-// async function getValuesServices() {
-//   try {
-//     const res = await axios.get('http://localhost:3000/prestataire/services/show');
-//     prestataires.value = res.data;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
 
-function getValuesPrestataire() {
-  try {
-    // Récupérer depuis localStorage
-    const prestatairesLocalStorage = localData.getAll("prestataires");
-    const utilisateursLocalStorage = localData.getAll("utilisateurs");
-    const servicesLocalStorage = localData.getAll("services");
-
-    // Fusionner prestataires JSON + localStorage (priorité au localStorage)
-    const localStoragePrestaIds = prestatairesLocalStorage.map(
-      (p) => p.id_prestataire
-    );
-    const prestatairesJSONFiltered = prestataireData.filter(
-      (p) => !localStoragePrestaIds.includes(p.id_prestataire)
-    );
-    const allPrestataires = [
-      ...prestatairesJSONFiltered,
-      ...prestatairesLocalStorage,
-    ];
-
-    // Fusionner utilisateurs JSON + localStorage
-    const localStorageUserIds = utilisateursLocalStorage.map(
-      (u) => u.id_utilisateur
-    );
-    const utilisateursJSONFiltered = utilisateurData.filter(
-      (u) => !localStorageUserIds.includes(u.id_utilisateur)
-    );
-    const allUtilisateurs = [
-      ...utilisateursJSONFiltered,
-      ...utilisateursLocalStorage,
-    ];
-
-    // Fusionner services JSON + localStorage
-    const localStorageServiceIds = servicesLocalStorage.map(
-      (s) => s.id_service
-    );
-    const servicesJSONFiltered = servicesData.filter(
-      (s) => !localStorageServiceIds.includes(s.id_service)
-    );
-    const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
-
-    prestataires.value = allPrestataires.map((presta) => {
-      const typePresta = typePrestaData.find(
-        (t) =>
-          t.id_type_prestataire ===
-          (presta.type_prestataire_id || presta.id_type_prestataire)
-      );
-      const user = allUtilisateurs.find(
-        (u) => u.id_utilisateur === presta.id_utilisateur
-      );
-      const nb_services = allServices.filter(
-        (s) =>
-          s.id_prestataire === presta.id_prestataire ||
-          s.prestataire_id === presta.id_prestataire
-      ).length;
-
-      return {
-        ...presta,
-        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
-        prenom_utilisateur: user?.prenom_utilisateur || "",
-        nom_utilisateur: user?.nom_utilisateur || "",
-        nb_services,
-      };
-    });
-  } catch (err) {
-    console.error(err);
-  }
+async function getValuesPrestataire() {
+    try {
+        const res = await prestataireStore.GetPrestataires();
+        prestataires.value = res.data;
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// async function getValuesPrestataire() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/prestataire/show");
-//         prestataires.value = res.data;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function getValuesTypePrestataire() {
-  try {
-    type_prestataire.value = typePrestaData;
-  } catch (err) {
-    console.error(err);
-  }
+async function getValuesTypePrestataire() {
+    try {
+        const res = await typePrestataireStore.GetTypePrestataires();
+        type_prestataire.value = res.data.result;
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// async function getValuesTypePrestataire() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
-//         type_prestataire.value = res.data.result;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function searchPrestataires() {
-  router.push({
-    path: "/",
-    query: {
-      nom: filters.value.nom || undefined,
-      category: filters.value.category || undefined,
-      prixMin: filters.value.prixMin || undefined,
-      prixMax: filters.value.prixMax || undefined,
-    },
-    hash: "#liste_prestataires",
-  });
-
-  if (isServiceView.value) {
-    let filtered = servicesData.map((service) => {
-      const presta = prestataireData.find(
-        (p) => p.id_prestataire === service.id_prestataire
-      );
-      const typePresta = typePrestaData.find(
-        (t) => t.id_type_prestataire === presta?.type_prestataire_id
-      );
-
-      return {
-        ...service,
-        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
-        type_prestataire_id: presta?.type_prestataire_id,
-      };
+async function searchPrestataires() {
+    router.push({
+        path: "/",
+        query: {
+            nom: filters.value.nom || undefined,
+            category: filters.value.category || undefined,
+            prixMin: filters.value.prixMin || undefined,
+            prixMax: filters.value.prixMax || undefined,
+        },
+        hash: "#liste_prestataires"
     });
 
-    if (filters.value.nom) {
-      filtered = filtered.filter((s) =>
-        s.nom_service?.toLowerCase().includes(filters.value.nom.toLowerCase())
-      );
-    }
-    if (filters.value.category && filters.value.category !== 0) {
-      filtered = filtered.filter(
-        (s) => s.type_prestataire_id === filters.value.category
-      );
-    }
-    if (filters.value.prixMin !== null && filters.value.prixMin !== "") {
-      filtered = filtered.filter(
-        (s) => s.prix >= Number(filters.value.prixMin)
-      );
-    }
-    if (filters.value.prixMax !== null && filters.value.prixMax !== "") {
-      filtered = filtered.filter(
-        (s) => s.prix <= Number(filters.value.prixMax)
-      );
-    }
+    const res = await prestataireStore.GetValuesFilter(...filters.value, isServiceView.value ? 'services' : 'prestataires');
 
-    prestataires.value = filtered;
-  } else {
-    let filtered = prestataireData.map((presta) => {
-      const typePresta = typePrestaData.find(
-        (t) => t.id_type_prestataire === presta.type_prestataire_id
-      );
-      const user = utilisateurData.find(
-        (u) => u.id_utilisateur === presta.id_utilisateur
-      );
-      const nb_services = servicesData.filter(
-        (s) => s.id_prestataire === presta.id_prestataire
-      ).length;
-
-      return {
-        ...presta,
-        nom_type_prestataire: typePresta?.nom_type_prestataire || {},
-        prenom_utilisateur: user?.prenom_utilisateur || "",
-        nom_utilisateur: user?.nom_utilisateur || "",
-        nb_services,
-      };
-    });
-
-    if (filters.value.nom) {
-      filtered = filtered.filter((p) =>
-        p.nom_prestataire
-          ?.toLowerCase()
-          .includes(filters.value.nom.toLowerCase())
-      );
-    }
-    if (filters.value.category && filters.value.category !== 0) {
-      filtered = filtered.filter(
-        (p) => p.type_prestataire_id === filters.value.category
-      );
-    }
-
-    prestataires.value = filtered;
-  }
+    prestataires.value = res.data;
 }
-
-// async function searchPrestataires() {
-//     router.push({
-//         path: "/",
-//         query: {
-//             nom: filters.value.nom || undefined,
-//             category: filters.value.category || undefined,
-//             prixMin: filters.value.prixMin || undefined,
-//             prixMax: filters.value.prixMax || undefined,
-//         },
-//         hash: "#liste_prestataires"
-//     });
-//
-//     const res = await axios.get('http://localhost:3000/prestataire/showFilter', {
-//         params: {
-//             ...filters.value,
-//             type: isServiceView.value ? 'services' : 'prestataires'
-//         }
-//     });
-//
-//     prestataires.value = res.data;
-// }
 </script>
 
 <style scoped>

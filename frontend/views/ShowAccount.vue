@@ -93,13 +93,10 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
-// import axios from 'axios';
 import { useNavigationStore } from "@/stores/navigation";
+import { useAdminAPIStore } from "@/services/admin.service";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
-import localData from "../../backend/database/localData.js";
-
-// import utilisateurData from "../../backend/database/jsonData/Utilisateur.json";
 
 const props = defineProps({
   userId: {
@@ -113,6 +110,7 @@ const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
 const navStore = useNavigationStore();
+const adminAPIStore = useAdminAPIStore();
 
 const { t, locale } = useI18n();
 
@@ -148,158 +146,76 @@ function goBack() {
   }
 }
 
-function getValuesUtilisateurs(id) {
+async function getValuesUtilisateurs(id) {
   if (!userStore.isConnected) {
-    router.push({ name: "Connexion_utilisateur" });
+    router.push({ name: 'Connexion_utilisateur' });
     return;
   }
 
   try {
-    console.log("Searching for user ID:", id);
+    console.log('Fetching user data for ID:', id);
+    const response = await adminAPIStore.GetUtilisateurById(id);
+    console.log('User data received:', response.data);
 
-    const utilisateurData = localData.getAll("utilisateurs");
-    console.log("Available users:", utilisateurData.length);
-
-    const user = utilisateurData.find((u) => u.id_utilisateur === Number(id));
-
-    if (!user) {
-      message.value = t("account.errorLoading");
-      messageType.value = "error";
-      loading.value = false;
-      return;
-    }
-
-    let formattedDate = "";
-    if (user.date_creation_utilisateur) {
-      const date = new Date(user.date_creation_utilisateur);
-      formattedDate = date.toLocaleDateString("fr-FR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+    let formattedDate = '';
+    if (response.data.date_creation_utilisateur) {
+      const date = new Date(response.data.date_creation_utilisateur);
+      formattedDate = date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
     }
 
     userData.value = {
-      id_user: user.id_utilisateur || "",
-      prenom: user.prenom_utilisateur || "",
-      nom: user.nom_utilisateur || "",
-      login: user.login_utilisateur || "",
-      mail: user.mail_utilisateur || "",
-      tel_utilisateur: user.tel_utilisateur || "",
-      sexe: user.sexe_utilisateur || "",
-      createdAt: formattedDate,
+      id_user: response.data.id_utilisateur || '',
+      prenom: response.data.prenom_utilisateur || '',
+      nom: response.data.nom_utilisateur || '',
+      login: response.data.login_utilisateur || '',
+      mail: response.data.mail_utilisateur || '',
+      tel_utilisateur: response.data.tel_utilisateur || '',
+      sexe: response.data.sexe_utilisateur || '',
+      createdAt: formattedDate
     };
 
-    console.log("Utilisateur chargé depuis localStorage:", userData.value);
+    console.log('User data updated:', userData.value);
   } catch (error) {
-    console.error("Erreur lors de la récupération des données :", error);
-    message.value = t("account.errorLoading");
-    messageType.value = "error";
+    console.error('Erreur lors de la récupération des données :', error);
+    message.value = t('account.errorLoading');
+    messageType.value = 'error';
   } finally {
     loading.value = false;
   }
 }
 
-// async function getValuesUtilisateurs(id) {
-//   if (!userStore.isConnected) {
-//     router.push({ name: 'Connexion_utilisateur' });
-//     return;
-//   }
-//
-//   try {
-//     console.log('Fetching user data for ID:', id);
-//     const response = await axios.get(`http://localhost:3000/admin/utilisateur/show/${id}`);
-//     console.log('User data received:', response.data);
-//
-//     let formattedDate = '';
-//     if (response.data.date_creation_utilisateur) {
-//       const date = new Date(response.data.date_creation_utilisateur);
-//       formattedDate = date.toLocaleDateString('fr-FR', {
-//         year: 'numeric',
-//         month: 'long',
-//         day: 'numeric'
-//       });
-//     }
-//
-//     userData.value = {
-//       id_user: response.data.id_utilisateur || '',
-//       prenom: response.data.prenom_utilisateur || '',
-//       nom: response.data.nom_utilisateur || '',
-//       login: response.data.login_utilisateur || '',
-//       mail: response.data.mail_utilisateur || '',
-//       tel_utilisateur: response.data.tel_utilisateur || '',
-//       sexe: response.data.sexe_utilisateur || '',
-//       createdAt: formattedDate
-//     };
-//
-//     console.log('User data updated:', userData.value);
-//   } catch (error) {
-//     console.error('Erreur lors de la récupération des données :', error);
-//     message.value = t('account.errorLoading');
-//     messageType.value = 'error';
-//   } finally {
-//     loading.value = false;
-//   }
-// }
 
-function deleteAccount(id) {
-  if (!confirm(t("account.confirmDelete"))) {
+async function deleteAccount(id) {
+  if (!confirm(t('account.confirmDelete'))) {
     return;
   }
 
   isDeleting.value = true;
-  message.value = "";
+  message.value = '';
 
   try {
-    // Supprimer l'utilisateur de localStorage
-    localData.delete("utilisateurs", id, "id_utilisateur");
+    await adminAPIStore.DeleteUtilisateur(id);
 
-    message.value = t("account.accountDeleted");
-    messageType.value = "success";
-
-    console.log("Compte supprimé de localStorage:", id);
+    message.value = t('account.accountDeleted');
+    messageType.value = 'success';
 
     userStore.logout();
 
     setTimeout(() => {
-      router.push({ name: "Home" });
+      router.push({ name: 'Home' });
     }, 2000);
   } catch (error) {
-    console.error("Erreur lors de la suppression du compte :", error);
-    message.value = t("account.deleteError");
-    messageType.value = "error";
+    console.error('Erreur lors de la suppression du compte :', error);
+    message.value = t('account.deleteError');
+    messageType.value = 'error';
   } finally {
     isDeleting.value = false;
   }
-}
-
-// async function deleteAccount(id) {
-//   if (!confirm(t('account.confirmDelete'))) {
-//     return;
-//   }
-//
-//   isDeleting.value = true;
-//   message.value = '';
-//
-//   try {
-//     await axios.delete(`http://localhost:3000/admin/utilisateur/delete/${id}`);
-//
-//     message.value = t('account.accountDeleted');
-//     messageType.value = 'success';
-//
-//     userStore.logout();
-//
-//     setTimeout(() => {
-//       router.push({ name: 'Home' });
-//     }, 2000);
-//   } catch (error) {
-//     console.error('Erreur lors de la suppression du compte :', error);
-//     message.value = t('account.deleteError');
-//     messageType.value = 'error';
-//   } finally {
-//     isDeleting.value = false;
-//   }
-// };
+};
 </script>
 
 <style scoped>

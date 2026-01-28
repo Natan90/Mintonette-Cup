@@ -164,10 +164,6 @@
 import NavView from "@/components/NavView.vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
-import joueursData from "../../backend/database/jsonData/Joueur.json";
-import matchesData from "../../backend/database/jsonData/Match.json";
-import equipesData from "../../backend/database/jsonData/Equipe.json";
-import paysData from "../../backend/database/jsonData/Pays.json";
 import logoPersonne from "@/images/LogoPersonne.png";
 import terrainImage from "@/images/TerrainSans.png";
 import Footer from "@/components/Footer.vue";
@@ -202,48 +198,20 @@ const matchTime = computed(() => {
   return `${hours}:${minutes}`;
 });
 
-function fetchPlayers() {
-  players.value = joueursData;
-}
-
-function fetchMatches() {
-  const matchesForTerrain = matchesData.filter(
-    (match) => match.id_terrain === terrainId.value
-  );
-
-  matches.value = matchesForTerrain.map((match) => {
-    const equipe1 = equipesData.find((e) => e.id_equipe === match.id_equipe1);
-    const equipe2 = equipesData.find((e) => e.id_equipe === match.id_equipe2);
-
-    const pays1 = paysData.find((p) => p.id_pays === equipe1?.id_pays);
-    const pays2 = paysData.find((p) => p.id_pays === equipe2?.id_pays);
-
-    return {
-      ...match,
-      team1_country: pays1?.nom_pays || "Équipe 1",
-      team2_country: pays2?.nom_pays || "Équipe 2",
-      team1_coach: equipe1?.entraineur || "Coach 1",
-      team2_coach: equipe2?.entraineur || "Coach 2",
-      team1_id: match.id_equipe1,
-      team2_id: match.id_equipe2,
-    };
-  });
-  selectedItem.value = 0;
-}
 
 // Version avec axios (commentée pour utilisation future)
-// async function fetchPlayers() {
-//   const res = await axios.get("http://localhost:3000/equipes/players");
-//   players.value = res.data;
-// }
+async function fetchPlayers() {
+  const res = await axios.get("http://localhost:3000/equipes/players");
+  players.value = res.data;
+}
 
-// async function fetchMatches() {
-//   const res = await axios.get(
-//     `http://localhost:3000/equipes/match/terrain/${terrainId.value}`
-//   );
-//   matches.value = res.data;
-//   selectedItem.value = 0;
-// }
+async function fetchMatches() {
+  const res = await axios.get(
+    `http://localhost:3000/equipes/match/terrain/${terrainId.value}`
+  );
+  matches.value = res.data;
+  selectedItem.value = 0;
+}
 
 function getMajorPlayers(teamId, side) {
   const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);

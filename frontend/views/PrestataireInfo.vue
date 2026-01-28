@@ -13,10 +13,7 @@
         </span>
         <div>
           <label for="nom_service">Nom du service</label>
-          <input
-            class="page_title"
-            v-model="oneService.nom_service"
-            id="nom_service" />
+          <input class="page_title" v-model="oneService.nom_service" id="nom_service" />
         </div>
         <div>
           <label for="titre_service">Titre du service</label>
@@ -24,17 +21,14 @@
         </div>
 
         <label> Description du service </label>
-        <Editor
-          v-model="currentDescri"
-          api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
-          :init="{
-            height: 200,
-            menubar: false,
-            plugins: 'lists link image table media code preview anchor',
-            toolbar:
-              'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-            branding: false,
-          }" />
+        <Editor v-model="currentDescri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+          height: 200,
+          menubar: false,
+          plugins: 'lists link image table media code preview anchor',
+          toolbar:
+            'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+          branding: false,
+        }" />
 
         <div class="service_besoin">
           <h3>Besoin</h3>
@@ -49,16 +43,10 @@
 
           <div class="info_item">
             <span class="info_label">Participants max</span>
-            <input
-              class="info_value"
-              v-model="oneService.nbParticipants_service" />
+            <input class="info_value" v-model="oneService.nbParticipants_service" />
           </div>
         </div>
-        <div
-          v-if="message && showService && messageType === 'error'"
-          class="message"
-          :class="
-            messageType === 'error' ? 'message-error' : 'message-success'
+        <div v-if="message && showService && messageType === 'error'" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'
           ">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
@@ -83,16 +71,9 @@
 
       <!-- Liste des types de prestataires disponibles -->
       <div class="type_prestataire">
-        <div
-          v-for="(item, index) in type_prestataire"
-          :key="index"
-          class="boite_type_presta"
-          :id="`p-${index}`">
+        <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
           <!-- Bouton de sélection du type de prestataire -->
-          <button
-            class="button_type_presta"
-            @click="selectTypePresta(index)"
-            :disabled="continueInscription">
+          <button class="button_type_presta" @click="selectTypePresta(index)" :disabled="continueInscription">
             {{ item.nom_type_prestataire[locale] }}
           </button>
         </div>
@@ -108,18 +89,11 @@
         <table class="table_type_presta">
           <tbody>
             <!-- Liste des options possibles -->
-            <tr
-              v-for="(item, index) in selectedItems"
-              :key="index"
-              class="table-row">
+            <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
               <td>
                 <!-- Checkbox (une seule sélection autorisée) -->
-                <input
-                  type="checkbox"
-                  :id="`item-${index}`"
-                  :value="index"
-                  @change="onCheckChange($event, item.nom, index)"
-                  :checked="isCheckedWithIndex(index)"
+                <input type="checkbox" :id="`item-${index}`" :value="index"
+                  @change="onCheckChange($event, item.nom, index)" :checked="isCheckedWithIndex(index)"
                   :disabled="continueInscription" />
                 <label :for="`item-${index}`">
                   {{ item.nom }}
@@ -139,9 +113,7 @@
 
   <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
   <div class="button_container" v-if="!continueInscription && pathAdd">
-    <button
-      @click.prevent="showContinueInscription"
-      :disabled="!isSelectionValid"
+    <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
       :class="{ disabled: !isSelectionValid }">
       {{ $t("prestataireInfo.btnContinueInscription") }}
     </button>
@@ -155,10 +127,7 @@
   </div>
 
   <!-- Formulaire de création / modification du prestataire -->
-  <div
-    class="prestataire_container"
-    v-if="continueInscription || !pathAdd"
-    id="presta_container">
+  <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
     <div class="editor_container">
       <!-- Champ : nom du prestataire -->
       <div class="form_group">
@@ -173,17 +142,14 @@
         <label>
           {{ $t("prestataireInfo.formulaire.descri") }}
         </label>
-        <Editor
-          v-model="descri_presta"
-          api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
-          :init="{
-            height: 600,
-            menubar: false,
-            plugins: 'lists link image table media code preview anchor',
-            toolbar:
-              'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-            branding: false,
-          }" />
+        <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+          height: 600,
+          menubar: false,
+          plugins: 'lists link image table media code preview anchor',
+          toolbar:
+            'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+          branding: false,
+        }" />
       </div>
 
       <!-- Champ : email de contact -->
@@ -191,11 +157,7 @@
         <label for="contact">
           {{ $t("user.mail") }}
         </label>
-        <input
-          type="text"
-          id="contact"
-          v-model="mail_presta"
-          placeholder="mail@example.com" />
+        <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
       </div>
 
       <!-- Champ : téléphone -->
@@ -203,12 +165,7 @@
         <label for="contact">
           {{ $t("user.tel_utilisateur") }}
         </label>
-        <input
-          type="tel"
-          id="contact"
-          v-model="tel_presta"
-          pattern="^0[1-9][0-9]{8}$"
-          placeholder="0123456789" />
+        <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
       </div>
 
       <div class="form_group">
@@ -222,33 +179,19 @@
         </div>
 
         <div class="service_input">
-          <div
-            v-for="(item, index) in services"
-            :key="index"
-            class="service_row">
+          <div v-for="(item, index) in services" :key="index" class="service_row">
             <button @click="showOneService(item.id_service)">
               {{ item.nom_service }}
             </button>
-            <span v-if="item.activate" class="active-icon" title="Actif"
-              >&#10003;</span
-            >
+            <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
             <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
-            <button
-              class="btn_activate"
-              v-if="!item.activate"
-              @click="activateService(item)">
+            <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
               Activer
             </button>
-            <button
-              class="btn_desactivate"
-              v-else-if="item.activate "
-              @click="desactivatingService(item)">
+            <button class="btn_desactivate" v-else-if="item.activate" @click="desactivatingService(item)">
               Désactiver
             </button>
-            <button
-              type="button"
-              class="remove_btn pointer"
-              @click="removeServiceField(index)">
+            <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">
               &times;
             </button>
           </div>
@@ -256,9 +199,7 @@
       </div>
 
       <!-- Message de succès ou d’erreur après action -->
-      <div
-        v-if="message && !showService"
-        class="message"
+      <div v-if="message && !showService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
         <span class="text">{{ message }}</span>
         <span class="modal-close" @click="closeMessage">&times;</span>
@@ -266,10 +207,7 @@
 
       <!-- Bouton de modification (mode édition) -->
       <div class="button_container" v-if="!pathAdd">
-        <button
-          @click="updatePresta"
-          :disabled="!isSelectionValid"
-          :class="{ disabled: !isSelectionValid }">
+        <button @click="updatePresta" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
           {{ $t("prestataireInfo.formulaire.btnModifier") }}
         </button>
       </div>
@@ -301,13 +239,19 @@ import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
 // import axios from 'axios';
 import { useI18n } from "vue-i18n";
-import localData from "../../backend/database/localData.js";
+import { useServiceStore } from "@/services/service.service";
+import { usePrestataireStore } from "@/services/prestataire.service";
+import { useTypePrestataireStore } from "@/services/type_prestataire.service";
 
 import Editor from "@tinymce/tinymce-vue";
 import Footer from "@/components/Footer.vue";
 
 const { t, locale } = useI18n();
 const userStore = useUserStore();
+const serviceStore = useServiceStore();
+const prestataireStore = usePrestataireStore();
+const typePrestataireStore = useTypePrestataireStore();
+
 const route = useRoute();
 
 const prestaId = computed(() => route.params.id);
@@ -559,42 +503,17 @@ function activateService(service) {
   actionsService(service);
 }
 
-function actionsService(service) {
-  try {
-    // Mettre à jour le service dans localStorage
-    localData.update(
-      "services",
-      service.id_service,
-      {
-        activate: !service.activate,
-      },
-      "id_service"
-    );
 
-    const index = services.value.findIndex(
-      (s) => s.id_service === service.id_service
-    );
+async function actionsService(service) {
+  try {
+    const res = await serviceStore.ActivateService(service.id_service);
+
+    const index = services.value.findIndex(s => s.id_service === service.id_service);
     if (index !== -1) {
       services.value[index].activate = !services.value[index].activate;
     }
 
-    console.log("Service activé/désactivé:", service.id_service);
   } catch (err) {
-    // async function activateService(service) {
-    //     activate.value = true;
-    //     actionsService(service);
-    // }
-    //
-    // async function actionsService(service) {
-    //     try {
-    //         const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
-    //
-    //         const index = services.value.findIndex(s => s.id_service === service.id_service);
-    //         if (index !== -1) {
-    //             services.value[index].activate = !services.value[index].activate;
-    //         }
-    //
-    //     } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
   }
 }
@@ -655,52 +574,25 @@ function delPresta() {
 //=========================
 //= Async functions types =
 //=========================
-function getValuesTypePresta() {
+async function getValuesTypePresta() {
   try {
-    type_prestataire.value = localData.getAll("type_prestataire");
-    console.log("Types prestataire chargés:", type_prestataire.value);
+    const res = await typePrestataireStore.GetTypePrestataires();
+    type_prestataire.value = res.data.result;
   } catch (err) {
-    console.error("Erreur chargement types prestataire:", err);
+    console.error(err);
   }
 }
 
-// async function getValuesTypePresta() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/prestataire/showTypePrestataire");
-//         type_prestataire.value = res.data.result;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
-
-function getValuesEveryType() {
+async function getValuesEveryType() {
   try {
-    type_animation.value = localData.getAll("type_animation");
-    type_restauration.value = localData.getAll("type_restauration");
-    type_boutique.value = localData.getAll("type_boutique");
-    console.log(
-      "Types chargés - Animation:",
-      type_animation.value.length,
-      "Restauration:",
-      type_restauration.value.length,
-      "Boutique:",
-      type_boutique.value.length
-    );
+    const res = await typePrestataireStore.GetTypePrestataires();
+    type_animation.value = res.data.animations;
+    type_restauration.value = res.data.restaurations;
+    type_boutique.value = res.data.boutiques;
   } catch (err) {
-    console.error("Erreur chargement types:", err);
+    console.error(err);
   }
 }
-
-// async function getValuesEveryType() {
-//     try {
-//         const res = await axios.get("http://localhost:3000/prestataire/showEveryType");
-//         type_animation.value = res.data.animations;
-//         type_restauration.value = res.data.restaurations;
-//         type_boutique.value = res.data.boutiques;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
 
 //==========================
 //= Async functions presta =
@@ -709,69 +601,48 @@ async function getValuesPrestataire() {
   if (prestaId.value === null) return;
 
   try {
-    const prestataires = localData.getAll("prestataires");
-    const presta = prestataires.find((p) => p.id_prestataire == prestaId.value);
+    const res = await prestataireStore.GetPrestataireById(prestaId.value);
+
+    const presta = res.data.prestataire;
+    const prestaServices = res.data.services;
 
     if (!presta) {
-      console.error("Prestataire non trouvé:", prestaId.value);
+      console.error("Prestataire non trouvé :", prestaId.value);
       return;
     }
 
-    const allServices = localData.getAll("services");
-    const prestaServices = allServices.filter(
-      (s) => s.id_prestataire == prestaId.value
-    );
-
     nom_presta.value = presta.nom_prestataire;
-
-    // async function getValuesPrestataire() {
-    //     if (prestaId.value === null) return;
-    //
-    //     try {
-    //         const res = await axios.get(`http://localhost:3000/prestataire/show/${prestaId.value}`);
-    //         const presta = res.data.prestataire;
-    //         const prestaServices = res.data.services;
-    //
-    //         nom_presta.value = presta.nom_prestataire;
     descri_presta.value = presta.descri_prestataire;
     mail_presta.value = presta.mail_prestataire;
     tel_presta.value = presta.tel_prestataire;
 
+    // Type de prestataire
     const typeObj = type_prestataire.value.find(
       (t) =>
         t.id_type_prestataire ===
         (presta.id_type_prestataire || presta.type_prestataire_id)
     );
+
     if (typeObj) {
       const nomType =
         typeObj.nom_type_prestataire[locale.value] ||
         typeObj.nom_type_prestataire.fr;
+
       selectedType.value = nomType.toLowerCase();
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
 
-    // Attendre que Vue mette à jour selectedItems computed
     await nextTick();
 
     let spec = presta.specificite;
 
-    // Pour suppirmer tous les trucs chiants
     if (typeof spec === "string") {
       spec = spec.replace(/[\{\}"]/g, "").trim();
     }
 
-    console.log(
-      "Recherche de la spécificité:",
-      spec,
-      "dans",
-      selectedItems.value
-    );
-
     const index = selectedItems.value.findIndex(
       (item) => item.nom.trim().toLowerCase() === spec.toLowerCase()
     );
-
-    console.log("Index trouvé:", index);
 
     if (index !== -1) {
       checkedItems.value = [{ nom: selectedItems.value[index].nom, index }];
@@ -779,6 +650,7 @@ async function getValuesPrestataire() {
       checkedItems.value = [];
     }
 
+    // Services
     services.value = prestaServices.map((s) => ({
       id_service: s.id_service,
       nom_service: s.nom_service,
@@ -789,321 +661,118 @@ async function getValuesPrestataire() {
   }
 }
 
-function addPrestataire() {
-  // Empêcher les doubles clics
-  if (isSubmitting.value) {
-    return;
-  }
-
-  isSubmitting.value = true;
-
+async function addPrestataire() {
   try {
-    const utilisateurs = localData.getAll("utilisateurs");
-    const userIndex = utilisateurs.findIndex(
-      (u) => u.id_utilisateur == prestaId.value
-    );
-
-    if (userIndex === -1) {
-      message.value = "Utilisateur non trouvé";
-      messageType.value = "error";
-      isSubmitting.value = false;
-      return;
-    }
-
-    // Vérifier si un prestataire existe déjà pour cet utilisateur
-    const prestataires = localData.getAll("prestataires");
-    const existingPresta = prestataires.find(
-      (p) => p.id_utilisateur == prestaId.value
-    );
-
-    if (existingPresta) {
-      message.value = "Vous avez déjà une demande de prestataire en cours";
-      messageType.value = "error";
-      isSubmitting.value = false;
-      return;
-    }
-
-    // Créer le nouveau prestataire
-    const newPrestaId =
-      prestataires.length > 0
-        ? Math.max(...prestataires.map((p) => p.id_prestataire)) + 1
-        : 1;
-
-    const newPrestataire = {
-      id_prestataire: newPrestaId,
-      id_utilisateur: parseInt(prestaId.value),
-      nom_prestataire: nom_presta.value,
-      descri_prestataire: descri_presta.value,
-      mail_prestataire: mail_presta.value,
-      tel_prestataire: tel_presta.value,
-      specificite: selectedNames.value.join(","),
-      id_type_prestataire: Number(selectedTypeId.value),
-      waitingforadmin: true,
-      refused: false,
-      id_zone: null,
-      message_ajout: true,
-    };
-
-    localData.add("prestataires", newPrestataire);
-
-    // Ajouter les services
-    const allServices = localData.getAll("services");
-    services.value.forEach((s) => {
-      const newServiceId =
-        allServices.length > 0
-          ? Math.max(...allServices.map((srv) => srv.id_service)) + 1
-          : 1;
-      const newService = {
-        id_service: newServiceId,
-        id_prestataire: newPrestaId,
-        nom_service: s.nom_service,
-        titre_service: s.titre_service,
-        descri_service: s.descri_service,
-        besoin: s.besoin,
-        prix_service: s.prix,
-        nbParticipants_service: s.nb_participants,
-        activate: s.activate || false,
-      };
-      localData.add("services", newService);
-    });
-
-    // Mettre à jour l'utilisateur (ispresta reste false jusqu'à validation admin)
-    utilisateurs[userIndex].ispresta = false;
-    utilisateurs[userIndex].waitingforadmin = true;
-    localData.update(
-      "utilisateurs",
-      prestaId.value,
-      { ispresta: false, waitingforadmin: true },
-      "id_utilisateur"
-    );
-
-    userStore.prestaId = newPrestaId;
-
-    message.value = "Prestataire créé avec succès";
-    messageType.value = "success";
-
-    console.log("Nouveau prestataire créé:", newPrestataire);
-
-    isSubmitting.value = false;
-  } catch (err) {
-    message.value = "Erreur lors de la création: " + err.message;
-    messageType.value = "error";
-    console.error("Erreur:", err);
-    isSubmitting.value = false;
-  }
-}
-
-// async function addPrestataire() {
-//     try {
-//         const servicesPayload = services.value.map(s => ({
-//             nom_service: s.nom_service,
-//             titre_service: {
-//                 fr: { texte: s.titre_service.fr },
-//                 en: { texte: s.titre_service.en }
-//             },
-//             descri_service: {
-//                 fr: { texte: s.descri_service.fr },
-//                 en: { texte: s.descri_service.en }
-//             },
-//             besoin: s.besoin,
-//             prix: s.prix,
-//             nb_participants: s.nb_participants,
-//             activate: s.activate,
-//             visible_public: s.visible_public
-//         }));
-//
-//
-//         const res = await axios.post(`http://localhost:3000/prestataire/becomePrestataire/${prestaId.value}`, {
-//             nom: nom_presta.value,
-//             descri: descri_presta.value,
-//             mail: mail_presta.value,
-//             tel: tel_presta.value,
-//             specificite: selectedNames.value,
-//             type: Number(selectedTypeId.value),
-//             services: servicesPayload
-//         });
-//         userStore.prestaId = res.data.user.prestaId;
-//
-//         message.value = res.data.message;
-//         messageType.value = "success";
-//     } catch (err) {
-//         if (err.response && err.response.data) {
-//             message.value = err.response.data.error;
-//         } else {
-//             message.value = "Erreur inconnue";
-//         }
-//         messageType.value = 'error';
-//     }
-// }
-
-function updatePresta() {
-  try {
-    // Mettre à jour le prestataire
-    localData.update(
-      "prestataires",
-      prestaId.value,
-      {
-        nom_prestataire: nom_presta.value,
-        descri_prestataire: descri_presta.value,
-        mail_prestataire: mail_presta.value,
-        tel_prestataire: tel_presta.value,
-        specificite: selectedNames.value.join(","),
-        id_type_prestataire: Number(selectedTypeId.value),
+    const servicesPayload = services.value.map(s => ({
+      nom_service: s.nom_service,
+      titre_service: {
+        fr: { texte: s.titre_service.fr },
+        en: { texte: s.titre_service.en }
       },
-      "id_prestataire"
-    );
+      descri_service: {
+        fr: { texte: s.descri_service.fr },
+        en: { texte: s.descri_service.en }
+      },
+      besoin: s.besoin,
+      prix: s.prix,
+      nb_participants: s.nb_participants,
+      activate: s.activate,
+      visible_public: s.visible_public
+    }));
 
-    // Mettre à jour les services
-    const allServices = localData.getAll("services");
-    services.value.forEach((s) => {
-      if (s.id_service) {
-        // Service existant - mise à jour
-        localData.update(
-          "services",
-          s.id_service,
-          {
-            nom_service: s.nom_service,
-            titre_service: s.titre_service,
-            descri_service: s.descri_service,
-            besoin: s.besoin,
-            prix_service: s.prix,
-            nbParticipants_service: s.nb_participants,
-            activate: s.activate,
-          },
-          "id_service"
-        );
-      } else {
-        // Nouveau service
-        const newServiceId =
-          allServices.length > 0
-            ? Math.max(...allServices.map((srv) => srv.id_service)) + 1
-            : 1;
-        localData.add("services", {
-          id_service: newServiceId,
-          id_prestataire: parseInt(prestaId.value),
-          nom_service: s.nom_service,
-          titre_service: s.titre_service,
-          descri_service: s.descri_service,
-          besoin: s.besoin,
-          prix_service: s.prix,
-          nbParticipants_service: s.nb_participants,
-          activate: s.activate || false,
-        });
-      }
+
+    const res = await prestataireStore.BecomePrestataire(prestaId.value, {
+      nom: nom_presta.value,
+      descri: descri_presta.value,
+      mail: mail_presta.value,
+      tel: tel_presta.value,
+      specificite: selectedNames.value,
+      type: Number(selectedTypeId.value),
+      services: servicesPayload
     });
+    userStore.prestaId = res.data.user.prestaId;
 
-    message.value = "Prestataire mis à jour avec succès";
+    message.value = res.data.message;
     messageType.value = "success";
-    console.log("Prestataire mis à jour:", prestaId.value);
   } catch (err) {
-    message.value = "Erreur lors de la mise à jour: " + err.message;
-    messageType.value = "error";
-    console.error("Erreur:", err);
+    if (err.response && err.response.data) {
+      message.value = err.response.data.error;
+    } else {
+      message.value = "Erreur inconnue";
+    }
+    messageType.value = 'error';
   }
 }
 
-// async function updatePresta() {
-//     try {
-//         const servicesPayload = services.value.map(s => ({
-//             nom_service: s.nom_service,
-//             titre_service: {
-//                 fr: { texte: s.titre_service.fr },
-//                 en: { texte: s.titre_service.en }
-//             },
-//             descri_service: {
-//                 fr: { texte: s.descri_service.fr },
-//                 en: { texte: s.descri_service.en }
-//             },
-//             besoin: s.besoin,
-//             prix: s.prix,
-//             nb_participants: s.nb_participants,
-//             activate: s.activate,
-//             visible_public: s.visible_public
-//         }));
-//
-//
-//         const res = await axios.put(`http://localhost:3000/prestataire/updatePresta/${prestaId.value}`, {
-//             nom: nom_presta.value,
-//             descri: descri_presta.value,
-//             mail: mail_presta.value,
-//             tel: tel_presta.value,
-//             specificite: selectedNames.value,
-//             type: Number(selectedTypeId.value),
-//             services: servicesPayload
-//         });
-//         message.value = res.data.message;
-//         messageType.value = "success";
-//     } catch (err) {
-//         if (err.response && err.response.data) {
-//             message.value = err.response.data.error;
-//         } else {
-//             message.value = "Erreur inconnue";
-//         }
-//         messageType.value = 'error';
-//     }
-// }
-
-function showOneService(id_service) {
+async function updatePresta() {
   try {
-    const allServices = localData.getAll("services");
-    const s = allServices.find((srv) => srv.id_service == id_service);
+    const servicesPayload = services.value.map(s => ({
+      nom_service: s.nom_service,
+      titre_service: {
+        fr: { texte: s.titre_service.fr },
+        en: { texte: s.titre_service.en }
+      },
+      descri_service: {
+        fr: { texte: s.descri_service.fr },
+        en: { texte: s.descri_service.en }
+      },
+      besoin: s.besoin,
+      prix: s.prix,
+      nb_participants: s.nb_participants,
+      activate: s.activate,
+      visible_public: s.visible_public
+    }));
 
-    if (!s) {
-      console.error("Service non trouvé:", id_service);
-      return;
+
+    const res = await prestataireStore.UpdatePrestataire(prestaId.value, {
+      nom: nom_presta.value,
+      descri: descri_presta.value,
+      mail: mail_presta.value,
+      tel: tel_presta.value,
+      specificite: selectedNames.value,
+      type: Number(selectedTypeId.value),
+      services: servicesPayload
+    });
+    message.value = res.data.message;
+    messageType.value = "success";
+  } catch (err) {
+    if (err.response && err.response.data) {
+      message.value = err.response.data.error;
+    } else {
+      message.value = "Erreur inconnue";
     }
+    messageType.value = 'error';
+  }
+}
 
-    console.log("Service trouvé:", s);
+
+async function showOneService(id_service) {
+  try {
+    const res = await serviceStore.GetServiceById(id_service);
+    const s = res.data;
+    console.log("res.data", res.data)
 
     oneService.value = {
       id_service: s.id_service,
       nom_service: s.nom_service,
 
       titre_service: {
-        fr: s.titre_service?.fr?.texte ?? s.titre_service?.fr ?? "",
-        en: s.titre_service?.en?.texte ?? s.titre_service?.en ?? "",
+        fr: s.titre_service?.fr?.texte ?? '',
+        en: s.titre_service?.en?.texte ?? ''
       },
 
       descri_service: {
-        fr: s.descri_service?.fr?.texte ?? s.descri_service?.fr ?? "",
-        en: s.descri_service?.en?.texte ?? s.descri_service?.en ?? "",
+        fr: s.descri_service?.fr?.texte ?? '',
+        en: s.descri_service?.en?.texte ?? ''
       },
 
       besoin: {
-        fr: s.besoin?.fr ?? "",
-        en: s.besoin?.en ?? "",
+        fr: s.besoin?.fr ?? '',
+        en: s.besoin?.en ?? ''
       },
 
-      prix: s.prix_service ?? s.prix ?? 0,
-      nb_participants: s.nbParticipants_service ?? s.nb_participants ?? 0,
-
-      // async function showOneService(id_service) {
-      //     try {
-      //         const res = await axios.get(`http://localhost:3000/prestataire/service/show/${id_service}`) ;
-      //         const s = res.data;
-      //         console.log("res.data", res.data)
-      //
-      //         oneService.value = {
-      //             id_service: s.id_service,
-      //             nom_service: s.nom_service,
-      //
-      //             titre_service: {
-      //                 fr: s.titre_service?.fr?.texte ?? '',
-      //                 en: s.titre_service?.en?.texte ?? ''
-      //             },
-      //
-      //             descri_service: {
-      //                 fr: s.descri_service?.fr?.texte ?? '',
-      //                 en: s.descri_service?.en?.texte ?? ''
-      //             },
-      //
-      //             besoin: {
-      //                 fr: s.besoin?.fr ?? '',
-      //                 en: s.besoin?.en ?? ''
-      //             },
-      //
-      //             prix: s.prix ?? 0,
-      //             nb_participants: s.nb_participants ?? 0,
+      prix: s.prix ?? 0,
+      nb_participants: s.nb_participants ?? 0,
       activate: s.activate ?? false,
       visible_public: s.visible_public ?? true,
     };

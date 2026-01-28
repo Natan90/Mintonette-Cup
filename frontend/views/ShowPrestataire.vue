@@ -203,18 +203,17 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
-// import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useUserStore } from "@/stores/user";
+import { usePrestataireStore } from "@/services/prestataire.service";
+import { useServiceStore } from "@/services/service.service";
+import { usePanierStore } from "@/services/panier.service";
 import { useI18n } from "vue-i18n";
-import PrestataireData from "../../backend/database/jsonData/Prestataire.json";
-import UtilisateurData from "../../backend/database/jsonData/Utilisateur.json";
-import ServicesData from "../../backend/database/jsonData/Services.json";
-import localData from "../../backend/database/localData.js";
+
 
 const { locale } = useI18n();
 const route = useRoute();
@@ -222,6 +221,9 @@ const router = useRouter();
 const navStore = useNavigationStore();
 const adminStore = useAdminStore();
 const userStore = useUserStore();
+const prestataireStore = usePrestataireStore();
+const serviceStore = useServiceStore();
+const panierStore = usePanierStore();
 
 const desactivateService = ref(null);
 
@@ -327,100 +329,18 @@ function goToEditPrestataire() {
 //==========================
 //= Async functions presta =
 //==========================
-// async function getValuesPrestataire() {
-//   try {
-//     const res = await axios.get(`http://localhost:3000/prestataire/show/${idPresta}`);
-//     onePresta.value = res.data.prestataire;
+async function getValuesPrestataire() {
+  try {
+    const res = await prestataireStore.GetPrestataireById(idPresta);
+    onePresta.value = res.data.prestataire;
 
-//     services.value = res.data.services;
+    services.value = res.data.services;
 
-//   } catch (err) {
-//     console.error("Erreur lors de la récupération des données :", err);
-//   }
-// }
-
-function getValuesPrestataire() {
-  console.log("idPresta:", idPresta, "Type:", typeof idPresta);
-
-  // Récupérer depuis localStorage
-  const prestatairesLocalStorage = localData.getAll("prestataires");
-  const utilisateursLocalStorage = localData.getAll("utilisateurs");
-  const servicesLocalStorage = localData.getAll("services");
-
-  // Fusionner prestataires JSON + localStorage (priorité au localStorage)
-  const localStoragePrestaIds = prestatairesLocalStorage.map(
-    (p) => p.id_prestataire,
-  );
-  const prestatairesJSONFiltered = PrestataireData.filter(
-    (p) => !localStoragePrestaIds.includes(p.id_prestataire),
-  );
-  const allPrestataires = [
-    ...prestatairesJSONFiltered,
-    ...prestatairesLocalStorage,
-  ];
-
-  // Fusionner utilisateurs JSON + localStorage
-  const localStorageUserIds = utilisateursLocalStorage.map(
-    (u) => u.id_utilisateur,
-  );
-  const utilisateursJSONFiltered = UtilisateurData.filter(
-    (u) => !localStorageUserIds.includes(u.id_utilisateur),
-  );
-  const allUtilisateurs = [
-    ...utilisateursJSONFiltered,
-    ...utilisateursLocalStorage,
-  ];
-
-  // Fusionner services JSON + localStorage
-  const localStorageServiceIds = servicesLocalStorage.map((s) => s.id_service);
-  const servicesJSONFiltered = ServicesData.filter(
-    (s) => !localStorageServiceIds.includes(s.id_service),
-  );
-  const allServices = [...servicesJSONFiltered, ...servicesLocalStorage];
-
-  // Trouver le prestataire
-  const presta = allPrestataires.find(
-    (p) => p.id_prestataire === Number(idPresta),
-  );
-  if (presta) {
-    const utilisateur = allUtilisateurs.find(
-      (u) => u.id_utilisateur === presta.id_utilisateur,
-    );
-    onePresta.value = {
-      ...presta,
-      nom_utilisateur: utilisateur?.nom_utilisateur || "",
-      prenom_utilisateur: utilisateur?.prenom_utilisateur || "",
-    };
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
   }
-
-  // Filtrer et normaliser les services pour ce prestataire
-  const filtered = allServices
-    .filter((s) => {
-      return (
-        s.prestataire_id === Number(idPresta) ||
-        s.id_prestataire === Number(idPresta)
-      );
-    })
-    .map((s) => {
-      // Normaliser la structure pour que tous les services aient les mêmes propriétés
-      return {
-        id_service: s.id_service,
-        nom_service: s.nom_service,
-        titre_service: s.titre_service,
-        descri_service: s.descri_service,
-        besoin: s.besoin,
-        prix: s.prix || s.prix_service,
-        nb_participants: s.nb_participants || s.nbParticipants_service,
-        activate: s.activate !== undefined ? s.activate : true,
-        prestataire_id: s.prestataire_id || s.id_prestataire,
-        visible_public:
-          s.visible_public !== undefined ? s.visible_public : true,
-      };
-    });
-
-  console.log("Services filtrés:", filtered.length);
-  services.value = filtered;
 }
+
 
 function desactivatingService(service) {
   desactivate.value = true;
@@ -432,130 +352,55 @@ function activateService(service) {
   actionsService(service);
 }
 
-// async function actionsService(service) {
-//   try {
-//     desactivateService.value = service;
+async function actionsService(service) {
+  try {
+    desactivateService.value = service;
 
-//     const res = await axios.patch(`http://localhost:3000/prestataire/activateService/${service.id_service}`);
+    const res = await serviceStore.ActivateService(service.id_service);
 
-//     const index = services.value.findIndex(s => s.id_service === service.id_service);
-//     if (index !== -1) {
-//       services.value[index].activate = !services.value[index].activate;
-//     }
+    const index = services.value.findIndex(s => s.id_service === service.id_service);
+    if (index !== -1) {
+      services.value[index].activate = !services.value[index].activate;
+    }
 
-//   } catch (err) {
-//     console.error("Erreur lors de la récupération des données :", err);
-//   }
-// }
-
-function actionsService(service) {
-  desactivateService.value = service;
-  const index = services.value.findIndex(
-    (s) => s.id_service === service.id_service,
-  );
-  if (index !== -1) {
-    // Inverser l'état activate
-    const newActivateState = !services.value[index].activate;
-    services.value[index].activate = newActivateState;
-
-    // Mettre à jour dans localStorage
-    localData.update(
-      "services",
-      service.id_service,
-      { activate: newActivateState },
-      "id_service",
-    );
-
-    console.log(
-      `Service ${service.id_service} ${
-        newActivateState ? "activé" : "désactivé"
-      }`,
-    );
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
   }
 }
 
-// async function getOneService(service) {
-//   showService.value = true;
-//   try {
-//     const res = await axios.get(`http://localhost:3000/prestataire/service/show/${service.id_service}`)
-//     oneService.value = res.data;
-//     console.log("Res.data" ,res.data);
 
-//     console.log(oneService)
-
-//     updateDescription();
-
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-function getOneService(service) {
+async function getOneService(service) {
   showService.value = true;
+  try {
+    const res = await serviceStore.GetServiceById(service.id_service)
+    oneService.value = res.data;
+    console.log("Res.data" ,res.data);
 
-  // Chercher dans localStorage d'abord, puis dans JSON
-  const servicesLocalStorage = localData.getAll("services");
-  let serviceData = servicesLocalStorage.find(
-    (s) => s.id_service === service.id_service,
-  );
+    console.log(oneService)
 
-  if (!serviceData) {
-    serviceData = ServicesData.find((s) => s.id_service === service.id_service);
+    updateDescription();
+
+  } catch (err) {
+    console.error(err);
   }
-
-  if (serviceData) {
-    oneService.value = serviceData;
-  }
-  updateDescription();
 }
 
-// async function addService(service) {
-//   if (!userStore.userId) {
-//     console.error("Utilisateur non connecté !");
-//     return;
-//   }
 
-//   try {
-//     const res = await axios.post(`http://localhost:3000/panier/addService`, {
-//       id_user: userStore.userId,
-//       service_id: service.id_service,
-//       quantite: 1
-//     });
-
-//     showService.value = false;
-//   } catch (err) {
-//     console.error("Erreur lors de l'ajout au panier :", err);
-//   }
-// }
-
-function addService(service) {
+async function addService(service) {
   if (!userStore.userId) {
-    alert("Vous devez être connecté pour vous inscrire à un service.");
+    console.error("Utilisateur non connecté !");
     return;
   }
 
-  const panier = JSON.parse(localStorage.getItem("panier")) || [];
-  const existingItem = panier.find(
-    (item) =>
-      item.service_id === service.id_service &&
-      item.id_user === userStore.userId,
-  );
+  try {
+    const res = await panierStore.AddToPanier("service", service, userStore.userId);
 
-  if (existingItem) {
-    existingItem.quantite += 1;
-    alert(`Quantité augmentée pour "${service.nom_service}" dans le panier.`);
-  } else {
-    panier.push({
-      id_user: userStore.userId,
-      service_id: service.id_service,
-      quantite: 1,
-    });
-    alert(`Service "${service.nom_service}" ajouté au panier !`);
+    showService.value = false;
+  } catch (err) {
+    console.error("Erreur lors de l'ajout au panier :", err);
   }
-
-  localStorage.setItem("panier", JSON.stringify(panier));
-  showService.value = false;
 }
+
 
 function updateDescription() {
   if (oneService.value) {
