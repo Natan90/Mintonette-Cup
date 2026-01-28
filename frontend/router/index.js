@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "@/views/Index.vue";
 import ShowPrestataire from "@/views/ShowPrestataire.vue";
-import Reserver from "@/views/Reserver.vue";
 import PresentationMintonette from "@/views/PresentationMintonette.vue";
 import PolygonCreation from "@/views/PolygonCreation.vue";
 import LogPage from "@/components/LogPage.vue";
@@ -14,7 +13,6 @@ import Gradin from "@/views/Gradin.vue";
 import MesBillets from "@/views/MesBillets.vue";
 import RecherchePrestataire from "@/views/RecherchePrestataire.vue";
 import App from "@/App.vue";
-import { useUserStore } from "@/stores/user";
 import Evenement from "@/views/Administrateur/Evenement.vue";
 import Utilisateur from "@/views/Administrateur/Utilisateur.vue";
 import AdminPrestataire from "@/views/Administrateur/AdminPrestataire.vue";
@@ -59,11 +57,6 @@ const routes = [
         name: "EditPrestataire",
         component: PrestataireInfo,
         props: true,
-      },
-      {
-        path: "Reserver",
-        name: "Reserver",
-        component: Reserver,
       },
       {
         path: "admin",

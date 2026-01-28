@@ -5,10 +5,7 @@
     </div>
 
     <section class="filtreEtListe">
-      <form
-        class="filtrePrestataire"
-        @submit.prevent="searchPrestataires"
-        id="filtre_presta">
+      <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
         <div class="content_slider">
           <span>{{ $t("filter.slider.prestataire") }}</span>
           <label class="switch">
@@ -20,31 +17,21 @@
 
         <div class="blocFiltre">
           <span>{{ $t("filter.name.title") }}</span>
-          <input
-            v-model="filters.nom"
-            type="text"
-            v-bind:placeholder="$t('filter.name.nameInput')" />
+          <input v-model="filters.nom" type="text" v-bind:placeholder="$t('filter.name.nameInput')" />
         </div>
 
         <div class="blocFiltre">
           <span>{{ $t("filter.categorie.title") }}</span>
           <div v-for="item in type_prestataire" :key="item.id_type_prestataire">
             <label class="pointer">
-              <input
-                type="radio"
-                name="categorie"
-                :value="Number(item.id_type_prestataire)"
+              <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
                 v-model="filters.category" />
               {{ item.nom_type_prestataire[locale] }}
             </label>
           </div>
 
           <label class="pointer">
-            <input
-              type="radio"
-              name="categorie"
-              :value="0"
-              v-model="filters.category" />
+            <input type="radio" name="categorie" :value="0" v-model="filters.category" />
             {{ $t("filter.categorie.all") }}
           </label>
         </div>
@@ -52,14 +39,8 @@
         <div class="blocFiltre" v-if="isServiceView">
           <span>{{ $t("filter.price.title") }}</span>
           <div class="prix">
-            <input
-              type="number"
-              v-model="filters.prixMin"
-              v-bind:placeholder="$t('filter.price.minPrice')" />
-            <input
-              type="number"
-              v-model="filters.prixMax"
-              v-bind:placeholder="$t('filter.price.maxPrice')" />
+            <input type="number" v-model="filters.prixMin" v-bind:placeholder="$t('filter.price.minPrice')" />
+            <input type="number" v-model="filters.prixMax" v-bind:placeholder="$t('filter.price.maxPrice')" />
           </div>
         </div>
 
@@ -75,9 +56,7 @@
 
       <section class="listePrestataireBorder">
         <div class="listePrestataire">
-          <div
-            v-for="item in prestatairesFiltres"
-            :key="item.id_prestataire || item.id_service"
+          <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service"
             class="blocListePrestataire">
             <div class="enTetePrestataire">
               <div class="titrePrestataire">
@@ -115,19 +94,15 @@
 
               <div class="contactPrestataire" v-if="!isServiceView">
                 <span>{{ $t("filter.contact") }}</span>
-                <span
-                  >{{ item.prenom_utilisateur }}
-                  {{ item.nom_utilisateur }}</span
-                >
+                <span>{{ item.prenom_utilisateur }}
+                  {{ item.nom_utilisateur }}</span>
                 <span>{{ item.mail_prestataire }}</span>
                 <span>{{ item.tel_prestataire }}</span>
               </div>
             </div>
 
-            <div
-              class="boutonListe"
-              @click="
-                goToSpecificPrestataire(item.id_prestataire || item.id_service)
+            <div class="boutonListe" @click="
+              goToSpecificPrestataire(item.id_prestataire || item.id_service)
               ">
               <span class="pointer">{{ $t("filter.more") }}</span>
             </div>
@@ -233,38 +208,45 @@ async function getValuesServices() {
 
 
 async function getValuesPrestataire() {
-    try {
-        const res = await prestataireStore.GetPrestataires();
-        prestataires.value = res.data;
-    } catch (err) {
-        console.error(err);
-    }
+  try {
+    const res = await prestataireStore.GetPrestataires();
+    prestataires.value = res.data;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function getValuesTypePrestataire() {
-    try {
-        const res = await typePrestataireStore.GetTypePrestataires();
-        type_prestataire.value = res.data.result;
-    } catch (err) {
-        console.error(err);
-    }
+  try {
+    const res = await typePrestataireStore.GetTypePrestataires();
+    type_prestataire.value = res.data.result;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function searchPrestataires() {
-    router.push({
-        path: "/",
-        query: {
-            nom: filters.value.nom || undefined,
-            category: filters.value.category || undefined,
-            prixMin: filters.value.prixMin || undefined,
-            prixMax: filters.value.prixMax || undefined,
-        },
-        hash: "#liste_prestataires"
-    });
+  router.push({
+    path: "/",
+    query: {
+      nom: filters.value.nom || undefined,
+      category: filters.value.category || undefined,
+      prixMin: filters.value.prixMin || undefined,
+      prixMax: filters.value.prixMax || undefined,
+    },
+    hash: "#liste_prestataires"
+  });
 
-    const res = await prestataireStore.GetValuesFilter(...filters.value, isServiceView.value ? 'services' : 'prestataires');
+  const res = await prestataireStore.GetValuesFilter({
+    nom: filters.value.nom || undefined,
+    category: filters.value.category || undefined,
+    prixMin: filters.value.prixMin || undefined,
+    prixMax: filters.value.prixMax || undefined,
+    type: isServiceView.value ? "services" : "prestataires",
+  });
+  console.log("Backend response:", res.data);
 
-    prestataires.value = res.data;
+  prestataires.value = res.data;
 }
 </script>
 
@@ -319,15 +301,15 @@ async function searchPrestataires() {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: var(--bleu-logo);
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px var(--bleu-logo);
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
@@ -386,7 +368,8 @@ input:checked + .slider:before {
   padding: 15px calc(5px + 1%);
   gap: 1.5em;
 
-  height: fit-content; /* C'EST MERVEILLEUX */
+  height: fit-content;
+  /* C'EST MERVEILLEUX */
 
   color: #0a1d42;
   background-color: var(--jaune-logo);

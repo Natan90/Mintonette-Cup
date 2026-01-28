@@ -58,6 +58,8 @@ async function filterPrestatairesAndServices({
   let sql = "";
   const values = [];
   let index = 1;
+  console.log("Type filter:", type);
+
 
   if (type === "services") {
     sql = `

@@ -32,6 +32,9 @@ exports.getPrestataireById = async (req, res) => {
 };
 
 exports.getFiltered = async (req, res) => {
+  console.log("Query reçue :", req.query); // pour debug
+  const { type } = req.query;
+  console.log("Type filter:", type);
   try {
     const result = await prestataireService.filterPrestatairesAndServices(
       req.query,

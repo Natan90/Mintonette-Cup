@@ -23,9 +23,9 @@ export async function handleError(url, typeReq, error) {
 
 
 
-export const getRequest = async (url) => {
+export const getRequest = async (url, config) => {
     try {
-        return await axiosInstance.get(url);
+        return await axiosInstance.get(url, config);
     } catch (error) {
         handleError(url, 'get', error);
     }

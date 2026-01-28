@@ -109,7 +109,6 @@ import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import Map from "@/views/Map.vue";
 import BounceCard from "@/components/BounceCard.vue";
-import TableauMatchs from "../views/TableauMatchs.vue";
 import RecherchePrestataire from "./RecherchePrestataire.vue";
 import CountUp from "../components/CountUp.vue";
 import PresentationMintonette from "./PresentationMintonette.vue";

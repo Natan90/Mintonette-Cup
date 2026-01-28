@@ -14,17 +14,20 @@ export const usePrestataireStore = defineStore("prestataire", () => {
     return getRequest(`/prestataire/show/${id_presta}`);
   }
 
-  async function GetValuesFilter(valueFilter, isServiceView) {
-    if (valueFilter.prixMin < 0) {
+  async function GetValuesFilter(values) {
+    if (values.prixMin < 0) {
       throw new Error("Le prix minimum ne peut pas être négatif");
     }
 
-    return getRequest("/prestataire/showFilter", {
-      params: {
-        ...valueFilter,
-        type: isServiceView ? "services" : "prestataires",
-      },
-    });
+    const params = {
+    type: values.type || "prestataires",
+    nom: values.nom || "",
+    category: values.category ?? 0,
+    prixMin: values.prixMin ?? "",
+    prixMax: values.prixMax ?? "",
+  };
+
+    return getRequest("/prestataire/showFilter", { params });
   }
 
   async function BecomePrestataire(prestataire, services) {
