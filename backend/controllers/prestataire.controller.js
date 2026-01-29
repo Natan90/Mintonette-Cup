@@ -12,19 +12,19 @@ exports.getPrestataire = async (req, res) => {
 
 exports.getPrestataireById = async (req, res) => {
   try {
-    const { type, id } = req.body;
+    const id = req.params.id;
 
-    if (type === "utilisateur") {
-      const result = await prestataireService.getPrestataireByIdUser(id);
-      return res.status(201).json(result);
-    }
+    // if (type === "utilisateur") {
+    //   const result = await prestataireService.getPrestataireByIdUser(id);
+    //   return res.status(201).json(result);
+    // }
 
-    if (type === "prestataire") {
+    // if (type === "prestataire") {
       const result = await prestataireService.getPrestataireByIdPrestataire(id);
       return res.status(201).json(result);
-    }
+    // }
 
-    return res.status(400).json({ error: "Type invalide" });
+    // return res.status(400).json({ error: "Type invalide" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur" });

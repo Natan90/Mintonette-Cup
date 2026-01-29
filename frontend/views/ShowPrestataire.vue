@@ -1,8 +1,8 @@
 <template>
   <NavView />
-  <div class="modal-backdrop" v-if="showService">
-    <div class="modal-content bigger">
-      <span class="modal-close" @click="closeModal">&times;</span>
+  <Modal v-model="showService"
+  :bigger="true">
+    <template #contentDelete>
       <div class="bloc_texte service_details">
         <h1 class="page_title" v-html="titre_service"></h1>
 
@@ -31,8 +31,42 @@
           S'inscrire
         </button>
       </div>
+    </template>
+    
+  </Modal>
+  <!-- <div class="modal-backdrop" v-if="showService">
+    <div class="modal-content bigger">
+      <span class="modal-close" @click="closeModal">&times;</span>
+      <div class="bloc_texte service_details">
+        <h1 class="page_title" v-html="titre_service"></h1>
+
+        <p class="service_description" v-html="descri_service"></p>
+
+        <div class="service_besoin" v-if="!oneService.visible_public">
+          <h3>Besoin</h3>
+          <p v-html="besoin_service"></p>
+        </div>
+
+        <div class="service_infos">
+          <div class="info_item">
+            <span class="info_label">Prix</span>
+            <span class="info_value">{{ oneService.prix }} €</span>
+          </div>
+
+          <div class="info_item">
+            <span class="info_label">Participants max</span>
+            <span class="info_value">{{ oneService.nb_participants }}</span>
+          </div>
+        </div>
+        <!-- Bouton S'inscrire uniquement pour les services des autres prestataires -->
+        <!-- <button
+          v-if="!(userStore.isConnected && userStore.prestaId == idPresta)"
+          @click="addService(oneService)">
+          S'inscrire
+        </button>
+      </div>
     </div>
-  </div>
+  </div> --> 
   <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
   <div class="main_container">
     <div class="bloc_texte">
@@ -206,6 +240,7 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import NavView from "@/components/NavView.vue";
+import Modal from "@/components/Modal.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useUserStore } from "@/stores/user";

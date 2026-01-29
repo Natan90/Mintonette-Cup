@@ -1201,7 +1201,7 @@ const pool = require("./db");
   ('Teppan', 'Renee', 'Masculin', '1993-07-25', 1.98, 7, 'Estonie', 'Attaquant', 29, NULL),
   ('Tammearu', 'Märt', 'Masculin', '2001-02-14', 1.98, 8, 'Estonie', 'Passeur', 29, 'Tammearu.png'),
   ('Täht', 'Robert', 'Masculin', '1993-11-08', 1.92, 9, 'Estonie', 'Libero', 29, 'Taht.png'),
-  ('Maar', 'Silver', 'Masculin', '1999-06-20', 1.84, 10, 'Estonie', 'Attaquant, 29, 'Maar.png'),
+  ('Maar', 'Silver', 'Masculin', '1999-06-20', 1.84, 10, 'Estonie', 'Attaquant', 29, 'Maar.png'),
   ('Venno', 'Oliver', 'Masculin', '1990-09-12', 2.10, 11, 'Estonie', 'Attaquant', 29, NULL),
   ('Saar', 'Alari', 'Masculin', '1996-01-28', 1.77, 12, 'Estonie', 'Libero', 29, NULL),
   ('Viiber', 'Robert', 'Masculin', '1997-05-16', 2.05, 16, 'Estonie', 'Passeur', 29, NULL),

@@ -1,23 +1,23 @@
 <template>
   <NavView></NavView>
   <MenuAdmin></MenuAdmin>
-  <div class="modal-backdrop" v-if="isDelete">
-    <div class="modal-content">
-      <span class="modal-close" @click="closeModal">&times;</span>
-      <div>
-        <p>
-          {{ $t('adminPage.user.modal.confirmation') }}
-          <span class="name_delete background_name" v-if="selectedUser">{{ selectedUser.nom_utilisateur }}</span> ?
-        </p>
+  <Modal v-model="isDelete">
+    <template #contentDelete>
+      <p>
+      {{ $t('adminPage.user.modal.confirmation') }}
+      <span class="name_delete background_name">
+        {{ selectedUser?.nom_utilisateur }}
+      </span>
+      ?
+    </p>
 
-      </div>
-      <div>
-        <button @click="deleteUtilisateur(id_user)" class="btn_modal btn_supprimer">
-          {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
-        </button>
-      </div>
-    </div>
-  </div>
+    <button @click="deleteUtilisateur(id_user)" class="btn_modal btn_supprimer">
+      {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
+    </button>
+    </template>
+    
+  </Modal>
+
   <div class="main_content">
     <h1 class="page_title">
       {{ $t('adminPage.user.title') }}
@@ -32,18 +32,19 @@
       <p class="nb_presta valid" v-else>
         {{ $t('adminPage.user.nb_userVide') }}
       </p>
-        <div class="filtre">
-          <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
-          <select id="triAlpha" v-model="adminStore.typeTriUser">
-            <option value="az">{{ $t('adminPage.tri.az') }}</option>
-            <option value="za">{{ $t('adminPage.tri.za') }}</option>
-            <option value="presta">{{ $t('adminPage.tri.presta') }}</option>
-            <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
-          </select>
-        </div>
+      <div class="filtre">
+        <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
+        <select id="triAlpha" v-model="adminStore.typeTriUser">
+          <option value="az">{{ $t('adminPage.tri.az') }}</option>
+          <option value="za">{{ $t('adminPage.tri.za') }}</option>
+          <option value="presta">{{ $t('adminPage.tri.presta') }}</option>
+          <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
+        </select>
+      </div>
     </div>
     <p class="backgroundBorderL message suppr" v-if="deleting">
-      <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{ $t('adminPage.user.messageSuppr') }}
+      <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{
+        $t('adminPage.user.messageSuppr') }}
       <span class="modal-close" @click="closeMessageSuppr">&times;</span>
     </p>
     <div class="all_data">
@@ -110,6 +111,7 @@ import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
 import localData from "../../../backend/database/localData.js";
 import { useAdminAPIStore } from "@/services/admin.service.js";
+import Modal from "@/components/Modal.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -129,18 +131,18 @@ const deleting = ref(false);
 
 
 const closeModal = () => {
-    isDelete.value = false;
+  isDelete.value = false;
 };
 
-const closeMessageSuppr = () =>{
-    deleting.value = false;
+const closeMessageSuppr = () => {
+  deleting.value = false;
 };
 
 function showProfil(id_user) {
   navStore.previousRoute = route.fullPath;
-  router.push({ 
+  router.push({
     name: 'ShowAccount',
-    params: { 
+    params: {
       userId: id_user,
       lang: locale.value
     }
@@ -167,10 +169,10 @@ function goToRetirerPrestataire() {
 
 
 function ModalShow(user) {
-    selectedUser.value = user;
-    id_user.value = user.id_utilisateur;
+  selectedUser.value = user;
+  id_user.value = user.id_utilisateur;
 
-    isDelete.value = true;
+  isDelete.value = true;
 };
 
 
@@ -194,7 +196,7 @@ const utilisateursFiltres = computed(() => {
 
     if (adminStore.typeTriUser === "za")
       return nomB.localeCompare(nomA);
-    
+
     return nomA.localeCompare(nomB);
 
   });
@@ -361,5 +363,4 @@ async function deleteUtilisateur(idUser) {
 .btn-delete:hover {
   background-color: #c0392b;
 }
-
 </style>

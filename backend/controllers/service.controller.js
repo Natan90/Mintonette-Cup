@@ -12,8 +12,8 @@ exports.getServices = async (req, res) => {
 
 exports.getServiceById = async (req, res) => {
   try {
-    const { id_service } = req.params.id;
-    const result = await panierService.getServiceById(id_service);
+    const id_service = req.params.id;
+    const result = await serviceService.getServiceById(id_service);
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
@@ -23,8 +23,8 @@ exports.getServiceById = async (req, res) => {
 
 exports.activateServiceById = async (req, res) => {
   try {
-    const { id_service } = req.params.id;
-    const result = await panierService.activateServiceById(id_service);
+    const id_service = req.params.id;
+    const result = await serviceService.activateServiceById(id_service);
     return res.status(201).json(result);
 
   } catch (err) {

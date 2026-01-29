@@ -1,24 +1,23 @@
 <template>
     <NavView></NavView>
     <MenuAdmin></MenuAdmin>
-    <div class="modal-backdrop" v-if="isDelete">
-        <div class="modal-content">
-            <span class="modal-close" @click="closeModal">&times;</span>
-            <div>
-                <p>
-                    {{ $t('adminPage.prestataire.modal.confirmation') }}
-                    <span class="name_delete background_name" v-if="selectedPresta">{{ selectedPresta.nom_prestataire
-                        }}</span> ?
-                </p>
+    <Modal v-model="isDelete">
+        <template #contentDelete>
+            <p>
+                {{ $t('adminPage.prestataire.modal.confirmation') }}
+                <span class="name_delete background_name">
+                    {{ selectedPresta.nom_prestataire }}
+                </span>
+                ?
+            </p>
 
-            </div>
-            <div>
-                <button @click="deletePrestataire(id_prestataire)" class="btn_modal btn_supprimer">
-                    {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
-                </button>
-            </div>
-        </div>
-    </div>
+            <button @click="deletePrestataire(id_prestataire)" class="btn_modal btn_supprimer">
+                {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
+            </button>
+        </template>
+
+    </Modal>
+
     <div class="main_content">
         <h1 class="page_title">
             {{ $t('adminPage.prestataire.title') }}
@@ -28,9 +27,11 @@
         </p>
         <div class="textAndFiltre">
             <p class="nb_presta toValidate" v-if="prestataires.filter(p => p.waitingforadmin).length > 0">
-                {{ $t('adminPage.prestataire.nb_presta', { count: prestataires.filter(p => p.waitingforadmin).length, 
-                    gotS : prestataires.filter(p => p.waitingforadmin).length > 1  ? 's' : '',
-                    verbe : prestataires.filter(p => p.waitingforadmin).length > 1  ? 'are' : 'is' }) }}
+                {{$t('adminPage.prestataire.nb_presta', {
+                    count: prestataires.filter(p => p.waitingforadmin).length,
+                    gotS: prestataires.filter(p => p.waitingforadmin).length > 1 ? 's' : '',
+                    verbe: prestataires.filter(p => p.waitingforadmin).length > 1 ? 'are' : 'is'
+                })}}
             </p>
             <p class="nb_presta valid" v-else>
                 {{ $t('adminPage.prestataire.nb_prestaVide') }}
@@ -57,16 +58,10 @@
         </p>
 
         <div class="tabs-container">
-            <button 
-                :class="['tab-button', { active: activeTab === 'table' }]"
-                @click="activeTab = 'table'"
-            >
+            <button :class="['tab-button', { active: activeTab === 'table' }]" @click="activeTab = 'table'">
                 <span>📋</span> Liste des prestataires
             </button>
-            <button 
-                :class="['tab-button', { active: activeTab === 'map' }]"
-                @click="activeTab = 'map'"
-            >
+            <button :class="['tab-button', { active: activeTab === 'map' }]" @click="activeTab = 'map'">
                 <span>🗺️</span> Carte des zones
             </button>
         </div>
@@ -105,10 +100,11 @@
                         <td :class="item.refused ? 'refused' : (item.waitingforadmin ? 'waiting' : 'notWaiting')">
                             {{ item.refused ? $t('adminPage.prestataire.statuts.refuse')
                                 : (item.waitingforadmin
-                                    ? $t('adminPage.prestataire.statuts.enAttente', { changement : item.message_ajout 
-                                                                                                        ? $t('adminPage.prestataire.statuts.messageAjout') 
-                                                                                                        : $t('adminPage.prestataire.statuts.messageModif') 
-                                                                                                    })
+                                    ? $t('adminPage.prestataire.statuts.enAttente', {
+                                        changement: item.message_ajout
+                                            ? $t('adminPage.prestataire.statuts.messageAjout')
+                                            : $t('adminPage.prestataire.statuts.messageModif')
+                                    })
                                     : $t('adminPage.prestataire.statuts.valider')) }}
                         </td>
                         <td>
@@ -143,16 +139,16 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from 'vue';
-// import axios from 'axios';
 import { useRouter, useRoute } from "vue-router";
 import MenuAdmin from '@/components/MenuAdmin.vue';
 import NavView from '@/components/NavView.vue';
 import ZoneMap from '@/components/ZoneMap.vue';
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
-import localData from "../../../backend/database/localData.js";
 import { useAdminAPIStore } from '@/services/admin.service.js';
 import { usePrestataireStore } from '@/services/prestataire.service.js';
+import Modal from '@/components/Modal.vue';
+import { useI18n } from 'vue-i18n';
 
 
 const route = useRoute();
@@ -165,13 +161,15 @@ const prestataireStore = usePrestataireStore();
 const isDelete = ref(false);
 const deleting = ref(false);
 const refusing = ref(false);
-const activeTab = ref('table'); 
-const zoneMapKey = ref(0); 
+const activeTab = ref('table');
+const zoneMapKey = ref(0);
 
 const prestataires = ref([]);
 const selectedPresta = ref(null);
 const deletedPresta = ref(null);
 const refusedPresta = ref(null);
+
+const locale = useI18n();
 
 
 const id_prestataire = ref(0);
@@ -224,32 +222,32 @@ function goToSpecificPrestataire(idPresta) {
 }
 
 const prestatairesFiltres = computed(() => {
-  let liste = [...prestataires.value];
+    let liste = [...prestataires.value];
 
-  // Tri alphabétique
-  liste.sort((a, b) => {
-    if (adminStore.typeTriPresta === "attente") {
-      if (a.waitingforadmin && !b.waitingforadmin) return -1;
-      if (!a.waitingforadmin && b.waitingforadmin) return 1;
-    }
+    // Tri alphabétique
+    liste.sort((a, b) => {
+        if (adminStore.typeTriPresta === "attente") {
+            if (a.waitingforadmin && !b.waitingforadmin) return -1;
+            if (!a.waitingforadmin && b.waitingforadmin) return 1;
+        }
 
-    if (adminStore.typeTriPresta === "valide") {
-      if (a.waitingforadmin && !b.waitingforadmin) return 1;
-      if (!a.waitingforadmin && b.waitingforadmin) return -1;
-    }
+        if (adminStore.typeTriPresta === "valide") {
+            if (a.waitingforadmin && !b.waitingforadmin) return 1;
+            if (!a.waitingforadmin && b.waitingforadmin) return -1;
+        }
 
 
-    const nomA = a.nom_prestataire?.toLowerCase() || "";
-    const nomB = b.nom_prestataire?.toLowerCase() || "";
+        const nomA = a.nom_prestataire?.toLowerCase() || "";
+        const nomB = b.nom_prestataire?.toLowerCase() || "";
 
-    if (adminStore.typeTriPresta === "za")
-      return nomB.localeCompare(nomA);
-    
-    return nomA.localeCompare(nomB);
+        if (adminStore.typeTriPresta === "za")
+            return nomB.localeCompare(nomA);
 
-  });
+        return nomA.localeCompare(nomB);
 
-  return liste;
+    });
+
+    return liste;
 });
 
 
@@ -293,52 +291,27 @@ async function refuserPrestataire(presta) {
 //
 //         await changePresta(true, presta.id_utilisateur);
 //         await getPrestataires();
-function deletePrestataire(idPresta) {
+
+
+async function deletePrestataire(idPresta) {
     try {
         deletedPresta.value = { ...selectedPresta.value };
-        
-        // Récupérer le prestataire avant de le supprimer pour obtenir l'id_utilisateur
-        const presta = localData.getById("prestataires", idPresta, "id_prestataire");
-        
-        // Supprimer tous les services associés au prestataire
-        const services = localData.getAll("services");
-        const servicesAssocie = services.filter(s => s.id_prestataire === idPresta);
-        servicesAssocie.forEach(service => {
-            localData.delete("services", service.id_service, "id_service");
-        });
-        console.log(`${servicesAssocie.length} service(s) du prestataire supprimé(s)`);
-        
-        // Supprimer le prestataire (libère automatiquement la zone)
-        localData.delete("prestataires", idPresta, "id_prestataire");
-        
-        // Mettre à jour l'utilisateur (ispresta = false)
-        if (presta) {
-            changePresta(false, presta.id_utilisateur);
-        }
+
+        const res = await adminAPIStore.DeletePrestataire(idPresta);
 
         isDelete.value = false;
         deleting.value = true;
         prestataires.value = prestataires.value.filter(u => u.id_prestataire !== idPresta);
-        
+        router.push({ name: 'Prestataires', params: { lang: locale.value } });
+
         getPrestataires();
         zoneMapKey.value++; // Force le rechargement de ZoneMap
-        
+
         console.log("Prestataire supprimé (zone libérée):", deletedPresta.value.nom_prestataire);
     } catch (err) {
         console.error(err);
     }
 }
-
-// async function deletePrestataire(idPresta) {
-//     try {
-//         deletedPresta.value = { ...selectedPresta.value };
-//
-//         const res = await axios.delete(`http://localhost:3000/admin/prestataire/delete/${idPresta}`);
-//
-//         isDelete.value = false;
-//         deleting.value = true;
-//         prestataires.value = prestataires.value.filter(u => u.id_prestataire !== idPresta);
-//         router.push({ name: 'Prestataires', params: { lang: locale.value } });
 
 async function changePresta(newValue, idPresta) {
     try {
