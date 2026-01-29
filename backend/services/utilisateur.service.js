@@ -1,4 +1,6 @@
 const pool = require("../database/db");
+const { v4: uuidv4 } = require("uuid");
+
 
 async function inscriptionUtilisateur(utilisateur) {
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = utilisateur;
@@ -65,8 +67,9 @@ async function connexionUtilisateur(utilisateur) {
     // );
 
     await client.query("COMMIT");
-
     throw { status: 401, message: "Login ou mot de passe incorrect" };
+  }
+
 
     const user = userResult.rows[0];
 
@@ -122,7 +125,7 @@ async function connexionUtilisateur(utilisateur) {
     //   VALUES ($1, $2, true, 'Connexion réussie')`,
     //   [user.id, mail]
     // );
-  }
+  
   await client.query("COMMIT");
 
   return {
@@ -163,9 +166,8 @@ async function updateUtilisateur(id_user, utilisateur) {
 
     if (checkEmail.rows.length > 0) {
       await client.query("ROLLBACK");
-      return res.status(409).json({
-        error: "Email déjà utilisé",
-      });
+      throw { status: 409, message: "Email déjà utilisé" }
+
     }
   }
 

@@ -1,9 +1,7 @@
 <template>
-  <!-- Barre de navigation principale -->
   <NavView id="nav_bar"></NavView>
-  <div class="modal-backdrop" v-if="showService">
-    <div class="modal-content bigger">
-      <span class="modal-close" @click="closeModal">&times;</span>
+  <Modal v-model="showService" :bigger="true">
+    <template #content>
       <div class="service_details">
         <span>
           <button @click="changeDescriLang">
@@ -53,8 +51,9 @@
         </div>
         <button @click="addServiceToPrestataire()">Ajouter le service</button>
       </div>
-    </div>
-  </div>
+    </template>
+  </Modal>
+  
 
   <div class="container">
     <!-- Titre principal de la page -->
@@ -242,7 +241,7 @@ import { useI18n } from "vue-i18n";
 import { useServiceStore } from "@/services/service.service";
 import { usePrestataireStore } from "@/services/prestataire.service";
 import { useTypePrestataireStore } from "@/services/type_prestataire.service";
-
+import Modal from "@/components/Modal.vue";
 import Editor from "@tinymce/tinymce-vue";
 import Footer from "@/components/Footer.vue";
 

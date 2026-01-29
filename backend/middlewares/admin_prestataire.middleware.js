@@ -1,5 +1,5 @@
 exports.validatePrestataireId = (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id;
   if (!id || isNaN(parseInt(id))) {
     return res.status(400).json({ error: "ID prestataire invalide" });
   }
@@ -7,7 +7,7 @@ exports.validatePrestataireId = (req, res, next) => {
 };
 
 exports.refuserPrestataireById = (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id;
   if (!id || isNaN(parseInt(id))) {
     return res.status(400).json({ error: "ID prestataire invalide" });
   }
@@ -15,7 +15,7 @@ exports.refuserPrestataireById = (req, res, next) => {
 };
 
 exports.deletePrestataireById = (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id;
   if (!id || isNaN(parseInt(id))) {
     return res.status(400).json({ error: "ID prestataire invalide" });
   }
@@ -23,7 +23,7 @@ exports.deletePrestataireById = (req, res, next) => {
 };
 
 exports.validateAssignZoneById = (req, res, next) => {
-  const id_zone = req.params;
+  const id_zone = req.params.id;
   const { id_prestataire } = req.body;
 
   if (!id_prestataire || !id_zone) {
@@ -38,7 +38,7 @@ exports.validateAssignZoneById = (req, res, next) => {
 };
 
 exports.validateUnassignZoneById = (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id;
   if (!id || isNaN(parseInt(id))) {
     return res.status(400).json({ error: "ID prestataire invalide" });
   }

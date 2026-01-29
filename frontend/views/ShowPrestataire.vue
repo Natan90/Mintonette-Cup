@@ -1,8 +1,7 @@
 <template>
   <NavView />
-  <Modal v-model="showService"
-  :bigger="true">
-    <template #contentDelete>
+  <Modal v-model="showService" :bigger="true">
+    <template #content>
       <div class="bloc_texte service_details">
         <h1 class="page_title" v-html="titre_service"></h1>
 
@@ -25,67 +24,27 @@
           </div>
         </div>
         <!-- Bouton S'inscrire uniquement pour les services des autres prestataires -->
-        <button
-          v-if="!(userStore.isConnected && userStore.prestaId == idPresta)"
-          @click="addService(oneService)">
+        <button v-if="!(userStore.isConnected && userStore.prestaId == idPresta)" @click="addService(oneService)">
           S'inscrire
         </button>
       </div>
     </template>
-    
   </Modal>
-  <!-- <div class="modal-backdrop" v-if="showService">
-    <div class="modal-content bigger">
-      <span class="modal-close" @click="closeModal">&times;</span>
-      <div class="bloc_texte service_details">
-        <h1 class="page_title" v-html="titre_service"></h1>
 
-        <p class="service_description" v-html="descri_service"></p>
-
-        <div class="service_besoin" v-if="!oneService.visible_public">
-          <h3>Besoin</h3>
-          <p v-html="besoin_service"></p>
-        </div>
-
-        <div class="service_infos">
-          <div class="info_item">
-            <span class="info_label">Prix</span>
-            <span class="info_value">{{ oneService.prix }} €</span>
-          </div>
-
-          <div class="info_item">
-            <span class="info_label">Participants max</span>
-            <span class="info_value">{{ oneService.nb_participants }}</span>
-          </div>
-        </div>
-        <!-- Bouton S'inscrire uniquement pour les services des autres prestataires -->
-        <!-- <button
-          v-if="!(userStore.isConnected && userStore.prestaId == idPresta)"
-          @click="addService(oneService)">
-          S'inscrire
-        </button>
-      </div>
-    </div>
-  </div> --> 
   <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
   <div class="main_container">
     <div class="bloc_texte">
       <h1 class="page_title">
         {{ $t("adminPage.prestataire.service.title") }}
       </h1>
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.descri', {
-            nom_prestataire: onePresta.nom_prestataire,
-          })
-        "
-        class="backgroundBorderL page_subtitle"></p>
+      <p v-html="$t('adminPage.prestataire.service.descri', {
+        nom_prestataire: onePresta.nom_prestataire,
+      })
+        " class="backgroundBorderL page_subtitle"></p>
     </div>
 
     <div class="textAndFiltre paddingSides">
-      <p
-        class="nb_presta valid"
-        v-if="services.filter((p) => p.activate).length > 0">
+      <p class="nb_presta valid" v-if="services.filter((p) => p.activate).length > 0">
         {{
           $t("adminPage.prestataire.service.nb_services", {
             count: services.filter((p) => p.activate).length,
@@ -109,31 +68,25 @@
       </div>
     </div>
     <div class="backgroundBorderL message valid" v-if="activate">
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.messageActiver', {
-            nomService: desactivateService?.nom_service,
-          })
+      <p v-html="$t('adminPage.prestataire.service.messageActiver', {
+        nomService: desactivateService?.nom_service,
+      })
         "></p>
       <span class="modal-close" @click="closeMessageActivate">&times;</span>
     </div>
 
     <div class="backgroundBorderL message refus" v-else-if="desactivate">
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.messageDesactiver', {
-            nomService: desactivateService?.nom_service,
-          })
+      <p v-html="$t('adminPage.prestataire.service.messageDesactiver', {
+        nomService: desactivateService?.nom_service,
+      })
         "></p>
       <span class="modal-close" @click="closeMessageDesactivate">&times;</span>
     </div>
 
     <div class="backgroundBorderL message suppr" v-else-if="deleting">
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.messageSuppr', {
-            nomService: desactivateService?.nom_service,
-          })
+      <p v-html="$t('adminPage.prestataire.service.messageSuppr', {
+        nomService: desactivateService?.nom_service,
+      })
         "></p>
       <span class="modal-close" @click="closeMessageSuppr">&times;</span>
     </div>
@@ -165,49 +118,34 @@
               </b>
             </p>
             <ul>
-              <li
-                v-for="(item, index) in servicesFiltres"
-                :key="index"
-                class="service_item"
+              <li v-for="(item, index) in servicesFiltres" :key="index" class="service_item"
                 style="padding-bottom: 10px">
                 <div class="serviceWithButtons">
                   {{ item.nom_service }}
-                  <span v-if="item.activate" class="active-icon" title="Actif"
-                    >&#10003;</span
-                  >
-                  <span v-else class="inactive-icon" title="Inactif"
-                    >&#10007;</span
-                  >
+                  <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
+                  <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
                   <span class="diff_button">
                     <button class="btn_info" @click="getOneService(item)">
                       Voir
                     </button>
                     <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
-                    <button
-                      class="btn_activate"
-                      v-if="
-                        !item.activate &&
-                        userStore.isConnected &&
-                        userStore.prestaId == idPresta
-                      "
-                      @click="activateService(item)">
+                    <button class="btn_activate" v-if="
+                      !item.activate &&
+                      userStore.isConnected &&
+                      userStore.prestaId == idPresta
+                    " @click="activateService(item)">
                       Activer
                     </button>
-                    <button
-                      class="btn_desactivate"
-                      v-else-if="
-                        item.activate &&
-                        userStore.isConnected &&
-                        userStore.prestaId == idPresta
-                      "
-                      @click="desactivatingService(item)">
+                    <button class="btn_desactivate" v-else-if="
+                      item.activate &&
+                      userStore.isConnected &&
+                      userStore.prestaId == idPresta
+                    " @click="desactivatingService(item)">
                       Désactiver
                     </button>
-                    <button
-                      class="btn_supprimer"
-                      v-if="
-                        userStore.isConnected && userStore.prestaId == idPresta
-                      ">
+                    <button class="btn_supprimer" v-if="
+                      userStore.isConnected && userStore.prestaId == idPresta
+                    ">
                       Supprimer
                     </button>
                   </span>
@@ -220,13 +158,11 @@
     </section>
 
     <div>
-      <button
-        @click="goToEditPrestataire"
-        v-if="
-          userStore.isConnected &&
-          onePresta.ispresta &&
-          userStore.prestaId === idPresta
-        ">
+      <button @click="goToEditPrestataire" v-if="
+        userStore.isConnected &&
+        onePresta.ispresta &&
+        userStore.prestaId === idPresta
+      ">
         Modifier mon profil
       </button>
     </div>
@@ -409,7 +345,7 @@ async function getOneService(service) {
   try {
     const res = await serviceStore.GetServiceById(service.id_service)
     oneService.value = res.data;
-    console.log("Res.data" ,res.data);
+    console.log("Res.data", res.data);
 
     console.log(oneService)
 

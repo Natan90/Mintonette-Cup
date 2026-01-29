@@ -126,7 +126,7 @@ async function getZone() {
               u.nom_utilisateur, u.prenom_utilisateur
        FROM Prestataire p
        JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
-       WHERE p.id_zone IS NOT NULL AND p.waitingforadmin = false`
+       WHERE p.waitingforadmin = false`
     );
 
     // Créer un tableau de 32 zones

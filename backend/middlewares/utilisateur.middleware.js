@@ -30,7 +30,7 @@ exports.validateConnexion = (req, res, next) => {
 };
 
 exports.validateUpdateUtilisateur = (req, res, next) => {
-  const { id } = req.params.id;
+  const id = req.params.id;
   const { nom, prenom, mail, tel_utilisateur, login, sexe, photo_profil } =
     req.body;
 

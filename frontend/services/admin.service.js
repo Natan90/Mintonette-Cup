@@ -89,11 +89,18 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
     return getRequest("/admin/prestataire/zones");
   }
 
-  async function AssignPrestataireZone(id_presta) {
+  async function AssignPrestataireZone(id_presta, id_zone) {
     if (!id_presta) {
       throw new Error("L'id du prestataire est obligatoire");
     }
-    return patchRequest(`/admin/prestataire/assignZone/${id_presta}`);
+
+    if (!id_zone) {
+      throw new Error("L'id de la zone est obligatoire");
+    }
+
+    return patchRequest(`/admin/prestataire/assignZone/${id_zone}`, {
+      id_prestataire: id_presta
+    });
   }
 
   async function UnassignPrestataireZone(id_presta) {

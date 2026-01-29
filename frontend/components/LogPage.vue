@@ -1,7 +1,6 @@
 <template>
-  <div class="modal-backdrop" v-if="showModal">
-    <div class="modal-content">
-      <span class="modal-close" @click="closeModal">&times;</span>
+  <Modal v-model="showModal">
+    <template #content>
       <div class="check-wrapper">
         <svg class="checkmark" viewBox="0 0 52 52">
           <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none" />
@@ -18,8 +17,8 @@
           {{ $t("modal.goToPrestataire") }}
         </button>
       </div>
-    </div>
-  </div>
+    </template>
+  </Modal>
 
   <div class="page" :class="{ moved: showRegister }">
     <div class="left-side" :class="{ moved: showRegister }">
@@ -32,18 +31,13 @@
         <p class="title">{{ $t("user.connexion") }}</p>
 
         <div class="item input_item">
-          <input
-            :placeholder="$t('user.login')"
-            v-model="login_utilisateur_connexion"
+          <input :placeholder="$t('user.login')" v-model="login_utilisateur_connexion"
             @keyup.enter="getValuesConnexion" />
           <hr />
         </div>
 
         <div class="item input_item">
-          <input
-            type="password"
-            :placeholder="$t('user.mdp')"
-            v-model="mdp_utilisateur_connexion"
+          <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur_connexion"
             @keyup.enter="getValuesConnexion" />
           <hr />
         </div>
@@ -55,9 +49,7 @@
         </div>
 
         <div class="item">
-          <button
-            @click="getValuesConnexion"
-            class="button_message button_connexion">
+          <button @click="getValuesConnexion" class="button_message button_connexion">
             {{ $t("user.buttonConnexion") }}
           </button>
           <p v-if="message" class="message">{{ message }}</p>
@@ -66,7 +58,7 @@
         <div class="item">
           <router-link to="/" class="button_message button_cancel">{{
             $t("pageLog.annuler")
-          }}</router-link>
+            }}</router-link>
         </div>
       </div>
 
@@ -77,44 +69,31 @@
             <div class="container_left">
               <div class="item both_size">
                 <div class="item">
-                  <input
-                    :placeholder="$t('user.prenom')"
-                    v-model="prenom_utilisateur"
+                  <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur"
                     @keyup.enter="getValuesInscription" />
                   <hr />
                 </div>
 
                 <div class="item">
-                  <input
-                    :placeholder="$t('user.nom')"
-                    v-model="nom_utilisateur"
-                    @keyup.enter="getValuesInscription" />
+                  <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" @keyup.enter="getValuesInscription" />
                   <hr />
                 </div>
               </div>
 
               <div class="item">
-                <input
-                  :placeholder="$t('user.login')"
-                  v-model="login_utilisateur"
+                <input :placeholder="$t('user.login')" v-model="login_utilisateur"
                   @keyup.enter="getValuesInscription" />
                 <hr />
               </div>
 
               <div class="item">
-                <input
-                  type="password"
-                  :placeholder="$t('user.mdp')"
-                  v-model="mdp_utilisateur"
+                <input type="password" :placeholder="$t('user.mdp')" v-model="mdp_utilisateur"
                   @keyup.enter="getValuesInscription" />
                 <hr />
               </div>
 
               <div class="item">
-                <input
-                  type="email"
-                  :placeholder="$t('user.mail')"
-                  v-model="mail_utilisateur"
+                <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur"
                   @keyup.enter="getValuesInscription" />
                 <hr />
               </div>
@@ -124,10 +103,7 @@
 
             <div class="container_right">
               <div class="item">
-                <input
-                  type="tel"
-                  pattern="^0[1-9][0-9]{8}$"
-                  v-model="tel_utilisateur"
+                <input type="tel" pattern="^0[1-9][0-9]{8}$" v-model="tel_utilisateur"
                   :placeholder="$t('user.tel_utilisateur')" /><br /><br />
               </div>
 
@@ -135,39 +111,27 @@
 
               <div class="item_radio">
                 <div class="radio_group">
-                  <input
-                    type="radio"
-                    v-model="sexe_utilisateur"
-                    :id="$t('user.typeSexe.homme')"
-                    :value="$t('user.typeSexe.homme')"
-                    name="sexe" />
+                  <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.homme')"
+                    :value="$t('user.typeSexe.homme')" name="sexe" />
                   <label :for="$t('user.typeSexe.homme')">{{
                     $t("user.typeSexe.homme")
-                  }}</label>
+                    }}</label>
                 </div>
 
                 <div class="radio_group">
-                  <input
-                    type="radio"
-                    v-model="sexe_utilisateur"
-                    :id="$t('user.typeSexe.femme')"
-                    :value="$t('user.typeSexe.femme')"
-                    name="sexe" />
+                  <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.femme')"
+                    :value="$t('user.typeSexe.femme')" name="sexe" />
                   <label :for="$t('user.typeSexe.femme')">{{
                     $t("user.typeSexe.femme")
-                  }}</label>
+                    }}</label>
                 </div>
 
                 <div class="radio_group">
-                  <input
-                    type="radio"
-                    v-model="sexe_utilisateur"
-                    :id="$t('user.typeSexe.autre')"
-                    :value="$t('user.typeSexe.autre')"
-                    name="sexe" />
+                  <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.autre')"
+                    :value="$t('user.typeSexe.autre')" name="sexe" />
                   <label :for="$t('user.typeSexe.autre')">{{
                     $t("user.typeSexe.autre")
-                  }}</label>
+                    }}</label>
                 </div>
               </div>
             </div>
@@ -182,7 +146,7 @@
           <div class="item">
             <router-link to="/" class="button_message button_cancel">{{
               $t("pageLog.annuler")
-            }}</router-link>
+              }}</router-link>
           </div>
         </form>
       </div>
@@ -207,8 +171,10 @@ import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
-import localData from "../../backend/database/localData.js";
+import Modal from "./Modal.vue";
+import { useUtilisateurAuthStore } from "@/services/utilisateur.service";
 
+const utilisateurAuthStore = useUtilisateurAuthStore();
 const route = useRoute();
 const showRegister = ref(route.name === "Inscription_utilisateur");
 
@@ -279,180 +245,74 @@ const valueTexts = computed(() => {
   }
 });
 
-function getValuesConnexion() {
+
+async function getValuesConnexion() {
   if (!login_utilisateur_connexion.value || !mdp_utilisateur_connexion.value) {
     message.value = "Veuillez remplir tous les champs obligatoires.";
     return;
   }
 
-  const utilisateursData = localData.getAll("utilisateurs");
- 
+  try {
+    const res = await utilisateurAuthStore.ConnexionUtilisateur({
+      login: login_utilisateur_connexion.value,
+      mdp: mdp_utilisateur_connexion.value,
+    });
 
-  const user = utilisateursData.find(
-    (u) =>
-      u.login_utilisateur === login_utilisateur_connexion.value &&
-      u.mdp_utilisateur === mdp_utilisateur_connexion.value
-  );
-
- 
-
-  if (user) {
-   
-
-    userStore.setUser(user.id_utilisateur);
-    if (user.isadmin || user.id_utilisateur === 1) {
-      userStore.setRole("admin");
-    } else {
-      userStore.setRole("user");
+    userStore.setUser(res.data.user.id);
+    if (res.data.user.role) {
+      userStore.setRole(res.data.user.role);
     }
-
-    if (user.ispresta) {
-      const prestataireData = localData.getAll("prestataires");
-      const prestataire = prestataireData.find(
-        (p) => p.id_utilisateur == user.id_utilisateur
-      );
-      if (prestataire) {
-        userStore.prestaId = prestataire.id_prestataire;
-      }
-    }
-
-    userId.value = user.id_utilisateur;
-    message.value = `Utilisateur connecté avec l'ID : ${user.id_utilisateur}`;
+    userId.value = userStore.userId;
+    message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
     connexion.value = true;
-
-    console.log("Utilisateur connecté depuis localStorage:", user);
-    console.log(
-      JSON.parse(localStorage.getItem("mintonette_utilisateurs"))
-    );
 
     if (connexion.value) {
       ModalShow(false);
     }
-  } else {
-    message.value = "Login ou mot de passe incorrect";
+  } catch (err) {
+    message.value = `Erreur lors de la connexion : ${err.response?.data?.error || err.message}`;
+    console.error(err);
   }
 }
 
-// async function getValuesConnexion() {
-//     if (!login_utilisateur_connexion.value || !mdp_utilisateur_connexion.value) {
-//         message.value = "Veuillez remplir tous les champs obligatoires.";
-//         return;
-//     }
 
-//     try {
-//         const res = await axios.post('http://localhost:3000/utilisateur/auth/connexion', {
-//             login: login_utilisateur_connexion.value,
-//             mdp: mdp_utilisateur_connexion.value,
-//         });
-//         userStore.setUser(res.data.user.id);
-//         if (res.data.user.role) {
-//             userStore.setRole(res.data.user.role);
-//         }
-//         userId.value = userStore.userId;
-//         message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
-//         connexion.value = true;
-
-//         if (connexion.value) {
-//             ModalShow(false);
-//         }
-//     } catch (err) {
-//         message.value = `Erreur lors de la connexion : ${err.response?.data?.error || err.message}`;
-//         console.error(err);
-//     }
-// }
-
-function getValuesInscription() {
-  if (
-    !nom_utilisateur.value ||
-    !prenom_utilisateur.value ||
-    !login_utilisateur.value ||
-    !mdp_utilisateur.value ||
-    !mail_utilisateur.value
-  ) {
+async function getValuesInscription() {
+  if (!nom_utilisateur.value || !prenom_utilisateur.value || !login_utilisateur.value || !mdp_utilisateur.value || !mail_utilisateur.value) {
     message.value = "Veuillez remplir tous les champs obligatoires.";
     return;
   }
 
-  const utilisateursData = localData.getAll("utilisateurs");
+  try {
+    if (sexe_utilisateur.value.toLowerCase() === 'Autre') {
+      sexe_utilisateur.value = autre_sexe_utilisateur.value;
+    }
 
-  const existingUser = utilisateursData.find(
-    (u) =>
-      u.login_utilisateur === login_utilisateur.value ||
-      u.mail_utilisateur === mail_utilisateur.value
-  );
+    const res = await utilisateurAuthStore.InscriptionUtilisateur({
+      nom: nom_utilisateur.value,
+      prenom: prenom_utilisateur.value,
+      login: login_utilisateur.value,
+      mdp: mdp_utilisateur.value,
+      mail: mail_utilisateur.value,
+      tel_utilisateur: tel_utilisateur.value,
+      sexe: sexe_utilisateur.value,
+    })
+    if (res.data && res.data.user) {
+      userStore.setUser(res.data.user.id);
+      userStore.setRole(res.data.user.role || 'user');
+      message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
+      inscription.value = true;
+    } else {
+      message.value = res.data?.message || "Inscription réussie mais impossible de récupérer l'ID utilisateur.";
+    }
 
-  if (existingUser) {
-    message.value = "Ce login ou email est déjà utilisé.";
-    return;
-  }
-
-  // Créer le nouvel utilisateur (l'ID sera généré automatiquement par localData.add)
-  const newUser = {
-    nom_utilisateur: nom_utilisateur.value,
-    prenom_utilisateur: prenom_utilisateur.value,
-    login_utilisateur: login_utilisateur.value,
-    mdp_utilisateur: mdp_utilisateur.value,
-    mail_utilisateur: mail_utilisateur.value,
-    tel_utilisateur: tel_utilisateur.value || null,
-    sexe_utilisateur: sexe_utilisateur.value || null,
-    date_creation_utilisateur: new Date().toISOString(),
-    ispresta: false,
-    waitingforadmin: false,
-    isadmin: false,
-  };
-
-  // Ajouter l'utilisateur à localStorage (l'ID sera généré automatiquement)
-  const addedUser = localData.add("utilisateurs", newUser);
-
-  console.log("Nouvel utilisateur créé et ajouté à localStorage:", addedUser);
-
-  userStore.setUser(addedUser.id_utilisateur);
-  userStore.setRole("user");
-  message.value = `Utilisateur créé avec succès ! ID : ${addedUser.id_utilisateur}`;
-  inscription.value = true;
-
-  if (inscription.value) {
-    ModalShow(true);
+    if (inscription.value) {
+      ModalShow(true);
+    }
+  } catch (err) {
+    message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;
+    console.error(err);
   }
 }
-
-// async function getValuesInscription() {
-//     if (!nom_utilisateur.value || !prenom_utilisateur.value || !login_utilisateur.value || !mdp_utilisateur.value || !mail_utilisateur.value) {
-//         message.value = "Veuillez remplir tous les champs obligatoires.";
-//         return;
-//     }
-
-//     try {
-//         if (sexe_utilisateur.value.toLowerCase() === 'Autre') {
-//             sexe_utilisateur.value = autre_sexe_utilisateur.value;
-//         }
-
-//         const res = await axios.post('http://localhost:3000/utilisateur/auth/inscription', {
-//             nom: nom_utilisateur.value,
-//             prenom: prenom_utilisateur.value,
-//             login: login_utilisateur.value,
-//             mdp: mdp_utilisateur.value,
-//             mail: mail_utilisateur.value,
-//             tel_utilisateur: tel_utilisateur.value,
-//             sexe: sexe_utilisateur.value,
-//         });
-//         if (res.data && res.data.user) {
-//             userStore.setUser(res.data.user.id);
-//             userStore.setRole(res.data.user.role || 'user');
-//             message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
-//             inscription.value = true;
-//         } else {
-//             message.value = res.data?.message || "Inscription réussie mais impossible de récupérer l'ID utilisateur.";
-//         }
-
-//         if (inscription.value) {
-//             ModalShow(true);
-//         }
-//     } catch (err) {
-//         message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;
-//         console.error(err);
-//     }
-// }
 
 function moveCard() {
   showRegister.value = !showRegister.value;
@@ -524,11 +384,9 @@ function moveCard() {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 30%,
-    var(--colorGradientBlue),
-    #0057c2
-  );
+  background: radial-gradient(circle at 30% 30%,
+      var(--colorGradientBlue),
+      #0057c2);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
   z-index: 0;
   pointer-events: none;
@@ -537,11 +395,9 @@ function moveCard() {
 .left-side.moved::before {
   left: auto;
   right: -80px;
-  background: radial-gradient(
-    circle at 70% 30%,
-    var(--colorGradientPurple),
-    var(--colorGradientBlue)
-  );
+  background: radial-gradient(circle at 70% 30%,
+      var(--colorGradientPurple),
+      var(--colorGradientBlue));
 }
 
 /* Créer un autre cercle */
@@ -604,11 +460,9 @@ function moveCard() {
 
 .background-right {
   flex: 1;
-  background: linear-gradient(
-    135deg,
-    var(--colorGradientBlue),
-    var(--colorGradientGreen)
-  );
+  background: linear-gradient(135deg,
+      var(--colorGradientBlue),
+      var(--colorGradientGreen));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -618,11 +472,9 @@ function moveCard() {
 }
 
 .background-right.moved {
-  background: linear-gradient(
-    135deg,
-    var(--colorGradientPurple),
-    var(--colorGradientBlue)
-  );
+  background: linear-gradient(135deg,
+      var(--colorGradientPurple),
+      var(--colorGradientBlue));
 }
 
 .left-card {
@@ -682,7 +534,7 @@ function moveCard() {
   opacity: 0.5;
 }
 
-.item input:focus + hr {
+.item input:focus+hr {
   transform: scaleX(1);
   opacity: 1;
 }
@@ -827,7 +679,7 @@ input::placeholder {
   transform: translateY(-2px);
 }
 
-.button_register:focus + .left-card {
+.button_register:focus+.left-card {
   transform: translateX(calc(-50% - 300px));
 }
 
@@ -955,11 +807,9 @@ input::placeholder {
 }
 
 .button-prestataire {
-  background: linear-gradient(
-    90deg,
-    var(--colorGradientPurple),
-    var(--colorGradientBlue)
-  );
+  background: linear-gradient(90deg,
+      var(--colorGradientPurple),
+      var(--colorGradientBlue));
   color: white;
   font-weight: 600;
   font-size: 1.2em;

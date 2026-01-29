@@ -2,7 +2,7 @@
     <NavView></NavView>
     <MenuAdmin></MenuAdmin>
     <Modal v-model="isDelete">
-        <template #contentDelete>
+        <template #content>
             <p>
                 {{ $t('adminPage.prestataire.modal.confirmation') }}
                 <span class="name_delete background_name">

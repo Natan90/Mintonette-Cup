@@ -1,4 +1,56 @@
 <template>
+  <Modal v-model="showModal">
+    <template #content>
+      <div class="modal-header">
+          <h3>Zone {{ selectedZone?.id_zone }}</h3>
+          <span class="modal-close" @click="closeModal">&times;</span>
+        </div>
+
+        <div class="modal-body">
+          <div v-if="selectedZone?.occupied" class="current-assignment">
+            <p>
+              <strong>Actuellement occupée par :</strong><br />
+              {{ selectedZone.prestataire.nom_prestataire }}
+            </p>
+            <button @click="unassignZone" class="btn btn-warning">
+              Libérer cette zone
+            </button>
+          </div>
+
+          <div v-else class="assign-section">
+            <label for="prestaSelect">Attribuer à un prestataire :</label>
+            <p
+              v-if="availablePrestataires.length === 0"
+              style="
+                color: #f59e0b;
+                padding: 10px;
+                background: #fef3c7;
+                border-radius: 6px;
+              ">
+              ⚠️ Aucun prestataire disponible (tous ont déjà une zone attribuée)
+            </p>
+            <select v-else id="prestaSelect" v-model="selectedPrestataire">
+              <option :value="null">-- Choisir un prestataire --</option>
+              <option
+                v-for="presta in availablePrestataires"
+                :key="presta.id_prestataire"
+                :value="presta.id_prestataire">
+                {{ presta.nom_prestataire }} - {{ presta.prenom_utilisateur }}
+                {{ presta.nom_utilisateur }}
+              </option>
+            </select>
+            <button
+              v-if="availablePrestataires.length > 0"
+              @click="assignZone"
+              class="btn btn-primary"
+              :disabled="!selectedPrestataire">
+              Attribuer
+            </button>
+          </div>
+        </div>
+    </template>
+  </Modal>
+  
   <div class="zone-map-container">
     <div class="map-header">
       <h3>Plan des zones prestataires</h3>
@@ -69,68 +121,17 @@
         </div>
       </div>
     </div>
-
-    <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Zone {{ selectedZone?.id_zone }}</h3>
-          <span class="modal-close" @click="closeModal">&times;</span>
-        </div>
-
-        <div class="modal-body">
-          <div v-if="selectedZone?.occupied" class="current-assignment">
-            <p>
-              <strong>Actuellement occupée par :</strong><br />
-              {{ selectedZone.prestataire.nom_prestataire }}
-            </p>
-            <button @click="unassignZone" class="btn btn-warning">
-              Libérer cette zone
-            </button>
-          </div>
-
-          <div v-else class="assign-section">
-            <label for="prestaSelect">Attribuer à un prestataire :</label>
-            <p
-              v-if="availablePrestataires.length === 0"
-              style="
-                color: #f59e0b;
-                padding: 10px;
-                background: #fef3c7;
-                border-radius: 6px;
-              ">
-              ⚠️ Aucun prestataire disponible (tous ont déjà une zone attribuée)
-            </p>
-            <select v-else id="prestaSelect" v-model="selectedPrestataire">
-              <option :value="null">-- Choisir un prestataire --</option>
-              <option
-                v-for="presta in availablePrestataires"
-                :key="presta.id_prestataire"
-                :value="presta.id_prestataire">
-                {{ presta.nom_prestataire }} - {{ presta.prenom_utilisateur }}
-                {{ presta.nom_utilisateur }}
-              </option>
-            </select>
-            <button
-              v-if="availablePrestataires.length > 0"
-              @click="assignZone"
-              class="btn btn-primary"
-              :disabled="!selectedPrestataire">
-              Attribuer
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-// import prestatairesData from "../../backend/database/jsonData/Prestataire.json";
-// import zoneData from "../../backend/database/jsonData/Zone.json";
-// import axios from "axios";
-import localData from "../../backend/database/localData.js";
+import Modal from "./Modal.vue";
+import { useAdminAPIStore } from "@/services/admin.service";
+import { usePrestataireStore } from "@/services/prestataire.service";
 
+const adminAPIStore = useAdminAPIStore();
+const prestataireStore = usePrestataireStore();
 const zones = ref([]);
 const prestataires = ref([]);
 const showModal = ref(false);
@@ -178,62 +179,24 @@ onMounted(() => {
   loadPrestataires();
 });
 
-function loadZones() {
-  const zonesData = localData.getAll("zones");
-  const prestasData = localData.getAll("prestataires");
 
-  zones.value = zonesData.map((zone) => {
-    const presta = prestasData.find(
-      (p) => p.id_zone === zone.id_zone && !p.waitingforadmin
-    );
-    return {
-      ...zone,
-      occupied: !!presta,
-      prestataire: presta || null,
-    };
-  });
-
-  console.log("Zones chargées depuis localStorage:", zones.value);
+async function loadZones() {
+  try {
+    const res = await adminAPIStore.GetZones();
+    zones.value = res.data;
+  } catch (err) {
+    console.error("Détails:", err.response?.data || err.message);
+  }
 }
 
-function loadPrestataires() {
-  const prestasData = localData.getAll("prestataires");
-  const utilisateursData = localData.getAll("utilisateurs");
-
-  // Enrichir avec les infos utilisateurs
-  prestataires.value = prestasData.map((presta) => {
-    const user = utilisateursData.find(
-      (u) => u.id_utilisateur === presta.id_utilisateur
-    );
-    return {
-      ...presta,
-      prenom_utilisateur: user?.prenom_utilisateur || "",
-      nom_utilisateur: user?.nom_utilisateur || "",
-    };
-  });
-
-  console.log("Prestataires chargés depuis localStorage:", prestataires.value);
+async function loadPrestataires() {
+  try {
+    const res = await prestataireStore.GetPrestataires();
+    prestataires.value = res.data;
+  } catch (err) {
+    console.error("Détails:", err.response?.data || err.message);
+  }
 }
-
-// async function loadZones() {
-
-//     const res = await axios.get(
-//       "http://localhost:3000/admin/prestataire/zones"
-//     );
-//     zones.value = res.data.zones;
-//   } catch (err) {
-//     console.error("Détails:", err.response?.data || err.message);
-//   }
-// }
-
-// async function loadPrestataires() {
-//   try {
-//     const res = await axios.get("http://localhost:3000/prestataire/show");
-//     prestataires.value = res.data;
-//   } catch (err) {
-//     console.error("Détails:", err.response?.data || err.message);
-//   }
-// }
 watch(loadPrestataires);
 function selectZone(zone) {
   selectedZone.value = zone;
@@ -247,120 +210,48 @@ function closeModal() {
   selectedPrestataire.value = null;
 }
 
-function assignZone() {
+
+async function assignZone() {
   if (!selectedPrestataire.value || !selectedZone.value) return;
 
   try {
-    console.log("🔄 Début assignation zone...");
-    console.log("Prestataire ID:", selectedPrestataire.value);
-    console.log("Zone ID:", selectedZone.value.id_zone);
+    const response = await adminAPIStore.AssignPrestataireZone(selectedPrestataire.value, selectedZone.value.id_zone);
 
-    // Mettre à jour la zone du prestataire
-    localData.update(
-      "prestataires",
-      selectedPrestataire.value,
-      {
-        id_zone: selectedZone.value.id_zone,
-      },
-      "id_prestataire"
-    );
+    prestataires.value = [];
+    zones.value = [];
 
-    console.log("✅ Zone mise à jour dans localStorage");
-    console.log(
-      `✅ Zone ${selectedZone.value.id_zone} attribuée au prestataire ${selectedPrestataire.value}`
-    );
-
-    // Recharger les données
-    loadPrestataires();
-    console.log("✅ Prestataires rechargés");
-
-    loadZones();
-    console.log("✅ Zones rechargées");
+    await loadPrestataires();
+    await loadZones();
 
     closeModal();
-    console.log("✅ Modal fermée");
   } catch (err) {
-    console.error("❌ Erreur attribution:", err);
-    console.error("❌ Stack:", err.stack);
-    alert("Erreur lors de l'attribution");
+    console.error("Erreur attribution:", err);
+    if (err.response?.status === 409) {
+      alert("Cette zone est déjà occupée");
+    } else {
+      alert("Erreur lors de l'attribution");
+    }
   }
 }
 
-// async function assignZone() {
-//   if (!selectedPrestataire.value || !selectedZone.value) return;
-//
-//   try {
-//     const response = await axios.patch(
-//       "http://localhost:3000/admin/prestataire/assignzone",
-//       {
-//         id_prestataire: selectedPrestataire.value,
-//         id_zone: selectedZone.value.id_zone,
-//       }
-//     );
-//
-//     prestataires.value = [];
-//     zones.value = [];
-//
-//     await loadPrestataires();
-//     await loadZones();
-//
-//     closeModal();
-//   } catch (err) {
-//     console.error("Erreur attribution:", err);
-//     if (err.response?.status === 409) {
-//       alert("Cette zone est déjà occupée");
-//     } else {
-//       alert("Erreur lors de l'attribution");
-//     }
-//   }
-// }
-
-function unassignZone() {
+async function unassignZone() {
   if (!selectedZone.value?.prestataire) return;
 
   try {
-    // Retirer la zone du prestataire
-    localData.update(
-      "prestataires",
-      selectedZone.value.prestataire.id_prestataire,
-      {
-        id_zone: null,
-      },
-      "id_prestataire"
-    );
+    const response = await adminAPIStore.UnassignPrestataireZone(selectedZone.value.prestataire.id_prestataire);
 
-    // Recharger les données
-    loadPrestataires();
-    loadZones();
+    prestataires.value = [];
+    zones.value = [];
 
-    console.log(`✅ Zone ${selectedZone.value.id_zone} libérée`);
+    await loadPrestataires();
+    await loadZones();
+
     closeModal();
   } catch (err) {
-    console.error("❌ Erreur libération zone:", err);
+    console.error("Erreur libération zone:", err);
     alert("Erreur lors de la libération de la zone");
   }
 }
-
-// async function unassignZone() {
-//   if (!selectedZone.value?.prestataire) return;
-//
-//   try {
-//     const response = await axios.patch(
-//       `http://localhost:3000/admin/prestataire/unassignzone/${selectedZone.value.prestataire.id_prestataire}`
-//     );
-//
-//     prestataires.value = [];
-//     zones.value = [];
-//
-//     await loadPrestataires();
-//     await loadZones();
-//
-//     closeModal();
-//   } catch (err) {
-//     console.error("Erreur libération zone:", err);
-//     alert("Erreur lors de la libération de la zone");
-//   }
-// }
 </script>
 
 <style scoped>

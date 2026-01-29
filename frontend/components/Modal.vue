@@ -3,7 +3,7 @@
         <div class="modal-content" :class="{ bigger: bigger }">
             <span class="modal-close" @click="close">&times;</span>
 
-            <slot name="contentDelete"></slot>
+            <slot name="content"></slot>
         </div>
     </div>
 </template>

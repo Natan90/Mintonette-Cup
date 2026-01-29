@@ -49,7 +49,7 @@ exports.getZone = async (req, res) => {
 
 exports.assignZoneById = async (req, res) => {
     const id_zone = req.params.id;
-    const id_prestataire = req.body;
+    const { id_prestataire } = req.body;
     try {
         const result = await adminPrestataireService.assignZoneById(id_zone, id_prestataire);
         return res.status(201).json(result);
