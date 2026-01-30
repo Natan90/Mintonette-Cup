@@ -31,7 +31,7 @@ exports.showMatches = async (req, res) => {
 };
 
 exports.showMatchByTerrain = async (req, res) => {
-  const { idTerrain } = req.params.id;
+  const idTerrain = req.params.id;
 
   try {
     const result = await matchService.getMatchById(idTerrain);

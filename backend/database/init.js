@@ -249,20 +249,19 @@ const pool = require("./db");
 
     const insertUsers = `
       INSERT INTO Utilisateur 
-        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta,isadmin)
+        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta, isadmin)
       VALUES
-        ('Alban', 'Robin', 'albanr', 'admin123', 'alban.robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
-        ('Emma', 'Durand', 'emmad', 'user123', 'emma.durand@gmail.com', '0612345678', 'F', TRUE, FALSE),
-        ('Lucas', 'Martin', 'lucasm', 'lucas01', 'lucas.martin@gmail.com', '0652437595', 'M', TRUE, FALSE),
-        ('Chloe', 'Petit', 'chloep', 'chloe22', 'chloe.petit@gmail.com', '0610423571', 'F', TRUE, FALSE),
-        ('Nathan', 'Dupont', 'nathand', 'nathan44', 'nathan.dupont@gmail.com', '0752435010', 'M', FALSE, FALSE),
-        ('Julie', 'Bernard', 'julieb', 'julie33', 'julie.bernard@gmail.com', '0630102040', 'F', FALSE, FALSE),
-        ('Sophie', 'Moreau', 'sophiem', 'sophie11', 'sophie.moreau@gmail.com', '0693759150', 'F', FALSE, FALSE),
-        ('Maxime', 'Lefevre', 'maxl', 'maxime77', 'maxime.lefevre@gmail.com', '0630102040', 'M', FALSE, FALSE),
-        ('Camille', 'Roux', 'camr', 'camille88', 'camille.roux@gmail.com', '0750402342', 'F', FALSE, FALSE),
-        ('Thomas', 'Garcia', 'thomg', 'thomas66', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE, FALSE),
-        ('f', 'f', 'f', 'f', 'f@gmail.com', '0768401922', 'M', FALSE, FALSE);
-
+        ('Alban', 'Robin', 'albanr', '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq', 'alban.robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
+        ('Emma', 'Durand', 'emmad', '$2b$10$QZUK7Ed97ZzAjQzUrzzTHuzh2pfRT/iPYPttR4CaIfaQKYZQRTxO6', 'emma.durand@gmail.com', '0612345678', 'F', TRUE, FALSE),
+        ('Lucas', 'Martin', 'lucasm', '$2b$10$SqwwG.GoZgR/bxl2IZ49U.tNkpkMhMpBIbA2yQE3lF/qG9QHktGQ6', 'lucas.martin@gmail.com', '0652437595', 'M', TRUE, FALSE),
+        ('Chloe', 'Petit', 'chloep', '$2b$10$GGtE3KIzPl6Soav1tutWtOEgajIowmwP9uJIwb/QsRJZBsLmd8/62', 'chloe.petit@gmail.com', '0610423571', 'F', TRUE, FALSE),
+        ('Nathan', 'Dupont', 'nathand', '$2b$10$X1l9xYZpXcXlgwCtbfRsheTndo2qcc9nYvf/RiVgB7uU2L8/AOo7.', 'nathan.dupont@gmail.com', '0752435010', 'M', FALSE, FALSE),
+        ('Julie', 'Bernard', 'julieb', '$2b$10$wD/ncJrAaw5bL5ja38nxtOBXm2ZA1ZJ33rv4NifrPeWNKZSFDuoNO', 'julie.bernard@gmail.com', '0630102040', 'F', FALSE, FALSE),
+        ('Sophie', 'Moreau', 'sophiem', '$2b$10$Z42qZv1Iqjw41dgirvwJP.K6QbGDRR1uX.OeQJQTdwjNhfSw/w1kS', 'sophie.moreau@gmail.com', '0693759150', 'F', FALSE, FALSE),
+        ('Maxime', 'Lefevre', 'maxl', '$2b$10$TfJqSCXzfqDHYoqSustMperZj7Dl3bb5AemeSPRMVwbocJrQ.Oob6', 'maxime.lefevre@gmail.com', '0630102040', 'M', FALSE, FALSE),
+        ('Camille', 'Roux', 'camr', '$2b$10$9Osya.DbkM5Si/Zg0DiwhuCT9IXwE5PUDwQ2iBc3beuwQOqcMFwiq', 'camille.roux@gmail.com', '0750402342', 'F', FALSE, FALSE),
+        ('Thomas', 'Garcia', 'thomg', '$2b$10$nWMa6gw35daf2xJI4sbFHe7AWVbcO9Djd1t1ZzkYnYn56KlkGY3T.', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE, FALSE),
+        ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy   ', 'f@gmail.com', '0768401922', 'M', FALSE, FALSE);
     `;
     await pool.query(insertUsers);
 

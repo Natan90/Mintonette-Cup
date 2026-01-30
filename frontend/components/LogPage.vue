@@ -270,8 +270,13 @@ async function getValuesConnexion() {
       ModalShow(false);
     }
   } catch (err) {
-    message.value = `Erreur lors de la connexion : ${err.response?.data?.error || err.message}`;
-    console.error(err);
+    console.log(err.data.error)
+    if (err && err.data && err.data.error) {
+      message.value = err.data.error;
+    } else {
+      message.value = "Erreur serveur : impossible de se connecter.";
+    }
+    console.error("Erreur connexion :", err);
   }
 }
 
@@ -283,9 +288,9 @@ async function getValuesInscription() {
   }
 
   try {
-    if (sexe_utilisateur.value.toLowerCase() === 'Autre') {
-      sexe_utilisateur.value = autre_sexe_utilisateur.value;
-    }
+    // if (sexe_utilisateur.value.toLowerCase() === 'Autre') {
+    //   sexe_utilisateur.value = autre_sexe_utilisateur.value;
+    // }
 
     const res = await utilisateurAuthStore.InscriptionUtilisateur({
       nom: nom_utilisateur.value,
@@ -309,8 +314,13 @@ async function getValuesInscription() {
       ModalShow(true);
     }
   } catch (err) {
-    message.value = `Erreur lors de l'inscription : ${err.response?.data?.error || err.message}`;
-    console.error(err);
+    console.log(err.data.error)
+    if (err && err.data && err.data.error) {
+      message.value = err.data.error;
+    } else {
+      message.value = "Erreur serveur : impossible de s'inscrire.";
+    }
+    console.error("Erreur connexion :", err);
   }
 }
 

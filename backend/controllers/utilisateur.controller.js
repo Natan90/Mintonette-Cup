@@ -35,7 +35,7 @@ exports.updateUtilisateur = async (req, res) => {
     if (err.status && err.message) {
       return res.status(err.status).json({ error: err.message });
     }
-    console.error("Erreur connexion utilisateur : ", err);
+    console.error("Erreur update utilisateur : ", err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };

@@ -6,9 +6,7 @@ exports.validateInscription = (req, res, next) => {
   }
 
   if (mdp.length < 8) {
-    return res
-      .status(400)
-      .json({ error: "Le mot de passe doit contenir minimum 8 carcatères" });
+    return res.status(400).json({ error: "Le mot de passe doit contenir minimum 8 carcatères" });
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,7 +21,7 @@ exports.validateConnexion = (req, res, next) => {
   const { login, mdp } = req.body;
 
   if (!login || !mdp) {
-    return res.status(400).json({ error: "Login et mot de passe requis" });
+    return res.status(400).json({ error: "Login ou mot de passe requis" });
   }
 
   next();
@@ -39,12 +37,12 @@ exports.validateUpdateUtilisateur = (req, res, next) => {
   }
 
   if (
-    !nom &&
-    !prenom &&
-    !mail &&
-    !tel_utilisateur &&
-    !login &&
-    !sexe &&
+    !nom ||
+    !prenom ||
+    !mail ||
+    !tel_utilisateur ||
+    !login ||
+    !sexe ||
     !photo_profil
   ) {
     return res.status(400).json({

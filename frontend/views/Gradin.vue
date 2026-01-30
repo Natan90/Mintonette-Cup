@@ -217,6 +217,7 @@ async function fetchGradin() {
   seats.value = seatsByMatch.value[idMatch.value];
 }
 
+
 async function fetchMatches() {
   const res = await axios.get(
     `http://localhost:3000/equipes/match/terrain/${terrainId}`,
