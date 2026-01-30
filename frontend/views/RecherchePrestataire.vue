@@ -469,6 +469,25 @@ input:checked+.slider:before {
   background-color: var(--couleur-fond);
 }
 
+@media (max-width:750px){
+
+  .filtreEtListe{
+    flex-direction: column; 
+  }
+
+  .filtrePrestataire{
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .listePrestataireBorder{
+    width: 100%;
+  }
+}
+
 .blocListePrestataire {
   display: flex;
   flex-direction: column;
