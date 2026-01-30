@@ -140,6 +140,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import { useGradinStore } from "@/services/gradin.service";
 import { usePanierStore } from "@/services/panier.service";
+import { useEquipeStore } from "@/services/equipe.service";
 
 const route = useRoute();
 const router = useRouter();
@@ -148,6 +149,7 @@ const userStore = useUserStore();
 const navStore = useNavigationStore();
 const gradinStore = useGradinStore();
 const panierStore = usePanierStore();
+const equipeStore = useEquipeStore();
 
 const matches = ref([]);
 const seats = ref([]);
@@ -219,9 +221,8 @@ async function fetchGradin() {
 
 
 async function fetchMatches() {
-  const res = await axios.get(
-    `http://localhost:3000/equipes/match/terrain/${terrainId}`,
-  );
+  const res  = await equipeStore.GetMatchById(terrainId);
+
   matches.value = res.data;
 }
 

@@ -1,15 +1,11 @@
 import { defineStore } from "pinia";
 import {
   getRequest,
-  postRequest,
-  putRequest,
-  patchRequest,
-  deleteRequest,
 } from "./axios.service";
 
 export const useEquipeStore = defineStore("equipe", () => {
 
-  async function GetMatcheById(id_match) {
+  async function GetMatchById(id_match) {
     if (!id_match) {
       throw new Error("L'id du match est obligatoire");
     }
@@ -17,6 +13,6 @@ export const useEquipeStore = defineStore("equipe", () => {
   } 
 
   return {
-    GetMatcheById,
+    GetMatchById,
   };
 });

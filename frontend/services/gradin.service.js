@@ -1,29 +1,23 @@
 import { defineStore } from "pinia";
-import { getRequest, putRequest, handleError } from "./axios.service";
+import { getRequest, putRequest } from "./axios.service";
 
 export const useGradinStore = defineStore("gradin", () => {
   async function GetGradinByMatchId(id_match) {
-    if (!id_match) handleError("L'id du match est obligatoire");
-    const res = null;
-
-    try {
-      res = await getRequest(`/gradin/show/${id_match}`);
-    } catch (error) {
-      res = handleError(error);
+    if (!id_match) {
+      throw new Error("L'id du match est obligatoire");
     }
-    return res;
+    
+    return getRequest(`/gradin/show/${id_match}`);
   }
 
   async function UpdateGradin(gradin) {
-    const res = null;
-    try {
-      res = await putRequest("/gradin/update", {
+    if (!gradin) {
+      throw new Error("Les valeurs du gradin sont obligatoires");
+    }
+
+    return putRequest("/gradin/update", {
         ...gradin,
       });
-    } catch (error) {
-      res = handleError(error);
-    }
-    return res;
   }
 
   return {
