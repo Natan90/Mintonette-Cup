@@ -1,5 +1,6 @@
 exports.validateAdd = (req, res, next) => {
-  const { type, id_user } = req.body;
+  const id_user = req.params.id;
+  const { type } = req.body;
 
   if (!type || !["siege", "service"].includes(type)) {
     return res
@@ -34,7 +35,8 @@ exports.validateAdd = (req, res, next) => {
 };
 
 exports.validateRemove = (req, res, next) => {
-  const { type, id_user } = req.body;
+  const id_user = req.params.id;
+  const { type } = req.body;
 
   if (!type || !["siege", "service"].includes(type)) {
     return res

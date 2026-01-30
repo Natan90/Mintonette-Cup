@@ -2,7 +2,7 @@ const panierService = require("../services/panier.service");
 
 exports.getPanier = async (req, res) => {
   try {
-    const { id_user } = req.params;
+    const id_user = req.params.id;
     const result = await panierService.getPanierByUser(id_user);
     return res.status(201).json(result);
   } catch (err) {
@@ -13,7 +13,8 @@ exports.getPanier = async (req, res) => {
 
 exports.addPanier = async (req, res) => {
   try {
-    const { type, id_user } = req.body;
+    const id_user = req.params.id;
+    const { type } = req.body;
 
     if (type === "siege") {
       const { matchId, numero_colonne, numero_ligne, zone } = req.body;
@@ -47,7 +48,8 @@ exports.removeSiege = async (req, res) => {
 
 exports.deletePanier = async (req, res) => {
     try {
-        const { type, id_user } = req.body;
+      const id_user = req.params.id;
+        const { type } = req.body;
 
         if (type === "siege") {
             const { matchId, numero_colonne, numero_ligne, zone } = req.body;

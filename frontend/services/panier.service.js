@@ -15,9 +15,8 @@ export const usePanierStore = defineStore("panier", () => {
       throw new Error("L'id de l'utilisateur est obligatoire");
     }
 
-    return postRequest("/panier/add", {
+    return postRequest(`/panier/add/${id_user}`, {
       type,
-      id_user,
       ...addValue,
     });
   }
@@ -27,10 +26,9 @@ export const usePanierStore = defineStore("panier", () => {
       throw new Error("L'id de l'utilisateur est obligatoire");
     }
 
-    return deleteRequest("/panier/delete", {
+    return deleteRequest(`/panier/delete/${id_user}`, {
       data: {
         type,
-        id_user,
       },
     });
   }

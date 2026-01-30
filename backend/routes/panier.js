@@ -7,9 +7,9 @@ const panierMiddleware = require("../middlewares/panier.middleware");
 router.get("/show/:id", panierController.getPanier);
 
 // POST ajouter au panier (siège ou service)
-router.post("/add", panierMiddleware.validateAdd, panierController.addPanier);
+router.post("/add/:id", panierMiddleware.validateAdd, panierController.addPanier);
 
 // DELETE retirer du panier (siège ou service)
-router.delete("/delete", panierMiddleware.validateRemove, panierController.deletePanier);
+router.delete("/delete/:id", panierMiddleware.validateRemove, panierController.deletePanier);
 
 module.exports = router;
