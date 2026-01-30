@@ -261,7 +261,7 @@ const pool = require("./db");
         ('Maxime', 'Lefevre', 'maxl', '$2b$10$TfJqSCXzfqDHYoqSustMperZj7Dl3bb5AemeSPRMVwbocJrQ.Oob6', 'maxime.lefevre@gmail.com', '0630102040', 'M', FALSE, FALSE),
         ('Camille', 'Roux', 'camr', '$2b$10$9Osya.DbkM5Si/Zg0DiwhuCT9IXwE5PUDwQ2iBc3beuwQOqcMFwiq', 'camille.roux@gmail.com', '0750402342', 'F', FALSE, FALSE),
         ('Thomas', 'Garcia', 'thomg', '$2b$10$nWMa6gw35daf2xJI4sbFHe7AWVbcO9Djd1t1ZzkYnYn56KlkGY3T.', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE, FALSE),
-        ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy   ', 'f@gmail.com', '0768401922', 'M', FALSE, FALSE);
+        ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy', 'f@gmail.com', '0768401922', 'M', FALSE, FALSE);
     `;
     await pool.query(insertUsers);
 
