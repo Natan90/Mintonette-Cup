@@ -18,13 +18,23 @@ exports.addPanier = async (req, res) => {
 
     if (type === "siege") {
       const { matchId, numero_colonne, numero_ligne, zone } = req.body;
-      const result = await panierService.addSiege(id_user, matchId, numero_colonne, numero_ligne, zone);
+      const result = await panierService.addSiege(
+        id_user,
+        matchId,
+        numero_colonne,
+        numero_ligne,
+        zone,
+      );
       return res.status(201).json(result);
     }
 
     if (type === "service") {
       const { service_id, quantite } = req.body;
-      const result = await panierService.addService(id_user, service_id, quantite);
+      const result = await panierService.addService(
+        id_user,
+        service_id,
+        quantite,
+      );
       return res.status(201).json(result);
     }
 
@@ -38,7 +48,13 @@ exports.addPanier = async (req, res) => {
 exports.removeSiege = async (req, res) => {
   try {
     const { id_panier, numero_colonne, numero_ligne, zone, matchId } = req.body;
-    await panierService.removeSiege(id_panier, numero_colonne, numero_ligne, zone, matchId);
+    await panierService.removeSiege(
+      id_panier,
+      numero_colonne,
+      numero_ligne,
+      zone,
+      matchId,
+    );
     res.json({ message: "Siège retiré du panier" });
   } catch (err) {
     console.error(err);
@@ -47,26 +63,61 @@ exports.removeSiege = async (req, res) => {
 };
 
 exports.deletePanier = async (req, res) => {
-    try {
-      const id_user = req.params.id;
-        const { type } = req.body;
+  try {
+    const id_user = req.params.id;
+    const { type } = req.body;
 
-        if (type === "siege") {
-            const { matchId, numero_colonne, numero_ligne, zone } = req.body;
-            const result = await panierService.removeSiege(id_user, matchId, numero_colonne, numero_ligne, zone);
-            return res.status(201).json(result);
-        }
-
-        if (type === "service") {
-            const { service_id, quantite } = req.body;
-            const result = await panierService.removeService(id_user, service_id, quantite);
-            return res.status(201).json(result);
-        }
-
-        return res.status(400).json({ error: "Type invalide" });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Erreur serveur" });
+    if (type === "siege") {
+      const { matchId, numero_colonne, numero_ligne, zone } = req.body;
+      const result = await panierService.removeSiege(
+        id_user,
+        matchId,
+        numero_colonne,
+        numero_ligne,
+        zone,
+      );
+      return res.status(201).json(result);
     }
+
+    if (type === "service") {
+      const { service_id, quantite } = req.body;
+      const result = await panierService.removeService(
+        id_user,
+        service_id,
+        quantite,
+      );
+      return res.status(201).json(result);
+    }
+
+    return res.status(400).json({ error: "Type invalide" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+exports.payPanier = async (req, res) => {
+  try {
+    const id_user = req.params.id;
+    const { sieges, services, total } = req.body;
+
+    const result = await panierService.payPanier(id_user, sieges, services, total);
+
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+exports.getBillets = async (req, res) => {
+  try {
+    const id_user = req.params.id;
+
+    const result = await panierService.getBilletsByUser(id_user);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
 }

@@ -8,10 +8,7 @@
         <h3>Sièges</h3>
         <div v-if="sieges.length === 0">Aucun siège</div>
 
-        <div
-          v-for="(seat, index) in sieges"
-          :key="'seat-' + index"
-          class="item">
+        <div v-for="(seat, index) in sieges" :key="'seat-' + index" class="item">
           <p>
             Siège : {{ seat.numero_colonne }}{{ seat.numero_ligne }}
             <span v-if="seat.team1 && seat.team2">
@@ -31,10 +28,7 @@
         <h3>Services</h3>
         <div v-if="services.length === 0">Aucun service</div>
 
-        <div
-          v-for="(service, index) in services"
-          :key="'service-' + index"
-          class="item">
+        <div v-for="(service, index) in services" :key="'service-' + index" class="item">
           <p>
             Service : {{ service.nom_service
             }}<span style="color: red"> x{{ service.quantite_service }}</span>
@@ -73,7 +67,6 @@
 import { ref, computed, onMounted } from "vue";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
-// import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { usePanierStore } from "@/services/panier.service";
@@ -94,9 +87,8 @@ const sieges = computed(() => {
 
   const uniqueMap = new Map();
   filtered.forEach((siege) => {
-    const key = `${siege.numero_colonne}-${siege.numero_ligne}-${siege.zone}-${
-      siege.matchId || ""
-    }`;
+    const key = `${siege.numero_colonne}-${siege.numero_ligne}-${siege.zone}-${siege.matchId || ""
+      }`;
     if (!uniqueMap.has(key)) {
       uniqueMap.set(key, siege);
     }
@@ -210,87 +202,98 @@ function backToBleacher() {
   });
 }
 
-function goToCheckout() {
-  if (panier.value.length === 0) {
-    alert("Aucun article dans le panier.");
-    return;
-  }
+async function goToCheckout() {
+  // Si panier vide ne pas afficher le bouton de paiement
+  // if (panier.value.length === 0) {
+  //   alert("Aucun article dans le panier.");
+  //   return;
+  // }
 
   const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
   if (!confirmPay) return;
 
-  try {
-    // === Gérer les sièges ===
-    const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
+  await panierStore.PayPanier(
+    userStore.userId,
+    sieges.value,
+    services.value,
+    total.value
+  );
 
-    sieges.value.forEach((seat) => {
-      const seatIndex = siegesLocal.findIndex(
-        (s) =>
-          s.numero_colonne === seat.numero_colonne &&
-          s.numero_ligne === seat.numero_ligne &&
-          s.zone === seat.zone &&
-          s.match_id === seat.matchId
-      );
 
-      if (seatIndex !== -1) {
-        siegesLocal[seatIndex].est_reserve = true;
-        siegesLocal[seatIndex].id_utilisateur = userStore.userId;
-      } else {
-        siegesLocal.push({
-          match_id: seat.matchId,
-          numero_colonne: seat.numero_colonne,
-          numero_ligne: seat.numero_ligne,
-          zone: seat.zone,
-          est_reserve: true,
-          id_utilisateur: userStore.userId,
-        });
-      }
-    });
+  // Rediriger vers "Mes Billets"
+  router.push({ name: "MesBillets" });
 
-    localStorage.setItem("sieges", JSON.stringify(siegesLocal));
+  // try {
+  //   // === Gérer les sièges ===
+  //   const siegesLocal = JSON.parse(localStorage.getItem("sieges") || "[]");
 
-    // === Gérer les services (inscriptions) ===
-    // Créer une collection pour les inscriptions aux services si elle n'existe pas
-    const inscriptionsServices = JSON.parse(
-      localStorage.getItem("panier_service") || "[]"
-    );
+  //   sieges.value.forEach((seat) => {
+  //     const seatIndex = siegesLocal.findIndex(
+  //       (s) =>
+  //         s.numero_colonne === seat.numero_colonne &&
+  //         s.numero_ligne === seat.numero_ligne &&
+  //         s.zone === seat.zone &&
+  //         s.match_id === seat.matchId
+  //     );
 
-    services.value.forEach((service) => {
-      // Générer un nouvel ID pour l'inscription
-      const newId =
-        inscriptionsServices.length > 0
-          ? Math.max(...inscriptionsServices.map((i) => i.id || 0)) + 1
-          : 1;
+  //     if (seatIndex !== -1) {
+  //       siegesLocal[seatIndex].est_reserve = true;
+  //       siegesLocal[seatIndex].id_utilisateur = userStore.userId;
+  //     } else {
+  //       siegesLocal.push({
+  //         match_id: seat.matchId,
+  //         numero_colonne: seat.numero_colonne,
+  //         numero_ligne: seat.numero_ligne,
+  //         zone: seat.zone,
+  //         est_reserve: true,
+  //         id_utilisateur: userStore.userId,
+  //       });
+  //     }
+  //   });
 
-      // Ajouter l'inscription au service
-      inscriptionsServices.push({
-        id: newId,
-        id_utilisateur: userStore.userId,
-        id_service: service.service_id,
-        quantite: service.quantite_service || 1,
-        date_inscription: new Date().toISOString(),
-      });
-    });
+  //   localStorage.setItem("sieges", JSON.stringify(siegesLocal));
 
-    localStorage.setItem(
-      "panier_service",
-      JSON.stringify(inscriptionsServices)
-    );
+  //   // === Gérer les services (inscriptions) ===
+  //   // Créer une collection pour les inscriptions aux services si elle n'existe pas
+  //   const inscriptionsServices = JSON.parse(
+  //     localStorage.getItem("panier_service") || "[]"
+  //   );
 
-    // Vider le panier
-    localStorage.setItem("panier", "[]");
-    panier.value = [];
+  //   services.value.forEach((service) => {
+  //     // Générer un nouvel ID pour l'inscription
+  //     const newId =
+  //       inscriptionsServices.length > 0
+  //         ? Math.max(...inscriptionsServices.map((i) => i.id || 0)) + 1
+  //         : 1;
 
-    alert(
-      "Paiement effectué avec succès ! Vos réservations ont été enregistrées."
-    );
+  //     // Ajouter l'inscription au service
+  //     inscriptionsServices.push({
+  //       id: newId,
+  //       id_utilisateur: userStore.userId,
+  //       id_service: service.service_id,
+  //       quantite: service.quantite_service || 1,
+  //       date_inscription: new Date().toISOString(),
+  //     });
+  //   });
 
-    // Rediriger vers "Mes Billets"
-    router.push({ name: "MesBillets" });
-  } catch (err) {
-    console.error("Erreur lors du paiement:", err);
-    alert("Une erreur est survenue lors du paiement.");
-  }
+  //   localStorage.setItem(
+  //     "panier_service",
+  //     JSON.stringify(inscriptionsServices)
+  //   );
+
+  //   // Vider le panier
+  //   localStorage.setItem("panier", "[]");
+  //   panier.value = [];
+
+  //   alert(
+  //     "Paiement effectué avec succès ! Vos réservations ont été enregistrées."
+  //   );
+
+
+  // } catch (err) {
+  //   console.error("Erreur lors du paiement:", err);
+  //   alert("Une erreur est survenue lors du paiement.");
+  // }
 }
 
 

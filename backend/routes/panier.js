@@ -12,4 +12,9 @@ router.post("/add/:id", panierMiddleware.validateAdd, panierController.addPanier
 // DELETE retirer du panier (siège ou service)
 router.delete("/delete/:id", panierMiddleware.validateRemove, panierController.deletePanier);
 
+// POST payer son panier
+router.post("/pay/:id", panierMiddleware.validatePay, panierController.payPanier);
+
+router.get("/billets/show/:id", panierMiddleware.valideBillets, panierController.getBillets);
+
 module.exports = router;

@@ -51,7 +51,9 @@ exports.validateRemove = (req, res, next) => {
   if (type === "siege") {
     const { matchId, numero_colonne, numero_ligne, zone } = req.body;
     if (!matchId || numero_colonne == null || numero_ligne == null || !zone) {
-      return res.status(400).json({ error: "Données siège manquantes pour la suppression" });
+      return res
+        .status(400)
+        .json({ error: "Données siège manquantes pour la suppression" });
     }
   }
 
@@ -69,3 +71,32 @@ exports.validateRemove = (req, res, next) => {
 
   next();
 };
+
+exports.validatePay = (req, res, next) => {
+  const id_user = req.params.id;
+  const { sieges, services, total } = req.body;
+
+  if (!id_user) {
+    return res.status(400).json({ error: "id_user requis" });
+  } 
+
+  if (!total) {
+    return res.status(400).json({ error: "Il n'y a pas de total" });
+  }
+
+  if (!sieges && !services) {
+    return res.status(400).json({ error: "Il n'y a rien a acheté" });
+  }
+
+  next();
+};
+
+exports.valideBillets = (req, res, next) => {
+  const id_user = req.params.id;
+
+  if (!id_user) {
+    return res.status(400).json({ error: "id_user requis" });
+  } 
+  
+  next();
+}
