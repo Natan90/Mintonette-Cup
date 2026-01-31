@@ -103,7 +103,7 @@
               <button class="button" @click="AddToCart">
                 <b>Ajouter au panier </b>
               </button>
-
+              
               <router-link :to="{ name: 'Panier' }">
                 <button class="button basket">
                   <b>Accéder à votre panier</b>

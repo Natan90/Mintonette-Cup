@@ -146,16 +146,26 @@
     </div>
   </div>
   <router-link
-    :to="{
-      name: 'Gradin',
-      params: {
-        lang: lang.value,
-        zone: terrainToZone[terrainId],
-      },
-    }"
+    :to="
+      user.isConnected
+        ? {
+            name: 'Gradin',
+            params: {
+              lang: lang,
+              zone: terrainToZone[terrainId],
+            },
+          }
+        : {
+            name: 'Inscription_utilisateur',
+            params: {
+              lang: lang,
+            },
+          }
+    "
     class="button">
     Réserver votre billet dès à présent
   </router-link>
+
   >
   <Footer></Footer>
 </template>
@@ -167,6 +177,9 @@ import { useRoute } from "vue-router";
 import logoPersonne from "@/images/LogoPersonne.png";
 import terrainImage from "@/images/TerrainSans.png";
 import Footer from "@/components/Footer.vue";
+import { useEquipeStore } from "@/services/equipe.service";
+import logPage from "@/components/LogPage.vue";
+import { useUserStore } from "@/stores/user";
 
 const terrainToZone = {
   1: "nord",
@@ -183,7 +196,8 @@ const matches = ref([]);
 const selectedItem = ref(1);
 const selectedPlayer = ref(null);
 const cardSide = ref("right");
-
+const equipeStore = useEquipeStore();
+const user = useUserStore();
 //La langue
 const lang = computed(() => route.params.lang);
 
@@ -198,17 +212,14 @@ const matchTime = computed(() => {
   return `${hours}:${minutes}`;
 });
 
-
-// Version avec axios (commentée pour utilisation future)
 async function fetchPlayers() {
-  const res = await axios.get("http://localhost:3000/equipes/players");
+  const res = await equipeStore.GetPlayer();
+
   players.value = res.data;
 }
 
 async function fetchMatches() {
-  const res = await axios.get(
-    `http://localhost:3000/equipes/match/terrain/${terrainId.value}`
-  );
+  const res = await equipeStore.GetMatchById(terrainId.value);
   matches.value = res.data;
   selectedItem.value = 0;
 }
@@ -219,7 +230,7 @@ function getMajorPlayers(teamId, side) {
   const findPlayerByPoste = (poste) => {
     const joueurs = teamPlayers.filter((p) => p.poste === poste);
     const avecPhoto = joueurs.find(
-      (p) => p.photo !== null && p.photo !== undefined
+      (p) => p.photo !== null && p.photo !== undefined,
     );
     if (avecPhoto) return avecPhoto;
     return joueurs[0];
@@ -231,10 +242,10 @@ function getMajorPlayers(teamId, side) {
   const libero = findPlayerByPoste("Libero");
 
   const receveursAll = teamPlayers.filter(
-    (p) => p.poste === "Receveur-Attaquant"
+    (p) => p.poste === "Receveur-Attaquant",
   );
   const receveursAvecPhoto = receveursAll.filter(
-    (p) => p.photo !== null && p.photo !== undefined
+    (p) => p.photo !== null && p.photo !== undefined,
   );
   const receveursSansPhoto = receveursAll.filter((p) => !p.photo);
 
