@@ -5,6 +5,9 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
+  DROP TABLE IF EXISTS Commande CASCADE;
+  DROP TABLE IF EXISTS Commande_Siege CASCADE;
+  DROP TABLE IF EXISTS Commande_Service CASCADE;
   DROP TABLE IF EXISTS Panier_Siege CASCADE;
   DROP TABLE IF EXISTS Siege CASCADE;
   DROP TABLE IF EXISTS Match CASCADE;
@@ -219,6 +222,32 @@ const pool = require("./db");
     points_contre INTEGER,
     qualifie BOOLEAN DEFAULT FALSE
   );
+
+  CREATE TABLE Commande (
+    id_commande SERIAL PRIMARY KEY,
+    utilisateur_id INT NOT NULL,
+    total NUMERIC(10,2) NOT NULL,
+    date_commande TIMESTAMP DEFAULT NOW(),
+    statut VARCHAR(20) DEFAULT 'payee'
+  );
+
+  CREATE TABLE Commande_Siege (
+    id_commande INT REFERENCES Commande(id_commande) ON DELETE CASCADE,
+    match_id INT,
+    numero_colonne VARCHAR(5),
+    numero_ligne INT,
+    zone VARCHAR(10),
+    prix NUMERIC(10,2),
+    PRIMARY KEY (id_commande, match_id, numero_colonne, numero_ligne, zone)
+  );
+
+  CREATE TABLE Commande_Service (
+    id_commande INT REFERENCES Commande(id_commande) ON DELETE CASCADE,
+    service_id INT REFERENCES Services(id_service),
+    quantite INT,
+    prix_unitaire NUMERIC(10,2)
+  );
+
 `;
 
     await pool.query(schemaSQL);

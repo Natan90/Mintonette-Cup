@@ -33,6 +33,14 @@ export const usePanierStore = defineStore("panier", () => {
     });
   }
 
+  async function GetBillets(id_user) {
+    if (!id_user) {
+      throw new Error("L'id de l'utilisateur est obligatoire");
+    }
+
+    return getRequest(``)
+  }
+
   return {
     GetPanierByUser,
     AddToPanier,
