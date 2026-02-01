@@ -51,9 +51,12 @@
     </div>
   </div>
   <div class="button-group">
-    <button @click="goToCheckout" class="btn btn-checkout">
+    <!-- <button @click="goToCheckout" class="btn btn-checkout">
       Procéder au paiement
-    </button>
+    </button> -->
+    <router-link to="Checkout" class="btn btn-checkout">
+      Procéder au paiement
+    </router-link>
     <button @click="reset" class="btn btn-danger">Vider le panier</button>
     <!-- <button
       @click="addTestSeats"
@@ -358,7 +361,9 @@ onMounted(() => {
   padding: 12px 20px;
   border: none;
   border-radius: 6px;
-  font-size: 1em;
+  font-size: 1.2em;
+  text-align: center;
+  text-decoration: none;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
