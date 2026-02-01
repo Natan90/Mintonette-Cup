@@ -5,6 +5,7 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
+  DROP TABLE IF EXISTS Nombre_Connexion CASCADE;
   DROP TABLE IF EXISTS Commande CASCADE;
   DROP TABLE IF EXISTS Commande_Siege CASCADE;
   DROP TABLE IF EXISTS Commande_Service CASCADE;
@@ -248,6 +249,13 @@ const pool = require("./db");
     prix_unitaire NUMERIC(10,2)
   );
 
+  CREATE TABLE Nombre_Connexion (
+    id_nb_connexion SERIAL PRIMARY KEY,
+    login_tentative VARCHAR(255),
+    succes BOOLEAN,
+    message VARCHAR(255),
+    nb_tentative INT DEFAULT 0
+  );
 `;
 
     await pool.query(schemaSQL);
@@ -1284,7 +1292,7 @@ const pool = require("./db");
 ('Masoutis', 'Thodoris', 'Masculin', '1996-01-18', 1.86, 6, 'Grèce', 'Libero', 32, NULL),
 ('Petreas', 'Andreas', 'Masculin', '1998-04-09', 1.99, 2, 'Grèce', 'Receveur-Attaquant', 32, NULL),
 ('Mouchlias', 'Stefanos', 'Masculin', '1994-06-28', 2.02, 14, 'Grèce', 'Central', 32, NULL);
-    `;  
+    `;
 
     await pool.query(insertJoueurEquipe);
 
