@@ -251,11 +251,15 @@ const pool = require("./db");
 
   CREATE TABLE Nombre_Connexion (
     id_nb_connexion SERIAL PRIMARY KEY,
-    login_tentative VARCHAR(255),
-    succes BOOLEAN,
+    login_tentative VARCHAR(255) NOT NULL,
+    nb_tentative INT NOT NULL DEFAULT 0,
+    first_attempt_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_attempt_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    succes BOOLEAN NOT NULL DEFAULT false,
     message VARCHAR(255),
-    nb_tentative INT DEFAULT 0
+    blocked_until TIMESTAMP
   );
+
 `;
 
     await pool.query(schemaSQL);
