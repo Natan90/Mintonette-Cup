@@ -313,19 +313,24 @@ async function processPayment() {
   try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    for (const seat of panier.value) {
-      console.log("Mise à jour du siège:", JSON.parse(JSON.stringify(seat)));
-      const res = await gradinStore.UpdateGradin({
-        matchId: seat.match_id ?? seat.matchId ?? null,
-        numero_colonne: seat.numero_colonne,
-        numero_ligne: seat.numero_ligne,
-        zone: seat.zone,
-        est_reserve: true,
-        id_utilisateur: userStore.userId,
-      });
-      console.log("Update response:", res && res.data ? res.data : res.status);
-    }
-    
+    // Préparer les données pour payPanier
+    const sieges = panier.value.map((seat) => ({
+      match_id: seat.match_id ?? seat.matchId ?? null,
+      numero_colonne: seat.numero_colonne,
+      numero_ligne: seat.numero_ligne,
+      zone: seat.zone,
+      prix: getPrice(seat),
+    }));
+
+    const services = [];
+
+    await panierStore.PayPanier(
+      userStore.userId,
+      sieges,
+      services,
+      total.value,
+    );
+
     await panierStore.ClearPanier(userStore.userId);
 
     localStorage.removeItem("selectedSeats");
