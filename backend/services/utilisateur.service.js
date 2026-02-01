@@ -1,6 +1,11 @@
 const pool = require("../database/db");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4, MAX } = require("uuid");
 const bcrypt = require("bcrypt");
+
+const MAX_ATTEMPTS = 3; // Nombre de tentatives maximum de connexion
+const WINDOW_MINUTES = 5; // Intervalle de temps en minutes pour les tentatives
+const BLOCK_MINUTES = 15; // Blocage temporaire en minutes après nb_tentatives > 3
+let blockedAccount = false;
 
 async function inscriptionUtilisateur(utilisateur) {
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = utilisateur;
@@ -55,8 +60,13 @@ async function connexionUtilisateur(utilisateur) {
   const { login, mdp } = utilisateur;
   const client = await pool.connect();
 
+  if (blockedAccount) {
+    throw { status: 429, message: "Compte temporairement bloqué" };
+  }
+
   try {
     await client.query("BEGIN");
+
 
     // Récupérer l'utilisateur
     const userResult = await client.query(
@@ -64,54 +74,44 @@ async function connexionUtilisateur(utilisateur) {
       [login],
     );
 
-    if (userResult.rows.length === 0) {
-      // Tentative de connexion échouée
-      // Faire le nombre de tentative de connexion
-      const res = await client.query(`
-        SELECT nb_tentative
-        FROM Nombre_Connexion
-        WHERE login_tentative = $1`,
-      [login]);
+    const now = new Date();
 
-      if (res.rows.length > 0 && res.rows[0].nb_tentative >= 3) {
-        throw { status: 429, message: "Compte temporairement bloqué" };
-      }
+    let attemptRes = await client.query(
+      `SELECT * FROM Nombre_Connexion WHERE login_tentative = $1`,
+      [login],
+    );
 
-      const nbTentatives = res.rows.length > 0 ? res.rows[0].nb_tentative + 1 : 1;
-      
-      let result = null;
-      if (nbTentatives > 1) {
-        result = await client.query(
-          `UPDATE Nombre_Connexion
-          SET
-            nb_tentative = $2,
-            succes = false,
-            message = 'Login inexistant'
-          WHERE login_tentative = $1
-          RETURNING nb_tentative
-          `,
-          [login, nbTentatives]
-        );
-      }
-      else if (nbTentatives == 1) {
-        result = await client.query(
-          `INSERT INTO Nombre_Connexion
-          (login_tentative, succes, message, nb_tentative)
-          VALUES ($1, false, 'Login inexistant', $2)
-          RETURNING nb_tentative`,
-          [login, nbTentatives]
-        );
-      }
+    let attempt;
 
-      if (result.rows[0].nb_tentative >= 3) {
-        await client.query("COMMIT");
-        throw { status: 429, message: "Compte temporairement bloqué" };
-      }
+    if (attemptRes.rows.length === 0) {
+      attempt = {
+        login_tentative: login,
+        nb_tentative: 0,
+        first_attempt_at: now,
+        last_attempt_at: now,
+        blocked_until: null,
+      };
 
-      await client.query("COMMIT");
-      throw { status: 401, message: "Login ou mot de passe incorrect" };
+      await client.query(
+        `INSERT INTO Nombre_Connexion
+         (login_tentative, nb_tentative, first_attempt_at, last_attempt_at, succes, message)
+         VALUES ($1, $2, $3, $4, false, 'Tentative initiale')`,
+        [login, 0, now, now],
+      );
+    } else {
+      attempt = attemptRes.rows[0];
     }
 
+    if (attempt.blocked_until && attempt.blocked_until > now) {
+      await client.query("COMMIT");
+      throw { status: 429, message: "Compte temporairement bloqué" };
+    }
+
+    // Si l'utilisateur n'existe pas
+    if (userResult.rows.length === 0) {
+      await updateNombreConnexion(client, attempt, login, now);
+      return;
+    }
     const user = userResult.rows[0];
 
     // if (!user.actif) {
@@ -131,20 +131,22 @@ async function connexionUtilisateur(utilisateur) {
 
     const passwordMatch = await bcrypt.compare(mdp, user.mdp_utilisateur);
     if (!passwordMatch) {
-      //   // await client.query(
-      //   //   `INSERT INTO logs_connexion
-      //   //   (utilisateur_id, email_tentative, succes, message)
-      //   //   VALUES ($1, $2, false, 'Mot de passe incorrect')`,
-      //   //   [user.id, mail]
-      //   // );
-
-      //   await client.query("COMMIT");
-
-      //   return res.status(401).json({
-      //     error: "Email ou mot de passe incorrect",
-      //   });
-      throw { status: 401, message: "Mot de passe incorrect" };
+      await updateNombreConnexion(client, attempt, login, now);
+      return;
     }
+
+    blockedAccount = false;
+    await client.query(
+      `UPDATE Nombre_Connexion
+       SET nb_tentative = 0,
+           first_attempt_at = $2,
+           last_attempt_at = $3,
+           blocked_until = null,
+           succes = true,
+           message = 'Connexion réussie'
+       WHERE login_tentative = $1`,
+      [login, now, now],
+    );
 
     // Générer un token de session
     const token = uuidv4();
@@ -158,14 +160,6 @@ async function connexionUtilisateur(utilisateur) {
     //   (utilisateur_id, token, date_expiration)
     //   VALUES ($1, $2, $3)`,
     //   [user.id, token, expiresAt]
-    // );
-
-    // Logger la connexion réussie
-    // await client.query(
-    //   `INSERT INTO logs_connexion
-    //   (utilisateur_id, email_tentative, succes, message)
-    //   VALUES ($1, $2, true, 'Connexion réussie')`,
-    //   [user.id, mail]
     // );
 
     await client.query("COMMIT");
@@ -188,6 +182,54 @@ async function connexionUtilisateur(utilisateur) {
     client.release();
   }
 }
+
+async function updateNombreConnexion(client, attempt, login, now) {
+  // Vérifier la fenêtre de temps
+  const firstAttempt = new Date(attempt.first_attempt_at);
+  const diffMinutes = (now - firstAttempt) / 60000;
+
+  let nbTentatives = attempt.nb_tentative;
+  let firstAttemptAt = attempt.first_attempt_at;
+
+  if (diffMinutes > WINDOW_MINUTES) {
+    // Réinitialiser la fenêtre
+    nbTentatives = 1;
+    firstAttemptAt = now;
+  } else {
+    nbTentatives += 1;
+  }
+
+  // Calculer le blocage si max atteint
+  let blockedUntil = null;
+  if (nbTentatives >= MAX_ATTEMPTS) {
+    blockedUntil = new Date(now.getTime() + BLOCK_MINUTES * 60000);
+  }
+
+  // Mettre à jour la table
+  await client.query(
+    `UPDATE Nombre_Connexion
+         SET nb_tentative = $2,
+             first_attempt_at = $3,
+             last_attempt_at = $4,
+             blocked_until = $5,
+             succes = false,
+             message = 'Login ou mot de passe incorrect'
+         WHERE login_tentative = $1`,
+    [login, nbTentatives, firstAttemptAt, now, blockedUntil],
+  );
+
+  await client.query("COMMIT");
+
+  let status = 401;
+  if (nbTentatives >= MAX_ATTEMPTS) {
+    status = nbTentatives >= MAX_ATTEMPTS ? 429 : 401;
+    blockedAccount = true;
+  }
+
+  const message = nbTentatives >= MAX_ATTEMPTS ? "Compte temporairement bloqué" : "Login ou mot de passe incorrect";
+  throw { status, message };
+}
+
 
 async function updateUtilisateur(id_user, utilisateur) {
   const { nom, prenom, mail, tel_utilisateur, login, sexe, photo_profil } =
