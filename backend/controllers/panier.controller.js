@@ -96,12 +96,28 @@ exports.deletePanier = async (req, res) => {
   }
 };
 
+exports.clearPanier = async (req, res) => {
+  try {
+    const id_user = req.params.id;
+    await panierService.clearPanier(id_user);
+    return res.status(200).json({ message: "Panier vidé avec succès" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
 exports.payPanier = async (req, res) => {
   try {
     const id_user = req.params.id;
     const { sieges, services, total } = req.body;
 
-    const result = await panierService.payPanier(id_user, sieges, services, total);
+    const result = await panierService.payPanier(
+      id_user,
+      sieges,
+      services,
+      total,
+    );
 
     return res.status(201).json(result);
   } catch (err) {
@@ -120,4 +136,4 @@ exports.getBillets = async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
-}
+};

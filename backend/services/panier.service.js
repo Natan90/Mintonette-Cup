@@ -206,7 +206,6 @@ async function payPanier(id_user, sieges, services, total) {
 
     const id_commande = commandeRes.rows[0].id_commande;
 
-
     for (const s of sieges) {
       await client.query(
         `
@@ -259,7 +258,8 @@ async function payPanier(id_user, sieges, services, total) {
 }
 
 async function getBilletsByUser(id_user) {
-  const result = await pool.query(`
+  const result = await pool.query(
+    `
     SELECT
       c.id_commande,
       c.date_commande,
@@ -301,11 +301,33 @@ async function getBilletsByUser(id_user) {
 
     WHERE c.utilisateur_id = $1
     ORDER BY c.date_commande DESC
-  `, [id_user]);
+  `,
+    [id_user],
+  );
 
   return result.rows;
 }
 
+async function clearPanier(id_user) {
+  const panierRes = await pool.query(
+    `SELECT id_panier FROM Panier WHERE utilisateur_id = $1 AND actif = true`,
+    [id_user],
+  );
+
+  if (panierRes.rows.length === 0) return;
+
+  const id_panier = panierRes.rows[0].id_panier;
+
+  // Supprimer tous les sièges du panier
+  await pool.query(`DELETE FROM Panier_Siege WHERE id_panier = $1`, [
+    id_panier,
+  ]);
+
+  // Supprimer tous les services du panier
+  await pool.query(`DELETE FROM Panier_Service WHERE id_panier = $1`, [
+    id_panier,
+  ]);
+}
 
 module.exports = {
   getPanierByUser,
@@ -314,5 +336,6 @@ module.exports = {
   removeSiege,
   removeService,
   payPanier,
-  getBilletsByUser
+  getBilletsByUser,
+  clearPanier,
 };

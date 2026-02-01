@@ -7,14 +7,33 @@ const panierMiddleware = require("../middlewares/panier.middleware");
 router.get("/show/:id", panierController.getPanier);
 
 // POST ajouter au panier (siège ou service)
-router.post("/add/:id", panierMiddleware.validateAdd, panierController.addPanier);
+router.post(
+  "/add/:id",
+  panierMiddleware.validateAdd,
+  panierController.addPanier,
+);
 
 // DELETE retirer du panier (siège ou service)
-router.delete("/delete/:id", panierMiddleware.validateRemove, panierController.deletePanier);
+router.delete(
+  "/delete/:id",
+  panierMiddleware.validateRemove,
+  panierController.deletePanier,
+);
+
+// DELETE vider complètement le panier
+router.delete("/clear/:id", panierController.clearPanier);
 
 // POST payer son panier
-router.post("/pay/:id", panierMiddleware.validatePay, panierController.payPanier);
+router.post(
+  "/pay/:id",
+  panierMiddleware.validatePay,
+  panierController.payPanier,
+);
 
-router.get("/billets/show/:id", panierMiddleware.valideBillets, panierController.getBillets);
+router.get(
+  "/billets/show/:id",
+  panierMiddleware.valideBillets,
+  panierController.getBillets,
+);
 
 module.exports = router;
