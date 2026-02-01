@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { getRequest, postRequest, deleteRequest } from "./axios.service";
 
 export const usePanierStore = defineStore("panier", () => {
-
   async function GetPanierByUser(id_user) {
     if (!id_user) {
       throw new Error("L'id de l'utilisateur est obligatoire");
@@ -49,8 +48,16 @@ export const usePanierStore = defineStore("panier", () => {
     return postRequest(`/panier/pay/${id_user}`, {
       sieges,
       services,
-      total
+      total,
     });
+  }
+
+  async function ClearPanier(id_user) {
+    if (!id_user) {
+      throw new Error("L'id de l'utilisateur est obligatoire");
+    }
+
+    return deleteRequest(`/panier/clear/${id_user}`);
   }
 
   return {
@@ -59,5 +66,6 @@ export const usePanierStore = defineStore("panier", () => {
     RemoveFromPanier,
     GetBilletsByUser,
     PayPanier,
+    ClearPanier,
   };
 });

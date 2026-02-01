@@ -8,7 +8,10 @@
         <h3>Sièges</h3>
         <div v-if="sieges.length === 0">Aucun siège</div>
 
-        <div v-for="(seat, index) in sieges" :key="'seat-' + index" class="item">
+        <div
+          v-for="(seat, index) in sieges"
+          :key="'seat-' + index"
+          class="item">
           <p>
             Siège : {{ seat.numero_colonne }}{{ seat.numero_ligne }}
             <span v-if="seat.team1 && seat.team2">
@@ -24,11 +27,13 @@
 
         <hr />
 
-        <!-- SERVICES -->
         <h3>Services</h3>
         <div v-if="services.length === 0">Aucun service</div>
 
-        <div v-for="(service, index) in services" :key="'service-' + index" class="item">
+        <div
+          v-for="(service, index) in services"
+          :key="'service-' + index"
+          class="item">
           <p>
             Service : {{ service.nom_service
             }}<span style="color: red"> x{{ service.quantite_service }}</span>
@@ -87,8 +92,9 @@ const sieges = computed(() => {
 
   const uniqueMap = new Map();
   filtered.forEach((siege) => {
-    const key = `${siege.numero_colonne}-${siege.numero_ligne}-${siege.zone}-${siege.matchId || ""
-      }`;
+    const key = `${siege.numero_colonne}-${siege.numero_ligne}-${siege.zone}-${
+      siege.matchId || ""
+    }`;
     if (!uniqueMap.has(key)) {
       uniqueMap.set(key, siege);
     }
@@ -101,7 +107,6 @@ const sieges = computed(() => {
 const services = computed(() => {
   const filtered = panier.value.filter((item) => item.nom_service);
 
-  // Dédupliquer les services par service_id
   const uniqueMap = new Map();
   filtered.forEach((service) => {
     const key = service.service_id || service.nom_service;
@@ -133,12 +138,12 @@ function getItemPrice(item, isService) {
 const total = computed(() => {
   const totalSieges = sieges.value.reduce(
     (sum, seat) => sum + getItemPrice(seat, false),
-    0
+    0,
   );
   const totalServices = services.value.reduce(
     (sum, service) =>
       sum + getItemPrice(service, true) * (service.quantite_service || 1),
-    0
+    0,
   );
   return totalSieges + totalServices;
 });
@@ -182,18 +187,31 @@ async function reset() {
     return;
   }
 
-  for (const seat of panier.value) {
-    await gradinStore.UpdateGradin({
-      numero_colonne: seat.numero_colonne,
-      numero_ligne: seat.numero_ligne,
-      zone: seat.zone,
-      est_reserve: false,
-    });
+  const confirmClear = confirm("Êtes-vous sûr de vouloir vider le panier ?");
+  if (!confirmClear) return;
+
+  try {
+    for (const seat of sieges.value) {
+      await gradinStore.UpdateGradin({
+        matchId: seat.matchId || seat.match_id,
+        numero_colonne: seat.numero_colonne,
+        numero_ligne: seat.numero_ligne,
+        zone: seat.zone,
+        est_reserve: false,
+        id_utilisateur: null,
+      });
+    }
+
+    await panierStore.ClearPanier(userStore.userId);
+
+    await fetchPanier();
+
+    alert("Panier vidé avec succès !");
+  } catch (err) {
+    console.error("Erreur reset panier:", err);
+    alert("Erreur lors du vidage du panier");
   }
-
-  await fetchPanier();
 }
-
 
 function backToBleacher() {
   router.push({
@@ -203,11 +221,10 @@ function backToBleacher() {
 }
 
 async function goToCheckout() {
-  // Si panier vide ne pas afficher le bouton de paiement
-  // if (panier.value.length === 0) {
-  //   alert("Aucun article dans le panier.");
-  //   return;
-  // }
+  if (panier.value.length === 0) {
+    alert("Aucun article dans le panier.");
+    return;
+  }
 
   const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
   if (!confirmPay) return;
@@ -216,9 +233,8 @@ async function goToCheckout() {
     userStore.userId,
     sieges.value,
     services.value,
-    total.value
+    total.value,
   );
-
 
   // Rediriger vers "Mes Billets"
   router.push({ name: "MesBillets" });
@@ -289,13 +305,11 @@ async function goToCheckout() {
   //     "Paiement effectué avec succès ! Vos réservations ont été enregistrées."
   //   );
 
-
   // } catch (err) {
   //   console.error("Erreur lors du paiement:", err);
   //   alert("Une erreur est survenue lors du paiement.");
   // }
 }
-
 
 onMounted(() => {
   fetchPanier();
