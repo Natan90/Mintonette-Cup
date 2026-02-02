@@ -307,7 +307,30 @@ async function updateUtilisateur(id_user, utilisateur) {
 }
 
 async function resetPassword(token, newPassword) {
+  const result = await pool.query(
+    `SELECT * FROM Utilisateur
+     WHERE reset_token = $1
+     AND reset_token_expire > NOW()`,
+    [token]
+  );
 
+  if (result.rows.length === 0) {
+    throw new Error("Lien invalide ou expiré");
+  }
+
+  const userId = result.rows[0].id_utilisateur;
+  const hash = await bcrypt.hash(newPassword, 10);
+
+  await pool.query(
+    `UPDATE Utilisateur
+     SET mdp_utilisateur = $1,
+         reset_token = NULL,
+         reset_token_expire = NULL
+     WHERE id_utilisateur = $2`,
+    [hash, userId]
+  );
+
+  return{ message: "Mot de passe réinitialisé" };
 }
 
 module.exports = {

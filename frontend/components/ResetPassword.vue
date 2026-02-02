@@ -11,8 +11,17 @@
 
     <div>
       <div class="input-group">
-        <input type="email" placeholder="mail@example.com" v-model.trim="mailToSend" />
+        <input type="email" placeholder="mail@example.com" v-model="mailToSend" @keyup.enter="sendEmail(mailToSend)"/>
       </div>
+      <v-progress-linear
+        v-if="isSending"
+        :model-value="progress"
+        height="6"
+        color="blue"
+        striped
+        indeterminate
+      ></v-progress-linear>
+      <br>
 
       <p class="message" v-if="message && !continueReset" :class="{ error: isError }">
         {{ message }}
@@ -43,20 +52,24 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service";
 import { useMailStore } from "@/services/mail.service";
 
+
 const route = useRoute();
+const router = useRouter();
 const userAuthStore = useUtilisateurAuthStore();
 const mailStore = useMailStore();
 
-const mailToSend = ref("");
+const mailToSend = ref(route.query.mailValue || "");
 const newPassword = ref("");
 const confirmPassword = ref("");
 const message = ref("");
 const isError = ref(false);
-const continueReset = ref(false);
+const continueReset = ref(route.query.continueReset === "true");
+const progress = ref(0);
+const isSending = ref(false);
 
 const token = route.params.token || null;
 
@@ -79,12 +92,19 @@ async function submitReset() {
   }
 
   try {
-    const res = await userAuthStore.ResetPasswordUtilisateur(newPassword.value);
+    const res = await userAuthStore.ResetPasswordUtilisateur(token, newPassword.value);
 
     message.value = "Mot de passe réinitialisé avec succès !";
     isError.value = false;
     newPassword.value = "";
     confirmPassword.value = "";
+
+    setTimeout(() => {
+      router.push({
+        name: "Connexion_utilisateur"
+      });
+    }, 1500);
+
   } catch (err) {
     message.value = err.response?.data?.error || "Erreur serveur";
     isError.value = true;
@@ -106,13 +126,25 @@ async function sendEmail(mailToSend) {
 
   message.value = "";
   isError.value = false;
-  continueReset.value = true;
+  isSending.value = true;
+  progress.value = 20;
 
   try {
+    const interval = setInterval(() => {
+      if (progress.value < 80) progress.value += 10;
+    }, 200);
+
     await mailStore.ResetPassword(mailToSend);
 
-    message.value = "Un e-mail de réinitialisation a été envoyé";
-    continueReset.value = true;
+    clearInterval(interval);
+    progress.value = 100;
+
+    setTimeout(() => {
+      isSending.value = false;
+      progress.value = 0;
+      message.value = "Un e-mail de réinitialisation a été envoyé";
+    }, 1000);
+    
   } catch (err) {
     message.value = err.response?.data?.error || "Erreur lors de l'envoi de l'e-mail";
     isError.value = true;

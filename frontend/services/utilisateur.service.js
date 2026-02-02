@@ -25,13 +25,14 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
     });
   }
 
-  async function ResetPasswordUtilisateur(password) {
-    if (!password) {
+  async function ResetPasswordUtilisateur(token, newPassword) {
+    if (!newPassword) {
       throw new Error("Le mot de passe est obligatoire");
     }
 
-    return postRequest(`/utilisateur/auth/password/reset`, {
-      password,
+    return postRequest(`/mail/password/confirm`, {
+      token,
+      newPassword,
     })
   }
 

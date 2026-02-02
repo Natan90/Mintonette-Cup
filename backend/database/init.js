@@ -294,7 +294,7 @@ const pool = require("./db");
       INSERT INTO Utilisateur 
         (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta, isadmin)
       VALUES
-        ('Alban', 'Robin', 'albanr', '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq', 'alban.robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
+        ('Alban', 'Robin', 'albanr', '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq', 'alban70robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
         ('Emma', 'Durand', 'emmad', '$2b$10$QZUK7Ed97ZzAjQzUrzzTHuzh2pfRT/iPYPttR4CaIfaQKYZQRTxO6', 'emma.durand@gmail.com', '0612345678', 'F', TRUE, FALSE),
         ('Lucas', 'Martin', 'lucasm', '$2b$10$SqwwG.GoZgR/bxl2IZ49U.tNkpkMhMpBIbA2yQE3lF/qG9QHktGQ6', 'lucas.martin@gmail.com', '0652437595', 'M', TRUE, FALSE),
         ('Chloe', 'Petit', 'chloep', '$2b$10$GGtE3KIzPl6Soav1tutWtOEgajIowmwP9uJIwb/QsRJZBsLmd8/62', 'chloe.petit@gmail.com', '0610423571', 'F', TRUE, FALSE),
