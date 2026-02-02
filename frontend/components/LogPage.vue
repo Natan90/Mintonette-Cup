@@ -335,10 +335,12 @@ function moveCard() {
 }
 
 function forbiddenPassword() {
+  navStore.previousRoute = route.fullPath;
   router.push({
     name: "ResetPasswordRequest"
   })
-}
+};
+
 </script>
 
 <style>

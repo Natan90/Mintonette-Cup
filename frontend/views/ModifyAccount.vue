@@ -1,5 +1,32 @@
 <template>
   <NavView></NavView>
+  <Modal v-model="showModal" :medium="true">
+    <template #content>
+      <div class="password-modal">
+        <h2>Sécurité du compte</h2>
+
+        <p>
+          Un mail de confirmation va être envoyé à :
+          <span>{{ formData.mail }}</span>
+        </p>
+
+        <p v-if="message" :class="{ error: isError }">
+          {{ message }}
+        </p>
+        <v-progress-linear v-if="isSending" :model-value="progress" height="6" color="blue" striped
+          indeterminate></v-progress-linear>
+
+        <div class="modal-actions" v-if="!success">
+          <button class="btn-cancel" @click="showModal = false">
+            Annuler
+          </button>
+          <button class="btn-confirm" @click="sendEmail(formData.mail)">
+            Confirmer l’envoi
+          </button>
+        </div>
+      </div>
+    </template>
+  </Modal>
   <div class="page">
     <div class="formulaire">
       <div class="titre_formulaire">
@@ -12,7 +39,7 @@
       </div>
 
       <div v-else>
-        <form @submit.prevent="updateUserInfo">
+        <form @submit.prevent="updateUserInfo()">
           <section class="infos_utilisateur">
             <div class="bloc_information photo-upload">
               <label for="photo">{{ $t("account.profilePhoto") }}</label>
@@ -25,7 +52,7 @@
               <input id="photo" type="file" accept="image/*" @change="handlePhotoUpload" class="photo-input" />
               <label for="photo" class="upload-btn">{{
                 $t("account.choosePhoto")
-                }}</label>
+              }}</label>
             </div>
 
             <div class="bloc_information">
@@ -78,11 +105,14 @@
             </div>
           </section>
 
-          <div v-if="message" :class="['message', messageType]">
+          <div v-if="message && !showModal" :class="['message', messageType]">
             {{ message }}
           </div>
 
           <div class="boutons">
+            <button type="button" class="pointer btn-password" @click="() => { showModal = true; resetModalState(); }">
+              Changer mot de passe
+            </button>
             <button class="pointer" type="submit" :disabled="isSubmitting">
               {{ isSubmitting ? $t("account.saving") : $t("account.save") }}
             </button>
@@ -98,7 +128,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
@@ -106,12 +136,17 @@ import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service";
+import Modal from "@/components/Modal.vue";
+import { useMailStore } from "@/services/mail.service";
+import { useNavigationStore } from "@/stores/navigation";
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const amdinAPIStore = useAdminAPIStore();
 const utilisateurAuthStore = useUtilisateurAuthStore();
+const mailStore = useMailStore();
+const navStore = useNavigationStore();
 const { t } = useI18n();
 
 const loading = ref(true);
@@ -120,6 +155,11 @@ const message = ref("");
 const messageType = ref("");
 const photoPreview = ref(null);
 const photoFile = ref(null);
+const showModal = ref(false);
+const isError = ref(false);
+const progress = ref(0);
+const isSending = ref(false);
+const success = ref(false);
 
 const userId = Number(route.params.userId);
 
@@ -131,6 +171,20 @@ const formData = ref({
   tel_utilisateur: "",
   sexe: "",
 });
+
+watch(showModal, (newValue) => {
+  resetModalState();
+});
+
+function resetModalState() {
+  message.value = "";
+  isError.value = false;
+  success.value = false;
+  isSending.value = false;
+  progress.value = 0;
+}
+
+
 
 onMounted(() => {
   GetUtilisateurById();
@@ -236,9 +290,122 @@ const updateUserInfo = async () => {
     isSubmitting.value = false;
   }
 };
+
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+async function sendEmail(mailToSend) {
+  if (!mailToSend) {
+    message.value = "Veuillez remplir votre email";
+    isError.value = true;
+    return;
+  }
+
+  if (!isValidEmail(mailToSend)) {
+    message.value = "Veuillez saisir une adresse e-mail valide";
+    isError.value = true;
+    return;
+  }
+
+  message.value = "";
+  isError.value = false;
+  isSending.value = true;
+  progress.value = 20;
+
+  try {
+    const interval = setInterval(() => {
+      if (progress.value < 80) progress.value += 10;
+    }, 200);
+
+    await mailStore.ResetPassword(mailToSend);
+
+    clearInterval(interval);
+    progress.value = 100;
+
+    navStore.previousRoute = route.fullPath;
+
+    setTimeout(() => {
+      isSending.value = false;
+      progress.value = 0;
+      success.value = true;
+      message.value = "Un e-mail de réinitialisation a été envoyé";
+    }, 1000);
+
+  } catch (err) {
+    message.value = err.response?.data?.error || "Erreur lors de l'envoi de l'e-mail";
+    isError.value = true;
+    success.value = false;
+  }
+}
+
 </script>
 
 <style scoped>
+.password-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.password-modal h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.password-modal p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.password-modal span {
+  font-weight: 700;
+  color: #1e40af;
+  word-break: break-word;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  background-color: #e5e7eb;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #d1d5db;
+}
+
+.btn-confirm {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-confirm:hover {
+  background-color: #059669;
+  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
+}
+
 .page {
   width: 100%;
   display: flex;
@@ -414,5 +581,23 @@ const updateUserInfo = async () => {
 
 .upload-btn:hover {
   background-color: #764ba2;
+}
+
+.btn-password {
+  background-color: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-password:hover {
+  background-color: #1e3a8a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(30, 64, 175, 0.4);
 }
 </style>

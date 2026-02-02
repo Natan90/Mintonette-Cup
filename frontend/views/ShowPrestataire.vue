@@ -387,10 +387,6 @@ function updateDescription() {
 </script>
 
 <style>
-.bigger {
-  max-width: 900px;
-}
-
 .service_details {
   max-width: 700px;
   margin: 0 auto;

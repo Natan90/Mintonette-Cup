@@ -55,19 +55,21 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service";
 import { useMailStore } from "@/services/mail.service";
+import { useNavigationStore } from "@/stores/navigation";
 
 
 const route = useRoute();
 const router = useRouter();
 const userAuthStore = useUtilisateurAuthStore();
 const mailStore = useMailStore();
+const navStore = useNavigationStore();
 
 const mailToSend = ref(route.query.mailValue || "");
 const newPassword = ref("");
 const confirmPassword = ref("");
 const message = ref("");
-const isError = ref(false);
 const continueReset = ref(route.query.continueReset === "true");
+const isError = ref(false);
 const progress = ref(0);
 const isSending = ref(false);
 
@@ -100,9 +102,9 @@ async function submitReset() {
     confirmPassword.value = "";
 
     setTimeout(() => {
-      router.push({
-        name: "Connexion_utilisateur"
-      });
+      if (navStore.previousRoute) {
+        router.push(navStore.previousRoute);
+      }
     }, 1500);
 
   } catch (err) {
