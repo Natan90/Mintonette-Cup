@@ -182,7 +182,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/components/user";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { usePanierStore } from "@/services/panier.service";

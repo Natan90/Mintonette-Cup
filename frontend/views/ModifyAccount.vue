@@ -130,7 +130,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/components/user";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";

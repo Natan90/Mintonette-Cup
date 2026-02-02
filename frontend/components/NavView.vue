@@ -146,7 +146,7 @@
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useUserStore } from "@/stores/user.js";
+import { useUserStore } from "@/components/user.js";
 import { useRoute, useRouter } from "vue-router";
 import localData from "../../backend/database/localData.js";
 

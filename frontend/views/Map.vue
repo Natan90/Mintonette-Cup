@@ -32,7 +32,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import router from "@/router";
 import { defaults as defaultInteractions } from "ol/interaction.js";
 import { ref } from "vue";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/components/user";
 import { useRoute } from "vue-router";
 import { usePrestataireStore } from "@/services/prestataire.service";
 

@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const MAX_ATTEMPTS = 3; // Nombre de tentatives maximum de connexion
 const WINDOW_MINUTES = 5; // Intervalle de temps en minutes pour les tentatives
 const BLOCK_MINUTES = 15; // Blocage temporaire en minutes après nb_tentatives > 3
-let blockedAccount = false;
+let blockedAccount = false; // Vérifie si le compte est bloqué
 
 async function inscriptionUtilisateur(utilisateur) {
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = utilisateur;

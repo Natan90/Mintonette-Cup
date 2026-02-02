@@ -179,7 +179,7 @@ import NavView from "@/components/NavView.vue";
 import Modal from "@/components/Modal.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminStore } from "@/stores/admin";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/components/user";
 import { usePrestataireStore } from "@/services/prestataire.service";
 import { useServiceStore } from "@/services/service.service";
 import { usePanierStore } from "@/services/panier.service";

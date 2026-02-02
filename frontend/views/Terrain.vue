@@ -179,7 +179,7 @@ import terrainImage from "@/images/TerrainSans.png";
 import Footer from "@/components/Footer.vue";
 import { useEquipeStore } from "@/services/equipe.service";
 import logPage from "@/components/LogPage.vue";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/components/user";
 
 const terrainToZone = {
   1: "nord",

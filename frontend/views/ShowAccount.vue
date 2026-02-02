@@ -91,7 +91,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/components/user";
 import { useI18n } from "vue-i18n";
 import { useNavigationStore } from "@/stores/navigation";
 import { useAdminAPIStore } from "@/services/admin.service";
