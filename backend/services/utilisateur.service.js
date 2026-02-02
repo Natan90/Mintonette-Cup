@@ -306,8 +306,13 @@ async function updateUtilisateur(id_user, utilisateur) {
   };
 }
 
+async function resetPassword(token, newPassword) {
+
+}
+
 module.exports = {
   inscriptionUtilisateur,
   connexionUtilisateur,
   updateUtilisateur,
+  resetPassword,
 };

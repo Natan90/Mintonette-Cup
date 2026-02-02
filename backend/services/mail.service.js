@@ -1,5 +1,6 @@
 const pool = require("../database/db");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -10,17 +11,29 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function resetPassword(mail, prenom_utilisateur) {
+async function resetPassword(mail) {
+  const token = crypto.randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+  await pool.query(
+    `UPDATE Utilisateur
+     SET reset_token = $1, reset_token_expire = $2
+     WHERE mail_utilisateur = $3`,
+    [token, expiresAt, mail]
+  );
+
+  const resetLink = process.env.LINK_FRONT + `fr/reset-password/${token}`;
+
   const subject = "Réinitialisation de votre mot de passe";
 
   const texteEmail = `
-        Bonjour ${result.rows[0].prenom_utilisateur},
-        Nous avons reçu une demande de réinitialisation de votre mot de passe pour votre compte.
+        Bonjour,
+        Nous avons reçu une demande de réinitialisation de votre mot de passe pour votre compte (${mail}).
         Pour définir un nouveau mot de passe, veuillez cliquer sur le lien ci-dessous (valable 1 heure) :
         ${resetLink}
         Si vous n'avez pas demandé cette réinitialisation, vous pouvez ignorer cet email. Votre mot de passe actuel restera inchangé.
         Merci,
-        L'équipe [Nom de votre application]
+        L'équipe de la Mintonette Cup
     `;
 
   const mailOptions = {

@@ -57,7 +57,9 @@ const pool = require("./db");
     photo_profil_utilisateur BYTEA,
     date_creation_utilisateur TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ispresta BOOLEAN DEFAULT FALSE,
-    isadmin BOOLEAN DEFAULT FALSE
+    isadmin BOOLEAN DEFAULT FALSE,
+    reset_token VARCHAR(255),
+    reset_token_expire TIMESTAMP
   );
 
   CREATE TABLE IF NOT EXISTS Type_utilisateur(

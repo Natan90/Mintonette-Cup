@@ -43,7 +43,7 @@
         </div>
 
         <div class="mdp_oublie">
-          <button id="button_mdp_oublie">
+          <button id="button_mdp_oublie" @click="forbiddenPassword()">
             <u>{{ $t("pageLog.mdpOublie") }}</u>
           </button>
         </div>
@@ -292,10 +292,6 @@ async function getValuesInscription() {
   }
 
   try {
-    // if (sexe_utilisateur.value.toLowerCase() === 'Autre') {
-    //   sexe_utilisateur.value = autre_sexe_utilisateur.value;
-    // }
-
     const res = await utilisateurAuthStore.InscriptionUtilisateur({
       nom: nom_utilisateur.value,
       prenom: prenom_utilisateur.value,
@@ -336,6 +332,12 @@ function moveCard() {
   } else {
     router.push({ name: "Connexion_utilisateur" });
   }
+}
+
+function forbiddenPassword() {
+  router.push({
+    name: "ResetPasswordRequest"
+  })
 }
 </script>
 
