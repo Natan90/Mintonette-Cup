@@ -102,7 +102,6 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
-// import axios from 'axios';
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminAPIStore } from "@/services/admin.service";

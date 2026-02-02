@@ -102,7 +102,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-// import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";

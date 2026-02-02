@@ -149,8 +149,6 @@ import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import localData from "../../backend/database/localData.js";
-// import utilisateursData from "../../backend/database/jsonData/Utilisateur.json";
-// import axios from "axios";
 
 const scrollToSection = (id) => {
   const section = document.getElementById(id);

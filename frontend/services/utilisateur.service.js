@@ -25,9 +25,20 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
     });
   }
 
+  async function ResetPasswordUtilisateur(password) {
+    if (!password) {
+      throw new Error("Le mot de passe est obligatoire");
+    }
+
+    return postRequest(`/utilisateur/auth/password/reset`, {
+      password,
+    })
+  }
+
   return {
     InscriptionUtilisateur,
     ConnexionUtilisateur,
     UpdateUtilisateur,
+    ResetPasswordUtilisateur,
   };
 });

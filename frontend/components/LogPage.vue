@@ -167,14 +167,15 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-// import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import Modal from "./Modal.vue";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service";
+import { useMailStore } from "@/services/mail.service";
 
 const utilisateurAuthStore = useUtilisateurAuthStore();
+const mailStore = useMailStore();
 const route = useRoute();
 const showRegister = ref(route.name === "Inscription_utilisateur");
 
@@ -273,6 +274,9 @@ async function getValuesConnexion() {
     console.log(err.data.error)
     if (err && err.data && err.data.error) {
       message.value = err.data.error;
+      if (message.value === "Compte temporairement bloqué") {
+        mailStore.ResetPassword(login_utilisateur_connexion.value)
+      }
     } else {
       message.value = "Erreur serveur : impossible de se connecter.";
     }

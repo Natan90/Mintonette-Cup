@@ -10,7 +10,6 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from 'axios';
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import NavView from "@/components/NavView.vue";
 import { useAdminAPIStore } from "@/services/admin.service";

@@ -10,6 +10,7 @@ const gradins = require("./routes/gradin");
 const adminRoutes = require("./routes/admin");
 const equipesRoutes = require("./routes/equipe");
 const panierRoutes = require("./routes/panier");
+const mailRoutes = require("./routes/mail");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,6 +35,7 @@ app.use("/prestataire/service", serviceRoute);
 app.use("/gradin", gradins);
 app.use("/equipes", equipesRoutes);
 app.use("/panier", panierRoutes);
+app.use("/mail", mailRoutes);
 
 
 // Swagger

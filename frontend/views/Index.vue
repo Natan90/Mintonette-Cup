@@ -99,8 +99,6 @@
 ******************** */
 import { ref, onMounted, onBeforeUnmount, onActivated, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import evenementData from "../../backend/database/jsonData/Evenement.json";
-import axios from "axios";
 import { useUserStore } from "@/stores/user";
 /* ********************
     PAGES IMPORTS 

@@ -21,6 +21,7 @@ import MenuAdmin from "@/components/MenuAdmin.vue";
 import Terrain from "@/views/Terrain.vue";
 import ZoneMap from "@/components/ZoneMap.vue";
 import Information from "@/views/Information.vue";
+import ResetPassword from "@/views/ResetPassword.vue";
 
 const routes = [
   {
@@ -152,6 +153,11 @@ const routes = [
         name: "Information",
         component: Information,
       },
+      {
+        path: "ResetPassword",
+        name: "ResetPassword",
+        component: ResetPassword,
+      }
     ],
   },
   {
