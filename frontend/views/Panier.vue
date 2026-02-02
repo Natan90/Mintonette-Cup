@@ -14,10 +14,12 @@
           class="item">
           <p>
             Siège : {{ seat.numero_colonne }}{{ seat.numero_ligne }}
-            <span v-if="seat.team1 && seat.team2">
-              {{ seat.team1.substring(0, 3) }} -
-              {{ seat.team2.substring(0, 3) }}
+            <span v-if="seat.equipe1_nom && seat.equipe2_nom">
+              {{ seat.equipe1_nom.substring(0, 3) }} -
+              {{ seat.equipe2_nom.substring(0, 3) }}
             </span>
+            <span v-else>ca marche pas </span>
+
             <span> (Zone {{ seat.zone }})</span>
           </p>
           <p style="color: red; font-weight: 700">
