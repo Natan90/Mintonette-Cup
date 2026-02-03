@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const session = require("express-session");
 
 const authRoutes = require("./routes/utilisateur");
 // const paysRoutes = require("./routes/equipes/equipes");
@@ -24,6 +25,18 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+  name: "mySession",
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    maxAge: 3600000 //1h
+  }
+}))
 
 // Routes
 app.use("/admin", adminRoutes);

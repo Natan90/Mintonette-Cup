@@ -14,6 +14,8 @@ const admin_evenementMiddleware = require("../middlewares/admin_evenement.middle
 // Utiilisateur
 const admin_utilisateurController = require("../controllers/admin_utilisateur.controller");
 const admin_utilisateurMiddleware = require("../middlewares/admin_utilisateur.middleware");
+const authSessionMiddleware = require("../middlewares/authSession.middleware");
+
 
 // ========= PRESTATAIRE ========= // 
 
@@ -54,15 +56,15 @@ router.put("/evenement/update", admin_evenementMiddleware.validateUpdateEvenemen
 // ========= Utilisateur ========= // 
 
 // GET récupère les utilisateurs
-router.get("/utilisateur/show", admin_utilisateurController.getUtilisateur);
+router.get("/utilisateur/show", authSessionMiddleware, admin_utilisateurController.getUtilisateur);
 
 // GET récupère un utilisateur par id
-router.get("/utilisateur/show/:id", admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.getUtilisateurById);
+router.get("/utilisateur/show/:id", authSessionMiddleware, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.getUtilisateurById);
 
 // PATCH change le statut de prestataire de l'utilisateur
-router.patch("/utilisateur/changePresta/:id", admin_utilisateurMiddleware.validateIdParams, admin_utilisateurMiddleware.validateValueChange, admin_utilisateurController.updateUtilisateurInPresta);
+router.patch("/utilisateur/changePresta/:id", authSessionMiddleware, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurMiddleware.validateValueChange, admin_utilisateurController.updateUtilisateurInPresta);
 
 // DELETE supprime un utilisateur
-router.delete("/utilisateur/delete/:id", admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.deleteUtilisateurById);
+router.delete("/utilisateur/delete/:id", authSessionMiddleware, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.deleteUtilisateurById);
 
 module.exports = router;

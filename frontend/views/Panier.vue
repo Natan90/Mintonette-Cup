@@ -77,7 +77,7 @@
 import { ref, computed, onMounted } from "vue";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
-import { useUserStore } from "@/components/user";
+import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { usePanierStore } from "@/services/panier.service";
 import { useGradinStore } from "@/services/gradin.service";

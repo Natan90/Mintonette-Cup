@@ -135,7 +135,7 @@
 import { ref, computed, onMounted } from "vue";
 import NavBar from "../components/NavView.vue";
 import Footer from "../components/Footer.vue";
-import { useUserStore } from "@/components/user";
+import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import { useGradinStore } from "@/services/gradin.service";

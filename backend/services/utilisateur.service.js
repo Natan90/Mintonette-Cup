@@ -1,5 +1,4 @@
 const pool = require("../database/db");
-const { v4: uuidv4, MAX } = require("uuid");
 const bcrypt = require("bcrypt");
 
 const MAX_ATTEMPTS = 3; // Nombre de tentatives maximum de connexion
@@ -110,7 +109,7 @@ async function connexionUtilisateur(utilisateur) {
     // Si l'utilisateur n'existe pas
     if (userResult.rows.length === 0) {
       await updateNombreConnexion(client, attempt, login, now);
-      return;
+      throw { status: 401, message: "Login ou mot de passe incorrect" };
     }
     const user = userResult.rows[0];
 
@@ -132,7 +131,7 @@ async function connexionUtilisateur(utilisateur) {
     const passwordMatch = await bcrypt.compare(mdp, user.mdp_utilisateur);
     if (!passwordMatch) {
       await updateNombreConnexion(client, attempt, login, now);
-      return;
+      throw { status: 401, message: "Login ou mot de passe incorrect" };
     }
 
     blockedAccount = false;
@@ -149,10 +148,10 @@ async function connexionUtilisateur(utilisateur) {
     );
 
     // Générer un token de session
-    const token = uuidv4();
-    const expiresAt = new Date();
+    // const token = uuidv4();
+    // const expiresAt = new Date();
 
-    expiresAt.setHours(expiresAt.getHours() + 24); // 24h
+    // expiresAt.setHours(expiresAt.getHours() + 24); // 24h
 
     // Créer la session
     // await client.query(
@@ -166,14 +165,12 @@ async function connexionUtilisateur(utilisateur) {
 
     return {
       message: "Connexion réussie",
-      token: token,
       user: {
         id: user.id_utilisateur,
         login: user.login_utilisateur,
         nom: user.nom_utilisateur,
         prenom: user.prenom_utilisateur,
       },
-      expiresAt: expiresAt,
     };
   } catch (err) {
     await client.query("ROLLBACK");

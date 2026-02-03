@@ -1,3 +1,5 @@
+const session = require('express-session');
+
 const utilisateurService = require("../services/utilisateur.service");
 
 exports.inscriptionUtilisateur = async (req, res) => {
@@ -14,8 +16,18 @@ exports.inscriptionUtilisateur = async (req, res) => {
 };
 
 exports.connexionUtilisateur = async (req, res) => {
+  const { login, mdp } = req.body;
+
   try {
-    const result = await utilisateurService.connexionUtilisateur(req.body);
+    const result = await utilisateurService.connexionUtilisateur({ login, mdp });
+
+    req.session.user = {
+      id: result.user.id,
+      login: result.user.login,
+      nom: result.user.nom,
+      prenom: result.user.prenom
+    };
+
     return res.status(201).json(result);
   } catch (err) {
     if (err.status && err.message) {
@@ -29,6 +41,11 @@ exports.connexionUtilisateur = async (req, res) => {
 exports.updateUtilisateur = async (req, res) => {
   try {
     const id_user = req.params.id;
+
+    if (Number(req.session.user.id) !== Number(id_user)) {
+      return res.status(403).json({ error: "Accès interdit" });
+    }
+
     const result = await utilisateurService.updateUtilisateur(id_user, req.body);
     return res.status(201).json(result);
   } catch (err) {

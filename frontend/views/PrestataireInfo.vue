@@ -234,7 +234,7 @@
 <script setup>
 import NavView from "@/components/NavView.vue";
 import { ref, onMounted, computed, nextTick } from "vue";
-import { useUserStore } from "@/components/user";
+import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useServiceStore } from "@/services/service.service";

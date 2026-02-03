@@ -36,15 +36,7 @@ exports.validateUpdateUtilisateur = (req, res, next) => {
     return res.status(400).json({ error: "ID invalide" });
   }
 
-  if (
-    !nom ||
-    !prenom ||
-    !mail ||
-    !tel_utilisateur ||
-    !login ||
-    !sexe ||
-    !photo_profil
-  ) {
+  if (!nom && !prenom && !mail && !tel_utilisateur && !login && !sexe && !photo_profil) {
     return res.status(400).json({
       error: "Aucune donnée à mettre à jour",
     });

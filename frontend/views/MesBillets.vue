@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useUserStore } from "@/components/user";
+import { useUserStore } from "@/stores/user";
 import { usePanierStore } from "@/services/panier.service";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";

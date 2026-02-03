@@ -49,7 +49,7 @@ async function updateUtilisateurInPresta(id_user, valueChange) {
 }
 
 async function deleteUtilisateurById(id_user) {
-  await pool.query("DELETE FROM Prestataire WHERE id_utilisateur=$1", [id]);
+  await pool.query("DELETE FROM Prestataire WHERE id_utilisateur=$1", [id_user]);
   const result = await pool.query(
     "DELETE FROM Utilisateur WHERE id_utilisateur=$1 RETURNING *",
     [id_user],
