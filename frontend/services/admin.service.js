@@ -13,6 +13,10 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
      UTILISATEUR
   ========== */
 
+  async function GetCurrentUser() {
+    return getRequest("/admin/utilisateur/me");
+  }
+
   async function GetUtilisateurs() {
     return getRequest("/admin/utilisateur/show");
   }
@@ -111,6 +115,7 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
   }
 
   return {
+    GetCurrentUser,
     GetUtilisateurs,
     GetUtilisateurById,
     ChangePrestaUtilisateur,

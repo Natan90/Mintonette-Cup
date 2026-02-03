@@ -55,6 +55,9 @@ router.put("/evenement/update", admin_evenementMiddleware.validateUpdateEvenemen
 
 // ========= Utilisateur ========= // 
 
+// GET récupère l'utilisateur courrant
+router.get("/utilisateur/me", authSessionMiddleware, admin_utilisateurController.getCurrentUser);
+
 // GET récupère les utilisateurs
 router.get("/utilisateur/show", authSessionMiddleware, admin_utilisateurController.getUtilisateur);
 

@@ -1,5 +1,6 @@
 const pool = require("../database/db");
 
+
 async function getUtilisateur() {
   const result = await pool.query(`
       SELECT u.*,

@@ -146,15 +146,9 @@ function goBack() {
   }
 }
 
-async function getValuesUtilisateurs(id) {
-  if (!userStore.isConnected) {
-    router.push({ name: 'Connexion_utilisateur' });
-    return;
-  }
-
+async function getValuesUtilisateurs() {
   try {
-    console.log('Fetching user data for ID:', id);
-    const response = await adminAPIStore.GetUtilisateurById(id);
+    const response = await adminAPIStore.GetCurrentUser();
     console.log('User data received:', response.data);
 
     let formattedDate = '';

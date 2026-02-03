@@ -39,3 +39,18 @@ exports.deleteUtilisateurById = async (req, res) => {
         res.status(500).json({ error: "Erreur interne" });
     }
 }
+
+exports.getCurrentUser = async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(401).json({ error: "Non authentifié" });
+        }
+        const result = await admin_utilisateurService.getUtilisateurById(req.session.user.id);
+
+        return res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur interne" });
+    }
+}
+
