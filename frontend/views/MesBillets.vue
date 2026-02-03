@@ -19,15 +19,20 @@
             <thead>
               <tr>
                 <th>Zone</th>
+                <th>Match</th>
                 <th>Place</th>
+                <th>Date</th>
                 <th>Heure</th>
                 <th>Prix</th>
+                <th>Actionf</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
-                <td>{{ b.zone }}</td>
+                <td>{{ b.  }}</td>
+                <td>{{ b.equipe1 }} VS {{ b.equipe2 }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
+                <td>{{ formatDate(b.date_match) }}</td>
                 <td>
                   <span v-if="b.date_match">
                     {{
@@ -70,7 +75,14 @@ function getPrice(seat) {
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
   return 12;
 }
-
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 async function fetchBillets() {
   if (!userStore.userId) return;
   error.value = null;

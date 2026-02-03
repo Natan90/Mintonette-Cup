@@ -1860,7 +1860,6 @@ async function fetchPresta() {
 
 onMounted(() => {
   fetchPresta();
-
   // Recharger les données quand la fenêtre redevient active
   window.addEventListener("focus", fetchPresta);
 });
