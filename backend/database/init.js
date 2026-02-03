@@ -261,6 +261,7 @@ const pool = require("./db");
     message VARCHAR(255),
     blocked_until TIMESTAMP
   );
+  
 
 `;
 
