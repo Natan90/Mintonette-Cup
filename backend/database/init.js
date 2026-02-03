@@ -5,6 +5,7 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
+  DROP TABLE IF EXISTS Reception_Box CASCADE;
   DROP TABLE IF EXISTS Nombre_Connexion CASCADE;
   DROP TABLE IF EXISTS Commande CASCADE;
   DROP TABLE IF EXISTS Commande_Siege CASCADE;
@@ -262,7 +263,14 @@ const pool = require("./db");
     blocked_until TIMESTAMP
   );
   
-  CREATE TABLE 
+  CREATE TABLE Reception_Box (
+    id_message SERIAL PRIMARY KEY,
+    message VARCHAR(500) NOT NULL,
+    message_lu BOOLEAN DEFAULT FALSE,
+    user_id_exped INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    user_id_dest INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
 
 `;
 

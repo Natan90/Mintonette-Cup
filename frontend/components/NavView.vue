@@ -58,6 +58,10 @@
         </div>
       </div>
 
+      <div @click="goToReceptionBox()" class="boutonNav pointer">
+        Boîte de réception
+      </div>
+
       <div v-if="!userStore.isConnected" class="partieProfil">
         <router-link
           :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
@@ -259,6 +263,10 @@ function isadmin() {
 //     console.log(err);
 //   }
 // }
+
+function goToReceptionBox() {
+  
+}
 
 onMounted(() => {
   loadProfilePhoto();
