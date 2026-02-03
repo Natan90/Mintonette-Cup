@@ -30,6 +30,7 @@
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
                 <td>{{ b.zone }}</td>
+                <!-- <td>{{ b }}</td> -->
                 <td>{{ b.equipe1 }} VS {{ b.equipe2 }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
                 <td>{{ formatDate(b.date_match) }}</td>
@@ -47,7 +48,7 @@
                 </td>
                 <td>{{ getPrice(b) }} €</td>
                 <td>
-                  <button @click="goToMatch(b.idMatch)">Voir plus</button>
+                  <button @click="goToMatch(b.match_id)">Voir plus</button>
                 </td>
               </tr>
             </tbody>
@@ -89,9 +90,12 @@ function formatDate(dateString) {
   });
 }
 
-function goToMatch(idMatch) {
-  if (!idMatch) return;
-  router.push({ name: "Terrain", params: { id: idMatch } });
+function goToMatch(idTerrain, idMatch) {
+  if (!idMatch) {
+    console.log("Je suis dans le if de goToMatch");
+    return;
+  }
+  router.push({ name: "Terrain", params: { id: idTerrain , idMatch: idMatch } });
 }
 
 async function fetchBillets() {

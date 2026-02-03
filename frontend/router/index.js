@@ -128,7 +128,7 @@ const routes = [
         component: PolygonCreation,
       },
       {
-        path: "terrain/:id",
+        path: "terrain/:id/:idMatch",
         name: "Terrain",
         component: Terrain,
         props: true,
