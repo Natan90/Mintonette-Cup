@@ -36,10 +36,15 @@ export const useUtilisateurAuthStore = defineStore("utilisateur_auth", () => {
     })
   }
 
+  async function DeconnexionUtilisateur() {
+    return postRequest("/utilisateur/auth/logout", {}, { withCredentials: true });
+  }
+
   return {
     InscriptionUtilisateur,
     ConnexionUtilisateur,
     UpdateUtilisateur,
     ResetPasswordUtilisateur,
+    DeconnexionUtilisateur,
   };
 });
