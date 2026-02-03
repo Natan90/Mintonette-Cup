@@ -29,7 +29,7 @@
             </thead>
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
-                <td>{{ b.  }}</td>
+                <td>{{ b.zone  }}</td>
                 <td>{{ b.equipe1 }} VS {{ b.equipe2 }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
                 <td>{{ formatDate(b.date_match) }}</td>

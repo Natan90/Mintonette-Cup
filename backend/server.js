@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(session({
   store: new FileStore({ 
-    path: './sessions',
+    path: './backend/sessions',
     ttl: 3600,
     retries: 0
   }),
