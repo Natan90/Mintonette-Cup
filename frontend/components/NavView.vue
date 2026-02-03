@@ -148,6 +148,7 @@ import { ref, watch, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user.js";
 import { useRoute, useRouter } from "vue-router";
+import { useUtilisateurAuthStore } from "@/services/utilisateur.service.js";
 import localData from "../../backend/database/localData.js";
 
 const scrollToSection = (id) => {
@@ -160,6 +161,7 @@ const { locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
+const userAuthStore = useUtilisateurAuthStore();
 
 const isInIndex = ref(route.name === "Home");
 const userProfilePhoto = ref(null);
@@ -273,10 +275,16 @@ watch(
   }
 );
 
-function handleLogout() {
-  userStore.logout();
-  router.push({ name: "Home" });
+async function handleLogout() {
+  try {
+    await userAuthStore.DeconnexionUtilisateur();
+    userStore.logout();
+    router.push({ name: "Home" });
+  } catch (err) {
+    console.error("Erreur lors de la déconnexion :", err);
+  }
 }
+
 
 function changeLanguage(lang) {
   // Ça permet de garder déjà ce qu'il y a dans l'URL et d'ajouter la langue
@@ -293,15 +301,6 @@ function changeLanguage(lang) {
 
 const savedLang = localStorage.getItem("lang");
 if (savedLang) locale.value = savedLang;
-
-// async function getValuesUser() {
-//   try {
-//     const res = await axios.get(`http://localhost:3000/admin/utilisateur/show/${userStore.userId}`)
-//     utilisateur.value = res.data;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
 
 // onMounted(async () => {
 //   window.addEventListener("scroll", handleScroll);

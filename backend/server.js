@@ -16,6 +16,19 @@ const mailRoutes = require("./routes/mail");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(session({
+  name: "userSession",
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 3600000 //1h
+  }
+}))
+
 // Middlewares
 app.use(
   cors({
@@ -25,18 +38,6 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(session({
-  name: "mySession",
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-    maxAge: 3600000 //1h
-  }
-}))
 
 // Routes
 app.use("/admin", adminRoutes);

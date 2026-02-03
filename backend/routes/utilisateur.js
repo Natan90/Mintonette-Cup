@@ -14,12 +14,8 @@ router.post("/connexion", utilisateurMiddleware.validateConnexion, utilisateurCo
 // POST mettre à jour utilisateur
 router.post("/update/:id", authSessionMiddleware, utilisateurMiddleware.validateUpdateUtilisateur, utilisateurController.updateUtilisateur);
 
-router.post("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie("mySession");
-    res.json({ message: "Déconnecté" });
-  });
-});
+// POST deconnexion utilisateur
+router.post("/logout", authSessionMiddleware, utilisateurController.deconnexionUtilisateur)
 
 
 module.exports = router;

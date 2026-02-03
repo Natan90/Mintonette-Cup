@@ -213,7 +213,8 @@ async function getValuesEvenement() {
 
 async function getValuesUser() {
   try {
-    const res = await adminAPIStore.GetUtilisateurById(userStore.userId)
+    console.log("Cookies après login :", document.cookie);
+    const res = await adminAPIStore.GetUtilisateurById(userStore.userId);
     utilisateur.value = res.data;
   } catch (err) {
     console.error(err);
