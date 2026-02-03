@@ -24,12 +24,12 @@
                 <th>Date</th>
                 <th>Heure</th>
                 <th>Prix</th>
-                <th>Actionf</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
-                <td>{{ b.zone  }}</td>
+                <td>{{ b.zone }}</td>
                 <td>{{ b.equipe1 }} VS {{ b.equipe2 }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
                 <td>{{ formatDate(b.date_match) }}</td>
@@ -46,6 +46,9 @@
                   <span v-else>—</span>
                 </td>
                 <td>{{ getPrice(b) }} €</td>
+                <td>
+                  <button @click="goToMatch(b.idMatch)">Voir plus</button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -58,11 +61,13 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { usePanierStore } from "@/services/panier.service";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 
+const router = useRouter();
 const userStore = useUserStore();
 const panierStore = usePanierStore();
 const billets = ref([]);
@@ -83,6 +88,12 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
+
+function goToMatch(idMatch) {
+  if (!idMatch) return;
+  router.push({ name: "Terrain", params: { id: idMatch } });
+}
+
 async function fetchBillets() {
   if (!userStore.userId) return;
   error.value = null;
