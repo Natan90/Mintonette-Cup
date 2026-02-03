@@ -27,6 +27,7 @@
                 new Date(seat.date_match).toLocaleTimeString("fr-FR", {
                   hour: "2-digit",
                   minute: "2-digit",
+                  timeZone: "UTC",
                 })
               }}
             </span>

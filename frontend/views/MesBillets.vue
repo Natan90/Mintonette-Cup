@@ -30,7 +30,13 @@
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
                 <td>
                   <span v-if="b.date_match">
-                    {{ new Date(b.date_match).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) }}
+                    {{
+                      new Date(b.date_match).toLocaleTimeString("fr-FR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        timeZone: "UTC",
+                      })
+                    }}
                   </span>
                   <span v-else>—</span>
                 </td>
@@ -65,7 +71,6 @@ function getPrice(seat) {
   return 12;
 }
 
-
 async function fetchBillets() {
   if (!userStore.userId) return;
   error.value = null;
@@ -73,9 +78,9 @@ async function fetchBillets() {
     const res = await panierStore.GetBilletsByUser(userStore.userId);
     billets.value = res.data;
   } catch (err) {
-    console.error('Erreur en récupérant les billets :', err);
-    error.value = 'Impossible de récupérer vos billets pour le moment.';
-  } 
+    console.error("Erreur en récupérant les billets :", err);
+    error.value = "Impossible de récupérer vos billets pour le moment.";
+  }
 }
 
 onMounted(() => {
