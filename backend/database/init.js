@@ -262,6 +262,7 @@ const pool = require("./db");
     blocked_until TIMESTAMP
   );
   
+  CREATE TABLE 
 
 `;
 
