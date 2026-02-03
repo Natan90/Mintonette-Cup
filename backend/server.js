@@ -1,8 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
-const { createClient } = require("redis");
-const { RedisStore } = require("connect-redis");
+const FileStore = require('session-file-store')(session);
 
 const authRoutes = require("./routes/utilisateur");
 // const paysRoutes = require("./routes/equipes/equipes");
@@ -18,18 +17,18 @@ const mailRoutes = require("./routes/mail");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const redisClient = createClient();
-redisClient.on("error", (err) => console.log("Redis Client Error", err));
-redisClient.connect().catch(console.error);
-
 app.use(session({
-  store: new RedisStore({ client: redisClient }),
+  store: new FileStore({ 
+    path: './sessions',
+    ttl: 3600,
+    retries: 0
+  }),
   name: "userSession",
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    httpOnly: false,
+    httpOnly: true,
     secure: false,
     sameSite: "lax",
     maxAge: 3600000 //1h
