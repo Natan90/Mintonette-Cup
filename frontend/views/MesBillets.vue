@@ -56,6 +56,7 @@
         </div>
       </div>
     </div>
+    <!-- #######################      terrain_id INTEGER REFERENCES Terrain(id_terrain), ca ligne 183 init.js #######################-->
     <Footer />
   </div>
 </template>
@@ -95,7 +96,7 @@ function goToMatch(idTerrain, idMatch) {
     console.log("Je suis dans le if de goToMatch");
     return;
   }
-  router.push({ name: "Terrain", params: { id: idTerrain , idMatch: idMatch } });
+  router.push({ name: "Terrain", params: { id: idTerrain, idMatch: idMatch } });
 }
 
 async function fetchBillets() {
