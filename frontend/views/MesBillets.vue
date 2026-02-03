@@ -18,17 +18,22 @@
           <table v-else class="billets-table">
             <thead>
               <tr>
-                <th>Match</th>
                 <th>Zone</th>
                 <th>Place</th>
+                <th>Heure</th>
                 <th>Prix</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
-                <td>{{ b.match_id || "—" }}</td>
                 <td>{{ b.zone }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
+                <td>
+                  <span v-if="b.date_match">
+                    {{ new Date(b.date_match).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) }}
+                  </span>
+                  <span v-else>—</span>
+                </td>
                 <td>{{ getPrice(b) }} €</td>
               </tr>
             </tbody>

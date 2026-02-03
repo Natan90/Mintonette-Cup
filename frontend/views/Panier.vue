@@ -18,9 +18,18 @@
               {{ seat.equipe1_nom.substring(0, 3) }} -
               {{ seat.equipe2_nom.substring(0, 3) }}
             </span>
-            <span v-else>ca marche pas </span>
 
-            <span> (Zone {{ seat.zone }})</span>
+            <span> | Zone {{ seat.zone }}</span>
+
+            <span v-if="seat.date_match">
+              | Heure :
+              {{
+                new Date(seat.date_match).toLocaleTimeString("fr-FR", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              }}
+            </span>
           </p>
           <p style="color: red; font-weight: 700">
             {{ getItemPrice(seat, false) }} €

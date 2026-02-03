@@ -25,7 +25,7 @@ async function getMatchById(id_terrain) {
         m.date_match,
         m.score_equipe1,
         m.score_equipe2,
-
+        m.date_match,
         e1.id_equipe AS team1_id,
         p1.nom_pays AS team1_country,
         e1.entraineur AS team1_coach,
