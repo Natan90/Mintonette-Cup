@@ -22,6 +22,7 @@ import Terrain from "@/views/Terrain.vue";
 import ZoneMap from "@/components/ZoneMap.vue";
 import Information from "@/views/Information.vue";
 import ResetPassword from "@/components/ResetPassword.vue";
+import ReceptionBox from "@/views/ReceptionBox.vue";
 
 const routes = [
   {
@@ -162,6 +163,11 @@ const routes = [
         path: "reset-password/:token",
         name: "ResetPasswordConfirm",
         component: ResetPassword,
+      },
+      {
+        path: "mailbox/reception",
+        name: "ReceptionBox",
+        component: ReceptionBox
       }
     ],
   },

@@ -265,7 +265,9 @@ function isadmin() {
 // }
 
 function goToReceptionBox() {
-  
+  router.push({
+    name: "ReceptionBox"
+  })
 }
 
 onMounted(() => {

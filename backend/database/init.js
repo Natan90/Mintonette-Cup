@@ -265,6 +265,7 @@ const pool = require("./db");
   
   CREATE TABLE Reception_Box (
     id_message SERIAL PRIMARY KEY,
+    subject VARCHAR(255),
     message VARCHAR(500) NOT NULL,
     message_lu BOOLEAN DEFAULT FALSE,
     user_id_exped INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
