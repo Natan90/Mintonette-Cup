@@ -23,6 +23,7 @@ import ZoneMap from "@/components/ZoneMap.vue";
 import Information from "@/views/Information.vue";
 import ResetPassword from "@/components/ResetPassword.vue";
 import ReceptionBox from "@/views/ReceptionBox.vue";
+import { useUserStore } from "@/stores/user";
 
 const routes = [
   {
@@ -188,6 +189,7 @@ const routes = [
     redirect: "/fr",
   },
 ];
+
 Panier;
 const router = createRouter({
   history: createWebHistory(),
@@ -205,6 +207,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresUserId = to.meta.requiresUserId;
+  const userStore = useUserStore();
   if (requiresUserId && !userStore.userId) {
     next({ name: "Connexion_utilisateur" });
   } else {

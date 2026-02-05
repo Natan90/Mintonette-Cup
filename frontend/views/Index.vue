@@ -36,7 +36,7 @@
               <span class="descri" v-html="item.descri"></span>
               <router-link
                 v-if="userStore.userId"
-                :to="{ name: 'Information', params: { id: userStore.userId } }"
+                :to="{ name: 'Information' }"
                 class="voirPlus pointer">
                 <span class="pointer">{{ $t("information.voirPlus") }}</span>
               </router-link>
@@ -48,6 +48,7 @@
 
     <section
       v-if="
+        userStore && 
         userStore.isConnected &&
         !utilisateur.ispresta &&
         !utilisateur.waitingforadmin
@@ -65,7 +66,7 @@
       </div>
     </section>
 
-    <section v-if="userStore.isConnected && utilisateur.ispresta" && utilisateur>
+    <section v-if="userStore.isConnected && utilisateur.ispresta">
       <div class="teams_texte">
         <div
           v-html="$t('mintonetteCup.prestataire.estDeja')"
