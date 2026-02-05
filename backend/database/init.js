@@ -5,7 +5,7 @@ const pool = require("./db");
     console.log("🚀 Initialisation de la base Mintonette Cup...");
 
     const schemaSQL = `
-  DROP TABLE IF EXISTS Reception_Box CASCADE;
+  DROP TABLE IF EXISTS Mailbox_Message CASCADE;
   DROP TABLE IF EXISTS Nombre_Connexion CASCADE;
   DROP TABLE IF EXISTS Commande CASCADE;
   DROP TABLE IF EXISTS Commande_Siege CASCADE;
@@ -262,17 +262,18 @@ const pool = require("./db");
     message VARCHAR(255),
     blocked_until TIMESTAMP
   );
-  
-  CREATE TABLE Reception_Box (
+
+  CREATE TABLE Mailbox_Message (
     id_message SERIAL PRIMARY KEY,
     subject VARCHAR(255),
-    message VARCHAR(500) NOT NULL,
-    message_lu BOOLEAN DEFAULT FALSE,
-    user_id_exped INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
-    user_id_dest INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
-    date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    message TEXT NOT NULL,
+    sender_id INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    recipient_id INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMP WITH TIME ZONE NULL,
+    is_deleted_by_sender BOOLEAN DEFAULT FALSE,
+    is_deleted_by_recipient BOOLEAN DEFAULT FALSE
   );
-
 `;
 
     await pool.query(schemaSQL);
@@ -318,6 +319,13 @@ const pool = require("./db");
         ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy', 'nooabigeard@gmail.com', '0768401922', 'M', FALSE, FALSE);
     `;
     await pool.query(insertUsers);
+
+    const insertMailbox = `
+    INSERT INTO mailbox_message (subject, message, sender_id, recipient_id)
+    VALUES 
+    ('Demande d’information', 'Bonjour, je souhaiterais avoir plus de détails sur la compétition.', 2, 1);`
+
+    await pool.query(insertMailbox);
 
     const insertTerrains = `
     INSERT INTO Terrain (nom_terrain) VALUES

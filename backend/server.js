@@ -11,6 +11,7 @@ const adminRoutes = require("./routes/admin");
 const equipesRoutes = require("./routes/equipe");
 const panierRoutes = require("./routes/panier");
 const mailRoutes = require("./routes/mail");
+const mailBoxRoutes = require("./routes/reception_box");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +39,7 @@ app.use("/gradin", gradins);
 app.use("/equipes", equipesRoutes);
 app.use("/panier", panierRoutes);
 app.use("/mail", mailRoutes);
+app.use("/mailbox", mailBoxRoutes);
 
 
 // Swagger

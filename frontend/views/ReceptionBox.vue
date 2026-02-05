@@ -18,17 +18,48 @@
                 $t('adminPage.prestataire.messageRefus') }}
             <span class="modal-close" @click="closeMessageRefus">&times;</span>
         </p>
+
+        <div>
+            <p>Vous avez {{ nbMessageNotRead }} 
+                {{ nbMessageNotRead > 1 ? 'messages' : 'message'}} non lus.
+            </p>
+            <div v-for="(message, index) in messageReceived" :key="index" v-if="messageReceived.length > 0">
+                {{ message.message }}
+            </div>
+            <div v-else>
+                <p>
+                    Votre boîte de réception est vide.
+                </p>
+            </div>
+
+            <div>
+            <div v-for="(message, index) in messageSent" :key="index" v-if="messageSent.length > 0">
+                {{ message.message }}
+            </div>
+            <div v-else>
+                <p>
+                    Votre n'avez pas encore envoyé de messages.
+                </p>
+            </div>
+        </div>
+        </div>
     </div>
 </template>
 
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import NavView from '@/components/NavView.vue';
+import { useMailBoxStore } from '@/services/reception_box.service';
+import { useUserStore } from '@/stores/user';
 
-
+const userStore = useUserStore();
+const mailBoxStore = useMailBoxStore();
 const deleting = ref(false);
 const refusing = ref(false);
+const messageReceived = ref([]);
+const messageSent = ref([]);
+const nbMessageNotRead = ref(0);
 
 const closeMessageSuppr = () => {
     deleting.value = false;
@@ -37,6 +68,23 @@ const closeMessageSuppr = () => {
 const closeMessageRefus = () => {
     refusing.value = false;
 };
+
+onMounted(() => {
+    getMessagesById(userStore.userId);
+})
+
+
+async function getMessagesById(id_user) {
+    try {
+        const res = await mailBoxStore.getMessagesById(id_user);
+
+        messageReceived.value = res.data.result.messageReceived;
+        messageSent.value = res.data.result.messageSent;
+        nbMessageNotRead.value = res.data.result.nbMessageNotRead;
+    } catch (err) {
+
+    }
+}
 
 </script>
 
