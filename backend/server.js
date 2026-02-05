@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const session = require("express-session");
-const FileStore = require('session-file-store')(session);
 
 const authRoutes = require("./routes/utilisateur");
 // const paysRoutes = require("./routes/equipes/equipes");
@@ -24,24 +22,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(session({
-  store: new FileStore({ 
-    path: process.env.PATH_FILE_STORE,
-    ttl: 3600,
-    retries: 0
-  }),
-  name: "userSession",
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    maxAge: 3600000 //1h
-  }
-}))
 
 
 app.use(express.json());

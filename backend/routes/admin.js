@@ -14,7 +14,7 @@ const admin_evenementMiddleware = require("../middlewares/admin_evenement.middle
 // Utiilisateur
 const admin_utilisateurController = require("../controllers/admin_utilisateur.controller");
 const admin_utilisateurMiddleware = require("../middlewares/admin_utilisateur.middleware");
-const authSessionMiddleware = require("../middlewares/authSession.middleware");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 
 // ========= PRESTATAIRE ========= // 
@@ -56,18 +56,18 @@ router.put("/evenement/update", admin_evenementMiddleware.validateUpdateEvenemen
 // ========= Utilisateur ========= // 
 
 // GET récupère l'utilisateur courrant
-router.get("/utilisateur/me", authSessionMiddleware, admin_utilisateurController.getCurrentUser);
+router.get("/utilisateur/me", authMiddleware.authenticateToken, admin_utilisateurController.getCurrentUser);
 
 // GET récupère les utilisateurs
-router.get("/utilisateur/show", authSessionMiddleware, admin_utilisateurController.getUtilisateur);
+router.get("/utilisateur/show", authMiddleware.authenticateToken, admin_utilisateurController.getUtilisateur);
 
 // GET récupère un utilisateur par id
-router.get("/utilisateur/show/:id", authSessionMiddleware, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.getUtilisateurById);
+router.get("/utilisateur/show/:id", authMiddleware.authenticateToken, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.getUtilisateurById);
 
 // PATCH change le statut de prestataire de l'utilisateur
-router.patch("/utilisateur/changePresta/:id", authSessionMiddleware, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurMiddleware.validateValueChange, admin_utilisateurController.updateUtilisateurInPresta);
+router.patch("/utilisateur/changePresta/:id", authMiddleware.authenticateToken, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurMiddleware.validateValueChange, admin_utilisateurController.updateUtilisateurInPresta);
 
 // DELETE supprime un utilisateur
-router.delete("/utilisateur/delete/:id", authSessionMiddleware, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.deleteUtilisateurById);
+router.delete("/utilisateur/delete/:id", authMiddleware.authenticateToken, admin_utilisateurMiddleware.validateIdParams, admin_utilisateurController.deleteUtilisateurById);
 
 module.exports = router;

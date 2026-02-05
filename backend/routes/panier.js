@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 const panierController = require("../controllers/panier.controller");
 const panierMiddleware = require("../middlewares/panier.middleware");
-const authSessionMiddleware = require("../middlewares/authSession.middleware");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 // GET panier par utilisateur
-router.get("/show/:id", panierController.getPanier);
+router.get("/show/:id", authMiddleware.authenticateToken, panierController.getPanier);
 
 // POST ajouter au panier (siège ou service)
 router.post(
   "/add/:id",
-  authSessionMiddleware,
+  authMiddleware.authenticateToken,
   panierMiddleware.validateAdd,
   panierController.addPanier,
 );
@@ -18,18 +18,18 @@ router.post(
 // DELETE retirer du panier (siège ou service)
 router.delete(
   "/delete/:id",
-  authSessionMiddleware,
+  authMiddleware.authenticateToken,
   panierMiddleware.validateRemove,
   panierController.deletePanier,
 );
 
 // DELETE vider complètement le panier
-router.delete("/clear/:id", authSessionMiddleware, panierController.clearPanier);
+router.delete("/clear/:id", authMiddleware.authenticateToken, panierController.clearPanier);
 
 // POST payer son panier
 router.post(
   "/pay/:id",
-  authSessionMiddleware,
+  authMiddleware.authenticateToken,
   panierMiddleware.validatePay,
   panierController.payPanier,
 );
@@ -37,7 +37,7 @@ router.post(
 // GET billets après achats
 router.get(
   "/billets/show/:id",
-  authSessionMiddleware,
+  authMiddleware.authenticateToken,
   panierMiddleware.valideBillets,
   panierController.getBillets,
 );

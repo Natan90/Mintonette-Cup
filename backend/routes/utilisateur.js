@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const utilisateurController = require("../controllers/utilisateur.controller");
 const utilisateurMiddleware = require("../middlewares/utilisateur.middleware");
-const authSessionMiddleware = require("../middlewares/authSession.middleware");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 
 // POST devenir utilisateur
@@ -12,10 +12,7 @@ router.post("/inscription", utilisateurMiddleware.validateInscription, utilisate
 router.post("/connexion", utilisateurMiddleware.validateConnexion, utilisateurController.connexionUtilisateur);
 
 // POST mettre à jour utilisateur
-router.post("/update/:id", authSessionMiddleware, utilisateurMiddleware.validateUpdateUtilisateur, utilisateurController.updateUtilisateur);
-
-// POST deconnexion utilisateur
-router.post("/logout", authSessionMiddleware, utilisateurController.deconnexionUtilisateur)
+router.post("/update/:id", authMiddleware.authenticateToken, utilisateurMiddleware.validateUpdateUtilisateur, utilisateurController.updateUtilisateur);
 
 
 module.exports = router;

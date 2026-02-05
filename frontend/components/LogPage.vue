@@ -260,9 +260,8 @@ async function getValuesConnexion() {
     });
 
     userStore.setUser(res.data.user.id);
-    if (res.data.user.role) {
-      userStore.setRole(res.data.user.role);
-    }
+    userStore.setRole(res.data.user.role || "user");
+    userStore.setToken(res.data.token);
     userId.value = userStore.userId;
     message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
     connexion.value = true;
@@ -303,7 +302,8 @@ async function getValuesInscription() {
     })
     if (res.data && res.data.user) {
       userStore.setUser(res.data.user.id);
-      userStore.setRole(res.data.user.role || 'user');
+      userStore.setRole(res.data.user.role || "user");
+      userStore.setToken(res.data.token);
       message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
       inscription.value = true;
     } else {

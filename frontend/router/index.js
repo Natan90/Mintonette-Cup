@@ -53,12 +53,14 @@ const routes = [
         name: "AddPrestataire",
         component: PrestataireInfo,
         props: true,
+        meta: { requiresUserId: true },
       },
       {
         path: "Prestataire/Edit/:id?",
         name: "EditPrestataire",
         component: PrestataireInfo,
         props: true,
+        meta: { requiresUserId: true },
       },
       {
         path: "admin",
@@ -68,21 +70,25 @@ const routes = [
             path: "evenement",
             name: "Evenement",
             component: Evenement,
+            meta: { requiresUserId: true },
           },
           {
             path: "utilisateurs",
             name: "Utilisateurs",
             component: Utilisateur,
+            meta: { requiresUserId: true },
           },
           {
             path: "prestataires",
             name: "Prestataires",
             component: AdminPrestataire,
+            meta: { requiresUserId: true },
           },
           {
             path: "statistiques",
             name: "Statistiques",
             component: Statistiques,
+            meta: { requiresUserId: true },
           },
         ],
       },
@@ -105,16 +111,19 @@ const routes = [
             name: "ShowAccount",
             component: ShowAccount,
             props: true,
+            meta: { requiresUserId: true },
           },
           {
             path: "billets",
             name: "MesBillets",
             component: MesBillets,
+            meta: { requiresUserId: true },
           },
           {
             path: "profil/modifier/:userId",
             name: "ModifyAccount",
             component: ModifyAccount,
+            meta: { requiresUserId: true },
           },
         ],
       },
@@ -143,11 +152,13 @@ const routes = [
         path: "Panier",
         name: "Panier",
         component: Panier,
+        meta: { requiresUserId: true },
       },
       {
         path: "Checkout",
         name: "Checkout",
         component: Checkout,
+        meta: { requiresUserId: true },
       },
       {
         path: "Information",
@@ -167,7 +178,8 @@ const routes = [
       {
         path: "mailbox/reception",
         name: "ReceptionBox",
-        component: ReceptionBox
+        component: ReceptionBox,
+        meta: { requiresUserId: true },
       }
     ],
   },
@@ -190,5 +202,15 @@ const router = createRouter({
     return { top: 0 };
   },
 });
+
+router.beforeEach((to, from, next) => {
+  const requiresUserId = to.meta.requiresUserId;
+  if (requiresUserId && !userStore.userId) {
+    next({ name: "Connexion_utilisateur" });
+  } else {
+    next();
+  }
+});
+
 
 export default router;

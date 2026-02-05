@@ -6,7 +6,9 @@ exports.getPrestataire = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur interne" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -20,14 +22,16 @@ exports.getPrestataireById = async (req, res) => {
     // }
 
     // if (type === "prestataire") {
-      const result = await prestataireService.getPrestataireByIdPrestataire(id);
-      return res.status(201).json(result);
+    const result = await prestataireService.getPrestataireByIdPrestataire(id);
+    return res.status(201).json(result);
     // }
 
     // return res.status(400).json({ error: "Type invalide" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -42,7 +46,9 @@ exports.getFiltered = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -58,11 +64,10 @@ exports.becomePrestataire = async (req, res) => {
       user: newPresta,
     });
   } catch (err) {
-    if (err.status && err.message) {
-      return res.status(err.status).json({ error: err.message });
-    }
-    console.error("Erreur création prestataire : ", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -78,10 +83,9 @@ exports.updatePrestataire = async (req, res) => {
       user: updatePresta,
     });
   } catch (err) {
-    if (err.status && err.message) {
-      return res.status(err.status).json({ error: err.message });
-    }
-    console.error("Erreur création prestataire : ", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };

@@ -9,7 +9,10 @@ exports.resetPassword = async (req, res) => {
     await mailService.resetPassword(mail);
     res.json({ message: "Email envoyé avec succès" });
   } catch (err) {
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -21,7 +24,10 @@ exports.confirmResetPassword = async (req, res) => {
     return res.status(201).json(result);
 
   } catch (err) {
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 
 }

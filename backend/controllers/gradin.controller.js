@@ -7,7 +7,9 @@ exports.getGradin = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur interne" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -17,6 +19,8 @@ exports.updateGradin = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur interne" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };

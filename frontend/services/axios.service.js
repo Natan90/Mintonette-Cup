@@ -1,9 +1,19 @@
 import axios from "axios";
-
+import { useUserStore } from "@/stores/user";
 
 export const axiosInstance = axios.create({
     baseURL: "http://localhost:3000",
     withCredentials: true
+});
+
+// Intercepteur pour injecter le JWT
+axiosInstance.interceptors.request.use(config => {
+    const userStore = useUserStore();
+    const token = userStore.token || localStorage.getItem('jwt');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });
 
 

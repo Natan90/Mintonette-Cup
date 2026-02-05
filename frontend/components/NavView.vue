@@ -62,7 +62,7 @@
         Boîte de réception
       </div>
 
-      <div v-if="!userStore.isConnected" class="partieProfil">
+      <div v-if="!isLoggedIn" class="partieProfil">
         <router-link
           :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
           class="boutonNav">
@@ -93,6 +93,7 @@
 
         <div class="optionsUser">
           <router-link
+            v-if="userStore.userId"
             :to="{
               name: 'ShowAccount',
               params: { lang: locale, userId: userStore.userId },
@@ -102,7 +103,7 @@
             <span class="pointer">{{ $t("barreNav.profil.profil") }}</span>
           </router-link>
           <router-link
-            v-if="admin && userStore.userId == 1"
+            v-if="admin && userStore.userId && userStore.userId == 1"
             :to="{ name: 'Evenement', params: { lang: locale } }"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
@@ -172,6 +173,8 @@ const userProfilePhoto = ref(null);
 const userInitials = ref("");
 const utilisateur = ref({});
 const admin = ref(false);
+
+const isLoggedIn = computed(() => !!userStore.token || !!localStorage.getItem('jwt'));
 
 const loadProfilePhoto = () => {
   if (userStore.isConnected) {
@@ -287,7 +290,6 @@ watch(
 
 async function handleLogout() {
   try {
-    await userAuthStore.DeconnexionUtilisateur();
     userStore.logout();
     router.push({ name: "Home" });
   } catch (err) {

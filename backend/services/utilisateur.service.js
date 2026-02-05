@@ -1,10 +1,21 @@
 const pool = require("../database/db");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
 const MAX_ATTEMPTS = 3; // Nombre de tentatives maximum de connexion
 const WINDOW_MINUTES = 5; // Intervalle de temps en minutes pour les tentatives
 const BLOCK_MINUTES = 15; // Blocage temporaire en minutes après nb_tentatives > 3
 let blockedAccount = false; // Vérifie si le compte est bloqué
+
+
+// Fonction pour générer un JWT
+const generateToken = (userId) => {
+  return jwt.sign(
+    { userId: userId.toString() },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
+  );
+};
 
 async function inscriptionUtilisateur(utilisateur) {
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = utilisateur;
@@ -37,15 +48,22 @@ async function inscriptionUtilisateur(utilisateur) {
 
     const newUser = result.rows[0];
 
+    const token = generateToken(newUser.id_utilisateur);
+
     // Assigner le rôle (user par défaut)
 
     await client.query("COMMIT");
 
     return {
-      message: "Utilisateur créé avec succès",
+      message: "Compte créé avec succès",
       user: {
-        id: newUser.id_utilisateur,
+        _id: newUser.id_utilisateur,
+        mail: newUser.mail_utilisateur,
+        nom: newUser.nom_utilisateur,
+        prenom: newUser.prenom_utilisateur
       },
+      token,
+      expiresIn: process.env.JWT_EXPIRES_IN || '1h'
     };
   } catch (err) {
     await client.query("ROLLBACK");
@@ -134,6 +152,8 @@ async function connexionUtilisateur(utilisateur) {
       throw { status: 401, message: "Login ou mot de passe incorrect" };
     }
 
+    const token = generateToken(user.id_utilisateur);
+
     blockedAccount = false;
     await client.query(
       `UPDATE Nombre_Connexion
@@ -171,6 +191,8 @@ async function connexionUtilisateur(utilisateur) {
         nom: user.nom_utilisateur,
         prenom: user.prenom_utilisateur,
       },
+      token,
+      expiresIn: process.env.JWT_EXPIRES_IN || '1h'
     };
   } catch (err) {
     await client.query("ROLLBACK");

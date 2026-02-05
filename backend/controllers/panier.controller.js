@@ -7,7 +7,9 @@ exports.getPanier = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -41,7 +43,10 @@ exports.addPanier = async (req, res) => {
     return res.status(400).json({ error: "Type invalide" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -58,7 +63,10 @@ exports.removeSiege = async (req, res) => {
     res.json({ message: "Siège retiré du panier" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -92,7 +100,10 @@ exports.deletePanier = async (req, res) => {
     return res.status(400).json({ error: "Type invalide" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -103,7 +114,10 @@ exports.clearPanier = async (req, res) => {
     return res.status(200).json({ message: "Panier vidé avec succès" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -122,7 +136,9 @@ exports.payPanier = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -134,6 +150,8 @@ exports.getBillets = async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };

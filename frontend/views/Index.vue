@@ -35,6 +35,7 @@
             <div class="contenuTexte">
               <span class="descri" v-html="item.descri"></span>
               <router-link
+                v-if="userStore.userId"
                 :to="{ name: 'Information', params: { id: userStore.userId } }"
                 class="voirPlus pointer">
                 <span class="pointer">{{ $t("information.voirPlus") }}</span>
@@ -64,7 +65,7 @@
       </div>
     </section>
 
-    <section v-if="userStore.isConnected && utilisateur.ispresta">
+    <section v-if="userStore.isConnected && utilisateur.ispresta" && utilisateur>
       <div class="teams_texte">
         <div
           v-html="$t('mintonetteCup.prestataire.estDeja')"
@@ -213,7 +214,11 @@ async function getValuesEvenement() {
 
 async function getValuesUser() {
   try {
-    console.log("Cookies après login :", document.cookie);
+    if (!userStore.userId) {
+      console.log("Aucun utilisateur connecté pour récupérer les données");
+      return;
+    }
+    console.log("User ID:", userStore.userId);
     const res = await adminAPIStore.GetUtilisateurById(userStore.userId);
     utilisateur.value = res.data;
   } catch (err) {

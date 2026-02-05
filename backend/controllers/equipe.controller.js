@@ -5,8 +5,10 @@ exports.showPays = async (req, res) => {
     const result = await matchService.getPays();
     return res.json(result);
   } catch (err) {
-    console.error("Erreur getPays :", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -15,8 +17,10 @@ exports.showPlayers = async (req, res) => {
     const result = await matchService.getPlayer();
     return res.json(result);
   } catch (err) {
-    console.error("Erreur getPlayer :", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -25,8 +29,10 @@ exports.showMatches = async (req, res) => {
     const result = await matchService.getMatch();
     return res.json(result);
   } catch (err) {
-    console.error("Erreur getMatch :", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
 
@@ -37,7 +43,9 @@ exports.showMatchByTerrain = async (req, res) => {
     const result = await matchService.getMatchById(idTerrain);
     return res.json(result);
   } catch (err) {
-    console.error("Erreur getMatchById :", err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
   }
 };
