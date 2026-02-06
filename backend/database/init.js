@@ -60,7 +60,9 @@ const pool = require("./db");
     ispresta BOOLEAN DEFAULT FALSE,
     isadmin BOOLEAN DEFAULT FALSE,
     reset_token VARCHAR(255),
-    reset_token_expire TIMESTAMP
+    reset_token_expire TIMESTAMP,
+    google_id TEXT,
+    provider VARCHAR(50) DEFAULT 'local'
   );
 
   CREATE TABLE IF NOT EXISTS Type_utilisateur(

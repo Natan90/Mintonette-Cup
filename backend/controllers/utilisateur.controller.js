@@ -1,5 +1,9 @@
 const utilisateurService = require("../services/utilisateur.service");
 
+exports.generateToken = (user) => {
+  return utilisateurService.generateToken(user);
+};
+
 exports.inscriptionUtilisateur = async (req, res) => {
   try {
     const result = await utilisateurService.inscriptionUtilisateur(req.body);

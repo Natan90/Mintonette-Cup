@@ -4,16 +4,18 @@ const jwt = require('jsonwebtoken');
 
 const MAX_ATTEMPTS = 3; // Nombre de tentatives maximum de connexion
 const WINDOW_MINUTES = 5; // Intervalle de temps en minutes pour les tentatives
-const BLOCK_MINUTES = 15; // Blocage temporaire en minutes après nb_tentatives > 3
-let blockedAccount = false; // Vérifie si le compte est bloqué
 
 
 // Fonction pour générer un JWT
-const generateToken = (userId) => {
+function generateToken(user) {
+  if (!user || !user.id_utilisateur) {
+    throw new Error("Utilisateur invalide pour générer le token");
+  }
+
   return jwt.sign(
-    { userId: userId.toString() },
+    { userId: user.id_utilisateur },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1h" }
   );
 };
 
@@ -48,7 +50,7 @@ async function inscriptionUtilisateur(utilisateur) {
 
     const newUser = result.rows[0];
 
-    const token = generateToken(newUser.id_utilisateur);
+    const token = generateToken(newUser);
 
     // Assigner le rôle (user par défaut)
 
@@ -77,12 +79,13 @@ async function connexionUtilisateur(utilisateur) {
   const { login, mdp } = utilisateur;
   const client = await pool.connect();
 
-  if (blockedAccount) {
-    throw { status: 429, message: "Compte temporairement bloqué" };
-  }
-
   try {
     await client.query("BEGIN");
+
+    if (attempt.blocked_until && attempt.blocked_until > now) {
+      await client.query("COMMIT");
+      throw { status: 429, message: "Compte temporairement bloqué" };
+    }
 
 
     // Récupérer l'utilisateur
@@ -106,7 +109,6 @@ async function connexionUtilisateur(utilisateur) {
         nb_tentative: 0,
         first_attempt_at: now,
         last_attempt_at: now,
-        blocked_until: null,
       };
 
       await client.query(
@@ -119,17 +121,21 @@ async function connexionUtilisateur(utilisateur) {
       attempt = attemptRes.rows[0];
     }
 
-    if (attempt.blocked_until && attempt.blocked_until > now) {
-      await client.query("COMMIT");
-      throw { status: 429, message: "Compte temporairement bloqué" };
-    }
-
     // Si l'utilisateur n'existe pas
     if (userResult.rows.length === 0) {
       await updateNombreConnexion(client, attempt, login, now);
       throw { status: 401, message: "Login ou mot de passe incorrect" };
     }
     const user = userResult.rows[0];
+
+    if (user.provider === 'google') {
+      await client.query("COMMIT");
+      throw {
+        status: 403,
+        message: "Ce compte utilise Google. Veuillez vous connecter avec Google."
+      };
+    }
+
 
     // if (!user.actif) {
     //   // await client.query(
@@ -152,15 +158,13 @@ async function connexionUtilisateur(utilisateur) {
       throw { status: 401, message: "Login ou mot de passe incorrect" };
     }
 
-    const token = generateToken(user.id_utilisateur);
+    const token = generateToken(user);
 
-    blockedAccount = false;
     await client.query(
       `UPDATE Nombre_Connexion
        SET nb_tentative = 0,
            first_attempt_at = $2,
            last_attempt_at = $3,
-           blocked_until = null,
            succes = true,
            message = 'Connexion réussie'
        WHERE login_tentative = $1`,
@@ -218,7 +222,6 @@ async function updateNombreConnexion(client, attempt, login, now) {
     nbTentatives += 1;
   }
 
-  // Calculer le blocage si max atteint
   let blockedUntil = null;
   if (nbTentatives >= MAX_ATTEMPTS) {
     blockedUntil = new Date(now.getTime() + BLOCK_MINUTES * 60000);
@@ -242,7 +245,6 @@ async function updateNombreConnexion(client, attempt, login, now) {
   let status = 401;
   if (nbTentatives >= MAX_ATTEMPTS) {
     status = nbTentatives >= MAX_ATTEMPTS ? 429 : 401;
-    blockedAccount = true;
   }
 
   const message = nbTentatives >= MAX_ATTEMPTS ? "Compte temporairement bloqué" : "Login ou mot de passe incorrect";
@@ -353,6 +355,7 @@ async function resetPassword(token, newPassword) {
 }
 
 module.exports = {
+  generateToken,
   inscriptionUtilisateur,
   connexionUtilisateur,
   updateUtilisateur,
