@@ -1839,22 +1839,29 @@ const nomType = ref("");
 async function fetchPresta() {
   try {
     const res = await prestataireStore.GetPrestataires();
-    prestataires.value = res.data;
-    nomType.value = res.nom_type_prestataire;
-    prestataires.value.forEach((presta) => {
-      if (presta.id_zone && presta.waitingforadmin === false) {
-        const zone = serviceLocation.value.find(
-          (z) => z.id_zone === presta.id_zone
-        );
-        if (zone) {
-          zone.name = presta.nom_prestataire;
-          zone.id_prestataire = presta.id_prestataire;
-          zone.type_prestataire = presta.nom_type_prestataire;
+    // Vérifier que res.data est un tableau
+    if (res && res.data && Array.isArray(res.data)) {
+      prestataires.value = res.data;
+      nomType.value = res.nom_type_prestataire;
+      prestataires.value.forEach((presta) => {
+        if (presta.id_zone && presta.waitingforadmin === false) {
+          const zone = serviceLocation.value.find(
+            (z) => z.id_zone === presta.id_zone
+          );
+          if (zone) {
+            zone.name = presta.nom_prestataire;
+            zone.id_prestataire = presta.id_prestataire;
+            zone.type_prestataire = presta.nom_type_prestataire;
+          }
         }
-      }
-    });
+      });
+    } else {
+      console.error("Les données reçues ne sont pas un tableau:", res);
+      prestataires.value = [];
+    }
   } catch (err) {
     console.error("Erreur lors de la récupération des prestataires:", err);
+    prestataires.value = [];
   }
 }
 

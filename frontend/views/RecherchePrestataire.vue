@@ -200,9 +200,16 @@ function goToSpecificPrestataire(idPresta) {
 async function getValuesServices() {
   try {
     const res = await serviceStore.GetServices();
-    prestataires.value = res.data;
+    // Vérifier que res.data est un tableau
+    if (res && res.data && Array.isArray(res.data)) {
+      prestataires.value = res.data;
+    } else {
+      console.error("Les données reçues ne sont pas un tableau:", res);
+      prestataires.value = [];
+    }
   } catch (err) {
     console.error(err);
+    prestataires.value = [];
   }
 }
 
@@ -210,18 +217,32 @@ async function getValuesServices() {
 async function getValuesPrestataire() {
   try {
     const res = await prestataireStore.GetPrestataires();
-    prestataires.value = res.data;
+    // Vérifier que res.data est un tableau
+    if (res && res.data && Array.isArray(res.data)) {
+      prestataires.value = res.data;
+    } else {
+      console.error("Les données reçues ne sont pas un tableau:", res);
+      prestataires.value = [];
+    }
   } catch (err) {
     console.error(err);
+    prestataires.value = [];
   }
 }
 
 async function getValuesTypePrestataire() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
-    type_prestataire.value = res.data.result;
+    // Vérifier que res.data.result est un tableau
+    if (res && res.data && res.data.result && Array.isArray(res.data.result)) {
+      type_prestataire.value = res.data.result;
+    } else {
+      console.error("Les données reçues ne sont pas valides:", res);
+      type_prestataire.value = [];
+    }
   } catch (err) {
     console.error(err);
+    type_prestataire.value = [];
   }
 }
 
@@ -246,7 +267,13 @@ async function searchPrestataires() {
   });
   console.log("Backend response:", res.data);
 
-  prestataires.value = res.data;
+  // Vérifier que res.data est un tableau
+  if (res && res.data && Array.isArray(res.data)) {
+    prestataires.value = res.data;
+  } else {
+    console.error("Les données reçues ne sont pas un tableau:", res);
+    prestataires.value = [];
+  }
 }
 </script>
 
