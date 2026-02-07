@@ -81,12 +81,7 @@ async function connexionUtilisateur(utilisateur) {
 
   try {
     await client.query("BEGIN");
-
-    if (attempt.blocked_until && attempt.blocked_until > now) {
-      await client.query("COMMIT");
-      throw { status: 429, message: "Compte temporairement bloqué" };
-    }
-
+    let attempt;
 
     // Récupérer l'utilisateur
     const userResult = await client.query(
@@ -100,8 +95,6 @@ async function connexionUtilisateur(utilisateur) {
       `SELECT * FROM Nombre_Connexion WHERE login_tentative = $1`,
       [login],
     );
-
-    let attempt;
 
     if (attemptRes.rows.length === 0) {
       attempt = {

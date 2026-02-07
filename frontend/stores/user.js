@@ -7,6 +7,7 @@ export const useUserStore = defineStore("user", () => {
   const isConnected = ref(localStorage.getItem("isConnected") === "true");
   const role = ref(localStorage.getItem("userRole") || null);
   const token = ref(localStorage.getItem("jwt") || null);
+  const isAuthenticating = ref(false);
   let logoutTimeout = null;
 
   if (token.value) {
@@ -50,12 +51,21 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  function startAuthenticating() {
+    isAuthenticating.value = true;
+  }
+
+  function stopAuthenticating() {
+    isAuthenticating.value = false;
+  }
+
   function logout() {
     userId.value = null;
     isConnected.value = false;
     role.value = null;
     token.value = null;
     prestaId.value = null;
+    isAuthenticating.value = false;
 
     localStorage.removeItem("userId");
     localStorage.removeItem("isConnected");
@@ -99,9 +109,12 @@ export const useUserStore = defineStore("user", () => {
     prestaId,
     role,
     token,
+    isAuthenticating,
     setUser,
     setRole,
     setToken,
+    startAuthenticating,
+    stopAuthenticating,
     logout,
   };
 });

@@ -55,6 +55,8 @@ exports.deleteUtilisateurById = async (req, res) => {
 
 exports.getCurrentUser = async (req, res) => {
   try {
+    console.log("req.user =", req.user);
+
     const id_user = req.user.id_utilisateur;
     const result = await admin_utilisateurService.getUtilisateurById(id_user);
 

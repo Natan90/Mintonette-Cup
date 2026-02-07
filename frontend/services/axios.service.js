@@ -2,7 +2,7 @@ import axios from "axios";
 import { useUserStore } from "@/stores/user";
 
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: import.meta.env.VITE_LINK_BACK,
     withCredentials: true
 });
 

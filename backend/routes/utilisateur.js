@@ -41,21 +41,24 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "/login" }),
+  passport.authenticate("google", { session: false, failureRedirect: "/fr/utilisateur/connexion" }),
   async (req, res, next) => {
 
     try {
       const user = req.user;
       if (!user) {
-        return res.redirect(`${process.env.LINK_FRONT}/utilisateur/connexion`);
+        console.log("❌ Aucun user dans req.user");
+        return res.redirect(`${process.env.LINK_FRONT}/fr/utilisateur/connexion`);
+
       }
 
       // Générer le token directement depuis le service
       const utilisateurService = require("../services/utilisateur.service");
       const token = utilisateurService.generateToken(user);
 
+      console.log("✅ Redirection avec token Google");
       // Redirection vers le front
-      res.redirect(`${process.env.LINK_FRONT}/utilisateur/connexion?token=${token}`);
+      res.redirect(`${process.env.LINK_FRONT}/fr/utilisateur/connexion?token=${token}`);
     } catch (err) {
       next(err);
     }

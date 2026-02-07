@@ -52,7 +52,6 @@
           <button @click="getValuesConnexion" class="button_message button_connexion">
             {{ $t("user.buttonConnexion") }}
           </button>
-          <p v-if="message" class="message">{{ message }}</p>
         </div>
 
         <div class="item">
@@ -272,20 +271,17 @@ onMounted(async () => {
     return;
   }
 
+  console.log("Token : ", token.value)
+
   if (token.value) {
     try {
-      userStore.setToken(token.value);
+      await connectUserWithToken(token.value);
 
-      const res = await adminAPIStore.GetCurrentUser();
-
-      userStore.setUser(res.data.user.id);
-      userStore.setRole(res.data.user.role || "user");
-
-      connexion.value = true;
-
-      router.replace({ name: "Connexion_utilisateur" });
-
-      ModalShow(false);
+      router.replace({ 
+        name: "Home", 
+        params: { lang: route.params.lang || "fr" },
+        query: {}
+      });
     } catch (e) {
       message.value = "Erreur lors de la récupération du profil utilisateur";
     }
@@ -392,6 +388,27 @@ function signInWithGoogle() {
   console.log("URL backend:", `${import.meta.env.VITE_LINK_BACK}/utilisateur/auth/google`);
   window.location.href = `${import.meta.env.VITE_LINK_BACK}/utilisateur/auth/google`;
 }
+
+async function connectUserWithToken(token) {
+  console.log("JWT reçu :", token);
+
+  userStore.startAuthenticating();
+  userStore.setToken(token);
+
+  console.log("juste avant appel de GetCurrentUser");
+
+  const res = await adminAPIStore.GetCurrentUser(token);
+  console.log("Résultat GetCurrentUser :", res);
+
+  console.log("juste après appel de GetCurrentUser");
+
+
+  userStore.setUser(res.data.id_utilisateur);
+  userStore.setRole(res.data.isadmin ? "admin" : "user");
+
+  userStore.stopAuthenticating();
+}
+
 
 </script>
 

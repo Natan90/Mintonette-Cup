@@ -208,7 +208,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresUserId = to.meta.requiresUserId;
   const userStore = useUserStore();
-  if (requiresUserId && !userStore.userId) {
+  if (to.meta.requiresUserId &&
+    !userStore.userId &&
+    !userStore.isAuthenticating) {
     next({ name: "Connexion_utilisateur" });
   } else {
     next();
