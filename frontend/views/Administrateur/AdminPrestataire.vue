@@ -287,11 +287,6 @@ async function refuserPrestataire(presta) {
         console.error(err);
     }
 }
-// //         const res = await axios.patch(`http://localhost:3000/admin/prestataire/validate/${presta.id_prestataire}`);
-//
-//         await changePresta(true, presta.id_utilisateur);
-//         await getPrestataires();
-
 
 async function deletePrestataire(idPresta) {
     try {
@@ -315,7 +310,7 @@ async function deletePrestataire(idPresta) {
 
 async function changePresta(newValue, idPresta) {
     try {
-        const res = await axios.patch(`http://localhost:3000/admin/utilisateur/changePresta/${idPresta}`, {
+        const res = await adminAPIStore.ChangePrestaUtilisateur(idPresta, {
             valueChange: newValue
         });
         console.log(res.data.message);
