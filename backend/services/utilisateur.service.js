@@ -121,15 +121,6 @@ async function connexionUtilisateur(utilisateur) {
     }
     const user = userResult.rows[0];
 
-    if (user.provider === 'google') {
-      await client.query("COMMIT");
-      throw {
-        status: 403,
-        message: "Ce compte utilise Google. Veuillez vous connecter avec Google."
-      };
-    }
-
-
     // if (!user.actif) {
     //   // await client.query(
     //   //   `INSERT INTO logs_connexion

@@ -308,7 +308,7 @@ const pool = require("./db");
       INSERT INTO Utilisateur 
         (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta, isadmin)
       VALUES
-        ('Alban', 'Robin', 'albanr', '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq', 'alban70robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
+        ('Alban', 'Robin', 'albanr', '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq', 'alban.robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
         ('Emma', 'Durand', 'emmad', '$2b$10$QZUK7Ed97ZzAjQzUrzzTHuzh2pfRT/iPYPttR4CaIfaQKYZQRTxO6', 'emma.durand@gmail.com', '0612345678', 'F', TRUE, FALSE),
         ('Lucas', 'Martin', 'lucasm', '$2b$10$SqwwG.GoZgR/bxl2IZ49U.tNkpkMhMpBIbA2yQE3lF/qG9QHktGQ6', 'lucas.martin@gmail.com', '0652437595', 'M', TRUE, FALSE),
         ('Chloe', 'Petit', 'chloep', '$2b$10$GGtE3KIzPl6Soav1tutWtOEgajIowmwP9uJIwb/QsRJZBsLmd8/62', 'chloe.petit@gmail.com', '0610423571', 'F', TRUE, FALSE),
@@ -318,7 +318,7 @@ const pool = require("./db");
         ('Maxime', 'Lefevre', 'maxl', '$2b$10$TfJqSCXzfqDHYoqSustMperZj7Dl3bb5AemeSPRMVwbocJrQ.Oob6', 'maxime.lefevre@gmail.com', '0630102040', 'M', FALSE, FALSE),
         ('Camille', 'Roux', 'camr', '$2b$10$9Osya.DbkM5Si/Zg0DiwhuCT9IXwE5PUDwQ2iBc3beuwQOqcMFwiq', 'camille.roux@gmail.com', '0750402342', 'F', FALSE, FALSE),
         ('Thomas', 'Garcia', 'thomg', '$2b$10$nWMa6gw35daf2xJI4sbFHe7AWVbcO9Djd1t1ZzkYnYn56KlkGY3T.', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE, FALSE),
-        ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy', 'nooabigeard@gmail.com', '0768401922', 'M', FALSE, FALSE);
+        ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy', 'f.f@gmail.com', '0768401922', 'M', FALSE, FALSE);
     `;
     await pool.query(insertUsers);
 

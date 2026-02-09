@@ -224,10 +224,6 @@ const isConnexionModal = computed(
 
 const closeModal = () => {
   showModal.value = false;
-
-  if (!isConnexionModal.value) {
-    router.push({ name: "Home" });
-  }
 };
 
 function ModalShow(isInscription) {
@@ -235,12 +231,12 @@ function ModalShow(isInscription) {
   if (!isInscription) {
     setTimeout(() => {
       closeModal();
-      router.push({ name: "Home" });
     }, 2000);
   }
 }
 
 function goToAddPrestataire() {
+  console.log("Dans la fonction goToAddPrestataire");
   router.push({
     name: "AddPrestataire",
     params: { id: userStore.userId },
