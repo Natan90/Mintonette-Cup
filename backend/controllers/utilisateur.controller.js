@@ -49,3 +49,17 @@ exports.updateUtilisateur = async (req, res) => {
     res.status(status).json({ error: message });
   }
 };
+
+exports.googleAuthenticateCallback = async (req, res) => {
+  try {
+    const user = req.user;
+    const token = utilisateurService.generateToken(user);
+
+    res.redirect(`${process.env.LINK_FRONT}/fr/utilisateur/connexion?token=${token}`);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+}

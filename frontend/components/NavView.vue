@@ -154,7 +154,7 @@ import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user.js";
 import { useRoute, useRouter } from "vue-router";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service.js";
-import localData from "../../backend/database/localData.js";
+import { useAdminAPIStore } from "@/services/admin.service";
 
 const scrollToSection = (id) => {
   const section = document.getElementById(id);
@@ -167,6 +167,7 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const userAuthStore = useUtilisateurAuthStore();
+const adminAPIStore = useAdminAPIStore();
 
 const isInIndex = ref(route.name === "Home");
 const userProfilePhoto = ref(null);
@@ -176,14 +177,14 @@ const admin = ref(false);
 
 const isLoggedIn = computed(() => !!userStore.token || !!localStorage.getItem('jwt'));
 
-const loadProfilePhoto = () => {
-  if (userStore.isConnected) {
-    const utilisateursData = localData.getAll("utilisateurs");
-    const userData = utilisateursData.find(
-      (u) => u.id_utilisateur === userStore.userId
-    );
 
-    if (userData) {
+const loadProfilePhoto = async () => {
+  if (userStore.isConnected) {
+    try {
+      const response = await adminAPIStore.GetCurrentUser();
+
+      const userData = response.data;
+
       if (userData.photo_profil_utilisateur) {
         userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
       } else {
@@ -191,81 +192,22 @@ const loadProfilePhoto = () => {
         const nom = userData.nom_utilisateur || "";
         userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
       }
-      utilisateur.value = userData;
-      console.log(
-        "Profil utilisateur chargé depuis localStorage:",
-        userData.prenom_utilisateur,
-        userData.nom_utilisateur,
-        "Initiales:",
-        userInitials.value,
-        "ispresta:",
-        userData.ispresta,
-        "id_utilisateur:",
-        userData.id_utilisateur,
-        "userStore.userId:",
-        userStore.userId,
-        "Afficher panier/billets?",
-        userStore.userId != 1,
-        "Données complètes:",
-        userData
-      );
-    } else {
-      console.error(
-        "Utilisateur non trouvé dans localStorage, ID:",
-        userStore.userId
-      );
+    } catch (error) {
+      console.error("Erreur lors du chargement du profil:", error);
     }
   }
 };
 
-// const loadProfilePhoto = async () => {
-//   if (userStore.isConnected) {
-//     try {
-//       const response = await axios.get(
-//         `http://localhost:3000/admin/utilisateur/show/${userStore.userId}`
-//       );
-//       const userData = response.data;
 
-//       if (userData.photo_profil_utilisateur) {
-//         userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
-//       } else {
-//         const prenom = userData.prenom_utilisateur || "";
-//         const nom = userData.nom_utilisateur || "";
-//         userInitials.value = (prenom.charAt(0) + nom.charAt(0)).toUpperCase();
-//       }
-//     } catch (error) {
-//       console.error("Erreur lors du chargement du profil:", error);
-//     }
-//   }
-// };
+async function isadmin() {
+  try {
+    const res =await adminAPIStore.GetUtilisateurById(1);
 
-function isadmin() {
-  const utilisateursData = localData.getAll("utilisateurs");
-  const user = utilisateursData.find(
-    (u) => u.id_utilisateur === userStore.userId
-  );
-  if (user) {
-    admin.value = user.isadmin || false;
-    console.log(
-      "Vérification admin pour userId",
-      userStore.userId,
-      ":",
-      admin.value
-    );
+    admin.value = res.data.isadmin;
+  } catch (err) {
+    console.log(err);
   }
 }
-
-// async function isadmin() {
-//   try {
-//     const res = await axios.get(
-//       `http://localhost:3000/admin/utilisateur/show/1`
-//     );
-//     admin.value = res.data.isadmin;
-//     console.log(admin.value + "Je suis la ");
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 
 function goToReceptionBox() {
   router.push({

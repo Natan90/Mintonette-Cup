@@ -6,7 +6,7 @@ const {
   findUserByEmail,
   createUserFromGoogle,
   updateUserGoogleId
-} = require('../models/utilisateur.model');
+} = require('../services/utilisateur.service');
 
 passport.use(
   new GoogleStrategy(
@@ -18,25 +18,31 @@ passport.use(
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
+        const googleId = profile.id;
+        const email = profile.emails?.[0]?.value;
+
         let user = await findUserByGoogleId(profile.id);
-
-        if (!user && profile.emails?.length) {
-          user = await findUserByEmail(profile.emails[0].value);
+        if (user) {
+          return done(null, user);
         }
 
-        if (!user.google_id) {
-            await updateUserGoogleId(user.id_utilisateur, profile.id);
-            user.google_id = profile.id;
+        if (email) {
+          user = await findUserByEmail(email);
+
+          if (user) {
+            await updateUserGoogleId(user.id_utilisateur, googleId);
+            user.google_id = googleId;
             user.provider = 'google';
+            return done(null, user);
+          }
         }
-        if (!user) {
-          user = await createUserFromGoogle({
-            googleId: profile.id,
-            email: profile.emails?.[0]?.value,
-            name: profile.displayName,
-            picture: profile.photos?.[0]?.value
-          });
-        }
+
+        user = await createUserFromGoogle({
+          googleId,
+          email,
+          name: profile.displayName,
+          picture: profile.photos?.[0]?.value
+        });
 
         return done(null, user);
       } catch (err) {

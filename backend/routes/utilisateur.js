@@ -27,42 +27,20 @@ router.post(
   utilisateurController.updateUtilisateur,
 );
 
-router.get(
-  "/google",
-  (req, res, next) => {
-    console.log("🔹 Route /google appelée");
-    next();
-  },
+router.get("/google", 
   passport.authenticate("google", {
     scope: ["profile", "email"],
     session: false,
-  }),
-);
+  }));
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "/fr/utilisateur/connexion" }),
-  async (req, res, next) => {
-
-    try {
-      const user = req.user;
-      if (!user) {
-        console.log("❌ Aucun user dans req.user");
-        return res.redirect(`${process.env.LINK_FRONT}/fr/utilisateur/connexion`);
-
-      }
-
-      // Générer le token directement depuis le service
-      const utilisateurService = require("../services/utilisateur.service");
-      const token = utilisateurService.generateToken(user);
-
-      console.log("✅ Redirection avec token Google");
-      // Redirection vers le front
-      res.redirect(`${process.env.LINK_FRONT}/fr/utilisateur/connexion?token=${token}`);
-    } catch (err) {
-      next(err);
-    }
-  }
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/fr/utilisateur/connexion",
+  }),
+  authMiddleware.validateGoogleCallback,
+  utilisateurController.googleAuthenticateCallback
 );
 
 

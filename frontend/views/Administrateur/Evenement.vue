@@ -190,35 +190,21 @@ async function getValuesEvenement() {
 }
 
 
-function debugLocalStorage() {
-  console.log("=== DEBUG LOCALSTORAGE ===");
-  const events = localData.getAll("evenements");
-  console.log("Nombre d'événements:", events.length);
-  console.log("Contenu complet:", events);
-  console.log(
-    "localStorage brut:",
-    localStorage.getItem("mintonette_evenements")
-  );
-  alert(
-    `Événements dans localStorage: ${events.length}\nVoir la console (F12) pour les détails`
-  );
-}
-
-function resetLocalStorage() {
-  if (
-    confirm(
-      "Voulez-vous réinitialiser l'événement avec les données d'origine ?"
-    )
-  ) {
-    localData.reset("evenements");
-    getValuesEvenement();
-    message.value = "Événement réinitialisé avec succès";
-    messageType.value = "success";
-    setTimeout(() => {
-      message.value = "";
-    }, 3000);
-  }
-}
+// function resetLocalStorage() {
+//   if (
+//     confirm(
+//       "Voulez-vous réinitialiser l'événement avec les données d'origine ?"
+//     )
+//   ) {
+//     localData.reset("evenements");
+//     getValuesEvenement();
+//     message.value = "Événement réinitialisé avec succès";
+//     messageType.value = "success";
+//     setTimeout(() => {
+//       message.value = "";
+//     }, 3000);
+//   }
+// }
 
 async function updateEvent() {
   try {

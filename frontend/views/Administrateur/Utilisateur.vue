@@ -108,7 +108,6 @@ import NavView from "@/components/NavView.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminStore } from "@/stores/admin";
 import { useNavigationStore } from "@/stores/navigation";
-import localData from "../../../backend/database/localData.js";
 import { useAdminAPIStore } from "@/services/admin.service.js";
 import Modal from "@/components/Modal.vue";
 

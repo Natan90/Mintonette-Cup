@@ -14,7 +14,6 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
   ========== */
 
   async function GetCurrentUser(token) {
-    console.log("Token envoyé :", token);
 
     return getRequest("/admin/utilisateur/me", token);
   }
