@@ -26,6 +26,18 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  const isTokenValid = () => {
+    if (!token.value) return false;
+
+    try {
+      const payload = JSON.parse(atob(token.value.split(".")[1]));
+      return payload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  };
+
+
   function setUser(id) {
     userId.value = id;
     isConnected.value = true;
@@ -110,6 +122,7 @@ export const useUserStore = defineStore("user", () => {
     role,
     token,
     isAuthenticating,
+    isTokenValid,
     setUser,
     setRole,
     setToken,

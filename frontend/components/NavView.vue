@@ -211,7 +211,7 @@ async function isadmin() {
 
 function goToReceptionBox() {
   router.push({
-    name: "ReceptionBox"
+    name: "Mailbox"
   })
 }
 

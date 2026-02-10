@@ -22,9 +22,11 @@ import Terrain from "@/views/Terrain.vue";
 import ZoneMap from "@/components/ZoneMap.vue";
 import Information from "@/views/Information.vue";
 import ResetPassword from "@/components/ResetPassword.vue";
-import ReceptionBox from "@/views/ReceptionBox.vue";
+import ReceptionBox from "@/components/mailbox/ReceptionBox.vue";
 import { useUserStore } from "@/stores/user";
 import { useNavigationStore } from "@/stores/navigation";
+import SentBox from "@/components/mailbox/SentBox.vue";
+import Mailbox from "@/views/Mailbox.vue";
 
 const routes = [
   {
@@ -178,11 +180,25 @@ const routes = [
         component: ResetPassword,
       },
       {
-        path: "mailbox/reception",
-        name: "ReceptionBox",
-        component: ReceptionBox,
+        path: "mailbox",
+        name: "Mailbox",
+        component: Mailbox,
         meta: { requiresUserId: true },
-      }
+        children: [
+          {
+            path: "reception",
+            name: "ReceptionBox",
+            component: ReceptionBox,
+            meta: { requiresUserId: true },
+          },
+          {
+            path: "envoye",
+            name: "SentBox",
+            component: SentBox,
+            meta: { requiresUserId: true }
+          }
+        ],
+      },
     ],
   },
   {
@@ -207,26 +223,33 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
   const navStore = useNavigationStore();
 
-  if (from.name && from.name != "Connexion_utilisateur" && from.name != "Inscription_utilisateur") {
+  if (
+    from.name &&
+    from.name !== "Connexion_utilisateur" &&
+    from.name !== "Inscription_utilisateur"
+  ) {
     navStore.previousRoute = from.fullPath;
   }
 
-  const userStore = useUserStore();
-  if (to.meta.requiresUserId &&
-    !userStore.userId &&
-    !userStore.isAuthenticating) {
-    next({ 
-      name: "Connexion_utilisateur",
-      query: {
-        redirect: to.fullPath
-      }
-    });
-  } else {
-    next();
-  }
-});
+  const requiresAuth = to.matched.some(
+    route => route.meta.requiresUserId
+  );
 
+  if (requiresAuth) {
+    if (!userStore.token || !userStore.isTokenValid()) {
+      userStore.logout();
+
+      next({
+        name: "Connexion_utilisateur",
+        query: { redirect: to.fullPath },
+      });
+      return;
+    }
+  }
+  next();
+});
 
 export default router;
