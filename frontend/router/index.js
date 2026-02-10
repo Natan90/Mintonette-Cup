@@ -24,6 +24,7 @@ import Information from "@/views/Information.vue";
 import ResetPassword from "@/components/ResetPassword.vue";
 import ReceptionBox from "@/views/ReceptionBox.vue";
 import { useUserStore } from "@/stores/user";
+import { useNavigationStore } from "@/stores/navigation";
 
 const routes = [
   {
@@ -206,12 +207,22 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const requiresUserId = to.meta.requiresUserId;
+  const navStore = useNavigationStore();
+
+  if (from.name && from.name != "Connexion_utilisateur" && from.name != "Inscription_utilisateur") {
+    navStore.previousRoute = from.fullPath;
+  }
+
   const userStore = useUserStore();
   if (to.meta.requiresUserId &&
     !userStore.userId &&
     !userStore.isAuthenticating) {
-    next({ name: "Connexion_utilisateur" });
+    next({ 
+      name: "Connexion_utilisateur",
+      query: {
+        redirect: to.fullPath
+      }
+    });
   } else {
     next();
   }

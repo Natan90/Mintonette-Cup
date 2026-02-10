@@ -190,6 +190,7 @@ import { useNavigationStore } from "@/stores/navigation";
 
 const adminAPIStore = useAdminAPIStore();
 const utilisateurAuthStore = useUtilisateurAuthStore();
+const previousRoute = useNavigationStore();
 const mailStore = useMailStore();
 const navStore = useNavigationStore();
 const route = useRoute();
@@ -222,8 +223,18 @@ const isConnexionModal = computed(
   () => route.path === "/utilisateur/connexion"
 );
 
+const redirect =
+  route.query.redirect || navStore.previousRoute || { 
+    name: "Home", 
+    params: { 
+      lang: route.params.lang || "fr" 
+    } 
+  };
+
 const closeModal = () => {
   showModal.value = false;
+
+  router.push(redirect);
 };
 
 function ModalShow(isInscription) {
