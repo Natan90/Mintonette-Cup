@@ -6,6 +6,7 @@ const pool = require("./db");
 
     const schemaSQL = `
   DROP TABLE IF EXISTS Mailbox_Message CASCADE;
+  DROP TABLE IF EXISTS Type_Message CASCADE;
   DROP TABLE IF EXISTS Nombre_Connexion CASCADE;
   DROP TABLE IF EXISTS Commande CASCADE;
   DROP TABLE IF EXISTS Commande_Siege CASCADE;
@@ -265,10 +266,16 @@ const pool = require("./db");
     blocked_until TIMESTAMP
   );
 
+  CREATE TABLE Type_Message (
+    id_type_message SERIAL PRIMARY KEY,
+    nom_type_message VARCHAR(255)
+  );
+
   CREATE TABLE Mailbox_Message (
     id_message SERIAL PRIMARY KEY,
     subject VARCHAR(255),
     message TEXT NOT NULL,
+    type_message_id INT NOT NULL REFERENCES Type_Message(id_type_message) ON DELETE CASCADE,
     sender_id INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
     recipient_id INT NOT NULL REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
     sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -322,10 +329,20 @@ const pool = require("./db");
     `;
     await pool.query(insertUsers);
 
+    const insertTypeMessage = `
+      INSERT INTO Type_Message (nom_type_message)
+      VALUES 
+      ('Demande pour devenir prestataire'),
+      ('Demande pour modifier son profil prestataire'),
+      ('Achat de billets'),
+      ('Assistance')
+    `;
+    await pool.query(insertTypeMessage);
+
     const insertMailbox = `
-    INSERT INTO mailbox_message (subject, message, sender_id, recipient_id)
+    INSERT INTO Mailbox_Message (subject, message, type_message_id, sender_id, recipient_id)
     VALUES 
-    ('Demande d’information', 'Bonjour, je souhaiterais avoir plus de détails sur la compétition.', 2, 1);`
+    ('Demande d’information', 'Bonjour, je souhaiterais avoir plus de détails sur la compétition.', 1, 2, 1);`
 
     await pool.query(insertMailbox);
 

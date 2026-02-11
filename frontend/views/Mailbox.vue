@@ -40,18 +40,11 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import NavView from '@/components/NavView.vue';
-import { useMailBoxStore } from '@/services/reception_box.service';
-import { useUserStore } from '@/stores/user';
 
-const userStore = useUserStore();
-const mailBoxStore = useMailBoxStore();
 const deleting = ref(false);
 const refusing = ref(false);
-const messageReceived = ref([]);
-const messageSent = ref([]);
-const nbMessageNotRead = ref(0);
 
 
 const closeMessageSuppr = () => {
@@ -62,21 +55,6 @@ const closeMessageRefus = () => {
     refusing.value = false;
 };
 
-onMounted(() => {
-    getMessagesById(userStore.userId);
-})
-
-async function getMessagesById(id_user) {
-    try {
-        const res = await mailBoxStore.getMessagesById(id_user);
-
-        messageReceived.value = res.data.result.messageReceived;
-        messageSent.value = res.data.result.messageSent;
-        nbMessageNotRead.value = res.data.result.nbMessageNotRead;
-    } catch (err) {
-
-    }
-}
 </script>
 
 
