@@ -13,6 +13,20 @@ exports.getMessagesById = async (req, res) => {
     }
 }
 
+exports.getMessagesByIdMessage = async (req, res) => {
+    try {
+        const id_message = req.params.id;
+        const { isReceived } = req.query;
+        const result = await reception_boxService.getMessagesByIdMessage(id_message, isReceived);
+        return res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+        const status = err.status || 500;
+        const message = err.message || "Erreur interne";
+        res.status(status).json({ error: message });
+    }
+}
+
 exports.sendMessageTo = async (req, res) => {
     try {
         const id_user_exped = req.params.id;

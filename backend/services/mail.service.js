@@ -22,7 +22,7 @@ async function resetPassword(mail) {
     [token, expiresAt, mail]
   );
 
-  const resetLink = process.env.LINK_FRONT + `fr/reset-password/${token}?continueReset=true&mailValue=${encodeURIComponent(mail)}`;
+  const resetLink = process.env.LINK_FRONT + `/fr/reset-password/${token}?continueReset=true&mailValue=${encodeURIComponent(mail)}`;
 
   const subject = "Réinitialisation de votre mot de passe";
 

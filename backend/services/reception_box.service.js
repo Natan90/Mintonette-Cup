@@ -41,6 +41,30 @@ async function getMessagesById(id_user) {
   };
 }
 
+async function getMessagesByIdMessage(id_message, isReceived) {
+  let joinSQL = "ON m.recipient_id = u.id_utilisateur";
+
+  if (isReceived) {
+    joinSQL = "ON m.sender_id = u.id_utilisateur"
+  }
+
+  const message = await pool.query(
+    `SELECT 
+        m.*,
+        t.*,
+        u.*
+      FROM Mailbox_Message m
+      JOIN Type_Message t
+      ON m.type_message_id = t.id_type_message
+      JOIN Utilisateur u
+      ` + joinSQL + `
+        WHERE m.id_message = $1
+        ORDER BY m.sent_at DESC`,
+        [id_message],
+  )
+  return message.rows[0];
+} 
+
 async function sendMessageTo(id_user_exped, id_user_dest) {}
 
 async function updateMessageById(id_user, id_message) {
@@ -71,4 +95,5 @@ module.exports = {
   getMessagesById,
   sendMessageTo,
   updateMessageById,
+  getMessagesByIdMessage,
 };
