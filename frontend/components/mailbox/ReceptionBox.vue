@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="item_mail">
-          <p>
+          <p class="mail-text">
             {{ messageSelected.message }}
           </p>
         </div>
@@ -145,5 +145,10 @@ async function updateMessageById(id_message) {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.mail-text {
+  text-align: left;
+  white-space: pre-line;
 }
 </style>

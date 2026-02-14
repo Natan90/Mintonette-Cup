@@ -45,7 +45,7 @@ async function getMessagesByIdMessage(id_message, isReceived) {
   let joinSQL = "ON m.recipient_id = u.id_utilisateur";
 
   if (isReceived) {
-    joinSQL = "ON m.sender_id = u.id_utilisateur"
+    joinSQL = "ON m.sender_id = u.id_utilisateur";
   }
 
   const message = await pool.query(
@@ -57,15 +57,45 @@ async function getMessagesByIdMessage(id_message, isReceived) {
       JOIN Type_Message t
       ON m.type_message_id = t.id_type_message
       JOIN Utilisateur u
-      ` + joinSQL + `
+      ` +
+      joinSQL +
+      `
         WHERE m.id_message = $1
         ORDER BY m.sent_at DESC`,
-        [id_message],
-  )
+    [id_message],
+  );
   return message.rows[0];
-} 
+}
 
-async function sendMessageTo(id_user_exped, id_user_dest) {}
+async function sendMessageTo(id_user_from, { id_user_to, subject, message, id_type_message }) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const now = new Date();
+
+    const result = await client.query(
+      `INSERT INTO Mailbox_Message
+      (subject, message, type_message_id, sender_id, recipient_id, sent_at)
+      VALUES ($1, $2, $3, $4, $5, $6)`,
+      [subject, message, id_type_message, id_user_from, id_user_to, now]
+    );
+    
+    await client.query("COMMIT");
+
+    return {
+      result: result.rows[0],
+      message: "Message envoyé avec succès"
+    }
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw { status: 500, message: "Erreur serveur" };
+  } finally {
+    client.release();
+  }
+}
 
 async function updateMessageById(id_user, id_message) {
   const client = await pool.connect();

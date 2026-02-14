@@ -53,7 +53,7 @@
       </div>
     </template>
   </Modal>
-  
+
 
   <div class="container">
     <!-- Titre principal de la page -->
@@ -206,14 +206,14 @@
 
       <!-- Bouton de modification (mode édition) -->
       <div class="button_container" v-if="!pathAdd">
-        <button @click="updatePresta" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
+        <button @click="updatePresta()" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
           {{ $t("prestataireInfo.formulaire.btnModifier") }}
         </button>
       </div>
 
       <!-- Bouton d'inscription (mode ajout) -->
       <div class="button_container" v-else>
-        <button @click="addPrestataire" :disabled="isSubmitting">
+        <button @click="addPrestataire()" :disabled="isSubmitting">
           {{ isSubmitting ? "En cours..." : $t("user.buttonInscription") }}
         </button>
       </div>
@@ -243,12 +243,14 @@ import { useTypePrestataireStore } from "@/services/type_prestataire.service";
 import Modal from "@/components/Modal.vue";
 import Editor from "@tinymce/tinymce-vue";
 import Footer from "@/components/Footer.vue";
+import { useMailBoxStore } from "@/services/reception_box.service";
 
 const { t, locale } = useI18n();
 const userStore = useUserStore();
 const serviceStore = useServiceStore();
 const prestataireStore = usePrestataireStore();
 const typePrestataireStore = useTypePrestataireStore();
+const mailBoxStore = useMailBoxStore();
 
 const route = useRoute();
 
@@ -661,6 +663,7 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
   try {
+    console.log("1 - Avant BecomePrestataire");
     const servicesPayload = services.value.map(s => ({
       nom_service: s.nom_service,
       titre_service: {
@@ -679,7 +682,7 @@ async function addPrestataire() {
     }));
 
 
-    const res = await prestataireStore.BecomePrestataire(prestaId.value, {
+    const res = await prestataireStore.BecomePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
       mail: mail_presta.value,
@@ -689,15 +692,18 @@ async function addPrestataire() {
       services: servicesPayload
     });
     userStore.prestaId = res.data.user.prestaId;
+    console.log("2 - Après BecomePrestataire");
+
+    await sendMailToAdmin(false);
 
     message.value = res.data.message;
     messageType.value = "success";
   } catch (err) {
-    if (err.response && err.response.data) {
-      message.value = err.response.data.error;
-    } else {
-      message.value = "Erreur inconnue";
-    }
+    console.log("ERREUR COMPLETE:", err);
+    console.log("err.message:", err.message);
+    console.log("err.response:", err.response);
+
+    message.value = err.message || "Erreur inconnue";
     messageType.value = 'error';
   }
 }
@@ -733,6 +739,9 @@ async function updatePresta() {
     });
     message.value = res.data.message;
     messageType.value = "success";
+
+    await sendMailToAdmin(true);
+
   } catch (err) {
     if (err.response && err.response.data) {
       message.value = err.response.data.error;
@@ -776,6 +785,39 @@ async function showOneService(id_service) {
     };
 
     showService.value = true;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function sendMailToAdmin(isModif) {
+  const path = isModif
+    ? "mailToSend.modifPresta"
+    : "mailToSend.demandePresta";
+
+  const subject = t(`${path}.subject`);
+
+  const message = t(`${path}.message`, {
+    nom: nom_presta.value,
+    email: mail_presta.value,
+    telephone: tel_presta.value,
+    type: selectedType.value,
+    specificite: selectedNames.value.join(", ")
+  });
+  console.log("USER ID:", userStore.userId);
+
+
+
+  const id_admin = 1;
+  let id_type_message = isModif ? 2 : 1;
+  try {
+    const res = await mailBoxStore.sendMessageTo(userStore.userId, { 
+      id_user_to: id_admin, 
+      subject, 
+      message, 
+      id_type_message 
+    });
+
   } catch (err) {
     console.error(err);
   }

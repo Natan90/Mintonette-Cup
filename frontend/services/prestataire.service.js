@@ -30,21 +30,12 @@ export const usePrestataireStore = defineStore("prestataire", () => {
     return getRequest("/prestataire/showFilter", { params });
   }
 
-  async function BecomePrestataire(prestataire, services) {
-    const id_presta = prestataire.id_prestataire;
-    if (!id_presta) {
+  async function BecomePrestataire(id_user, data) {
+    if (!id_user) {
       throw new Error("L'id du prestataire est obligatoire");
     }
 
-    return postRequest(`/prestataire/becomePrestataire/${id_presta}`, {
-      nom: prestataire.nom_prestataire,
-      descri: prestataire.descri_prestataire,
-      mail: prestataire.mail_prestataire,
-      tel: prestataire.tel_prestataire,
-      specificite: prestataire.specificite,
-      type: Number(prestataire.id_type_prestataire),
-      services,
-    });
+    return postRequest(`/prestataire/becomePrestataire/${id_user}`, data);
   }
 
   async function UpdatePrestataire(prestataire, services) {

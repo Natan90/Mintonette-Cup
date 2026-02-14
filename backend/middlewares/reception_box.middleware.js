@@ -38,3 +38,23 @@ exports.validateUpdateMessageById = (req, res, next) => {
 
     next();
 }
+
+exports.validateSendMessageTo = (req, res, next) => {
+    const id_user_from = req.params.id;
+    const { id_user_to, subject, message, id_type_message } = req.body;
+
+    if (!id_user_from || isNaN(parseInt(id_user_from))) {
+        return res.status(400).json({ error: "ID invalide" });
+    }
+    req.params.id =  parseInt(id_user_from);
+
+    if (!id_user_to || !subject || !message || !id_type_message) {
+        return res.status(400).json({ error: "Champs obligatoires manquants" });
+    }
+
+    if (isNaN(id_user_to) || isNaN(id_type_message)) {
+        return res.status(400).json({ error: "ID invalide" });
+    }
+    
+    next();
+}

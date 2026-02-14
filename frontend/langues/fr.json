@@ -256,5 +256,15 @@
     "aucuneLangues": "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?",
     "queFR": "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?",
     "queEN": "La version française du service n’est pas remplie.\n\nSouhaitez-vous continuer ?"
+  },
+  "mailToSend": {
+    "demandePresta": {
+      "subject": "Nouvelle demande de prestataire",
+      "message": "Bonjour,\n\nUne nouvelle demande de prestataire vient d'être soumise.\n\nNom du prestataire : {nom}\nEmail : {email}\nTéléphone : {telephone}\nType : {type}\nSpécificité : {specificite}\n\nMerci de vérifier et valider cette demande depuis l'espace administrateur.\n\nCordialement,\n Mintonette Cup"
+    },
+    "modifPresta": {
+      "subject": "Modification d'un prestataire",
+      "message": "Bonjour,\n\nUn prestataire a modifié ses informations.\n\nNom du prestataire : {nom}\nEmail : {email}\nTéléphone : {telephone}\nType : {type}\nSpécificité : {specificite}\n\nMerci de vérifier les modifications effectuées.\n\nCordialement,\n Mintonette Cup"
+    }
   }
 }

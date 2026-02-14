@@ -10,5 +10,6 @@ router.get("/message/:id/received", authMiddleware.authenticateToken, reception_
 
 router.post("/message/:id/read", authMiddleware.authenticateToken, reception_boxMiddleware.validateUpdateMessageById, reception_boxController.updateMessageById);
 
+router.post("/message/:id/send", authMiddleware.authenticateToken, reception_boxMiddleware.validateSendMessageTo, reception_boxController.sendMessageTo);
 
 module.exports = router;

@@ -29,9 +29,9 @@ exports.getMessagesByIdMessage = async (req, res) => {
 
 exports.sendMessageTo = async (req, res) => {
     try {
-        const id_user_exped = req.params.id;
-        const { id_user_dest } = req.body;
-        const result = await reception_boxService.sendMessageTo(id_user_exped, id_user_dest);
+        const id_user_from = req.params.id;
+        const { id_user_to, subject, message, id_type_message } = req.body;
+        const result = await reception_boxService.sendMessageTo(id_user_from, { id_user_to, subject, message, id_type_message });
         return res.status(200).json(result);
     } catch (err) {
         console.error(err);

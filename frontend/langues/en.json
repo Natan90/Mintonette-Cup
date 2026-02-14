@@ -250,5 +250,15 @@
     "aucuneLangues": "Neither the French nor the English versions are filled in.\n\nDo you want to continue anyway?",
     "queFR": "The English version of the service is not filled in.\n\nDo you want to continue?",
     "queEN": "The French version of the service is not filled in.\n\nDo you want to continue?"
+  },
+  "mailToSend": {
+    "demandePresta": {
+      "subject": "New service provider request",
+      "message": "Hello,\n\nA new service provider request has been submitted.\n\nProvider name: {nom}\nEmail: {email}\nPhone: {telephone}\nType: {type}\nSpecialty: {specificite}\n\nPlease review and validate this request from the admin dashboard.\n\nBest regards,\nMintonette Cup"
+    },
+    "modifPresta": {
+      "subject": "Service provider account update",
+      "message": "Hello,\n\nA service provider has updated their information.\n\nProvider name: {nom}\nEmail: {email}\nPhone: {telephone}\nType: {type}\nSpecialty: {specificite}\n\nPlease review the submitted changes.\n\nBest regards,\nMintonette Cup"
+    }
   }
 }

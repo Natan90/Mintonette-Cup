@@ -43,7 +43,6 @@ async function updateEvenement(evenement) {
   } catch (err) {
     await client.query("ROLLBACK");
     throw { status: 500, message: "Erreur serveur" };
-
   } finally {
     client.release();
   }
