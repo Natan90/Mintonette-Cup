@@ -14,7 +14,7 @@ exports.getPrestataire = async (req, res) => {
 
 exports.getPrestataireById = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id_user = req.params.id;
 
     // if (type === "utilisateur") {
     //   const result = await prestataireService.getPrestataireByIdUser(id);
@@ -22,7 +22,7 @@ exports.getPrestataireById = async (req, res) => {
     // }
 
     // if (type === "prestataire") {
-    const result = await prestataireService.getPrestataireByIdPrestataire(id);
+    const result = await prestataireService.getPrestataireByIdUser(id_user);
     return res.status(201).json(result);
     // }
 

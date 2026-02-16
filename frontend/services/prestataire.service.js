@@ -38,21 +38,12 @@ export const usePrestataireStore = defineStore("prestataire", () => {
     return postRequest(`/prestataire/becomePrestataire/${id_user}`, data);
   }
 
-  async function UpdatePrestataire(prestataire, services) {
-    const id_presta = prestataire.id_prestataire;
-    if (!id_presta) {
-      throw new Error("L'id du prestataire est obligatoire");
-    }
+  async function UpdatePrestataire(id_user, data) {
+  if (!id_user) {
+    throw new Error("L'id utilisateur est obligatoire");
+  }
 
-    return putRequest(`/prestataire/updatePresta/${id_presta}`, {
-      nom: prestataire.nom_prestataire,
-      descri: prestataire.descri_prestataire,
-      mail: prestataire.mail_prestataire,
-      tel: prestataire.tel_prestataire,
-      specificite: prestataire.specificite,
-      type: Number(prestataire.id_type_prestataire),
-      services,
-    });
+  return putRequest(`/prestataire/updatePresta/${id_user}`, data);
   }
 
   return {

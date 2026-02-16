@@ -21,22 +21,24 @@ async function getPrestataire() {
   return result.rows;
 }
 
-async function getPrestataireByIdPrestataire(id_presta) {
+async function getPrestataireByIdUser(id_user) {
   const resultPresta = await pool.query(
     `SELECT 
         p.*,
         u.*
      FROM Prestataire p
      JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
-     WHERE id_prestataire = $1`,
-    [id_presta]
+     WHERE P.id_utilisateur = $1`,
+    [id_user]
   );
 
   if (resultPresta.rows.length === 0) return null;
 
+  const id_prestataire = resultPresta.rows[0].id_prestataire;
+
   const resultServices = await pool.query(
     `SELECT * FROM Services WHERE prestataire_id = $1`,
-    [id_presta]
+    [id_prestataire]
   );
 
   // Ajouter le tableau de services
@@ -296,8 +298,7 @@ async function updatePrestataire(id_user, prestataire) {
 
 module.exports = {
   getPrestataire,
-  // getPrestataireByIdUser,
-  getPrestataireByIdPrestataire,
+  getPrestataireByIdUser,
   filterPrestatairesAndServices,
   becomePrestataire,
   updatePrestataire,

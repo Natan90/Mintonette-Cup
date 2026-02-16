@@ -310,9 +310,7 @@ async function deletePrestataire(idPresta) {
 
 async function changePresta(newValue, idPresta) {
     try {
-        const res = await adminAPIStore.ChangePrestaUtilisateur(idPresta, {
-            valueChange: newValue
-        });
+        const res = await adminAPIStore.ChangePrestaUtilisateur(idPresta, newValue);
         console.log(res.data.message);
     } catch (err) {
         console.error(err);

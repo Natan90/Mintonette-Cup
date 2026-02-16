@@ -72,7 +72,7 @@
       <div class="type_prestataire">
         <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
           <!-- Bouton de sélection du type de prestataire -->
-          <button class="button_type_presta" @click="selectTypePresta(index)" :disabled="continueInscription">
+          <button class="button_type_presta" @click="selectTypePresta(index)" :disabled="continueInscription" :class="selectedIndex === index ? 'button_selected' : ''">
             {{ item.nom_type_prestataire[locale] }}
           </button>
         </div>
@@ -92,7 +92,7 @@
               <td>
                 <!-- Checkbox (une seule sélection autorisée) -->
                 <input type="checkbox" :id="`item-${index}`" :value="index"
-                  @change="onCheckChange($event, item.nom, index)" :checked="isCheckedWithIndex(index)"
+                  @change="onCheckChange($event, item)" :checked="isChecked(item)"
                   :disabled="continueInscription" />
                 <label :for="`item-${index}`">
                   {{ item.nom }}
@@ -290,6 +290,7 @@ const selectedType = ref("animation");
 const selectedTypeId = ref(1);
 const continueInscription = ref(false);
 const checkedItems = ref([]);
+const selectedIndex = ref(0);
 
 //=========================
 //===== Inputs fields =====
@@ -304,6 +305,7 @@ const desactivate = ref(false);
 const deleting = ref(false);
 const isSubmitting = ref(false);
 
+
 const selectedNames = computed(() =>
   checkedItems.value.map((item) => item.nom)
 );
@@ -312,13 +314,13 @@ const isSelectionValid = computed(() => {
   return checkedItems.value.length == 1;
 });
 
-onMounted(() => {
+onMounted(async () => {
   try {
-    getValuesTypePresta();
-    getValuesEveryType();
+    await getValuesTypePresta();
+    await getValuesEveryType();
     if (!pathAdd.value) {
       continueInscription.value = true; // Activer le formulaire en mode édition
-      getValuesPrestataire();
+      await getValuesPrestataire();
     }
   } catch (err) {
     console.error(err);
@@ -393,17 +395,17 @@ const currentBesoin = computed({
 });
 
 const selectedItems = computed(() => {
-  switch (selectedType.value) {
-    case "animation":
-      return type_animation.value.map((item) => ({
+  switch (selectedTypeId.value) {
+    case 1:
+      return type_animation.value.map(item => ({
         nom: item.nom_type_animation,
       }));
-    case "boutique":
-      return type_boutique.value.map((item) => ({
+    case 2:
+      return type_boutique.value.map(item => ({
         nom: item.nom_type_boutique,
       }));
-    case "restauration":
-      return type_restauration.value.map((item) => ({
+    case 3:
+      return type_restauration.value.map(item => ({
         nom: item.nom_type_restauration,
       }));
     default:
@@ -412,17 +414,15 @@ const selectedItems = computed(() => {
 });
 
 const selectedTypeLabel = computed(() => {
-  switch (selectedType.value) {
-    case "animation":
-      return "d'animation";
-    case "boutique":
-      return "de boutique";
-    case "restauration":
-      return "de restauration";
-    default:
-      return "";
-  }
+  const typeObj = type_prestataire.value[selectedIndex.value];
+  if (!typeObj) return "";
+
+  return (
+    typeObj.nom_type_prestataire[locale.value] ||
+    typeObj.nom_type_prestataire.fr
+  );
 });
+
 
 function isLangEmpty(service, lang) {
   return (
@@ -521,17 +521,21 @@ async function actionsService(service) {
 //=========================
 //======== Events =========
 //=========================
-function isCheckedWithIndex(index) {
-  return checkedItems.value.some((i) => i.index === index);
+function isChecked(item) {
+  return checkedItems.value.some(
+    (i) => i.nom === item.nom
+  );
 }
 
-function onCheckChange(event, nom, index) {
+
+function onCheckChange(event, item) {
   if (event.target.checked) {
-    checkedItems.value.push({ nom, index });
+    checkedItems.value = [item];
   } else {
-    checkedItems.value = checkedItems.value.filter((i) => i.index !== index);
+    checkedItems.value = [];
   }
 }
+
 
 function showContinueInscription() {
   continueInscription.value = true;
@@ -556,16 +560,14 @@ function hideContinueInscription() {
 }
 
 function selectTypePresta(index) {
+  selectedIndex.value = index;
+
   const typeObj = type_prestataire.value[index];
   if (typeObj) {
-    // nom_type_prestataire est un objet avec des langues { fr: "Animation", en: "Animation" }
-    const nomType =
-      typeObj.nom_type_prestataire[locale.value] ||
-      typeObj.nom_type_prestataire.fr;
-    selectedType.value = nomType.toLowerCase();
     selectedTypeId.value = typeObj.id_type_prestataire;
   }
 }
+
 
 function delPresta() {
   userStore.delPresta();
@@ -617,13 +619,17 @@ async function getValuesPrestataire() {
     tel_presta.value = presta.tel_prestataire;
 
     // Type de prestataire
-    const typeObj = type_prestataire.value.find(
+    const indexType = type_prestataire.value.findIndex(
       (t) =>
         t.id_type_prestataire ===
         (presta.id_type_prestataire || presta.type_prestataire_id)
     );
 
-    if (typeObj) {
+    if (indexType !== -1) {
+      selectedIndex.value = indexType;
+
+      const typeObj = type_prestataire.value[indexType];
+
       const nomType =
         typeObj.nom_type_prestataire[locale.value] ||
         typeObj.nom_type_prestataire.fr;
@@ -632,12 +638,21 @@ async function getValuesPrestataire() {
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
 
+
     await nextTick();
 
     let spec = presta.specificite;
 
     if (typeof spec === "string") {
-      spec = spec.replace(/[\{\}"]/g, "").trim();
+      try {
+        spec = JSON.parse(spec);
+      } catch {
+        spec = [spec];
+      }
+    }
+
+    if (Array.isArray(spec)) {
+      spec = spec[0];
     }
 
     const index = selectedItems.value.findIndex(
@@ -691,7 +706,9 @@ async function addPrestataire() {
       type: Number(selectedTypeId.value),
       services: servicesPayload
     });
-    userStore.prestaId = res.data.user.prestaId;
+    console.log(res.data);
+
+    userStore.prestaId = res.data.id_prestataire;
     console.log("2 - Après BecomePrestataire");
 
     await sendMailToAdmin(false);
@@ -728,7 +745,7 @@ async function updatePresta() {
     }));
 
 
-    const res = await prestataireStore.UpdatePrestataire(prestaId.value, {
+    const res = await prestataireStore.UpdatePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
       mail: mail_presta.value,
@@ -881,6 +898,10 @@ async function sendMailToAdmin(isModif) {
 .button_type_presta:active {
   transform: translateY(2px) scale(0.98);
   box-shadow: 0 3px 10px rgba(0, 87, 255, 0.3);
+}
+
+.button_selected {
+  background: linear-gradient(135deg, #f77925, #ff9b59);
 }
 
 .container_table {

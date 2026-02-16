@@ -73,7 +73,7 @@
           class="team_content"></div>
 
         <router-link
-          :to="{ name: 'EditPrestataire', params: { id: userStore.prestaId } }"
+          :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
           class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonGerer") }}
         </router-link>

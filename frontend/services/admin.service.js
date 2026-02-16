@@ -29,11 +29,13 @@ export const useAdminAPIStore = defineStore("admin_API", () => {
     return getRequest(`/admin/utilisateur/show/${id_user}`);
   }
 
-  async function ChangePrestaUtilisateur(id_user) {
+  async function ChangePrestaUtilisateur(id_user, newValue) {
     if (!id_user) {
       throw new Error("L'id de l'utilisateur est obligatoire");
     }
-    return patchRequest(`/admin/utilisateur/changePresta/${id_user}`);
+    return patchRequest(`/admin/utilisateur/changePresta/${id_user}`, {
+      newValue
+    });
   }
 
   async function DeleteUtilisateur(id_user) {
