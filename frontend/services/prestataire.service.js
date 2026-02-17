@@ -43,7 +43,7 @@ export const usePrestataireStore = defineStore("prestataire", () => {
     throw new Error("L'id utilisateur est obligatoire");
   }
 
-  return putRequest(`/prestataire/updatePresta/${id_user}`, data);
+  return postRequest(`/prestataire/updatePrestataire/${id_user}`, data);
   }
 
   return {

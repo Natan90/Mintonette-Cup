@@ -716,11 +716,7 @@ async function addPrestataire() {
     message.value = res.data.message;
     messageType.value = "success";
   } catch (err) {
-    console.log("ERREUR COMPLETE:", err);
-    console.log("err.message:", err.message);
-    console.log("err.response:", err.response);
-
-    message.value = err.message || "Erreur inconnue";
+    message.value = err.message;
     messageType.value = 'error';
   }
 }
@@ -760,11 +756,7 @@ async function updatePresta() {
     await sendMailToAdmin(true);
 
   } catch (err) {
-    if (err.response && err.response.data) {
-      message.value = err.response.data.error;
-    } else {
-      message.value = "Erreur inconnue";
-    }
+    message.value = err.message;
     messageType.value = 'error';
   }
 }

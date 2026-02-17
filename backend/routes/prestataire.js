@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const prestataireController = require("../controllers/prestataire.controller");
 const prestataireMiddleware = require("../middlewares/prestataire.middleware");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 // GET prestataire
 router.get("/show", prestataireController.getPrestataire);
@@ -13,9 +14,9 @@ router.get("/show/:id", prestataireController.getPrestataireById);
 router.get("/showFilter", prestataireMiddleware.validateFilter, prestataireController.getFiltered);
 
 // POST devenir prestataire
-router.post("/becomePrestataire/:id", prestataireMiddleware.validateBecomePresta, prestataireController.becomePrestataire);
+router.post("/becomePrestataire/:id", authMiddleware.authenticateToken, prestataireMiddleware.validateBecomePresta, prestataireController.becomePrestataire);
 
 // POST mettre à jour prestataire
-router.post("/updatePrestataire/:id", prestataireMiddleware.validateUpdatePresta, prestataireController.updatePrestataire);
+router.post("/updatePrestataire/:id", authMiddleware.authenticateToken, prestataireMiddleware.validateUpdatePresta, prestataireController.updatePrestataire);
 
 module.exports = router;
