@@ -35,23 +35,6 @@ exports.getPrestataireById = async (req, res) => {
   }
 };
 
-exports.getFiltered = async (req, res) => {
-  console.log("Query reçue :", req.query); // pour debug
-  const { type } = req.query;
-  console.log("Type filter:", type);
-  try {
-    const result = await prestataireService.filterPrestatairesAndServices(
-      req.query,
-    );
-    return res.status(201).json(result);
-  } catch (err) {
-    console.error(err);
-    const status = err.status || 500;
-    const message = err.message || "Erreur serveur";
-    res.status(status).json({ error: message });
-  }
-};
-
 exports.becomePrestataire = async (req, res) => {
   try {
     const id_user = req.params.id;

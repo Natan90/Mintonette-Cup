@@ -151,9 +151,51 @@ const filters = ref({
   prixMax: route.query.prixMax || null,
 });
 
-const prestatairesFiltres = computed(() =>
-  prestataires.value.filter((p) => !p.waitingforadmin)
-);
+const appliedFilters = ref({
+  nom: "",
+  category: 0,
+  prixMin: null,
+  prixMax: null,
+})
+
+const prestatairesFiltres = computed(() => {
+  return prestataires.value
+    .filter(p => !p.waitingforadmin)
+
+    .filter(p => {
+      if (!appliedFilters.value.nom) return true
+
+      const nom = isServiceView.value
+        ? p.nom_service
+        : p.nom_prestataire
+
+      return nom
+        ?.toLowerCase()
+        .includes(appliedFilters.value.nom.toLowerCase())
+    })
+
+    .filter(p => {
+      if (!appliedFilters.value.category || appliedFilters.value.category === 0)
+        return true
+
+      return (
+        Number(p.id_type_prestataire) ===
+        Number(appliedFilters.value.category)
+      )
+    })
+
+    .filter(p => {
+      if (!isServiceView.value) return true
+
+      if (appliedFilters.value.prixMin && p.prix < appliedFilters.value.prixMin)
+        return false
+
+      if (appliedFilters.value.prixMax && p.prix > appliedFilters.value.prixMax)
+        return false
+
+      return true
+    })
+})
 
 onMounted(() => {
   try {
@@ -172,10 +214,13 @@ onMounted(() => {
 function resetFilters() {
   filters.value = {
     nom: "",
-    category: null,
+    category: 0,
     prixMin: null,
     prixMax: null,
-  };
+  }
+
+  appliedFilters.value = { ...filters.value }
+
   router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
   getValuesPrestataire();
 }
@@ -247,6 +292,13 @@ async function getValuesTypePrestataire() {
 }
 
 async function searchPrestataires() {
+  appliedFilters.value = {
+    nom: filters.value.nom,
+    category: filters.value.category,
+    prixMin: filters.value.prixMin,
+    prixMax: filters.value.prixMax,
+  }
+
   router.push({
     path: "/",
     query: {
@@ -258,22 +310,6 @@ async function searchPrestataires() {
     hash: "#liste_prestataires"
   });
 
-  const res = await prestataireStore.GetValuesFilter({
-    nom: filters.value.nom || undefined,
-    category: filters.value.category || undefined,
-    prixMin: filters.value.prixMin || undefined,
-    prixMax: filters.value.prixMax || undefined,
-    type: isServiceView.value ? "services" : "prestataires",
-  });
-  console.log("Backend response:", res.data);
-
-  // Vérifier que res.data est un tableau
-  if (res && res.data && Array.isArray(res.data)) {
-    prestataires.value = res.data;
-  } else {
-    console.error("Les données reçues ne sont pas un tableau:", res);
-    prestataires.value = [];
-  }
 }
 </script>
 

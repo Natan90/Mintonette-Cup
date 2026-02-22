@@ -1,25 +1,3 @@
-exports.validateFilter = (req, res, next) => {
-  const { category, prixMin, prixMax, type } = req.query;
-
-  if (type && !["services", "prestataires"].includes(type)) {
-    return res.status(400).json({ error: "Type invalide, doit être 'service' ou 'prestataire'" });
-  }
-
-  if (prixMin && isNaN(Number(prixMin))) {
-    return res.status(400).json({ error: "prixMin doit être un nombre" });
-  }
-
-  if (prixMax && isNaN(Number(prixMax))) {
-    return res.status(400).json({ error: "prixMax doit être un nombre" });
-  }
-
-  if (category && isNaN(Number(category))) {
-    return res.status(400).json({ error: "category doit être un nombre" });
-  }
-
-  next();
-};
-
 exports.validateBecomePresta = (req, res, next) => {
     const { nom, descri, mail, tel, specificite, type, services } = req.body;
 

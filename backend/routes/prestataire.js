@@ -10,9 +10,6 @@ router.get("/show", prestataireController.getPrestataire);
 // GET prestataire par type (utilisateur ou prestataire)
 router.get("/show/:id", prestataireController.getPrestataireById);
 
-// GET filtre du prestataire ou service
-router.get("/showFilter", prestataireMiddleware.validateFilter, prestataireController.getFiltered);
-
 // POST devenir prestataire
 router.post("/becomePrestataire/:id", authMiddleware.authenticateToken, prestataireMiddleware.validateBecomePresta, prestataireController.becomePrestataire);
 

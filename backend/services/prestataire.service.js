@@ -48,81 +48,6 @@ async function getPrestataireByIdUser(id_user) {
   };
 }
 
-
-async function filterPrestatairesAndServices({
-  nom,
-  category,
-  prixMin,
-  prixMax,
-  type,
-}) {
-  let sql = "";
-  const values = [];
-  let index = 1;
-  console.log("Type filter:", type);
-
-
-  if (type === "services") {
-    sql = `
-      SELECT
-        s.*,
-        p.nom_prestataire,
-        t.nom_type_prestataire
-      FROM Services s
-      JOIN Prestataire p ON s.prestataire_id = p.id_prestataire
-      JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
-      WHERE 1=1
-    `;
-  } else {
-    sql = `
-      SELECT
-        p.*,
-        t.nom_type_prestataire,
-        COUNT(s.id_service) AS nb_services
-      FROM Prestataire p
-      JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
-      LEFT JOIN Services s ON s.prestataire_id = p.id_prestataire
-      WHERE 1=1
-    `;
-  }
-
-  if (nom) {
-    sql += ` AND p.nom_prestataire ILIKE $${index}`;
-    values.push(`%${nom}%`);
-    index++;
-  }
-
-  if (category && category !== "0") {
-    sql += ` AND p.type_prestataire_id = $${index}`;
-    values.push(Number(category));
-    index++;
-  }
-
-  if (prixMin) {
-    sql += ` AND s.prix >= $${index}`;
-    values.push(prixMin);
-    index++;
-  }
-
-  if (prixMax) {
-    sql += ` AND s.prix <= $${index}`;
-    values.push(prixMax);
-    index++;
-  }
-
-  if (type === "services") {
-    sql += ` ORDER BY s.nom_service`;
-  } else {
-    sql += `
-      GROUP BY p.id_prestataire, t.nom_type_prestataire
-      ORDER BY p.nom_prestataire
-    `;
-  }
-
-  const result = await pool.query(sql, values);
-  return result.rows;
-}
-
 async function becomePrestataire(id_user, prestataire) {
   const { nom, descri, mail, tel, specificite, type, services } = prestataire;
   const client = await pool.connect();
@@ -299,7 +224,6 @@ async function updatePrestataire(id_user, prestataire) {
 module.exports = {
   getPrestataire,
   getPrestataireByIdUser,
-  filterPrestatairesAndServices,
   becomePrestataire,
   updatePrestataire,
 };
