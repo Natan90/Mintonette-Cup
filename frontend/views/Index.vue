@@ -35,7 +35,6 @@
             <div class="contenuTexte">
               <span class="descri" v-html="item.descri"></span>
               <router-link
-                v-if="userStore.userId"
                 :to="{ name: 'Information' }"
                 class="voirPlus pointer">
                 <span class="pointer">{{ $t("information.voirPlus") }}</span>
