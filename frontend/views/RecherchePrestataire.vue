@@ -54,8 +54,7 @@
         </div>
       </form>
 
-      <section class="listePrestataireBorder">
-        <div class="listePrestataire">
+      <section class="listePrestataire">
           <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service"
             class="blocListePrestataire">
             <div class="enTetePrestataire">
@@ -107,7 +106,6 @@
               <span class="pointer">{{ $t("filter.more") }}</span>
             </div>
           </div>
-        </div>
       </section>
     </section>
   </section>
@@ -510,14 +508,9 @@ input:checked+.slider:before {
 
 /* LISTE */
 
-.listePrestataireBorder {
-  width: 70%;
-  background-color: var(--jaune-logo);
-  opacity: 0.9;
-}
-
 .listePrestataire {
-  width: calc(100% - 40px);
+
+  width: 70%;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -527,10 +520,8 @@ input:checked+.slider:before {
 
   padding: 20px;
 
-  border-radius: 10px 10px 0 0;
-
   background-color: var(--couleur-fond);
-}
+} 
 
 @media (max-width:750px){
 
@@ -546,7 +537,7 @@ input:checked+.slider:before {
     border-radius: 0;
   }
 
-  .listePrestataireBorder{
+  .listePrestataire{
     width: 100%;
   }
 }
