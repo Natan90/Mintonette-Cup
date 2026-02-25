@@ -1,7 +1,7 @@
 <template>
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <!-- Logo -->
-    <router-link :to="{ name: 'Home', params: { lang: locale } }">
+    <router-link :to="{ name: 'Home', params: { lang: locale } }" class="routeur_logo">
       <img src="../images/logo.png" class="logo pointer" alt="logo" />
     </router-link>
 
@@ -65,7 +65,7 @@
       <div v-if="!isLoggedIn" class="partieProfil">
         <router-link
           :to="{ name: 'Connexion_utilisateur', params: { lang: locale } }"
-          class="boutonNav">
+          class="boutonNav connect">
           <span class="pointer">{{ $t("user.buttonConnexion") }}</span>
         </router-link>
 
@@ -73,7 +73,7 @@
 
         <router-link
           :to="{ name: 'Inscription_utilisateur', params: { lang: locale } }"
-          class="boutonNav">
+          class="boutonNav connect">
           <span class="pointer">{{ $t("user.buttonInscription") }}</span>
         </router-link>
       </div>
@@ -441,4 +441,70 @@ a span {
   border: 2px solid white;
   transition: all 0.3s ease;
 }
+
+@media(max-width:1000px){
+  .barre-nav{
+    flex-direction: column;
+  }
+
+  .logo{
+    margin: 0;
+    object-fit: contain;
+  }
+
+  .routeur_logo{
+    max-height: 100px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .routeur_logo,
+  .optionNav,
+  .boutonNav:not(.connect){
+    flex-direction: column;
+    background-color: var(--bleu-logo);
+    width: 100%;
+    margin: 0;
+  }
+
+  .routeur_logo:hover,
+  .boutonNav:not(.connect):hover{
+    background-color: var(--jaune-logo);
+    color: black;
+    transition: var(--transition-fast);
+  }
+
+  .routeur_logo:hover{
+    transform: scale(1.02);
+  }  
+
+  .boutonNav:not(.connect):hover{
+    padding-left: 10px;
+  }
+
+  .partieProfil{
+    background-color: var(--bleu-logo);
+    justify-content: center;
+    width: 100%;
+  }
+
+  .partieProfil:hover{
+    transition: var(--transition-fast);
+    background-color: var(--jaune-logo);
+    color: black;
+    span{
+      color: black;
+    }
+  }
+
+  .partieProfil span:hover{
+    color: grey;
+    font-size: bold;
+    transition: var(--transition-fast);
+  }
+
+
+}
+
+
 </style>
