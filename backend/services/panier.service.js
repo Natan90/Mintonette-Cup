@@ -42,8 +42,6 @@ async function getPanierByUser(id_user) {
   return result.rows;
 }
 
-async function getBilletsById(id_user) {}
-
 async function addSiege(id_user, matchId, numero_colonne, numero_ligne, zone) {
   const panierRes = await pool.query(
     `SELECT id_panier FROM Panier WHERE utilisateur_id = $1 AND actif = true`,
@@ -328,6 +326,8 @@ async function clearPanier(id_user) {
   await pool.query(`DELETE FROM Panier_Service WHERE id_panier = $1`, [
     id_panier,
   ]);
+
+  await pool.query(`UPDATE Panier SET actif = false WHERE id_panier = $1`, [id_panier]);
 }
 
 module.exports = {

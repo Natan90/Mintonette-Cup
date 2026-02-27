@@ -29,4 +29,6 @@ exports.validebilletsQR = (req, res, next) => {
     if (!mail || !user || !activity) {
         return res.status(400).json({ error: "Tous les champs sont requis" });
     }
+
+    next();
 }

@@ -71,14 +71,14 @@ async function billetsQR(id_billet, mail, user, activity) {
     id_billet,
   });
 
-  const qrCode = await QRCode.toDataURL(qrData);
+  const qrBuffer = await QRCode.toBuffer(qrData);
 
   const subject = "Votre billet - Mintonette Cup";
   const texteEmail = `
   <p>Bonjour ${user.prenom_utilisateur} ${user.nom_utilisateur},</p>
   <p>Voici votre billet pour l'activité <strong>${activity}</strong>.</p>
   <p>Présentez ce QR code à l'entrée :</p>
-  <img src="${qrCode}" alt="QR Code billet" style="width:200px;height:200px;" />
+  <img src="cid:qrcode" alt="QR Code billet" style="width:200px;height:200px;" />
   <p>Merci,<br>L'équipe de la Mintonette Cup</p>`;
 
   const mailOptions = {
@@ -86,6 +86,13 @@ async function billetsQR(id_billet, mail, user, activity) {
     to: mail,
     subject,
     html: texteEmail,
+    attachments: [
+      {
+        filename: "billet.png",
+        content: qrBuffer,
+        cid: "qrcode",
+      },
+    ],
   };
 
   try {

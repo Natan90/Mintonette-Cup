@@ -188,6 +188,7 @@ import Footer from "@/components/Footer.vue";
 import { usePanierStore } from "@/services/panier.service";
 import { useGradinStore } from "@/services/gradin.service";
 import { useAdminAPIStore } from "@/services/admin.service";
+import { useMailStore } from "@/services/mail.service";
 
 const router = useRouter();
 const route = useRoute();
@@ -195,9 +196,11 @@ const userStore = useUserStore();
 const panierStore = usePanierStore();
 const gradinStore = useGradinStore();
 const adminAPIStore = useAdminAPIStore();
+const mailStore = useMailStore();
 
 const panier = ref([]);
 const isProcessing = ref(false);
+const user = ref([]);
 
 const form = ref({
   prenom: "",
@@ -241,15 +244,15 @@ async function fetchUserInfo() {
       console.log("UserId n'est pas rempli");
     }
     const res = await adminAPIStore.GetUtilisateurById(userStore.userId);
-    const user = res.data;
+    user.value = res.data;
 
-    form.value.prenom = user.prenom_utilisateur || "";
-    form.value.nom = user.nom_utilisateur || "";
-    form.value.email = user.mail_utilisateur || "";
-    form.value.tel = user.tel_utilisateur || "";
-    form.value.adresse = user.adresse || "";
-    form.value.codepostal = user.code_postal || "";
-    form.value.ville = user.ville || "";
+    form.value.prenom = user.value.prenom_utilisateur || "";
+    form.value.nom = user.value.nom_utilisateur || "";
+    form.value.email = user.value.mail_utilisateur || "";
+    form.value.tel = user.value.tel_utilisateur || "";
+    form.value.adresse = user.value.adresse || "";
+    form.value.codepostal = user.value.code_postal || "";
+    form.value.ville = user.value.ville || "";
   } catch (err) {
     console.error("Erreur fetchUserInfo:", err);
   }
@@ -302,6 +305,8 @@ async function processPayment() {
     alert("Veuillez remplir tous les champs obligatoires");
     return;
   }
+  console.log("Panier items:", panier.value); // vérifie les clés disponibles
+  console.log("Premier item:", JSON.stringify(panier.value[0]));
 
   if (panier.value.length === 0) {
     alert("Votre panier est vide");
@@ -315,7 +320,7 @@ async function processPayment() {
 
     // Préparer les données pour payPanier
     const sieges = panier.value.map((seat) => ({
-      match_id: seat.match_id ?? seat.matchId ?? null,
+      match_id: seat.match_id ?? seat.id_match ?? null,
       numero_colonne: seat.numero_colonne,
       numero_ligne: seat.numero_ligne,
       zone: seat.zone,
@@ -324,13 +329,16 @@ async function processPayment() {
 
     const services = [];
 
-    await panierStore.PayPanier(
+    const commande = await panierStore.PayPanier(
       userStore.userId,
       sieges,
       services,
       total.value,
     );
 
+    const id_billet = commande.data.id_commande;
+
+    await mailStore.BilletsQR(id_billet, form.value.email, user.value, "tp")
     await panierStore.ClearPanier(userStore.userId);
 
     localStorage.removeItem("selectedSeats");
