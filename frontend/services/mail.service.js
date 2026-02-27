@@ -30,5 +30,6 @@ export const useMailStore = defineStore("mail", () => {
 
   return {
     ResetPassword,
+    BilletsQR,
   };
 });
