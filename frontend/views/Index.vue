@@ -392,7 +392,6 @@ body::-webkit-scrollbar {
   text-align: center;
   margin: 0 auto;
   padding: 60px 40px;
-  width: calc(100% - 80px);
   background: #0a3a75;
 
   /* background: linear-gradient(135deg, #0a3a75cc, #4fa3ffcc); */

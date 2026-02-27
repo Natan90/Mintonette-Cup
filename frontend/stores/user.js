@@ -96,6 +96,16 @@ export const useUserStore = defineStore("user", () => {
       alert("Session expirée, vous avez été déconnecté.");
     }, timer);
   }
+  
+  function getRemainingDelay() {
+    if (!token.value) return 0;
+    try {
+      const payload = JSON.parse(atob(token.value.split('.')[1]));
+      return payload.exp * 1000 - Date.now();
+    } catch {
+      return 0;
+    }
+  }
 
 
   watch(userId, (v) => {
@@ -129,5 +139,7 @@ export const useUserStore = defineStore("user", () => {
     startAuthenticating,
     stopAuthenticating,
     logout,
+    runLogoutTimer,
+    getRemainingDelay,
   };
 });
