@@ -27,6 +27,7 @@ import { useUserStore } from "@/stores/user";
 import { useNavigationStore } from "@/stores/navigation";
 import SentBox from "@/components/mailbox/SentBox.vue";
 import Mailbox from "@/views/Mailbox.vue";
+import Remboursement from "@/views/Remboursement.vue";
 
 const routes = [
   {
@@ -199,6 +200,13 @@ const routes = [
           }
         ],
       },
+      {
+        path: "Remboursement",
+        name: "Remboursement",
+        component: Remboursement,
+        meta: { requiresUserId: true },
+      },
+      
     ],
   },
   {

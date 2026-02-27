@@ -53,6 +53,15 @@
               </tr>
             </tbody>
           </table>
+
+          <router-link
+            :to="{
+              name: 'Remboursement',
+              params: { lang: $route.params.lang },
+            }"
+            class="btn btn-checkout">
+            Se faire rembourser
+          </router-link>
         </div>
       </div>
     </div>
@@ -77,7 +86,6 @@ const loading = ref(false);
 const error = ref(null);
 
 function getPrice(seat) {
-  // same pricing logic as Checkout
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
   return 12;

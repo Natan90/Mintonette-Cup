@@ -788,28 +788,28 @@ const pool = require("./db");
     const insertMatchs = `
       INSERT INTO Match (id_terrain, id_equipe1, id_equipe2, date_match) VALUES
       -- Terrain 1 (4 matchs)
-      (1, 1, 5, '2026-01-01 10:00:00'),    -- France vs Canada
-      (1, 2, 18, '2026-01-01 14:00:00'),   -- Allemagne vs Turquie
-      (1, 3, 19, '2026-01-01 18:00:00'),   -- Argentine vs Belgique
-      (1, 4, 20, '2026-01-01 21:00:00'),   -- Italie vs Espagne
+      (1, 1, 5, '2026-06-06 10:00:00'),    -- France vs Canada
+      (1, 2, 18, '2026-06-06 14:00:00'),   -- Allemagne vs Turquie
+      (1, 3, 19, '2026-06-06 18:00:00'),   -- Argentine vs Belgique
+      (1, 4, 20, '2026-06-06 21:00:00'),   -- Italie vs Espagne
       
       -- Terrain 2 (4 matchs)
-      (2, 17, 21, '2026-01-01 10:00:00'),  -- Pays-Bas vs Angleterre
-      (2, 6, 22, '2026-01-01 14:00:00'),   -- Bulgarie vs Thaïlande
-      (2, 7, 23, '2026-01-01 18:00:00'),   -- Brésil vs Kazakhstan
-      (2, 8, 24, '2026-01-01 21:00:00'),   -- Cuba vs Corée du Sud
+      (2, 17, 21, '2026-06-07 10:00:00'),  -- Pays-Bas vs Angleterre
+      (2, 6, 22, '2026-06-07 14:00:00'),   -- Bulgarie vs Thaïlande
+      (2, 7, 23, '2026-06-07 18:00:00'),   -- Brésil vs Kazakhstan
+      (2, 8, 24, '2026-06-07 21:00:00'),   -- Cuba vs Corée du Sud
       
       -- Terrain 3 (4 matchs)
-      (3, 9, 25, '2026-01-01 10:00:00'),   -- États-Unis vs Croatie
-      (3, 10, 26, '2026-01-01 14:00:00'),  -- Slovénie vs Russie
-      (3, 11, 27, '2026-01-01 18:00:00'),  -- Iran vs Égypte
-      (3, 12, 28, '2026-01-01 21:00:00'),  -- Ukraine vs République Tchèque 
+      (3, 9, 25, '2026-06-08 10:00:00'),   -- États-Unis vs Croatie
+      (3, 10, 26, '2026-06-08 14:00:00'),  -- Slovénie vs Russie
+      (3, 11, 27, '2026-06-08 18:00:00'),  -- Iran vs Égypte
+      (3, 12, 28, '2026-06-08 21:00:00'),  -- Ukraine vs République Tchèque 
       
       -- Terrain 4 (4 matchs)
-      (4, 13, 29, '2026-01-01 10:00:00'),  -- Chine vs Estonie
-      (4, 14, 30, '2026-01-01 14:00:00'),  -- Japon vs Grèce
-      (4, 15, 31, '2026-01-01 18:00:00'),  -- Pologne vs Tunisie
-      (4, 16, 32, '2026-01-01 21:00:00');  -- Serbie vs Saint-Marin
+      (4, 13, 29, '2026-06-09 10:00:00'),  -- Chine vs Estonie
+      (4, 14, 30, '2026-06-09 14:00:00'),  -- Japon vs Grèce
+      (4, 15, 31, '2026-06-09 18:00:00'),  -- Pologne vs Tunisie
+      (4, 16, 32, '2026-06-09 21:00:00');  -- Serbie vs Saint-Marin
   `;
     await pool.query(insertMatchs);
 
