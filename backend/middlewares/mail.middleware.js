@@ -17,3 +17,16 @@ exports.valideConfirmPassword = (req, res, next) => {
 
     next();
 }
+
+exports.validebilletsQR = (req, res, next) => {
+    const id_billet = req.params.id;
+    const { mail, user, activity } = req.body; 
+
+    if (isNaN(id_billet)) {
+        return res.status(400).json({ error: "ID invalide" });
+    }
+
+    if (!mail || !user || !activity) {
+        return res.status(400).json({ error: "Tous les champs sont requis" });
+    }
+}

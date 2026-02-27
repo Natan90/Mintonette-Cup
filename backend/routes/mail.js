@@ -9,4 +9,7 @@ router.post("/password/reset", mailMiddleware.valideResetPassword, mailControlle
 // POST valider le reset du password
 router.post("/password/confirm", mailMiddleware.valideConfirmPassword, mailController.confirmResetPassword);
 
+// POST envoyer le QRCode du billet / activité
+router.post("/billets/send/:id", mailMiddleware.validebilletsQR, mailController.billetsQR);
+
 module.exports = router;

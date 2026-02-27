@@ -1,6 +1,7 @@
 const pool = require("../database/db");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const QRCode = require("qrcode");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -19,10 +20,12 @@ async function resetPassword(mail) {
     `UPDATE Utilisateur
      SET reset_token = $1, reset_token_expire = $2
      WHERE mail_utilisateur = $3`,
-    [token, expiresAt, mail]
+    [token, expiresAt, mail],
   );
 
-  const resetLink = process.env.LINK_FRONT + `/fr/reset-password/${token}?continueReset=true&mailValue=${encodeURIComponent(mail)}`;
+  const resetLink =
+    process.env.LINK_FRONT +
+    `/fr/reset-password/${token}?continueReset=true&mailValue=${encodeURIComponent(mail)}`;
 
   const subject = "Réinitialisation de votre mot de passe";
 
@@ -62,6 +65,40 @@ async function resetPassword(mail) {
   }
 }
 
+async function billetsQR(id_billet, mail, user, activity) {
+  const qrData = JSON.stringify({
+    mail,
+    id_billet,
+  });
+
+  const qrCode = await QRCode.toDataURL(qrData);
+
+  const subject = "Votre billet - Mintonette Cup";
+  const texteEmail = `
+  <p>Bonjour ${user.prenom_utilisateur} ${user.nom_utilisateur},</p>
+  <p>Voici votre billet pour l'activité <strong>${activity}</strong>.</p>
+  <p>Présentez ce QR code à l'entrée :</p>
+  <img src="${qrCode}" alt="QR Code billet" style="width:200px;height:200px;" />
+  <p>Merci,<br>L'équipe de la Mintonette Cup</p>`;
+
+  const mailOptions = {
+    from: process.env.MAIL_USER,
+    to: mail,
+    subject,
+    html: texteEmail,
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Mail billet envoyé:", info.response);
+    return info;
+  } catch (err) {
+    console.error("Erreur envoi mail billet:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   resetPassword,
+  billetsQR,
 };
