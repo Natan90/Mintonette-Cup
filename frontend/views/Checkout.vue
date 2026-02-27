@@ -322,7 +322,7 @@ async function processPayment() {
     const sieges = panier.value.map((seat) => ({
       match_id: seat.match_id ?? seat.id_match ?? null,
       numero_colonne: seat.numero_colonne,
-      numero_ligne: seat.numero_ligne,
+      numero_ligne: seat.numero_ligne,  
       zone: seat.zone,
       prix: getPrice(seat),
     }));
@@ -338,7 +338,10 @@ async function processPayment() {
 
     const id_billet = commande.data.id_commande;
 
-    await mailStore.BilletsQR(id_billet, form.value.email, user.value, "tp")
+    const billets = await panierStore.GetBilletsByUser(user.value.id_utilisateur);
+    const firstBillet = billets.data[0];
+
+    await mailStore.BilletsQR(id_billet, form.value.email, user.value, `${firstBillet?.equipe1} vs ${firstBillet?.equipe2}`);
     await panierStore.ClearPanier(userStore.userId);
 
     localStorage.removeItem("selectedSeats");
