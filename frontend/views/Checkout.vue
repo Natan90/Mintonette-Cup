@@ -172,6 +172,16 @@
               {{ isProcessing ? "Traitement en cours..." : `Payer ${total} €` }}
             </button>
           </div>
+          <br><br>
+          <v-progress-linear
+              v-if="isProcessing"
+              :model-value="progress"
+              height="6"
+              color="blue"
+              striped
+              indeterminate
+            ></v-progress-linear>
+            <p v-html="message"></p>
         </div>
       </div>
     </div>
@@ -200,7 +210,9 @@ const mailStore = useMailStore();
 
 const panier = ref([]);
 const isProcessing = ref(false);
+const progress = ref(0);
 const user = ref([]);
+const message = ref("");
 
 const form = ref({
   prenom: "",
@@ -316,7 +328,7 @@ async function processPayment() {
   isProcessing.value = true;
 
   try {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Préparer les données pour payPanier
     const sieges = panier.value.map((seat) => ({
@@ -341,14 +353,29 @@ async function processPayment() {
     const billets = await panierStore.GetBilletsByUser(user.value.id_utilisateur);
     const firstBillet = billets.data[0];
 
-    await mailStore.BilletsQR(id_billet, form.value.email, user.value, `${firstBillet?.equipe1} vs ${firstBillet?.equipe2}`);
+    await mailStore.BilletsQR(id_billet, form.value.email, user.value, `${firstBillet?.equipe1} vs ${firstBillet?.equipe2}`, sieges);
+    const interval = setInterval(() => {
+      if (progress.value < 80) progress.value += 10;
+    }, 200);
+
+    clearInterval(interval);
+    progress.value = 100;
+
+    isProcessing.value = false;
+    progress.value = 0;
+    message.value = `Un e-mail contenant vos billets a été envoyé à l'adresse suivante : <span class="name_delete">${form.value.email}</span>`;
+
+    setTimeout(() => {
+        router.push({ name: "MesBillets", params: { lang: route.params.lang } });
+    }, 1500);
+
     await panierStore.ClearPanier(userStore.userId);
 
     localStorage.removeItem("selectedSeats");
 
-    alert("Paiement réussi ! Vos billets ont été confirmés.");
+    // alert("Paiement réussi ! Vos billets ont été confirmés.");
 
-    router.push({ name: "MesBillets", params: { lang: route.params.lang } });
+    
   } catch (error) {
     console.error("Erreur lors du paiement:", error);
     alert("Une erreur est survenue lors du paiement. Veuillez réessayer.");

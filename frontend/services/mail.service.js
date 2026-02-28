@@ -12,19 +12,20 @@ export const useMailStore = defineStore("mail", () => {
     });
   }
 
-  async function BilletsQR(id_billet, mail, user, activity) {
+  async function BilletsQR(id_billet, mail, user, activity, sieges) {
     if (!id_billet) {
       throw new Error("Le mail de l'utilisateur est obligatoire");
     }
 
-    if (!mail || !user || !activity) {
+    if (!mail || !user || !activity || !sieges) {
       throw new Error("Champs obligatoires manquants");
     }
 
     return postRequest(`/mail/billets/send/${id_billet}`, {
       mail, 
       user, 
-      activity
+      activity,
+      sieges
     })
   }
 

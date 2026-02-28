@@ -33,10 +33,10 @@ exports.confirmResetPassword = async (req, res) => {
 
 exports.billetsQR = async (req, res) => {
   const id_billet = req.params.id;
-  const { mail, user, activity } = req.body;
+  const { mail, user, activity, sieges } = req.body;
 
   try {
-    await mailService.billetsQR(id_billet, mail, user, activity);
+    await mailService.billetsQR(id_billet, mail, user, activity, sieges);
     res.json({ message: "Email envoyé avec succès" });
   } catch (err) {
     console.error(err);

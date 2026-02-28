@@ -65,7 +65,7 @@ async function resetPassword(mail) {
   }
 }
 
-async function billetsQR(id_billet, mail, user, activity) {
+async function billetsQR(id_billet, mail, user, activity, sieges) {
   const qrData = JSON.stringify({
     mail,
     id_billet,
@@ -73,10 +73,34 @@ async function billetsQR(id_billet, mail, user, activity) {
 
   const qrBuffer = await QRCode.toBuffer(qrData);
 
+  const placesTable = `
+  <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+    <thead>
+      <tr style="background-color: #1e90ff; color: white;">
+      <th style="padding: 8px 12px; border: 1px solid #ddd;">Zone</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd;">Place</th>
+        <th style="padding: 8px 12px; border: 1px solid #ddd;">Tarif</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${sieges.map((p, i) => `
+        <tr style="background-color: ${i % 2 === 0 ? '#f9f9f9' : 'white'};">
+        <td style="padding: 8px 12px; border: 1px solid #ddd; text-align:center;">${p.zone}</td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; text-align:center;">${p.numero_colonne}${p.numero_ligne}</td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; text-align:center;">${p.prix} €</td>
+        </tr>
+      `).join("")}
+    </tbody>
+  </table>
+`;
+
   const subject = "Votre billet - Mintonette Cup";
   const texteEmail = `
   <p>Bonjour ${user.prenom_utilisateur} ${user.nom_utilisateur},</p>
   <p>Voici votre billet pour l'activité <strong>${activity}</strong>.</p>
+  <p><strong>Vos places :</strong></p>
+  ${placesTable}
+  <br>
   <p>Présentez ce QR code à l'entrée :</p>
   <img src="cid:qrcode" alt="QR Code billet" style="width:200px;height:200px;" />
   <p>Merci,<br>L'équipe de la Mintonette Cup</p>`;

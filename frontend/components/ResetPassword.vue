@@ -44,9 +44,7 @@
       </form>
     </div>
 
-    <p v-if="message && continueReset" :class="{ error: isError }">
-      {{ message }}
-    </p>
+    <p v-if="message && continueReset" :class="{ error: isError }" v-html="message"></p>
   </div>
 </template>
 
@@ -144,7 +142,7 @@ async function sendEmail(mailToSend) {
     setTimeout(() => {
       isSending.value = false;
       progress.value = 0;
-      message.value = "Un e-mail de réinitialisation a été envoyé";
+      message.value = `Un e-mail de réinitialisation a été envoyé à l'adresse suivante : <span class="name_delete">${mailToSend}</span>`;
     }, 1000);
     
   } catch (err) {

@@ -20,13 +20,13 @@ exports.valideConfirmPassword = (req, res, next) => {
 
 exports.validebilletsQR = (req, res, next) => {
     const id_billet = req.params.id;
-    const { mail, user, activity } = req.body; 
+    const { mail, user, activity, sieges } = req.body; 
 
     if (isNaN(id_billet)) {
         return res.status(400).json({ error: "ID invalide" });
     }
 
-    if (!mail || !user || !activity) {
+    if (!mail || !user || !activity || !sieges) {
         return res.status(400).json({ error: "Tous les champs sont requis" });
     }
 
