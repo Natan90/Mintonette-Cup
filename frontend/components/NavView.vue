@@ -2,7 +2,7 @@
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <!-- Logo -->
     <router-link :to="{ name: 'Home', params: { lang: locale } }" class="routeur_logo">
-      <img src="../images/logo_rose.png" class="logo pointer" alt="logo" />
+      <img :src="isInIndex ? logo : logo_rose" class="logo pointer" alt="logo" />
     </router-link>
 
     <div class="optionNav">
@@ -155,6 +155,9 @@ import { useUserStore } from "@/stores/user.js";
 import { useRoute, useRouter } from "vue-router";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service.js";
 import { useAdminAPIStore } from "@/services/admin.service";
+
+import logo from "../images/logo.png";
+import logo_rose from "../images/logo_rose.png";
 
 const scrollToSection = (id) => {
   const section = document.getElementById(id);

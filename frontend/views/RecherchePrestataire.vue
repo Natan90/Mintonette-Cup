@@ -1,112 +1,150 @@
 <template>
   <section class="recherche" id="liste_prestataires">
+
     <div class="titreFiltre">
-      <span>{{ $t("filter.titleFilter") }}</span>
+      <div class="titreFiltre-inner">
+        <span class="titre-label">Annuaire</span>
+        <h2 class="titre-main">{{ $t("filter.titleFilter") }}</h2>
+      </div>
+      <div class="content_slider">
+        <span :class="{ active: !isServiceView }">{{ $t("filter.slider.prestataire") }}</span>
+        <label class="switch">
+          <input type="checkbox" v-model="isServiceView" />
+          <span class="slider round"></span>
+        </label>
+        <span :class="{ active: isServiceView }">{{ $t("filter.slider.service") }}</span>
+      </div>
     </div>
 
     <section class="filtreEtListe">
+
       <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
-        <div class="content_slider">
-          <span>{{ $t("filter.slider.prestataire") }}</span>
-          <label class="switch">
-            <input type="checkbox" v-model="isServiceView" />
-            <span class="slider round"></span>
-          </label>
-          <span>{{ $t("filter.slider.service") }}</span>
+
+        <div class="blocFiltre">
+          <span class="filtre-label">{{ $t("filter.name.title") }}</span>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input v-model="filters.nom" type="text" :placeholder="$t('filter.name.nameInput')" />
+          </div>
         </div>
 
         <div class="blocFiltre">
-          <span>{{ $t("filter.name.title") }}</span>
-          <input v-model="filters.nom" type="text" v-bind:placeholder="$t('filter.name.nameInput')" />
-        </div>
-
-        <div class="blocFiltre">
-          <span>{{ $t("filter.categorie.title") }}</span>
-          <div v-for="item in type_prestataire" :key="item.id_type_prestataire">
-            <label class="pointer">
+          <span class="filtre-label">{{ $t("filter.categorie.title") }}</span>
+          <div class="radio-group">
+            <label class="radio-item pointer" :class="{ selected: filters.category === 0 }">
+              <input type="radio" name="categorie" :value="0" v-model="filters.category" />
+              <span>{{ $t("filter.categorie.all") }}</span>
+            </label>
+            <label class="radio-item pointer"
+              :class="{ selected: filters.category === Number(item.id_type_prestataire) }"
+              v-for="item in type_prestataire" :key="item.id_type_prestataire">
               <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
                 v-model="filters.category" />
-              {{ item.nom_type_prestataire[locale] }}
+              <span>{{ item.nom_type_prestataire[locale] }}</span>
             </label>
           </div>
-
-          <label class="pointer">
-            <input type="radio" name="categorie" :value="0" v-model="filters.category" />
-            {{ $t("filter.categorie.all") }}
-          </label>
         </div>
 
         <div class="blocFiltre" v-if="isServiceView">
-          <span>{{ $t("filter.price.title") }}</span>
+          <span class="filtre-label">{{ $t("filter.price.title") }}</span>
           <div class="prix">
-            <input type="number" v-model="filters.prixMin" v-bind:placeholder="$t('filter.price.minPrice')" />
-            <input type="number" v-model="filters.prixMax" v-bind:placeholder="$t('filter.price.maxPrice')" />
+            <div class="input-wrap">
+              <input type="number" v-model="filters.prixMin" :placeholder="$t('filter.price.minPrice')" />
+              <span class="prix-suffix">€</span>
+            </div>
+            <div class="input-wrap">
+              <input type="number" v-model="filters.prixMax" :placeholder="$t('filter.price.maxPrice')" />
+              <span class="prix-suffix">€</span>
+            </div>
           </div>
         </div>
 
         <div class="boutonsFiltre">
-          <button class="pointer" type="submit">
+          <button class="btn-search pointer" type="submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
             {{ $t("filter.button.search") }}
           </button>
-          <button class="pointer" type="submit" @click="resetFilters">
+          <button class="btn-reset pointer" type="button" @click="resetFilters">
             {{ $t("filter.button.reset") }}
           </button>
         </div>
       </form>
 
       <section class="listePrestataire">
-          <div v-for="item in prestatairesFiltres" :key="item.id_prestataire || item.id_service"
-            class="blocListePrestataire">
-            <div class="enTetePrestataire">
-              <div class="titrePrestataire">
-                <span>
-                  {{ isServiceView ? item.nom_service : item.nom_prestataire }}
-                </span>
-              </div>
-
-              <div class="typePrestataire">
-                <span>
-                  {{ item.nom_type_prestataire[locale] }}
-                </span>
-              </div>
+        <div v-for="(item, i) in prestatairesFiltres" :key="item.id_prestataire || item.id_service"
+          class="blocListePrestataire" :style="{ '--i': i }">
+          <div class="enTetePrestataire">
+            <div class="titrePrestataire">
+              <span class="nom-presta">{{ isServiceView ? item.nom_service : item.nom_prestataire }}</span>
             </div>
-
-            <div class="descriptionPrestataire" v-if="!isServiceView">
-              <span>{{ $t("filter.description") }}</span>
-              <div v-html="item.descri_prestataire"></div>
-            </div>
-
-            <div class="blocBasPrestataire">
-              <div class="infosPrestataire">
-                <span>{{ $t("filter.info.title") }}</span>
-                <span v-if="!isServiceView">
-                  {{ $t("filter.info.service") }} : {{ item.nb_services }}
-                </span>
-                <span v-else>
-                  {{ $t("filter.info.tarif") }} : {{ item.prix }} €
-                </span>
-                <span v-if="isServiceView">
-                  {{ $t("filter.info.capacite") }} : {{ item.nb_participants }}
-                  {{ $t("filter.info.people") }}
-                </span>
-              </div>
-
-              <div class="contactPrestataire" v-if="!isServiceView">
-                <span>{{ $t("filter.contact") }}</span>
-                <span>{{ item.prenom_utilisateur }}
-                  {{ item.nom_utilisateur }}</span>
-                <span>{{ item.mail_prestataire }}</span>
-                <span>{{ item.tel_prestataire }}</span>
-              </div>
-            </div>
-
-            <div class="boutonListe" @click="
-              goToSpecificPrestataire(item.id_prestataire || item.id_service)
-              ">
-              <span class="pointer">{{ $t("filter.more") }}</span>
+            <div class="typePrestataire">
+              <span>{{ item.nom_type_prestataire[locale] }}</span>
             </div>
           </div>
+
+          <div class="descriptionPrestataire" v-if="!isServiceView">
+            <span class="section-label">{{ $t("filter.description") }}</span>
+            <div class="descri-content" v-html="item.descri_prestataire"></div>
+          </div>
+          <div class="blocBasPrestataire">
+            <div class="infosPrestataire">
+              <span class="section-label">{{ $t("filter.info.title") }}</span>
+              <span v-if="!isServiceView">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                {{ $t("filter.info.service") }} : <strong>{{ item.nb_services }}</strong>
+              </span>
+              <span v-else>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                {{ $t("filter.info.tarif") }} : <strong>{{ item.prix }} €</strong>
+              </span>
+              <span v-if="isServiceView">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                {{ $t("filter.info.capacite") }} : <strong>{{ item.nb_participants }}</strong> {{
+                  $t("filter.info.people") }}
+              </span>
+            </div>
+
+            <div class="contactPrestataire" v-if="!isServiceView">
+              <span class="section-label">{{ $t("filter.contact") }}</span>
+              <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
+              <a :href="'mailto:' + item.mail_prestataire">{{ item.mail_prestataire }}</a>
+              <span>{{ item.tel_prestataire }}</span>
+            </div>
+          </div>
+          <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire || item.id_service)">
+            <span class="pointer">
+              {{ $t("filter.more") }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div class="empty-state" v-if="prestatairesFiltres.length === 0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <p>Aucun résultat trouvé</p>
+        </div>
       </section>
+
     </section>
   </section>
 </template>
@@ -312,71 +350,49 @@ async function searchPrestataires() {
 </script>
 
 <style scoped>
-.content_slider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.content_slider span {
-  font-weight: 500;
-}
-
 .switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 24px;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* The slider */
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--couleur-fond);
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+  transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
   left: 4px;
-  bottom: 4px;
-  background-color: var(--rose-logo);
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  bottom: 3px;
+  background: #fff;
+  transition: 0.3s;
 }
 
 input:checked+.slider {
-  background-color: var(--primary-color);
-}
-
-input:focus+.slider {
-  box-shadow: 0 0 1px var(--primary-color);
+  background: var(--rose-logo);
+  border-color: var(--rose-logo);
 }
 
 input:checked+.slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  transform: translateX(22px);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 34px;
 }
@@ -385,329 +401,438 @@ input:checked+.slider:before {
   border-radius: 50%;
 }
 
+/* =====================
+   HEADER SECTION
+===================== */
 .recherche {
   display: flex;
   flex-direction: column;
+  background: var(--primary-color, #0a1d42);
 }
 
 .titreFiltre {
-  width: 100%;
-  height: 100%;
-
   display: flex;
-  flex-direction: column;
   align-items: center;
-
-  background-color: var(--rose-logo);
-  opacity: 0.9;
-
-  text-align: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 50px 60px 40px;
+  background: linear-gradient(135deg, --primary-color 0%, --couleur-fond 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
 }
 
-.titreFiltre span {
-  font-size: 2.6em;
+.titreFiltre::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: var(--rose-logo);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.titreFiltre-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.titre-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rose-logo);
+}
+
+.titre-main {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 800;
-  color: #0a1d42;
-  padding-top: 60px;
-  margin: 50px 0;
-  letter-spacing: 1px;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.content_slider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.content_slider span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s;
+}
+
+.content_slider span.active {
+  color: #fff;
+  font-weight: 700;
 }
 
 .filtreEtListe {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
+  min-height: 600px;
 }
 
-/* FILTRE */
-
 .filtrePrestataire {
-  width: 30%;
+  width: 280px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-
-  padding: 15px calc(5px + 1%);
-  gap: 1.5em;
-
+  gap: 28px;
+  padding: 32px 24px;
+  background: var(--primary-color);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
   height: fit-content;
-  /* C'EST MERVEILLEUX */
+  position: sticky;
+  top: 0;
+}
 
-  color: #0a1d42;
-  background-color: var(--rose-logo);
-  opacity: 0.9;
-
-  border-radius: 0 0 10px 10px;
+.filtre-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 10px;
 }
 
 .blocFiltre {
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  padding: 3px;
+  gap: 4px;
 }
 
-.blocFiltre span {
-  text-transform: uppercase;
-  font-size: 16px;
-  font-weight: 500;
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.blocFiltre input {
-  border: none;
-  border-radius: 10px;
-  padding: 4px;
+.input-icon {
+  position: absolute;
+  left: 10px;
+  width: 15px;
+  height: 15px;
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
 
-  max-width: 17em;
+.blocFiltre input[type="text"],
+.blocFiltre input[type="number"] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 9px 12px 9px 34px;
+  color: #fff;
+  font-size: 0.88rem;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+
+.blocFiltre input[type="number"] {
+  padding-left: 12px;
+}
+
+.blocFiltre input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.blocFiltre input:focus {
+  border-color: var(--rose-logo);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .prix {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-wrap: wrap;
-
-  row-gap: 1em;
+  gap: 10px;
 }
 
-.prix input {
-  min-width: 6em;
+.prix-suffix {
+  position: absolute;
+  right: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.82rem;
+  pointer-events: none;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.88rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.radio-item input {
+  display: none;
+}
+
+.radio-item::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.radio-item.selected {
+  background: rgba(232, 80, 130, 0.12);
+  border-color: rgba(232, 80, 130, 0.4);
+  color: #fff;
+}
+
+.radio-item.selected::before {
+  background: var(--rose-logo);
+  border-color: var(--rose-logo);
+  box-shadow: 0 0 8px rgba(232, 80, 130, 0.5);
 }
 
 .boutonsFiltre {
-  font-size: 15px;
-  text-align: center;
-  align-items: baseline;
   display: flex;
-  justify-content: space-evenly;
-  padding: 10px;
-  flex-wrap: wrap;
-  row-gap: 1em;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
 }
 
-.boutonsFiltre button {
-  font-size: 16px;
-
-  font-weight: bolder;
-
-  color: #0a1d42;
-  background-color: var(--rose-logo);
+.btn-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: var(--rose-logo);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   border: none;
-  border-radius: 10px;
-  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(232, 80, 130, 0.35);
 }
 
-.boutonsFiltre button:hover {
-  background-color: var(--rose-logo);
-  color: black;
-  background-color: white;
-  opacity: 0.9;
-  transition: var(--transition-fast);
+.btn-search:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232, 80, 130, 0.5);
 }
 
-/* FILTRE */
+.btn-reset {
+  padding: 10px 20px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.82rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-/* LISTE */
+.btn-reset:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.25);
+}
 
 .listePrestataire {
-
-  width: 70%;
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   flex-wrap: wrap;
+  align-content: flex-start;
   gap: 20px;
-
-  padding: 20px;
-
-  background-color: var(--couleur-fond);
-} 
-
-@media (max-width:750px){
-
-  .filtreEtListe{
-    flex-direction: column; 
-  }
-
-  .filtrePrestataire{
-    align-items: center;
-    width: 100%;
-    justify-content: space-evenly;
-    padding: 0;
-    border-radius: 0;
-  }
-
-  .listePrestataire{
-    width: 100%;
-  }
+  padding: 32px;
+  background: var(--primary-color);
+  background: linear-gradient(160deg, #0d1f4a 0%, --primary-color 100%);
 }
 
 .blocListePrestataire {
   display: flex;
   flex-direction: column;
-  gap: 1em;
-
-  width: 430px;
-  height: fit-content;
-
-  padding: 12px 10px 10px 10px;
-
-  border-radius: 10px;
-
-  opacity: 0.9;
+  gap: 0;
+  width: 380px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s;
+  animation: cardIn 0.4s ease both;
+  animation-delay: calc(var(--i, 0) * 0.06s);
 }
 
-.blocListePrestataire:nth-child(2n + 1) {
-  color: #0a1d42;
-  background-color: var(--rose-logo);
-}
-
-.blocListePrestataire:nth-child(2n) {
-  color: #0a1d42;
-  background-color: var(--rose-logo);
-
-  .typePrestataire {
-    color: var(--primary-color);
-    background-color: var(--rose-logo);
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  .blocBasPrestataire {
-    color: var(--primary-color);
-    background-color: var(--rose-logo);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-
-  .infosPrestataire :not(:first-child),
-  .contactPrestataire :not(:first-child) {
-    border-left: 4px solid var(--primary-color);
-  }
-
-  .boutonListe span {
-    color: var(--rose-logo);
-  }
-
-  .boutonListe span:hover {
-    color: orangered;
-    transition: var(--transition-fast);
-  }
-}
-
-.blocListePrestataire:nth-child(2n) {
-  color: var(--rose-logo);
-  background-color: var(--primary-color);
 }
 
 .blocListePrestataire:hover {
-  opacity: 1;
-  transform: scale(1.05);
-  transition: var(--transition-fast);
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(232, 80, 130, 0.3);
+  box-shadow:
+    0 0 0 1px rgba(232, 80, 130, 0.15),
+    0 12px 40px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(232, 80, 130, 0.08);
 }
 
 .enTetePrestataire {
   display: flex;
-  width: 100%;
-  flex-direction: row;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
 
-  margin-bottom: 1em;
-
-  font-weight: 500;
+.nom-presta {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .typePrestataire {
-  padding: 3px;
-  text-align: end;
-
-  height: fit-content;
-
-  border-radius: 2px;
-
+  flex-shrink: 0;
+  padding: 4px 10px;
+  background: rgba(232, 80, 130, 0.15);
+  border: 1px solid rgba(232, 80, 130, 0.3);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--rose-logo);
-  background-color: var(--primary-color);
-}
-
-.titrePrestataire {
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-
-  font-size: 1.25em;
-  font-weight: 1000;
-  gap: 0.5em;
-  text-align: center;
-}
-
-.titrePrestataire img {
-  width: 100%;
-  object-fit: contain;
 }
 
 .descriptionPrestataire {
-  margin-bottom: 1.3em;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.descriptionPrestataire div {
-  font-weight: 500;
-  padding-left: 1em;
+.section-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 6px;
+}
+
+.descri-content {
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .blocBasPrestataire {
-  width: 100%;
-
   display: flex;
-  flex-direction: row;
-
   flex-wrap: wrap;
-
-  gap: 2em;
-
-  padding: 6px 0 10px 0;
-
-  border-radius: 2px;
-
-  color: var(--rose-logo);
-  background-color: var(--primary-color);
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.descriptionPrestataire,
 .infosPrestataire,
 .contactPrestataire {
   display: flex;
   flex-direction: column;
-
-  padding: 0 0.2em 0 1em;
+  gap: 5px;
+  min-width: 140px;
 }
 
-.descriptionPrestataire :first-child,
-.infosPrestataire :first-child,
-.contactPrestataire :first-child {
-  text-transform: uppercase;
-  font-weight: 600;
-  margin-bottom: 0.5em;
+.infosPrestataire span,
+.contactPrestataire span,
+.contactPrestataire a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
 }
 
-.infosPrestataire :not(:first-child),
-.contactPrestataire :not(:first-child) {
-  font-weight: 500;
-  padding-left: 0.8em;
-  border-left: 4px solid var(--rose-logo);
+.contactPrestataire a:hover {
+  color: var(--rose-logo);
+}
+
+.infosPrestataire span:not(:first-child) strong,
+.infosPrestataire span strong {
+  color: #fff;
 }
 
 .boutonListe {
-  text-align: right;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .boutonListe span {
-  font-weight: 600;
-
-  text-decoration: underline;
-
-  color: #0a1d42;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rose-logo);
+  transition: gap 0.2s ease;
 }
 
 .boutonListe span:hover {
-  color: purple;
-  transition: var(--transition-fast);
+  gap: 10px;
 }
 
-/* LISTE */
+.empty-state {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 20px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.empty-state p {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
 </style>

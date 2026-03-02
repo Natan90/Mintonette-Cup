@@ -5,9 +5,7 @@
     <div class="all">
       <div class="image">
         <img :src="imagePreview || '../images/photo_fond.png'" alt="" />
-        <div
-          class="texteImage"
-          :style="{ color: colorTitle, fontFamily: selectedFont }">
+        <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
         </div>
       </div>
@@ -17,49 +15,36 @@
 
 
       <section class="infos">
-        <section class="infos" id="Info">
-          <div
-            class="bloc"
-            v-for="(item, index) in informationArray"
-            :key="index">
-            <img class="illustration" :src="item.image" />
-            <span class="title">
-              <countUp
-                :from="0"
-                :to="item.countUp"
-                :duration="2"
-                class="count-up-text"
-                v-if="item.countUp" />
-              {{ item.title }}
-            </span>
-            <div class="contenuTexte">
-              <span class="descri" v-html="item.descri"></span>
-              <router-link
-                :to="{ name: 'Information' }"
-                class="voirPlus pointer">
-                <span class="pointer">{{ $t("information.voirPlus") }}</span>
-              </router-link>
+        <section class="infos-wrapper" id="Info">
+          <div class="infos-row" v-for="(row, rowIndex) in chunkedArray" :key="rowIndex">
+            <div class="bloc" v-for="(item, index) in row" :key="index">
+              <img class="illustration" :src="item.image" />
+              <span class="title">
+                <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
+                {{ item.title }}
+              </span>
+              <div class="contenuTexte">
+                <span class="descri" v-html="item.descri"></span>
+                <router-link :to="{ name: 'Information' }" class="voirPlus pointer">
+                  <span class="pointer">{{ $t("information.voirPlus") }}</span>
+                </router-link>
+              </div>
             </div>
           </div>
         </section>
       </section>
     </div>
 
-    <section
-      v-if="
-        userStore && 
-        userStore.isConnected &&
-        !utilisateur.ispresta &&
-        !utilisateur.waitingforadmin
-      ">
+    <section v-if="
+      userStore &&
+      userStore.isConnected &&
+      !utilisateur.ispresta &&
+      !utilisateur.waitingforadmin
+    ">
       <div class="teams_texte">
-        <div
-          v-html="$t('mintonetteCup.prestataire.devenir')"
-          class="team_content"></div>
+        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="team_content"></div>
 
-        <router-link
-          :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
-          class="btn_teams">
+        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }" class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonDevenir") }}
         </router-link>
       </div>
@@ -67,13 +52,9 @@
 
     <section v-if="userStore.isConnected && utilisateur.ispresta">
       <div class="teams_texte">
-        <div
-          v-html="$t('mintonetteCup.prestataire.estDeja')"
-          class="team_content"></div>
+        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="team_content"></div>
 
-        <router-link
-          :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
-          class="btn_teams">
+        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonGerer") }}
         </router-link>
       </div>
@@ -81,12 +62,10 @@
 
     <section v-if="userStore.isConnected && utilisateur.waitingforadmin">
       <div class="teams_texte">
-        <div
-          v-html="$t('mintonetteCup.prestataire.enAttente')"
-          class="team_content"></div>
+        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="team_content"></div>
       </div>
     </section>
-   
+
 
     <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -185,6 +164,17 @@ const handleScroll = () => {
   }
 };
 
+const CARDS_PER_ROW = 3;
+
+const chunkedArray = computed(() => {
+  const arr = informationArray.value;
+  const rows = [];
+  for (let i = 0; i < arr.length; i += CARDS_PER_ROW) {
+    rows.push(arr.slice(i, i + CARDS_PER_ROW));
+  }
+  return rows;
+});
+
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   getValuesEvenement();
@@ -201,15 +191,15 @@ onBeforeUnmount(() => {
 });
 
 async function getValuesEvenement() {
-    try {
-        const res = await adminAPIStore.GetEvenement();
-        title_evenement.value = res.data.nom_evenement;
-        colorTitle.value = res.data.color_title;
-        selectedFont.value = res.data.text_font;
-        imagePreview.value = res.data.image_evenement;
-    } catch (err) {
-        console.error(err);
-    }
+  try {
+    const res = await adminAPIStore.GetEvenement();
+    title_evenement.value = res.data.nom_evenement;
+    colorTitle.value = res.data.color_title;
+    selectedFont.value = res.data.text_font;
+    imagePreview.value = res.data.image_evenement;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function getValuesUser() {
@@ -267,38 +257,83 @@ body::-webkit-scrollbar {
   /* font-family: "Meie Script"; */
 }
 
-.infos {
+.infos-wrapper {
   display: flex;
-  justify-content: space-evenly;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  /* gap: 30px; */
   width: 95%;
-  margin: 50px 2.5% 50px 2.5%;
-  gap: 50px;
+  margin: 50px 2.5%;
+}
+
+.infos-row {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  gap: 40px;
+  margin: 30px;
 }
 
 .bloc {
   display: flex;
   flex-wrap: wrap;
   background-color: var(--rose-logo);
-  opacity: 0.7;
+  opacity: 0.6;
   padding-bottom: 5px;
   max-width: 60%;
-  margin: 15px 20px;
+  /* margin: 15px 20px; */
   width: 300px;
   height: 270px;
 
   border-radius: 10px;
 
-  transition: var(--transition-fast);
+  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
-.bloc:hover {
-  background-color: var(--rose-logo);
-  opacity: 0.9;
-  transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.infos-row .bloc:hover {
+  transform: translateZ(100px);
+  filter: brightness(1);
+  opacity: 1;
+}
+
+.infos-row .bloc:hover + .bloc {
+  transform: translateZ(60px) rotateY(10deg);
+  /* filter: brightness(0.6); */
+  opacity: 0.6;
+}
+
+.infos-row .bloc:hover + .bloc + .bloc {
+  transform: translateZ(40px) rotateY(5deg);
+  /* filter: brightness(0.4); */
+  opacity: 0.4;
+}
+
+.infos-row .bloc:has(+ .bloc:hover) {
+  transform: translateZ(60px) rotateY(-10deg);
+  /* filter: brightness(0.6); */
+  opacity: 0.6;
+}
+
+.infos-row .bloc:has(+ .bloc + .bloc:hover) {
+  transform: translateZ(40px) rotateY(-5deg);
+  /* filter: brightness(0.4); */
+  opacity: 0.4;
+}
+
+.infos-row:has(.bloc:hover) + .infos-row .bloc {
+  transform: translateZ(-60px) rotateX(-12deg);
+  /* filter: brightness(0.5); */
+  opacity: 0.3;
+  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+}
+
+.infos-row:has(+ .infos-row .bloc:hover) .bloc {
+  transform: translateZ(-60px) rotateX(12deg);
+  filter: brightness(0.5);
+  opacity: 0.3;
+  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
 }
 
 .bloc .title {
@@ -392,7 +427,7 @@ body::-webkit-scrollbar {
   text-align: center;
   margin: 0 auto;
   padding: 60px 40px;
-  background: #0a3a75;
+  background: var(--primary-color);
 
   /* background: linear-gradient(135deg, #0a3a75cc, #4fa3ffcc); */
   backdrop-filter: blur(8px);
@@ -419,20 +454,20 @@ body::-webkit-scrollbar {
   margin-top: 25px;
   padding: 16px 35px;
 
-  background: #f7c325;
-  color: #0a1d42;
+  background: var(--rose-logo);
+  color: var(--primary-color);
 
   font-weight: bold;
   font-size: 1.3em;
   border-radius: 50px;
   text-decoration: none;
 
-  box-shadow: 0 6px 14px rgba(247, 195, 37, 0.35);
+  box-shadow: 0 6px 14px var(--rose-logo);
   transition: 0.25s ease;
 }
 
 .btn_teams:hover {
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(247, 195, 37, 0.55);
+  box-shadow: 0 6px 12px color-mix(in srgb, var(--rose-logo) 50%, transparent);
 }
 </style>
