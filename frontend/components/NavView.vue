@@ -2,7 +2,7 @@
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <!-- Logo -->
     <router-link :to="{ name: 'Home', params: { lang: locale } }" class="routeur_logo">
-      <img src="../images/logo.png" class="logo pointer" alt="logo" />
+      <img src="../images/logo_rose.png" class="logo pointer" alt="logo" />
     </router-link>
 
     <div class="optionNav">
@@ -317,7 +317,7 @@ if (savedLang) locale.value = savedLang;
 }
 
 .boutonNav:hover {
-  color: #ffff00;
+  color: var(--rose-hover);
 }
 
 a span {
@@ -367,7 +367,7 @@ a span {
   .profile-placeholder,
   .profile-photo {
     transform: scale(1.1);
-    border-color: var(--jaune-logo);
+    border-color: var(--rose-logo);
   }
 
   .optionProfil {
@@ -399,7 +399,7 @@ a span {
 
 .optionProfil:hover {
   text-indent: 0.8em;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   color: black;
 }
 
@@ -462,14 +462,14 @@ a span {
   .optionNav,
   .boutonNav:not(.connect){
     flex-direction: column;
-    background-color: var(--bleu-logo);
+    background-color: var(--primary-color);
     width: 100%;
     margin: 0;
   }
 
   .routeur_logo:hover,
   .boutonNav:not(.connect):hover{
-    background-color: var(--jaune-logo);
+    background-color: var(--rose-logo);
     color: black;
     transition: var(--transition-fast);
   }
@@ -483,14 +483,14 @@ a span {
   }
 
   .partieProfil{
-    background-color: var(--bleu-logo);
+    background-color: var(--primary-color);
     justify-content: center;
     width: 100%;
   }
 
   .partieProfil:hover{
     transition: var(--transition-fast);
-    background-color: var(--jaune-logo);
+    background-color: var(--rose-logo);
     color: black;
     span{
       color: black;

@@ -357,17 +357,17 @@ async function searchPrestataires() {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 input:checked+.slider {
-  background-color: var(--bleu-logo);
+  background-color: var(--primary-color);
 }
 
 input:focus+.slider {
-  box-shadow: 0 0 1px var(--bleu-logo);
+  box-shadow: 0 0 1px var(--primary-color);
 }
 
 input:checked+.slider:before {
@@ -398,7 +398,7 @@ input:checked+.slider:before {
   flex-direction: column;
   align-items: center;
 
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   opacity: 0.9;
 
   text-align: center;
@@ -433,7 +433,7 @@ input:checked+.slider:before {
   /* C'EST MERVEILLEUX */
 
   color: #0a1d42;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   opacity: 0.9;
 
   border-radius: 0 0 10px 10px;
@@ -490,14 +490,14 @@ input:checked+.slider:before {
   font-weight: bolder;
 
   color: #0a1d42;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   border: none;
   border-radius: 10px;
   padding: 6px;
 }
 
 .boutonsFiltre button:hover {
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   color: black;
   background-color: white;
   opacity: 0.9;
@@ -559,30 +559,30 @@ input:checked+.slider:before {
 
 .blocListePrestataire:nth-child(2n + 1) {
   color: #0a1d42;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
 }
 
 .blocListePrestataire:nth-child(2n) {
   color: #0a1d42;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
 
   .typePrestataire {
-    color: var(--bleu-logo);
-    background-color: var(--jaune-logo);
+    color: var(--primary-color);
+    background-color: var(--rose-logo);
   }
 
   .blocBasPrestataire {
-    color: var(--bleu-logo);
-    background-color: var(--jaune-logo);
+    color: var(--primary-color);
+    background-color: var(--rose-logo);
   }
 
   .infosPrestataire :not(:first-child),
   .contactPrestataire :not(:first-child) {
-    border-left: 4px solid var(--bleu-logo);
+    border-left: 4px solid var(--primary-color);
   }
 
   .boutonListe span {
-    color: var(--jaune-logo);
+    color: var(--rose-logo);
   }
 
   .boutonListe span:hover {
@@ -592,8 +592,8 @@ input:checked+.slider:before {
 }
 
 .blocListePrestataire:nth-child(2n) {
-  color: var(--jaune-logo);
-  background-color: var(--bleu-logo);
+  color: var(--rose-logo);
+  background-color: var(--primary-color);
 }
 
 .blocListePrestataire:hover {
@@ -621,8 +621,8 @@ input:checked+.slider:before {
 
   border-radius: 2px;
 
-  color: var(--jaune-logo);
-  background-color: var(--bleu-logo);
+  color: var(--rose-logo);
+  background-color: var(--primary-color);
 }
 
 .titrePrestataire {
@@ -664,8 +664,8 @@ input:checked+.slider:before {
 
   border-radius: 2px;
 
-  color: var(--jaune-logo);
-  background-color: var(--bleu-logo);
+  color: var(--rose-logo);
+  background-color: var(--primary-color);
 }
 
 .descriptionPrestataire,
@@ -689,7 +689,7 @@ input:checked+.slider:before {
 .contactPrestataire :not(:first-child) {
   font-weight: 500;
   padding-left: 0.8em;
-  border-left: 4px solid var(--jaune-logo);
+  border-left: 4px solid var(--rose-logo);
 }
 
 .boutonListe {

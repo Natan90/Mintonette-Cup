@@ -281,7 +281,7 @@ body::-webkit-scrollbar {
 .bloc {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   opacity: 0.7;
   padding-bottom: 5px;
   max-width: 60%;
@@ -295,7 +295,7 @@ body::-webkit-scrollbar {
 }
 
 .bloc:hover {
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   opacity: 0.9;
   transform: scale(1.1);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -335,7 +335,7 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: flex-end;
   text-align: end;
-  color: var(--bleu-logo);
+  color: var(--primary-color);
   font-weight: bold;
   text-decoration: underline;
 }

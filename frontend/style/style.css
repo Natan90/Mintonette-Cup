@@ -19,10 +19,9 @@
     /* INDEX */
 
     /* Couleurs */
-    --primary-color: #00167a;
-    --baniere-color-food: #b71c1c;
-    --jaune-logo: #f7c325;
-    --bleu-logo: rgb(4, 14, 87);
+    --primary-color: #3a6f43;
+    --rose-logo: #ffd5d5;
+    --rose-hover: #fc9999;
     --couleur-fond: #f9fafb;
 
     /* Transitions */
@@ -138,6 +137,6 @@
 }
 
 .back-arrow:hover {
-  color: var(--jaune-logo);
+  color: var(--rose-logo);
   transition: var(--transition-fast);
 }

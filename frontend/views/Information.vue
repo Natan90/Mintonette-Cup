@@ -88,7 +88,7 @@ const informationArray = computed(() => [
     padding: 100px 2em 200px 2em;
 
     color: var(--primary-color);
-    background-color: var(--jaune-logo);
+    background-color: var(--rose-logo);
 
 }
 
@@ -139,7 +139,7 @@ const informationArray = computed(() => [
 
     text-align: center;
     background-color: var(--primary-color);
-    color: var(--jaune-logo);
+    color: var(--rose-logo);
 }
 
 .textBloc{

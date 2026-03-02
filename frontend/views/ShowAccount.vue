@@ -238,7 +238,7 @@ async function deleteAccount(id) {
   gap: 30px;
   border-radius: 10px 10px 0 0;
   padding: 20px;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   color: black;
 }
 
@@ -265,7 +265,7 @@ async function deleteAccount(id) {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
 }
 
 .bloc_information {
@@ -374,7 +374,7 @@ async function deleteAccount(id) {
 }
 
 .boutons a:hover {
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   color: grey;
   transition: var(--transition-fast);
 }

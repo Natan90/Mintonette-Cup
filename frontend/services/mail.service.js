@@ -26,7 +26,7 @@ export const useMailStore = defineStore("mail", () => {
       user, 
       activity,
       sieges
-    })
+    });
   }
 
   return {

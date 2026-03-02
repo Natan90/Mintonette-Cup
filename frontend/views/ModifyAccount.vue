@@ -450,7 +450,7 @@ async function sendEmail(mailToSend) {
   flex-direction: column;
   gap: 20px;
 
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
 }
 
 .bloc_information {
@@ -515,7 +515,7 @@ async function sendEmail(mailToSend) {
 
 .boutons a:hover,
 .boutons button:hover {
-  background-color: var(--jaune-logo);
+  background-color: var(--rose-logo);
   color: grey;
   transition: var(--transition-fast);
 }
