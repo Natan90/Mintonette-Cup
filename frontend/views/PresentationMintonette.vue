@@ -2,7 +2,7 @@
   <section class="presentation">
     <span class="question">{{ $t("PresentationMintonette.title") }}</span>
 
-    <span v-html="descri_evenement_texte"></span>
+    <span v-html="descri_evenement_texte" class="descri"></span>
   </section>
 </template>
 
@@ -69,19 +69,28 @@ function updateDescription() {
 
 <style>
 .presentation {
-  width: 70%;
-  margin: 30px 15%;
+  color: var(--rose-logo);
+  width: 100%;
+  /* margin: 30px 15%; */
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
 
-  text-align: justify;
+  /* text-align: justify; */
+  
 }
 
 .question {
-  font-size: 2em;
+  font-size: 3em;
   font-weight: bold;
+  align-self: center;
+}
+
+.descri {
+  font-size: 1.2em;
+  text-align: center;
   align-self: center;
 }
 </style>

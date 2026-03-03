@@ -9,7 +9,7 @@
           {{ title_evenement }}
         </div>
       </div>
-      <PresentationMintonette></PresentationMintonette>
+      <PresentationMintonette class="presentationMint"></PresentationMintonette>
       <section id="Carte" class="section"></section>
       <Map> </Map>
 
@@ -243,8 +243,23 @@ body::-webkit-scrollbar {
   /* margin-top: 1.5em; */
 }
 
+.image {
+  position: relative;
+}
+
+.image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, transparent, black);
+  pointer-events: none;
+}
+
 .texteImage {
-  z-index: 1;
+  z-index: 2;
   font-size: 5em;
   text-align: center;
   position: absolute;
@@ -255,6 +270,13 @@ body::-webkit-scrollbar {
   border-radius: 10px;
   padding: 5px 10px;
   /* font-family: "Meie Script"; */
+}
+
+.presentationMint {
+  height: 500px;
+  background: linear-gradient(to top, transparent, black);
+  pointer-events: none;
+  background-color: var(--primary-color);
 }
 
 .infos-wrapper {
