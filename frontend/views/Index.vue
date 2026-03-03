@@ -280,8 +280,8 @@ body::-webkit-scrollbar {
   background-color: var(--primary-color);
 }
 
-.map {
-  background: linear-gradient(to top, var(--primary-color), #fff);
+.infos {
+  background: linear-gradient(to bottom, transparent, var(--rose-logo));
 }
 
 .infos-wrapper {

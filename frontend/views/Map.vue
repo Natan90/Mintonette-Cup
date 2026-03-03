@@ -292,7 +292,7 @@ const generalMap = [
     ],
   },
 ];
-//Terrains & Gradins #############################################################################################################################################
+//Terrains & Gradins 
 const landLocations = [
   {
     type: "court",
@@ -342,7 +342,7 @@ const landLocations = [
       [1044.26509630362, 677.7501285267031],
     ],
   },
-  // Gradin ##############################################################################################################################################################################################################################
+  // Gradin 
   {
     type: "stand",
     name: "Tribune Nord",
@@ -503,7 +503,7 @@ const landLocations = [
   },
 ];
 
-// Gradins  ##########################################################################################################################################################################################################################################
+// Gradins  
 const NorthStand = [
   {
     type: "stand",
@@ -715,7 +715,7 @@ const WestStand = [
     ],
   },
 ];
-//Prestataires  #########################################################################################################""
+//Prestataires  
 const serviceLocation = ref([
   {
     id_zone: 1,
@@ -2336,7 +2336,7 @@ function goBack() {
 <style>
 body {
   font-family: "Inter", "Segoe UI", sans-serif;
-  /* background: #f9fafb; */
+  background: #f0f0f0;
   color: #222;
 }
 
@@ -2345,7 +2345,8 @@ body::-webkit-scrollbar {
 }
 
 .container-map {
-  background: linear-gradient(to bottom, var(--primary-color), #ffffff);
+  background-color: #f0f0f0;
+  background: linear-gradient(to bottom, var(--primary-color), #8aaf8f, #c5d9c7, #f0f0f0);
   min-height: 100vh;
 }
 
@@ -2353,7 +2354,7 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin: 20px 0;
+  /* margin: 20px 0; */
 }
 
 .SwitchButton {
@@ -2414,9 +2415,7 @@ body::-webkit-scrollbar {
   /* border: 2px solid #00167a; */
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
-  background: transparent;
 }
 </style>
