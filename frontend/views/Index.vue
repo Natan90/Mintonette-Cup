@@ -4,7 +4,8 @@
 
     <div class="all">
       <div class="image">
-        <img :src="imagePreview || '../images/photo_fond.png'" alt="" />
+        <img src="../images/ballon.png" alt="ballon" id="img_ballon" :style="{ transform: `translateY(${ballonY}px)` }">
+        <img :src="imagePreview || '../images/photo_fond.png'" alt="photo_fond" />
         <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
         </div>
@@ -156,12 +157,78 @@ const transformStyles = [
   "rotate(-5deg) translate(250px)",
 ];
 
+const ballonY = ref(0);
+const ballonVelocity = ref(0);
+const alreadyScroll = ref(false);
+let lastScrollY = 0;
+let animationFrame = null;
+let stopTimeout = null;
+
+const animateBounce = () => {
+  const gravity = 0.6;
+  const damping = 0.55;
+  const floor = ballonY.value;
+
+  let velocity = ballonVelocity.value;
+  let pos = ballonY.value;
+  let bouncePos = 0;
+
+  let bounceVelocity = -20;
+
+  const bounce = () => {
+    bounceVelocity += gravity;
+    bouncePos += bounceVelocity;
+
+    if (bouncePos >= 0) {
+      bouncePos = 0;
+      bounceVelocity *= -damping;
+
+      if (Math.abs(bounceVelocity) < 0.5) {
+        ballonY.value = floor;
+        return;
+      }
+    }
+
+    ballonY.value = floor + bouncePos;
+    animationFrame = requestAnimationFrame(bounce);
+  };
+
+  animationFrame = requestAnimationFrame(bounce);
+};
+
 const handleScroll = () => {
-  if (window.scrollY > 500) {
+  const scrollY = window.scrollY;
+  
+  if (scrollY > 500) {
     navbar.value = "-100px";
   } else {
     navbar.value = "0px";
   }
+
+  if (alreadyScroll.value) return;
+
+  const maxScroll = 60;
+  const maxDrop = 1300;
+  const newY = Math.min((scrollY / maxScroll) * maxDrop, maxDrop);
+
+  if (newY >= maxDrop && ballonY.value < maxDrop) {
+    ballonY.value = maxDrop;
+    alreadyScroll.value = true;
+
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+    clearTimeout(stopTimeout);
+    animateBounce();
+    return;
+  }
+
+  if (!animationFrame) {
+    ballonY.value = newY;
+  }
+
+  lastScrollY = scrollY;
 };
 
 const CARDS_PER_ROW = 3;
@@ -174,6 +241,7 @@ const chunkedArray = computed(() => {
   }
   return rows;
 });
+
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -245,6 +313,16 @@ body::-webkit-scrollbar {
 
 .image {
   position: relative;
+}
+
+#img_ballon {
+  z-index: 999;
+  position: absolute;
+  top: 0;
+  right: 16.5%;
+  width: 85px;
+  height: auto;
+  will-change: transform;
 }
 
 .image::after {
