@@ -1,18 +1,20 @@
 <template>
-  <div class="button"></div>
-  <!-- Balise vide pour insérer la map -->
-  <div class="mapContainer">
-    <div class="map" id="map">
-      <button
-        v-if="currentMapType !== 'generalZone'"
-        class="SwitchButton pointer"
-        @click="goBack">
-        Retour
-      </button>
-    </div>
-  </div>
-  <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
-  <div class="hoverName" id="hoverName"></div>
+  <section class="container-map">    
+    <div class="button"></div>
+      <!-- Balise vide pour insérer la map -->
+      <div class="mapContainer">
+        <div class="map" id="map">
+          <button
+            v-if="currentMapType !== 'generalZone'"
+            class="SwitchButton pointer"
+            @click="goBack">
+            Retour
+          </button>
+        </div>
+      </div>
+      <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
+      <div class="hoverName" id="hoverName"></div>
+  </section>
 </template>
 
 <script setup>
@@ -2334,12 +2336,17 @@ function goBack() {
 <style>
 body {
   font-family: "Inter", "Segoe UI", sans-serif;
-  background: #f9fafb;
+  /* background: #f9fafb; */
   color: #222;
 }
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+.container-map {
+  background: linear-gradient(to bottom, var(--primary-color), #ffffff);
+  min-height: 100vh;
 }
 
 .button {
@@ -2410,5 +2417,6 @@ body::-webkit-scrollbar {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
+  background: transparent;
 }
 </style>

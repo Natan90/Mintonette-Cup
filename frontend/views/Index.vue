@@ -273,10 +273,15 @@ body::-webkit-scrollbar {
 }
 
 .presentationMint {
+  margin: 0 auto;
   height: 500px;
   background: linear-gradient(to top, transparent, black);
   pointer-events: none;
   background-color: var(--primary-color);
+}
+
+.map {
+  background: linear-gradient(to top, var(--primary-color), #fff);
 }
 
 .infos-wrapper {
