@@ -10,7 +10,25 @@
           {{ title_evenement }}
         </div>
       </div>
-      <PresentationMintonette class="presentationMint"></PresentationMintonette>
+      <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
+      <section class="presentationMint">
+        <section class="presentation">
+          <span class="question">{{ $t("PresentationMintonette.title") }}</span>
+
+          <div ref="ancreBallon" id="ancre-ballon"></div>
+          <span v-html="descri_evenement_texte" class="descri_evenement"></span>
+          <section class="video_with_balloon">
+            <div class="container_video">
+              <video width="400">
+                <source src="/public/vnl_video.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </section>
+        </section>
+
+      </section>
+
+
       <section id="Carte" class="section"></section>
       <Map> </Map>
 
@@ -78,7 +96,7 @@
 /* ********************
         IMPORTS 
 ******************** */
-import { ref, onMounted, onBeforeUnmount, onActivated, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, onActivated, computed, watch, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 /* ********************
@@ -92,6 +110,7 @@ import RecherchePrestataire from "./RecherchePrestataire.vue";
 import CountUp from "../components/CountUp.vue";
 import PresentationMintonette from "./PresentationMintonette.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
+
 
 /* ********************
     IMAGES IMPORTS 
@@ -108,14 +127,18 @@ const userStore = useUserStore();
 const adminAPIStore = useAdminAPIStore();
 
 const utilisateur = ref([]);
+const { locale } = useI18n();
 
 /* ********************
     Evenement Values
 ******************** */
+const evenement = ref(null);
 const title_evenement = ref("");
 const colorTitle = ref("");
 const imagePreview = ref(null);
 const selectedFont = ref(null);
+const descri_evenement_title = ref("");
+const descri_evenement_texte = ref("");
 
 const { t } = useI18n();
 const informationArray = computed(() => [
@@ -160,9 +183,45 @@ const transformStyles = [
 const ballonY = ref(0);
 const ballonVelocity = ref(0);
 const alreadyScroll = ref(false);
+const ballonHasFallen = ref(false);
+const showBalloon = ref(false);
+const ancreBallon = ref(null);
+
 let lastScrollY = 0;
 let animationFrame = null;
 let stopTimeout = null;
+
+
+const getMaxDrop = () => {
+  if (!ancreBallon.value) return 1300;
+  const ballonEl = document.getElementById("img_ballon");
+  const ancreRect = ancreBallon.value.getBoundingClientRect();
+  const ballonRect = ballonEl.getBoundingClientRect();
+
+  return ancreRect.top - ballonRect.top + window.scrollY;
+};
+
+const animateFall = () => {
+  const gravity = 1.5;
+  const maxDrop = getMaxDrop();
+  let velocity = 0;
+
+  const fall = () => {
+    velocity += gravity;
+    ballonY.value += velocity;
+
+    if (ballonY.value >= maxDrop) {
+      ballonY.value = maxDrop;
+      animationFrame = null;
+      animateBounce();
+      return;
+    }
+
+    animationFrame = requestAnimationFrame(fall);
+  };
+
+  animationFrame = requestAnimationFrame(fall);
+};
 
 const animateBounce = () => {
   const gravity = 0.6;
@@ -196,36 +255,31 @@ const animateBounce = () => {
   animationFrame = requestAnimationFrame(bounce);
 };
 
+function hideOrShowBalloon() {
+  const elt = document.getElementById("img_ballon");
+
+  if (showBalloon.value) {
+    elt.style.display = 'block';
+  }
+  else {
+    elt.style.display = 'none';
+  }
+}
+
 const handleScroll = () => {
   const scrollY = window.scrollY;
-  
+
   if (scrollY > 500) {
     navbar.value = "-100px";
   } else {
     navbar.value = "0px";
   }
+  showBalloon.value = true;
+  hideOrShowBalloon();
 
-  if (alreadyScroll.value) return;
-
-  const maxScroll = 60;
-  const maxDrop = 1300;
-  const newY = Math.min((scrollY / maxScroll) * maxDrop, maxDrop);
-
-  if (newY >= maxDrop && ballonY.value < maxDrop) {
-    ballonY.value = maxDrop;
-    alreadyScroll.value = true;
-
-    if (animationFrame) {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = null;
-    }
-    clearTimeout(stopTimeout);
-    animateBounce();
-    return;
-  }
-
-  if (!animationFrame) {
-    ballonY.value = newY;
+  if (!ballonHasFallen.value && !animationFrame) {
+    ballonHasFallen.value = true;
+    animateFall();
   }
 
   lastScrollY = scrollY;
@@ -245,6 +299,7 @@ const chunkedArray = computed(() => {
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
+  hideOrShowBalloon();
   getValuesEvenement();
   getValuesUser();
 });
@@ -258,15 +313,37 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
+watch(
+  () => locale.value,
+  (newLang) => {
+    updateDescription();
+  }
+);
+
+
 async function getValuesEvenement() {
   try {
     const res = await adminAPIStore.GetEvenement();
+    evenement.value = res.data;
     title_evenement.value = res.data.nom_evenement;
     colorTitle.value = res.data.color_title;
     selectedFont.value = res.data.text_font;
     imagePreview.value = res.data.image_evenement;
+
+    updateDescription();
   } catch (err) {
     console.error(err);
+  }
+}
+
+function updateDescription() {
+  if (evenement.value?.descri_evenement?.[locale.value]) {
+    descri_evenement_texte.value =
+      evenement.value.descri_evenement[locale.value].texte;
+    descri_evenement_title.value =
+      evenement.value.descri_evenement[locale.value].title;
+  } else {
+    descri_evenement_texte.value = "";
   }
 }
 
@@ -315,6 +392,17 @@ body::-webkit-scrollbar {
   position: relative;
 }
 
+.image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, transparent, black);
+  pointer-events: none;
+}
+
 #img_ballon {
   z-index: 999;
   position: absolute;
@@ -325,15 +413,25 @@ body::-webkit-scrollbar {
   will-change: transform;
 }
 
-.image::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(to bottom, transparent, black);
-  pointer-events: none;
+.presentation {
+  color: var(--rose-logo);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+.question {
+  font-size: 3em;
+  font-weight: bold;
+  align-self: center;
+}
+
+.descri_evenement {
+  font-size: 1.2em;
+  text-align: center;
+  align-self: center;
 }
 
 .texteImage {
@@ -403,13 +501,13 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-.infos-row .bloc:hover + .bloc {
+.infos-row .bloc:hover+.bloc {
   transform: translateZ(60px) rotateY(10deg);
   /* filter: brightness(0.6); */
   opacity: 0.6;
 }
 
-.infos-row .bloc:hover + .bloc + .bloc {
+.infos-row .bloc:hover+.bloc+.bloc {
   transform: translateZ(40px) rotateY(5deg);
   /* filter: brightness(0.4); */
   opacity: 0.4;
@@ -427,7 +525,7 @@ body::-webkit-scrollbar {
   opacity: 0.4;
 }
 
-.infos-row:has(.bloc:hover) + .infos-row .bloc {
+.infos-row:has(.bloc:hover)+.infos-row .bloc {
   transform: translateZ(-60px) rotateX(-12deg);
   /* filter: brightness(0.5); */
   opacity: 0.3;
@@ -574,5 +672,16 @@ body::-webkit-scrollbar {
 .btn_teams:hover {
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 6px 12px color-mix(in srgb, var(--rose-logo) 50%, transparent);
+}
+
+.video_with_balloon {
+  margin-top: 60px;
+}
+
+.container_video {
+  z-index: 1000;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>

@@ -14,9 +14,6 @@ import { useAdminAPIStore } from "@/services/admin.service.js";
 const { locale } = useI18n();
 const adminAPIStore = useAdminAPIStore();
 
-const content = ref("");
-const selectedItem = ref(0);
-
 const evenement = ref(null);
 const title_evenement = ref("");
 const colorTitle = ref("");
