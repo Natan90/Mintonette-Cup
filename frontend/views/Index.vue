@@ -24,12 +24,12 @@
       </div>
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
       <div
-      v-if="isBallonStopped"
-      class="message-ballon"
-      :style="[
-        messageBallonStyle,
-        isBallonStopped ? { cursor: 'pointer' } : {},
-      ]"
+        v-if="isBallonStopped"
+        class="message-ballon"
+        :style="[
+          messageBallonStyle,
+          isBallonStopped ? { cursor: 'pointer' } : {},
+        ]"
         @click="playVideoFullscreen()">
         Plongez dans l'ambiance
       </div>
@@ -732,7 +732,7 @@ body::-webkit-scrollbar {
   padding: 60px 40px;
   background: var(--primary-color);
 
-  background: linear-gradient(to bottom, var(--rose-logo), #242424cc);
+  background: linear-gradient(to bottom, var(--rose-logo), 60%, #242424cc);
   backdrop-filter: blur(8px);
   /* box-shadow: 0 10px 30px rgba(0,0,0,0.15); */
 }
