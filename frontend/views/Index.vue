@@ -4,7 +4,10 @@
 
     <div class="all">
       <div class="image">
-        <img src="../images/ballon.png" alt="ballon" id="img_ballon" :style="{ transform: `translateY(${ballonY}px)` }">
+        <img src="../images/ballon.png" alt="ballon" id="img_ballon"
+          @click="isBallonStopped && playVideoFullscreen()"
+          :style="[{ transform: `translateY(${ballonY}px)` }, isBallonStopped ? { cursor: 'pointer' } : {}]"
+        />
         <img :src="imagePreview || '../images/photo_fond.png'" alt="photo_fond" />
         <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
@@ -12,15 +15,15 @@
       </div>
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
       <div ref="ancreBallon" id="ancre-ballon"></div>
-      <div v-if="isBallonStopped" class="message-ballon" :style="messageBallonStyle">
-        Découvrez l'évènement !
+      <div v-if="isBallonStopped" class="message-ballon" :style="[messageBallonStyle, isBallonStopped ? { cursor: 'pointer' } : {}]" @click="playVideoFullscreen()">
+        Plongez dans l'ambiance
       </div>
       <section class="presentationMint">
         <section class="presentation">
           <span class="question">{{ $t("PresentationMintonette.title") }}</span>
 
           <span v-html="descri_evenement_texte" class="descri_evenement"></span>
-          <section class="video_with_balloon">
+          <section controls class="video_with_balloon">
             <div class="container_video">
               <video controls width="400">
                 <source src="/public/vnl_video.mp4" type="video/mp4" />
@@ -297,6 +300,21 @@ function hideOrShowBalloon() {
     elt.style.display = 'none';
   }
 }
+
+function playVideoFullscreen() {
+  const video = document.querySelector("video");
+  if (!video) return;
+
+  video.play();
+
+  if (video.requestFullscreen) {
+    video.requestFullscreen();
+  } else if (video.webkitRequestFullscreen) {
+    video.webkitRequestFullscreen();
+  } else if (video.mozRequestFullScreen) {
+    video.mozRequestFullScreen();
+  }
+};
 
 const handleScroll = () => {
   const scrollY = window.scrollY;
@@ -713,6 +731,7 @@ body::-webkit-scrollbar {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  pointer-events: all;
 }
 
 .message-ballon {
