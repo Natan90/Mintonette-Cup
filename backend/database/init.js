@@ -22,6 +22,8 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Organisateur CASCADE;
   DROP TABLE IF EXISTS Panier_Service CASCADE;
   DROP TABLE IF EXISTS Services CASCADE;
+  DROP TABLE IF EXISTS Article CASCADE;
+  DROP TABLE IF EXISTS Acticite CASCADE;  
   DROP TABLE IF EXISTS Panier CASCADE;  
   DROP TABLE IF EXISTS Prestataire CASCADE;
   DROP TABLE IF EXISTS Type_prestataire CASCADE;
@@ -121,17 +123,30 @@ const pool = require("./db");
       actif BOOLEAN DEFAULT TRUE
     );
 
+    CREATE TABLE IF NOT EXISTS Article (
+      id_article SERIAL PRIMARY KEY,
+      nom_article VARCHAR(250),
+      stock INT,
+      prix_article NUMERIC(10, 2)
+    );
+
+    CREATE TABLE IF NOT EXISTS Activite (
+      id_activite SERIAL PRIMARY KEY,
+      nom_activite VARCHAR(250),
+      nb_participant INT,
+      prix_activite NUMERIC(10, 2)
+    );
+
     CREATE TABLE IF NOT EXISTS Services(
       id_service SERIAL PRIMARY KEY,
       nom_service VARCHAR(100),
-      titre_service JSONB,
       descri_service JSONB,
       visible_public BOOLEAN DEFAULT TRUE,
       besoin JSONB,
-      prix NUMERIC(10,2),
-      nb_participants INTEGER,
       activate BOOLEAN,
-      prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
+      prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire),
+      article_id INTEGER REFERENCES Article(id_article),
+      activite_id INTEGER REFERENCES Activite(id_activite)
     );
 
     CREATE TABLE IF NOT EXISTS Panier_Service (
@@ -411,15 +426,55 @@ const pool = require("./db");
     `;
     await pool.query(insertPrestataire);
 
+    const insertArticles = `
+    INSERT INTO Article (nom_article, stock, prix_article) VALUES
+      ('Maillot Mintonette Cup 2026', 150, 49.99),
+      ('Short de volley officiel', 100, 29.99),
+      ('Casquette Mintonette Cup', 200, 19.99),
+      ('Écharpe supporter', 300, 14.99),
+      ('Ballon de volley officiel', 50, 39.99),
+      ('Sac à dos Mintonette Cup', 80, 34.99),
+      ('Bouteille isotherme logo MC', 120, 24.99),
+      ('Porte-clés Mintonette Cup', 500, 4.99),
+      ('Poster officiel du tournoi', 250, 9.99),
+      ('Pack supporter (maillot + écharpe)', 60, 59.99),
+      ('Burger Classic', 200, 8.50),
+      ('Burger Double Cheese', 200, 10.50),
+      ('Menu Burger + Frites', 150, 13.00),
+      ('Frites maison', 300, 3.50),
+      ('Eau minérale 50cl', 500, 1.50),
+      ('Soda 33cl', 400, 2.50),
+      ('Jus de fruit 25cl', 300, 2.00),
+      ('Smoothie du jour', 100, 4.50),
+      ('Hot-dog', 250, 5.00),
+      ('Wrap poulet', 200, 7.50),
+      ('Salade César', 150, 8.00),
+      ('Sandwich jambon-fromage', 200, 5.50),
+      ('Sachet de chips', 400, 2.00),
+      ('Barre chocolatée', 350, 1.50),
+      ('Madeleine individuelle', 300, 1.00),
+      ('Mix apéritif 100g', 250, 3.00);
+    `;
+    await pool.query(insertArticles);
+
+
+    const insertActivite = `
+    INSERT INTO Activite (nom_activite, nb_participant, prix_activite) VALUES
+      ('Initiation au volley-ball', 12, 15.00),
+      ('Tournoi 3x3 amateur', 24, 10.00),
+      ('Séance de dédicaces joueurs', 30, 25.00),
+      ('Atelier smash avec coach', 8, 20.00),
+      ('Photo avec le trophée', 1, 5.00),
+      ('Quiz volley géant', 50, 0.00),
+      ('Parcours de réception ballon', 6, 12.00);
+    `;
+    await pool.query(insertActivite);
+
     const insertServices = `
       INSERT INTO Services 
-      (nom_service, titre_service, descri_service, visible_public, besoin, prix, nb_participants, activate, prestataire_id) VALUES
+      (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
       (
         'Stand de burgers sur place',
-        '{
-          "fr": { "texte": "Stand de <b>burgers gourmands</b>" },
-          "en": { "texte": "<b>Gourmet burger stand</b>" }
-        }',
         '{
           "fr": { "texte": "Profitez d’un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>." },
           "en": { "texte": "Enjoy a <b>freshly prepared burger stand</b> with quality ingredients.<br>An ideal solution for <b>quick and friendly catering</b>." }
@@ -429,18 +484,12 @@ const pool = require("./db");
           "fr": "Accès à une prise électrique et un espace de 6m² minimum",
           "en": "Access to a power outlet and minimum 6m² space"
         }',
-        12.50,
-        150,
         true,
         1
       ),
 
       (
         'Service de boissons fraîches',
-        '{
-          "fr": { "texte": "Service de <b>boissons fraîches</b>" },
-          "en": { "texte": "<b>Cold drinks</b> service" }
-        }',
         '{
           "fr": { "texte": "Un <b>service de boissons fraîches</b> pour désaltérer vos invités tout au long de la journée." },
           "en": { "texte": "A <b>cold drinks service</b> to keep your guests refreshed all day long." }
@@ -450,18 +499,12 @@ const pool = require("./db");
           "fr": "Point d’eau requis à proximité",
           "en": "Nearby water access required"
         }',
-        3.00,
-        300,
         false,
         1
       ),
 
       (
         'Restauration rapide événementielle',
-        '{
-          "fr": { "texte": "<b>Restauration rapide</b> événementielle" },
-          "en": { "texte": "Event <b>fast food catering</b>" }
-        }',
         '{
           "fr": { "texte": "Une solution de <b>restauration rapide pensée pour l’événementiel</b>, efficace même lors de fortes affluences." },
           "en": { "texte": "A <b>fast food catering solution designed for events</b>, even during high attendance." }
@@ -471,18 +514,12 @@ const pool = require("./db");
           "fr": "Zone de cuisson autorisée obligatoire",
           "en": "Authorized cooking area required"
         }',
-        9.90,
-        400,
         false,
         1
       ),
 
       (
         'Snacking sucré et salé',
-        '{
-          "fr": { "texte": "Snacking <b>sucré & salé</b>" },
-          "en": { "texte": "<b>Sweet & savory</b> snacking" }
-        }',
         '{
           "fr": { "texte": "Un large choix de <b>snacks sucrés et salés</b> pour satisfaire toutes les envies." },
           "en": { "texte": "A wide selection of <b>sweet and savory snacks</b> for all tastes." }
@@ -492,18 +529,12 @@ const pool = require("./db");
           "fr": "Table de service requise",
           "en": "Service table required"
         }',
-        4.50,
-        200,
         true,
         1
       ),
 
       (
         'Animation musicale sur scène',
-        '{
-          "fr": { "texte": "<b>Animation musicale</b> sur scène" },
-          "en": { "texte": "<b>Live music</b> performance" }
-        }',
         '{
           "fr": { "texte": "Une <b>animation musicale live</b> pour créer une ambiance festive et dynamique." },
           "en": { "texte": "A <b>live music performance</b> to create a festive and dynamic atmosphere." }
@@ -513,18 +544,12 @@ const pool = require("./db");
           "fr": "Scène et système son requis",
           "en": "Stage and sound system required"
         }',
-        450.00,
-        1000,
         false,
         2
       ),
 
       (
         'Animation micro et public',
-        '{
-          "fr": { "texte": "Animation <b>micro & public</b>" },
-          "en": { "texte": "<b>Host & audience</b> animation" }
-        }',
         '{
           "fr": { "texte": "Un animateur pour <b>interagir avec le public</b> et rythmer votre événement." },
           "en": { "texte": "A host to <b>interact with the audience</b> and energize your event." }
@@ -534,18 +559,12 @@ const pool = require("./db");
           "fr": "Système audio requis",
           "en": "Audio system required"
         }',
-        250.00,
-        800,
         true,
         2
       ),
 
       (
         'Jeux et animations interactives',
-        '{
-          "fr": { "texte": "Jeux & <b>animations interactives</b>" },
-          "en": { "texte": "<b>Interactive games</b> & activities" }
-        }',
         '{
           "fr": { "texte": "Des <b>animations participatives</b> pour engager le public et créer des moments mémorables." },
           "en": { "texte": "Interactive activities to engage the audience and create <b>memorable moments</b>." }
@@ -555,18 +574,12 @@ const pool = require("./db");
           "fr": "Espace sécurisé requis",
           "en": "Secure area required"
         }',
-        180.00,
-        300,
         false,
         2
       ),
 
       (
         'Animation pour enfants sur place',
-        '{
-          "fr": { "texte": "Animation <b>pour enfants</b>" },
-          "en": { "texte": "<b>Children’s</b> entertainment" }
-        }',
         '{
           "fr": { "texte": "Des animations ludiques et encadrées pour offrir aux enfants un <b>moment sûr et amusant</b>." },
           "en": { "texte": "Fun and supervised activities to offer children a <b>safe and enjoyable experience</b>." }
@@ -576,18 +589,12 @@ const pool = require("./db");
           "fr": "Espace clos obligatoire",
           "en": "Enclosed area required"
         }',
-        200.00,
-        50,
         true,
         2
       ),
 
       (
         'Stand de vente de produits sportifs',
-        '{
-          "fr": { "texte": "Stand de <b>produits sportifs</b>" },
-          "en": { "texte": "<b>Sports products</b> stand" }
-        }',
         '{
           "fr": { "texte": "Un stand dédié à la <b>vente de produits sportifs</b> directement sur votre événement." },
           "en": { "texte": "A stand dedicated to the <b>sale of sports products</b> at your event." }
@@ -597,18 +604,12 @@ const pool = require("./db");
           "fr": "Surface plane requise",
           "en": "Flat surface required"
         }',
-        0.00,
-        500,
         false,
         3
       ),
 
       (
         'Personnalisation de maillots sur place',
-        '{
-          "fr": { "texte": "<b>Personnalisation</b> de maillots" },
-          "en": { "texte": "<b>Jersey customization</b>" }
-        }',
         '{
           "fr": { "texte": "Un service de <b>personnalisation en direct</b> pour repartir avec un maillot unique." },
           "en": { "texte": "A <b>live customization service</b> to leave with a unique jersey." }
@@ -618,18 +619,12 @@ const pool = require("./db");
           "fr": "Accès électrique requis",
           "en": "Power access required"
         }',
-        15.00,
-        200,
         false,
         3
       ),
 
       (
         'Vente d’accessoires sportifs',
-        '{
-          "fr": { "texte": "Vente d’<b>accessoires sportifs</b>" },
-          "en": { "texte": "<b>Sports accessories</b> sales" }
-        }',
         '{
           "fr": { "texte": "Une sélection d’<b>accessoires sportifs</b> pour compléter votre équipement." },
           "en": { "texte": "A selection of <b>sports accessories</b> to complete your equipment." }
@@ -639,18 +634,12 @@ const pool = require("./db");
           "fr": "Stand couvert recommandé",
           "en": "Covered stand recommended"
         }',
-        0.00,
-        400,
         false,
         3
       ),
 
       (
         'Boutique éphémère événementielle',
-        '{
-          "fr": { "texte": "<b>Boutique éphémère</b>" },
-          "en": { "texte": "<b>Pop-up store</b>" }
-        }',
         '{
           "fr": { "texte": "Une <b>boutique temporaire</b> pour offrir une expérience d’achat immersive lors de votre événement." },
           "en": { "texte": "A <b>temporary pop-up store</b> offering an immersive shopping experience." }
@@ -660,8 +649,6 @@ const pool = require("./db");
           "fr": "Espace couvert requis",
           "en": "Covered space required"
         }',
-        0.00,
-        600,
         true,
         3
       );
