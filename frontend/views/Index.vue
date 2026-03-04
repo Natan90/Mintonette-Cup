@@ -723,15 +723,8 @@ body::-webkit-scrollbar {
 }
 
 .video_with_balloon {
-  margin-top: 60px;
-}
-
-.container_video {
-  z-index: 1000;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: all;
+  display: flex;
+  justify-content: center;
 }
 
 .message-ballon {

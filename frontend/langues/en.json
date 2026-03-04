@@ -21,7 +21,9 @@
       "boutonDevenir": "Become a provider",
       "estDeja": "<h2>Welcome to our providers!</h2><p>Thank you for contributing to the Mintonette Cup with your expertise.<br>You can manage your services and update your information below:</p>",
       "boutonGerer": "Manage my services",
-      "enAttente": "<p>Your <strong>service provider request</strong> has been received.<br>It will be <strong>reviewed by an administrator</strong> and you will be <strong>notified as soon as it is approved</strong>.</p>"
+      "enAttente": "<p>Your <strong>service provider request</strong> has been received.<br>It will be <strong>reviewed by an administrator</strong> and you will be <strong>notified as soon as it is approved</strong>.</p>",
+      "nonConnecte": "<h2>Want to join the adventure?</h2><br><p>Become an official Mintonette Cup vendor and offer your services to all participants.<br><strong>Log in or create an account</strong> to submit your application!</p>",
+      "boutonNonConnecte": "Log in / Sign up"
     },
     "competition": {
       "descri": "<h2>Dive into the competition!</h2><p>Dive into the heart of the competition and explore the countries competing in the Mintonette Cup.<br><strong>Lineups, photos, and key information: it’s all here!</strong></p><p>Whether you're a player, a supporter, or just curious, discover all the tournament countries:</p>",

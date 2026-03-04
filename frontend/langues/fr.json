@@ -21,7 +21,9 @@
       "boutonDevenir": "Je deviens prestataire",
       "estDeja": "<h2>Bienvenue parmi nos prestataires !</h2> <p>Merci de contribuer à la Mintonette Cup avec votre savoir-faire.<br> Vous pouvez gérer vos prestations et mettre à jour vos informations ci-dessous :</p>",
       "boutonGerer": "Gérer mes prestations",
-      "enAttente": "<p>Votre <strong>demande de prestataire</strong> a été reçue.<br>Elle sera <strong>examinée par un administrateur</strong> et vous serez <strong>informé dès qu’elle sera validée</strong>.</p>"
+      "enAttente": "<p>Votre <strong>demande de prestataire</strong> a été reçue.<br>Elle sera <strong>examinée par un administrateur</strong> et vous serez <strong>informé dès qu’elle sera validée</strong>.</p>",
+      "nonConnecte": "<h2>Envie de rejoindre l'aventure ?</h2><br><p>Devenez prestataire officiel de la Mintonette Cup et proposez vos services à tous les participants.<br><strong>Connectez-vous ou créez un compte</strong> pour soumettre votre candidature !</p>",
+      "boutonNonConnecte": "Se connecter / S'inscrire"
     },
     "competition": {
       "descri": "<h2>Plongez dans la compétition !</h2> <p>Plongez au cœur de la compétition et explorez les pays engagés dans la Mintonette Cup.<br> <strong>Compositions, photos et infos essentielles : tout est là !</strong></p><p>Que vous soyez joueur, supporter ou simple curieux, découvrez tous les pays du tournoi :</p>",
