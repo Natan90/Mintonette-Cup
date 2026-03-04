@@ -478,9 +478,7 @@ async function connectUserWithToken(token) {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%,
-      var(--colorGradientBlue),
-      #0057c2);
+  background: var(--primary-color);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
   z-index: 0;
   pointer-events: none;
@@ -489,9 +487,7 @@ async function connectUserWithToken(token) {
 .left-side.moved::before {
   left: auto;
   right: -80px;
-  background: radial-gradient(circle at 70% 30%,
-      var(--colorGradientPurple),
-      var(--colorGradientBlue));
+  background: var(--primary-color);
 }
 
 /* Créer un autre cercle */
@@ -502,7 +498,7 @@ async function connectUserWithToken(token) {
   left: 50px;
   width: 120px;
   height: 120px;
-  background: radial-gradient(circle at 40% 40%, #00c853, #009e40);
+  background: var(--rose-logo);
   border-radius: 50%;
   z-index: 0;
   opacity: 0.7;
@@ -511,7 +507,7 @@ async function connectUserWithToken(token) {
 .left-side.moved::after {
   left: auto;
   right: 50px;
-  background: radial-gradient(circle at 60% 40%, #00c853, #009e40);
+  background: var(--rose-logo);
 }
 
 /* Créer une forme différente */
@@ -519,7 +515,7 @@ async function connectUserWithToken(token) {
   position: absolute;
   width: 150px;
   height: 150px;
-  background: linear-gradient(135deg, #1e90ff, #00c853);
+  background: linear-gradient(135deg, #f39bff, #8f5994);
   border-radius: 50% 30% 50% 30%;
   top: 10%;
   left: 30%;
@@ -538,7 +534,7 @@ async function connectUserWithToken(token) {
   position: absolute;
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #00bcd4, #0097a7);
+  background: linear-gradient(135deg, #5fbe6f, #489154);
   border-radius: 50% 40% 60% 50%;
   top: 75%;
   left: 80%;
@@ -555,8 +551,8 @@ async function connectUserWithToken(token) {
 .background-right {
   flex: 1;
   background: linear-gradient(135deg,
-      var(--colorGradientBlue),
-      var(--colorGradientGreen));
+      #ffffff, 40%,
+      var(--primary-color));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -567,8 +563,8 @@ async function connectUserWithToken(token) {
 
 .background-right.moved {
   background: linear-gradient(135deg,
-      var(--colorGradientPurple),
-      var(--colorGradientBlue));
+      var(--primary-color), 50%,
+      #ffffff);
 }
 
 .left-card {
@@ -602,7 +598,7 @@ async function connectUserWithToken(token) {
   letter-spacing: 1px;
   font-size: 2.2em;
   font-weight: 700;
-  color: #1e90ff;
+  color: #ff00dd;
   text-align: center;
   margin-bottom: 25px;
 }
@@ -666,14 +662,14 @@ input::placeholder {
   border: none;
   background-color: transparent;
   font-size: 0.85em;
-  color: #007bff;
+  color: #ff00dd;
   cursor: pointer;
   transition: color 0.25s ease, text-decoration 0.25s ease;
 }
 
 #button_mdp_oublie:hover {
   text-decoration: underline;
-  color: #0056b3;
+  color: #c702ad;
 }
 
 .button_message {
@@ -691,7 +687,7 @@ input::placeholder {
 }
 
 .button_connexion {
-  background: linear-gradient(90deg, #1e90ff, #007bff);
+  background: linear-gradient(90deg, #ff00dd, #007bff);
   background-size: 200% 100%;
   transition: all 0.3s;
 }
@@ -702,8 +698,8 @@ input::placeholder {
 
 .button_cancel {
   background: #fffaf1;
-  color: #1e90ff;
-  border: 2px solid #1e90ff;
+  color: #ff00dd;
+  border: 2px solid #ff00dd;
   border-radius: 8px;
   padding: 10px 15px;
   font-weight: 600;
@@ -714,11 +710,11 @@ input::placeholder {
 }
 
 .button_cancel:hover {
-  background: #e0e7ff;
-  border-color: #1e90ff;
-  color: #1e90ff;
+  background: #ffe0e0;
+  border-color: #c702ad;
+  color: #c702ad;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(30, 144, 255, 0.25);
+  box-shadow: 0 4px 15px rgba(199, 2, 173, 0.25);
 }
 
 .button_message:active {
