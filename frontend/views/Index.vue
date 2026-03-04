@@ -101,7 +101,7 @@
 
 
     <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    
     <Footer></Footer>
   </div>
 </template>
@@ -680,7 +680,7 @@ body::-webkit-scrollbar {
   padding: 60px 40px;
   background: var(--primary-color);
 
-  /* background: linear-gradient(135deg, #0a3a75cc, #4fa3ffcc); */
+  background: linear-gradient(to bottom, var(--rose-logo), #242424cc);
   backdrop-filter: blur(8px);
   /* box-shadow: 0 10px 30px rgba(0,0,0,0.15); */
 }
@@ -746,6 +746,9 @@ body::-webkit-scrollbar {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.4s ease;
   transform: translateY(-50%);
+}
+#liste_prestataires{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 @keyframes fadeIn {

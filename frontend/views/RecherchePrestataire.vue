@@ -1,47 +1,72 @@
 <template>
   <section class="recherche" id="liste_prestataires">
-
     <div class="titreFiltre">
       <div class="titreFiltre-inner">
         <span class="titre-label">Annuaire</span>
         <h2 class="titre-main">{{ $t("filter.titleFilter") }}</h2>
       </div>
       <div class="content_slider">
-        <span :class="{ active: !isServiceView }">{{ $t("filter.slider.prestataire") }}</span>
+        <span :class="{ active: !isServiceView }">{{
+          $t("filter.slider.prestataire")
+        }}</span>
         <label class="switch">
           <input type="checkbox" v-model="isServiceView" />
           <span class="slider round"></span>
         </label>
-        <span :class="{ active: isServiceView }">{{ $t("filter.slider.service") }}</span>
+        <span :class="{ active: isServiceView }">{{
+          $t("filter.slider.service")
+        }}</span>
       </div>
     </div>
 
     <section class="filtreEtListe">
-
-      <form class="filtrePrestataire" @submit.prevent="searchPrestataires" id="filtre_presta">
-
+      <form
+        class="filtrePrestataire"
+        @submit.prevent="searchPrestataires"
+        id="filtre_presta">
         <div class="blocFiltre">
           <span class="filtre-label">{{ $t("filter.name.title") }}</span>
           <div class="input-wrap">
-            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              class="input-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.35-4.35" />
             </svg>
-            <input v-model="filters.nom" type="text" :placeholder="$t('filter.name.nameInput')" />
+            <input
+              v-model="filters.nom"
+              type="text"
+              :placeholder="$t('filter.name.nameInput')" />
           </div>
         </div>
 
         <div class="blocFiltre">
           <span class="filtre-label">{{ $t("filter.categorie.title") }}</span>
           <div class="radio-group">
-            <label class="radio-item pointer" :class="{ selected: filters.category === 0 }">
-              <input type="radio" name="categorie" :value="0" v-model="filters.category" />
+            <label
+              class="radio-item pointer"
+              :class="{ selected: filters.category === 0 }">
+              <input
+                type="radio"
+                name="categorie"
+                :value="0"
+                v-model="filters.category" />
               <span>{{ $t("filter.categorie.all") }}</span>
             </label>
-            <label class="radio-item pointer"
-              :class="{ selected: filters.category === Number(item.id_type_prestataire) }"
-              v-for="item in type_prestataire" :key="item.id_type_prestataire">
-              <input type="radio" name="categorie" :value="Number(item.id_type_prestataire)"
+            <label
+              class="radio-item pointer"
+              :class="{
+                selected: filters.category === Number(item.id_type_prestataire),
+              }"
+              v-for="item in type_prestataire"
+              :key="item.id_type_prestataire">
+              <input
+                type="radio"
+                name="categorie"
+                :value="Number(item.id_type_prestataire)"
                 v-model="filters.category" />
               <span>{{ item.nom_type_prestataire[locale] }}</span>
             </label>
@@ -52,11 +77,17 @@
           <span class="filtre-label">{{ $t("filter.price.title") }}</span>
           <div class="prix">
             <div class="input-wrap">
-              <input type="number" v-model="filters.prixMin" :placeholder="$t('filter.price.minPrice')" />
+              <input
+                type="number"
+                v-model="filters.prixMin"
+                :placeholder="$t('filter.price.minPrice')" />
               <span class="prix-suffix">€</span>
             </div>
             <div class="input-wrap">
-              <input type="number" v-model="filters.prixMax" :placeholder="$t('filter.price.maxPrice')" />
+              <input
+                type="number"
+                v-model="filters.prixMax"
+                :placeholder="$t('filter.price.maxPrice')" />
               <span class="prix-suffix">€</span>
             </div>
           </div>
@@ -64,7 +95,13 @@
 
         <div class="boutonsFiltre">
           <button class="btn-search pointer" type="submit">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              width="16"
+              height="16">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.35-4.35" />
             </svg>
@@ -77,11 +114,16 @@
       </form>
 
       <section class="listePrestataire">
-        <div v-for="(item, i) in prestatairesFiltres" :key="item.id_prestataire || item.id_service"
-          class="blocListePrestataire" :style="{ '--i': i }">
+        <div
+          v-for="(item, i) in prestatairesFiltres"
+          :key="item.id_prestataire || item.id_service"
+          class="blocListePrestataire"
+          :style="{ '--i': i }">
           <div class="enTetePrestataire">
             <div class="titrePrestataire">
-              <span class="nom-presta">{{ isServiceView ? item.nom_service : item.nom_prestataire }}</span>
+              <span class="nom-presta">{{
+                isServiceView ? item.nom_service : item.nom_prestataire
+              }}</span>
             </div>
             <div class="typePrestataire">
               <span>{{ item.nom_type_prestataire[locale] }}</span>
@@ -96,55 +138,96 @@
             <div class="infosPrestataire">
               <span class="section-label">{{ $t("filter.info.title") }}</span>
               <span v-if="!isServiceView">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="13"
+                  height="13">
+                  <path
+                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
-                {{ $t("filter.info.service") }} : <strong>{{ item.nb_services }}</strong>
+                {{ $t("filter.info.service") }} :
+                <strong>{{ item.nb_services }}</strong>
               </span>
               <span v-else>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="13"
+                  height="13">
                   <line x1="12" y1="1" x2="12" y2="23" />
                   <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                 </svg>
-                {{ $t("filter.info.tarif") }} : <strong>{{ item.prix }} €</strong>
+                {{ $t("filter.info.tarif") }} :
+                <strong>{{ item.prix }} €</strong>
               </span>
               <span v-if="isServiceView">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="13"
+                  height="13">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
                   <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
-                {{ $t("filter.info.capacite") }} : <strong>{{ item.nb_participants }}</strong> {{
-                  $t("filter.info.people") }}
+                {{ $t("filter.info.capacite") }} :
+                <strong>{{ item.nb_participants }}</strong>
+                {{ $t("filter.info.people") }}
               </span>
             </div>
 
             <div class="contactPrestataire" v-if="!isServiceView">
               <span class="section-label">{{ $t("filter.contact") }}</span>
-              <span>{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span>
-              <a :href="'mailto:' + item.mail_prestataire">{{ item.mail_prestataire }}</a>
+              <span
+                >{{ item.prenom_utilisateur }} {{ item.nom_utilisateur }}</span
+              >
+              <a :href="'mailto:' + item.mail_prestataire">{{
+                item.mail_prestataire
+              }}</a>
               <span>{{ item.tel_prestataire }}</span>
             </div>
           </div>
-          <div class="boutonListe" @click="goToSpecificPrestataire(item.id_prestataire || item.id_service)">
+          <div
+            class="boutonListe"
+            @click="
+              goToSpecificPrestataire(item.id_prestataire || item.id_service)
+            ">
             <span class="pointer">
               {{ $t("filter.more") }}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                width="14"
+                height="14">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </span>
           </div>
         </div>
         <div class="empty-state" v-if="prestatairesFiltres.length === 0">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            width="48"
+            height="48">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.35-4.35" />
           </svg>
           <p>Aucun résultat trouvé</p>
         </div>
       </section>
-
     </section>
   </section>
 </template>
@@ -157,7 +240,6 @@ import { useI18n } from "vue-i18n";
 import { useServiceStore } from "@/services/service.service";
 import { usePrestataireStore } from "@/services/prestataire.service";
 import { useTypePrestataireStore } from "@/services/type_prestataire.service";
-
 
 const router = useRouter();
 const route = useRoute();
@@ -192,46 +274,43 @@ const appliedFilters = ref({
   category: 0,
   prixMin: null,
   prixMax: null,
-})
+});
 
 const prestatairesFiltres = computed(() => {
   return prestataires.value
-    .filter(p => !p.waitingforadmin)
+    .filter((p) => !p.waitingforadmin)
 
-    .filter(p => {
-      if (!appliedFilters.value.nom) return true
+    .filter((p) => {
+      if (!appliedFilters.value.nom) return true;
 
-      const nom = isServiceView.value
-        ? p.nom_service
-        : p.nom_prestataire
+      const nom = isServiceView.value ? p.nom_service : p.nom_prestataire;
 
       return nom
         ?.toLowerCase()
-        .includes(appliedFilters.value.nom.toLowerCase())
+        .includes(appliedFilters.value.nom.toLowerCase());
     })
 
-    .filter(p => {
+    .filter((p) => {
       if (!appliedFilters.value.category || appliedFilters.value.category === 0)
-        return true
+        return true;
 
       return (
-        Number(p.id_type_prestataire) ===
-        Number(appliedFilters.value.category)
-      )
+        Number(p.id_type_prestataire) === Number(appliedFilters.value.category)
+      );
     })
 
-    .filter(p => {
-      if (!isServiceView.value) return true
+    .filter((p) => {
+      if (!isServiceView.value) return true;
 
       if (appliedFilters.value.prixMin && p.prix < appliedFilters.value.prixMin)
-        return false
+        return false;
 
       if (appliedFilters.value.prixMax && p.prix > appliedFilters.value.prixMax)
-        return false
+        return false;
 
-      return true
-    })
-})
+      return true;
+    });
+});
 
 onMounted(() => {
   try {
@@ -253,9 +332,9 @@ function resetFilters() {
     category: 0,
     prixMin: null,
     prixMax: null,
-  }
+  };
 
-  appliedFilters.value = { ...filters.value }
+  appliedFilters.value = { ...filters.value };
 
   router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
   getValuesPrestataire();
@@ -293,7 +372,6 @@ async function getValuesServices() {
     prestataires.value = [];
   }
 }
-
 
 async function getValuesPrestataire() {
   try {
@@ -333,7 +411,7 @@ async function searchPrestataires() {
     category: filters.value.category,
     prixMin: filters.value.prixMin,
     prixMax: filters.value.prixMax,
-  }
+  };
 
   router.push({
     path: "/",
@@ -343,9 +421,8 @@ async function searchPrestataires() {
       prixMin: filters.value.prixMin || undefined,
       prixMax: filters.value.prixMax || undefined,
     },
-    hash: "#liste_prestataires"
+    hash: "#liste_prestataires",
   });
-
 }
 </script>
 
@@ -384,12 +461,12 @@ async function searchPrestataires() {
   transition: 0.3s;
 }
 
-input:checked+.slider {
+input:checked + .slider {
   background: var(--rose-logo);
   border-color: var(--rose-logo);
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
   transform: translateX(22px);
 }
 
@@ -421,11 +498,10 @@ input:checked+.slider:before {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
-  
 }
 
 .titreFiltre::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -60px;
   right: -60px;
@@ -490,7 +566,7 @@ input:checked+.slider:before {
   flex-direction: column;
   gap: 28px;
   padding: 32px 24px;
-  background: var(--primary-color);
+  background: linear-gradient(to bottom, #3e3e3e, black);
   border-right: 1px solid rgba(255, 255, 255, 0.07);
   height: fit-content;
   position: sticky;
@@ -537,7 +613,9 @@ input:checked+.slider:before {
   padding: 9px 12px 9px 34px;
   color: #fff;
   font-size: 0.88rem;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
   outline: none;
 }
 
@@ -591,7 +669,7 @@ input:checked+.slider:before {
 }
 
 .radio-item::before {
-  content: '';
+  content: "";
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -634,7 +712,9 @@ input:checked+.slider:before {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   box-shadow: 0 4px 16px rgba(232, 80, 130, 0.35);
 }
 
@@ -668,8 +748,7 @@ input:checked+.slider:before {
   align-content: flex-start;
   gap: 20px;
   padding: 32px;
-  background: var(--primary-color);
-  background: linear-gradient(160deg, #0d1f4a 0%, --primary-color 100%);
+  background: linear-gradient(to bottom, #3e3e3e, black);
 }
 
 .blocListePrestataire {
@@ -681,7 +760,10 @@ input:checked+.slider:before {
   overflow: hidden;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s;
   animation: cardIn 0.4s ease both;
   animation-delay: calc(var(--i, 0) * 0.06s);
 }
