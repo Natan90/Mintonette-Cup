@@ -4,33 +4,21 @@
 
     <div class="all">
       <div class="image">
-        <img
-          src="../images/ballon.png"
-          alt="ballon"
-          id="img_ballon"
-          @click="isBallonStopped && playVideoFullscreen()"
+        <img src="../images/ballon.png" alt="ballon" id="img_ballon" @click="isBallonStopped && playVideoFullscreen()"
           :style="[
             { transform: `translateY(${ballonY}px)` },
             isBallonStopped ? { cursor: 'pointer' } : {},
           ]" />
-        <img
-          :src="imagePreview || '../images/photo_fond.png'"
-          alt="photo_fond" />
-        <div
-          class="texteImage"
-          :style="{ color: colorTitle, fontFamily: selectedFont }">
+        <img :src="imagePreview || '../images/photo_fond.png'" alt="photo_fond" />
+        <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
         </div>
       </div>
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
-      <div
-        v-if="isBallonStopped"
-        class="message-ballon"
-        :style="[
-          messageBallonStyle,
-          isBallonStopped ? { cursor: 'pointer' } : {},
-        ]"
-        @click="playVideoFullscreen()">
+      <div v-if="isBallonStopped" class="message-ballon" :style="[
+        messageBallonStyle,
+        isBallonStopped ? { cursor: 'pointer' } : {},
+      ]" @click="playVideoFullscreen()">
         Plongez dans l'ambiance
       </div>
       <section class="presentationMint">
@@ -39,41 +27,32 @@
           <span class="question">{{ $t("PresentationMintonette.title") }}</span>
 
           <span v-html="descri_evenement_texte" class="descri_evenement"></span>
-          <section controls class="video_with_balloon">
-            <div class="container_video">
-              <video controls width="400">
-                <source src="/public/vnl_video.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </section>
         </section>
       </section>
+
+      <div class="video_with_balloon" v-if="showingBallon">
+        <div class="container_video">
+          <video ref="videoRef" controls width="400">
+            <source src="/public/vnl_video.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
 
       <section id="Carte" class="section"></section>
       <Map> </Map>
 
       <section class="infos">
         <section class="infos-wrapper" id="Info">
-          <div
-            class="infos-row"
-            v-for="(row, rowIndex) in chunkedArray"
-            :key="rowIndex">
+          <div class="infos-row" v-for="(row, rowIndex) in chunkedArray" :key="rowIndex">
             <div class="bloc" v-for="(item, index) in row" :key="index">
               <img class="illustration" :src="item.image" />
               <span class="title">
-                <countUp
-                  :from="0"
-                  :to="item.countUp"
-                  :duration="2"
-                  class="count-up-text"
-                  v-if="item.countUp" />
+                <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
                 {{ item.title }}
               </span>
               <div class="contenuTexte">
                 <span class="descri" v-html="item.descri"></span>
-                <router-link
-                  :to="{ name: 'Information' }"
-                  class="voirPlus pointer">
+                <router-link :to="{ name: 'Information' }" class="voirPlus pointer">
                   <span class="pointer">{{ $t("information.voirPlus") }}</span>
                 </router-link>
               </div>
@@ -83,21 +62,16 @@
       </section>
     </div>
 
-    <section
-      v-if="
-        userStore &&
-        userStore.isConnected &&
-        !utilisateur.ispresta &&
-        !utilisateur.waitingforadmin
-      ">
+    <section v-if="
+      userStore &&
+      userStore.isConnected &&
+      !utilisateur.ispresta &&
+      !utilisateur.waitingforadmin
+    ">
       <div class="teams_texte">
-        <div
-          v-html="$t('mintonetteCup.prestataire.devenir')"
-          class="team_content"></div>
+        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="team_content"></div>
 
-        <router-link
-          :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
-          class="btn_teams">
+        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }" class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonDevenir") }}
         </router-link>
       </div>
@@ -105,13 +79,9 @@
 
     <section v-else-if="userStore.isConnected && utilisateur.ispresta">
       <div class="teams_texte">
-        <div
-          v-html="$t('mintonetteCup.prestataire.estDeja')"
-          class="team_content"></div>
+        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="team_content"></div>
 
-        <router-link
-          :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
-          class="btn_teams">
+        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonGerer") }}
         </router-link>
       </div>
@@ -119,17 +89,13 @@
 
     <section v-else-if="userStore.isConnected && utilisateur.waitingforadmin">
       <div class="teams_texte">
-        <div
-          v-html="$t('mintonetteCup.prestataire.enAttente')"
-          class="team_content"></div>
+        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="team_content"></div>
       </div>
     </section>
 
     <section v-else>
       <div class="teams_texte">
-        <div
-          class="team_content"
-          v-html="$t('mintonetteCup.prestataire.nonConnecte')"></div>
+        <div class="team_content" v-html="$t('mintonetteCup.prestataire.nonConnecte')"></div>
         <router-link :to="{ name: 'Connexion_utilisateur' }" class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonNonConnecte") }}
         </router-link>
@@ -246,6 +212,7 @@ const ballonHasFallen = ref(false);
 const showBalloon = ref(false);
 const ancreBallon = ref(null);
 const isBallonStopped = ref(false);
+const showingBallon = ref(false);
 
 let animationFrame = null;
 
@@ -347,18 +314,39 @@ function hideOrShowBalloon() {
   }
 }
 
-function playVideoFullscreen() {
-  const video = document.querySelector("video");
+const videoRef = ref(null);
+
+async function playVideoFullscreen() {
+  showingBallon.value = true;
+
+  await nextTick();
+
+  const video = videoRef.value;
   if (!video) return;
 
-  video.play();
+  try {
+    await video.play();
+    await video.requestFullscreen();
 
-  if (video.requestFullscreen) {
-    video.requestFullscreen();
-  } else if (video.webkitRequestFullscreen) {
-    video.webkitRequestFullscreen();
-  } else if (video.mozRequestFullScreen) {
-    video.mozRequestFullScreen();
+    const onFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        document.removeEventListener("fullscreenchange", onFullscreenChange);
+        showingBallon.value = false;
+        video.pause();
+        video.currentTime = 0;
+      }
+    };
+
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+
+    video.addEventListener("ended", () => {
+      document.exitFullscreen?.();
+      showingBallon.value = false;
+    }, { once: true });
+
+  } catch (err) {
+    console.error("Erreur fullscreen:", err);
+    showingBallon.value = true;
   }
 }
 
@@ -595,13 +583,13 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-.infos-row .bloc:hover + .bloc {
+.infos-row .bloc:hover+.bloc {
   transform: translateZ(60px) rotateY(10deg);
   /* filter: brightness(0.6); */
   opacity: 0.6;
 }
 
-.infos-row .bloc:hover + .bloc + .bloc {
+.infos-row .bloc:hover+.bloc+.bloc {
   transform: translateZ(40px) rotateY(5deg);
   /* filter: brightness(0.4); */
   opacity: 0.4;
@@ -619,7 +607,7 @@ body::-webkit-scrollbar {
   opacity: 0.4;
 }
 
-.infos-row:has(.bloc:hover) + .infos-row .bloc {
+.infos-row:has(.bloc:hover)+.infos-row .bloc {
   transform: translateZ(-60px) rotateX(-12deg);
   /* filter: brightness(0.5); */
   opacity: 0.3;
@@ -792,6 +780,7 @@ body::-webkit-scrollbar {
   animation: fadeIn 0.4s ease;
   transform: translateY(-50%);
 }
+
 #liste_prestataires {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
