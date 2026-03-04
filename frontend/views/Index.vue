@@ -23,18 +23,18 @@
         </div>
       </div>
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
-      <div ref="ancreBallon" id="ancre-ballon"></div>
       <div
-        v-if="isBallonStopped"
-        class="message-ballon"
-        :style="[
-          messageBallonStyle,
-          isBallonStopped ? { cursor: 'pointer' } : {},
-        ]"
+      v-if="isBallonStopped"
+      class="message-ballon"
+      :style="[
+        messageBallonStyle,
+        isBallonStopped ? { cursor: 'pointer' } : {},
+      ]"
         @click="playVideoFullscreen()">
         Plongez dans l'ambiance
       </div>
       <section class="presentationMint">
+        <div ref="ancreBallon" id="ancre-ballon"></div>
         <section class="presentation">
           <span class="question">{{ $t("PresentationMintonette.title") }}</span>
 
