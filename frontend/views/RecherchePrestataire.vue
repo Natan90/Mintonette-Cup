@@ -407,7 +407,7 @@ input:checked+.slider:before {
 .recherche {
   display: flex;
   flex-direction: column;
-  background: var(--primary-color, #0a1d42);
+  background: linear-gradient(to bottom, #242424cc, black);
 }
 
 .titreFiltre {
@@ -421,6 +421,7 @@ input:checked+.slider:before {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
+  
 }
 
 .titreFiltre::before {
