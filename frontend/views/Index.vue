@@ -217,7 +217,9 @@ const getMaxDrop = () => {
   const ancreRect = ancreBallon.value.getBoundingClientRect();
   const ballonRect = ballonEl.getBoundingClientRect();
 
-  return ancreRect.top - ballonRect.top + window.scrollY;
+  const offset = -50;
+
+  return ancreRect.top - ballonRect.top + window.scrollY + offset;
 };
 
 const animateFall = () => {
