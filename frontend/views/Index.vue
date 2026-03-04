@@ -493,7 +493,7 @@ body::-webkit-scrollbar {
   flex-direction: column;
   /* gap: 30px; */
   width: 95%;
-  margin: 0px 2.5%;
+  margin: 50px 2.5%;
 }
 
 .infos-row {
@@ -511,6 +511,7 @@ body::-webkit-scrollbar {
   display: flex;
   flex-wrap: wrap;
   background-color: #ACC18A;
+
   opacity: 0.6;
   padding-bottom: 5px;
   max-width: 60%;
