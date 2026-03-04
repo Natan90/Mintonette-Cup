@@ -4,9 +4,17 @@
 
     <div class="all">
       <div class="image">
-        <img src="../images/ballon.png" alt="ballon" id="img_ballon" :style="{ transform: `translateY(${ballonY}px)` }">
-        <img :src="imagePreview || '../images/photo_fond.png'" alt="photo_fond" />
-        <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }">
+        <img
+          src="../images/ballon.png"
+          alt="ballon"
+          id="img_ballon"
+          :style="{ transform: `translateY(${ballonY}px)` }" />
+        <img
+          :src="imagePreview || '../images/photo_fond.png'"
+          alt="photo_fond" />
+        <div
+          class="texteImage"
+          :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
         </div>
       </div>
@@ -25,26 +33,33 @@
             </div>
           </section>
         </section>
-
       </section>
-
 
       <section id="Carte" class="section"></section>
       <Map> </Map>
 
-
       <section class="infos">
         <section class="infos-wrapper" id="Info">
-          <div class="infos-row" v-for="(row, rowIndex) in chunkedArray" :key="rowIndex">
+          <div
+            class="infos-row"
+            v-for="(row, rowIndex) in chunkedArray"
+            :key="rowIndex">
             <div class="bloc" v-for="(item, index) in row" :key="index">
               <img class="illustration" :src="item.image" />
               <span class="title">
-                <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
+                <countUp
+                  :from="0"
+                  :to="item.countUp"
+                  :duration="2"
+                  class="count-up-text"
+                  v-if="item.countUp" />
                 {{ item.title }}
               </span>
               <div class="contenuTexte">
                 <span class="descri" v-html="item.descri"></span>
-                <router-link :to="{ name: 'Information' }" class="voirPlus pointer">
+                <router-link
+                  :to="{ name: 'Information' }"
+                  class="voirPlus pointer">
                   <span class="pointer">{{ $t("information.voirPlus") }}</span>
                 </router-link>
               </div>
@@ -54,16 +69,21 @@
       </section>
     </div>
 
-    <section v-if="
-      userStore &&
-      userStore.isConnected &&
-      !utilisateur.ispresta &&
-      !utilisateur.waitingforadmin
-    ">
+    <section
+      v-if="
+        userStore &&
+        userStore.isConnected &&
+        !utilisateur.ispresta &&
+        !utilisateur.waitingforadmin
+      ">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.devenir')"
+          class="team_content"></div>
 
-        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }" class="btn_teams">
+        <router-link
+          :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
+          class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonDevenir") }}
         </router-link>
       </div>
@@ -71,9 +91,13 @@
 
     <section v-if="userStore.isConnected && utilisateur.ispresta">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.estDeja')"
+          class="team_content"></div>
 
-        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" class="btn_teams">
+        <router-link
+          :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
+          class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonGerer") }}
         </router-link>
       </div>
@@ -81,10 +105,11 @@
 
     <section v-if="userStore.isConnected && utilisateur.waitingforadmin">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.enAttente')"
+          class="team_content"></div>
       </div>
     </section>
-
 
     <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -96,7 +121,15 @@
 /* ********************
         IMPORTS 
 ******************** */
-import { ref, onMounted, onBeforeUnmount, onActivated, computed, watch, nextTick } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  onActivated,
+  computed,
+  watch,
+  nextTick,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 /* ********************
@@ -110,7 +143,6 @@ import RecherchePrestataire from "./RecherchePrestataire.vue";
 import CountUp from "../components/CountUp.vue";
 import PresentationMintonette from "./PresentationMintonette.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
-
 
 /* ********************
     IMAGES IMPORTS 
@@ -191,7 +223,6 @@ let lastScrollY = 0;
 let animationFrame = null;
 let stopTimeout = null;
 
-
 const getMaxDrop = () => {
   if (!ancreBallon.value) return 1300;
   const ballonEl = document.getElementById("img_ballon");
@@ -259,10 +290,9 @@ function hideOrShowBalloon() {
   const elt = document.getElementById("img_ballon");
 
   if (showBalloon.value) {
-    elt.style.display = 'block';
-  }
-  else {
-    elt.style.display = 'none';
+    elt.style.display = "block";
+  } else {
+    elt.style.display = "none";
   }
 }
 
@@ -296,7 +326,6 @@ const chunkedArray = computed(() => {
   return rows;
 });
 
-
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   hideOrShowBalloon();
@@ -317,9 +346,8 @@ watch(
   () => locale.value,
   (newLang) => {
     updateDescription();
-  }
+  },
 );
-
 
 async function getValuesEvenement() {
   try {
@@ -393,7 +421,7 @@ body::-webkit-scrollbar {
 }
 
 .image::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -465,7 +493,7 @@ body::-webkit-scrollbar {
   flex-direction: column;
   /* gap: 30px; */
   width: 95%;
-  margin: 50px 2.5%;
+  margin: 0px 2.5%;
 }
 
 .infos-row {
@@ -482,7 +510,7 @@ body::-webkit-scrollbar {
 .bloc {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--rose-logo);
+  background-color: #ACC18A;
   opacity: 0.6;
   padding-bottom: 5px;
   max-width: 60%;
@@ -492,7 +520,9 @@ body::-webkit-scrollbar {
 
   border-radius: 10px;
 
-  transition: transform 0.4s ease, filter 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease;
 }
 
 .infos-row .bloc:hover {
@@ -501,13 +531,13 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-.infos-row .bloc:hover+.bloc {
+.infos-row .bloc:hover + .bloc {
   transform: translateZ(60px) rotateY(10deg);
   /* filter: brightness(0.6); */
   opacity: 0.6;
 }
 
-.infos-row .bloc:hover+.bloc+.bloc {
+.infos-row .bloc:hover + .bloc + .bloc {
   transform: translateZ(40px) rotateY(5deg);
   /* filter: brightness(0.4); */
   opacity: 0.4;
@@ -525,18 +555,24 @@ body::-webkit-scrollbar {
   opacity: 0.4;
 }
 
-.infos-row:has(.bloc:hover)+.infos-row .bloc {
+.infos-row:has(.bloc:hover) + .infos-row .bloc {
   transform: translateZ(-60px) rotateX(-12deg);
   /* filter: brightness(0.5); */
   opacity: 0.3;
-  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease,
+    opacity 0.4s ease;
 }
 
 .infos-row:has(+ .infos-row .bloc:hover) .bloc {
   transform: translateZ(-60px) rotateX(12deg);
   filter: brightness(0.5);
   opacity: 0.3;
-  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease,
+    opacity 0.4s ease;
 }
 
 .bloc .title {
