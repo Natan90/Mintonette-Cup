@@ -4,18 +4,34 @@
 
     <div class="all">
       <div class="image">
-        <img src="../images/ballon.png" alt="ballon" id="img_ballon"
+        <img
+          src="../images/ballon.png"
+          alt="ballon"
+          id="img_ballon"
           @click="isBallonStopped && playVideoFullscreen()"
-          :style="[{ transform: `translateY(${ballonY}px)` }, isBallonStopped ? { cursor: 'pointer' } : {}]"
-        />
-        <img :src="imagePreview || '../images/photo_fond.png'" alt="photo_fond" />
-        <div class="texteImage" :style="{ color: colorTitle, fontFamily: selectedFont }">
+          :style="[
+            { transform: `translateY(${ballonY}px)` },
+            isBallonStopped ? { cursor: 'pointer' } : {},
+          ]" />
+        <img
+          :src="imagePreview || '../images/photo_fond.png'"
+          alt="photo_fond" />
+        <div
+          class="texteImage"
+          :style="{ color: colorTitle, fontFamily: selectedFont }">
           {{ title_evenement }}
         </div>
       </div>
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
       <div ref="ancreBallon" id="ancre-ballon"></div>
-      <div v-if="isBallonStopped" class="message-ballon" :style="[messageBallonStyle, isBallonStopped ? { cursor: 'pointer' } : {}]" @click="playVideoFullscreen()">
+      <div
+        v-if="isBallonStopped"
+        class="message-ballon"
+        :style="[
+          messageBallonStyle,
+          isBallonStopped ? { cursor: 'pointer' } : {},
+        ]"
+        @click="playVideoFullscreen()">
         Plongez dans l'ambiance
       </div>
       <section class="presentationMint">
@@ -31,26 +47,33 @@
             </div>
           </section>
         </section>
-
       </section>
-
 
       <section id="Carte" class="section"></section>
       <Map> </Map>
 
-
       <section class="infos">
         <section class="infos-wrapper" id="Info">
-          <div class="infos-row" v-for="(row, rowIndex) in chunkedArray" :key="rowIndex">
+          <div
+            class="infos-row"
+            v-for="(row, rowIndex) in chunkedArray"
+            :key="rowIndex">
             <div class="bloc" v-for="(item, index) in row" :key="index">
               <img class="illustration" :src="item.image" />
               <span class="title">
-                <countUp :from="0" :to="item.countUp" :duration="2" class="count-up-text" v-if="item.countUp" />
+                <countUp
+                  :from="0"
+                  :to="item.countUp"
+                  :duration="2"
+                  class="count-up-text"
+                  v-if="item.countUp" />
                 {{ item.title }}
               </span>
               <div class="contenuTexte">
                 <span class="descri" v-html="item.descri"></span>
-                <router-link :to="{ name: 'Information' }" class="voirPlus pointer">
+                <router-link
+                  :to="{ name: 'Information' }"
+                  class="voirPlus pointer">
                   <span class="pointer">{{ $t("information.voirPlus") }}</span>
                 </router-link>
               </div>
@@ -60,16 +83,21 @@
       </section>
     </div>
 
-    <section v-if="
-      userStore &&
-      userStore.isConnected &&
-      !utilisateur.ispresta &&
-      !utilisateur.waitingforadmin
-    ">
+    <section
+      v-if="
+        userStore &&
+        userStore.isConnected &&
+        !utilisateur.ispresta &&
+        !utilisateur.waitingforadmin
+      ">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.devenir')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.devenir')"
+          class="team_content"></div>
 
-        <router-link :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }" class="btn_teams">
+        <router-link
+          :to="{ name: 'AddPrestataire', params: { id: userStore.userId } }"
+          class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonDevenir") }}
         </router-link>
       </div>
@@ -77,9 +105,13 @@
 
     <section v-else-if="userStore.isConnected && utilisateur.ispresta">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.estDeja')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.estDeja')"
+          class="team_content"></div>
 
-        <router-link :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }" class="btn_teams">
+        <router-link
+          :to="{ name: 'EditPrestataire', params: { id: userStore.userId } }"
+          class="btn_teams">
           {{ $t("mintonetteCup.prestataire.boutonGerer") }}
         </router-link>
       </div>
@@ -87,21 +119,25 @@
 
     <section v-else-if="userStore.isConnected && utilisateur.waitingforadmin">
       <div class="teams_texte">
-        <div v-html="$t('mintonetteCup.prestataire.enAttente')" class="team_content"></div>
+        <div
+          v-html="$t('mintonetteCup.prestataire.enAttente')"
+          class="team_content"></div>
       </div>
     </section>
 
     <section v-else>
       <div class="teams_texte">
-        <div class="team_content">
-          Rien pour l'instant
-        </div>
+        <div
+          class="team_content"
+          v-html="$t('mintonetteCup.prestataire.nonConnecte')"></div>
+        <router-link :to="{ name: 'Connexion_utilisateur' }" class="btn_teams">
+          {{ $t("mintonetteCup.prestataire.boutonNonConnecte") }}
+        </router-link>
       </div>
     </section>
 
-
     <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
-    
+
     <Footer></Footer>
   </div>
 </template>
@@ -110,7 +146,15 @@
 /* ********************
         IMPORTS 
 ******************** */
-import { ref, onMounted, onBeforeUnmount, onActivated, computed, watch, nextTick } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  onActivated,
+  computed,
+  watch,
+  nextTick,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 /* ********************
@@ -124,7 +168,6 @@ import RecherchePrestataire from "./RecherchePrestataire.vue";
 import CountUp from "../components/CountUp.vue";
 import PresentationMintonette from "./PresentationMintonette.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
-
 
 /* ********************
     IMAGES IMPORTS 
@@ -273,10 +316,14 @@ const animateBounce = () => {
           if (!ballonEl) return;
 
           const rect = ballonEl.getBoundingClientRect();
-          const parentRect = ballonEl.offsetParent?.getBoundingClientRect() ?? { top: 0, left: 0 };
+          const parentRect = ballonEl.offsetParent?.getBoundingClientRect() ?? {
+            top: 0,
+            left: 0,
+          };
 
           messageBallonTop.value = rect.top - parentRect.top + rect.height / 2;
-          messageBallonLeft.value = rect.left - parentRect.left + rect.width + 10;
+          messageBallonLeft.value =
+            rect.left - parentRect.left + rect.width + 10;
         });
 
         return;
@@ -294,10 +341,9 @@ function hideOrShowBalloon() {
   const elt = document.getElementById("img_ballon");
 
   if (showBalloon.value) {
-    elt.style.display = 'block';
-  }
-  else {
-    elt.style.display = 'none';
+    elt.style.display = "block";
+  } else {
+    elt.style.display = "none";
   }
 }
 
@@ -314,7 +360,7 @@ function playVideoFullscreen() {
   } else if (video.mozRequestFullScreen) {
     video.mozRequestFullScreen();
   }
-};
+}
 
 const handleScroll = () => {
   const scrollY = window.scrollY;
@@ -344,7 +390,6 @@ const chunkedArray = computed(() => {
   return rows;
 });
 
-
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   hideOrShowBalloon();
@@ -365,9 +410,8 @@ watch(
   () => locale.value,
   (newLang) => {
     updateDescription();
-  }
+  },
 );
-
 
 async function getValuesEvenement() {
   try {
@@ -441,7 +485,7 @@ body::-webkit-scrollbar {
 }
 
 .image::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -530,7 +574,7 @@ body::-webkit-scrollbar {
 .bloc {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--rose-logo);
+  background-color: #b3d89c;
   opacity: 0.6;
   padding-bottom: 5px;
   max-width: 60%;
@@ -540,7 +584,9 @@ body::-webkit-scrollbar {
 
   border-radius: 10px;
 
-  transition: transform 0.4s ease, filter 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease;
 }
 
 .infos-row .bloc:hover {
@@ -549,13 +595,13 @@ body::-webkit-scrollbar {
   opacity: 1;
 }
 
-.infos-row .bloc:hover+.bloc {
+.infos-row .bloc:hover + .bloc {
   transform: translateZ(60px) rotateY(10deg);
   /* filter: brightness(0.6); */
   opacity: 0.6;
 }
 
-.infos-row .bloc:hover+.bloc+.bloc {
+.infos-row .bloc:hover + .bloc + .bloc {
   transform: translateZ(40px) rotateY(5deg);
   /* filter: brightness(0.4); */
   opacity: 0.4;
@@ -573,18 +619,24 @@ body::-webkit-scrollbar {
   opacity: 0.4;
 }
 
-.infos-row:has(.bloc:hover)+.infos-row .bloc {
+.infos-row:has(.bloc:hover) + .infos-row .bloc {
   transform: translateZ(-60px) rotateX(-12deg);
   /* filter: brightness(0.5); */
   opacity: 0.3;
-  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease,
+    opacity 0.4s ease;
 }
 
 .infos-row:has(+ .infos-row .bloc:hover) .bloc {
   transform: translateZ(-60px) rotateX(12deg);
   filter: brightness(0.5);
   opacity: 0.3;
-  transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    filter 0.4s ease,
+    opacity 0.4s ease;
 }
 
 .bloc .title {
@@ -607,7 +659,7 @@ body::-webkit-scrollbar {
 .descri {
   margin: 0px 10px;
   font-size: 0.7em;
-  height: 2.5em;
+  height: 3em;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -740,7 +792,7 @@ body::-webkit-scrollbar {
   animation: fadeIn 0.4s ease;
   transform: translateY(-50%);
 }
-#liste_prestataires{
+#liste_prestataires {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
