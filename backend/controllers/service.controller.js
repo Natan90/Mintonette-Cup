@@ -37,3 +37,16 @@ exports.activateServiceById = async (req, res) => {
     res.status(status).json({ error: message });
   }
 };
+
+exports.addServiceById = async (req, res) => {
+  try {
+    const id_prestataire = req.params.id;
+    const result = await serviceService.CreateService(id_prestataire, req.body);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+}

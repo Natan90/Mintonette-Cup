@@ -96,7 +96,8 @@ const pool = require("./db");
 
   CREATE TABLE IF NOT EXISTS Type_prestataire(
     id_type_prestataire SERIAL PRIMARY KEY,
-    nom_type_prestataire JSONB
+    nom_type_prestataire JSONB,
+    is_activity BOOLEAN
   );
  
   CREATE TABLE IF NOT EXISTS Prestataire(
@@ -144,7 +145,6 @@ const pool = require("./db");
       visible_public BOOLEAN DEFAULT TRUE,
       besoin JSONB,
       activate BOOLEAN,
-      is_activity BOOLEAN,
       prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire),
       article_id INTEGER REFERENCES Article(id_article),
       activite_id INTEGER REFERENCES Activite(id_activite)
@@ -403,19 +403,19 @@ const pool = require("./db");
     await pool.query(insertTypeBoutique);
 
     const insertTypePrestataire = `
-    INSERT INTO Type_prestataire (nom_type_prestataire) VALUES
+    INSERT INTO Type_prestataire (nom_type_prestataire, is_activity) VALUES
       ('{
         "fr": "Animation",
         "en": "Activity"
-      }'),
+      }', true),
       ('{
         "fr": "Boutique",
         "en": "Shop"
-      }'),
+      }', false),
       ('{
         "fr": "Restauration",
         "en": "Food"
-      }');
+      }', false);
     `;
     await pool.query(insertTypePrestataire);
 
@@ -473,7 +473,7 @@ const pool = require("./db");
 
     const insertServices = `
       INSERT INTO Services 
-      (nom_service, descri_service, visible_public, besoin, activate, is_activity, prestataire_id) VALUES
+      (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
       (
         'Stand de burgers sur place',
         '{
@@ -486,7 +486,6 @@ const pool = require("./db");
           "en": "Access to a power outlet and minimum 6m² space"
         }',
         true,
-        false,
         1
       ),
 
@@ -501,7 +500,6 @@ const pool = require("./db");
           "fr": "Point d’eau requis à proximité",
           "en": "Nearby water access required"
         }',
-        false,
         false,
         1
       ),
@@ -518,7 +516,6 @@ const pool = require("./db");
           "en": "Authorized cooking area required"
         }',
         false,
-        false,
         1
       ),
 
@@ -534,7 +531,6 @@ const pool = require("./db");
           "en": "Service table required"
         }',
         true,
-        false,
         1
       ),
 
@@ -550,7 +546,6 @@ const pool = require("./db");
           "en": "Stage and sound system required"
         }',
         false,
-        true,
         2
       ),
 
@@ -565,7 +560,6 @@ const pool = require("./db");
           "fr": "Système audio requis",
           "en": "Audio system required"
         }',
-        true,
         true,
         2
       ),
@@ -582,7 +576,6 @@ const pool = require("./db");
           "en": "Secure area required"
         }',
         false,
-        true,
         2
       ),
 
@@ -597,7 +590,6 @@ const pool = require("./db");
           "fr": "Espace clos obligatoire",
           "en": "Enclosed area required"
         }',
-        true,
         true,
         2
       ),
@@ -614,7 +606,6 @@ const pool = require("./db");
           "en": "Flat surface required"
         }',
         false,
-        false,
         3
       ),
 
@@ -629,7 +620,6 @@ const pool = require("./db");
           "fr": "Accès électrique requis",
           "en": "Power access required"
         }',
-        false,
         false,
         3
       ),
@@ -646,7 +636,6 @@ const pool = require("./db");
           "en": "Covered stand recommended"
         }',
         false,
-        false,
         3
       ),
 
@@ -662,7 +651,6 @@ const pool = require("./db");
           "en": "Covered space required"
         }',
         true,
-        false,
         3
       );
       `;

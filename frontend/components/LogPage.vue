@@ -444,7 +444,7 @@ async function connectUserWithToken(token) {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: var(--log-primary);
+  background: var(--primary-color);
   box-shadow: 0 12px 30px rgba(58, 111, 67, 0.2);
   z-index: 0;
   pointer-events: none;
@@ -462,7 +462,7 @@ async function connectUserWithToken(token) {
   left: 50px;
   width: 120px;
   height: 120px;
-  background: var(--log-rose-pale);
+  background: var(--rose-pale);
   border-radius: 50%;
   z-index: 0;
   opacity: 0.8;
@@ -559,7 +559,7 @@ async function connectUserWithToken(token) {
   letter-spacing: 1px;
   font-size: 2.2em;
   font-weight: 700;
-  color: var(--log-primary);
+  color: var(--primary-color);
   text-align: center;
   margin-bottom: 25px;
 }
@@ -626,13 +626,13 @@ input::placeholder {
   border: none;
   background-color: transparent;
   font-size: 0.85em;
-  color: var(--log-rose);
+  color: var(--rose);
   cursor: pointer;
   transition: color 0.25s ease;
 }
 
 #button_mdp_oublie:hover {
-  color: var(--log-rose-hover);
+  color: var(--rose-hover);
 }
 
 /* ── Boutons ── */
@@ -665,8 +665,8 @@ input::placeholder {
 
 .button_cancel {
   background: transparent;
-  color: var(--log-primary);
-  border: 2px solid var(--log-primary);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: 8px;
   padding: 10px 15px;
   font-weight: 600;
@@ -678,8 +678,8 @@ input::placeholder {
 
 .button_cancel:hover {
   background: #eef5ef;
-  border-color: var(--log-primary-dark);
-  color: var(--log-primary-dark);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(58, 111, 67, 0.15);
 }
@@ -692,7 +692,7 @@ input::placeholder {
 .message {
   margin-top: 12px;
   font-weight: 600;
-  color: var(--log-rose-hover);
+  color: var(--rose-hover);
   text-align: center;
   font-size: 14px;
 }
@@ -726,7 +726,7 @@ input::placeholder {
   border: 2px solid rgba(255, 255, 255, 0.8);
   padding: 12px 28px;
   border-radius: 8px;
-  color: var(--log-primary-dark);
+  color: var(--primary-dark);
   background: var(--log-card-bg);
   font-weight: 700;
   font-size: 1em;
@@ -784,7 +784,7 @@ input::placeholder {
 }
 
 .radio_group input[type="radio"] {
-  accent-color: var(--log-primary);
+  accent-color: var(--primary-color);
   width: auto;
   margin: 0;
   vertical-align: middle;
@@ -819,7 +819,7 @@ input::placeholder {
 
 .google-btn:hover {
   background: #f5faf6;
-  border-color: var(--log-primary-light);
+  border-color: var(--primary-light);
   box-shadow: 0 2px 8px rgba(58, 111, 67, 0.12);
 }
 
@@ -838,7 +838,7 @@ input::placeholder {
 .checkmark {
   width: 90%;
   height: 90%;
-  stroke: var(--log-primary);
+  stroke: var(--primary-color);
   stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -869,7 +869,7 @@ input::placeholder {
 }
 
 .modal-close:hover {
-  color: var(--log-rose-hover);
+  color: var(--rose-hover);
 }
 
 /* ── Bouton prestataire ── */

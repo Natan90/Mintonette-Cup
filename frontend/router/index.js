@@ -28,6 +28,7 @@ import { useNavigationStore } from "@/stores/navigation";
 import SentBox from "@/components/mailbox/SentBox.vue";
 import Mailbox from "@/views/Mailbox.vue";
 import Remboursement from "@/views/Remboursement.vue";
+import ArticlesAndActivities from "@/components/ArticlesAndActivities.vue";
 
 const routes = [
   {
@@ -44,28 +45,41 @@ const routes = [
         }),
       },
       {
-        path: "RecherchePresta",
-        name: "RecherchePresta",
-        component: RecherchePrestataire,
-      },
-      {
-        path: "ShowPrestataire/:id",
-        name: "ShowPrestataire",
-        component: ShowPrestataire,
-      },
-      {
-        path: "Prestataire/Add/:id?",
-        name: "AddPrestataire",
-        component: PrestataireInfo,
-        props: true,
-        meta: { requiresUserId: true },
-      },
-      {
-        path: "Prestataire/Edit/:id?",
-        name: "EditPrestataire",
-        component: PrestataireInfo,
-        props: true,
-        meta: { requiresUserId: true },
+        path: "prestataire",
+        name: "Prestataire",
+        children: [
+          {
+            path: "filter",
+            name: "RecherchePresta",
+            component: RecherchePrestataire,
+          },
+          {
+            path: ":id/show",
+            name: "ShowPrestataire",
+            component: ShowPrestataire,
+          },
+          {
+            path: ":id?/add",
+            name: "AddPrestataire",
+            component: PrestataireInfo,
+            props: true,
+            meta: { requiresUserId: true },
+          },
+          {
+            path: ":id?/edit",
+            name: "EditPrestataire",
+            component: PrestataireInfo,
+            props: true,
+            meta: { requiresUserId: true },
+          },
+          {
+            path: "service/:id/articles",
+            name: "AddByService",
+            component: ArticlesAndActivities,
+            props: true,
+            meta: { requiresUserId: true },
+          },
+        ],
       },
       {
         path: "admin",
@@ -125,7 +139,7 @@ const routes = [
             meta: { requiresUserId: true },
           },
           {
-            path: "profil/modifier/:userId",
+            path: "profil/:userId/modifier",
             name: "ModifyAccount",
             component: ModifyAccount,
             meta: { requiresUserId: true },
@@ -133,12 +147,12 @@ const routes = [
         ],
       },
       {
-        path: "Presentation_Mintonette_Cup",
+        path: "presentation-mintonette-cup",
         name: "Presentation_Mintonette_Cup",
         component: PresentationMintonette,
       },
       {
-        path: "PolygoneCreation",
+        path: "polygone-creation",
         name: "PolygoneCreation",
         component: PolygonCreation,
       },
@@ -149,24 +163,24 @@ const routes = [
         props: true,
       },
       {
-        path: "Gradin/:zone",
+        path: "gradin/:zone",
         name: "Gradin",
         component: Gradin,
       },
       {
-        path: "Panier",
+        path: "panier",
         name: "Panier",
         component: Panier,
         meta: { requiresUserId: true },
       },
       {
-        path: "Checkout",
+        path: "checkout",
         name: "Checkout",
         component: Checkout,
         meta: { requiresUserId: true },
       },
       {
-        path: "Information",
+        path: "information",
         name: "Information",
         component: Information,
       },
@@ -196,17 +210,16 @@ const routes = [
             path: "envoye",
             name: "SentBox",
             component: SentBox,
-            meta: { requiresUserId: true }
-          }
+            meta: { requiresUserId: true },
+          },
         ],
       },
       {
-        path: "Remboursement",
+        path: "remboursement",
         name: "Remboursement",
         component: Remboursement,
         meta: { requiresUserId: true },
       },
-      
     ],
   },
   {
@@ -242,9 +255,7 @@ router.beforeEach((to, from, next) => {
     navStore.previousRoute = from.fullPath;
   }
 
-  const requiresAuth = to.matched.some(
-    route => route.meta.requiresUserId
-  );
+  const requiresAuth = to.matched.some((route) => route.meta.requiresUserId);
 
   if (requiresAuth) {
     if (!userStore.token || !userStore.isTokenValid()) {

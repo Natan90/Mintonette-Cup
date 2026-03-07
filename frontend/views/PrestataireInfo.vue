@@ -3,53 +3,77 @@
   <Modal v-model="showService" :bigger="true">
     <template #content>
       <div class="service_details">
-        <span>
-          <button @click="changeDescriLang">
-            <span v-if="isFrench">Passer en anglais</span>
-            <span v-else>Go in French</span>
+
+        <!-- Langue -->
+        <div class="service_lang">
+          <button class="btn_lang" @click="changeDescriLang">
+            <span v-if="isFrench">🌐 Passer en anglais</span>
+            <span v-else>🌐 Go in French</span>
           </button>
-        </span>
-        <div>
+        </div>
+
+        <!-- Nom du service -->
+        <div class="service_form_group">
           <label for="nom_service">Nom du service</label>
-          <input class="page_title" v-model="oneService.nom_service" id="nom_service" />
-        </div>
-        <div>
-          <label for="titre_service">Titre du service</label>
-          <input class="page_title" v-model="currentTitre" id="titre_service" />
+          <input class="service_input_text" v-model="oneService.nom_service" id="nom_service" />
         </div>
 
-        <label> Description du service </label>
-        <Editor v-model="currentDescri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
-          height: 200,
-          menubar: false,
-          plugins: 'lists link image table media code preview anchor',
-          toolbar:
-            'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-          branding: false,
-        }" />
-
-        <div class="service_besoin">
-          <h3>Besoin</h3>
-          <input v-model="currentBesoin" />
+        <!-- Description -->
+        <div class="service_form_group">
+          <label>Description du service</label>
+          <Editor v-model="currentDescri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+            height: 200,
+            menubar: false,
+            plugins: 'lists link image table media code preview anchor',
+            toolbar: 'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+            branding: false,
+          }" />
         </div>
 
-        <div class="service_infos">
-          <div class="info_item">
-            <span class="info_label">Prix (en €)</span>
-            <input class="info_value" v-model="oneService.prix_service" />
-          </div>
+        <!-- Besoin -->
+        <div class="service_form_group">
+          <label>Besoin</label>
+          <input class="service_input_text" v-model="currentBesoin" />
+        </div>
 
-          <div class="info_item">
-            <span class="info_label">Participants max</span>
-            <input class="info_value" v-model="oneService.nbParticipants_service" />
+        <!-- Visible -->
+        <div class="service_form_group">
+          <div>
+            <label>Visible :</label>
+            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <label>Oui</label>
+            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <label>Non</label>
           </div>
         </div>
-        <div v-if="message && showService && messageType === 'error'" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'
-          ">
+
+        <!-- Actif -->
+        <div class="service_form_group">
+          <div>
+            <label>Actif :</label>
+            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <label>Oui</label>
+            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <label>Non</label>
+          </div>
+        </div>
+
+
+
+        <!-- Message erreur -->
+        <div v-if="message && showService && messageType === 'error'" class="message"
+          :class="messageType === 'error' ? 'message-error' : 'message-success'">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
         </div>
-        <button @click="addServiceToPrestataire()">Ajouter le service</button>
+
+        <!-- Bouton principal -->
+        <div class="service_submit">
+          <button class="btn_service_submit" @click="addServiceToPrestataire">
+            ✓ Ajouter le service
+          </button>
+        </div>
+
       </div>
     </template>
   </Modal>
@@ -106,7 +130,7 @@
       </div>
     </div>
 
-    <!-- Message d'erreur si la sélection des checkbox est invalide -->
+    <!-- Message d'erreur si la sélection des boutons radios est invalide -->
     <div class="message_error" v-if="errorMessageCheckBox">
       <p>{{ errorMessageCheckBox }}</p>
     </div>
@@ -174,8 +198,8 @@
               $t("prestataireInfo.services", {
                 gotS: services.length > 1 ? "s" : "",
               })
-              }}</label>
-            <button @click="showService = true" class="pointer">+ Ajouter</button>
+            }}</label>
+            <button @click="showModalByService" class="pointer">+ Ajouter</button>
           </div>
 
           <div class="service_input">
@@ -231,7 +255,7 @@
 import NavView from "@/components/NavView.vue";
 import { ref, onMounted, computed, nextTick } from "vue";
 import { useUserStore } from "@/stores/user";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useServiceStore } from "@/services/service.service";
 import { usePrestataireStore } from "@/services/prestataire.service";
@@ -249,7 +273,7 @@ const typePrestataireStore = useTypePrestataireStore();
 const mailBoxStore = useMailBoxStore();
 
 const route = useRoute();
-
+const router = useRouter();
 const prestaId = computed(() => route.params.id);
 const pathAdd = computed(() => route.name === "AddPrestataire");
 
@@ -262,6 +286,7 @@ const isFrench = ref(true);
 //======= Services ========
 //=========================
 const showService = ref(false);
+const isActivityService = ref(false);
 const services = ref([]);
 const oneService = ref({
   nom_service: "",
@@ -273,6 +298,14 @@ const oneService = ref({
   activate: false,
   visible_public: true,
 });
+
+function showModalByService() {
+  showService.value = true;
+  const currentType = type_prestataire.value.find(
+    (t) => t.id_type_prestataire === selectedTypeId.value
+  );
+  isActivityService.value = currentType?.is_activity ?? false;
+}
 
 //=========================
 //=== Type prestataire ====
@@ -322,10 +355,6 @@ onMounted(async () => {
     console.error(err);
   }
 });
-
-const closeModal = () => {
-  showService.value = false;
-};
 
 const closeMessage = () => {
   message.value = "";
@@ -444,42 +473,50 @@ function getMissingLangMessage(service) {
   return null;
 }
 
-function addServiceToPrestataire() {
-  if (
-    !oneService.value.nom_service ||
-    oneService.value.nom_service.trim() === ""
-  ) {
+
+async function addServiceToPrestataire() {
+  if (!oneService.value.nom_service?.trim()) {
     message.value = "Le nom du service est obligatoire.";
     messageType.value = "error";
     return;
   }
   const confirmMessage = getMissingLangMessage(oneService.value);
-
   if (confirmMessage) {
     const confirmAdd = window.confirm(confirmMessage);
     if (!confirmAdd) return;
   }
 
-  oneService.value.prix = Number(oneService.value.prix_service || 0);
-  oneService.value.nb_participants = Number(
-    oneService.value.nbParticipants_service || 0
-  );
+  try {
+    const res = await serviceStore.CreateService(prestaId.value, {
+      nom_service: oneService.value.nom_service,
+      descri_service: oneService.value.descri_service,
+      besoin: oneService.value.besoin,
+      activate: oneService.value.activate,
+      visible_public: oneService.value.visible_public
+    });
 
-  services.value.push({ ...oneService.value });
+    const newServiceId = res.data.id_service;
 
-  oneService.value = {
-    nom_service: "",
-    titre_service: { fr: "", en: "" },
-    descri_service: { fr: "", en: "" },
-    besoin: { fr: "", en: "" },
-    prix: 0,
-    nb_participants: 0,
-    activate: false,
-    visible_public: true,
-  };
-  showService.value = false;
-  message.value = "Service ajouté avec succès !";
-  messageType.value = "success";
+    services.value.push({ 
+      ...oneService.value, 
+      id_service: newServiceId 
+    });
+
+    showService.value = false;
+    message.value = "Service ajouté avec succès !";
+    messageType.value = "success";
+
+    router.push({
+      name: "AddByService",
+      params: { id: newServiceId },
+      query: { isActivity: isActivityService.value }
+    });
+
+
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
+  }
 }
 
 function removeServiceField(index) {
@@ -940,7 +977,7 @@ async function sendMailToAdmin(isModif) {
   background: #f0f7f1;
 }
 
-input[type="checkbox"] {
+input[type="radio"] {
   accent-color: var(--log-primary);
   margin-right: 10px;
   width: auto;
@@ -1232,5 +1269,172 @@ input[type="checkbox"] {
 
 .modal-close:hover {
   color: var(--log-rose-hover);
+}
+
+/* ── Modal service : conteneur principal ── */
+.service_details {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 4px 2px;
+}
+
+/* ── Bouton langue ── */
+.service_lang {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn_lang {
+  background: transparent;
+  border: 1.5px solid var(--log-border);
+  color: var(--log-primary);
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn_lang:hover {
+  background: var(--log-primary);
+  color: #fff;
+  border-color: var(--log-primary);
+}
+
+/* ── Groupes de champs ── */
+.service_form_group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.service_form_group label {
+  font-weight: 700;
+  font-size: 0.9em;
+  color: var(--log-primary-dark);
+  letter-spacing: 0.3px;
+}
+
+.service_input_text {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--log-border);
+  background: var(--log-card-bg);
+  color: #2a3d2e;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service_input_text:focus {
+  outline: none;
+  border-color: var(--log-primary-light);
+  box-shadow: 0 0 0 3px rgba(90, 153, 102, 0.15);
+}
+
+.service_input_number {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--log-border);
+  background: var(--log-card-bg);
+  color: #2a3d2e;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service_input_number:focus {
+  outline: none;
+  border-color: var(--log-primary-light);
+  box-shadow: 0 0 0 3px rgba(90, 153, 102, 0.15);
+}
+
+/* ── Bloc activité / article ── */
+.service_bloc {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--log-fond);
+  border: 1.5px solid var(--log-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.service_bloc_title {
+  font-size: 1em;
+  font-weight: 700;
+  color: var(--log-primary);
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Ligne de deux inputs côte à côte ── */
+.service_row_inputs {
+  display: flex;
+  gap: 14px;
+}
+
+.service_row_inputs .service_form_group {
+  flex: 1;
+}
+
+/* ── Bouton secondaire (ajouter activité/article) ── */
+.service_btn_container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn_service_add {
+  background: transparent;
+  border: 1.5px solid var(--log-primary);
+  color: var(--log-primary);
+  font-weight: 700;
+  font-size: 0.9em;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn_service_add:hover {
+  background: var(--log-primary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(58, 111, 67, 0.25);
+}
+
+/* ── Bouton principal de soumission ── */
+.service_submit {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.btn_service_submit {
+  background: var(--log-gradient-cta);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.25);
+  transition: all 0.3s ease;
+  letter-spacing: 0.4px;
+}
+
+.btn_service_submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(58, 111, 67, 0.35);
+}
+
+.btn_service_submit:active {
+  transform: translateY(1px);
 }
 </style>

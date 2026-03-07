@@ -24,22 +24,13 @@
     --rose-hover: #fc9999;
     --couleur-fond: #f9fafb;
 
-    /* Transitions */
-    --transition-fast: 0.3s ease;
+    --primary-light:  #5a9966;
+    --primary-dark:   #2a5232;
 
-    /* INDEX */
-
-    /* Page de connexion / inscription */
-
-    /* Couleurs */
-    --log-primary:        #3a6f43;
-    --log-primary-light:  #5a9966;
-    --log-primary-dark:   #2a5232;
-
-    --log-rose:           #e8637a;
-    --log-rose-hover:     #c94d65;
-    --log-rose-pale:      #ffd5d5;
-    --log-rose-medium:    #fc9999;
+    --rose:           #e8637a;
+    --rose-hover:     #c94d65;
+    --rose-pale:      #ffd5d5;
+    --rose-medium:    #fc9999;
 
     --log-card-bg:        #fffaf8;
     --log-fond:           #f9fafb;
@@ -52,6 +43,13 @@
     --log-gradient-input: linear-gradient(to right, #5a9966, #e8637a);
     --log-blob-1: linear-gradient(135deg, #fc9999, #e8637a);
     --log-blob-2: linear-gradient(135deg, #5a9966, #3a6f43);
+
+    /* Transitions */
+    --transition-fast: 0.3s ease;
+
+    /* INDEX */
+
+    /* Page de connexion / inscription */
 
     /* Police */
     --fontFamilyTitle: "Poppins";

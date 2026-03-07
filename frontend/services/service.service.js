@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getRequest, patchRequest } from "./axios.service";
+import { getRequest, patchRequest, postRequest } from "./axios.service";
 
 export const useServiceStore = defineStore("service", () => {
 
@@ -21,9 +21,19 @@ export const useServiceStore = defineStore("service", () => {
     return patchRequest(`/prestataire/service/activate/${id_service}`);
   }
 
+  async function CreateService(id_prestataire, data) {
+    if (!id_prestataire) {
+      throw new Error("L'id du prestataire est obligatoire");
+    }
+    return postRequest(`/prestataire/service/add/${id_prestataire}`, {
+      ...data
+    });
+  }
+
   return {
     GetServices,
     GetServiceById,
     ActivateService,
+    CreateService,
   };
 });
