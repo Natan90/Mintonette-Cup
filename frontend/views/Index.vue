@@ -33,7 +33,7 @@
       <div class="video_with_balloon" v-if="showingBallon">
         <div class="container_video">
           <video ref="videoRef" controls width="400">
-            <source src="/public/vnl_video.mp4" type="video/mp4" />
+            <source src="/vnl_video.mp4" type="video/mp4" />
           </video>
         </div>
       </div>

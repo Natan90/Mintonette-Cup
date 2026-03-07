@@ -92,7 +92,7 @@
     </div>
 
     <section>
-      <div class="container">
+      <div class="container_admin">
         <div class="container_cards">
           <p class="title_presta">{{ onePresta.nom_prestataire }}</p>
           <!-- <img src=""> -->
@@ -455,7 +455,7 @@ function updateDescription() {
   color: #111;
 }
 
-.container {
+.container_admin {
   display: flex;
   flex-direction: row;
   margin-left: 250px;

@@ -233,7 +233,6 @@ const redirect =
 
 const closeModal = () => {
   showModal.value = false;
-
   router.push(redirect);
 };
 
@@ -283,7 +282,6 @@ onMounted(async () => {
   if (token.value) {
     try {
       await connectUserWithToken(token.value);
-
       router.replace({ 
         name: "Home", 
         params: { lang: route.params.lang || "fr" },
@@ -294,7 +292,6 @@ onMounted(async () => {
     }
   }
 });
-
 
 async function getValuesConnexion() {
   if (!login_utilisateur_connexion.value || !mdp_utilisateur_connexion.value) {
@@ -331,7 +328,6 @@ async function getValuesConnexion() {
     console.error("Erreur connexion :", err);
   }
 }
-
 
 async function getValuesInscription() {
   if (!nom_utilisateur.value || !prenom_utilisateur.value || !login_utilisateur.value || !mdp_utilisateur.value || !mail_utilisateur.value) {
@@ -402,47 +398,15 @@ async function connectUserWithToken(token) {
   userStore.startAuthenticating();
   userStore.setToken(token);
 
-  console.log("juste avant appel de GetCurrentUser");
-
   const res = await adminAPIStore.GetCurrentUser(token);
   console.log("Résultat GetCurrentUser :", res);
-
-  console.log("juste après appel de GetCurrentUser");
-
 
   userStore.setUser(res.data.id_utilisateur);
   userStore.setRole(res.data.isadmin ? "admin" : "user");
 
   userStore.stopAuthenticating();
 }
-
-
 </script>
-
-<style>
-:root {
-  /* Font family title */
-  --fontFamilyTitle: "Poppins";
-
-  /* Coordonnées de left_card */
-  --coordLeftCardTop: 50%;
-  --coordLeftCardLeft: 15%;
-
-  /* Taille de left_card */
-  --widthLeftCard35: 35%;
-  --widthLeftCard45: 45%;
-
-  /* Taille de left_side */
-  --widthLeftSide: 45%;
-
-  /* Couleurs fond dégradé en mode connexion */
-  --colorGradientBlue: #1e90ff;
-  --colorGradientGreen: #00c853;
-
-  /* Couleurs fond dégradé en mode inscription */
-  --colorGradientPurple: #9b59b6;
-}
-</style>
 
 <style scoped>
 * {
@@ -456,20 +420,22 @@ async function connectUserWithToken(token) {
   width: 100%;
   position: relative;
   overflow: hidden;
+  background-color: var(--log-fond);
 }
 
 .page.moved {
   flex-direction: row-reverse;
 }
 
+/* ── Côté gauche décoratif ── */
 .left-side {
   width: var(--widthLeftSide);
   position: relative;
   z-index: 1;
   overflow: hidden;
+  background-color: var(--log-fond);
 }
 
-/* Créer un cercle */
 .left-side::before {
   content: "";
   position: absolute;
@@ -478,8 +444,8 @@ async function connectUserWithToken(token) {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: var(--primary-color);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  background: var(--log-primary);
+  box-shadow: 0 12px 30px rgba(58, 111, 67, 0.2);
   z-index: 0;
   pointer-events: none;
 }
@@ -487,10 +453,8 @@ async function connectUserWithToken(token) {
 .left-side.moved::before {
   left: auto;
   right: -80px;
-  background: var(--primary-color);
 }
 
-/* Créer un autre cercle */
 .left-side::after {
   content: "";
   position: absolute;
@@ -498,28 +462,27 @@ async function connectUserWithToken(token) {
   left: 50px;
   width: 120px;
   height: 120px;
-  background: var(--rose-logo);
+  background: var(--log-rose-pale);
   border-radius: 50%;
   z-index: 0;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .left-side.moved::after {
   left: auto;
   right: 50px;
-  background: var(--rose-logo);
 }
 
-/* Créer une forme différente */
+/* Blob organique 1 — rose */
 .blob {
   position: absolute;
   width: 150px;
   height: 150px;
-  background: linear-gradient(135deg, #f39bff, #8f5994);
+  background: var(--log-blob-1);
   border-radius: 50% 30% 50% 30%;
   top: 10%;
   left: 30%;
-  opacity: 0.3;
+  opacity: 0.25;
   z-index: 0;
   transform: rotate(20deg);
 }
@@ -529,16 +492,16 @@ async function connectUserWithToken(token) {
   right: 30%;
 }
 
-/* Créer une autre forme différente */
+/* Blob organique 2 — vert */
 .small-blob {
   position: absolute;
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #5fbe6f, #489154);
+  background: var(--log-blob-2);
   border-radius: 50% 40% 60% 50%;
   top: 75%;
   left: 80%;
-  opacity: 0.35;
+  opacity: 0.3;
   z-index: 0;
   transform: rotate(-25deg);
 }
@@ -548,11 +511,10 @@ async function connectUserWithToken(token) {
   right: 80%;
 }
 
+/* ── Panneau droit coloré ── */
 .background-right {
   flex: 1;
-  background: linear-gradient(135deg,
-      #ffffff, 40%,
-      var(--primary-color));
+  background: var(--log-gradient-connexion);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -562,30 +524,28 @@ async function connectUserWithToken(token) {
 }
 
 .background-right.moved {
-  background: linear-gradient(135deg,
-      var(--primary-color), 50%,
-      #ffffff);
+  background: var(--log-gradient-inscription);
 }
 
+/* ── Carte formulaire ── */
 .left-card {
   width: var(--widthLeftCard35);
-  background: #fffaf1;
-  border-radius: 18px;
+  background: var(--log-card-bg);
+  border-radius: 20px;
   padding: 40px 50px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 35px rgba(58, 111, 67, 0.12), 0 2px 8px rgba(232, 99, 122, 0.08);
 
   position: absolute;
   left: 15%;
   top: var(--coordLeftCardTop);
   transform: translateY(-50%);
   transition: all 0.5s ease;
-
   z-index: 2;
 }
 
 .left-card:hover {
   transform: translateY(calc(-50% - 3px));
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 18px 45px rgba(58, 111, 67, 0.16), 0 4px 12px rgba(232, 99, 122, 0.1);
 }
 
 .left-card.moved {
@@ -593,16 +553,18 @@ async function connectUserWithToken(token) {
   width: var(--widthLeftCard45);
 }
 
+/* ── Titre ── */
 .title {
   font-family: var(--fontFamilyTitle), sans-serif;
   letter-spacing: 1px;
   font-size: 2.2em;
   font-weight: 700;
-  color: #ff00dd;
+  color: var(--log-primary);
   text-align: center;
   margin-bottom: 25px;
 }
 
+/* ── Champs ── */
 .item {
   position: relative;
   display: flex;
@@ -614,17 +576,16 @@ async function connectUserWithToken(token) {
   height: 3px;
   border: none;
   border-radius: 3px;
-  background: linear-gradient(to right, #1e90ff, #00c853);
+  background: var(--log-gradient-input);
   margin: 5px 0 0 0;
   padding: 0;
-
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.7s ease;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
-.item input:focus+hr {
+.item input:focus + hr {
   transform: scaleX(1);
   opacity: 1;
 }
@@ -637,6 +598,7 @@ input {
   font-size: 15px;
   border-radius: 8px;
   border: none;
+  color: #2a3d2e;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -650,9 +612,11 @@ input:focus {
 
 input::placeholder {
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
+  color: #8aab8e;
 }
 
+/* ── Mot de passe oublié ── */
 .mdp_oublie {
   text-align: right;
   margin-bottom: 15px;
@@ -662,24 +626,24 @@ input::placeholder {
   border: none;
   background-color: transparent;
   font-size: 0.85em;
-  color: #ff00dd;
+  color: var(--log-rose);
   cursor: pointer;
-  transition: color 0.25s ease, text-decoration 0.25s ease;
+  transition: color 0.25s ease;
 }
 
 #button_mdp_oublie:hover {
-  text-decoration: underline;
-  color: #c702ad;
+  color: var(--log-rose-hover);
 }
 
+/* ── Boutons ── */
 .button_message {
   display: block;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 10px 15px;
   font-size: 15px;
   cursor: pointer;
-  transition: transform 0.1s ease, background-color 0.3s ease;
+  transition: transform 0.15s ease, box-shadow 0.25s ease;
   width: 100%;
   text-align: center;
   color: #fff;
@@ -687,19 +651,22 @@ input::placeholder {
 }
 
 .button_connexion {
-  background: linear-gradient(90deg, #ff00dd, #007bff);
+  background: var(--log-gradient-cta);
   background-size: 200% 100%;
-  transition: all 0.3s;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.25);
 }
 
 .button_connexion:hover {
   transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(58, 111, 67, 0.3);
 }
 
 .button_cancel {
-  background: #fffaf1;
-  color: #ff00dd;
-  border: 2px solid #ff00dd;
+  background: transparent;
+  color: var(--log-primary);
+  border: 2px solid var(--log-primary);
   border-radius: 8px;
   padding: 10px 15px;
   font-weight: 600;
@@ -710,26 +677,27 @@ input::placeholder {
 }
 
 .button_cancel:hover {
-  background: #ffe0e0;
-  border-color: #c702ad;
-  color: #c702ad;
+  background: #eef5ef;
+  border-color: var(--log-primary-dark);
+  color: var(--log-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(199, 2, 173, 0.25);
+  box-shadow: 0 4px 15px rgba(58, 111, 67, 0.15);
 }
 
 .button_message:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 8px rgba(30, 144, 255, 0.2);
 }
 
+/* ── Message d'erreur ── */
 .message {
   margin-top: 12px;
   font-weight: 600;
-  color: red;
+  color: var(--log-rose-hover);
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
 }
 
+/* ── Texte panneau droit ── */
 .bg-text {
   text-align: center;
   max-width: 500px;
@@ -741,7 +709,8 @@ input::placeholder {
   font-weight: 700;
   margin-bottom: 10px;
   letter-spacing: 1px;
-  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
 }
 
 .bg-text p {
@@ -749,30 +718,30 @@ input::placeholder {
   opacity: 0.95;
   font-weight: 400;
   line-height: 1.5;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .button_register {
-  border: none;
-  padding: 12px 25px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  padding: 12px 28px;
   border-radius: 8px;
-  color: black;
-  background: #fffaf1;
-  font-weight: 600;
+  color: var(--log-primary-dark);
+  background: var(--log-card-bg);
+  font-weight: 700;
   font-size: 1em;
   cursor: pointer;
-  margin-top: 20px;
-  transition: transform 0.2s ease;
+  margin-top: 22px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .button_register:hover {
   transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
 }
 
-.button_register:focus+.left-card {
-  transform: translateX(calc(-50% - 300px));
-}
-
+/* ── Grille inscription ── */
 .grid {
   display: flex;
   flex-direction: row;
@@ -786,19 +755,13 @@ input::placeholder {
 
 .separator {
   width: 2px;
-  background-color: #ccc;
+  background: linear-gradient(to bottom, transparent, var(--log-border), transparent);
   margin: 0 20px;
 }
 
 .container_right {
   width: 50%;
   padding: 15px 0px 15px 15px;
-}
-
-.item {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 18px;
 }
 
 .both_size {
@@ -820,7 +783,9 @@ input::placeholder {
   white-space: nowrap;
 }
 
-.item_radio input {
+.radio_group input[type="radio"] {
+  accent-color: var(--log-primary);
+  width: auto;
   margin: 0;
   vertical-align: middle;
 }
@@ -829,30 +794,41 @@ input::placeholder {
   margin-left: 5px;
   font-weight: 500;
   font-size: 14px;
+  color: #3a4a3d;
   cursor: pointer;
 }
 
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+/* ── Bouton Google ── */
+.google-btn {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
-}
-
-.modal-content {
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 300px;
-  width: 90%;
-  text-align: center;
-  position: relative;
+  color: #3c4043;
+  border: 1px solid var(--log-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* Check animation */
+.google-btn:hover {
+  background: #f5faf6;
+  border-color: var(--log-primary-light);
+  box-shadow: 0 2px 8px rgba(58, 111, 67, 0.12);
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Modale check ── */
 .check-wrapper {
   width: 120px;
   height: 120px;
@@ -862,7 +838,7 @@ input::placeholder {
 .checkmark {
   width: 90%;
   height: 90%;
-  stroke: var(--colorGradientBlue);
+  stroke: var(--log-primary);
   stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -893,72 +869,38 @@ input::placeholder {
 }
 
 .modal-close:hover {
-  color: #ff0000;
+  color: var(--log-rose-hover);
 }
 
-.google-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem;
-  background: white;
-  color: #3c4043;
-  border: 1px solid #dadce0;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.google-btn:hover {
-  background: #f8f9fa;
-  border-color: #d2d4d6;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-}
-
+/* ── Bouton prestataire ── */
 .button-prestataire {
-  background: linear-gradient(90deg,
-      var(--colorGradientPurple),
-      var(--colorGradientBlue));
+  background: var(--log-gradient-cta);
   color: white;
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1.1em;
   padding: 12px 25px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgb(30, 144, 255, 0.4);
+  box-shadow: 0 5px 15px rgba(58, 111, 67, 0.25);
 }
 
 .button-prestataire:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgb(30, 144, 255, 054);
+  box-shadow: 0 8px 22px rgba(58, 111, 67, 0.35);
 }
 
 .button-prestataire:active {
   transform: translateY(1px);
-  box-shadow: 0 3px 10px rgb(30, 144, 255, 0.3);
+  box-shadow: 0 3px 10px rgba(58, 111, 67, 0.2);
 }
 
 @keyframes draw-circle {
-  to {
-    stroke-dashoffset: 0;
-  }
+  to { stroke-dashoffset: 0; }
 }
 
 @keyframes draw-check {
-  to {
-    stroke-dashoffset: 0;
-  }
+  to { stroke-dashoffset: 0; }
 }
 </style>

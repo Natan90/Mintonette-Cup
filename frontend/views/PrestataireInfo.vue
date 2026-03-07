@@ -55,177 +55,173 @@
   </Modal>
 
 
-  <div class="container">
-    <!-- Titre principal de la page -->
-    <div class="title">
-      <p v-if="pathAdd">{{ $t("prestataireInfo.titleAdd") }}</p>
-      <p v-else>{{ $t("prestataireInfo.titleEdit") }}</p>
-    </div>
-
-    <div class="content">
-      <!-- Sous-titre indiquant le rôle du prestataire -->
-      <div class="subtitle">
-        <p>{{ $t("prestataireInfo.role") }}</p>
+  <section class="container">
+    <div class="content_container">
+      <!-- Titre principal de la page -->
+      <div class="title">
+        <p v-if="pathAdd">{{ $t("prestataireInfo.titleAdd") }}</p>
+        <p v-else>{{ $t("prestataireInfo.titleEdit") }}</p>
       </div>
 
-      <!-- Liste des types de prestataires disponibles -->
-      <div class="type_prestataire">
-        <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
-          <!-- Bouton de sélection du type de prestataire -->
-          <button class="button_type_presta" @click="selectTypePresta(index)" :disabled="continueInscription" :class="selectedIndex === index ? 'button_selected' : ''">
-            {{ item.nom_type_prestataire[locale] }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Tableau affichant les spécificités selon le type choisi -->
-      <div v-if="selectedType" class="container_table">
-        <h1>
-          {{ $t("prestataireInfo.type") }}
-          <span :style="{ color: 'red' }">{{ selectedTypeLabel }}</span> ?
-        </h1>
-
-        <table class="table_type_presta">
-          <tbody>
-            <!-- Liste des options possibles -->
-            <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
-              <td>
-                <!-- Checkbox (une seule sélection autorisée) -->
-                <input type="checkbox" :id="`item-${index}`" :value="index"
-                  @change="onCheckChange($event, item)" :checked="isChecked(item)"
-                  :disabled="continueInscription" />
-                <label :for="`item-${index}`">
-                  {{ item.nom }}
-                </label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Message d'erreur si la sélection des checkbox est invalide -->
-  <div class="message_error" v-if="errorMessageCheckBox">
-    <p>{{ errorMessageCheckBox }}</p>
-  </div>
-
-  <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
-  <div class="button_container" v-if="!continueInscription && pathAdd">
-    <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
-      :class="{ disabled: !isSelectionValid }">
-      {{ $t("prestataireInfo.btnContinueInscription") }}
-    </button>
-  </div>
-
-  <!-- Bouton retour vers la sélection du type -->
-  <div class="button_container" v-if="continueInscription && pathAdd">
-    <button @click.prevent="hideContinueInscription">
-      {{ $t("prestataireInfo.btnRetour") }}
-    </button>
-  </div>
-
-  <!-- Formulaire de création / modification du prestataire -->
-  <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
-    <div class="editor_container">
-      <!-- Champ : nom du prestataire -->
-      <div class="form_group">
-        <label for="nom">
-          {{ $t("prestataireInfo.formulaire.nom") }}
-        </label>
-        <input type="text" id="nom" v-model="nom_presta" />
-      </div>
-
-      <!-- Champ : description avec éditeur TinyMCE -->
-      <div class="form_group">
-        <label>
-          {{ $t("prestataireInfo.formulaire.descri") }}
-        </label>
-        <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
-          height: 600,
-          menubar: false,
-          plugins: 'lists link image table media code preview anchor',
-          toolbar:
-            'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-          branding: false,
-        }" />
-      </div>
-
-      <!-- Champ : email de contact -->
-      <div class="form_group">
-        <label for="contact">
-          {{ $t("user.mail") }}
-        </label>
-        <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
-      </div>
-
-      <!-- Champ : téléphone -->
-      <div class="form_group">
-        <label for="contact">
-          {{ $t("user.tel_utilisateur") }}
-        </label>
-        <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
-      </div>
-
-      <div class="form_group">
-        <div class="ajout_services">
-          <label>{{
-            $t("prestataireInfo.services", {
-              gotS: services.length > 1 ? "s" : "",
-            })
-          }}</label>
-          <button @click="showService = true" class="pointer">+ Ajouter</button>
+      <div class="content">
+        <!-- Sous-titre indiquant le rôle du prestataire -->
+        <div class="subtitle">
+          <p>{{ $t("prestataireInfo.role") }}</p>
         </div>
 
-        <div class="service_input">
-          <div v-for="(item, index) in services" :key="index" class="service_row">
-            <button @click="showOneService(item.id_service)">
-              {{ item.nom_service }}
-            </button>
-            <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
-            <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
-            <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
-              Activer
-            </button>
-            <button class="btn_desactivate" v-else-if="item.activate" @click="desactivatingService(item)">
-              Désactiver
-            </button>
-            <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">
-              &times;
+        <!-- Liste des types de prestataires disponibles -->
+        <div class="type_prestataire">
+          <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
+            <!-- Bouton de sélection du type de prestataire -->
+            <button class="button_type_presta pointer" @click="selectTypePresta(index)" :disabled="continueInscription"
+              :class="selectedIndex === index ? 'button_selected' : ''">
+              {{ item.nom_type_prestataire[locale] }}
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- Message de succès ou d’erreur après action -->
-      <div v-if="message && !showService" class="message"
-        :class="messageType === 'error' ? 'message-error' : 'message-success'">
-        <span class="text">{{ message }}</span>
-        <span class="modal-close" @click="closeMessage">&times;</span>
-      </div>
+        <!-- Tableau affichant les spécificités selon le type choisi -->
+        <div v-if="selectedType" class="container_table">
+          <h1>
+            {{ $t("prestataireInfo.type") }}
+            <span :style="{ color: 'var(--log-rose)' }">{{ selectedTypeLabel }}</span> ?
+          </h1>
 
-      <!-- Bouton de modification (mode édition) -->
-      <div class="button_container" v-if="!pathAdd">
-        <button @click="updatePresta()" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
-          {{ $t("prestataireInfo.formulaire.btnModifier") }}
-        </button>
+          <table class="table_type_presta">
+            <tbody>
+              <!-- Liste des options possibles -->
+              <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
+                <td>
+                  <!-- Checkbox (une seule sélection autorisée) -->
+                  <input type="radio" :id="`item-${index}`" :value="index" @change="onCheckChange($event, item)"
+                    :checked="isChecked(item)" :disabled="continueInscription" />
+                  <label :for="`item-${index}`">
+                    {{ item.nom }}
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <!-- Bouton d'inscription (mode ajout) -->
-      <div class="button_container" v-else>
-        <button @click="addPrestataire()" :disabled="isSubmitting">
-          {{ isSubmitting ? "En cours..." : $t("user.buttonInscription") }}
-        </button>
-      </div>
-
-      <!-- Bouton de suppression du prestataire -->
-      <!-- <div class="button_container">
-        <button @click="delPresta">
-          {{ $t("adminPage.prestataire.btn_suppr") }}
-        </button>
-      </div> -->
     </div>
-  </div>
+
+    <!-- Message d'erreur si la sélection des checkbox est invalide -->
+    <div class="message_error" v-if="errorMessageCheckBox">
+      <p>{{ errorMessageCheckBox }}</p>
+    </div>
+
+    <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
+    <div class="button_container" v-if="!continueInscription && pathAdd">
+      <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
+        :class="{ disabled: !isSelectionValid }">
+        {{ $t("prestataireInfo.btnContinueInscription") }}
+      </button>
+    </div>
+
+    <!-- Bouton retour vers la sélection du type -->
+    <div class="button_container" v-if="continueInscription && pathAdd">
+      <button @click.prevent="hideContinueInscription">
+        {{ $t("prestataireInfo.btnRetour") }}
+      </button>
+    </div>
+
+    <!-- Formulaire de création / modification du prestataire -->
+    <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
+      <div class="editor_container">
+        <!-- Champ : nom du prestataire -->
+        <div class="form_group">
+          <label for="nom">
+            {{ $t("prestataireInfo.formulaire.nom") }}
+          </label>
+          <input type="text" id="nom" v-model="nom_presta" />
+        </div>
+
+        <!-- Champ : description avec éditeur TinyMCE -->
+        <div class="form_group">
+          <label>
+            {{ $t("prestataireInfo.formulaire.descri") }}
+          </label>
+          <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+            height: 600,
+            menubar: false,
+            plugins: 'lists link image table media code preview anchor',
+            toolbar:
+              'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+            branding: false,
+          }" />
+        </div>
+
+        <!-- Champ : email de contact -->
+        <div class="form_group">
+          <label for="contact">
+            {{ $t("user.mail") }}
+          </label>
+          <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
+        </div>
+
+        <!-- Champ : téléphone -->
+        <div class="form_group">
+          <label for="contact">
+            {{ $t("user.tel_utilisateur") }}
+          </label>
+          <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
+        </div>
+
+        <div class="form_group">
+          <div class="ajout_services">
+            <label>{{
+              $t("prestataireInfo.services", {
+                gotS: services.length > 1 ? "s" : "",
+              })
+              }}</label>
+            <button @click="showService = true" class="pointer">+ Ajouter</button>
+          </div>
+
+          <div class="service_input">
+            <div v-for="(item, index) in services" :key="index" class="service_row">
+              <button @click="showOneService(item.id_service)">
+                {{ item.nom_service }}
+              </button>
+              <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
+              <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
+              <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
+                Activer
+              </button>
+              <button class="btn_desactivate" v-else-if="item.activate" @click="desactivatingService(item)">
+                Désactiver
+              </button>
+              <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">
+                &times;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message de succès ou d'erreur après action -->
+        <div v-if="message && !showService" class="message"
+          :class="messageType === 'error' ? 'message-error' : 'message-success'">
+          <span class="text">{{ message }}</span>
+          <span class="modal-close" @click="closeMessage">&times;</span>
+        </div>
+
+        <!-- Bouton de modification (mode édition) -->
+        <div class="button_container" v-if="!pathAdd">
+          <button @click="updatePresta()" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
+            {{ $t("prestataireInfo.formulaire.btnModifier") }}
+          </button>
+        </div>
+
+        <!-- Bouton d'inscription (mode ajout) -->
+        <div class="button_container" v-else>
+          <button @click="addPrestataire()" :disabled="isSubmitting">
+            {{ isSubmitting ? "En cours..." : $t("user.buttonInscription") }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- Pied de page -->
   <Footer></Footer>
@@ -319,7 +315,7 @@ onMounted(async () => {
     await getValuesTypePresta();
     await getValuesEveryType();
     if (!pathAdd.value) {
-      continueInscription.value = true; // Activer le formulaire en mode édition
+      continueInscription.value = true;
       await getValuesPrestataire();
     }
   } catch (err) {
@@ -372,9 +368,6 @@ const currentDescri = computed({
 const errorMessageCheckBox = computed(() => {
   if (checkedItems.value.length === 0) {
     return "Veuillez sélectionner une option.";
-  }
-  if (checkedItems.value.length > 1) {
-    return "Veuillez sélectionner une seule option.";
   }
   return "";
 });
@@ -518,15 +511,11 @@ async function actionsService(service) {
   }
 }
 
-//=========================
-//======== Events =========
-//=========================
 function isChecked(item) {
   return checkedItems.value.some(
     (i) => i.nom === item.nom
   );
 }
-
 
 function onCheckChange(event, item) {
   if (event.target.checked) {
@@ -535,7 +524,6 @@ function onCheckChange(event, item) {
     checkedItems.value = [];
   }
 }
-
 
 function showContinueInscription() {
   continueInscription.value = true;
@@ -569,13 +557,6 @@ function selectTypePresta(index) {
 }
 
 
-function delPresta() {
-  userStore.delPresta();
-}
-
-//=========================
-//= Async functions types =
-//=========================
 async function getValuesTypePresta() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
@@ -596,9 +577,6 @@ async function getValuesEveryType() {
   }
 }
 
-//==========================
-//= Async functions presta =
-//==========================
 async function getValuesPrestataire() {
   if (prestaId.value === null) return;
 
@@ -618,7 +596,6 @@ async function getValuesPrestataire() {
     mail_presta.value = presta.mail_prestataire;
     tel_presta.value = presta.tel_prestataire;
 
-    // Type de prestataire
     const indexType = type_prestataire.value.findIndex(
       (t) =>
         t.id_type_prestataire ===
@@ -637,7 +614,6 @@ async function getValuesPrestataire() {
       selectedType.value = nomType.toLowerCase();
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
-
 
     await nextTick();
 
@@ -665,7 +641,6 @@ async function getValuesPrestataire() {
       checkedItems.value = [];
     }
 
-    // Services
     services.value = prestaServices.map((s) => ({
       id_service: s.id_service,
       nom_service: s.nom_service,
@@ -678,7 +653,6 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
   try {
-    console.log("1 - Avant BecomePrestataire");
     const servicesPayload = services.value.map(s => ({
       nom_service: s.nom_service,
       titre_service: {
@@ -696,7 +670,6 @@ async function addPrestataire() {
       visible_public: s.visible_public
     }));
 
-
     const res = await prestataireStore.BecomePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
@@ -706,10 +679,8 @@ async function addPrestataire() {
       type: Number(selectedTypeId.value),
       services: servicesPayload
     });
-    console.log(res.data);
 
     userStore.prestaId = res.data.id_prestataire;
-    console.log("2 - Après BecomePrestataire");
 
     await sendMailToAdmin(false);
 
@@ -740,7 +711,6 @@ async function updatePresta() {
       visible_public: s.visible_public
     }));
 
-
     const res = await prestataireStore.UpdatePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
@@ -761,12 +731,10 @@ async function updatePresta() {
   }
 }
 
-
 async function showOneService(id_service) {
   try {
     const res = await serviceStore.GetServiceById(id_service);
     const s = res.data;
-    console.log("res.data", res.data)
 
     oneService.value = {
       id_service: s.id_service,
@@ -806,25 +774,22 @@ async function sendMailToAdmin(isModif) {
 
   const subject = t(`${path}.subject`);
 
-  const message = t(`${path}.message`, {
+  const messageText = t(`${path}.message`, {
     nom: nom_presta.value,
     email: mail_presta.value,
     telephone: tel_presta.value,
     type: selectedType.value,
     specificite: selectedNames.value.join(", ")
   });
-  console.log("USER ID:", userStore.userId);
-
-
 
   const id_admin = 1;
   let id_type_message = isModif ? 2 : 1;
   try {
-    const res = await mailBoxStore.sendMessageTo(userStore.userId, { 
-      id_user_to: id_admin, 
-      subject, 
-      message, 
-      id_type_message 
+    const res = await mailBoxStore.sendMessageTo(userStore.userId, {
+      id_user_to: id_admin,
+      subject,
+      message: messageText,
+      id_type_message
     });
 
   } catch (err) {
@@ -834,30 +799,51 @@ async function sendMailToAdmin(isModif) {
 </script>
 
 <style scoped>
+.container,
+.prestataire_container,
+.button_container,
+.message_error {
+  --log-primary: #3a6f43;
+  --log-primary-light: #5a9966;
+  --log-primary-dark: #2a5232;
+  --log-rose: #e8637a;
+  --log-rose-hover: #c94d65;
+  --log-rose-pale: #ffd5d5;
+  --log-rose-medium: #fc9999;
+  --log-card-bg: #fffaf8;
+  --log-fond: #f9fafb;
+  --log-border: #ddd0cc;
+  --log-gradient-cta: linear-gradient(90deg, #3a6f43, #e8637a);
+  --log-gradient-input: linear-gradient(to right, #5a9966, #e8637a);
+}
+
+/* ── Conteneur principal ── */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #0a1d42;
 }
 
+/* ── Titre ── */
 .title p {
   text-align: center;
   font-size: 2.5em;
   font-weight: 700;
   margin-bottom: 10px;
-  color: var(--primary-color);
+  color: var(--log-primary);
 }
 
+/* ── Sous-titre ── */
 .subtitle p {
   font-size: 1.3em;
   text-align: center;
   margin-bottom: 30px;
-  color: black;
+  color: #3a4a3d;
 }
 
+/* ── Sélection type prestataire ── */
 .type_prestataire {
   display: flex;
   gap: 20px;
@@ -867,41 +853,56 @@ async function sendMailToAdmin(isModif) {
 }
 
 .button_type_presta {
-  background: linear-gradient(135deg, #f7c325, #ffdb59);
-  color: #0a1d42;
+  background: var(--log-card-bg);
+  color: var(--log-primary);
   font-weight: 700;
   font-size: 1.1em;
   padding: 15px 30px;
-  border: none;
+  border: 2px solid var(--log-primary-light);
   border-radius: 30px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  cursor: pointer;
-  box-shadow: 0 6px 15px rgba(247, 195, 37, 0.4);
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.15);
   transition: all 0.3s ease;
 }
 
-.button_type_presta:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 0 20px rgba(247, 195, 37, 0.6),
-    0 0 8px rgba(247, 195, 37, 0.4) inset;
+.button_type_presta:not(.button_selected):hover {
+  transform: translateY(-4px) scale(1.04);
+  background: #eef5ef;
+  box-shadow: 0 8px 22px rgba(58, 111, 67, 0.25);
+  border-color: var(--log-primary);
 }
 
 .button_type_presta:active {
   transform: translateY(2px) scale(0.98);
-  box-shadow: 0 3px 10px rgba(0, 87, 255, 0.3);
 }
 
 .button_selected {
-  background: linear-gradient(135deg, #f77925, #ff9b59);
+  background: var(--log-gradient-cta);
+  color: #fff;
+  /* border-color: transparent; */
+  box-shadow: 0 6px 18px rgba(58, 111, 67, 0.3);
 }
 
+.button_selected:hover {
+  background: var(--log-gradient-cta-invert);
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 8px 22px rgba(232, 99, 122, 0.35);
+}
+
+/* ── Table des spécificités ── */
 .container_table {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+}
+
+.container_table h1 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: var(--log-primary-dark);
 }
 
 .table_type_presta {
@@ -909,49 +910,95 @@ async function sendMailToAdmin(isModif) {
   max-width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  background: #fff;
+  background: var(--log-card-bg);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(58, 111, 67, 0.1), 0 2px 8px rgba(232, 99, 122, 0.06);
 }
 
 .table_type_presta td {
   padding: 15px 20px;
   font-size: 1em;
+  color: #2a3d2e;
+}
+
+.table_type_presta td label {
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .table-row {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--log-border);
+  transition: background 0.2s ease;
 }
 
 .table-row:last-child {
   border-bottom: none;
 }
 
-.other-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.table-row:hover {
+  background: #f0f7f1;
 }
 
-.other-option input[type="text"] {
-  flex: 1;
-  padding: 6px 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+input[type="checkbox"] {
+  accent-color: var(--log-primary);
+  margin-right: 10px;
+  width: auto;
 }
 
-.container_table h1 {
+/* ── Message d'erreur checkbox ── */
+.message_error {
   text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 20px;
-  color: #1b2e59;
+  color: var(--log-rose-hover);
+  font-weight: 600;
+  font-size: 0.95em;
+  margin-top: 8px;
 }
 
+/* ── Boutons d'action principaux ── */
+.button_container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.button_container button {
+  background: var(--log-gradient-cta);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1em;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.25);
+  transition: all 0.3s ease;
+  letter-spacing: 0.4px;
+}
+
+.button_container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(58, 111, 67, 0.35);
+}
+
+.button_container button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 10px rgba(58, 111, 67, 0.2);
+}
+
+.button_container button.disabled,
+.button_container button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Formulaire prestataire ── */
 .prestataire_container {
   display: flex;
   justify-content: center;
-  padding-top: 80px;
+  padding-top: 60px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -959,31 +1006,49 @@ async function sendMailToAdmin(isModif) {
 .editor_container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
   width: 100%;
   max-width: 800px;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 
-.tox-tinymce {
-  width: 100% !important;
-}
-
+/* ── Labels & Inputs ── */
 .form_group label {
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-weight: 700;
+  margin-bottom: 6px;
   display: block;
+  color: var(--log-primary-dark);
+  font-size: 0.95em;
+  letter-spacing: 0.3px;
 }
 
 .form_group input,
 .form_group select {
   width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--log-border);
+  background: var(--log-card-bg);
+  color: #2a3d2e;
+  font-size: 15px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+.form_group input:focus,
+.form_group select:focus {
+  outline: none;
+  border-color: var(--log-primary-light);
+  box-shadow: 0 0 0 3px rgba(90, 153, 102, 0.15);
+}
+
+.form_group input::placeholder {
+  color: #8aab8e;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ── Section services ── */
 .ajout_services {
   display: flex;
   flex-direction: row;
@@ -991,61 +1056,181 @@ async function sendMailToAdmin(isModif) {
   align-items: center;
 }
 
+.ajout_services label {
+  font-weight: 700;
+  color: var(--log-primary-dark);
+}
+
 .ajout_services button {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: var(--log-gradient-cta);
   color: white;
   border: none;
   font-weight: 700;
-  padding: 12px 22px;
+  padding: 10px 20px;
   border-radius: 25px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.4);
+  box-shadow: 0 4px 12px rgba(58, 111, 67, 0.25);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  cursor: pointer;
 }
 
 .ajout_services button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 18px rgba(41, 128, 185, 0.6),
-    0 0 10px rgba(41, 128, 185, 0.3) inset;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(58, 111, 67, 0.35);
 }
 
 .ajout_services button:active {
   transform: translateY(1px) scale(0.98);
-  box-shadow: 0 3px 10px rgba(41, 128, 185, 0.4);
 }
 
 .service_input {
   display: flex;
   flex-direction: column;
+  margin-top: 8px;
 }
 
 .service_row {
   display: flex;
   align-items: center;
+  gap: 10px;
   margin-top: 10px;
+  padding: 8px 12px;
+  background: var(--log-card-bg);
+  border: 1.5px solid var(--log-border);
+  border-radius: 10px;
+  transition: box-shadow 0.2s ease;
 }
 
-.service_row input {
+.service_row:hover {
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.1);
+}
+
+.service_row>button:first-child {
   flex: 1;
-  padding: 8px 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: var(--log-primary);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.95em;
+  padding: 4px 0;
+  transition: color 0.2s;
 }
 
+.service_row>button:first-child:hover {
+  color: var(--log-primary-dark);
+  text-decoration: underline;
+}
+
+/* Icônes actif / inactif */
+.active-icon {
+  color: var(--log-primary);
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.inactive-icon {
+  color: var(--log-rose);
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+/* Bouton Activer */
+.btn_activate {
+  background: var(--log-primary);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(58, 111, 67, 0.2);
+}
+
+.btn_activate:hover {
+  background: var(--log-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* Bouton Désactiver */
+.btn_desactivate {
+  background: var(--log-rose);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(232, 99, 122, 0.25);
+}
+
+.btn_desactivate:hover {
+  background: var(--log-rose-hover);
+  transform: translateY(-1px);
+}
+
+/* Bouton supprimer */
 .remove_btn {
-  background: #e74c3c;
+  background: var(--log-rose);
   color: white;
   border: none;
-  padding: 10px 14px;
-  margin-left: 10px;
-  border-radius: 10px;
-  transition: all 0.2s;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(232, 99, 122, 0.2);
 }
 
 .remove_btn:hover {
-  background: #c0392b;
+  background: var(--log-rose-hover);
   transform: scale(1.1);
+}
+
+/* ── Messages succès / erreur ── */
+.message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.message-success {
+  background: #eef7f0;
+  color: var(--log-primary-dark);
+  border: 1.5px solid var(--log-primary-light);
+}
+
+.message-error {
+  background: #fff0f2;
+  color: var(--log-rose-hover);
+  border: 1.5px solid var(--log-rose-medium);
+}
+
+.message .text {
+  flex: 1;
+}
+
+.modal-close {
+  font-size: 20px;
+  font-weight: bold;
+  color: #777;
+  cursor: pointer;
+  margin-left: 12px;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: var(--log-rose-hover);
 }
 </style>
