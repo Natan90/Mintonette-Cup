@@ -344,7 +344,7 @@ async function getOneService(service) {
   showService.value = true;
   try {
     const res = await serviceStore.GetServiceById(service.id_service)
-    oneService.value = res.data;
+    oneService.value = res.data.service;
     console.log("Res.data", res.data);
 
     console.log(oneService)

@@ -30,10 +30,30 @@ export const useServiceStore = defineStore("service", () => {
     });
   }
 
+  async function AddArticles(id_service, data) {
+    if (!id_service) {
+      throw new Error("L'id du service est obligatoire");
+    }
+    return postRequest(`/prestataire/service/${id_service}/articles/add`, {
+      ...data
+    });
+  }  
+
+  async function AddActivites(id_service, data) {
+    if (!id_service) {
+      throw new Error("L'id du service est obligatoire");
+    }
+    return postRequest(`/prestataire/service/${id_service}/activites/add`, {
+      ...data
+    });
+  }
+
   return {
     GetServices,
     GetServiceById,
     ActivateService,
     CreateService,
+    AddArticles,
+    AddActivites,
   };
 });

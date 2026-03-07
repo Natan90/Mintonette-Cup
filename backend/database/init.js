@@ -21,9 +21,9 @@ const pool = require("./db");
   DROP TABLE IF EXISTS Zone CASCADE;
   DROP TABLE IF EXISTS Organisateur CASCADE;
   DROP TABLE IF EXISTS Panier_Service CASCADE;
-  DROP TABLE IF EXISTS Services CASCADE;
   DROP TABLE IF EXISTS Article CASCADE;
-  DROP TABLE IF EXISTS Acticite CASCADE;  
+  DROP TABLE IF EXISTS Activite CASCADE;  
+  DROP TABLE IF EXISTS Services CASCADE;
   DROP TABLE IF EXISTS Panier CASCADE;  
   DROP TABLE IF EXISTS Prestataire CASCADE;
   DROP TABLE IF EXISTS Type_prestataire CASCADE;
@@ -124,20 +124,6 @@ const pool = require("./db");
       actif BOOLEAN DEFAULT TRUE
     );
 
-    CREATE TABLE IF NOT EXISTS Article (
-      id_article SERIAL PRIMARY KEY,
-      nom_article VARCHAR(250),
-      stock INT,
-      prix_article NUMERIC(10, 2)
-    );
-
-    CREATE TABLE IF NOT EXISTS Activite (
-      id_activite SERIAL PRIMARY KEY,
-      nom_activite VARCHAR(250),
-      nb_participant INT,
-      prix_activite NUMERIC(10, 2)
-    );
-
     CREATE TABLE IF NOT EXISTS Services(
       id_service SERIAL PRIMARY KEY,
       nom_service VARCHAR(100),
@@ -145,9 +131,24 @@ const pool = require("./db");
       visible_public BOOLEAN DEFAULT TRUE,
       besoin JSONB,
       activate BOOLEAN,
-      prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire),
-      article_id INTEGER REFERENCES Article(id_article),
-      activite_id INTEGER REFERENCES Activite(id_activite)
+      prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
+    );
+
+    CREATE TABLE IF NOT EXISTS Article (
+      id_article SERIAL PRIMARY KEY,
+      nom_article VARCHAR(250),
+      stock INT,
+      prix_article NUMERIC(10, 2),
+      service_id INTEGER NOT NULL REFERENCES Services(id_service)
+    );
+
+    CREATE TABLE IF NOT EXISTS Activite (
+      id_activite SERIAL PRIMARY KEY,
+      nom_activite VARCHAR(250),
+      nb_participant INT,
+      prix_activite NUMERIC(10, 2),
+      date_activite TIMESTAMP,
+      service_id INTEGER NOT NULL REFERENCES Services(id_service)
     );
 
     CREATE TABLE IF NOT EXISTS Panier_Service (
@@ -157,7 +158,6 @@ const pool = require("./db");
       prix_unitaire NUMERIC(10,2) NOT NULL,
       PRIMARY KEY (id_panier, service_id)
     );
-
 
 
   CREATE TABLE IF NOT EXISTS Pays(
@@ -427,50 +427,6 @@ const pool = require("./db");
     `;
     await pool.query(insertPrestataire);
 
-    const insertArticles = `
-    INSERT INTO Article (nom_article, stock, prix_article) VALUES
-      ('Maillot Mintonette Cup 2026', 150, 49.99),
-      ('Short de volley officiel', 100, 29.99),
-      ('Casquette Mintonette Cup', 200, 19.99),
-      ('Écharpe supporter', 300, 14.99),
-      ('Ballon de volley officiel', 50, 39.99),
-      ('Sac à dos Mintonette Cup', 80, 34.99),
-      ('Bouteille isotherme logo MC', 120, 24.99),
-      ('Porte-clés Mintonette Cup', 500, 4.99),
-      ('Poster officiel du tournoi', 250, 9.99),
-      ('Pack supporter (maillot + écharpe)', 60, 59.99),
-      ('Burger Classic', 200, 8.50),
-      ('Burger Double Cheese', 200, 10.50),
-      ('Menu Burger + Frites', 150, 13.00),
-      ('Frites maison', 300, 3.50),
-      ('Eau minérale 50cl', 500, 1.50),
-      ('Soda 33cl', 400, 2.50),
-      ('Jus de fruit 25cl', 300, 2.00),
-      ('Smoothie du jour', 100, 4.50),
-      ('Hot-dog', 250, 5.00),
-      ('Wrap poulet', 200, 7.50),
-      ('Salade César', 150, 8.00),
-      ('Sandwich jambon-fromage', 200, 5.50),
-      ('Sachet de chips', 400, 2.00),
-      ('Barre chocolatée', 350, 1.50),
-      ('Madeleine individuelle', 300, 1.00),
-      ('Mix apéritif 100g', 250, 3.00);
-    `;
-    await pool.query(insertArticles);
-
-
-    const insertActivite = `
-    INSERT INTO Activite (nom_activite, nb_participant, prix_activite) VALUES
-      ('Initiation au volley-ball', 12, 15.00),
-      ('Tournoi 3x3 amateur', 24, 10.00),
-      ('Séance de dédicaces joueurs', 30, 25.00),
-      ('Atelier smash avec coach', 8, 20.00),
-      ('Photo avec le trophée', 1, 5.00),
-      ('Quiz volley géant', 50, 0.00),
-      ('Parcours de réception ballon', 6, 12.00);
-    `;
-    await pool.query(insertActivite);
-
     const insertServices = `
       INSERT INTO Services 
       (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
@@ -656,6 +612,50 @@ const pool = require("./db");
       `;
 
     await pool.query(insertServices);
+
+    const insertArticles = `
+    INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
+      ('Maillot Mintonette Cup 2026', 150, 49.99, 9),
+      ('Short de volley officiel', 100, 29.99, 9),
+      ('Casquette Mintonette Cup', 200, 19.99, 9),
+      ('Écharpe supporter', 300, 14.99, 9),
+      ('Ballon de volley officiel', 50, 39.99, 9),
+      ('Sac à dos Mintonette Cup', 80, 34.99, 9),
+      ('Bouteille isotherme logo MC', 120, 24.99, 9),
+      ('Porte-clés Mintonette Cup', 500, 4.99, 9),
+      ('Poster officiel du tournoi', 250, 9.99, 9),
+      ('Pack supporter (maillot + écharpe)', 60, 59.99, 9),
+      ('Burger Classic', 200, 8.50, 1),
+      ('Burger Double Cheese', 200, 10.50, 1),
+      ('Menu Burger + Frites', 150, 13.00, 1),
+      ('Frites maison', 300, 3.50, 1),
+      ('Eau minérale 50cl', 500, 1.50, 2),
+      ('Soda 33cl', 400, 2.50, 2),
+      ('Jus de fruit 25cl', 300, 2.00, 2),
+      ('Smoothie du jour', 100, 4.50, 2),
+      ('Hot-dog', 250, 5.00, 3),
+      ('Wrap poulet', 200, 7.50, 3),
+      ('Salade César', 150, 8.00, 3),
+      ('Sandwich jambon-fromage', 200, 5.50, 3),
+      ('Sachet de chips', 400, 2.00, 4),
+      ('Barre chocolatée', 350, 1.50, 4),
+      ('Madeleine individuelle', 300, 1.00, 4),
+      ('Mix apéritif 100g', 250, 3.00, 4);
+    `;
+    await pool.query(insertArticles);
+
+
+    const insertActivite = `
+    INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES
+      ('Initiation au volley-ball', 12, 15.00, '2026-07-15T10:00:00', 7),
+      ('Tournoi 3x3 amateur', 24, 10.00, '2026-07-15T14:00:00', 7),
+      ('Séance de dédicaces joueurs', 30, 25.00, '2026-07-16T11:00:00', 8),
+      ('Atelier smash avec coach', 8, 20.00, '2026-07-16T15:00:00', 7),
+      ('Photo avec le trophée', 1, 5.00, '2026-07-15T09:00:00', 8),
+      ('Quiz volley géant', 50, 0.00, '2026-07-17T18:00:00', 6),
+      ('Parcours de réception ballon', 6, 12.00, '2026-07-17T10:00:00', 7);
+    `;
+    await pool.query(insertActivite);
 
     const insertPays = `
     INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES

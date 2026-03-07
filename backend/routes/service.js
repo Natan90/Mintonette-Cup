@@ -16,4 +16,10 @@ router.patch("/activate/:id", serviceMiddleware.validateActivateService, service
 // POST créer un service
 router.post("/add/:id", authMiddleware.authenticateToken, serviceMiddleware.validateAddService , serviceController.addServiceById);
 
+// POST ajouter une activité
+router.post("/:id/activites/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddActiviteByIdService, serviceController.addActiviteByIdService);
+
+// POST ajouter un article
+router.post("/:id/articles/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddArticleByIdService, serviceController.addArticleByIdService);
+
 module.exports = router;

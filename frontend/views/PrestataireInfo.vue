@@ -771,7 +771,7 @@ async function updatePresta() {
 async function showOneService(id_service) {
   try {
     const res = await serviceStore.GetServiceById(id_service);
-    const s = res.data;
+    const s = res.data.service;
 
     oneService.value = {
       id_service: s.id_service,

@@ -5,77 +5,81 @@
     <!-- Bloc Activité -->
     <div v-if="props.isActivityService" class="bloc_container">
       <div class="bloc_header">
-        <span class="bloc_icon">🏃</span>
-        <h4 class="bloc_title">Activité</h4>
+        <h4 class="bloc_title">Activités</h4>
       </div>
 
       <div class="form_group">
         <label>Nom de l'activité</label>
-        <input class="input_text" placeholder="Ex: Initiation escalade" />
+        <input class="input_text" placeholder="Ex: Initiation escalade" v-model="nom_activite"/>
       </div>
 
       <div class="row_inputs">
         <div class="form_group">
           <label>Participants max</label>
-          <input type="number" class="input_number" placeholder="0" />
+          <input type="number" class="input_number" placeholder="0" v-model="nb_participants"/>
         </div>
         <div class="form_group">
           <label>Prix unitaire (€)</label>
-          <input type="number" class="input_number" placeholder="0.00" />
+          <input type="number" class="input_number" placeholder="0.00" v-model="prix_activite"/>
         </div>
       </div>
 
       <div class="row_inputs">
         <div class="form_group">
           <label>Date</label>
-          <input type="date" class="input_text" />
+          <input type="date" class="input_text" v-model="date_activite"/>
         </div>
         <div class="form_group">
           <label>Heure</label>
-          <input type="time" class="input_text" />
+          <input type="time" class="input_text" v-model="heure_activite"/>
         </div>
       </div>
 
       <div class="btn_container">
-        <button class="btn_add">+ Ajouter</button>
+        <button class="btn_add" @click="addInItemsList()">+ Ajouter</button>
       </div>
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <p class="list_empty">Aucune activité ajoutée pour l'instant.</p>
+        <p v-if="itemsList.length > 0" v-for="(item, index) in itemsList" :key="index">
+          {{ item.nom_activite }}
+        </p>
+        <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
     </div>
 
     <!-- Bloc Article -->
     <div v-else class="bloc_container">
       <div class="bloc_header">
-        <span class="bloc_icon">📦</span>
-        <h4 class="bloc_title">Article</h4>
+        <h4 class="bloc_title">Articles</h4>
       </div>
 
       <div class="form_group">
         <label>Nom de l'article</label>
-        <input class="input_text" placeholder="Ex: T-shirt XL" />
+        <input class="input_text" placeholder="Ex: T-shirt XL" v-model="nom_article"/>
       </div>
 
       <div class="row_inputs">
         <div class="form_group">
           <label>Stock</label>
-          <input type="number" class="input_number" placeholder="0" />
+          <input type="number" class="input_number" placeholder="0" v-model="stock_article"/>
         </div>
         <div class="form_group">
           <label>Prix (€)</label>
-          <input type="number" class="input_number" placeholder="0.00" />
+          <input type="number" class="input_number" placeholder="0.00" v-model="prix_article"/>
         </div>
       </div>
 
       <div class="btn_container">
-        <button class="btn_add" @click="">+ Ajouter</button>
+        <button class="btn_add" @click="addInItemsList()">+ Ajouter</button>
       </div>
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
-        <p class="list_empty">Aucun article ajouté pour l'instant.</p>
+        <p v-if="itemsList.length > 0" v-for="(item, index) in itemsList" :key="index">
+          {{ item.nom_article }}
+        </p>
+        <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
     </div>
 
@@ -83,8 +87,10 @@
 </template>
 
 <script setup>
+import { useServiceStore } from '@/services/service.service';
 import NavView from './NavView.vue';
-import { ref } from "vue";
+import { onMounted, ref, computed } from "vue";
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   isActivityService: {
@@ -92,11 +98,74 @@ const props = defineProps({
     required: true
   }
 });
+const route = useRoute();
+
+const serviceStore = useServiceStore();
+const id_service = computed(() => route.params.id);
 
 const itemsList = ref([]);
 
+// Activite
+const nom_activite = ref("");
+const nb_participants = ref(0);
+const prix_activite = ref(0);
+const date_activite = ref(null);
+const heure_activite = ref(null);
 
-// async function Add
+// Article
+const nom_article = ref("");
+const stock_article = ref(0);
+const prix_article = ref(0);
+
+onMounted(() => {
+  getValuesItemsList();
+})
+
+
+
+
+async function getValuesItemsList() {
+  try {
+    const res = await serviceStore.GetServiceById(id_service.value);
+
+    if (props.isActivityService) {
+      itemsList.value = res.data.activites;
+    } else {
+      itemsList.value = res.data.articles;
+    }
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function addInItemsList() {
+  try {
+    let res = null;
+    
+    if (props.isActivityService) {
+      res = await serviceStore.AddActivites(id_service.value, {
+        nom: nom_activite.value, 
+        nb_participants: nb_participants.value,
+        prix: prix_activite.value,
+        date: date_activite.value,
+        heure: heure_activite.value
+      });
+    }
+    else {
+      res = await serviceStore.AddArticles(id_service.value, {
+        nom: nom_article.value,
+        stock: stock_article.value,
+        prix: prix_article.value
+      })
+    }
+
+    getValuesItemsList();
+
+  } catch (err) {
+    console.error(err);
+  }
+}
 </script>
 
 <style scoped>
@@ -133,10 +202,6 @@ const itemsList = ref([]);
   gap: 10px;
   padding-bottom: 16px;
   border-bottom: 2px solid var(--log-border);
-}
-
-.bloc_icon {
-  font-size: 1.6em;
 }
 
 .bloc_title {

@@ -362,7 +362,7 @@ async function getValuesServices() {
     const res = await serviceStore.GetServices();
     // Vérifier que res.data est un tableau
     if (res && res.data && Array.isArray(res.data)) {
-      prestataires.value = res.data;
+      prestataires.value = res.data.services;
     } else {
       console.error("Les données reçues ne sont pas un tableau:", res);
       prestataires.value = [];
