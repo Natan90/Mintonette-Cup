@@ -1,9 +1,9 @@
 <template>
   <NavView></NavView>
+  <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
   <div class="page_wrapper">
-
     <!-- Bloc Activité -->
-    <div v-if="props.isActivityService" class="bloc_container">
+    <div v-if="isActivityService" class="bloc_container">
       <div class="bloc_header">
         <h4 class="bloc_title">Activités</h4>
       </div>
@@ -19,7 +19,7 @@
           <input type="number" class="input_number" placeholder="0" v-model="nb_participants"/>
         </div>
         <div class="form_group">
-          <label>Prix unitaire (€)</label>
+          <label>Prix de l'entrée</label>
           <input type="number" class="input_number" placeholder="0.00" v-model="prix_activite"/>
         </div>
       </div>
@@ -73,6 +73,11 @@
       <div class="btn_container">
         <button class="btn_add" @click="addInItemsList()">+ Ajouter</button>
       </div>
+      <div v-if="message" class="message"
+          :class="messageType === 'error' ? 'message-error' : 'message-success'">
+          <span class="text">{{ message }}</span>
+          <span class="modal-close" @click="closeMessage">&times;</span>
+      </div>
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
@@ -87,21 +92,23 @@
 </template>
 
 <script setup>
-import { useServiceStore } from '@/services/service.service';
 import NavView from './NavView.vue';
+import { useServiceStore } from '@/services/service.service';
 import { onMounted, ref, computed } from "vue";
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useNavigationStore } from '@/stores/navigation';
 
-const props = defineProps({
-  isActivityService: {
-    type: Boolean,
-    required: true
-  }
-});
 const route = useRoute();
-
+const router = useRouter();
 const serviceStore = useServiceStore();
+const navStore = useNavigationStore();
+
+const isActivityService = computed(() => route.query.isActivityService === 'true');
+console.log("isActivityService :", isActivityService.value);
 const id_service = computed(() => route.params.id);
+
+const message = ref("");
+const messageType = ref("success");
 
 const itemsList = ref([]);
 
@@ -121,14 +128,22 @@ onMounted(() => {
   getValuesItemsList();
 })
 
+const closeMessage = () => {
+  message.value = "";
+};
 
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 
 async function getValuesItemsList() {
   try {
     const res = await serviceStore.GetServiceById(id_service.value);
 
-    if (props.isActivityService) {
+    if (isActivityService.value) {
       itemsList.value = res.data.activites;
     } else {
       itemsList.value = res.data.articles;
@@ -143,22 +158,26 @@ async function addInItemsList() {
   try {
     let res = null;
     
-    if (props.isActivityService) {
+    if (isActivityService.value) {
+      console.log("dans activities avec isActivityService =", isActivityService.value);
       res = await serviceStore.AddActivites(id_service.value, {
         nom: nom_activite.value, 
-        nb_participants: nb_participants.value,
+        nb_participant: nb_participants.value,
         prix: prix_activite.value,
         date: date_activite.value,
         heure: heure_activite.value
       });
     }
     else {
+      console.log("dans articles avec isActivityService =", isActivityService.value);
       res = await serviceStore.AddArticles(id_service.value, {
         nom: nom_article.value,
         stock: stock_article.value,
         prix: prix_article.value
       })
     }
+    message.value = res.data.message;
+    messageType.value = res.status === 201 ? "success" : "error";
 
     getValuesItemsList();
 
@@ -172,7 +191,6 @@ async function addInItemsList() {
 /* ── Variables ── */
 .page_wrapper {
   min-height: 100vh;
-  background: var(--log-fond);
   display: flex;
   align-items: flex-start;
   justify-content: center;

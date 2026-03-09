@@ -264,6 +264,7 @@ import Modal from "@/components/Modal.vue";
 import Editor from "@tinymce/tinymce-vue";
 import Footer from "@/components/Footer.vue";
 import { useMailBoxStore } from "@/services/reception_box.service";
+import { useNavigationStore } from "@/stores/navigation";
 
 const { t, locale } = useI18n();
 const userStore = useUserStore();
@@ -271,6 +272,7 @@ const serviceStore = useServiceStore();
 const prestataireStore = usePrestataireStore();
 const typePrestataireStore = useTypePrestataireStore();
 const mailBoxStore = useMailBoxStore();
+const navStore = useNavigationStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -364,20 +366,6 @@ const changeDescriLang = () => {
   isFrench.value = !isFrench.value;
 };
 
-const currentTitre = computed({
-  get() {
-    return isFrench.value
-      ? oneService.value.titre_service.fr
-      : oneService.value.titre_service.en;
-  },
-  set(value) {
-    if (isFrench.value) {
-      oneService.value.titre_service.fr = value;
-    } else {
-      oneService.value.titre_service.en = value;
-    }
-  },
-});
 
 const currentDescri = computed({
   get() {
@@ -506,10 +494,12 @@ async function addServiceToPrestataire() {
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";
 
+    navStore.previousRoute = route.fullPath;
+
     router.push({
       name: "AddByService",
       params: { id: newServiceId },
-      query: { isActivity: isActivityService.value }
+      query: { isActivityService: isActivityService.value }
     });
 
 

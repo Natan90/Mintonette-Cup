@@ -110,11 +110,13 @@ async function addArticleByIdService(id_service, article) {
     return {
       id_article: result.rows[0].id_article,
       message: "Article ajouté avec succès",
+      status: 201,
     };
   } else {
     return {
       id_article: checkArticle.rows[0].id_article,
-      message: "Article ajouté avec succès",
+      message: "Cet article existe déjà",
+      status: 200,
     };
   }
 }
@@ -141,11 +143,13 @@ async function addActiviteByIdService(id_service, activite) {
     return {
       id_activite: result.rows[0].id_activite,
       message: "Activité ajoutée avec succès",
+      status: 201,
     };
   } else {
     return {
       id_activite: checkActivite.rows[0].id_activite,
-      message: "Activité ajoutée avec succès",
+      message: "Cette activité existe déjà",
+      status: 200,
     };
   }
 }

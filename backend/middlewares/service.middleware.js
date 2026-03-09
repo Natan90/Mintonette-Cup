@@ -58,7 +58,7 @@ exports.validateAddArticleByIdService = (req, res, next) => {
   }
 
   if (!nom || nom.trim() === "") {
-    return res.status(400).json({ error: "nom est requis" });
+    return res.status(400).json({ error: "nom_article est requis" });
   }
 
   if (stock === undefined || stock === null) {
