@@ -7,7 +7,7 @@
       <div v-if="!userStore.isConnected" class="empty">
         <p>Veuillez vous connecter pour consulter vos billets.</p>
       </div>
-<!-- ###################################################################################################### finir mail pour admin ###################################################################################################### -->
+      <!-- ###################################################################################################### finir mail pour admin ###################################################################################################### -->
       <div v-else>
         <div v-if="error" class="error">{{ error }}</div>
         <div v-else>
@@ -43,7 +43,13 @@
                   <th>Date</th>
                   <th>Heure</th>
                   <th>Prix</th>
-                  <th>Action</th>
+                  <th>
+                    <input
+                      type="checkbox"
+                      :checked="allSelected"
+                      @change="toggleSelectAll" />
+                    <span>Sélectionner tout</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -81,13 +87,11 @@
                 :disabled="!raisonRemboursement"
                 @click="sendMailToAdmin()">
                 <div v-if="selectedBillets.length <= 1">
-                  Demander le remboursement ( {{ selectedBillets.length }} billet
-                  )
+                  Demander le remboursement (
+                  {{ selectedBillets.length }} billet )
                 </div>
                 <div v-else-if="selectedBillets.length > 1">
-                  Demander le remboursement ( {{
-                    selectedBillets.length
-                  }}
+                  Demander le remboursement ( {{ selectedBillets.length }}
                   billets )
                 </div>
               </button>
@@ -101,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { usePanierStore } from "@/services/panier.service";
@@ -117,6 +121,20 @@ const error = ref(null);
 const selectedBillets = ref([]);
 const raisonRemboursement = ref("");
 
+const allSelected = computed(() => {
+  return (
+    billets.value.length > 0 &&
+    selectedBillets.value.length === billets.value.length
+  );
+});
+function toggleSelectAll() {
+  if (allSelected.value) {
+    selectedBillets.value = [];
+  } else {
+    selectedBillets.value = [...billets.value];
+  }
+}
+
 function getPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
@@ -130,7 +148,6 @@ function formatDate(dateString) {
     year: "numeric",
   });
 }
-
 
 async function demanderRemboursement() {
   if (!raisonRemboursement.value) {
@@ -153,13 +170,11 @@ async function demanderRemboursement() {
   } catch (err) {
     console.error("Erreur lors de la demande de remboursement:", err);
     alert("Une erreur est survenue lors de la demande de remboursement");
-  } 
+  }
 }
 
 async function sendMailToAdmin(isModif) {
-  const path = isModif
-    ? "mailToSend.modifPresta"
-    : "mailToSend.demandePresta";
+  const path = isModif ? "mailToSend.modifPresta" : "mailToSend.demandePresta";
 
   const subject = t(`${path}.subject`);
 
@@ -168,27 +183,23 @@ async function sendMailToAdmin(isModif) {
     email: mail_presta.value,
     telephone: tel_presta.value,
     type: selectedType.value,
-    specificite: selectedNames.value.join(", ")
+    specificite: selectedNames.value.join(", "),
   });
   console.log("USER ID:", userStore.userId);
-
-
 
   const id_admin = 1;
   let id_type_message = isModif ? 2 : 1;
   try {
-    const res = await mailBoxStore.sendMessageTo(userStore.userId, { 
-      id_user_to: id_admin, 
-      subject, 
-      message, 
-      id_type_message 
+    const res = await mailBoxStore.sendMessageTo(userStore.userId, {
+      id_user_to: id_admin,
+      subject,
+      message,
+      id_type_message,
     });
-
   } catch (err) {
     console.error(err);
   }
 }
-
 
 async function fetchBillets() {
   if (!userStore.userId) return;

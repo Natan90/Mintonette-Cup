@@ -53,8 +53,11 @@
               </tr>
             </tbody>
           </table>
-
-          <router-link
+          <div v-if="billets.length == 0">
+            <p></p>
+          </div>
+          <div v-else>
+             <router-link
             :to="{
               name: 'Remboursement',
               params: { lang: $route.params.lang },
@@ -62,6 +65,7 @@
             class="btn btn-checkout">
             Se faire rembourser
           </router-link>
+          </div>
         </div>
       </div>
     </div>
