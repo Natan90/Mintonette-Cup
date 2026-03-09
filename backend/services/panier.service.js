@@ -11,8 +11,7 @@ async function getPanierByUser(id_user) {
         pays1.nom_pays AS equipe1_nom,
         pays2.nom_pays AS equipe2_nom,
         psrv.*,
-        srv.nom_service,
-        srv.prix AS prix_service
+        srv.nom_service
     FROM Panier p
     LEFT JOIN Panier_Siege ps
         ON ps.id_panier = p.id_panier
@@ -327,7 +326,9 @@ async function clearPanier(id_user) {
     id_panier,
   ]);
 
-  await pool.query(`UPDATE Panier SET actif = false WHERE id_panier = $1`, [id_panier]);
+  await pool.query(`UPDATE Panier SET actif = false WHERE id_panier = $1`, [
+    id_panier,
+  ]);
 }
 
 module.exports = {
