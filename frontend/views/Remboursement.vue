@@ -7,7 +7,6 @@
       <div v-if="!userStore.isConnected" class="empty">
         <p>Veuillez vous connecter pour consulter vos billets.</p>
       </div>
-      <!-- ###################################################################################################### finir mail pour admin ###################################################################################################### -->
       <div v-else>
         <div v-if="error" class="error">{{ error }}</div>
         <div v-else>
@@ -107,19 +106,31 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { usePanierStore } from "@/services/panier.service";
+import { useMailBoxStore } from "@/services/reception_box.service";
+import { useAdminAPIStore } from "@/services/admin.service";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 
 const router = useRouter();
+const { t } = useI18n();
 const userStore = useUserStore();
 const panierStore = usePanierStore();
+const mailBoxStore = useMailBoxStore();
+const adminAPIStore = useAdminAPIStore();
 const billets = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const selectedBillets = ref([]);
 const raisonRemboursement = ref("");
+const panier = ref([]);
+const userData = ref({
+  prenom: "",
+  nom: "",
+  email: "",
+});
 
 const allSelected = computed(() => {
   return (
@@ -149,7 +160,36 @@ function formatDate(dateString) {
   });
 }
 
-async function demanderRemboursement() {
+// async function askReimbursement() {
+//   if (!raisonRemboursement.value) {
+//     alert("Veuillez sélectionner une raison de remboursement");
+//     return;
+//   }
+
+//   if (selectedBillets.value.length === 0) {
+//     alert("Veuillez sélectionner au moins un billet");
+//     return;
+//   }
+
+//   try {
+//     for (const seat of panier.value) {
+//       await gradinStore.UpdateGradin({
+//         numero_colonne: seat.numero_colonne,
+//         numero_ligne: seat.numero_ligne,
+//         zone: seat.zone,
+//         est_reserve: false,
+//         id_utilisateur: none,
+//       });
+//     }
+//     console.log("Je suis dans le for de panier.value");
+//     await fetchBillets();
+//   } catch (err) {
+//     console.error("Erreur lors de la demande de remboursement:", err);
+//     alert("Une erreur est survenue lors de la demande de remboursement");
+//   }
+// }
+
+async function sendMailToAdmin() {
   if (!raisonRemboursement.value) {
     alert("Veuillez sélectionner une raison de remboursement");
     return;
@@ -161,43 +201,60 @@ async function demanderRemboursement() {
   }
 
   try {
-    alert(
-      `Demande de remboursement envoyée pour ${selectedBillets.value.length} billet(s)\nRaison: ${raisonRemboursement.value}`,
-    );
-    selectedBillets.value = [];
-    raisonRemboursement.value = "";
-    await fetchBillets();
-  } catch (err) {
-    console.error("Erreur lors de la demande de remboursement:", err);
-    alert("Une erreur est survenue lors de la demande de remboursement");
-  }
-}
+    let detailsBillets = "";
+    let montantTotal = 0;
 
-async function sendMailToAdmin(isModif) {
-  const path = isModif ? "mailToSend.modifPresta" : "mailToSend.demandePresta";
+    selectedBillets.value.forEach((billet, index) => {
+      const prix = getPrice(billet);
+      montantTotal += prix;
+      detailsBillets += `${index + 1}. ${billet.equipe1} VS ${billet.equipe2} - Zone ${billet.zone} - Place ${billet.numero_colonne}${billet.numero_ligne} - ${formatDate(billet.date_match)} - ${prix}€\n`;
+    });
 
-  const subject = t(`${path}.subject`);
+    const raisonsTraduction = {
+      annulation_match: t("Annulation du match", "Annulation du match"),
+      erreur_reservation: t("Erreur de réservation", "Erreur de réservation"),
+      empechement: t("Empêchement personnel", "Empêchement personnel"),
+      autre: t("Autre", "Autre"),
+    };
 
-  const message = t(`${path}.message`, {
-    nom: nom_presta.value,
-    email: mail_presta.value,
-    telephone: tel_presta.value,
-    type: selectedType.value,
-    specificite: selectedNames.value.join(", "),
-  });
-  console.log("USER ID:", userStore.userId);
+    const raisonTexte =
+      raisonsTraduction[raisonRemboursement.value] || raisonRemboursement.value;
 
-  const id_admin = 1;
-  let id_type_message = isModif ? 2 : 1;
-  try {
-    const res = await mailBoxStore.sendMessageTo(userStore.userId, {
+    const subject = t("mailToSend.demandeRemboursement.subject");
+    const message = t("mailToSend.demandeRemboursement.message", {
+      nbBillets: selectedBillets.value.length,
+      nomUtilisateur: userData.value.prenom + " " + userData.value.nom,
+      emailUtilisateur: userData.value.email,
+      raison: raisonTexte,
+      detailsBillets: detailsBillets,
+      montantTotal: montantTotal,
+    });
+
+    const id_admin = 1;
+    const id_type_message = 4;
+
+    await mailBoxStore.sendMessageTo(userStore.userId, {
       id_user_to: id_admin,
       subject,
       message,
       id_type_message,
     });
+
+    alert(
+      "Votre demande de remboursement a été envoyée à l'administrateur avec succès !",
+    );
+
+    // Réinitialiser les sélections
+    selectedBillets.value = [];
+    raisonRemboursement.value = "";
   } catch (err) {
-    console.error(err);
+    console.error(
+      "Erreur lors de l'envoi de la demande de remboursement:",
+      err,
+    );
+    alert(
+      "Une erreur est survenue lors de l'envoi de la demande de remboursement",
+    );
   }
 }
 
@@ -213,8 +270,24 @@ async function fetchBillets() {
   }
 }
 
+async function fetchUserData() {
+  try {
+    const response = await adminAPIStore.GetCurrentUser();
+    userData.value = {
+      prenom: response.data.prenom_utilisateur || "",
+      nom: response.data.nom_utilisateur || "",
+      email: response.data.mail_utilisateur || "",
+    };
+  } catch (err) {
+    console.error("Erreur en récupérant les données utilisateur :", err);
+  }
+}
+
 onMounted(() => {
-  if (userStore.isConnected) fetchBillets();
+  if (userStore.isConnected) {
+    fetchBillets();
+    fetchUserData();
+  }
 });
 </script>
 

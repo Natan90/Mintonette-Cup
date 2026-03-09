@@ -351,14 +351,14 @@ const pool = require("./db");
       ('Demande pour devenir prestataire'),
       ('Demande pour modifier son profil prestataire'),
       ('Achat de billets'),
-      ('Assistance')
+      ('Remboursement')
     `;
     await pool.query(insertTypeMessage);
 
     const insertMailbox = `
     INSERT INTO Mailbox_Message (subject, message, type_message_id, sender_id, recipient_id)
     VALUES 
-    ('Demande d’information', 'Bonjour, je souhaiterais avoir plus de détails sur la compétition.', 1, 2, 1);`
+    ('Demande d’information', 'Bonjour, je souhaiterais avoir plus de détails sur la compétition.', 1, 2, 1);`;
 
     await pool.query(insertMailbox);
 
@@ -643,7 +643,6 @@ const pool = require("./db");
       ('Mix apéritif 100g', 250, 3.00, 4);
     `;
     await pool.query(insertArticles);
-
 
     const insertActivite = `
     INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES

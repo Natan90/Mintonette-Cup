@@ -267,6 +267,10 @@
     "modifPresta": {
       "subject": "Modification d'un prestataire",
       "message": "Bonjour,\n\nUn prestataire a modifié ses informations.\n\nNom du prestataire : {nom}\nEmail : {email}\nTéléphone : {telephone}\nType : {type}\nSpécificité : {specificite}\n\nMerci de vérifier les modifications effectuées.\n\nCordialement,\n Mintonette Cup"
+    },
+    "demandeRemboursement": {
+      "subject": "Remboursement de billet(s)",
+      "message": "Bonjour,\n\nJe vous informe du remboursement de {nbBillets} billet(s).\n\n\nEmail : {emailUtilisateur}\nRaison : {raison}\n\nDétails des billets :\n{detailsBillets}\n\nMontant total : {montantTotal} €\n\nCordialement,\n{nomUtilisateur}"
     }
   }
 }

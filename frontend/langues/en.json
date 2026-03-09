@@ -261,6 +261,10 @@
     "modifPresta": {
       "subject": "Service provider account update",
       "message": "Hello,\n\nA service provider has updated their information.\n\nProvider name: {nom}\nEmail: {email}\nPhone: {telephone}\nType: {type}\nSpecialty: {specificite}\n\nPlease review the submitted changes.\n\nBest regards,\nMintonette Cup"
+    },
+    "demandeRemboursement": {
+      "subject": "Ticket refund",
+      "message": "Hello,\n\nA user is requesting a refund for {nbBillets} ticket(s).\n\nUser: {nomUtilisateur}\nEmail: {emailUtilisateur}\nReason: {raison}\n\nTicket details:\n{detailsBillets}\n\nTotal amount: {montantTotal} €\n\nPlease process this request as soon as possible.\n\nBest regards,\nMintonette Cup"
     }
   }
 }
