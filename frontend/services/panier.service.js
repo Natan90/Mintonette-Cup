@@ -60,6 +60,22 @@ export const usePanierStore = defineStore("panier", () => {
     return deleteRequest(`/panier/clear/${id_user}`);
   }
 
+  async function RemoveBillet(id_user, billet) {
+    if (!id_user) {
+      throw new Error("L'id de l'utilisateur est obligatoire");
+    }
+
+    return deleteRequest(`/panier/billets/remove/${id_user}`, {
+      data: {
+        id_commande: billet.id_commande,
+        match_id: billet.match_id,
+        numero_colonne: billet.numero_colonne,
+        numero_ligne: billet.numero_ligne,
+        zone: billet.zone,
+      },
+    });
+  }
+
   return {
     GetPanierByUser,
     AddToPanier,
@@ -67,5 +83,6 @@ export const usePanierStore = defineStore("panier", () => {
     GetBilletsByUser,
     PayPanier,
     ClearPanier,
+    RemoveBillet,
   };
 });

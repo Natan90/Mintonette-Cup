@@ -298,6 +298,7 @@ async function getBilletsByUser(id_user) {
       ON srv.id_service = csv.service_id
 
     WHERE c.utilisateur_id = $1
+    AND cs.match_id IS NOT NULL
     ORDER BY c.date_commande DESC
   `,
     [id_user],
@@ -316,12 +317,10 @@ async function clearPanier(id_user) {
 
   const id_panier = panierRes.rows[0].id_panier;
 
-  // Supprimer tous les sièges du panier
   await pool.query(`DELETE FROM Panier_Siege WHERE id_panier = $1`, [
     id_panier,
   ]);
 
-  // Supprimer tous les services du panier
   await pool.query(`DELETE FROM Panier_Service WHERE id_panier = $1`, [
     id_panier,
   ]);
@@ -329,6 +328,24 @@ async function clearPanier(id_user) {
   await pool.query(`UPDATE Panier SET actif = false WHERE id_panier = $1`, [
     id_panier,
   ]);
+}
+
+async function deleteBillet(
+  id_commande,
+  match_id,
+  numero_colonne,
+  numero_ligne,
+  zone,
+) {
+  await pool.query(
+    `DELETE FROM Commande_Siege 
+     WHERE id_commande = $1 
+     AND match_id = $2 
+     AND numero_colonne = $3 
+     AND numero_ligne = $4 
+     AND zone = $5`,
+    [id_commande, match_id, numero_colonne, numero_ligne, zone],
+  );
 }
 
 module.exports = {
@@ -340,4 +357,5 @@ module.exports = {
   payPanier,
   getBilletsByUser,
   clearPanier,
+  deleteBillet,
 };

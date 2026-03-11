@@ -5,7 +5,11 @@ const panierMiddleware = require("../middlewares/panier.middleware");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 // GET panier par utilisateur
-router.get("/show/:id", authMiddleware.authenticateToken, panierController.getPanier);
+router.get(
+  "/show/:id",
+  authMiddleware.authenticateToken,
+  panierController.getPanier,
+);
 
 // POST ajouter au panier (siège ou service)
 router.post(
@@ -24,7 +28,11 @@ router.delete(
 );
 
 // DELETE vider complètement le panier
-router.delete("/clear/:id", authMiddleware.authenticateToken, panierController.clearPanier);
+router.delete(
+  "/clear/:id",
+  authMiddleware.authenticateToken,
+  panierController.clearPanier,
+);
 
 // POST payer son panier
 router.post(
@@ -40,6 +48,14 @@ router.get(
   authMiddleware.authenticateToken,
   panierMiddleware.valideBillets,
   panierController.getBillets,
+);
+
+// DELETE supprimer un billet acheté
+router.delete(
+  "/billets/remove/:id",
+  authMiddleware.authenticateToken,
+  panierMiddleware.validateDeleteBillet,
+  panierController.deleteBillet,
 );
 
 module.exports = router;

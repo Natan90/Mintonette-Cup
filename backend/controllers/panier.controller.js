@@ -155,3 +155,26 @@ exports.getBillets = async (req, res) => {
     res.status(status).json({ error: message });
   }
 };
+
+exports.deleteBillet = async (req, res) => {
+  try {
+    const id_user = req.params.id;
+    const { id_commande, match_id, numero_colonne, numero_ligne, zone } =
+      req.body;
+
+    await panierService.deleteBillet(
+      id_commande,
+      match_id,
+      numero_colonne,
+      numero_ligne,
+      zone,
+    );
+
+    return res.status(200).json({ message: "Billet supprimé avec succès" });
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};

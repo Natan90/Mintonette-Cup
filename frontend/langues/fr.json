@@ -270,7 +270,7 @@
     },
     "demandeRemboursement": {
       "subject": "Remboursement de billet(s)",
-      "message": "Bonjour,\n\nJe vous informe du remboursement de {nbBillets} billet(s).\n\n\nEmail : {emailUtilisateur}\nRaison : {raison}\n\nDétails des billets :\n{detailsBillets}\n\nMontant total : {montantTotal} €\n\nCordialement,\n{nomUtilisateur}"
+      "message": "Bonjour,\n\nJe vous informe du remboursement de {nbBillets} billet(s).\n\n  \nEmail : {emailUtilisateur}\nRaison : {raison}\n\nDétails des billets :\n{detailsBillets}\n\nMontant total : {montantTotal} €\n\nCordialement,\n{nomUtilisateur}"
     }
   }
 }

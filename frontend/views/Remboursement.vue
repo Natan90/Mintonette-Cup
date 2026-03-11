@@ -84,7 +84,7 @@
               <button
                 class="btn-rembourser"
                 :disabled="!raisonRemboursement"
-                @click="sendMailToAdmin()">
+                @click="askReimbursementAndSendMailToAdmin()">
                 <div v-if="selectedBillets.length <= 1">
                   Demander le remboursement (
                   {{ selectedBillets.length }} billet )
@@ -105,21 +105,24 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 import { usePanierStore } from "@/services/panier.service";
 import { useMailBoxStore } from "@/services/reception_box.service";
+import { useGradinStore } from "@/services/gradin.service";
 import { useAdminAPIStore } from "@/services/admin.service";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
+import { useRouter, useRoute } from "vue-router";
 
+const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
 const panierStore = usePanierStore();
 const mailBoxStore = useMailBoxStore();
 const adminAPIStore = useAdminAPIStore();
+const gradinStore = useGradinStore();
 const billets = ref([]);
 const loading = ref(false);
 const error = ref(null);
@@ -160,36 +163,7 @@ function formatDate(dateString) {
   });
 }
 
-// async function askReimbursement() {
-//   if (!raisonRemboursement.value) {
-//     alert("Veuillez sélectionner une raison de remboursement");
-//     return;
-//   }
-
-//   if (selectedBillets.value.length === 0) {
-//     alert("Veuillez sélectionner au moins un billet");
-//     return;
-//   }
-
-//   try {
-//     for (const seat of panier.value) {
-//       await gradinStore.UpdateGradin({
-//         numero_colonne: seat.numero_colonne,
-//         numero_ligne: seat.numero_ligne,
-//         zone: seat.zone,
-//         est_reserve: false,
-//         id_utilisateur: none,
-//       });
-//     }
-//     console.log("Je suis dans le for de panier.value");
-//     await fetchBillets();
-//   } catch (err) {
-//     console.error("Erreur lors de la demande de remboursement:", err);
-//     alert("Une erreur est survenue lors de la demande de remboursement");
-//   }
-// }
-
-async function sendMailToAdmin() {
+async function askReimbursementAndSendMailToAdmin() {
   if (!raisonRemboursement.value) {
     alert("Veuillez sélectionner une raison de remboursement");
     return;
@@ -200,6 +174,55 @@ async function sendMailToAdmin() {
     return;
   }
 
+  await sendMailToAdmin();
+
+  await askReimbursement();
+
+  alert("L'administrateur a été averti de votre remboursement avec succès !");
+  selectedBillets.value = [];
+  raisonRemboursement.value = "";
+  router.push({
+    name: "MesBillets",
+    params: {
+      lang: route.params.lang,
+    },
+  });
+}
+
+async function askReimbursement() {
+  try {
+    for (const seat of selectedBillets.value) {
+      await gradinStore.UpdateGradin({
+        matchId: seat.match_id,
+        numero_colonne: seat.numero_colonne,
+        numero_ligne: seat.numero_ligne,
+        zone: seat.zone,
+        est_reserve: false,
+        id_utilisateur: null,
+      });
+
+      await panierStore.RemoveBillet(userStore.userId, seat);
+    }
+
+    selectedBillets.value.forEach((seat) => {
+      const index = billets.value.findIndex(
+        (b) =>
+          b.match_id === seat.match_id &&
+          b.numero_colonne === seat.numero_colonne &&
+          b.numero_ligne === seat.numero_ligne &&
+          b.zone === seat.zone,
+      );
+      if (index !== -1) {
+        billets.value.splice(index, 1);
+      }
+    });
+  } catch (err) {
+    console.error("Erreur lors de la demande de remboursement:", err);
+    alert("Une erreur est survenue lors de la demande de remboursement");
+  }
+}
+
+async function sendMailToAdmin() {
   try {
     let detailsBillets = "";
     let montantTotal = 0;
@@ -239,14 +262,6 @@ async function sendMailToAdmin() {
       message,
       id_type_message,
     });
-
-    alert(
-      "Votre demande de remboursement a été envoyée à l'administrateur avec succès !",
-    );
-
-    // Réinitialiser les sélections
-    selectedBillets.value = [];
-    raisonRemboursement.value = "";
   } catch (err) {
     console.error(
       "Erreur lors de l'envoi de la demande de remboursement:",

@@ -78,7 +78,7 @@ exports.validatePay = (req, res, next) => {
 
   if (!id_user) {
     return res.status(400).json({ error: "id_user requis" });
-  } 
+  }
 
   if (!total) {
     return res.status(400).json({ error: "Il n'y a pas de total" });
@@ -96,7 +96,31 @@ exports.valideBillets = (req, res, next) => {
 
   if (!id_user) {
     return res.status(400).json({ error: "id_user requis" });
-  } 
-  
+  }
+
   next();
-}
+};
+
+exports.validateDeleteBillet = (req, res, next) => {
+  const id_user = req.params.id;
+  const { id_commande, match_id, numero_colonne, numero_ligne, zone } =
+    req.body;
+
+  if (!id_user) {
+    return res.status(400).json({ error: "id_user requis" });
+  }
+
+  if (
+    !id_commande ||
+    !match_id ||
+    numero_colonne == null ||
+    numero_ligne == null ||
+    !zone
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Toutes les données du billet sont requises" });
+  }
+
+  next();
+};
