@@ -17,12 +17,12 @@ watch(idle, (isIdle) => {
   } else {
     console.log("Utilisateur actif");
     if (userStore.isConnected) {
-      const remaining = userStore.getRemainingDelay();
-      if (remaining > 0) {
-        userStore.runLogoutTimer(remaining);
-        console.log("Timer réinitialisé, temps restant :", remaining);
-      }
-      else {
+      if (userStore.getRemainingDelay() > 0) {
+        const payload = JSON.parse(atob(userStore.token.split('.')[1]));
+        const duration = (payload.exp - payload.iat) * 1000;
+        userStore.runLogoutTimer(duration);
+        console.log("Timer réinitialisé, durée de base :", duration);
+      } else {
         userStore.logout();
       }
     }

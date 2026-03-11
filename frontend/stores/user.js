@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
+import { usePrestataireInfoStore } from "@/stores/prestataire_info";
 
 export const useUserStore = defineStore("user", () => {
   const userId = ref(Number(localStorage.getItem("userId")) || null);
@@ -39,6 +40,14 @@ export const useUserStore = defineStore("user", () => {
 
 
   function setUser(id) {
+    const prestataireInfoStore = usePrestataireInfoStore();
+
+    const previousUserId = prestataireInfoStore.lastUserId;
+    if (previousUserId && previousUserId !== String(id)) {
+      prestataireInfoStore.clearStore();
+    }
+    prestataireInfoStore.lastUserId = String(id);
+
     userId.value = id;
     isConnected.value = true;
   }
@@ -78,7 +87,6 @@ export const useUserStore = defineStore("user", () => {
     token.value = null;
     prestaId.value = null;
     isAuthenticating.value = false;
-
     localStorage.removeItem("userId");
     localStorage.removeItem("isConnected");
     localStorage.removeItem("userRole");

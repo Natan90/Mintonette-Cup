@@ -1,6 +1,6 @@
 <template>
   <NavView id="nav_bar"></NavView>
-  <Modal v-model="showService" :bigger="true">
+  <Modal v-model="isModalService" :bigger="true">
     <template #content>
       <div class="service_details">
 
@@ -15,7 +15,7 @@
         <!-- Nom du service -->
         <div class="service_form_group">
           <label for="nom_service">Nom du service</label>
-          <input class="service_input_text" v-model="oneService.nom_service" id="nom_service" />
+          <input class="service_input_text" v-model="nomService" id="nom_service" />
         </div>
 
         <!-- Description -->
@@ -40,9 +40,9 @@
         <div class="service_form_group">
           <div>
             <label>Visible :</label>
-            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="true"/>
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="false"/>
             <label>Non</label>
           </div>
         </div>
@@ -51,9 +51,9 @@
         <div class="service_form_group">
           <div>
             <label>Actif :</label>
-            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <input type="radio" class="service_input_text" v-model="activate" :value="true"/>
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="currentBesoin" />
+            <input type="radio" class="service_input_text" v-model="activate" :value="false"/>
             <label>Non</label>
           </div>
         </div>
@@ -69,8 +69,14 @@
 
         <!-- Bouton principal -->
         <div class="service_submit">
-          <button class="btn_service_submit" @click="addServiceToPrestataire">
-            ✓ Ajouter le service
+          <button class="btn_service_submit" @click="addServiceToPrestataire()">
+            ✓ Ajouter vos 
+            <span v-if="isActivityService">
+              activités
+            </span>
+            <span v-else>
+              articles
+            </span>
           </button>
         </div>
 
@@ -116,7 +122,7 @@
               <!-- Liste des options possibles -->
               <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
                 <td>
-                  <!-- Checkbox (une seule sélection autorisée) -->
+                  <!-- Bouton radio -->
                   <input type="radio" :id="`item-${index}`" :value="index" @change="onCheckChange($event, item)"
                     :checked="isChecked(item)" :disabled="continueInscription" />
                   <label :for="`item-${index}`">
@@ -137,7 +143,7 @@
 
     <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
     <div class="button_container" v-if="!continueInscription && pathAdd">
-      <button @click.prevent="showContinueInscription" :disabled="!isSelectionValid"
+      <button @click.prevent="showContinueInscription()" :disabled="!isSelectionValid"
         :class="{ disabled: !isSelectionValid }">
         {{ $t("prestataireInfo.btnContinueInscription") }}
       </button>
@@ -145,7 +151,7 @@
 
     <!-- Bouton retour vers la sélection du type -->
     <div class="button_container" v-if="continueInscription && pathAdd">
-      <button @click.prevent="hideContinueInscription">
+      <button @click.prevent="hideContinueInscription()">
         {{ $t("prestataireInfo.btnRetour") }}
       </button>
     </div>
@@ -158,7 +164,7 @@
           <label for="nom">
             {{ $t("prestataireInfo.formulaire.nom") }}
           </label>
-          <input type="text" id="nom" v-model="nom_presta" />
+          <input type="text" id="nom" v-model="nom" />
         </div>
 
         <!-- Champ : description avec éditeur TinyMCE -->
@@ -166,7 +172,7 @@
           <label>
             {{ $t("prestataireInfo.formulaire.descri") }}
           </label>
-          <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+          <Editor v-model="descri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
             height: 600,
             menubar: false,
             plugins: 'lists link image table media code preview anchor',
@@ -181,7 +187,7 @@
           <label for="contact">
             {{ $t("user.mail") }}
           </label>
-          <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
+          <input type="text" id="contact" v-model="mail" placeholder="mail@example.com" />
         </div>
 
         <!-- Champ : téléphone -->
@@ -189,7 +195,7 @@
           <label for="contact">
             {{ $t("user.tel_utilisateur") }}
           </label>
-          <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
+          <input type="tel" id="contact" v-model="tel" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
         </div>
 
         <div class="form_group">
@@ -252,6 +258,7 @@
 </template>
 
 <script setup>
+// ── Imports ──────────────────────────────────────
 import NavView from "@/components/NavView.vue";
 import { ref, onMounted, computed, nextTick } from "vue";
 import { useUserStore } from "@/stores/user";
@@ -265,145 +272,88 @@ import Editor from "@tinymce/tinymce-vue";
 import Footer from "@/components/Footer.vue";
 import { useMailBoxStore } from "@/services/reception_box.service";
 import { useNavigationStore } from "@/stores/navigation";
+import { usePrestataireInfoStore } from "@/stores/prestataire_info";
+import { storeToRefs } from "pinia";
 
+
+// ── Stores & Router ──────────────────────────────
 const { t, locale } = useI18n();
 const userStore = useUserStore();
 const serviceStore = useServiceStore();
 const prestataireStore = usePrestataireStore();
 const typePrestataireStore = useTypePrestataireStore();
 const mailBoxStore = useMailBoxStore();
-const navStore = useNavigationStore();
-
+const prestataireInfoStore = usePrestataireInfoStore();
 const route = useRoute();
 const router = useRouter();
+
+
+// ── Store Refs ───────────────────────────────────
+const { 
+  nom, descri, mail, tel,
+  nomService, descriService, besoinService,
+  visiblePublic, activate,
+  isModalService, continueInscription,
+  selectedIndex, checkedItem
+} = storeToRefs(prestataireInfoStore);
+
+
+// ── Routes ───────────────────────────────────────
 const prestaId = computed(() => route.params.id);
 const pathAdd = computed(() => route.name === "AddPrestataire");
 
+
+// ── Refs locaux ──────────────────────────────────
+// -- UI --
 const message = ref("");
 const messageType = ref("success");
-
 const isFrench = ref(true);
+const isSubmitting = ref(false);
 
-//=========================
-//======= Services ========
-//=========================
-const showService = ref(false);
+// -- Services --
 const isActivityService = ref(false);
 const services = ref([]);
-const oneService = ref({
-  nom_service: "",
-  titre_service: { fr: "", en: "" },
-  descri_service: { fr: "", en: "" },
-  besoin: { fr: "", en: "" },
-  prix: 0,
-  nb_participants: 0,
-  activate: false,
-  visible_public: true,
-});
 
-function showModalByService() {
-  showService.value = true;
-  const currentType = type_prestataire.value.find(
-    (t) => t.id_type_prestataire === selectedTypeId.value
-  );
-  isActivityService.value = currentType?.is_activity ?? false;
-}
-
-//=========================
-//=== Type prestataire ====
-//=========================
+// -- Types prestataire --
 const type_prestataire = ref([]);
 const type_animation = ref([]);
 const type_restauration = ref([]);
 const type_boutique = ref([]);
-
 const selectedType = ref("animation");
 const selectedTypeId = ref(1);
-const continueInscription = ref(false);
-const checkedItems = ref([]);
-const selectedIndex = ref(0);
-
-//=========================
-//===== Inputs fields =====
-//=========================
-const nom_presta = ref("");
-const descri_presta = ref("");
-const mail_presta = ref("");
-const tel_presta = ref("");
-
-const activate = ref(false);
-const desactivate = ref(false);
-const deleting = ref(false);
-const isSubmitting = ref(false);
 
 
+// ── Computed ─────────────────────────────────────
 const selectedNames = computed(() =>
-  checkedItems.value.map((item) => item.nom)
+  checkedItem.value.map((item) => item.nom)
 );
-
 const isSelectionValid = computed(() => {
-  return checkedItems.value.length == 1;
+  return checkedItem.value.length == 1;
 });
-
-onMounted(async () => {
-  try {
-    await getValuesTypePresta();
-    await getValuesEveryType();
-    if (!pathAdd.value) {
-      continueInscription.value = true;
-      await getValuesPrestataire();
-    }
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-const closeMessage = () => {
-  message.value = "";
-};
-
-const changeDescriLang = () => {
-  isFrench.value = !isFrench.value;
-};
-
-
-const currentDescri = computed({
-  get() {
-    return isFrench.value
-      ? oneService.value.descri_service.fr
-      : oneService.value.descri_service.en;
-  },
-  set(value) {
-    if (isFrench.value) {
-      oneService.value.descri_service.fr = value;
-    } else {
-      oneService.value.descri_service.en = value;
-    }
-  },
-});
-
 const errorMessageCheckBox = computed(() => {
-  if (checkedItems.value.length === 0) {
+  if (checkedItem.value.length === 0) {
     return "Veuillez sélectionner une option.";
   }
   return "";
 });
-
-const currentBesoin = computed({
+const currentDescri = computed({
   get() {
-    return isFrench.value
-      ? oneService.value.besoin.fr
-      : oneService.value.besoin.en;
+    return isFrench.value ? descriService.value.fr : descriService.value.en;
   },
   set(value) {
-    if (isFrench.value) {
-      oneService.value.besoin.fr = value;
-    } else {
-      oneService.value.besoin.en = value;
-    }
+    if (isFrench.value) descriService.value.fr = value;
+    else descriService.value.en = value;
   },
 });
-
+const currentBesoin = computed({
+  get() {
+    return isFrench.value ? besoinService.value.fr : besoinService.value.en;
+  },
+  set(value) {
+    if (isFrench.value) besoinService.value.fr = value;
+    else besoinService.value.en = value;
+  },
+});
 const selectedItems = computed(() => {
   switch (selectedTypeId.value) {
     case 1:
@@ -422,7 +372,6 @@ const selectedItems = computed(() => {
       return [];
   }
 });
-
 const selectedTypeLabel = computed(() => {
   const typeObj = type_prestataire.value[selectedIndex.value];
   if (!typeObj) return "";
@@ -433,123 +382,36 @@ const selectedTypeLabel = computed(() => {
   );
 });
 
-
-function isLangEmpty(service, lang) {
-  return (
-    !service.titre_service[lang]?.trim() &&
-    !service.descri_service[lang]?.trim() &&
-    !service.besoin[lang]?.trim()
-  );
-}
-
-function getMissingLangMessage(service) {
-  const frEmpty = isLangEmpty(service, "fr");
-  const enEmpty = isLangEmpty(service, "en");
-
-  if (frEmpty && enEmpty) {
-    return t("messagesServices.aucuneLangues");
-  }
-
-  if (frEmpty) {
-    return t("messagesServices.queEN");
-  }
-
-  if (enEmpty) {
-    return t("messagesServices.queFR");
-  }
-
-  return null;
-}
-
-
-async function addServiceToPrestataire() {
-  if (!oneService.value.nom_service?.trim()) {
-    message.value = "Le nom du service est obligatoire.";
-    messageType.value = "error";
-    return;
-  }
-  const confirmMessage = getMissingLangMessage(oneService.value);
-  if (confirmMessage) {
-    const confirmAdd = window.confirm(confirmMessage);
-    if (!confirmAdd) return;
-  }
-
+// ── onMounted ────────────────────────────────────
+onMounted(async () => {
+  checkedItem.value = Array.isArray(prestataireInfoStore.checkedItem)
+    ? prestataireInfoStore.checkedItem : [];
   try {
-    const res = await serviceStore.CreateService(prestaId.value, {
-      nom_service: oneService.value.nom_service,
-      descri_service: oneService.value.descri_service,
-      besoin: oneService.value.besoin,
-      activate: oneService.value.activate,
-      visible_public: oneService.value.visible_public
-    });
-
-    const newServiceId = res.data.id_service;
-
-    services.value.push({ 
-      ...oneService.value, 
-      id_service: newServiceId 
-    });
-
-    showService.value = false;
-    message.value = "Service ajouté avec succès !";
-    messageType.value = "success";
-
-    navStore.previousRoute = route.fullPath;
-
-    router.push({
-      name: "AddByService",
-      params: { id: newServiceId },
-      query: { isActivityService: isActivityService.value }
-    });
-
-
-  } catch (err) {
-    message.value = err.message;
-    messageType.value = "error";
-  }
-}
-
-function removeServiceField(index) {
-  services.value.splice(index, 1);
-}
-
-async function desactivatingService(service) {
-  desactivate.value = true;
-  actionsService(service);
-}
-
-function activateService(service) {
-  activate.value = true;
-  actionsService(service);
-}
-
-
-async function actionsService(service) {
-  try {
-    const res = await serviceStore.ActivateService(service.id_service);
-
-    const index = services.value.findIndex(s => s.id_service === service.id_service);
-    if (index !== -1) {
-      services.value[index].activate = !services.value[index].activate;
+    await getValuesTypePresta();
+    await getValuesEveryType();
+    if (!pathAdd.value) {
+      continueInscription.value = true;
+      await getValuesPrestataire();
     }
-
   } catch (err) {
-    console.error("Erreur lors de la récupération des données :", err);
+    console.error(err);
   }
-}
+});
 
-function isChecked(item) {
-  return checkedItems.value.some(
-    (i) => i.nom === item.nom
+// ── UI & Modal ───────────────────────────────────
+const closeMessage = () => {
+  message.value = "";
+};
+const changeDescriLang = () => {
+  isFrench.value = !isFrench.value;
+};
+
+function showModalByService() {
+  isModalService.value = true;
+  const currentType = type_prestataire.value.find(
+    (t) => t.id_type_prestataire === selectedTypeId.value
   );
-}
-
-function onCheckChange(event, item) {
-  if (event.target.checked) {
-    checkedItems.value = [item];
-  } else {
-    checkedItems.value = [];
-  }
+  isActivityService.value = currentType?.is_activity ?? false;
 }
 
 function showContinueInscription() {
@@ -574,6 +436,8 @@ function hideContinueInscription() {
   });
 }
 
+
+// ── Type prestataire ─────────────────────────────
 function selectTypePresta(index) {
   selectedIndex.value = index;
 
@@ -583,6 +447,15 @@ function selectTypePresta(index) {
   }
 }
 
+function onCheckChange(event, item) {
+  checkedItem.value = event.target.checked ? [item] : [];
+}
+
+function isChecked(item) {
+  return checkedItem.value.some(
+    (i) => i.nom === item.nom
+  );
+}
 
 async function getValuesTypePresta() {
   try {
@@ -604,6 +477,135 @@ async function getValuesEveryType() {
   }
 }
 
+
+// ── Services ─────────────────────────────────────
+function isLangEmpty(descri, besoin, lang) {
+  return !descri[lang]?.trim() && !besoin[lang]?.trim();
+}
+
+function getMissingLangMessage() {
+  const frEmpty = isLangEmpty(descriService.value, besoinService.value, "fr");
+  const enEmpty = isLangEmpty(descriService.value, besoinService.value, "en");
+
+  if (frEmpty && enEmpty) return t("messagesServices.aucuneLangues");
+  if (frEmpty) return t("messagesServices.queEN");
+  if (enEmpty) return t("messagesServices.queFR");
+  return null;
+}
+
+async function addServiceToPrestataire() {
+  if (!nomService.value.trim()) {
+    message.value = "Le nom du service est obligatoire.";
+    messageType.value = "error";
+    return;
+  }
+
+  const confirmMessage = getMissingLangMessage();
+  if (confirmMessage) {
+    const confirmAdd = window.confirm(confirmMessage);
+    if (!confirmAdd) return;
+  }
+
+  try {
+    const res = await serviceStore.CreateService(prestaId.value, {
+      nom_service: nomService.value,
+      descri_service: descriService.value,
+      besoin: besoinService.value,
+      activate: Boolean(activate.value),
+      visible_public: Boolean(visiblePublic.value),
+    });
+
+    const newServiceId = res.data.id_service;
+
+    services.value.push({
+      nom_service: nomService.value,
+      descri_service: descriService.value,
+      besoin: besoinService.value,
+      activate: Boolean(activate.value),
+      visible_public: Boolean(visiblePublic.value),
+      id_service: newServiceId,
+    });
+
+    message.value = "Service ajouté avec succès !";
+    messageType.value = "success";
+
+    router.push({
+      name: "AddByService",
+      params: { id: newServiceId },
+      query: { isActivityService: isActivityService.value }
+    });
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
+  }
+}
+
+function removeServiceField(index) {
+  services.value.splice(index, 1);
+}
+
+function activateService(service) {
+  activate.value = true;
+  actionsService(service);
+}
+
+async function desactivatingService(service) {
+  desactivate.value = true;
+  actionsService(service);
+}
+
+async function actionsService(service) {
+  try {
+    const res = await serviceStore.ActivateService(service.id_service);
+
+    const index = services.value.findIndex(s => s.id_service === service.id_service);
+    if (index !== -1) {
+      services.value[index].activate = !services.value[index].activate;
+    }
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
+}
+
+async function showOneService(id_service) {
+  try {
+    const res = await serviceStore.GetServiceById(id_service);
+    const s = res.data.service;
+
+    oneService.value = {
+      id_service: s.id_service,
+      nom_service: s.nom_service,
+
+      titre_service: {
+        fr: s.titre_service?.fr?.texte ?? '',
+        en: s.titre_service?.en?.texte ?? ''
+      },
+
+      descri_service: {
+        fr: s.descri_service?.fr?.texte ?? '',
+        en: s.descri_service?.en?.texte ?? ''
+      },
+
+      besoin: {
+        fr: s.besoin?.fr ?? '',
+        en: s.besoin?.en ?? ''
+      },
+
+      prix: s.prix ?? 0,
+      nb_participants: s.nb_participants ?? 0,
+      activate: s.activate ?? false,
+      visible_public: s.visible_public ?? true,
+    };
+
+    showService.value = true;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+// ── Prestataire ──────────────────────────────────
 async function getValuesPrestataire() {
   if (prestaId.value === null) return;
 
@@ -618,10 +620,10 @@ async function getValuesPrestataire() {
       return;
     }
 
-    nom_presta.value = presta.nom_prestataire;
-    descri_presta.value = presta.descri_prestataire;
-    mail_presta.value = presta.mail_prestataire;
-    tel_presta.value = presta.tel_prestataire;
+    nom.value = presta.nom_prestataire;
+    descri.value = presta.descri_prestataire;
+    mail.value = presta.mail_prestataire;
+    tel.value = presta.tel_prestataire;
 
     const indexType = type_prestataire.value.findIndex(
       (t) =>
@@ -663,9 +665,9 @@ async function getValuesPrestataire() {
     );
 
     if (index !== -1) {
-      checkedItems.value = [{ nom: selectedItems.value[index].nom, index }];
+      checkedItem.value = [{ nom: selectedItems.value[index].nom, index }];
     } else {
-      checkedItems.value = [];
+      checkedItem.value = [];
     }
 
     services.value = prestaServices.map((s) => ({
@@ -698,10 +700,10 @@ async function addPrestataire() {
     }));
 
     const res = await prestataireStore.BecomePrestataire(userStore.userId, {
-      nom: nom_presta.value,
-      descri: descri_presta.value,
-      mail: mail_presta.value,
-      tel: tel_presta.value,
+      nom: nom.value,
+      descri: descri.value,
+      mail: mail.value,
+      tel: tel.value,
       specificite: selectedNames.value,
       type: Number(selectedTypeId.value),
       services: servicesPayload
@@ -739,10 +741,10 @@ async function updatePresta() {
     }));
 
     const res = await prestataireStore.UpdatePrestataire(userStore.userId, {
-      nom: nom_presta.value,
-      descri: descri_presta.value,
-      mail: mail_presta.value,
-      tel: tel_presta.value,
+      nom: nom.value,
+      descri: descri.value,
+      mail: mail.value,
+      tel: tel.value,
       specificite: selectedNames.value,
       type: Number(selectedTypeId.value),
       services: servicesPayload
@@ -758,42 +760,8 @@ async function updatePresta() {
   }
 }
 
-async function showOneService(id_service) {
-  try {
-    const res = await serviceStore.GetServiceById(id_service);
-    const s = res.data.service;
 
-    oneService.value = {
-      id_service: s.id_service,
-      nom_service: s.nom_service,
-
-      titre_service: {
-        fr: s.titre_service?.fr?.texte ?? '',
-        en: s.titre_service?.en?.texte ?? ''
-      },
-
-      descri_service: {
-        fr: s.descri_service?.fr?.texte ?? '',
-        en: s.descri_service?.en?.texte ?? ''
-      },
-
-      besoin: {
-        fr: s.besoin?.fr ?? '',
-        en: s.besoin?.en ?? ''
-      },
-
-      prix: s.prix ?? 0,
-      nb_participants: s.nb_participants ?? 0,
-      activate: s.activate ?? false,
-      visible_public: s.visible_public ?? true,
-    };
-
-    showService.value = true;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
+// ── Mail ─────────────────────────────────────────
 async function sendMailToAdmin(isModif) {
   const path = isModif
     ? "mailToSend.modifPresta"
@@ -802,9 +770,9 @@ async function sendMailToAdmin(isModif) {
   const subject = t(`${path}.subject`);
 
   const messageText = t(`${path}.message`, {
-    nom: nom_presta.value,
-    email: mail_presta.value,
-    telephone: tel_presta.value,
+    nom: nom.value,
+    email: mail.value,
+    telephone: tel.value,
     type: selectedType.value,
     specificite: selectedNames.value.join(", ")
   });

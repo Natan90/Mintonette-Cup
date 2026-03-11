@@ -1,6 +1,19 @@
 <template>
   <NavView></NavView>
   <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
+
+  <section>
+    <div>
+      <p v-if="isActivityService">
+        Ajoutez les activités proposées dans le cadre du service <span class="name_delete">{{ service.nom_service }}</span>. Chaque activité peut avoir sa propre date, son horaire, son tarif et son nombre de participants.
+      </p>
+
+      <p v-else>
+        Ajoutez les articles disponibles à la vente pour le service <span class="name_delete">{{ service.nom_service }}</span>. Précisez le nom, le stock disponible et le prix de chaque article.
+      </p>
+    </div>
+  </section>
+
   <div class="page_wrapper">
     <!-- Bloc Activité -->
     <div v-if="isActivityService" class="bloc_container">
@@ -111,6 +124,7 @@ const message = ref("");
 const messageType = ref("success");
 
 const itemsList = ref([]);
+const service = ref([]);
 
 // Activite
 const nom_activite = ref("");
@@ -142,6 +156,7 @@ function goBack() {
 async function getValuesItemsList() {
   try {
     const res = await serviceStore.GetServiceById(id_service.value);
+    service.value = res.data.service;
 
     if (isActivityService.value) {
       itemsList.value = res.data.activites;
