@@ -14,7 +14,7 @@ exports.validateActivateService = (req, res, next) => {
 
 exports.validateAddService = (req, res, next) => {
   const id_prestataire = req.params.id;
-  const { nom_service, descri_service, besoin, activate, visible_public, is_activity } = req.body;
+  const { nom_service, descri_service, besoin, activate, visible_public } = req.body;
   // Validation id_prestataire
   if (!id_prestataire) {
     return res.status(400).json({ error: "id_prestataire est requis" });

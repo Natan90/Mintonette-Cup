@@ -4,6 +4,7 @@ import { ref, watch } from "vue";
 export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   const lastUserId = ref(localStorage.getItem("lastUserId") || null);
   const selectedIndex = ref(Number(localStorage.getItem("selectedIndex")) || 0);
+  const selectedTypeId = ref(Number(localStorage.getItem("selectedTypeId")) || 1);
   const checkedItem = ref(JSON.parse(localStorage.getItem("checkedItem") || "[]"));
   const continueInscription = ref(localStorage.getItem("continueInscription") === "true");
   const nom = ref(localStorage.getItem("nom") || "");
@@ -19,6 +20,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
 
   function clearStore() {
     selectedIndex.value = 0;
+    selectedTypeId.value = 1;
     checkedItem.value = [];
     continueInscription.value = false;
     nom.value = "";
@@ -32,6 +34,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     visiblePublic.value = true;
     activate.value = false;
     localStorage.removeItem("selectedIndex");
+    localStorage.removeItem("selectedTypeId");
     localStorage.removeItem("checkedItem");
     localStorage.removeItem("continueInscription");
     localStorage.removeItem("nom");
@@ -52,6 +55,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   });
   watch(selectedIndex, (v) => localStorage.setItem("selectedIndex", v));
   watch(checkedItem, (v) => localStorage.setItem("checkedItem", JSON.stringify(v)), { deep: true });
+  watch(selectedTypeId, (v) => localStorage.setItem("selectedTypeId", v));
   watch(continueInscription, (v) => localStorage.setItem("continueInscription", v));
   watch(nom, (v) => localStorage.setItem("nom", v));
   watch(descri, (v) => localStorage.setItem("descri", v));
@@ -66,6 +70,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
 
   return {
     lastUserId,
+    selectedTypeId,
     selectedIndex, checkedItem, continueInscription,
     nom, descri, mail, tel,
     isModalService, nomService, descriService, besoinService,

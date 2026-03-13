@@ -1,7 +1,7 @@
 const pool = require("../database/db");
 
-async function getServices() {
-  const servicesResult = await pool.query(`SELECT * FROM Services`);
+async function getServices(id_presta) {
+  const servicesResult = await pool.query(`SELECT * FROM Services WHERE prestataire_id = $1`);
 
   const articlesResult = await pool.query(`SELECT * FROM Article`);
 

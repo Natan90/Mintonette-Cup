@@ -284,6 +284,7 @@ const prestataireStore = usePrestataireStore();
 const typePrestataireStore = useTypePrestataireStore();
 const mailBoxStore = useMailBoxStore();
 const prestataireInfoStore = usePrestataireInfoStore();
+const navStore = useNavigationStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -294,13 +295,15 @@ const {
   nomService, descriService, besoinService,
   visiblePublic, activate,
   isModalService, continueInscription,
-  selectedIndex, checkedItem
+  selectedIndex, checkedItem, selectedTypeId
 } = storeToRefs(prestataireInfoStore);
 
+// UTILISER LE getStoreValues POUR RÉCUPÉRER LES DONNÉES QUE QUAND ON VEUT
 
 // ── Routes ───────────────────────────────────────
 const prestaId = computed(() => route.params.id);
 const pathAdd = computed(() => route.name === "AddPrestataire");
+const getStoreValues = computed(() => navStore.previousRoute === "AddByService" || navStore.isPageInforPrestaReload());
 
 
 // ── Refs locaux ──────────────────────────────────
@@ -320,7 +323,6 @@ const type_animation = ref([]);
 const type_restauration = ref([]);
 const type_boutique = ref([]);
 const selectedType = ref("animation");
-const selectedTypeId = ref(1);
 
 
 // ── Computed ─────────────────────────────────────
@@ -607,10 +609,11 @@ async function showOneService(id_service) {
 
 // ── Prestataire ──────────────────────────────────
 async function getValuesPrestataire() {
-  if (prestaId.value === null) return;
+  if (!prestaId.value) return;
 
   try {
     const res = await prestataireStore.GetPrestataireById(prestaId.value);
+  console.log("réponse API:", res.data);
 
     const presta = res.data.prestataire;
     const prestaServices = res.data.services;

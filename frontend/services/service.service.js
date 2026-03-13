@@ -4,7 +4,7 @@ import { getRequest, patchRequest, postRequest } from "./axios.service";
 export const useServiceStore = defineStore("service", () => {
 
   async function GetServices() {
-    return getRequest("/prestataire/service/show");
+    return getRequest(`/prestataire/service/show`);
   }
 
   async function GetServiceById(id_service) {

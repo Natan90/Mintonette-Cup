@@ -49,7 +49,7 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add" @click="addInItemsList()">+ Ajouter</button>
+        <button class="btn_add" @click="addInItemsList()">+ Ajouter une activité</button>
       </div>
 
       <!-- Liste des activités ajoutées -->
@@ -61,6 +61,9 @@
           <span>💶 {{ item.prix }} €</span>
         </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
+      </div>
+      <div class="btn_container">
+        <button class="btn_add" @click="addInItemsList()">+ Ajouter ce service</button>
       </div>
     </div>
 
@@ -87,7 +90,7 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add" @click="addInItemsList()">+ Ajouter</button>
+        <button class="btn_add" @click="addInItemsList()">+ Ajouter un article</button>
       </div>
       <div v-if="message" class="message"
           :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -101,6 +104,9 @@
           {{ item.nom_article }}
         </p>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
+      </div>
+      <div class="btn_container">
+        <button class="btn_add" @click="addInItemsList()">+ Ajouter un article</button>
       </div>
     </div>
 
@@ -151,7 +157,11 @@ const closeMessage = () => {
 
 function goBack() {
   if (navStore.previousRoute) {
-    router.push(navStore.previousRoute);
+    const tempRoute = navStore.previousRoute;
+
+    navStore.previousRoute = route.fullPath;
+
+    router.push(tempRoute);
   }
 }
 
