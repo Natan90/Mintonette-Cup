@@ -54,9 +54,12 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <p v-if="itemsList.length > 0" v-for="(item, index) in itemsList" :key="index">
-          {{ item.nom_activite }}
-        </p>
+        <div v-if="itemsList.length > 0" v-for="(item, index) in itemsList" :key="index" class="item_card">
+          <span class="item_name">{{ item.nom_activite }}</span>
+          <span>📅 {{ item.date_activite }} à {{ item.heure_activite }}</span>
+          <span>👥 {{ item.nb_participant }} participants max</span>
+          <span>💶 {{ item.prix }} €</span>
+        </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
     </div>
