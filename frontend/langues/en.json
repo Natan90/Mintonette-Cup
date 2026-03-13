@@ -83,6 +83,12 @@
     "title": "Burger Stand",
     "description": "Good news! The burger stand will be present at the Mintonette Cup.\nYou will find a wide selection to satisfy all tastes: delicious classic burgers,\ngourmet creations, and vegetarian options so everyone can enjoy.\n\nWhether you are a meat lover or prefer lighter alternatives, everyone will be warmly welcomed. It's the perfect opportunity to share a friendly moment over a good meal while enjoying the event!"
   },
+  "gradin": {
+    "siegeDispo": "Available seat",
+    "siegeReserv": "Reserved seat",
+    "siegeproprio": "Seat purchased by you",
+    "siegeSelec": "Selected seat "
+  },
   "services": {
     "title": "Provider Services",
     "actions": ["Order Meal", "Reserve Table"]

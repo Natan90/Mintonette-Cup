@@ -103,7 +103,7 @@
               <button class="button" @click="AddToCart">
                 <b>Ajouter au panier </b>
               </button>
-              
+
               <router-link :to="{ name: 'Panier' }">
                 <button class="button basket">
                   <b>Accéder à votre panier</b>
@@ -115,11 +115,12 @@
             </div>
           </div>
         </div>
-
-        <div class="buttonContainer" v-if="idMatch">
-          <button class="button resetButton" @click="resetAllSelection">
-            <b>Réinitialiser la sélection totale </b>
-          </button>
+        <div v-if="globalSelectedSeats.length">
+          <div class="buttonContainer" v-if="idMatch">
+            <button class="button resetButton" @click="resetAllSelection">
+              <b>Réinitialiser la sélection totale </b>
+            </button>
+          </div>
         </div>
         <div v-if="estAjoute" class="successMessage">
           ✓ Vous avez bien ajouté ces articles dans votre panier
@@ -219,9 +220,8 @@ async function fetchGradin() {
   seats.value = seatsByMatch.value[idMatch.value];
 }
 
-
 async function fetchMatches() {
-  const res  = await equipeStore.GetMatchById(terrainId);
+  const res = await equipeStore.GetMatchById(terrainId);
 
   matches.value = res.data;
 }
@@ -243,13 +243,17 @@ async function AddToCart() {
 
   try {
     for (const seat of globalSelectedSeats.value) {
-      await panierStore.AddToPanier("siege", {
-        utilisateur_id: userStore.userId,
-        matchId: seat.matchId,
-        numero_colonne: seat.numero_colonne,
-        numero_ligne: seat.numero_ligne,
-        zone: seat.zone,
-      }, userStore.userId);
+      await panierStore.AddToPanier(
+        "siege",
+        {
+          utilisateur_id: userStore.userId,
+          matchId: seat.matchId,
+          numero_colonne: seat.numero_colonne,
+          numero_ligne: seat.numero_ligne,
+          zone: seat.zone,
+        },
+        userStore.userId,
+      );
     }
 
     estAjoute.value = true;
@@ -293,7 +297,6 @@ onMounted(async () => {
   }
 });
 
-
 function UpdateSeatStatus(index) {
   const seat = seats.value[index];
   if (seat.state === "reserved" || seat.state === "owned") return;
@@ -333,9 +336,6 @@ function UpdateSeatStatus(index) {
   );
 }
 
-
-
-
 // function resetAllSelection() {
 //   globalSelectedSeats.value = [];
 //   seats.value.forEach((seat) => {
@@ -365,26 +365,27 @@ onMounted(() => {
 }
 
 .matchHeader h2 {
-  color: #00167a;
+  color: var(--primary-color);
   font-size: 2em;
   margin-bottom: 10px;
 }
 
 .matchHeader h3 {
-  color: #00167a;
+  color: var(--primary-color);
   font-size: 1.5em;
   margin: 20px 0;
 }
 .legend {
   display: flex;
   gap: 10px;
+  justify-content: center;
 }
 .legend img {
   width: 40px;
 }
 .sectionTitle {
   text-align: center;
-  color: #00167a;
+  color: var(--primary-color);
   font-size: 1.3em;
   margin-bottom: 20px;
 }
@@ -403,7 +404,7 @@ onMounted(() => {
   border: none;
   border-radius: 20px;
   background-color: #e6e9f5;
-  color: #00167a;
+  color: var(--primary-color);
   font-weight: 600;
   transition: 0.2s ease-in-out;
   cursor: pointer;
@@ -415,12 +416,12 @@ onMounted(() => {
 
 .matchTitle .matchTime {
   font-size: 0.85em;
-  color: #4a5568;
+  color: var(--primary-color);
 }
 
 .matchTitle.active,
 .matchTitle:hover {
-  background-color: #00167a;
+  background-color: var(--primary-color);
   color: white;
 }
 
@@ -448,10 +449,9 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(12, 60px);
   gap: 10px;
-  background: #f6f7fb;
+  background: #f0f0f0;
   padding: 30px;
   border-radius: 12px;
-  justify-content: center;
 }
 
 .Seat {
@@ -462,6 +462,7 @@ onMounted(() => {
   cursor: pointer;
   padding: 0;
   transition: transform 0.1s;
+  justify-content: center;
 }
 
 .Seat:hover {
@@ -486,7 +487,7 @@ onMounted(() => {
 }
 
 .SeatInfo h3 {
-  color: #00167a;
+  color: var(--primary-color);
   margin-bottom: 15px;
   text-align: center;
 }
@@ -517,24 +518,24 @@ onMounted(() => {
 
 .seatMatch {
   font-weight: 600;
-  color: #00167a;
+  color: var(--primary-color);
   min-width: 60px;
 }
 
 .seatLocation {
-  color: #4a5568;
+  color: var(--primary-color);
   flex: 1;
 }
 
 .seatPrice {
   font-weight: bold;
-  color: #2c5282;
+  color: var(--primary-color);
 }
 
 .totalPrice {
   text-align: center;
   font-size: 1.3em;
-  color: #00167a;
+  color: var(--primary-color);
   margin: 20px 0;
   padding: 15px;
   background: white;
@@ -542,8 +543,8 @@ onMounted(() => {
 }
 
 .button {
-  background: #00167a;
-  color: white;
+  background: var(--primary-color);
+  color: var(--couleur-fond);
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -557,7 +558,7 @@ onMounted(() => {
 }
 
 .button:hover {
-  background: #001a99;
+  background: var(--primary-light);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

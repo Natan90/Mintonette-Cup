@@ -66,10 +66,13 @@
     <!-- <button @click="goToCheckout" class="btn btn-checkout">
       Procéder au paiement
     </button> -->
-    <router-link to="Checkout" class="btn btn-checkout">
-      Procéder au paiement
-    </router-link>
-    <button @click="reset" class="btn btn-danger">Vider le panier</button>
+    <div v-if="panier.length >= 1">
+      <router-link to="Checkout" class="btn btn-checkout">
+        Procéder au paiement
+      </router-link>
+      <button @click="reset" class="btn btn-danger">Vider le panier</button>
+    </div>
+    <div v-else></div>
     <!-- <button
       @click="addTestSeats"
       class="btn btn-test"
