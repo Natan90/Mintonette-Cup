@@ -8,8 +8,8 @@
             v-if="currentMapType !== 'generalZone'"
             class="SwitchButton pointer"
             @click="goBack">
-            Retour
-          </button>
+              {{ locale === 'fr' ? 'Retour' : 'Back' }}          
+            </button>
         </div>
       </div>
       <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
@@ -37,8 +37,19 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
 import { usePrestataireStore } from "@/services/prestataire.service";
+import { computed } from 'vue'
 
+const userStore = useUserStore()
 const route = useRoute();
+const locale = computed(() => route.params.lang || 'fr') // 'fr' ou 'en'
+
+function getTranslatedName(name) {
+  if (typeof name === 'object' && name[locale.value] !== undefined) {  // .value !!!
+    return name[locale.value]
+  }
+  return name
+}
+
 const prestataireStore = usePrestataireStore();
 
 let map;
@@ -63,7 +74,6 @@ let label = null;
 const nom_prestataire = ref("");
 const prestataires = ref([]);
 
-const userStore = useUserStore();
 
 const tailleMap = [0, 0, 2000, 1600];
 const projection = new Projection({
@@ -75,7 +85,7 @@ const projection = new Projection({
 const generalMap = [
   {
     type: "generalZone",
-    name: "Zone prestataire",
+    name: { fr: "Zone prestataire", en: "Provider Zone" },
     image: "/MapPrestaGauche.png",
     cote: "gauche",
     coord: [
@@ -142,7 +152,7 @@ const generalMap = [
   },
   {
     type: "generalZone",
-    name: "Gymnase",
+    name: { fr: "Gymnase", en: "Gymnasium" },
     image: "/mapTerrain.png",
     coord: [
       [1007.8458944344685, 1189.9510785216112],
@@ -239,7 +249,7 @@ const generalMap = [
   },
   {
     type: "generalZone",
-    name: "Zone prestataire",
+    name:  { fr: "Zone prestataire", en: "Provider Zone" },
     image: "/MapPrestaDroite.png",
     cote: "droite",
     coord: [
@@ -296,7 +306,7 @@ const generalMap = [
 const landLocations = [
   {
     type: "court",
-    name: "Terrain 1",
+    name: { fr: "Terrain 1", en: "Field 1" },
     terrainId: 1,
     coord: [
       [455.745856348253, 1038.1583883478115],
@@ -308,7 +318,7 @@ const landLocations = [
   },
   {
     type: "court",
-    name: "Terrain 2",
+    name: { fr: "Terrain 2", en: "Field 2" },
     terrainId: 2,
     coord: [
       [1046.4892222541098, 1033.455234377288],
@@ -320,7 +330,7 @@ const landLocations = [
   },
   {
     type: "court",
-    name: "Terrain 3",
+    name: { fr: "Terrain 3", en: "Field 3" },
     terrainId: 3,
     coord: [
       [442.9922551816334, 678.0303751011293],
@@ -332,7 +342,7 @@ const landLocations = [
   },
   {
     type: "court",
-    name: "Terrain 4",
+    name: { fr: "Terrain 4", en: "Field 4" },
     terrainId: 4,
     coord: [
       [1044.26509630362, 677.7501285267031],
@@ -345,7 +355,7 @@ const landLocations = [
   // Gradin 
   {
     type: "stand",
-    name: "Tribune Nord",
+    name: { fr: "Tribune Nord", en: "North Stand", id: "nord" },
     url: userStore.isConnected
       ? "/Gradins/Gradin/nord"
       : "/utilisateur/connexion",
@@ -385,7 +395,7 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Tribune Est",
+    name: { fr: "Tribune Est", en: "East Stand", id: "est" },
     url: userStore.isConnected
       ? "/Gradins/Gradin/est"
       : "/utilisateur/connexion",
@@ -422,7 +432,7 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Tribune Sud",
+    name: { fr: "Tribune Sud", en: "South Stand", id: "sud" },
     url: userStore.isConnected
       ? "/Gradins/Gradin/sud"
       : "/utilisateur/connexion",
@@ -483,7 +493,7 @@ const landLocations = [
   },
   {
     type: "stand",
-    name: "Tribune Ouest",
+    name: { fr: "Tribune Ouest", en: "West Stand", id: "ouest" },
     url: userStore.isConnected
       ? "/Gradins/Gradin/ouest"
       : "/utilisateur/connexion",
@@ -507,7 +517,7 @@ const landLocations = [
 const NorthStand = [
   {
     type: "stand",
-    name: "PrixCher",
+    name: { fr: "Prix élevé", en: "High Price" },
     url: "../PrixCher",
     coord: [
       [197.24300002303798, 116.1750271862619],
@@ -521,7 +531,7 @@ const NorthStand = [
   },
   {
     type: "stand",
-    name: "PrixPasCher",
+    name: { fr: "Prix bas", en: "Low Price" },
     url: "../PrixPasCher",
     coord: [
       [71.3409777832273, 633.9786521287269],
@@ -544,7 +554,7 @@ const NorthStand = [
 const EstStand = [
   {
     type: "stand",
-    name: "PrixCher",
+    name: { fr: "Prix élevé", en: "High Price" },
     url: "../PrixCher",
     coord: [
       [176.2836981541086, 519.054598490954],
@@ -573,7 +583,7 @@ const EstStand = [
   },
   {
     type: "stand",
-    name: "PrixPasCher",
+    name: { fr: "Prix bas", en: "Low Price" },
     url: "../PrixPasCher",
     coord: [
       [129.90687999905307, 803.8515706700118],
@@ -606,7 +616,7 @@ const EstStand = [
 const SouthStand = [
   {
     type: "stand",
-    name: "PrixPasCher",
+    name: { fr: "Prix bas", en: "Low Price" },
     url: "../PrixPasCher",
     coord: [
       [104.82777916200078, 677.7304861903494],
@@ -624,7 +634,7 @@ const SouthStand = [
   },
   {
     type: "stand",
-    name: "PrixCher",
+    name: { fr: "Prix élevé", en: "High Price" },
     url: "../PrixCher",
     coord: [
       [318.6920824648939, 421.088332880612],
@@ -636,7 +646,7 @@ const SouthStand = [
   },
   {
     type: "stand",
-    name: "PrixPasCher",
+    name: { fr: "Prix bas", en: "Low Price" },
     url: "../PrixPasCher",
     coord: [
       [688.29094927702, 393.4628795562422],
@@ -674,7 +684,7 @@ const SouthStand = [
 const WestStand = [
   {
     type: "stand",
-    name: "PrixCher",
+    name: { fr: "Prix élevé", en: "High Price" },
     url: "../PrixCher",
     coord: [
       [839.6821741164738, 482.92883322719194],
@@ -696,7 +706,7 @@ const WestStand = [
   },
   {
     type: "stand",
-    name: "PrixPasCher",
+    name: { fr: "Prix bas", en: "Low Price" },
     url: "../PrixPasCher",
     coord: [
       [72.98403140543218, 785.9660750072215],
@@ -1875,13 +1885,11 @@ async function fetchPresta() {
         const zone = serviceLocation.value.find(
           (z) => z.id_zone === presta.id_zone,
         );
-
+        
         if (zone) {
-          zone.name = presta.nom_prestataire;
-
+          zone.nom_prestataire = presta.nom_prestataire;  // garde objet
           zone.id_prestataire = presta.id_prestataire;
-
-          zone.type_prestataire = presta.nom_type_prestataire?.fr;
+          zone.type_prestataire = getTranslatedName(presta.nom_type_prestataire);  // traduit !
         }
       }
     });
@@ -2055,10 +2063,13 @@ onMounted(() => {
     }
 
     if (searchFeature) {
-      const name = searchFeature.get("name");
+      const rawName = searchFeature.get("name");        // brut
+      const name = getTranslatedName(rawName);          // traduit
+
       const type = searchFeature.get("type");
       //C'est pour récupérer la position et les dimensions de la carte ( pour afficher le label au bon endroit )
       const bounds = mapContainer.getBoundingClientRect();
+
 
       label.style.display = "block";
 
@@ -2076,7 +2087,7 @@ onMounted(() => {
       label.style.top = y + "px";
 
       if (type === "service") {
-        const zone = serviceLocation.value.find((z) => z.name === name);
+        const zone = serviceLocation.value.find((z) => z.id_zone === searchFeature.get("id"))
         if (zone && zone.type_prestataire) {
           label.innerHTML = `<div class="contentContener"><span class="title">${name}</span><br/><span class="subtitle">${zone.type_prestataire}</span></div>`;
         } else {
@@ -2094,7 +2105,8 @@ onMounted(() => {
         searchFeature.setStyle(standHoverStyle);
         label.style.backgroundColor = "#000000";
       } else if (searchFeature.get("type") === "service") {
-        const zone = serviceLocation.value.find((z) => z.name === name);
+        const zone = serviceLocation.value.find((z) => z.id_zone === searchFeature.get("id"))
+
         if (zone && zone.type_prestataire) {
           if (zone.type_prestataire === "Restauration") {
             searchFeature.setStyle(restorationHoverStyle);
@@ -2155,26 +2167,8 @@ onMounted(() => {
     }
 
     if (type === "stand") {
-      const standName = clickedFeature.get("name"); // ex: "Tribune Nord"
-      let zone = "";
-
-      // Détermine la zone en fonction du stand
-      switch (standName) {
-        case "Tribune Nord":
-          zone = "nord";
-          break;
-        case "Tribune Est":
-          zone = "est";
-          break;
-        case "Tribune Sud":
-          zone = "sud";
-          break;
-        case "Tribune Ouest":
-          zone = "ouest";
-          break;
-        default:
-          zone = "nord";
-      }
+      const standName = clickedFeature.get("id"); // ex: "nord"
+      let zone = standName;
 
       router.push({
         name: "Gradin",
@@ -2290,7 +2284,7 @@ function changeMap(type, image = null, cote) {
     } else if (f.get("type") === "service") {
       const zoneName = f.get("name");
       const serviceZone = serviceLocation.value.find(
-        (z) => z.name === zoneName,
+        (z) => z.id_zone === f.get("id"), 
       );
       if (serviceZone && serviceZone.type_prestataire) {
         if (serviceZone.type_prestataire === "Restauration") {
