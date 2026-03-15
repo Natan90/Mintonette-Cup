@@ -1,12 +1,12 @@
 <template>
   <NavView id="nav_bar"></NavView>
-  <Modal v-model="isModalService" :bigger="true">
+  <Modal v-model="showModal_service" :bigger="true">
     <template #content>
       <div class="service_details">
 
         <!-- Langue -->
         <div class="service_lang">
-          <button class="btn_lang" @click="changeDescriLang">
+          <button class="btn_lang" @click="changeDescriLang()">
             <span v-if="isFrench">🌐 Passer en anglais</span>
             <span v-else>🌐 Go in French</span>
           </button>
@@ -15,7 +15,7 @@
         <!-- Nom du service -->
         <div class="service_form_group">
           <label for="nom_service">Nom du service</label>
-          <input class="service_input_text" v-model="nomService" id="nom_service" />
+          <input class="service_input_text" v-model="nom_service" id="nom_service" />
         </div>
 
         <!-- Description -->
@@ -40,9 +40,9 @@
         <div class="service_form_group">
           <div>
             <label>Visible :</label>
-            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="true"/>
+            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="true"/>
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="false"/>
+            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="false"/>
             <label>Non</label>
           </div>
         </div>
@@ -51,9 +51,9 @@
         <div class="service_form_group">
           <div>
             <label>Actif :</label>
-            <input type="radio" class="service_input_text" v-model="activate" :value="true"/>
+            <input type="radio" class="service_input_text" v-model="activate_service" :value="true"/>
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="activate" :value="false"/>
+            <input type="radio" class="service_input_text" v-model="activate_service" :value="false"/>
             <label>Non</label>
           </div>
         </div>
@@ -103,8 +103,8 @@
         <div class="type_prestataire">
           <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
             <!-- Bouton de sélection du type de prestataire -->
-            <button class="button_type_presta pointer" @click="selectTypePresta(index)" :disabled="continueInscription"
-              :class="selectedIndex === index ? 'button_selected' : ''">
+            <button class="button_type_presta pointer" @click="selectTypePresta(index)" :disabled="continueInscription_service"
+              :class="selectedIndex_presta === index ? 'button_selected' : ''">
               {{ item.nom_type_prestataire[locale] }}
             </button>
           </div>
@@ -124,7 +124,7 @@
                 <td>
                   <!-- Bouton radio -->
                   <input type="radio" :id="`item-${index}`" :value="index" @change="onCheckChange($event, item)"
-                    :checked="isChecked(item)" :disabled="continueInscription" />
+                    :checked="isChecked(item)" :disabled="continueInscription_service" />
                   <label :for="`item-${index}`">
                     {{ item.nom }}
                   </label>
@@ -142,7 +142,7 @@
     </div>
 
     <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
-    <div class="button_container" v-if="!continueInscription && pathAdd">
+    <div class="button_container" v-if="!continueInscription_service && pathAdd">
       <button @click.prevent="showContinueInscription()" :disabled="!isSelectionValid"
         :class="{ disabled: !isSelectionValid }">
         {{ $t("prestataireInfo.btnContinueInscription") }}
@@ -150,21 +150,21 @@
     </div>
 
     <!-- Bouton retour vers la sélection du type -->
-    <div class="button_container" v-if="continueInscription && pathAdd">
+    <div class="button_container" v-if="continueInscription_service && pathAdd">
       <button @click.prevent="hideContinueInscription()">
         {{ $t("prestataireInfo.btnRetour") }}
       </button>
     </div>
 
     <!-- Formulaire de création / modification du prestataire -->
-    <div class="prestataire_container" v-if="continueInscription || !pathAdd" id="presta_container">
+    <div class="prestataire_container" v-if="continueInscription_service || !pathAdd" id="presta_container">
       <div class="editor_container">
         <!-- Champ : nom du prestataire -->
         <div class="form_group">
           <label for="nom">
             {{ $t("prestataireInfo.formulaire.nom") }}
           </label>
-          <input type="text" id="nom" v-model="nom" />
+          <input type="text" id="nom" v-model="nom_presta" />
         </div>
 
         <!-- Champ : description avec éditeur TinyMCE -->
@@ -172,7 +172,7 @@
           <label>
             {{ $t("prestataireInfo.formulaire.descri") }}
           </label>
-          <Editor v-model="descri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+          <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
             height: 600,
             menubar: false,
             plugins: 'lists link image table media code preview anchor',
@@ -187,7 +187,7 @@
           <label for="contact">
             {{ $t("user.mail") }}
           </label>
-          <input type="text" id="contact" v-model="mail" placeholder="mail@example.com" />
+          <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
         </div>
 
         <!-- Champ : téléphone -->
@@ -195,7 +195,7 @@
           <label for="contact">
             {{ $t("user.tel_utilisateur") }}
           </label>
-          <input type="tel" id="contact" v-model="tel" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
+          <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
         </div>
 
         <div class="form_group">
@@ -205,7 +205,7 @@
                 gotS: services.length > 1 ? "s" : "",
               })
             }}</label>
-            <button @click="showModalByService" class="pointer">+ Ajouter</button>
+            <button @click="showModalByService()" class="pointer">+ Ajouter</button>
           </div>
 
           <div class="service_input">
@@ -229,7 +229,7 @@
         </div>
 
         <!-- Message de succès ou d'erreur après action -->
-        <div v-if="message && !showService" class="message"
+        <div v-if="message && !showModal_service" class="message"
           :class="messageType === 'error' ? 'message-error' : 'message-success'">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
@@ -260,9 +260,9 @@
 <script setup>
 // ── Imports ──────────────────────────────────────
 import NavView from "@/components/NavView.vue";
-import { ref, onMounted, computed, nextTick } from "vue";
+import { ref, onMounted, computed, nextTick, watch } from "vue";
 import { useUserStore } from "@/stores/user";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useServiceStore } from "@/services/service.service";
 import { usePrestataireStore } from "@/services/prestataire.service";
@@ -303,7 +303,10 @@ const {
 // ── Routes ───────────────────────────────────────
 const prestaId = computed(() => route.params.id);
 const pathAdd = computed(() => route.name === "AddPrestataire");
-const getStoreValues = computed(() => navStore.previousRoute === "AddByService" || navStore.isPageInforPrestaReload());
+const getStoreValues = computed(() => {
+  const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+  return navStore.previousRoute === "AddByService" || isReload;
+});
 
 
 // ── Refs locaux ──────────────────────────────────
@@ -324,40 +327,57 @@ const type_restauration = ref([]);
 const type_boutique = ref([]);
 const selectedType = ref("animation");
 
+// -- Valeurs de l'utilisateur -- 
+const nom_presta = ref("");
+const descri_presta = ref("");
+const mail_presta = ref("");
+const tel_presta = ref(0);
+const nom_service = ref("");
+const descri_service = ref({ fr: "", en: "" });
+const besoin_service = ref({ fr: "", en: "" });
+const visible_public_service = ref(false);
+const activate_service = ref(false);
+const showModal_service = ref(false);
+const continueInscription_service = ref(false);
+const selectedIndex_presta = ref(0);
+const checkedItem_presta = ref([]);
+const selectedTypeId_presta = ref(1);
+
 
 // ── Computed ─────────────────────────────────────
 const selectedNames = computed(() =>
-  checkedItem.value.map((item) => item.nom)
+  checkedItem_presta.value.map((item) => item.nom)
 );
 const isSelectionValid = computed(() => {
-  return checkedItem.value.length == 1;
+  return checkedItem_presta.value.length == 1;
 });
 const errorMessageCheckBox = computed(() => {
-  if (checkedItem.value.length === 0) {
+  if (checkedItem_presta.value.length === 0) {
     return "Veuillez sélectionner une option.";
   }
   return "";
 });
 const currentDescri = computed({
   get() {
-    return isFrench.value ? descriService.value.fr : descriService.value.en;
+    return isFrench.value ? descri_service.value.fr : descri_service.value.en;
   },
   set(value) {
-    if (isFrench.value) descriService.value.fr = value;
-    else descriService.value.en = value;
+    if (isFrench.value) descri_service.value.fr = value;
+    else descri_service.value.en = value;
   },
 });
+
 const currentBesoin = computed({
   get() {
-    return isFrench.value ? besoinService.value.fr : besoinService.value.en;
+    return isFrench.value ? besoin_service.value.fr : besoin_service.value.en;
   },
   set(value) {
-    if (isFrench.value) besoinService.value.fr = value;
-    else besoinService.value.en = value;
+    if (isFrench.value) besoin_service.value.fr = value;
+    else besoin_service.value.en = value;
   },
 });
 const selectedItems = computed(() => {
-  switch (selectedTypeId.value) {
+  switch (selectedTypeId_presta.value) {
     case 1:
       return type_animation.value.map(item => ({
         nom: item.nom_type_animation,
@@ -375,7 +395,7 @@ const selectedItems = computed(() => {
   }
 });
 const selectedTypeLabel = computed(() => {
-  const typeObj = type_prestataire.value[selectedIndex.value];
+  const typeObj = type_prestataire.value[selectedIndex_presta.value];
   if (!typeObj) return "";
 
   return (
@@ -384,17 +404,60 @@ const selectedTypeLabel = computed(() => {
   );
 });
 
+// ── Watch ────────────────────────────────────
+const isSyncing = ref(false);
+
+watch(nom_presta, (v) => { if (!isSyncing.value) nom.value = v; });
+watch(descri_presta, (v) => { if (!isSyncing.value) descri.value = v; });
+watch(mail_presta, (v) => { if (!isSyncing.value) mail.value = v; });
+watch(tel_presta, (v) => { if (!isSyncing.value) tel.value = v; });
+watch(selectedTypeId_presta, (v) => { if (!isSyncing.value) selectedTypeId.value = v; });
+watch(selectedIndex_presta, (v) => { if (!isSyncing.value) selectedIndex.value = v; });
+watch(checkedItem_presta, (v) => { if (!isSyncing.value) checkedItem.value = v; }, { deep: true });
+watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscription.value = v; });
+
+// ── onBeforeRouteLeave ────────────────────────────────────
+onBeforeRouteLeave((to) => {
+  if (to.name !== "AddByService") {
+    prestataireInfoStore.clearStore();
+  }
+});
+
 // ── onMounted ────────────────────────────────────
 onMounted(async () => {
-  checkedItem.value = Array.isArray(prestataireInfoStore.checkedItem)
-    ? prestataireInfoStore.checkedItem : [];
   try {
     await getValuesTypePresta();
     await getValuesEveryType();
-    if (!pathAdd.value) {
-      continueInscription.value = true;
-      await getValuesPrestataire();
+
+    if (getStoreValues.value) {
+      nom_presta.value = nom.value;
+      descri_presta.value = descri.value;
+      mail_presta.value = mail.value;
+      tel_presta.value = tel.value;
+      selectedTypeId_presta.value = selectedTypeId.value || 1;
+      selectedIndex_presta.value = selectedIndex.value || 0;
+      checkedItem_presta.value = Array.isArray(checkedItem.value) ? checkedItem.value : [];
+      continueInscription_service.value = continueInscription.value;
+    } else {
+      isSyncing.value = true;
+      prestataireInfoStore.clearStore();
+      selectedTypeId_presta.value = 1;
+      selectedIndex_presta.value = 0;
+      checkedItem_presta.value = [];
+      continueInscription_service.value = false;
+      nom_presta.value = "";
+      descri_presta.value = "";
+      mail_presta.value = "";
+      tel_presta.value = "";
+      await nextTick();
+      isSyncing.value = false;
+
+      if (!pathAdd.value) {
+        continueInscription_service.value = true;
+        await getValuesPrestataire();
+      }
     }
+
   } catch (err) {
     console.error(err);
   }
@@ -409,15 +472,15 @@ const changeDescriLang = () => {
 };
 
 function showModalByService() {
-  isModalService.value = true;
+  showModal_service.value = true;
   const currentType = type_prestataire.value.find(
-    (t) => t.id_type_prestataire === selectedTypeId.value
+    (t) => t.id_type_prestataire === selectedTypeId_presta.value
   );
   isActivityService.value = currentType?.is_activity ?? false;
 }
 
 function showContinueInscription() {
-  continueInscription.value = true;
+  continueInscription_service.value = true;
 
   nextTick(() => {
     const element = document.getElementById("presta_container");
@@ -428,7 +491,7 @@ function showContinueInscription() {
 }
 
 function hideContinueInscription() {
-  continueInscription.value = false;
+  continueInscription_service.value = false;
 
   nextTick(() => {
     const element = document.getElementById("nav_bar");
@@ -441,20 +504,20 @@ function hideContinueInscription() {
 
 // ── Type prestataire ─────────────────────────────
 function selectTypePresta(index) {
-  selectedIndex.value = index;
+  selectedIndex_presta.value = index;
 
   const typeObj = type_prestataire.value[index];
   if (typeObj) {
-    selectedTypeId.value = typeObj.id_type_prestataire;
+    selectedTypeId_presta.value = typeObj.id_type_prestataire;
   }
 }
 
 function onCheckChange(event, item) {
-  checkedItem.value = event.target.checked ? [item] : [];
+  checkedItem_presta.value = event.target.checked ? [item] : [];
 }
 
 function isChecked(item) {
-  return checkedItem.value.some(
+  return checkedItem_presta.value.some(
     (i) => i.nom === item.nom
   );
 }
@@ -496,7 +559,7 @@ function getMissingLangMessage() {
 }
 
 async function addServiceToPrestataire() {
-  if (!nomService.value.trim()) {
+  if (!nom_service.value.trim()) {
     message.value = "Le nom du service est obligatoire.";
     messageType.value = "error";
     return;
@@ -510,21 +573,21 @@ async function addServiceToPrestataire() {
 
   try {
     const res = await serviceStore.CreateService(prestaId.value, {
-      nom_service: nomService.value,
-      descri_service: descriService.value,
-      besoin: besoinService.value,
-      activate: Boolean(activate.value),
-      visible_public: Boolean(visiblePublic.value),
+      nom_service: nom_service.value,
+      descri_service: descri_service.value,
+      besoin: besoin_service.value,
+      activate: Boolean(activate_service.value),
+      visible_public: Boolean(visible_public_service.value),
     });
 
     const newServiceId = res.data.id_service;
 
     services.value.push({
-      nom_service: nomService.value,
-      descri_service: descriService.value,
-      besoin: besoinService.value,
-      activate: Boolean(activate.value),
-      visible_public: Boolean(visiblePublic.value),
+      nom_service: nom_service.value,
+      descri_service: descri_service.value,
+      besoin: besoin_service.value,
+      activate: Boolean(activate_service.value),
+      visible_public: Boolean(visible_public_service.value),
       id_service: newServiceId,
     });
 
@@ -623,9 +686,16 @@ async function getValuesPrestataire() {
       return;
     }
 
+    nom_presta.value = presta.nom_prestataire;
     nom.value = presta.nom_prestataire;
+
+    descri_presta.value = presta.descri_prestataire;
     descri.value = presta.descri_prestataire;
+
+    mail_presta.value = presta.mail_prestataire;
     mail.value = presta.mail_prestataire;
+
+    tel_presta.value = presta.tel_prestataire;
     tel.value = presta.tel_prestataire;
 
     const indexType = type_prestataire.value.findIndex(
@@ -635,6 +705,7 @@ async function getValuesPrestataire() {
     );
 
     if (indexType !== -1) {
+      selectedIndex_presta.value = indexType;
       selectedIndex.value = indexType;
 
       const typeObj = type_prestataire.value[indexType];
@@ -642,8 +713,9 @@ async function getValuesPrestataire() {
       const nomType =
         typeObj.nom_type_prestataire[locale.value] ||
         typeObj.nom_type_prestataire.fr;
-
       selectedType.value = nomType.toLowerCase();
+
+      selectedTypeId_presta.value = typeObj.id_type_prestataire;
       selectedTypeId.value = typeObj.id_type_prestataire;
     }
 
@@ -667,11 +739,8 @@ async function getValuesPrestataire() {
       (item) => item.nom.trim().toLowerCase() === spec.toLowerCase()
     );
 
-    if (index !== -1) {
-      checkedItem.value = [{ nom: selectedItems.value[index].nom, index }];
-    } else {
-      checkedItem.value = [];
-    }
+    checkedItem_presta.value = index !== -1 ? [{ nom: selectedItems.value[index].nom, index }] : [];
+    checkedItem.value = checkedItem_presta.value;
 
     services.value = prestaServices.map((s) => ({
       id_service: s.id_service,
@@ -703,12 +772,12 @@ async function addPrestataire() {
     }));
 
     const res = await prestataireStore.BecomePrestataire(userStore.userId, {
-      nom: nom.value,
-      descri: descri.value,
-      mail: mail.value,
-      tel: tel.value,
+      nom: nom_presta.value,
+      descri: descri_presta.value,
+      mail: mail_presta.value,
+      tel: tel_presta.value,
       specificite: selectedNames.value,
-      type: Number(selectedTypeId.value),
+      type: Number(selectedTypeId_presta.value),
       services: servicesPayload
     });
 
@@ -744,12 +813,12 @@ async function updatePresta() {
     }));
 
     const res = await prestataireStore.UpdatePrestataire(userStore.userId, {
-      nom: nom.value,
-      descri: descri.value,
-      mail: mail.value,
-      tel: tel.value,
+      nom: nom_presta.value,
+      descri: descri_presta.value,
+      mail: mail_presta.value,
+      tel: tel_presta.value,
       specificite: selectedNames.value,
-      type: Number(selectedTypeId.value),
+      type: Number(selectedTypeId_presta.value),
       services: servicesPayload
     });
     message.value = res.data.message;
