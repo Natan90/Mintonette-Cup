@@ -4,6 +4,7 @@
     "prestataire": "Service Providers",
     "aPropos": "About",
     "partenaire": "Our Partners",
+    "boiteReception": "Inbox",
     "profil": {
       "prestation": "My Services",
       "evenement": "Event",
@@ -25,6 +26,7 @@
       "nonConnecte": "<h2>Want to join the adventure?</h2><br><p>Become an official Mintonette Cup vendor and offer your services to all participants.<br><strong>Log in or create an account</strong> to submit your application!</p>",
       "boutonNonConnecte": "Log in / Sign up"
     },
+    "Ballon": "Soak up the atmosphere",
     "competition": {
       "descri": "<h2>Dive into the competition!</h2><p>Dive into the heart of the competition and explore the countries competing in the Mintonette Cup.<br><strong>Lineups, photos, and key information: it’s all here!</strong></p><p>Whether you're a player, a supporter, or just curious, discover all the tournament countries:</p>",
       "boutonMatchs": "View countries"

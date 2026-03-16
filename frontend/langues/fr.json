@@ -4,6 +4,7 @@
     "prestataire": "Prestataire",
     "aPropos": "À propos",
     "partenaire": "Nos partenaires",
+    "boiteReception": "Boite de Réception",
     "profil": {
       "prestation": "Mes Prestations",
       "evenement": "Évènement",
@@ -25,6 +26,7 @@
       "nonConnecte": "<h2>Envie de rejoindre l'aventure ?</h2><br><p>Devenez prestataire officiel de la Mintonette Cup et proposez vos services à tous les participants.<br><strong>Connectez-vous ou créez un compte</strong> pour soumettre votre candidature !</p>",
       "boutonNonConnecte": "Se connecter / S'inscrire"
     },
+    "Ballon": "Plongez dans l'ambiance",
     "competition": {
       "descri": "<h2>Plongez dans la compétition !</h2> <p>Plongez au cœur de la compétition et explorez les pays engagés dans la Mintonette Cup.<br> <strong>Compositions, photos et infos essentielles : tout est là !</strong></p><p>Que vous soyez joueur, supporter ou simple curieux, découvrez tous les pays du tournoi :</p>",
       "boutonMatchs": "Voir les pays"

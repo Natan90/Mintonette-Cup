@@ -48,18 +48,18 @@
           v-if="locale === 'en'"
           @click="changeLanguage('fr')"
           class="boutonNav pointer">
-          <span>Français</span>
+          <span>French</span>
         </div>
         <div
           v-else-if="locale === 'fr'"
           @click="changeLanguage('en')"
           class="boutonNav pointer">
-          <span>English</span>
+          <span>Anglais</span>
         </div>
       </div>
 
       <div @click="goToReceptionBox()" class="boutonNav pointer">
-        Boîte de réception
+       {{ $t("barreNav.boiteReception") }}
       </div>
 
       <div v-if="!isLoggedIn" class="partieProfil">
