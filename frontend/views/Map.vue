@@ -1,24 +1,24 @@
 <template>
-  <section class="container-map">    
+  <section class="container-map">
     <div class="button"></div>
-      <!-- Balise vide pour insérer la map -->
-      <div class="mapContainer">
-        <div class="map" id="map">
-          <button
-            v-if="currentMapType !== 'generalZone'"
-            class="SwitchButton pointer"
-            @click="goBack">
-              {{ locale === 'fr' ? 'Retour' : 'Back' }}          
-            </button>
-        </div>
+    <!-- Balise vide pour insérer la map -->
+    <div class="mapContainer">
+      <div class="map" id="map">
+        <button
+          v-if="currentMapType !== 'generalZone'"
+          class="SwitchButton pointer"
+          @click="goBack">
+          {{ locale === "fr" ? "Retour" : "Back" }}
+        </button>
       </div>
-      <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
-      <div class="hoverName" id="hoverName"></div>
+    </div>
+    <!-- Ce qui permet de faire apparaitre le nom du lieu en hover -->
+    <div class="hoverName" id="hoverName"></div>
   </section>
 </template>
 
 <script setup>
-import { onMounted, onActivated, onBeforeUnmount } from "vue";
+import { onMounted, onActivated, onBeforeUnmount, watch } from "vue";
 import "ol/ol.css";
 import Map from "ol/Map.js";
 import View from "ol/View.js";
@@ -37,17 +37,52 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRoute } from "vue-router";
 import { usePrestataireStore } from "@/services/prestataire.service";
-import { computed } from 'vue'
+import { useI18n } from "vue-i18n";
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 const route = useRoute();
-const locale = computed(() => route.params.lang || 'fr') // 'fr' ou 'en'
+const { locale } = useI18n();
 
 function getTranslatedName(name) {
-  if (typeof name === 'object' && name[locale.value] !== undefined) {  // .value !!!
-    return name[locale.value]
+  if (typeof name === "object" && name[locale.value] !== undefined) {
+    // .value !!!
+    return name[locale.value];
   }
-  return name
+  return name;
+}
+
+function normalizeTypeKey(typeValue, typeId = null) {
+  if (typeId === 1) return "animation";
+  if (typeId === 2) return "boutique";
+  if (typeId === 3) return "restauration";
+
+  const raw = getTranslatedName(typeValue);
+  if (!raw || typeof raw !== "string") return "boutique";
+
+  const normalized = raw.toLowerCase().trim();
+
+  if (
+    normalized === "restauration" ||
+    normalized === "food" ||
+    normalized === "catering" ||
+    normalized === "restoration"
+  ) {
+    return "restauration";
+  }
+
+  if (normalized === "animation" || normalized === "activity") {
+    return "animation";
+  }
+
+  if (
+    normalized === "boutique" ||
+    normalized === "shop" ||
+    normalized === "store"
+  ) {
+    return "boutique";
+  }
+
+  return "boutique";
 }
 
 const prestataireStore = usePrestataireStore();
@@ -73,7 +108,6 @@ let label = null;
 
 const nom_prestataire = ref("");
 const prestataires = ref([]);
-
 
 const tailleMap = [0, 0, 2000, 1600];
 const projection = new Projection({
@@ -249,7 +283,7 @@ const generalMap = [
   },
   {
     type: "generalZone",
-    name:  { fr: "Zone prestataire", en: "Provider Zone" },
+    name: { fr: "Zone prestataire", en: "Provider Zone" },
     image: "/MapPrestaDroite.png",
     cote: "droite",
     coord: [
@@ -302,7 +336,7 @@ const generalMap = [
     ],
   },
 ];
-//Terrains & Gradins 
+//Terrains & Gradins
 const landLocations = [
   {
     type: "court",
@@ -352,7 +386,7 @@ const landLocations = [
       [1044.26509630362, 677.7501285267031],
     ],
   },
-  // Gradin 
+  // Gradin
   {
     type: "stand",
     name: { fr: "Tribune Nord", en: "North Stand", id: "nord" },
@@ -513,7 +547,7 @@ const landLocations = [
   },
 ];
 
-// Gradins  
+// Gradins
 const NorthStand = [
   {
     type: "stand",
@@ -725,7 +759,7 @@ const WestStand = [
     ],
   },
 ];
-//Prestataires  
+//Prestataires
 const serviceLocation = ref([
   {
     id_zone: 1,
@@ -1860,12 +1894,9 @@ async function fetchPresta() {
       return;
     }
 
-    // CAS 1 : res.data existe
     if (res.data && Array.isArray(res.data)) {
       prestataires.value = res.data;
-    }
-
-    else if (Array.isArray(res)) {
+    } else if (Array.isArray(res)) {
       prestataires.value = res;
     } else {
       console.error("Structure inconnue", res);
@@ -1875,7 +1906,6 @@ async function fetchPresta() {
       return;
     }
 
-    
     if (prestataires.value.length > 0) {
       nomType.value = prestataires.value[0].nom_type_prestataire;
     }
@@ -1885,11 +1915,16 @@ async function fetchPresta() {
         const zone = serviceLocation.value.find(
           (z) => z.id_zone === presta.id_zone,
         );
-        
+
         if (zone) {
-          zone.nom_prestataire = presta.nom_prestataire;  // garde objet
+          zone.nom_prestataire = presta.nom_prestataire;
+          zone.name = presta.nom_prestataire; // garde objet
           zone.id_prestataire = presta.id_prestataire;
-          zone.type_prestataire = getTranslatedName(presta.nom_type_prestataire);  // traduit !
+          zone.type_prestataire_raw = presta.nom_type_prestataire;
+          zone.type_prestataire_key = normalizeTypeKey(
+            presta.nom_type_prestataire,
+            presta.type_prestataire_id,
+          );
         }
       }
     });
@@ -1914,12 +1949,26 @@ onBeforeUnmount(() => {
   window.removeEventListener("focus", fetchPresta);
 });
 
+watch(locale, async () => {
+  await fetchPresta();
+  if (currentMapType.value === "prestataires") {
+    changeMap("prestataires", null, currentMapCote.value);
+  }
+});
+
 //Pour créer les zones sur les maps
 function features(location) {
   return location.map((location) => {
+    const standId =
+      location.id ||
+      (location.name && typeof location.name === "object"
+        ? location.name.id
+        : null);
+
     const feature = new Feature({
       geometry: new Polygon([location.coord]),
       id: location.id_zone,
+      standId: standId,
       cote: location.cote,
       name: location.name,
       type: location.type,
@@ -2033,7 +2082,6 @@ onMounted(() => {
       label.style.display = "none";
     }
   });
-
   map.on("pointermove", (event) => {
     const searchFeature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
     const mapContainer = document.getElementById("map");
@@ -2047,9 +2095,12 @@ onMounted(() => {
         if (lastFeature.get("type") === "stand") {
           lastFeature.setStyle(standStyle);
         } else if (lastFeature.get("type") === "service") {
-          if (lastZone && lastZone.type_prestataire === "Restauration") {
+          if (lastZone && lastZone.type_prestataire_key === "restauration") {
             lastFeature.setStyle(restorationStyle);
-          } else if (lastZone && lastZone.type_prestataire === "Animation") {
+          } else if (
+            lastZone &&
+            lastZone.type_prestataire_key === "animation"
+          ) {
             lastFeature.setStyle(animationlStyle);
           } else {
             lastFeature.setStyle(providerStyle);
@@ -2063,13 +2114,21 @@ onMounted(() => {
     }
 
     if (searchFeature) {
-      const rawName = searchFeature.get("name");        // brut
-      const name = getTranslatedName(rawName);          // traduit
-
       const type = searchFeature.get("type");
+
+      let name;
+      if (type === "service") {
+        const zone = serviceLocation.value.find(
+          (z) => z.id_zone === searchFeature.get("id"),
+        );
+        name = zone?.nom_prestataire || searchFeature.get("name");
+      } else {
+        const rawName = searchFeature.get("name");
+        name = getTranslatedName(rawName);
+      }
+
       //C'est pour récupérer la position et les dimensions de la carte ( pour afficher le label au bon endroit )
       const bounds = mapContainer.getBoundingClientRect();
-
 
       label.style.display = "block";
 
@@ -2087,14 +2146,19 @@ onMounted(() => {
       label.style.top = y + "px";
 
       if (type === "service") {
-        const zone = serviceLocation.value.find((z) => z.id_zone === searchFeature.get("id"))
-        if (zone && zone.type_prestataire) {
-          label.innerHTML = `<div class="contentContener"><span class="title">${name}</span><br/><span class="subtitle">${zone.type_prestataire}</span></div>`;
+        const zone = serviceLocation.value.find(
+          (z) => z.id_zone === searchFeature.get("id"),
+        );
+        if (zone && zone.type_prestataire_key) {
+          label.innerHTML = `<div class="contentContener">
+      <span class="title">${zone.nom_prestataire || name}</span><br/>
+      <span class="subtitle">${getTranslatedName(zone.type_prestataire_raw)}</span>
+    </div>`;
         } else {
           label.innerText = name;
         }
       } else {
-        label.innerText = name;
+        label.innerText = name; // ← ajoute ce else pour les autres types
       }
 
       label.style.fontSize = "16px";
@@ -2105,16 +2169,18 @@ onMounted(() => {
         searchFeature.setStyle(standHoverStyle);
         label.style.backgroundColor = "#000000";
       } else if (searchFeature.get("type") === "service") {
-        const zone = serviceLocation.value.find((z) => z.id_zone === searchFeature.get("id"))
+        const zone = serviceLocation.value.find(
+          (z) => z.id_zone === searchFeature.get("id"),
+        );
 
-        if (zone && zone.type_prestataire) {
-          if (zone.type_prestataire === "Restauration") {
+        if (zone && zone.type_prestataire_key) {
+          if (zone.type_prestataire_key === "restauration") {
             searchFeature.setStyle(restorationHoverStyle);
             label.style.backgroundColor = "#800020";
-          } else if (zone.type_prestataire === "Animation") {
+          } else if (zone.type_prestataire_key === "animation") {
             searchFeature.setStyle(animationlHoverStyle);
             label.style.backgroundColor = "#5a189a";
-          } else if (zone.type_prestataire === "Boutique") {
+          } else if (zone.type_prestataire_key === "boutique") {
             searchFeature.setStyle(providerHoverStyle);
             label.style.backgroundColor = "#1F5E00";
           } else {
@@ -2159,7 +2225,8 @@ onMounted(() => {
           name: "Terrain",
           params: {
             id: terrainId,
-            lang: route.params.lang,
+            idMatch: 1,
+            lang: locale.value,
           },
         });
       }
@@ -2167,14 +2234,14 @@ onMounted(() => {
     }
 
     if (type === "stand") {
-      const standName = clickedFeature.get("id"); // ex: "nord"
-      let zone = standName;
+      const standName = clickedFeature.get("standId");
+      if (!standName) return;
 
       router.push({
         name: "Gradin",
         params: {
-          lang: route.params.lang,
-          zone: zone,
+          lang: locale.value,
+          zone: standName,
         },
       });
       return;
@@ -2188,7 +2255,7 @@ onMounted(() => {
         router.push({
           name: "ShowPrestataire",
           params: {
-            lang: route.params.lang,
+            lang: locale.value,
             id: zone.id_prestataire,
           },
         });
@@ -2284,12 +2351,12 @@ function changeMap(type, image = null, cote) {
     } else if (f.get("type") === "service") {
       const zoneName = f.get("name");
       const serviceZone = serviceLocation.value.find(
-        (z) => z.id_zone === f.get("id"), 
+        (z) => z.id_zone === f.get("id"),
       );
-      if (serviceZone && serviceZone.type_prestataire) {
-        if (serviceZone.type_prestataire === "Restauration") {
+      if (serviceZone && serviceZone.type_prestataire_key) {
+        if (serviceZone.type_prestataire_key === "restauration") {
           f.setStyle(restorationStyle);
-        } else if (serviceZone.type_prestataire === "Animation") {
+        } else if (serviceZone.type_prestataire_key === "animation") {
           f.setStyle(animationlStyle);
         } else {
           f.setStyle(providerStyle);
@@ -2340,7 +2407,13 @@ body::-webkit-scrollbar {
 
 .container-map {
   background-color: #f0f0f0;
-  background: linear-gradient(to bottom, var(--primary-color), #8aaf8f, #c5d9c7, #f0f0f0);
+  background: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    #8aaf8f,
+    #c5d9c7,
+    #f0f0f0
+  );
   min-height: 100vh;
 }
 
