@@ -40,9 +40,9 @@
         <div class="service_form_group">
           <div>
             <label>Visible :</label>
-            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="true"/>
+            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="true" />
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="false"/>
+            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="false" />
             <label>Non</label>
           </div>
         </div>
@@ -51,9 +51,9 @@
         <div class="service_form_group">
           <div>
             <label>Actif :</label>
-            <input type="radio" class="service_input_text" v-model="activate_service" :value="true"/>
+            <input type="radio" class="service_input_text" v-model="activate_service" :value="true" />
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="activate_service" :value="false"/>
+            <input type="radio" class="service_input_text" v-model="activate_service" :value="false" />
             <label>Non</label>
           </div>
         </div>
@@ -70,7 +70,7 @@
         <!-- Bouton principal -->
         <div class="service_submit">
           <button class="btn_service_submit" @click="addServiceToPrestataire()">
-            ✓ Ajouter vos 
+            ✓ Ajouter vos
             <span v-if="isActivityService">
               activités
             </span>
@@ -83,6 +83,19 @@
       </div>
     </template>
   </Modal>
+
+  <v-dialog v-model="showLeaveDialog" max-width="500">
+    <v-card title="Quitter la page ?">
+      <v-card-text>
+        Vous avez des modifications non sauvegardées. Si vous quittez cette page, toutes vos données seront perdues.
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text="Rester sur la page" @click="cancelLeave()"></v-btn>
+        <v-btn color="error" text="Quitter quand même" @click="confirmLeave()"></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
 
   <section class="container">
@@ -103,8 +116,8 @@
         <div class="type_prestataire">
           <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
             <!-- Bouton de sélection du type de prestataire -->
-            <button class="button_type_presta pointer" @click="selectTypePresta(index)" :disabled="continueInscription_service"
-              :class="selectedIndex_presta === index ? 'button_selected' : ''">
+            <button class="button_type_presta pointer" @click="selectTypePresta(index)"
+              :disabled="continueInscription_service" :class="selectedIndex_presta === index ? 'button_selected' : ''">
               {{ item.nom_type_prestataire[locale] }}
             </button>
           </div>
@@ -290,7 +303,7 @@ const router = useRouter();
 
 
 // ── Store Refs ───────────────────────────────────
-const { 
+const {
   nom, descri, mail, tel,
   nomService, descriService, besoinService,
   visiblePublic, activate,
@@ -315,6 +328,8 @@ const message = ref("");
 const messageType = ref("success");
 const isFrench = ref(true);
 const isSubmitting = ref(false);
+const showLeaveDialog = ref(false);
+const pendingNavigation = ref(null);
 
 // -- Services --
 const isActivityService = ref(false);
@@ -417,10 +432,22 @@ watch(checkedItem_presta, (v) => { if (!isSyncing.value) checkedItem.value = v; 
 watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscription.value = v; });
 
 // ── onBeforeRouteLeave ────────────────────────────────────
-onBeforeRouteLeave((to) => {
-  if (to.name !== "AddByService") {
+onBeforeRouteLeave((to, from, next) => {
+  if (to.name === "AddByService") {
     prestataireInfoStore.clearStore();
+    next();
+    return;
   }
+
+  const hasData = nom_presta.value || descri_presta.value || mail_presta.value || services.value.length > 0;
+  if (!hasData) {
+    prestataireInfoStore.clearStore();
+    next();
+    return;
+  }
+
+  pendingNavigation.value = next;
+  showLeaveDialog.value = true;
 });
 
 // ── onMounted ────────────────────────────────────
@@ -499,6 +526,23 @@ function hideContinueInscription() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   });
+}
+
+function cancelLeave() {
+  showLeaveDialog.value = false;
+  if (pendingNavigation.value) {
+    pendingNavigation.value(false);
+    pendingNavigation.value = null;
+  }
+}
+
+function confirmLeave() {
+  showLeaveDialog.value = false;
+  prestataireInfoStore.clearStore();
+  if (pendingNavigation.value) {
+    pendingNavigation.value();
+    pendingNavigation.value = null;
+  }
 }
 
 
@@ -676,7 +720,7 @@ async function getValuesPrestataire() {
 
   try {
     const res = await prestataireStore.GetPrestataireById(prestaId.value);
-  console.log("réponse API:", res.data);
+    console.log("réponse API:", res.data);
 
     const presta = res.data.prestataire;
     const prestaServices = res.data.services;
