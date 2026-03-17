@@ -1,138 +1,298 @@
-const pool = require("./db");
-
-(async () => {
-  try {
-    const insertEvenement = `
-      INSERT INTO Evenement
-      (nom_evenement, color_title, text_font, image_evenement, descri_evenement)
-      VALUES
-      (
+INSERT INTO
+    Evenement (
+        nom_evenement,
+        color_title,
+        text_font,
+        image_evenement,
+        descri_evenement
+    )
+VALUES
+    (
         'Mintonette Cup',
         '#ffffff',
         'Meie Script',
         '/photo_fond.png',
-        $$
-        {
-          "fr": {
-            "texte": "Le grand <b>tournoi de Volley mondial</b> Mintonette Cup arrive <b>à Montpellier</b> ! Notre troisième édition s'annonce folle.<br>Vous êtes <b>adèpte de volley-ball</b>, aimez suivre de <b>grands évenements sportifs</b> qui regroupent <b>passionnés</b> et <b>bonne ambiance</b> ? <b>La Mintonnette Cup vous attend !</b><br>Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une <b>ambiance débordante</b>.<br>On vous attends dans les gradins !<br>"
-          },
-          "en": {
-            "texte": "The great <b>world Volleyball tournament</b> Mintonette Cup is coming <b>to Montpellier</b>! Our third edition promises to be amazing.<br>Are you a <b>sports enthusiast</b>, do you love following <b>major sporting events</b> that bring together <b>passionate fans</b> and <b>a great atmosphere</b>? <b>The Mintonette Cup awaits you !</b><br>On the agenda: <b>thrilling matches</b>, an <b>amazing audience</b> and a <b>bustling atmosphere</b>.<br>We look forward to seeing you in the stands !<br>"
-          }
-        }
-        $$::jsonb
-      );
-      `;
+        '{"fr": {"texte": "Le grand <b>tournoi de Volley mondial</b> Mintonette Cup arrive <b>à Montpellier</b> ! Notre troisième édition s''annonce folle.<br>Vous êtes <b>adèpte de volley-ball</b>, aimez suivre de <b>grands évenements sportifs</b> qui regroupent <b>passionnés</b> et <b>bonne ambiance</b> ? <b>La Mintonnette Cup vous attend !</b><br>Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une <b>ambiance débordante</b>.<br>On vous attends dans les gradins !<br>"}, "en": {"texte": "The great <b>world Volleyball tournament</b> Mintonette Cup is coming <b>to Montpellier</b>! Our third edition promises to be amazing.<br>Are you a <b>sports enthusiast</b>, do you love following <b>major sporting events</b> that bring together <b>passionate fans</b> and <b>a great atmosphere</b>? <b>The Mintonette Cup awaits you !</b><br>On the agenda: <b>thrilling matches</b>, an <b>amazing audience</b> and a <b>bustling atmosphere</b>.<br>We look forward to seeing you in the stands !<br>"}}'::jsonb
+    );
 
-    await pool.query(insertEvenement);
+INSERT INTO
+    Utilisateur (
+        prenom_utilisateur,
+        nom_utilisateur,
+        login_utilisateur,
+        mdp_utilisateur,
+        mail_utilisateur,
+        tel_utilisateur,
+        sexe_utilisateur,
+        ispresta,
+        isadmin
+    )
+VALUES
+    (
+        'Alban',
+        'Robin',
+        'albanr',
+        '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq',
+        'alban70robin@gmail.com',
+        '0763749895',
+        'M',
+        FALSE,
+        TRUE
+    ),
+    (
+        'Emma',
+        'Durand',
+        'emmad',
+        '$2b$10$QZUK7Ed97ZzAjQzUrzzTHuzh2pfRT/iPYPttR4CaIfaQKYZQRTxO6',
+        'emma.durand@gmail.com',
+        '0612345678',
+        'F',
+        TRUE,
+        FALSE
+    ),
+    (
+        'Lucas',
+        'Martin',
+        'lucasm',
+        '$2b$10$SqwwG.GoZgR/bxl2IZ49U.tNkpkMhMpBIbA2yQE3lF/qG9QHktGQ6',
+        'lucas.martin@gmail.com',
+        '0652437595',
+        'M',
+        TRUE,
+        FALSE
+    ),
+    (
+        'Chloe',
+        'Petit',
+        'chloep',
+        '$2b$10$GGtE3KIzPl6Soav1tutWtOEgajIowmwP9uJIwb/QsRJZBsLmd8/62',
+        'chloe.petit@gmail.com',
+        '0610423571',
+        'F',
+        TRUE,
+        FALSE
+    ),
+    (
+        'Nathan',
+        'Dupont',
+        'nathand',
+        '$2b$10$X1l9xYZpXcXlgwCtbfRsheTndo2qcc9nYvf/RiVgB7uU2L8/AOo7.',
+        'nathan.dupont@gmail.com',
+        '0752435010',
+        'M',
+        FALSE,
+        FALSE
+    ),
+    (
+        'Julie',
+        'Bernard',
+        'julieb',
+        '$2b$10$wD/ncJrAaw5bL5ja38nxtOBXm2ZA1ZJ33rv4NifrPeWNKZSFDuoNO',
+        'julie.bernard@gmail.com',
+        '0630102040',
+        'F',
+        FALSE,
+        FALSE
+    ),
+    (
+        'Sophie',
+        'Moreau',
+        'sophiem',
+        '$2b$10$Z42qZv1Iqjw41dgirvwJP.K6QbGDRR1uX.OeQJQTdwjNhfSw/w1kS',
+        'sophie.moreau@gmail.com',
+        '0693759150',
+        'F',
+        FALSE,
+        FALSE
+    ),
+    (
+        'Maxime',
+        'Lefevre',
+        'maxl',
+        '$2b$10$TfJqSCXzfqDHYoqSustMperZj7Dl3bb5AemeSPRMVwbocJrQ.Oob6',
+        'maxime.lefevre@gmail.com',
+        '0630102040',
+        'M',
+        FALSE,
+        FALSE
+    ),
+    (
+        'Camille',
+        'Roux',
+        'camr',
+        '$2b$10$9Osya.DbkM5Si/Zg0DiwhuCT9IXwE5PUDwQ2iBc3beuwQOqcMFwiq',
+        'camille.roux@gmail.com',
+        '0750402342',
+        'F',
+        FALSE,
+        FALSE
+    ),
+    (
+        'Thomas',
+        'Garcia',
+        'thomg',
+        '$2b$10$nWMa6gw35daf2xJI4sbFHe7AWVbcO9Djd1t1ZzkYnYn56KlkGY3T.',
+        'thomas.garcia@gmail.com',
+        '0682759641',
+        'M',
+        FALSE,
+        FALSE
+    ),
+    (
+        'f',
+        'f',
+        'f',
+        '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy',
+        'f.f@gmail.com',
+        '0768401922',
+        'M',
+        FALSE,
+        FALSE
+    );
 
-    const insertUsers = `
-      INSERT INTO Utilisateur 
-        (prenom_utilisateur, nom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur, ispresta, isadmin)
-      VALUES
-        ('Alban', 'Robin', 'albanr', '$2b$10$JealGklfPfDgZl1cWuQp3.eLGlL12k8HsWp2Eq52wMITcSWUD44cq', 'alban70robin@gmail.com', '0763749895', 'M', FALSE, TRUE),
-        ('Emma', 'Durand', 'emmad', '$2b$10$QZUK7Ed97ZzAjQzUrzzTHuzh2pfRT/iPYPttR4CaIfaQKYZQRTxO6', 'emma.durand@gmail.com', '0612345678', 'F', TRUE, FALSE),
-        ('Lucas', 'Martin', 'lucasm', '$2b$10$SqwwG.GoZgR/bxl2IZ49U.tNkpkMhMpBIbA2yQE3lF/qG9QHktGQ6', 'lucas.martin@gmail.com', '0652437595', 'M', TRUE, FALSE),
-        ('Chloe', 'Petit', 'chloep', '$2b$10$GGtE3KIzPl6Soav1tutWtOEgajIowmwP9uJIwb/QsRJZBsLmd8/62', 'chloe.petit@gmail.com', '0610423571', 'F', TRUE, FALSE),
-        ('Nathan', 'Dupont', 'nathand', '$2b$10$X1l9xYZpXcXlgwCtbfRsheTndo2qcc9nYvf/RiVgB7uU2L8/AOo7.', 'nathan.dupont@gmail.com', '0752435010', 'M', FALSE, FALSE),
-        ('Julie', 'Bernard', 'julieb', '$2b$10$wD/ncJrAaw5bL5ja38nxtOBXm2ZA1ZJ33rv4NifrPeWNKZSFDuoNO', 'julie.bernard@gmail.com', '0630102040', 'F', FALSE, FALSE),
-        ('Sophie', 'Moreau', 'sophiem', '$2b$10$Z42qZv1Iqjw41dgirvwJP.K6QbGDRR1uX.OeQJQTdwjNhfSw/w1kS', 'sophie.moreau@gmail.com', '0693759150', 'F', FALSE, FALSE),
-        ('Maxime', 'Lefevre', 'maxl', '$2b$10$TfJqSCXzfqDHYoqSustMperZj7Dl3bb5AemeSPRMVwbocJrQ.Oob6', 'maxime.lefevre@gmail.com', '0630102040', 'M', FALSE, FALSE),
-        ('Camille', 'Roux', 'camr', '$2b$10$9Osya.DbkM5Si/Zg0DiwhuCT9IXwE5PUDwQ2iBc3beuwQOqcMFwiq', 'camille.roux@gmail.com', '0750402342', 'F', FALSE, FALSE),
-        ('Thomas', 'Garcia', 'thomg', '$2b$10$nWMa6gw35daf2xJI4sbFHe7AWVbcO9Djd1t1ZzkYnYn56KlkGY3T.', 'thomas.garcia@gmail.com', '0682759641', 'M', FALSE, FALSE),
-        ('f', 'f', 'f', '$2b$10$pCnEX05CtGo4eqxHontD7.rshyasZbTanv5WNzkjTB3uXSyZTfpUy', 'f.f@gmail.com', '0768401922', 'M', FALSE, FALSE);
-    `;
-    await pool.query(insertUsers);
+INSERT INTO
+    Type_Message (nom_type_message)
+VALUES
+    ('Demande pour devenir prestataire'),
+    ('Demande pour modifier son profil prestataire'),
+    ('Achat de billets'),
+    ('Remboursement');
 
-    const insertTypeMessage = `
-      INSERT INTO Type_Message (nom_type_message)
-      VALUES 
-      ('Demande pour devenir prestataire'),
-      ('Demande pour modifier son profil prestataire'),
-      ('Achat de billets'),
-      ('Remboursement')
-    `;
-    await pool.query(insertTypeMessage);
+INSERT INTO
+    Mailbox_Message (
+        subject,
+        message,
+        type_message_id,
+        sender_id,
+        recipient_id
+    )
+VALUES
+    (
+        'Demande d''information',
+        'Bonjour, je souhaiterais avoir plus de détails sur la compétition.',
+        1,
+        2,
+        1
+    );
 
-    const insertMailbox = `
-    INSERT INTO Mailbox_Message (subject, message, type_message_id, sender_id, recipient_id)
-    VALUES 
-    ('Demande d’information', 'Bonjour, je souhaiterais avoir plus de détails sur la compétition.', 1, 2, 1);`;
+INSERT INTO
+    Terrain (nom_terrain)
+VALUES
+    ('Terrain 1'),
+    ('Terrain 2'),
+    ('Terrain 3'),
+    ('Terrain 4');
 
-    await pool.query(insertMailbox);
+INSERT INTO
+    Type_animation (nom_type_animation)
+VALUES
+    ('Animation musicale'),
+    ('Show artistique'),
+    ('Animation public'),
+    ('Animation sportive'),
+    ('Animation festive'),
+    ('Média / Photo / Vidéo'),
+    ('Technique / Son & lumière');
+INSERT INTO
+    Type_restauration (nom_type_restauration)
+VALUES
+    ('Restauration chaude'),
+    ('Restauration saine / végétarienne / vegan'),
+    ('Boissons et rafraîchissements'),
+    ('Desserts et gourmandises'),
+    ('Food trucks / street food');
 
-    const insertTerrains = `
-    INSERT INTO Terrain (nom_terrain) VALUES
-      ('Terrain 1'),
-      ('Terrain 2'),
-      ('Terrain 3'),
-      ('Terrain 4');
-    `;
-    await pool.query(insertTerrains);
+INSERT INTO
+    Type_boutique (nom_type_boutique)
+VALUES
+    ('Vêtements et accessoires'),
+    ('Objets et souvenirs'),
+    ('Livres et supports média'),
+    ('Articles créatifs / personnalisables');
 
-    const insertTypeAnimation = `
-    INSERT INTO Type_animation (nom_type_animation) VALUES
-      ('Animation musicale'),
-      ('Show artistique'),
-      ('Animation public'),
-      ('Animation sportive'),
-      ('Animation festive'),
-      ('Média / Photo / Vidéo'),
-      ('Technique / Son & lumière')  
-    `;
-    await pool.query(insertTypeAnimation);
-
-    const insertTypeRestauration = `
-    INSERT INTO Type_restauration (nom_type_restauration) VALUES
-      ('Restauration chaude'),
-      ('Restauration saine / végétarienne / vegan'),
-      ('Boissons et rafraîchissements'),
-      ('Desserts et gourmandises'),
-      ('Food trucks / street food')
-    `;
-    await pool.query(insertTypeRestauration);
-
-    const insertTypeBoutique = `
-    INSERT INTO Type_boutique (nom_type_boutique) VALUES
-      ('Vêtements et accessoires'),
-      ('Objets et souvenirs'),
-      ('Livres et supports média'),
-      ('Articles créatifs / personnalisables')
-    `;
-    await pool.query(insertTypeBoutique);
-
-    const insertTypePrestataire = `
-    INSERT INTO Type_prestataire (nom_type_prestataire, is_activity) VALUES
-      ('{
+INSERT INTO
+    Type_prestataire (nom_type_prestataire, is_activity)
+VALUES
+    (
+        '{
         "fr": "Animation",
         "en": "Activity"
-      }', true),
-      ('{
+      }',
+        true
+    ),
+    (
+        '{
         "fr": "Boutique",
         "en": "Shop"
-      }', false),
-      ('{
+      }',
+        false
+    ),
+    (
+        '{
         "fr": "Restauration",
         "en": "Food"
-      }', false);
-    `;
-    await pool.query(insertTypePrestataire);
+      }',
+        false
+    );
 
-    const insertPrestataire = `
-    INSERT INTO Prestataire (nom_prestataire, descri_prestataire, mail_prestataire, tel_prestataire, waitingforadmin, specificite, message_ajout, id_utilisateur, type_prestataire_id, id_zone) VALUES
-      ('FoodExpress', 'Service de restauration rapide pour événements', 'contact@foodexpress.com', '0123456789', false, 'Animation festive', true, 2, 3, 1),
-      ('AnimEvent', 'Animations pour tous types d’événements', 'contact@animevent.com', '0987654321', false, 'Livres et supports média', true, 3, 1, 22),
-      ('SportMerch', 'Boutique spécialisée en articles sportifs', 'contact@sportmerch.com', '0112233445', false, 'Vêtements et accessoires', true, 4, 2, 4);
-    `;
-    await pool.query(insertPrestataire);
+INSERT INTO
+    Prestataire (
+        nom_prestataire,
+        descri_prestataire,
+        mail_prestataire,
+        tel_prestataire,
+        waitingforadmin,
+        specificite,
+        message_ajout,
+        id_utilisateur,
+        type_prestataire_id,
+        id_zone
+    )
+VALUES
+    (
+        'FoodExpress',
+        'Service de restauration rapide pour événements',
+        'contact@foodexpress.com',
+        '0123456789',
+        false,
+        'Animation festive',
+        true,
+        2,
+        3,
+        1
+    ),
+    (
+        'AnimEvent',
+        'Animations pour tous types d''événements',
+        'contact@animevent.com',
+        '0987654321',
+        false,
+        'Livres et supports média',
+        true,
+        3,
+        1,
+        22
+    ),
+    (
+        'SportMerch',
+        'Boutique spécialisée en articles sportifs',
+        'contact@sportmerch.com',
+        '0112233445',
+        false,
+        'Vêtements et accessoires',
+        true,
+        4,
+        2,
+        4
+    );
 
-    const insertServices = `
-      INSERT INTO Services 
+
+INSERT INTO Services 
       (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
       (
         'Stand de burgers sur place',
         '{
-          "fr": { "texte": "Profitez d’un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>." },
+          "fr": { "texte": "Profitez d''un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>." },
           "en": { "texte": "Enjoy a <b>freshly prepared burger stand</b> with quality ingredients.<br>An ideal solution for <b>quick and friendly catering</b>." }
         }',
         true,
@@ -152,7 +312,7 @@ const pool = require("./db");
         }',
         true,
         '{
-          "fr": "Point d’eau requis à proximité",
+          "fr": "Point d''eau requis à proximité",
           "en": "Nearby water access required"
         }',
         false,
@@ -162,7 +322,7 @@ const pool = require("./db");
       (
         'Restauration rapide événementielle',
         '{
-          "fr": { "texte": "Une solution de <b>restauration rapide pensée pour l’événementiel</b>, efficace même lors de fortes affluences." },
+          "fr": { "texte": "Une solution de <b>restauration rapide pensée pour l''événementiel</b>, efficace même lors de fortes affluences." },
           "en": { "texte": "A <b>fast food catering solution designed for events</b>, even during high attendance." }
         }',
         false,
@@ -280,9 +440,9 @@ const pool = require("./db");
       ),
 
       (
-        'Vente d’accessoires sportifs',
+        'Vente d''accessoires sportifs',
         '{
-          "fr": { "texte": "Une sélection d’<b>accessoires sportifs</b> pour compléter votre équipement." },
+          "fr": { "texte": "Une sélection d''<b>accessoires sportifs</b> pour compléter votre équipement." },
           "en": { "texte": "A selection of <b>sports accessories</b> to complete your equipment." }
         }',
         false,
@@ -297,7 +457,7 @@ const pool = require("./db");
       (
         'Boutique éphémère événementielle',
         '{
-          "fr": { "texte": "Une <b>boutique temporaire</b> pour offrir une expérience d’achat immersive lors de votre événement." },
+          "fr": { "texte": "Une <b>boutique temporaire</b> pour offrir une expérience d''achat immersive lors de votre événement." },
           "en": { "texte": "A <b>temporary pop-up store</b> offering an immersive shopping experience." }
         }',
         true,
@@ -308,12 +468,9 @@ const pool = require("./db");
         true,
         3
       );
-      `;
 
-    await pool.query(insertServices);
 
-    const insertArticles = `
-    INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
+INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
       ('Maillot Mintonette Cup 2026', 150, 49.99, 9),
       ('Short de volley officiel', 100, 29.99, 9),
       ('Casquette Mintonette Cup', 200, 19.99, 9),
@@ -340,11 +497,9 @@ const pool = require("./db");
       ('Barre chocolatée', 350, 1.50, 4),
       ('Madeleine individuelle', 300, 1.00, 4),
       ('Mix apéritif 100g', 250, 3.00, 4);
-    `;
-    await pool.query(insertArticles);
 
-    const insertActivite = `
-    INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES
+
+INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES
       ('Initiation au volley-ball', 12, 15.00, '2026-07-15T10:00:00', 7),
       ('Tournoi 3x3 amateur', 24, 10.00, '2026-07-15T14:00:00', 7),
       ('Séance de dédicaces joueurs', 30, 25.00, '2026-07-16T11:00:00', 8),
@@ -352,11 +507,9 @@ const pool = require("./db");
       ('Photo avec le trophée', 1, 5.00, '2026-07-15T09:00:00', 8),
       ('Quiz volley géant', 50, 0.00, '2026-07-17T18:00:00', 6),
       ('Parcours de réception ballon', 6, 12.00, '2026-07-17T10:00:00', 7);
-    `;
-    await pool.query(insertActivite);
 
-    const insertPays = `
-    INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES
+
+INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES
     ('France', 'Bleu / Blanc', 'José le portemanteau', true, 1),
     ('Allemagne', 'Noir / Rouge', 'Adler', true, 1),
     ('Argentine', 'Bleu ciel / Blanc', 'El Cóndor', true, 1),
@@ -368,7 +521,7 @@ const pool = require("./db");
     ('États-Unis', 'Bleu marine / Rouge', 'Stars & Stripes Eagle', true, 1),
     ('Slovénie', 'Bleu‑clair / Blanc', 'Le Lynx Slovène', true, 1),
     ('Iran', 'Vert / Blanc', 'Le Lion Perse', true, 1),
-    ('Ukraine', 'Bleu / Jaune', 'L’Ourson Bleu‑Jaune', true, 1),
+    ('Ukraine', 'Bleu / Jaune', 'L''Ourson Bleu‑Jaune', true, 1),
     ('Chine', 'Rouge / Jaune', 'Le Dragon Rouge', true, 1),
     ('Japon', 'Blanc / Rouge', 'Le Samouraï Rouge', true, 1),
     ('Pologne', 'Blanc / Rouge', 'La Bête Blanche', true, 1),
@@ -379,30 +532,24 @@ const pool = require("./db");
     ('Espagne', 'Rouge / Jaune', 'Le Taureau Furia', false, 1),
     ('Angleterre', 'Blanc / Bleu', 'Le Lion Britannique', false, 1),
     ('Thaïlande', 'Bleu / Rouge', 'Le Garuda Bleu', false, 1),
-    ('Kazakhstan', 'Bleu ciel / Jaune', 'L’Aigle d’Or', false, 1),
+    ('Kazakhstan', 'Bleu ciel / Jaune', 'L''Aigle d''Or', false, 1),
     ('Corée du Sud', 'Blanc / Rouge', 'Le Tigre Blanc', false, 1),
     ('Croatie', 'Rouge / Blanc', 'Le Damier Croate', false, 1),
-    ('Russie', 'Blanc / Rouge', 'L’Ours Rouge', false, 1),    
+    ('Russie', 'Blanc / Rouge', 'L''Ours Rouge', false, 1),    
     ('Égypte', 'Rouge / Blanc ', 'Le Faucon du Nil', false, 1),
     ('République tchèque', 'Rouge / Blanc', 'Le Lion de Bohême', false, 1),
-    ('Estonie', 'Bleu / Noir', 'L’Hirondelle Baltique', false, 1),
+    ('Estonie', 'Bleu / Noir', 'L''Hirondelle Baltique', false, 1),
     ('Grèce', 'Bleu / Blanc', 'Le Phénix Hellénique', false, 1),
     ('Tunisie', 'Rouge / Blanc', 'Le Scorpion Rouge', false, 1),
     ('Saint‑Marin', 'Bleu / Blanc', 'Le Gardien du Roc', false, 1);
-    `;
 
-    await pool.query(insertPays);
 
-    const insertZone = `
-    INSERT INTO Zone (id_zone) VALUES
+INSERT INTO Zone (id_zone) VALUES
     (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16),
-    (17), (18), (19), (20), (21), (22), (23), (24), (25), (26), (27), (28), (29), (30), (31), (32)
-    `;
+    (17), (18), (19), (20), (21), (22), (23), (24), (25), (26), (27), (28), (29), (30), (31), (32);
 
-    await pool.query(insertZone);
 
-    const insertEquipes = `
-    INSERT INTO Equipe (sexe_equipe, nb_joueurs, id_pays, entraineur) VALUES
+INSERT INTO Equipe (sexe_equipe, nb_joueurs, id_pays, entraineur) VALUES
     ('Homme', 14, 1, 'Andrea Giani'),  -- France
     ('Homme', 14, 2, 'Michał Winiarski'),  -- Allemagne
     ('Homme', 14, 3, 'Marcelo Méndez'),  -- Argentine
@@ -467,12 +614,9 @@ const pool = require("./db");
     ('Femme', 12, 30, NULL), -- Grèce
     ('Femme', 12, 31, NULL), -- Tunisie
     ('Femme', 12, 32, NULL); -- Saint Marin
-    `;
 
-    await pool.query(insertEquipes);
 
-    const insertMatchs = `
-      INSERT INTO Match (id_terrain, id_equipe1, id_equipe2, date_match) VALUES
+INSERT INTO Match (id_terrain, id_equipe1, id_equipe2, date_match) VALUES
       -- Terrain 1 (4 matchs)
       (1, 1, 5, '2026-06-06 10:00:00'),    -- France vs Canada
       (1, 2, 18, '2026-06-06 14:00:00'),   -- Allemagne vs Turquie
@@ -496,11 +640,9 @@ const pool = require("./db");
       (4, 14, 30, '2026-06-09 14:00:00'),  -- Japon vs Grèce
       (4, 15, 31, '2026-06-09 18:00:00'),  -- Pologne vs Tunisie
       (4, 16, 32, '2026-06-09 21:00:00');  -- Serbie vs Saint-Marin
-  `;
-    await pool.query(insertMatchs);
 
-    const insertJoueurEquipe = `
-    INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe, photo) VALUES
+
+INSERT INTO Joueur (nom_joueur, prenom_joueur, sexe_joueur, date_naissance_joueur, taille, numero_joueur, pays, poste, id_equipe, photo) VALUES
     -- France
     ('Ngapeth', 'Earvin', 'Masculin', '1991-02-12', 1.96, 9, 'France', 'Attaquant', 1, 'Ngapeth.png'),
     ('Grebennikov', 'Jenia', 'Masculin', '1990-08-13', 1.87, 3, 'France', 'Libero', 1, 'Grebennikov.png'),
@@ -1022,60 +1164,10 @@ const pool = require("./db");
 ('Masoutis', 'Thodoris', 'Masculin', '1996-01-18', 1.86, 6, 'Grèce', 'Libero', 32, NULL),
 ('Petreas', 'Andreas', 'Masculin', '1998-04-09', 1.99, 2, 'Grèce', 'Receveur-Attaquant', 32, NULL),
 ('Mouchlias', 'Stefanos', 'Masculin', '1994-06-28', 2.02, 14, 'Grèce', 'Central', 32, NULL);
-    `;
 
-    await pool.query(insertJoueurEquipe);
 
-    const insertClassementPoule = `
-    INSERT INTO ClassementPoule
-    (id_equipe, poule, matchs_joues, victoires, defaites, points, sets_gagnes, sets_perdus, points_pour, points_contre, qualifie)
-    VALUES
-    -- Poule A
-    (1, 'A', 6, 4, 2, 10, 14, 6, 300, 240, TRUE),
-    (2, 'A', 6, 3, 3, 6, 10, 12, 280, 290, TRUE),
-    (23, 'A', 6, 2, 4, 2, 4, 16, 220, 300, FALSE),
-    (26, 'A', 6, 1, 5, -2, 2, 12, 200, 260, FALSE),
-    -- Poule B
-    (14, 'B', 6, 4, 2, 10, 18, 4, 320, 240, TRUE),
-    (8, 'B', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
-    (29, 'B', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
-    (32, 'B', 6, 0, 6, -6, 4, 14, 240, 320, FALSE),
-    -- Poule C
-    (7, 'C', 6, 6, 0, 18, 16, 2, 310, 230, TRUE),
-    (16, 'C', 6, 4, 2, 10, 12, 6, 290, 250, TRUE),
-    (19, 'C', 6, 2, 4, 2, 8, 14, 260, 280, FALSE),
-    (31, 'C', 6, 0, 6, -6, 4, 14, 240, 310, FALSE),
-    -- Poule D
-    (3, 'D', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
-    (6, 'D', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
-    (17, 'D', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
-    (25, 'D', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
-    -- Poule E
-    (4, 'E', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
-    (12, 'E', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
-    (22, 'E', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
-    (28, 'E', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
-    -- Poule F
-    (10, 'F', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
-    (18, 'F', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
-    (21, 'F', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
-    (27, 'F', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
-    -- Poule G
-    (15, 'G', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
-    (9, 'G', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
-    (13, 'G', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
-    (30, 'G', 6, 0, 6, -6, 4, 16, 240, 320, FALSE),
-    -- Poule H
-    (5, 'H', 6, 6, 0, 18, 18, 4, 320, 240, TRUE),
-    (11, 'H', 6, 4, 2, 10, 14, 8, 300, 260, TRUE),
-    (20, 'H', 6, 2, 4, 2, 10, 14, 280, 290, FALSE),
-    (24, 'H', 6, 0, 6, -6, 4, 16, 240, 320, FALSE);
-    `;
 
-    await pool.query(insertClassementPoule);
-
-    const insertSiege = `
-    INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, id_utilisateur, zone, match_id) VALUES
+INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, id_utilisateur, zone, match_id) VALUES
     ('A', 1,  FALSE, NULL, 'NORD', 1), ('A', 2, FALSE,  NULL, 'NORD', 1), ('A', 3, FALSE,  NULL, 'NORD', 1), ('A', 4,  FALSE, NULL, 'NORD', 1),
     ('A', 5,  FALSE, NULL, 'NORD', 1), ('A', 6,  FALSE, NULL, 'NORD', 1), ('A', 7,  FALSE, NULL, 'NORD', 1), ('A', 8,  FALSE, NULL, 'NORD', 1),
     ('A', 9,  FALSE, NULL, 'NORD', 1), ('A', 10,  FALSE, NULL, 'NORD', 1), ('A', 11,  FALSE, NULL, 'NORD', 1), ('A', 12, FALSE, NULL, 'NORD', 1),
@@ -1639,13 +1731,19 @@ const pool = require("./db");
 
 ('I', 1, FALSE, NULL, 'OUEST', 16), ('I', 2, FALSE, NULL, 'OUEST', 16), ('I', 3, FALSE, NULL, 'OUEST', 16), ('I', 4, FALSE, NULL, 'OUEST', 16);
 
-`;
-    await pool.query(insertSiege);
 
-    console.log("Données insérées !");
-  } catch (err) {
-    console.error("Erreur :", err);
-  } finally {
-    await pool.end();
-  }
-})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
