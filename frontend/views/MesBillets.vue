@@ -2,7 +2,7 @@
   <div class="mes-billets-page">
     <NavView />
     <div class="content">
-      <h1>Mes billets</h1>
+      <h1>{{ $t("billet.mesBillets") }}</h1>
 
       <div v-if="!userStore.isConnected" class="empty">
         <p>Veuillez vous connecter pour consulter vos billets.</p>
@@ -12,26 +12,26 @@
         <div v-if="error" class="error">{{ error }}</div>
         <div v-else>
           <div v-if="billets.length === 0" class="empty">
-            <p>Vous n'avez aucun billet réservé.</p>
+            <p>{{ $t("billet.aucunBillets") }}</p>
           </div>
 
           <table v-else class="billets-table">
             <thead>
               <tr>
-                <th>Zone</th>
-                <th>Match</th>
-                <th>Place</th>
-                <th>Date</th>
-                <th>Heure</th>
-                <th>Prix</th>
-                <th>Action</th>
+                <th>{{ $t("billet.Zone") }}</th>
+                <th>{{ $t("billet.Match") }}</th>
+                <th>{{ $t("billet.Place") }}</th>
+                <th>{{ $t("billet.Date") }}</th>
+                <th>{{ $t("billet.Heure") }}</th>
+                <th>{{ $t("billet.Prix") }}</th>
+                <th>{{ $t("billet.Action") }}</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(b, index) in billets" :key="index">
                 <td>{{ b.zone }}</td>
                 <!-- <td>{{ b }}</td> -->
-                <td>{{ b.equipe1 }} VS {{ b.equipe2 }}</td> 
+                <td>{{ b.equipe1 }} VS {{ b.equipe2 }}</td>
                 <td>{{ b.numero_colonne }}{{ b.numero_ligne }}</td>
                 <td>{{ formatDate(b.date_match) }}</td>
                 <td>
@@ -57,14 +57,14 @@
             <p></p>
           </div>
           <div v-else>
-             <router-link
-            :to="{
-              name: 'Remboursement',
-              params: { lang: $route.params.lang },
-            }"
-            class="btn btn-checkout">
-            Se faire rembourser
-          </router-link>
+            <router-link
+              :to="{
+                name: 'Remboursement',
+                params: { lang: $route.params.lang },
+              }"
+              class="btn btn-checkout">
+              {{ $t("billet.remboursement") }}
+            </router-link>
           </div>
         </div>
       </div>
@@ -79,10 +79,12 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { usePanierStore } from "@/services/panier.service";
+import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 
 const router = useRouter();
+const { locale } = useI18n();
 const userStore = useUserStore();
 const panierStore = usePanierStore();
 const billets = ref([]);
@@ -96,10 +98,13 @@ function getPrice(seat) {
 }
 function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString("fr-FR", {
+  const currentLocale = locale.value === "en" ? "en-GB" : "fr-FR";
+
+  return date.toLocaleDateString(currentLocale, {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 

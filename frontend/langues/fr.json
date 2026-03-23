@@ -292,5 +292,17 @@
     "zoneLabel": "Zone {zone}",
     "viderPanier": "Vider le panier",
     "procederPayement": "Procéder au payement"
+  },
+  "billet": {
+    "mesBillets": "Mes billets",
+    "aucunBillets": "Vous n'avez aucun billet réservé.",
+    "remboursement": "Se faire rembourser",
+    "Zone": "Zone",
+    "Match": "Match",
+    "Place": "Place",
+    "Date": "Date",
+    "Heure": "Heure",
+    "Prix": "Prix",
+    "Action": "Action"
   }
 }

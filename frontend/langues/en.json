@@ -292,5 +292,17 @@
     "zoneLabel": "Zone {zone}",
     "viderPanier": "Empty the cart",
     "procederPayement": "Proceed to payment"
+  },
+   "billet": {
+    "mesBillets": "My billets",
+    "aucunBillets": "You have no tickets booked.",
+    "remboursement": "Get a refund",
+    "Zone": "Zone",
+    "Match": "Match",
+    "Place": "Place",
+    "Date": "Date",
+    "Heure": "Hour",
+    "Prix": "Price",
+    "Action": "Action"
   }
 }
