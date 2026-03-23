@@ -2,34 +2,30 @@
   <NavView />
   <div class="container">
     <div class="panier">
-      <h2>Votre panier</h2>
-      <div v-if="panier.length === 0">Aucun article dans le panier</div>
+      <h2>{{ $t("Panier.votrePanier") }}</h2>
+      <div v-if="panier.length === 0">{{ $t("Panier.panierVide") }}</div>
       <div v-else>
         <h3>Sièges</h3>
         <div v-if="sieges.length === 0">Aucun siège</div>
-
         <div
           v-for="(seat, index) in sieges"
           :key="'seat-' + index"
           class="item">
           <p>
-            Siège : {{ seat.numero_colonne }}{{ seat.numero_ligne }}
+            {{ $t("Panier.siegeMatch") }} : {{ seat.numero_colonne
+            }}{{ seat.numero_ligne }}
             <span v-if="seat.equipe1_nom && seat.equipe2_nom">
               {{ seat.equipe1_nom.substring(0, 3) }} -
               {{ seat.equipe2_nom.substring(0, 3) }}
             </span>
-
-            <span> | Zone {{ seat.zone }}</span>
-
+            <span>
+              | {{ $t("Panier.zoneLabel", { zone: translateZone(seat.zone) }) }}
+            </span>
             <span v-if="seat.date_match">
-              | Heure :
-              {{
-                new Date(seat.date_match).toLocaleTimeString("fr-FR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  timeZone: "UTC",
-                })
-              }}
+              | {{ $t("Panier.dateMatch") }} :
+              {{ formatMatchDate(seat.date_match) }}
+              | {{ $t("Panier.heureMatch") }} :
+              {{ formatMatchTime(seat.date_match) }}
             </span>
           </p>
           <p style="color: red; font-weight: 700">
@@ -40,7 +36,7 @@
         <hr />
 
         <h3>Services</h3>
-        <div v-if="services.length === 0">Aucun service</div>
+        <div v-if="services.length === 0">{{ $t("Panier.aucunService") }}</div>
 
         <div
           v-for="(service, index) in services"
@@ -58,7 +54,7 @@
     </div>
 
     <div class="total">
-      <h2>Prix total</h2>
+      <h2>{{ $t("Panier.prixTotal") }}</h2>
       <div class="montant">{{ total }} €</div>
     </div>
   </div>
@@ -68,9 +64,11 @@
     </button> -->
     <div v-if="panier.length >= 1">
       <router-link to="Checkout" class="btn btn-checkout">
-        Procéder au paiement
+        {{ $t("Panier.procederPayement") }}
       </router-link>
-      <button @click="reset" class="btn btn-danger">Vider le panier</button>
+      <button @click="reset" class="btn btn-danger">
+        {{ $t("Panier.viderPanier") }}
+      </button>
     </div>
     <div v-else></div>
     <!-- <button
@@ -94,9 +92,11 @@ import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { usePanierStore } from "@/services/panier.service";
 import { useGradinStore } from "@/services/gradin.service";
+import { useI18n } from "vue-i18n";
 
 const route = useRoute();
 const router = useRouter();
+const { t, te, locale } = useI18n();
 const panierStore = usePanierStore();
 const gradinStore = useGradinStore();
 
@@ -138,6 +138,37 @@ const services = computed(() => {
 });
 
 const prix = ref(0);
+
+function translateZone(rawZone) {
+  const normalized = String(rawZone || "")
+    .replace(/^zone\s+/i, "")
+    .trim()
+    .toLowerCase();
+
+  const key = `zones.${normalized}`;
+  return te(key) ? t(key) : rawZone;
+}
+
+function getCurrentIntlLocale() {
+  return locale.value === "en" ? "en-GB" : "fr-FR";
+}
+
+function formatMatchDate(matchDate) {
+  return new Date(matchDate).toLocaleDateString(getCurrentIntlLocale(), {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function formatMatchTime(matchDate) {
+  return new Date(matchDate).toLocaleTimeString(getCurrentIntlLocale(), {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+  });
+}
 
 function getItemPrice(item, isService) {
   if (item.nom_service && isService) {

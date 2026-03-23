@@ -91,6 +91,12 @@
     "siegeproprio": "Seat purchased by you",
     "siegeSelec": "Selected seat "
   },
+  "zones": {
+    "nord": "North",
+    "sud": "South",
+    "est": "East",
+    "ouest": "West"
+  },
   "services": {
     "title": "Provider Services",
     "actions": ["Order Meal", "Reserve Table"]
@@ -274,5 +280,17 @@
       "subject": "Ticket refund",
       "message": "Hello,\n\nA user is requesting a refund for {nbBillets} ticket(s).\n\nUser: {nomUtilisateur}\nEmail: {emailUtilisateur}\nReason: {raison}\n\nTicket details:\n{detailsBillets}\n\nTotal amount: {montantTotal} €\n\nPlease process this request as soon as possible.\n\nBest regards,\nMintonette Cup"
     }
+  },
+  "Panier": {
+    "votrePanier": "Your cart",
+    "panierVide": "No items in your cart",
+    "prixTotal": "Total Price",
+    "aucunService": "No service ",
+    "dateMatch": "Date",
+    "heureMatch": "Hour",
+    "siegeMatch": "Seat",
+    "zoneLabel": "Zone {zone}",
+    "viderPanier": "Empty the cart",
+    "procederPayement": "Proceed to payment"
   }
 }
