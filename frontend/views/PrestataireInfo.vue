@@ -84,10 +84,10 @@
     </template>
   </Modal>
 
-  <v-dialog v-model="showLeaveDialog" max-width="500">
+  <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave">
     <v-card title="Quitter la page ?">
       <v-card-text>
-        Vous avez des modifications non sauvegardées. Si vous quittez cette page, toutes vos données seront perdues.
+        Vous avez des modifications <strong>non sauvegardées</strong>. Si vous quittez cette page, toutes vos données seront perdues.
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -311,7 +311,6 @@ const {
   selectedIndex, checkedItem, selectedTypeId
 } = storeToRefs(prestataireInfoStore);
 
-// UTILISER LE getStoreValues POUR RÉCUPÉRER LES DONNÉES QUE QUAND ON VEUT
 
 // ── Routes ───────────────────────────────────────
 const prestaId = computed(() => route.params.id);
@@ -330,6 +329,7 @@ const isFrench = ref(true);
 const isSubmitting = ref(false);
 const showLeaveDialog = ref(false);
 const pendingNavigation = ref(null);
+const allowLeave = ref(false);
 
 // -- Services --
 const isActivityService = ref(false);
@@ -433,21 +433,33 @@ watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscri
 
 // ── onBeforeRouteLeave ────────────────────────────────────
 onBeforeRouteLeave((to, from, next) => {
+  if (allowLeave.value) {
+    next();
+    return;
+  }
+
   if (to.name === "AddByService") {
     prestataireInfoStore.clearStore();
     next();
     return;
   }
 
-  const hasData = nom_presta.value || descri_presta.value || mail_presta.value || services.value.length > 0;
+  const hasData =
+    nom_presta.value ||
+    descri_presta.value ||
+    mail_presta.value ||
+    services.value.length > 0;
+
   if (!hasData) {
     prestataireInfoStore.clearStore();
     next();
     return;
   }
 
-  pendingNavigation.value = next;
   showLeaveDialog.value = true;
+  pendingNavigation.value = to;
+
+  next(false);
 });
 
 // ── onMounted ────────────────────────────────────
@@ -530,17 +542,16 @@ function hideContinueInscription() {
 
 function cancelLeave() {
   showLeaveDialog.value = false;
-  if (pendingNavigation.value) {
-    pendingNavigation.value(false);
-    pendingNavigation.value = null;
-  }
+  pendingNavigation.value = null;
 }
 
 function confirmLeave() {
   showLeaveDialog.value = false;
   prestataireInfoStore.clearStore();
+  allowLeave.value = true;
+
   if (pendingNavigation.value) {
-    pendingNavigation.value();
+    router.push(pendingNavigation.value);
     pendingNavigation.value = null;
   }
 }
@@ -1447,7 +1458,6 @@ input[type="radio"] {
   letter-spacing: 0.5px;
 }
 
-/* ── Ligne de deux inputs côte à côte ── */
 .service_row_inputs {
   display: flex;
   gap: 14px;
@@ -1457,7 +1467,6 @@ input[type="radio"] {
   flex: 1;
 }
 
-/* ── Bouton secondaire (ajouter activité/article) ── */
 .service_btn_container {
   display: flex;
   justify-content: flex-end;
@@ -1482,7 +1491,6 @@ input[type="radio"] {
   box-shadow: 0 4px 12px rgba(58, 111, 67, 0.25);
 }
 
-/* ── Bouton principal de soumission ── */
 .service_submit {
   display: flex;
   justify-content: center;
@@ -1510,5 +1518,56 @@ input[type="radio"] {
 
 .btn_service_submit:active {
   transform: translateY(1px);
+}
+
+.confirmLeave {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.confirmLeave .v-card {
+  border-radius: 12px;
+  padding: 20px;
+  background: #fffaf8;
+  box-shadow: 0 8px 24px rgba(58, 111, 67, 0.2), 0 2px 8px rgba(232, 99, 122, 0.1);
+}
+
+.confirmLeave .v-card-text {
+  font-size: 1em;
+  color: #2a3d2e;
+  line-height: 1.5;
+}
+
+.confirmLeave .v-card-text strong {
+  color: #e8637a;
+}
+
+.confirmLeave .v-card-actions .v-btn {
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: none;
+  padding: 8px 20px;
+  transition: all 0.2s ease;
+}
+
+.confirmLeave .v-card-actions .v-btn[color="error"] {
+  background: #e8637a;
+  color: #fff;
+}
+
+.confirmLeave .v-card-actions .v-btn[color="error"]:hover {
+  background: #c94d65;
+}
+
+.confirmLeave .v-card-actions .v-btn[text] {
+  color: #3a6f43;
+}
+
+.confirmLeave .v-card-actions .v-btn[text]:hover {
+  background: #eef5ef;
+}
+
+.confirmLeave .v-card-actions {
+  justify-content: flex-end;
+  gap: 12px;
 }
 </style>
