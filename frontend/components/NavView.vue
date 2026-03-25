@@ -6,60 +6,62 @@
     </router-link>
 
     <div class="optionNav">
-      <!-- <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
-        class="boutonNav">
-        <span class="pointer">Prestataire (mode public)</span>
-      </router-link> -->
-      <div
-        v-if="isInIndex"
-        @click="scrollToSection('Carte')"
-        class="boutonNav pointer">
-        {{ $t("barreNav.carte") }}
-      </div>
-
-      <div
-        v-if="isInIndex"
-        @click="scrollToSection('Info')"
-        class="boutonNav pointer">
-        {{ $t("barreNav.aPropos") }}
-      </div>
-      <div
-        v-if="isInIndex"
-        @click="scrollToSection('liste_prestataires')"
-        class="boutonNav pointer">
-        {{ $t("barreNav.prestataire") }}
-      </div>
-
-      <div @click="scrollToSection('footer')" class="boutonNav pointer">
-        {{ $t("barreNav.partenaire") }}
-      </div>
-      <!-- <router-link
-        v-if="utilisateur.ispresta"
-        :to="{
-          name: 'EditPrestataire',
-          params: { id: userStore.userId, lang: locale },
-        }"
-        class="boutonNav">
-        <span class="pointer">Edit Prestataire (mode presta)</span>
-      </router-link> -->
-
-      <div class="langue">
+      <div class="optionCenter">
+        <!-- <router-link :to="{ name: 'ShowPrestataire', params: { lang: locale } }" 
+          class="boutonNav">
+          <span class="pointer">Prestataire (mode public)</span>
+        </router-link> -->
         <div
-          v-if="locale === 'en'"
-          @click="changeLanguage('fr')"
+          v-if="isInIndex"
+          @click="scrollToSection('Carte')"
           class="boutonNav pointer">
-          <span>French</span>
+          {{ $t("barreNav.carte") }}
+        </div>
+
+        <div
+          v-if="isInIndex"
+          @click="scrollToSection('Info')"
+          class="boutonNav pointer">
+          {{ $t("barreNav.aPropos") }}
         </div>
         <div
-          v-else-if="locale === 'fr'"
-          @click="changeLanguage('en')"
+          v-if="isInIndex"
+          @click="scrollToSection('liste_prestataires')"
           class="boutonNav pointer">
-          <span>Anglais</span>
+          {{ $t("barreNav.prestataire") }}
         </div>
-      </div>
 
-      <div @click="goToReceptionBox()" class="boutonNav pointer">
-       {{ $t("barreNav.boiteReception") }}
+        <div @click="scrollToSection('footer')" class="boutonNav pointer">
+          {{ $t("barreNav.partenaire") }}
+        </div>
+        <!-- <router-link
+          v-if="utilisateur.ispresta"
+          :to="{
+            name: 'EditPrestataire',
+            params: { id: userStore.userId, lang: locale },
+          }"
+          class="boutonNav">
+          <span class="pointer">Edit Prestataire (mode presta)</span>
+        </router-link> -->
+
+        <div class="langue">
+          <div
+            v-if="locale === 'en'"
+            @click="changeLanguage('fr')"
+            class="boutonNav pointer">
+            <span>French</span>
+          </div>
+          <div
+            v-else-if="locale === 'fr'"
+            @click="changeLanguage('en')"
+            class="boutonNav pointer">
+            <span>Anglais</span>
+          </div>
+        </div>
+
+        <div @click="goToReceptionBox()" class="boutonNav pointer">
+        {{ $t("barreNav.boiteReception") }}
+        </div>
       </div>
 
       <div v-if="!isLoggedIn" class="partieProfil">
@@ -305,6 +307,13 @@ if (savedLang) locale.value = savedLang;
   font-weight: 500;
 }
 
+.optionCenter{
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  gap: 40px;
+}
+
 .barre-nav a {
   text-decoration: none;
   color: white;
@@ -354,9 +363,10 @@ a span {
   height: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   gap: 4px;
   margin-right: 0.6em;
+
 }
 
 .userButtons {
