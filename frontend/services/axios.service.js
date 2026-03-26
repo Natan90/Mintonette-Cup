@@ -38,7 +38,7 @@ export const getRequest = async (url, config) => {
     try {
         return await axiosInstance.get(url, config);
     } catch (error) {
-        handleError(url, 'get', error);
+        await handleError(url, 'get', error);
     }
 }
 
@@ -46,7 +46,7 @@ export const postRequest = async (url, data, config = {}) => {
     try {
         return await axiosInstance.post(url, data, config);
     } catch (error) {
-        handleError(url, 'post', error);
+        await handleError(url, 'post', error);
     }
 }
 
@@ -54,7 +54,7 @@ export const putRequest = async (url, data, config = {}) => {
     try {
         return await axiosInstance.put(url, data, config);
     } catch (error) {
-        handleError(url, 'put', error);
+        await handleError(url, 'put', error);
     }
 }
 
@@ -62,7 +62,7 @@ export const patchRequest = async (url, data, config = {}) => {
     try {
         return await axiosInstance.patch(url, data, config);
     } catch (error) {
-        handleError(url, 'patch', error);
+        await handleError(url, 'patch', error);
     }
 }
 
@@ -70,6 +70,6 @@ export const deleteRequest = async (url, data, config = {}) => {
     try {
         return await axiosInstance.delete(url, data, config);
     } catch (error) {
-        handleError(url, 'delete', error);
+        await handleError(url, 'delete', error);
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <NavView id="nav_bar"></NavView>
-  <Modal v-model="showModal_service" :bigger="true">
+  <Modal v-model="isModalService" :bigger="true">
     <template #content>
       <div class="service_details">
 
@@ -15,7 +15,7 @@
         <!-- Nom du service -->
         <div class="service_form_group">
           <label for="nom_service">Nom du service</label>
-          <input class="service_input_text" v-model="nom_service" id="nom_service" />
+          <input class="service_input_text" v-model="nomService" id="nom_service" />
         </div>
 
         <!-- Description -->
@@ -40,9 +40,9 @@
         <div class="service_form_group">
           <div>
             <label>Visible :</label>
-            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="true" />
+            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="true" />
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="visible_public_service" :value="false" />
+            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="false" />
             <label>Non</label>
           </div>
         </div>
@@ -51,9 +51,9 @@
         <div class="service_form_group">
           <div>
             <label>Actif :</label>
-            <input type="radio" class="service_input_text" v-model="activate_service" :value="true" />
+            <input type="radio" class="service_input_text" v-model="activate" :value="true" />
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="activate_service" :value="false" />
+            <input type="radio" class="service_input_text" v-model="activate" :value="false" />
             <label>Non</label>
           </div>
         </div>
@@ -242,7 +242,7 @@
         </div>
 
         <!-- Message de succès ou d'erreur après action -->
-        <div v-if="message && !showModal_service" class="message"
+        <div v-if="message && !isModalService" class="message"
           :class="messageType === 'error' ? 'message-error' : 'message-success'">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
@@ -347,12 +347,6 @@ const nom_presta = ref("");
 const descri_presta = ref("");
 const mail_presta = ref("");
 const tel_presta = ref(0);
-const nom_service = ref("");
-const descri_service = ref({ fr: "", en: "" });
-const besoin_service = ref({ fr: "", en: "" });
-const visible_public_service = ref(false);
-const activate_service = ref(false);
-const showModal_service = ref(false);
 const continueInscription_service = ref(false);
 const selectedIndex_presta = ref(0);
 const checkedItem_presta = ref([]);
@@ -374,21 +368,21 @@ const errorMessageCheckBox = computed(() => {
 });
 const currentDescri = computed({
   get() {
-    return isFrench.value ? descri_service.value.fr : descri_service.value.en;
+    return isFrench.value ? descriService.value.fr : descriService.value.en;
   },
   set(value) {
-    if (isFrench.value) descri_service.value.fr = value;
-    else descri_service.value.en = value;
+    if (isFrench.value) descriService.value.fr = value;
+    else descriService.value.en = value;
   },
 });
 
 const currentBesoin = computed({
   get() {
-    return isFrench.value ? besoin_service.value.fr : besoin_service.value.en;
+    return isFrench.value ? besoinService.value.fr : besoinService.value.en;
   },
   set(value) {
-    if (isFrench.value) besoin_service.value.fr = value;
-    else besoin_service.value.en = value;
+    if (isFrench.value) besoinService.value.fr = value;
+    else besoinService.value.en = value;
   },
 });
 const selectedItems = computed(() => {
@@ -433,13 +427,7 @@ watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscri
 
 // ── onBeforeRouteLeave ────────────────────────────────────
 onBeforeRouteLeave((to, from, next) => {
-  if (allowLeave.value) {
-    next();
-    return;
-  }
-
-  if (to.name === "AddByService") {
-    prestataireInfoStore.clearStore();
+  if (allowLeave.value || to.name === "AddByService") {
     next();
     return;
   }
@@ -511,7 +499,7 @@ const changeDescriLang = () => {
 };
 
 function showModalByService() {
-  showModal_service.value = true;
+  isModalService.value = true;
   const currentType = type_prestataire.value.find(
     (t) => t.id_type_prestataire === selectedTypeId_presta.value
   );
@@ -614,7 +602,7 @@ function getMissingLangMessage() {
 }
 
 async function addServiceToPrestataire() {
-  if (!nom_service.value.trim()) {
+  if (!nomService.value.trim()) {
     message.value = "Le nom du service est obligatoire.";
     messageType.value = "error";
     return;
@@ -628,30 +616,24 @@ async function addServiceToPrestataire() {
 
   try {
     const res = await serviceStore.CreateService(prestaId.value, {
-      nom_service: nom_service.value,
-      descri_service: descri_service.value,
-      besoin: besoin_service.value,
-      activate: Boolean(activate_service.value),
-      visible_public: Boolean(visible_public_service.value),
+      nom_service: nomService.value,
+      descri_service: descriService.value,
+      besoin: besoinService.value,
+      activate: Boolean(activate.value),
+      visible_public: Boolean(visiblePublic.value),
     });
 
     const newServiceId = res.data.id_service;
-
-    services.value.push({
-      nom_service: nom_service.value,
-      descri_service: descri_service.value,
-      besoin: besoin_service.value,
-      activate: Boolean(activate_service.value),
-      visible_public: Boolean(visible_public_service.value),
-      id_service: newServiceId,
-    });
 
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";
 
     router.push({
       name: "AddByService",
-      params: { id: newServiceId },
+      params: { 
+        id_presta: prestaId.value,
+        id: newServiceId
+       },
       query: { isActivityService: isActivityService.value }
     });
   } catch (err) {
@@ -702,9 +684,9 @@ async function showOneService(id_service) {
         en: s.titre_service?.en?.texte ?? ''
       },
 
-      descri_service: {
-        fr: s.descri_service?.fr?.texte ?? '',
-        en: s.descri_service?.en?.texte ?? ''
+      descriService: {
+        fr: s.descriService?.fr?.texte ?? '',
+        en: s.descriService?.en?.texte ?? ''
       },
 
       besoin: {
@@ -816,8 +798,8 @@ async function addPrestataire() {
         en: { texte: s.titre_service.en }
       },
       descri_service: {
-        fr: { texte: s.descri_service.fr },
-        en: { texte: s.descri_service.en }
+        fr: { texte: s.descriService.fr },
+        en: { texte: s.descriService.en }
       },
       besoin: s.besoin,
       prix: s.prix,
@@ -857,8 +839,8 @@ async function updatePresta() {
         en: { texte: s.titre_service.en }
       },
       descri_service: {
-        fr: { texte: s.descri_service.fr },
-        en: { texte: s.descri_service.en }
+        fr: { texte: s.descriService.fr },
+        en: { texte: s.descriService.en }
       },
       besoin: s.besoin,
       prix: s.prix,
@@ -1495,79 +1477,5 @@ input[type="radio"] {
   display: flex;
   justify-content: center;
   padding-top: 4px;
-}
-
-.btn_service_submit {
-  background: var(--log-gradient-cta);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1em;
-  padding: 12px 36px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.25);
-  transition: all 0.3s ease;
-  letter-spacing: 0.4px;
-}
-
-.btn_service_submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 20px rgba(58, 111, 67, 0.35);
-}
-
-.btn_service_submit:active {
-  transform: translateY(1px);
-}
-
-.confirmLeave {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.confirmLeave .v-card {
-  border-radius: 12px;
-  padding: 20px;
-  background: #fffaf8;
-  box-shadow: 0 8px 24px rgba(58, 111, 67, 0.2), 0 2px 8px rgba(232, 99, 122, 0.1);
-}
-
-.confirmLeave .v-card-text {
-  font-size: 1em;
-  color: #2a3d2e;
-  line-height: 1.5;
-}
-
-.confirmLeave .v-card-text strong {
-  color: #e8637a;
-}
-
-.confirmLeave .v-card-actions .v-btn {
-  border-radius: 8px;
-  font-weight: 600;
-  text-transform: none;
-  padding: 8px 20px;
-  transition: all 0.2s ease;
-}
-
-.confirmLeave .v-card-actions .v-btn[color="error"] {
-  background: #e8637a;
-  color: #fff;
-}
-
-.confirmLeave .v-card-actions .v-btn[color="error"]:hover {
-  background: #c94d65;
-}
-
-.confirmLeave .v-card-actions .v-btn[text] {
-  color: #3a6f43;
-}
-
-.confirmLeave .v-card-actions .v-btn[text]:hover {
-  background: #eef5ef;
-}
-
-.confirmLeave .v-card-actions {
-  justify-content: flex-end;
-  gap: 12px;
 }
 </style>

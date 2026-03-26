@@ -156,3 +156,82 @@
   color: var(--rose-logo);
   transition: var(--transition-fast);
 }
+
+/* Dialog de confirmation de quitter avec des données non sauvegardées */
+
+.confirmLeave {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.confirmLeave .v-card {
+  border-radius: 12px;
+  padding: 20px;
+  background: #fffaf8;
+  box-shadow: 0 8px 24px rgba(58, 111, 67, 0.2), 0 2px 8px rgba(232, 99, 122, 0.1);
+}
+
+.confirmLeave .v-card-text {
+  font-size: 1em;
+  color: #2a3d2e;
+  line-height: 1.5;
+}
+
+.confirmLeave .v-card-text strong {
+  color: #e8637a;
+}
+
+.confirmLeave .v-card-actions .v-btn {
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: none;
+  padding: 8px 20px;
+  transition: all 0.2s ease;
+}
+
+.confirmLeave .v-card-actions .v-btn[color="error"] {
+  background: #e8637a;
+  color: #fff;
+}
+
+.confirmLeave .v-card-actions .v-btn[color="error"]:hover {
+  background: #c94d65;
+}
+
+.confirmLeave .v-card-actions .v-btn[text] {
+  color: #3a6f43;
+}
+
+.confirmLeave .v-card-actions .v-btn[text]:hover {
+  background: #eef5ef;
+}
+
+.confirmLeave .v-card-actions {
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Dialog de confirmation de quitter avec des données non sauvegardées */
+
+
+.btn_service_submit {
+  background: var(--log-gradient-cta);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.25);
+  transition: all 0.3s ease;
+  letter-spacing: 0.4px;
+}
+
+.btn_service_submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(58, 111, 67, 0.35);
+}
+
+.btn_service_submit:active {
+  transform: translateY(1px);
+}
