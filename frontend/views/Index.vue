@@ -22,6 +22,7 @@
           {{ title_evenement }}
         </div>
       </div>
+
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
       <div
         v-if="isBallonStopped"
@@ -83,7 +84,9 @@
         </section>
       </section>
     </div>
-
+    <router-link :to="{ name: 'Commentaire' }">
+      <p>Venez noter l'événement </p>
+    </router-link>
     <section
       v-if="
         userStore &&

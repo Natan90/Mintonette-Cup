@@ -29,6 +29,7 @@ import SentBox from "@/components/mailbox/SentBox.vue";
 import Mailbox from "@/views/Mailbox.vue";
 import Remboursement from "@/views/Remboursement.vue";
 import ArticlesAndActivities from "@/components/ArticlesAndActivities.vue";
+import Commentaire from "@/views/Commentaire.vue";
 
 const routes = [
   {
@@ -171,6 +172,12 @@ const routes = [
         path: "panier",
         name: "Panier",
         component: Panier,
+        meta: { requiresUserId: true },
+      },
+      {
+        path: "Commentaire",
+        name: "Commentaire",
+        component: Commentaire,
         meta: { requiresUserId: true },
       },
       {
