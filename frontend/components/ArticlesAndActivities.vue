@@ -4,7 +4,63 @@
 
   <Modal v-model="isShowingRecapService" :bigger="true">
     <template #content>
-      <div>
+      <div class="recap_container">
+
+        <h2 class="recap_title">📋 Récapitulatif du service</h2>
+
+        <!-- Infos service -->
+        <div class="recap_section">
+          <p><strong>Nom :</strong> {{ nomService }}</p>
+          <p><strong>Description :</strong></p><div v-html="currentDescri"></div>
+          <p><strong>Besoin :</strong> {{ currentBesoin }}</p>
+          <p><strong>Visible :</strong> {{ visiblePublic ? "Oui" : "Non" }}</p>
+          <p><strong>Activé :</strong> {{ activate ? "Oui" : "Non" }}</p>
+        </div>
+
+        <!-- Activités -->
+        <div v-if="isActivityService" class="recap_section">
+          <h3>Activités</h3>
+
+          <div v-if="activitesList.length > 0">
+            <div v-for="(item, index) in activitesList" :key="index" class="recap_item">
+              <p><strong>{{ item.nom_activite }}</strong></p>
+              <p>📅 {{ item.date_activite }} à {{ item.heure_activite }}</p>
+              <p>👥 {{ item.nb_participant }} participants</p>
+              <p>🪙 {{ item.prix }} €</p>
+            </div>
+          </div>
+
+          <p v-else>Aucune activité ajoutée</p>
+        </div>
+
+        <!-- Articles -->
+        <div v-else class="recap_section">
+          <h3>Articles</h3>
+
+          <div v-if="articlesList.length > 0">
+            <div v-for="(item, index) in articlesList" :key="index" class="recap_item">
+              <p><strong>{{ item.nom_article }}</strong></p>
+              <p>📦 Stock : {{ item.stock }}</p>
+              <p>🪙 {{ item.prix }} €</p>
+            </div>
+          </div>
+
+          <p v-else>Aucun article ajouté</p>
+        </div>
+        <div v-if="message && isShowingRecapService" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+          <span class="text">{{ message }}</span>
+          <span class="modal-close" @click="closeMessage()">&times;</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="recap_actions">
+          <button class="btn_modal btn_refuser" @click="isShowingRecapService = false">
+            Modifier
+          </button>
+          <button class="btn_modal btn_valider" @click="addServiceToPrestataire()">
+            Confirmer
+          </button>
+        </div>
 
       </div>
     </template>
@@ -78,7 +134,7 @@
       <div class="btn_container">
         <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter une activité</button>
       </div>
-      <div v-if="message" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+      <div v-if="message && !isShowingRecapService" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
         <span class="text">{{ message }}</span>
         <span class="modal-close" @click="closeMessage()">&times;</span>
       </div>
@@ -128,7 +184,7 @@
       <div class="btn_container">
         <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter un article</button>
       </div>
-      <div v-if="message" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+      <div v-if="message && !isShowingRecapService" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
         <span class="text">{{ message }}</span>
         <span class="modal-close" @click="closeMessage()">&times;</span>
       </div>
@@ -161,12 +217,15 @@ import Modal from '@/components/Modal.vue';
 import NavView from './NavView.vue';
 import { useServiceStore } from '@/services/service.service';
 import { onMounted, ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useNavigationStore } from '@/stores/navigation';
 import { usePrestataireInfoStore } from '@/stores/prestataire_info';
 import { storeToRefs } from "pinia";
 import Footer from './Footer.vue';
 
+
+const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const serviceStore = useServiceStore();
@@ -185,8 +244,25 @@ const allowLeave = ref(false);
 const isShowingRecapService = ref(false);
 const isGoingBack = ref(false);
 
-const itemsList = ref([]);
-const service = ref([]);
+
+// ── Service ───────────────────────────────────
+const currentDescri = computed({
+  get() {
+    return descriService.value[locale.value];
+  },
+  set(value) {
+    descriService.value[locale.value] = value;
+  },
+});
+
+const currentBesoin = computed({
+  get() {
+    return besoinService.value[locale.value];
+  },
+  set(value) {
+    besoinService.value[locale.value] = value;
+  },
+});
 
 // ── Store Refs ───────────────────────────────────
 const {
@@ -413,6 +489,39 @@ async function addServiceToPrestataire() {
 </script>
 
 <style scoped>
+.recap_container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recap_title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.recap_section {
+  background: #f8fdf9;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #dfeee2;
+}
+
+.recap_item {
+  border-bottom: 1px dashed #ccc;
+  padding: 8px 0;
+}
+
+.recap_item:last-child {
+  border-bottom: none;
+}
+
+.recap_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* ── Variables ── */
 .page_wrapper {
   min-height: 100vh;
