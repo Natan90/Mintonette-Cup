@@ -15,9 +15,41 @@ function generateToken(user) {
   return jwt.sign(
     { userId: user.id_utilisateur },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: process.env.TOKEN_EXPIRE }
   );
 };
+
+async function refreshToken(token) {
+  if (!token) {
+    throw { status: 401, message: "Token manquant" };
+  }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    const result = await pool.query(
+      `SELECT id_utilisateur FROM Utilisateur WHERE id_utilisateur = $1`,
+      [payload.userId]
+    );
+
+    if (result.rows.length === 0) {
+      throw { status: 401, message: "Utilisateur introuvable" };
+    }
+
+    const newToken = generateToken({ id_utilisateur: payload.userId });
+
+    return { token: newToken };
+
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      throw { status: 401, message: "Token expiré" };
+    }
+    if (err.name === "JsonWebTokenError") {
+      throw { status: 401, message: "Token invalide" };
+    }
+    throw err;
+  }
+}
 
 async function inscriptionUtilisateur(utilisateur) {
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = utilisateur;
@@ -393,6 +425,7 @@ async function updateUserGoogleId(userId, googleId) {
 
 module.exports = {
   generateToken,
+  refreshToken,
   inscriptionUtilisateur,
   connexionUtilisateur,
   updateUtilisateur,

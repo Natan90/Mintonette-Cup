@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import { usePrestataireInfoStore } from "@/stores/prestataire_info";
+import { postRequest } from "@/services/axios.service";
 
 export const useUserStore = defineStore("user", () => {
   const userId = ref(Number(localStorage.getItem("userId")) || null);
@@ -10,6 +11,7 @@ export const useUserStore = defineStore("user", () => {
   const token = ref(localStorage.getItem("jwt") || null);
   const isAuthenticating = ref(false);
   let logoutTimeout = null;
+  let isRefreshing = false;
 
   if (token.value) {
     try {
@@ -21,6 +23,7 @@ export const useUserStore = defineStore("user", () => {
         logout();
       } else {
         runLogoutTimer(delay);
+        refreshToken();
       }
     } catch {
       logout();
@@ -65,7 +68,9 @@ export const useUserStore = defineStore("user", () => {
       const exp = payload.exp * 1000;
       const delay = exp - Date.now();
 
-      if (delay > 0) runLogoutTimer(delay);
+      if (delay > 0) { 
+        runLogoutTimer(delay);
+      }
       else logout();
     } catch {
       logout();
@@ -115,6 +120,23 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function refreshToken() {
+    if (isRefreshing) return;
+    isRefreshing = true;
+
+    try {
+      const res = await postRequest("/utilisateur/auth/refresh", {
+        token: token.value
+      });
+
+      setToken(res.data.token);
+
+    } catch (err) {
+      logout();
+    } finally {
+      isRefreshing = false;
+    }
+  }
 
   watch(userId, (v) => {
     if (v !== null) localStorage.setItem("userId", v);
@@ -149,5 +171,6 @@ export const useUserStore = defineStore("user", () => {
     logout,
     runLogoutTimer,
     getRemainingDelay,
+    refreshToken,
   };
 });

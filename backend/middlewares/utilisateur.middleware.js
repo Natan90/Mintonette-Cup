@@ -1,3 +1,12 @@
+exports.validateRefreshToken = (req, res, next) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(400).json({ error: "Champs obligatoires manquants" });
+  }
+
+  next();
+}
+
 exports.validateInscription = (req, res, next) => {
   const { nom, prenom, login, mdp, mail, tel_utilisateur, sexe } = req.body;
 

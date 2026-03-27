@@ -6,7 +6,7 @@
     <template #content>
       <div class="recap_container">
 
-        <h2 class="recap_title">📋 Récapitulatif du service</h2>
+        <h2 class="recap_title">Récapitulatif du service</h2>
 
         <!-- Infos service -->
         <div class="recap_section">
