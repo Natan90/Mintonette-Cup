@@ -231,11 +231,18 @@ const redirect =
     } 
   };
 
+/**
+ * Ferme la modal de confirmation et redirige l'utilisateur vers la route définie (redirect).
+ */
 const closeModal = () => {
   showModal.value = false;
   router.push(redirect);
 };
-
+/**
+ * Affiche la modal de confirmation après connexion ou inscription.
+ * Ferme automatiquement la modal après 2 secondes si ce n’est pas une inscription.
+ * @param {boolean} isInscription - Indique si l’action provient d’une inscription
+ */
 function ModalShow(isInscription) {
   showModal.value = true;
   if (!isInscription) {
@@ -244,7 +251,9 @@ function ModalShow(isInscription) {
     }, 2000);
   }
 }
-
+/**
+ * Redirige l'utilisateur vers la page d'ajout de prestataire avec son ID utilisateur.
+ */
 function goToAddPrestataire() {
   console.log("Dans la fonction goToAddPrestataire");
   router.push({
@@ -293,6 +302,10 @@ onMounted(async () => {
   }
 });
 
+/**
+ * Gère la connexion utilisateur : validation des champs, appel API, stockage du token et utilisateur,
+ * puis affichage d’une modal de confirmation en cas de succès.
+ */
 async function getValuesConnexion() {
   if (!login_utilisateur_connexion.value || !mdp_utilisateur_connexion.value) {
     message.value = "Veuillez remplir tous les champs obligatoires.";
@@ -328,7 +341,10 @@ async function getValuesConnexion() {
     console.error("Erreur connexion :", err);
   }
 }
-
+/**
+ * Gère l'inscription utilisateur : validation des champs, appel API,
+ * stockage des données utilisateur et affichage d’une modal de confirmation.
+ */
 async function getValuesInscription() {
   if (!nom_utilisateur.value || !prenom_utilisateur.value || !login_utilisateur.value || !mdp_utilisateur.value || !mail_utilisateur.value) {
     message.value = "Veuillez remplir tous les champs obligatoires.";
@@ -368,7 +384,9 @@ async function getValuesInscription() {
     console.error("Erreur connexion :", err);
   }
 }
-
+/**
+ * Alterne entre la vue connexion et inscription et met à jour la route correspondante.
+ */
 function moveCard() {
   showRegister.value = !showRegister.value;
 
@@ -378,20 +396,29 @@ function moveCard() {
     router.push({ name: "Connexion_utilisateur" });
   }
 }
-
+/**
+ * Redirige l'utilisateur vers la page de réinitialisation de mot de passe
+ * en sauvegardant la route actuelle comme retour possible.
+ */
 function forbiddenPassword() {
   navStore.previousRoute = route.fullPath;
   router.push({
     name: "ResetPasswordRequest"
   })
 };
-
+/**
+ * Lance l'authentification Google en redirigeant vers l'URL backend OAuth.
+ */
 function signInWithGoogle() {
   console.log("🔹 Bouton Google cliqué");
   console.log("URL backend:", `${import.meta.env.VITE_LINK_BACK}/utilisateur/auth/google`);
   window.location.href = `${import.meta.env.VITE_LINK_BACK}/utilisateur/auth/google`;
 }
-
+/**
+ * Connecte un utilisateur à partir d’un token JWT :
+ * stocke le token, récupère les informations utilisateur et initialise la session.
+ * @param {string} token - JWT reçu après authentification
+ */
 async function connectUserWithToken(token) {
   console.log("JWT reçu :", token);
 

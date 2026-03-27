@@ -139,10 +139,27 @@ watch(
   }
 );
 
+onMounted(() => {
+  try {
+    getValuesEvenement();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+/**
+ * Ouvre le sélecteur de fichier pour importer une image.
+*/
 function triggerFileSelect() {
   fileInput.value.click();
 }
-
+/**
+ * Gère la sélection d’un fichier image :
+ * - Stocke le fichier sélectionné
+ * - Génère un aperçu en base64
+ * - Réinitialise les valeurs si aucun fichier
+ * @param {Event} event - Événement de sélection de fichier
+*/
 function onFileChange(event) {
   const file = event.target.files[0];
   if (!file) {
@@ -162,17 +179,20 @@ function onFileChange(event) {
   reader.readAsDataURL(file);
 }
 
-onMounted(() => {
-  try {
-    getValuesEvenement();
-  } catch (err) {
-    console.error(err);
-  }
-});
+
 
 //=========================
 //= Async functions event =
 //=========================
+/**
+ * Récupère les informations de l'événement depuis l'API :
+ * - Titre
+ * - Couleur
+ * - Police
+ * - Image
+ * - Description
+ * Met à jour les valeurs locales du formulaire.
+*/
 async function getValuesEvenement() {
   try {
     const res = await adminAPIStore.GetEvenement();
@@ -206,6 +226,15 @@ async function getValuesEvenement() {
 //   }
 // }
 
+/**
+ * Met à jour l'événement via l'API :
+ * - Titre
+ * - Description (FR/EN)
+ * - Couleur
+ * - Police
+ * - Image
+ * Affiche un message de succès ou d'erreur.
+*/
 async function updateEvent() {
   try {
     const res = await adminAPIStore.UpdateEvenement({
@@ -227,7 +256,10 @@ async function updateEvent() {
     messageType.value = 'error';
   }
 }
-
+/**
+ * Met à jour la description de l'événement
+ * en fonction de la langue sélectionnée.
+*/
 function updateDescription() {
   if (evenementData.value?.descri_evenement?.[locale.value]) {
     descri_evenement.value =

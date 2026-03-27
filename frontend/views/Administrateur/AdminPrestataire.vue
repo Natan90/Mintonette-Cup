@@ -189,25 +189,33 @@ watch(activeTab, (newTab) => {
     }
 });
 
-const closeModal = () => {
-    isDelete.value = false;
-};
-
+/**
+ * Ferme le message de confirmation de suppression.
+*/
 const closeMessageSuppr = () => {
     deleting.value = false;
 };
-
+/**
+ * Ferme le message de refus.
+*/
 const closeMessageRefus = () => {
     refusing.value = false;
 };
-
+/**
+ * Ouvre la modal de suppression et sélectionne un prestataire.
+ * @param {Object} presta - Prestataire sélectionné
+*/
 function ModalShow(presta) {
     selectedPresta.value = presta;
     id_prestataire.value = presta.id_prestataire;
 
     isDelete.value = true;
 };
-
+/**
+ * Redirige vers la page de détail d’un prestataire.
+ * Sauvegarde la route actuelle pour retour arrière.
+ * @param {number|string} idPresta - ID du prestataire
+*/
 function goToSpecificPrestataire(idPresta) {
     navStore.previousRoute = route.fullPath;
     router.push({
@@ -250,8 +258,9 @@ const prestatairesFiltres = computed(() => {
     return liste;
 });
 
-
-
+/**
+ * Récupère la liste des prestataires depuis l’API.
+*/
 async function getPrestataires() {
     try {
         const res = await prestataireStore.GetPrestataires();
@@ -260,8 +269,13 @@ async function getPrestataires() {
         console.error(err);
     }
 }
-
-
+/**
+ * Valide un prestataire :
+ * - Met à jour son statut utilisateur
+ * - Recharge la liste des prestataires
+ * - Met à jour la carte des zones
+ * @param {Object} presta - Prestataire à valider
+*/
 async function validPrestataire(presta) {
     try {
         const res = await adminAPIStore.ValidePrestataire(presta.id_prestataire);
@@ -273,8 +287,10 @@ async function validPrestataire(presta) {
         console.error(err);
     }
 }
-
-
+/**
+ * Refuse un prestataire et met à jour l’affichage.
+ * @param {Object} presta - Prestataire refusé
+*/
 async function refuserPrestataire(presta) {
     try {
         refusedPresta.value = presta;
@@ -287,7 +303,14 @@ async function refuserPrestataire(presta) {
         console.error(err);
     }
 }
-
+/**
+ * Supprime un prestataire :
+ * - Appelle l’API de suppression
+ * - Met à jour la liste locale
+ * - Affiche un message de confirmation
+ * - Recharge les données et la carte des zones
+ * @param {number|string} idPresta - ID du prestataire à supprimer
+*/
 async function deletePrestataire(idPresta) {
     try {
         deletedPresta.value = { ...selectedPresta.value };
@@ -307,7 +330,11 @@ async function deletePrestataire(idPresta) {
         console.error(err);
     }
 }
-
+/**
+ * Met à jour le statut "prestataire" d’un utilisateur.
+ * @param {boolean} newValue - Nouveau statut
+ * @param {number|string} idPresta - ID utilisateur
+*/
 async function changePresta(newValue, idPresta) {
     try {
         const res = await adminAPIStore.ChangePrestaUtilisateur(idPresta, newValue);

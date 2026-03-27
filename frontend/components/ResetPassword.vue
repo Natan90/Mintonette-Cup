@@ -73,11 +73,24 @@ const isSending = ref(false);
 
 const token = route.params.token || null;
 
+/**
+ * Vérifie si une adresse email est valide à l'aide d'une regex.
+ * @param {string} email - Email à valider
+ * @returns {boolean} true si l'email est valide, sinon false
+*/
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
+/**
+ * Réinitialise le mot de passe utilisateur après validation :
+ * - Vérifie que les champs sont remplis
+ * - Vérifie la correspondance des mots de passe
+ * - Appelle l'API de reset password
+ * - Affiche un message de succès ou d'erreur
+ * - Redirige vers la route précédente après succès
+*/
 async function submitReset() {
   if (!newPassword.value || !confirmPassword.value) {
     message.value = "Veuillez remplir tous les champs";
@@ -110,7 +123,14 @@ async function submitReset() {
     isError.value = true;
   }
 }
-
+/**
+ * Envoie un email de réinitialisation de mot de passe :
+ * - Vérifie la présence et validité de l'email
+ * - Lance une animation de progression
+ * - Appelle l'API d'envoi d'email
+ * - Affiche un message de confirmation ou d'erreur
+ * @param {string} mailToSend - Email de l'utilisateur
+*/
 async function sendEmail(mailToSend) {
   if (!mailToSend) {
     message.value = "Veuillez remplir votre email";

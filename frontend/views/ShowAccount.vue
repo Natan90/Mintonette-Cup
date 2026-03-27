@@ -140,12 +140,18 @@ onMounted(() => {
   }
 });
 
+/**
+ * Remonte à la page précédente enregistrée dans le store de navigation.
+*/
 function goBack() {
   if (navStore.previousRoute) {
     router.push(navStore.previousRoute);
   }
 }
-
+/**
+ * Récupère les informations de l’utilisateur connecté ou ciblé
+ * et formate les données (notamment la date de création).
+*/
 async function getValuesUtilisateurs() {
   try {
     const response = await adminAPIStore.GetCurrentUser();
@@ -181,8 +187,10 @@ async function getValuesUtilisateurs() {
     loading.value = false;
   }
 }
-
-
+/**
+ * Supprime le compte utilisateur après confirmation,
+ * déconnecte l’utilisateur et redirige vers l’accueil.
+*/
 async function deleteAccount(id) {
   if (!confirm(t('account.confirmDelete'))) {
     return;

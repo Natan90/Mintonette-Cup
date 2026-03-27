@@ -343,10 +343,16 @@ const closeMessage = () => {
 };
 
 // ── Retour avec données non sauvegardées ──────────────────────────────────
+/**
+ * Annule la tentative de navigation et ferme la popup de confirmation de sortie.
+ */
 function cancelLeave() {
   showLeaveDialog.value = false;
   pendingNavigation.value = null;
 }
+/**
+ * Confirme la sortie de la page, vide les stores si nécessaire et redirige vers la route demandée.
+ */
 function confirmLeave() {
   showLeaveDialog.value = false;
   if (isGoingBack.value) {
@@ -365,6 +371,9 @@ function confirmLeave() {
     router.push(target);
   }
 }
+/**
+ * Retourne à la page précédente en utilisant la dernière route enregistrée dans le store de navigation.
+ */
 function goBack() {
   isGoingBack.value = true;
   const target = navStore.previousRoute;
@@ -375,6 +384,10 @@ function goBack() {
 
 
 // ── Articles / Activités ──────────────────────────────────
+/**
+ * Vérifie si une activité ou un article existe déjà dans la liste afin d'éviter les doublons.
+ * @returns {boolean} true si l'élément existe déjà, sinon false
+ */
 function alreadyExists() {
   const normalize = (str) => (str || "").trim().toLowerCase();
 
@@ -396,7 +409,10 @@ function alreadyExists() {
 
   return false;
 }
-
+/**
+ * Ajoute une activité ou un article dans la liste locale après validation des champs.
+ * Réinitialise ensuite les champs du formulaire et affiche un message de confirmation.
+ */
 async function addInItemsList() {
   if (!hasData.value) {
     message.value = "Veuillez remplir tous les champs."
@@ -442,10 +458,16 @@ async function addInItemsList() {
 
 
 // ── Services ──────────────────────────────────
+/**
+ * Affiche la modal de récapitulatif du service avant validation finale.
+ */
 function showRecapService() {
   isShowingRecapService.value = true;
 }
-
+/**
+ * Crée le service côté backend puis ajoute les activités ou articles associés.
+ * Affiche un message de succès ou d'erreur selon le résultat de l'opération.
+ */
 async function addServiceToPrestataire() {
   try {
     const res = await serviceStore.CreateService(id_presta.value, {
