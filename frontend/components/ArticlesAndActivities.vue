@@ -11,7 +11,8 @@
         <!-- Infos service -->
         <div class="recap_section">
           <p><strong>Nom :</strong> {{ nomService }}</p>
-          <p><strong>Description :</strong></p><div v-html="currentDescri"></div>
+          <p><strong>Description :</strong></p>
+          <div v-html="currentDescri"></div>
           <p><strong>Besoin :</strong> {{ currentBesoin }}</p>
           <p><strong>Visible :</strong> {{ visiblePublic ? "Oui" : "Non" }}</p>
           <p><strong>Activé :</strong> {{ activate ? "Oui" : "Non" }}</p>
@@ -47,7 +48,8 @@
 
           <p v-else>Aucun article ajouté</p>
         </div>
-        <div v-if="message && isShowingRecapService" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+        <div v-if="message && isShowingRecapService" class="message"
+          :class="messageType === 'error' ? 'message-error' : 'message-success'">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage()">&times;</span>
         </div>
@@ -88,14 +90,17 @@
   <section>
     <div>
       <p v-if="isActivityService">
-        Ajoutez les activités proposées dans le cadre du service <span class="name_delete">{{ nomService }}</span>. Chaque activité peut avoir sa propre date, son horaire, son tarif et son nombre de participants.
+        Ajoutez les activités proposées dans le cadre du service <span class="name_delete">{{ nomService }}</span>.
+        Chaque
+        activité peut avoir sa propre date, son horaire, son tarif et son nombre de participants.
       </p>
 
       <p v-else>
-        Ajoutez les articles disponibles à la vente pour le service <span class="name_delete">{{ nomService }}</span>. Précisez le nom, le stock disponible et le prix de chaque article.
+        Ajoutez les articles disponibles à la vente pour le service <span class="name_delete">{{ nomService }}</span>.
+        Précisez le nom, le stock disponible et le prix de chaque article.
       </p>
     </div>
-  </section>  
+  </section>
 
   <div class="page_wrapper">
     <!-- Bloc Activité -->
@@ -134,7 +139,8 @@
       <div class="btn_container">
         <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter une activité</button>
       </div>
-      <div v-if="message && !isShowingRecapService" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+      <div v-if="message && !isShowingRecapService" class="message"
+        :class="messageType === 'error' ? 'message-error' : 'message-success'">
         <span class="text">{{ message }}</span>
         <span class="modal-close" @click="closeMessage()">&times;</span>
       </div>
@@ -154,9 +160,17 @@
         </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
-      <div class="btn_container">
-        <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
+      <div class="btn_container" v-if="alreadyAddedService">
+        <button class="btn_service_submit" @click="showRecapService()" v-if="alreadyAddedService">+ Ajouter ce service</button>
       </div>
+      <div v-else class="already_added_banner">
+        <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
+        <div>
+          <p class="already_added_title">Service ajouté avec succès</p>
+          <p class="already_added_sub">Ce service a déjà été enregistré.</p>
+        </div>
+      </div>
+      
     </div>
 
     <!-- Bloc Article -->
@@ -184,7 +198,8 @@
       <div class="btn_container">
         <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter un article</button>
       </div>
-      <div v-if="message && !isShowingRecapService" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
+      <div v-if="message && !isShowingRecapService" class="message"
+        :class="messageType === 'error' ? 'message-error' : 'message-success'">
         <span class="text">{{ message }}</span>
         <span class="modal-close" @click="closeMessage()">&times;</span>
       </div>
@@ -203,8 +218,15 @@
         </div>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
-      <div class="btn_container">
-        <button class="btn_add" @click="showRecapService()">+ Ajouter ce service</button>
+      <div class="btn_container" v-if="alreadyAddedService">
+        <button class="btn_service_submit" @click="showRecapService()" v-if="alreadyAddedService">+ Ajouter ce service</button>
+      </div>
+      <div v-else class="already_added_banner">
+        <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
+        <div>
+          <p class="already_added_title">Service ajouté avec succès</p>
+          <p class="already_added_sub">Ce service a déjà été enregistré.</p>
+        </div>
       </div>
     </div>
 
@@ -263,6 +285,7 @@ const currentBesoin = computed({
     besoinService.value[locale.value] = value;
   },
 });
+const alreadyAddedService = ref(false);
 
 // ── Store Refs ───────────────────────────────────
 const {
@@ -479,24 +502,33 @@ async function addServiceToPrestataire() {
     });
 
     const newServiceId = res.data.id_service;
-    const newRes = null;
 
     if (isActivityService.value) {
-      newRes = await serviceStore.AddActivites(newServiceId, {
-        nom: nom_activite.value,
-        nb_participant: Number(nb_participants.value),
-        prix: Number(prix_activite.value),
-        date: date_activite.value,
-        heure: heure_activite.value
-      });
+      for (let i = 0; i < activitesList.value.length; i++) {
+        const elt = activitesList.value[i];
+
+        await serviceStore.AddActivites(newServiceId, {
+          nom: elt.nom_activite,
+          nb_participant: Number(elt.nb_participant),
+          prix: Number(elt.prix),
+          date: elt.date_activite,
+          heure: elt.heure_activite
+        });
+      }
     }
     else {
-      newRes = await serviceStore.AddArticles(newServiceId, {
-        nom: nom_article.value,
-        stock: Number(stock_article.value),
-        prix: Number(prix_article.value)
-      })
+      for (let i = 0; i < articlesList.value.length; i++) {
+        const elt = articlesList.value[i];
+
+        await serviceStore.AddArticles(newServiceId, {
+          nom: elt.nom_article,
+          stock: Number(elt.stock),
+          prix: Number(elt.prix)
+        });
+      }
     }
+
+    alreadyAddedService.value = true;
 
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";
@@ -515,6 +547,9 @@ async function addServiceToPrestataire() {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
 .recap_title {
@@ -736,5 +771,35 @@ async function addServiceToPrestataire() {
 .btn_remove_item:hover {
   color: #c94d65;
   transform: scale(1.2);
+}
+
+.already_added_banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #edf7ef, #f5fcf6);
+  border: 1.5px solid #a8d9b0;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-top: 8px;
+  box-shadow: 0 4px 14px rgba(58, 111, 67, 0.1);
+}
+
+.already_added_icon {
+  font-size: 2em;
+  flex-shrink: 0;
+}
+
+.already_added_title {
+  font-weight: 700;
+  font-size: 1em;
+  color: var(--primary-dark);
+  margin: 0 0 2px 0;
+}
+
+.already_added_sub {
+  font-size: 0.85em;
+  color: #5a7a5e;
+  margin: 0;
 }
 </style>

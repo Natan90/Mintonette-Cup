@@ -8,7 +8,7 @@
         <div class="service_lang">
           <button class="btn_lang" @click="changeDescriLang()">
             <span v-if="isFrench">🌐 Passer en anglais</span>
-            <span v-else>🌐 Go in French</span>
+            <span v-else>🌐 Switch to French</span>
           </button>
         </div>
 
@@ -1017,24 +1017,6 @@ async function sendMailToAdmin(isModif) {
 </script>
 
 <style scoped>
-.container,
-.prestataire_container,
-.button_container,
-.message_error {
-  --log-primary: #3a6f43;
-  --log-primary-light: #5a9966;
-  --log-primary-dark: #2a5232;
-  --log-rose: #e8637a;
-  --log-rose-hover: #c94d65;
-  --log-rose-pale: #ffd5d5;
-  --log-rose-medium: #fc9999;
-  --log-card-bg: #fffaf8;
-  --log-fond: #f9fafb;
-  --log-border: #ddd0cc;
-  --log-gradient-cta: linear-gradient(90deg, #3a6f43, #e8637a);
-  --log-gradient-input: linear-gradient(to right, #5a9966, #e8637a);
-}
-
 /* ── Conteneur principal ── */
 .container {
   display: flex;
@@ -1480,7 +1462,7 @@ input[type="radio"] {
 
 .btn_lang:hover {
   background: var(--log-primary);
-  color: #fff;
+  color: var(--rose-pale);
   border-color: var(--log-primary);
 }
 

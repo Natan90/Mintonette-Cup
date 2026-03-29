@@ -19,6 +19,7 @@
     width: 90%;
     text-align: center;
     position: relative;
+    overflow: visible;
 }
 
 .modal-content:not(.medium):not(.bigger) {

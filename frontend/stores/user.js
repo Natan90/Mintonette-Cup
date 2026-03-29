@@ -86,6 +86,9 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function logout() {
+    const prestataireInfoStore = usePrestataireInfoStore();
+
+    prestataireInfoStore.clearStore();
     userId.value = null;
     isConnected.value = false;
     role.value = null;
