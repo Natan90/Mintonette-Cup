@@ -5,6 +5,15 @@ const utilisateurController = require("../controllers/utilisateur.controller");
 const utilisateurMiddleware = require("../middlewares/utilisateur.middleware");
 const authMiddleware = require("../middlewares/auth.middleware");
 
+// POST refresh token 
+router.post(
+  "/refresh",
+  authMiddleware.authenticateToken,
+  utilisateurMiddleware.validateRefreshToken,
+  utilisateurController.refreshToken
+)
+
+
 // POST devenir utilisateur
 router.post(
   "/inscription",

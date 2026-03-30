@@ -74,7 +74,7 @@ const routes = [
             meta: { requiresUserId: true },
           },
           {
-            path: "service/:id/articles",
+            path: ":id_presta/add/service/:id",
             name: "AddByService",
             component: ArticlesAndActivities,
             props: true,

@@ -91,11 +91,38 @@ const billets = ref([]);
 const loading = ref(false);
 const error = ref(null);
 
+onMounted(() => {
+  if (userStore.isConnected) fetchBillets();
+});
+
+/**
+ * Calcule le prix d’un billet en fonction de la colonne du siège.
+ *
+ * Règles :
+ * - Colonnes I / H / G → 25€
+ * - Colonnes F / E / D → 18€
+ * - Autres colonnes → 12€
+ *
+ * @param {Object} seat - Objet représentant un siège
+ * @param {string} seat.numero_colonne - Lettre de la colonne
+ * @returns {number} Prix du billet en euros
+*/
 function getPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
   return 12;
 }
+/**
+ * Formate une date en fonction de la langue active (i18n).
+ *
+ * - Format français : "27 mars 2026"
+ * - Format anglais : "27 March 2026"
+ *
+ * Utilise le fuseau UTC pour éviter les décalages.
+ *
+ * @param {string} dateString - Date au format ISO
+ * @returns {string} Date formatée selon la locale
+*/
 function formatDate(dateString) {
   const date = new Date(dateString);
   const currentLocale = locale.value === "en" ? "en-GB" : "fr-FR";
@@ -107,7 +134,14 @@ function formatDate(dateString) {
     timeZone: "UTC",
   });
 }
-
+/**
+ * Redirige l’utilisateur vers la page d’un match spécifique.
+ *
+ * Vérifie que l'identifiant du match est valide avant navigation.
+ *
+ * @param {number|string} idTerrain - Identifiant du terrain
+ * @param {number|string} idMatch - Identifiant du match
+*/
 function goToMatch(idTerrain, idMatch) {
   if (!idMatch) {
     console.log("Je suis dans le if de goToMatch");
@@ -115,7 +149,16 @@ function goToMatch(idTerrain, idMatch) {
   }
   router.push({ name: "Terrain", params: { id: idTerrain, idMatch: idMatch } });
 }
-
+/**
+ * Récupère les billets de l’utilisateur connecté depuis l’API.
+ *
+ * - Vérifie que l’utilisateur est connecté
+ * - Appelle le service panier
+ * - Met à jour la liste des billets
+ * - Gère les erreurs d’appel API
+ *
+ * @async
+*/
 async function fetchBillets() {
   if (!userStore.userId) return;
   error.value = null;
@@ -127,10 +170,6 @@ async function fetchBillets() {
     error.value = "Impossible de récupérer vos billets pour le moment.";
   }
 }
-
-onMounted(() => {
-  if (userStore.isConnected) fetchBillets();
-});
 </script>
 
 <style scoped>

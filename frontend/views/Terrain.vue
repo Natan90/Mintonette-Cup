@@ -212,18 +212,40 @@ const matchTime = computed(() => {
   return `${hours}:${minutes}`;
 });
 
+
+onMounted(() => {
+  fetchPlayers();
+  fetchMatches();
+});
+
+watch(terrainId, () => {
+  fetchMatches();
+});
+
+/**
+ * Récupère la liste des joueurs pour tous les matchs du terrain sélectionné.
+*/
 async function fetchPlayers() {
   const res = await equipeStore.GetPlayer();
 
   players.value = res.data;
 }
-
+/**
+ * Récupère les matchs associés au terrain courant.
+ * Réinitialise également l’index du match sélectionné.
+*/
 async function fetchMatches() {
   const res = await equipeStore.GetMatchById(terrainId.value);
   matches.value = res.data;
   selectedItem.value = 0;
 }
-
+/**
+ * Retourne les joueurs titulaires majeurs d’une équipe avec leur position sur le terrain.
+ * La disposition dépend du côté (gauche/droite).
+ *
+ * @param teamId - Identifiant de l’équipe
+ * @param side - Côté du terrain ("left" ou "right")
+*/
 function getMajorPlayers(teamId, side) {
   const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);
 
@@ -279,35 +301,36 @@ function getMajorPlayers(teamId, side) {
     receveurs[1] && { ...receveurs[1], terrainPosition: positions.recep2 },
   ].filter(Boolean);
 }
-
+/**
+ * Retourne la liste des joueurs remplaçants d’une équipe.
+ *
+ * @param teamId - Identifiant de l’équipe
+*/
 function getSubstitutes(teamId) {
   return players.value.filter((p) => p.id_equipe === teamId).slice(6);
 }
-
+/**
+ * Définit le joueur sélectionné pour afficher sa fiche détaillée,
+ * ainsi que le côté d’affichage de la carte.
+ *
+ * @param player - Joueur sélectionné
+ * @param side - Côté d’affichage ("left" ou "right")
+*/
 function moreInfo(player, side) {
   selectedPlayer.value = player;
   cardSide.value = side;
 }
-
+/**
+ * Calcule l’âge d’un joueur à partir de sa date de naissance.
+ *
+ * @param player - Objet joueur contenant `date_naissance_joueur`
+*/
 function getAge(player) {
   return (
     new Date().getFullYear() -
     new Date(player.date_naissance_joueur).getFullYear()
   );
 }
-
-function getCountry(player) {
-  return player.pays;
-}
-
-onMounted(() => {
-  fetchPlayers();
-  fetchMatches();
-});
-
-watch(terrainId, () => {
-  fetchMatches();
-});
 </script>
 
 <style scoped>

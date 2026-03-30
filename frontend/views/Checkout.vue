@@ -250,6 +250,19 @@ const isFormValid = computed(() => {
   );
 });
 
+onMounted(() => {
+  fetchPanier();
+  fetchUserInfo();
+  // if (userStore.userId) {
+  //   // Les données devraient être chargées depuis le userStore ou depuis l'API
+  //   // Pour l'instant, c'est une placeholder
+  // }
+});
+
+/**
+ * Récupère les informations de l'utilisateur connecté
+ * et pré-remplit le formulaire de paiement.
+*/
 async function fetchUserInfo() {
   try {
     if (!userStore.userId) {
@@ -269,12 +282,21 @@ async function fetchUserInfo() {
     console.error("Erreur fetchUserInfo:", err);
   }
 }
+/**
+ * Détermine le prix d’un siège selon sa colonne.
+ * @param {Object} seat - Siège sélectionné
+ * @returns {number} Prix du siège
+*/
 function getPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
   return 12;
 }
-
+/**
+ * Récupère le panier de l'utilisateur :
+ * - Depuis l'API si disponible
+ * - Sinon depuis le localStorage en fallback
+*/
 async function fetchPanier() {
   try {
     const res = await panierStore.GetPanierByUser(userStore.userId);
@@ -297,13 +319,18 @@ async function fetchPanier() {
     }
   }
 }
-
+/**
+ * Formate le numéro de carte bancaire
+ * en groupes de 4 chiffres séparés par des espaces.
+*/
 function formatCardNumber(event) {
   let value = form.value.numerocarte.replace(/\s/g, "");
   let formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
   form.value.numerocarte = formattedValue;
 }
-
+/**
+ * Formate la date d’expiration de carte au format MM/YY.
+*/
 function formatExpiration(event) {
   let value = form.value.expiration.replace(/\D/g, "");
   if (value.length >= 2) {
@@ -311,7 +338,15 @@ function formatExpiration(event) {
   }
   form.value.expiration = value;
 }
-
+/**
+ * Traite le paiement complet :
+ * - Validation du formulaire
+ * - Création de la commande
+ * - Génération des billets
+ * - Envoi des billets par email
+ * - Nettoyage du panier
+ * - Redirection vers les billets
+*/
 async function processPayment() {
   if (!isFormValid.value) {
     alert("Veuillez remplir tous les champs obligatoires");
@@ -383,29 +418,12 @@ async function processPayment() {
     isProcessing.value = false;
   }
 }
-
+/**
+ * Retourne à la page précédente (panier).
+*/
 function goBackToCart() {
   router.back();
 }
-
-function addTestSeats() {
-  const testSeats = [
-    { numero_colonne: "A", numero_ligne: 1, zone: "Nord" },
-    { numero_colonne: "B", numero_ligne: 2, zone: "Nord" },
-    { numero_colonne: "H", numero_ligne: 5, zone: "Est" },
-  ];
-  panier.value = testSeats;
-  alert(`${testSeats.length} places de test ajoutées`);
-}
-
-onMounted(() => {
-  fetchPanier();
-  fetchUserInfo();
-  // if (userStore.userId) {
-  //   // Les données devraient être chargées depuis le userStore ou depuis l'API
-  //   // Pour l'instant, c'est une placeholder
-  // }
-});
 </script>
 
 <style scoped>

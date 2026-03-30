@@ -27,6 +27,10 @@ onMounted(async () => {
   getMessagesById(userStore.userId);
 });
 
+/**
+ * Récupère les messages envoyés par un utilisateur et les stocke dans la liste locale.
+ * @param {number|string} id_user - Identifiant de l'utilisateur
+ */
 async function getMessagesById(id_user) {
     try {
         const res = await mailBoxStore.getMessagesById(id_user);

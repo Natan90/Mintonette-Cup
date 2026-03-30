@@ -326,6 +326,9 @@ onMounted(() => {
   }
 });
 
+/**
+ * Réinitialise les filtres de recherche et recharge la liste complète des prestataires.
+*/
 function resetFilters() {
   filters.value = {
     nom: "",
@@ -339,7 +342,10 @@ function resetFilters() {
   router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
   getValuesPrestataire();
 }
-
+/**
+ * Redirige vers la page de détail d’un prestataire ou d’un service
+ * tout en sauvegardant la route actuelle dans le store de navigation.
+*/
 function goToSpecificPrestataire(idPresta) {
   navStore.previousRoute = {
     path: route.path,
@@ -357,6 +363,9 @@ function goToSpecificPrestataire(idPresta) {
 //=========================
 //==== Async functions ====
 //=========================
+/**
+ * Récupère la liste des services depuis l’API et met à jour la liste locale des prestataires.
+*/
 async function getValuesServices() {
   try {
     const res = await serviceStore.GetServices();
@@ -372,7 +381,9 @@ async function getValuesServices() {
     prestataires.value = [];
   }
 }
-
+/**
+ * Récupère la liste des prestataires depuis l’API et met à jour la liste locale.
+*/
 async function getValuesPrestataire() {
   try {
     const res = await prestataireStore.GetPrestataires();
@@ -388,7 +399,9 @@ async function getValuesPrestataire() {
     prestataires.value = [];
   }
 }
-
+/**
+ * Récupère la liste des types de prestataires depuis l’API.
+*/
 async function getValuesTypePrestataire() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
@@ -404,7 +417,9 @@ async function getValuesTypePrestataire() {
     type_prestataire.value = [];
   }
 }
-
+/**
+ * Applique les filtres de recherche et met à jour l’URL avec les paramètres sélectionnés.
+*/
 async function searchPrestataires() {
   appliedFilters.value = {
     nom: filters.value.nom,

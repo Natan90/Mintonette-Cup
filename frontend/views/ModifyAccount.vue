@@ -172,10 +172,22 @@ const formData = ref({
   sexe: "",
 });
 
+onMounted(() => {
+  GetUtilisateurById();
+});
+
 watch(showModal, (newValue) => {
   resetModalState();
 });
 
+/**
+ * Réinitialise l’état de la modale de sécurité.
+ *
+ * - Efface les messages affichés
+ * - Réinitialise les indicateurs d’erreur et de succès
+ * - Stoppe les états de chargement
+ * - Remet la barre de progression à 0
+*/
 function resetModalState() {
   message.value = "";
   isError.value = false;
@@ -183,13 +195,17 @@ function resetModalState() {
   isSending.value = false;
   progress.value = 0;
 }
-
-
-
-onMounted(() => {
-  GetUtilisateurById();
-});
-
+/**
+ * Récupère les informations de l’utilisateur connecté.
+ *
+ * - Vérifie si l’utilisateur est connecté
+ * - Redirige vers la page de connexion si non connecté
+ * - Récupère les données depuis l’API
+ * - Remplit le formulaire avec les données utilisateur
+ * - Gère l’affichage de la photo de profil
+ *
+ * @async
+*/
 async function GetUtilisateurById() {
   if (!userStore.isConnected) {
     router.push({ name: 'Connexion_utilisateur' });
@@ -220,8 +236,15 @@ async function GetUtilisateurById() {
     loading.value = false;
   }
 }
-
-
+/**
+ * Gère l’upload et la prévisualisation d’une photo de profil.
+ *
+ * - Récupère le fichier sélectionné
+ * - Le stocke pour envoi futur
+ * - Génère une preview en base64 pour affichage immédiat
+ *
+ * @param {Event} event - Événement de sélection de fichier
+*/
 const handlePhotoUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -234,8 +257,18 @@ const handlePhotoUpload = (event) => {
     reader.readAsDataURL(file);
   }
 };
-
-
+/**
+ * Met à jour les informations du profil utilisateur.
+ *
+ * - Vérifie les champs obligatoires
+ * - Empêche les soumissions multiples
+ * - Convertit la photo en base64 si présente
+ * - Envoie les données à l’API
+ * - Gère les messages de succès et d’erreur
+ * - Redirige après succès
+ *
+ * @async
+*/
 const updateUserInfo = async () => {
   if (isSubmitting.value) return;
 
@@ -290,12 +323,30 @@ const updateUserInfo = async () => {
     isSubmitting.value = false;
   }
 };
-
+/**
+ * Vérifie si une adresse e-mail est valide.
+ *
+ * Utilise une expression régulière simple.
+ *
+ * @param {string} email - Adresse e-mail à valider
+ * @returns {boolean} true si valide, sinon false
+*/
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
-
+/**
+ * Envoie un e-mail de réinitialisation de mot de passe.
+ *
+ * - Vérifie la validité de l’adresse e-mail
+ * - Affiche une progression simulée
+ * - Appelle le service d’envoi de mail
+ * - Gère les états UI (chargement, succès, erreur)
+ * - Sauvegarde la route précédente pour navigation future
+ *
+ * @async
+ * @param {string} mailToSend - Adresse e-mail du destinataire
+*/
 async function sendEmail(mailToSend) {
   if (!mailToSend) {
     message.value = "Veuillez remplir votre email";
@@ -339,7 +390,6 @@ async function sendEmail(mailToSend) {
     success.value = false;
   }
 }
-
 </script>
 
 <style scoped>
