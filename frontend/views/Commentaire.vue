@@ -89,7 +89,6 @@
               <p class="titreCommentaire">
                 {{ getCommentTitle(commentaire) }}
               </p>
-
             </div>
 
             <div class="actionsCommentaire">
