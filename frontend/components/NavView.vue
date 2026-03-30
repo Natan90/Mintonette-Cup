@@ -536,7 +536,7 @@ a span {
   }
 
   .optionsUser{
-    width: 100vw;
+    width: 100%;
   }
 
   .userButtons:hover {
@@ -559,6 +559,13 @@ a span {
   }
 
   /* Si déconnecté */
+  .partieProfil{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: var(--primary-color);
+  }
+
   .partieProfil:hover{
     transition: var(--transition-fast);
     background-color: var(--rose-logo);
@@ -570,7 +577,6 @@ a span {
 
   .partieProfil span:hover{
     color: grey;
-    font-size: bold;
     transition: var(--transition-fast);
   }
 
