@@ -575,6 +575,10 @@ a span {
     }
   }
 
+  .optionProfil{
+    width: 100vw;
+  }
+
   .partieProfil span:hover{
     color: grey;
     transition: var(--transition-fast);
