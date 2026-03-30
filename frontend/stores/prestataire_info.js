@@ -17,8 +17,9 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   const visiblePublic = ref(localStorage.getItem("visiblePublic") === "true");
   const activate = ref(localStorage.getItem("activate") === "true");
   const oneService = ref(JSON.parse(localStorage.getItem("oneService") || "null"));
-  const existingActivitesList = ref(JSON.parse(sessionStorage.getItem("existingActivitesList") || "[]"));
-  const existingArticlesList = ref(JSON.parse(sessionStorage.getItem("existingArticlesList") || "[]"));
+  const existingActivitesList = ref(JSON.parse(localStorage.getItem("existingActivitesList") || "[]"));
+  const existingArticlesList = ref(JSON.parse(localStorage.getItem("existingArticlesList") || "[]"));
+  const alreadyClosed = ref(localStorage.getItem("alreadyClosed") === "true");
 
   // Activité
   const nom_activite = ref(localStorage.getItem("nom_activite") || "");
@@ -48,9 +49,11 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     besoinService.value = { fr: "", en: "" };
     visiblePublic.value = true;
     activate.value = false;
+    alreadyClosed.value = false;
 
     clearItemsStore();
 
+    localStorage.removeItem("alreadyClosed");
     localStorage.removeItem("selectedIndex");
     localStorage.removeItem("selectedTypeId");
     localStorage.removeItem("checkedItem");
@@ -68,33 +71,33 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   }
 
   function clearItemsStore() {
-  nom_activite.value = "";
-  nb_participants.value = 0;
-  prix_activite.value = 0;
-  date_activite.value = null;
-  heure_activite.value = null;
-  activitesList.value = [];
-  existingActivitesList.value = [];
+    nom_activite.value = "";
+    nb_participants.value = 0;
+    prix_activite.value = 0;
+    date_activite.value = null;
+    heure_activite.value = null;
+    activitesList.value = [];
+    existingActivitesList.value = [];
 
-  nom_article.value = "";
-  stock_article.value = 0;
-  prix_article.value = 0;
-  articlesList.value = [];
-  existingArticlesList.value = [];
+    nom_article.value = "";
+    stock_article.value = 0;
+    prix_article.value = 0;
+    articlesList.value = [];
+    existingArticlesList.value = [];
 
-  localStorage.removeItem("nom_activite");
-  localStorage.removeItem("nb_participants");
-  localStorage.removeItem("prix_activite");
-  localStorage.removeItem("date_activite");
-  localStorage.removeItem("heure_activite");
-  localStorage.removeItem("activitesList");
-  localStorage.removeItem("existingActivitesList");
-  localStorage.removeItem("nom_article");
-  localStorage.removeItem("stock_article");
-  localStorage.removeItem("prix_article");
-  localStorage.removeItem("articlesList");
-  localStorage.removeItem("existingArticlesList");
-}
+    localStorage.removeItem("nom_activite");
+    localStorage.removeItem("nb_participants");
+    localStorage.removeItem("prix_activite");
+    localStorage.removeItem("date_activite");
+    localStorage.removeItem("heure_activite");
+    localStorage.removeItem("activitesList");
+    localStorage.removeItem("existingActivitesList");
+    localStorage.removeItem("nom_article");
+    localStorage.removeItem("stock_article");
+    localStorage.removeItem("prix_article");
+    localStorage.removeItem("articlesList");
+    localStorage.removeItem("existingArticlesList");
+  }
 
   watch(lastUserId, (v) => {
     if (v) localStorage.setItem("lastUserId", v);
@@ -137,6 +140,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   watch(stock_article, (v) => localStorage.setItem("stock_article", v));
   watch(prix_article, (v) => localStorage.setItem("prix_article", v));
   watch(articlesList, (v) => localStorage.setItem("articlesList", JSON.stringify(v)), { deep: true });
+  watch(alreadyClosed, (v) => localStorage.setItem("alreadyClosed", v));
 
   return {
     lastUserId,
@@ -146,6 +150,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     nom, descri, mail, tel,
     nomService, descriService, besoinService,
     visiblePublic, activate,
+    alreadyClosed,
     nom_activite, nb_participants, prix_activite, date_activite, heure_activite, activitesList, 
     nom_article, stock_article, prix_article, articlesList,
     clearStore, clearItemsStore

@@ -2,7 +2,7 @@
   <NavView></NavView>
   <div class="back-arrow pointer" @click="goBack()">&#8592; Retour</div>
 
-  <Modal v-model="isShowingRecapService" :bigger="true">
+  <Modal v-model="showRecapModal" :bigger="true">
     <template #content>
       <div class="recap_container">
 
@@ -22,8 +22,8 @@
         <div v-if="isActivityService" class="recap_section">
           <h3>Activités</h3>
 
-          <div v-if="activitesList.length > 0">
-            <div v-for="(item, index) in activitesList" :key="index" class="recap_item">
+          <div v-if="displayedItems.length > 0">
+            <div v-for="(item, index) in displayedItems" :key="index" class="recap_item">
               <p><strong>{{ item.nom_activite }}</strong></p>
               <p>📅 {{ item.date_activite }} à {{ item.heure_activite }}</p>
               <p>👥 {{ item.nb_participant }} participants</p>
@@ -38,8 +38,8 @@
         <div v-else class="recap_section">
           <h3>Articles</h3>
 
-          <div v-if="articlesList.length > 0">
-            <div v-for="(item, index) in articlesList" :key="index" class="recap_item">
+          <div v-if="displayedItems.length > 0">
+            <div v-for="(item, index) in displayedItems" :key="index" class="recap_item">
               <p><strong>{{ item.nom_article }}</strong></p>
               <p>📦 Stock : {{ item.stock }}</p>
               <p>🪙 {{ item.prix }} €</p>
@@ -147,7 +147,7 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <div v-if="(showOneServiceFromStore ? existingActivitesList : activitesList).length > 0" v-for="(item, index) in (showOneServiceFromStore ? existingActivitesList : activitesList)" :key="index" class="item_card">
+        <div v-if="displayedItems.length > 0" v-for="(item, index) in displayedItems" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_activite }}</span>
             <button class="btn_remove_item" @click="activitesList.splice(index, 1)">&times;</button>
@@ -209,7 +209,7 @@
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
-        <div v-if="(showOneServiceFromStore ? existingArticlesList : articlesList).length > 0" v-for="(item, index) in (showOneServiceFromStore ? existingArticlesList : articlesList)" :key="index" class="item_card">
+        <div v-if="displayedItems.length > 0" v-for="(item, index) in displayedItems" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_article }}</span>
             <button class="btn_remove_item" @click="articlesList.splice(index, 1)">&times;</button>
@@ -221,7 +221,10 @@
         </div>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
+      <div class="btn_container" v-if="showOneServiceFromStore">
+        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
+      </div>
+      <div class="btn_container" v-else-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
@@ -275,6 +278,25 @@ const isGoingBack = ref(false);
 
 // ── Service ───────────────────────────────────
 const showOneServiceFromStore = ref(false);
+
+const displayedItems = computed(() => {
+  if (showOneServiceFromStore.value) {
+    const existing = isActivityService.value
+      ? existingActivitesList.value
+      : existingArticlesList.value;
+
+    const local = isActivityService.value
+      ? activitesList.value
+      : articlesList.value;
+
+    return [...existing, ...local];
+  }
+
+  return isActivityService.value
+    ? activitesList.value
+    : articlesList.value;
+});
+
 const currentDescri = computed({
   get() {
     return descriService.value[locale.value];
@@ -302,12 +324,26 @@ const hasChanged = computed(() => {
 
 const alreadyAddedService = ref(false);
 
+const showRecapModal = computed({
+  get() {
+    return isShowingRecapService.value;
+  },
+  set(value) {
+    isShowingRecapService.value = value;
+
+    if (!value) {
+      alreadyClosed.value = true;
+    }
+  }
+});
+
 // ── Store Refs ───────────────────────────────────
 const {
   nom, descri, mail, tel,
   nomService, descriService, besoinService,
   visiblePublic, activate, articlesList, activitesList,
-  oneService, existingActivitesList, existingArticlesList
+  oneService, existingActivitesList, existingArticlesList,
+  alreadyClosed
 } = storeToRefs(prestataireInfoStore);
 
 console.log("nomService : " + nomService.value)
@@ -375,8 +411,10 @@ onMounted(() => {
   showOneServiceFromStore.value = false;
 
   if (route.query.isShowingRecapService === 'true') {
-    isShowingRecapService.value = true;
     showOneServiceFromStore.value = true;
+    if (!alreadyClosed.value) {
+      isShowingRecapService.value = true;
+    }
   }
 });
 
@@ -457,7 +495,14 @@ function alreadyExists() {
  * @returns {Array} un clone du tableau
  */
 function createCloneOfItemsList(isActivity) {
-  const list = isActivity ? activitesList.value : articlesList.value;
+  let list = [];
+  if (showOneServiceFromStore.value) {
+    list = isActivity ? existingActivitesList.value : existingArticlesList.value;
+  } 
+  else {
+    list = isActivity ? activitesList.value : articlesList.value;
+  }
+  // const list = isActivity ? activitesList.value : articlesList.value;
   return JSON.parse(JSON.stringify(list));
 }
 /**
