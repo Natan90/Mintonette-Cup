@@ -7,8 +7,11 @@ const authMiddleware = require("../middlewares/auth.middleware");
 // GET services
 router.get("/show", serviceController.getServices);
 
-// GET service par id
-router.get("/show/:id", serviceController.getServiceById);
+// GET service par id_prestataire
+router.get("/show/prestataire/:id_presta", serviceMiddleware.validateServiceByIdPrestataire, serviceController.getServiceByIdPrestataire);
+
+// GET service par id_service
+router.get("/show/service/:id_service", serviceMiddleware.validateServiceByIdService, serviceController.getServiceByIdService);
 
 // PATCH activer / désactiver le service
 router.patch("/activate/:id", serviceMiddleware.validateActivateService, serviceController.activateServiceById);

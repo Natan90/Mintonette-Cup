@@ -455,6 +455,8 @@ onMounted(async () => {
   try {
     await getValuesTypePresta();
     await getValuesEveryType();
+    await getServiceByIdPrestataire(prestaId.value);
+
 
     if (getStoreValues.value) {
       nom_presta.value = nom.value;
@@ -754,7 +756,7 @@ async function actionsService(service) {
 */
 async function showOneService(id_service) {
   try {
-    const res = await serviceStore.GetServiceById(id_service);
+    const res = await serviceStore.GetServiceByIdService(id_service);
     const s = res.data.service;
 
     oneService.value = {
@@ -791,6 +793,23 @@ async function showOneService(id_service) {
 
 // ── Prestataire ──────────────────────────────────
 /**
+ * Récupère les informations complètes des services d'un prestataire
+ * 
+ * @async
+ * @param {Integer} id_presta - L'id du prestataire
+*/
+async function getServiceByIdPrestataire(id_presta) {
+  const resServices = await serviceStore.GetServiceByIdPrestataire(id_presta);
+
+  const prestaServices = resServices.data.services;
+
+  services.value = prestaServices.map((s) => ({
+      id_service: s.id_service,
+      nom_service: s.nom_service,
+      activate: s.activate || false,
+    }));
+}
+/**
  * Récupère les informations complètes d’un prestataire.
  * 
  * Charge :
@@ -807,11 +826,12 @@ async function getValuesPrestataire() {
   if (!prestaId.value) return;
 
   try {
-    const res = await prestataireStore.GetPrestataireById(prestaId.value);
-    console.log("réponse API:", res.data);
+    const res = await prestataireStore.GetPrestataireById(userStore.userId);
+    console.log("res.data complet :", res.data);
 
     const presta = res.data.prestataire;
-    const prestaServices = res.data.services;
+
+    getServiceByIdPrestataire(prestaId.value);
 
     if (!presta) {
       console.error("Prestataire non trouvé :", prestaId.value);
@@ -874,11 +894,7 @@ async function getValuesPrestataire() {
     checkedItem_presta.value = index !== -1 ? [{ nom: selectedItems.value[index].nom, index }] : [];
     checkedItem.value = checkedItem_presta.value;
 
-    services.value = prestaServices.map((s) => ({
-      id_service: s.id_service,
-      nom_service: s.nom_service,
-      activate: s.activate || false,
-    }));
+    
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
   }

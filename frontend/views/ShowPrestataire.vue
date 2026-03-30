@@ -364,7 +364,7 @@ async function actionsService(service) {
 async function getOneService(service) {
   showService.value = true;
   try {
-    const res = await serviceStore.GetServiceById(service.id_service)
+    const res = await serviceStore.GetServiceByIdService(service.id_service)
     oneService.value = res.data.service;
     console.log("Res.data", res.data);
 

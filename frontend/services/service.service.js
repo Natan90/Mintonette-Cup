@@ -7,11 +7,18 @@ export const useServiceStore = defineStore("service", () => {
     return getRequest(`/prestataire/service/show`);
   }
 
-  async function GetServiceById(id_service) {
+  async function GetServiceByIdService(id_service) {
     if (!id_service) {
       throw new Error("L'id du service est obligatoire");
     }
-    return getRequest(`/prestataire/service/show/${id_service}`);
+    return getRequest(`/prestataire/service/show/service/${id_service}`);
+  }
+
+  async function GetServiceByIdPrestataire(id_presta) {
+    if (!id_presta) {
+      throw new Error("L'id du prestataire est obligatoire");
+    }
+    return getRequest(`/prestataire/service/show/prestataire/${id_presta}`);
   }
 
   async function ActivateService(id_service) {
@@ -50,7 +57,8 @@ export const useServiceStore = defineStore("service", () => {
 
   return {
     GetServices,
-    GetServiceById,
+    GetServiceByIdService,
+    GetServiceByIdPrestataire,
     ActivateService,
     CreateService,
     AddArticles,

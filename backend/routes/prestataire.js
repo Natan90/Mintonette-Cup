@@ -8,7 +8,7 @@ const authMiddleware = require("../middlewares/auth.middleware");
 router.get("/show", prestataireController.getPrestataire);
 
 // GET prestataire par type (utilisateur ou prestataire)
-router.get("/show/:id", prestataireController.getPrestataireById);
+router.get("/show/:id", prestataireMiddleware.validatePrestataireById, prestataireController.getPrestataireById);
 
 // POST devenir prestataire
 router.post("/becomePrestataire/:id", authMiddleware.authenticateToken, prestataireMiddleware.validateBecomePresta, prestataireController.becomePrestataire);

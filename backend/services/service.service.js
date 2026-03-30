@@ -1,7 +1,7 @@
 const pool = require("../database/db");
 
-async function getServices(id_presta) {
-  const servicesResult = await pool.query(`SELECT * FROM Services WHERE prestataire_id = $1`);
+async function getServices() {
+  const servicesResult = await pool.query(`SELECT * FROM Services`);
 
   const articlesResult = await pool.query(`SELECT * FROM Article`);
 
@@ -14,7 +14,22 @@ async function getServices(id_presta) {
   };
 }
 
-async function getServiceById(id_service) {
+async function getServiceByIdPrestataire(id_presta) {
+  const serviceResult = await pool.query(
+    `SELECT * FROM Services WHERE prestataire_id = $1`,
+    [id_presta]
+  );
+
+  if (serviceResult.rows.length === 0)
+    throw { status: 404, message: "Aucun service trouvé pour ce prestataire" };
+
+  // ✅ Retourne tous les services, pas juste le premier
+  return {
+    services: serviceResult.rows,
+  };
+}
+
+async function getServiceByIdService(id_service) {
   const serviceResult = await pool.query(
     `SELECT * FROM Services WHERE id_service = $1`,
     [id_service],
@@ -80,7 +95,7 @@ async function createService(id_presta, service) {
 
     return {
       id_service: insertService.rows[0].id_service,
-      message: "Service crée avec succès",
+      message: "Service crée avec succès (back)",
     };
   } else {
     return {
@@ -156,7 +171,8 @@ async function addActiviteByIdService(id_service, activite) {
 
 module.exports = {
   getServices,
-  getServiceById,
+  getServiceByIdPrestataire,
+  getServiceByIdService,
   activateServiceById,
   createService,
   addArticleByIdService,

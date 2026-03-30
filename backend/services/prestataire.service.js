@@ -32,19 +32,8 @@ async function getPrestataireByIdUser(id_user) {
     [id_user]
   );
 
-  if (resultPresta.rows.length === 0) return null;
-
-  const id_prestataire = resultPresta.rows[0].id_prestataire;
-
-  const resultServices = await pool.query(
-    `SELECT * FROM Services WHERE prestataire_id = $1`,
-    [id_prestataire]
-  );
-
-  // Ajouter le tableau de services
   return {
-    prestataire : resultPresta.rows[0],
-    services: resultServices.rows
+    prestataire : resultPresta.rows[0]
   };
 }
 

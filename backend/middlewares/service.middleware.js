@@ -1,3 +1,23 @@
+exports.validateServiceByIdService = (req, res, next) => {
+  const id_service = req.params.id_service;
+
+  if (!id_service) {
+    return res.status(400).json({ error: "id_service est requis" });
+  }
+
+  next();
+}
+
+exports.validateServiceByIdPrestataire = (req, res, next) => {
+  const id_presta = req.params.id_presta;
+
+  if (!id_presta) {
+    return res.status(400).json({ error: "id_presta est requis" });
+  }
+
+  next();
+}
+
 exports.validateActivateService = (req, res, next) => {
   const id_service = req.params.id; 
 

@@ -71,10 +71,10 @@
   <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave">
     <v-card title="Quitter la page ?">
       <v-card-text>
-        <span v-if="!hasData">
+        <span v-if="!hasData && !isGoingBack">
           Vous n'avez ajouté aucune donnée. Le service créé précédemment sera <strong>perdu</strong> si vous quittez.
         </span>
-        <span v-else>
+        <span v-else-if="hasData">
           Vous avez des modifications <strong>non sauvegardées</strong>. Si vous quittez cette page, toutes vos données
           seront perdues.
         </span>
@@ -160,8 +160,11 @@
         </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="alreadyAddedService">
-        <button class="btn_service_submit" @click="showRecapService()" v-if="alreadyAddedService">+ Ajouter ce service</button>
+      <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
+        <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
+      </div>
+      <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
+        <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div>
       <div v-else class="already_added_banner">
         <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
@@ -218,8 +221,11 @@
         </div>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="alreadyAddedService">
-        <button class="btn_service_submit" @click="showRecapService()" v-if="alreadyAddedService">+ Ajouter ce service</button>
+      <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
+        <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
+      </div>
+      <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
+        <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div>
       <div v-else class="already_added_banner">
         <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
@@ -285,6 +291,14 @@ const currentBesoin = computed({
     besoinService.value[locale.value] = value;
   },
 });
+
+const newItemsList = ref([]);
+
+const hasChanged = computed(() => {
+  const current = isActivityService.value ? activitesList.value : articlesList.value;
+  return JSON.stringify(current) !== JSON.stringify(newItemsList.value);
+});
+
 const alreadyAddedService = ref(false);
 
 // ── Store Refs ───────────────────────────────────
@@ -334,18 +348,16 @@ onBeforeRouteLeave((to, from, next) => {
     return;
   }
 
-  if (!hasData.value && (!articlesList || !activitesList) && isGoingBack.value) {
+  if (alreadyAddedService.value && !hasChanged.value) {
     prestataireInfoStore.clearItemsStore();
+    allowLeave.value = true;
     next();
     return;
   }
 
-  if (!hasData.value && (!articlesList || !activitesList) && !isGoingBack.value) {
-    if (!showLeaveDialog.value) {
-      pendingNavigation.value = to;
-      showLeaveDialog.value = true;
-    }
-    next(false);
+  if (isGoingBack.value && !hasData.value && !hasChanged.value) {
+    prestataireInfoStore.clearItemsStore();
+    next();
     return;
   }
 
@@ -353,12 +365,11 @@ onBeforeRouteLeave((to, from, next) => {
     pendingNavigation.value = to;
     showLeaveDialog.value = true;
   }
-
   next(false);
 });
 
 onMounted(() => {
-
+  newItemsList.value = createCloneOfItemsList(isActivityService.value);
 });
 
 const closeMessage = () => {
@@ -433,6 +444,15 @@ function alreadyExists() {
   return false;
 }
 /**
+ * Créé un clone du tableau activitesList ou articlesList en fonction de isActivity
+ * @param {Boolean} isActivity - true si on ajoute des activités, false sinon 
+ * @returns {Array} un clone du tableau
+ */
+function createCloneOfItemsList(isActivity) {
+  const list = isActivity ? activitesList.value : articlesList.value;
+  return JSON.parse(JSON.stringify(list));
+}
+/**
  * Ajoute une activité ou un article dans la liste locale après validation des champs.
  * Réinitialise ensuite les champs du formulaire et affiche un message de confirmation.
  */
@@ -477,6 +497,9 @@ async function addInItemsList() {
     message.value = "Article ajouté.";
     messageType.value = "success";
   }
+
+  // Create a clone to compare with previous tab
+  // Put alreadyAddedService in computed
 }
 
 
@@ -488,47 +511,50 @@ function showRecapService() {
   isShowingRecapService.value = true;
 }
 /**
- * Crée le service côté backend puis ajoute les activités ou articles associés.
+ * Crée les activités côté backend.
+ */
+async function addActivitesToService(idService) {
+  for (let i = 0; i < activitesList.value.length; i++) {
+    const elt = activitesList.value[i];
+
+    await serviceStore.AddActivites(idService, {
+      nom: elt.nom_activite,
+      nb_participant: Number(elt.nb_participant),
+      prix: Number(elt.prix),
+      date: elt.date_activite,
+      heure: elt.heure_activite
+    });
+  }
+}
+/**
+ * Crée les articles côté backend.
+ */
+async function addArticlesToService(idService) {
+  for (let i = 0; i < articlesList.value.length; i++) {
+    const elt = articlesList.value[i];
+
+    await serviceStore.AddArticles(newServiceId, {
+      nom: elt.nom_article,
+      stock: Number(elt.stock),
+      prix: Number(elt.prix)
+    });
+  }
+}
+/**
+ * Crée le service côté backend.
  * Affiche un message de succès ou d'erreur selon le résultat de l'opération.
  */
 async function addServiceToPrestataire() {
   try {
-    const res = await serviceStore.CreateService(id_presta.value, {
-      nom_service: nomService.value,
-      descri_service: descriService.value,
-      besoin: besoinService.value,
-      activate: Boolean(activate.value),
-      visible_public: Boolean(visiblePublic.value),
-    });
-
-    const newServiceId = res.data.id_service;
-
     if (isActivityService.value) {
-      for (let i = 0; i < activitesList.value.length; i++) {
-        const elt = activitesList.value[i];
-
-        await serviceStore.AddActivites(newServiceId, {
-          nom: elt.nom_activite,
-          nb_participant: Number(elt.nb_participant),
-          prix: Number(elt.prix),
-          date: elt.date_activite,
-          heure: elt.heure_activite
-        });
-      }
+      addActivitesToService(id_service.value);
     }
     else {
-      for (let i = 0; i < articlesList.value.length; i++) {
-        const elt = articlesList.value[i];
-
-        await serviceStore.AddArticles(newServiceId, {
-          nom: elt.nom_article,
-          stock: Number(elt.stock),
-          prix: Number(elt.prix)
-        });
-      }
+      addArticlesToService(id_service.value);
     }
 
     alreadyAddedService.value = true;
+    newItemsList.value = createCloneOfItemsList(isActivityService.value);
 
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";
@@ -538,8 +564,6 @@ async function addServiceToPrestataire() {
     messageType.value = "error";
   }
 }
-
-
 </script>
 
 <style scoped>
