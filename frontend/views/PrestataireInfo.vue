@@ -306,8 +306,7 @@ const router = useRouter();
 const {
   nom, descri, mail, tel,
   nomService, descriService, besoinService,
-  visiblePublic, activate,
-  isModalService, continueInscription,
+  visiblePublic, activate, continueInscription,
   selectedIndex, checkedItem, selectedTypeId
 } = storeToRefs(prestataireInfoStore);
 
@@ -330,6 +329,7 @@ const isSubmitting = ref(false);
 const showLeaveDialog = ref(false);
 const pendingNavigation = ref(null);
 const allowLeave = ref(false);
+const isModalService = ref(false);
 
 // -- Services --
 const isActivityService = ref(false);
