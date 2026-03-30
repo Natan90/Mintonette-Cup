@@ -23,7 +23,6 @@ async function getServiceByIdPrestataire(id_presta) {
   if (serviceResult.rows.length === 0)
     throw { status: 404, message: "Aucun service trouvé pour ce prestataire" };
 
-  // ✅ Retourne tous les services, pas juste le premier
   return {
     services: serviceResult.rows,
   };

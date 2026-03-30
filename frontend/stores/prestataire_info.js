@@ -16,6 +16,9 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   const besoinService = ref(JSON.parse(localStorage.getItem("besoinService") || '{"fr":"","en":""}'));
   const visiblePublic = ref(localStorage.getItem("visiblePublic") === "true");
   const activate = ref(localStorage.getItem("activate") === "true");
+  const oneService = ref(JSON.parse(localStorage.getItem("oneService") || "null"));
+  const existingActivitesList = ref(JSON.parse(sessionStorage.getItem("existingActivitesList") || "[]"));
+  const existingArticlesList = ref(JSON.parse(sessionStorage.getItem("existingArticlesList") || "[]"));
 
   // Activité
   const nom_activite = ref(localStorage.getItem("nom_activite") || "");
@@ -61,6 +64,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     localStorage.removeItem("besoinService");
     localStorage.removeItem("visiblePublic");
     localStorage.removeItem("activate");
+    localStorage.removeItem("oneService");
   }
 
   function clearItemsStore() {
@@ -70,11 +74,13 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   date_activite.value = null;
   heure_activite.value = null;
   activitesList.value = [];
+  existingActivitesList.value = [];
 
   nom_article.value = "";
   stock_article.value = 0;
   prix_article.value = 0;
   articlesList.value = [];
+  existingArticlesList.value = [];
 
   localStorage.removeItem("nom_activite");
   localStorage.removeItem("nb_participants");
@@ -82,10 +88,12 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   localStorage.removeItem("date_activite");
   localStorage.removeItem("heure_activite");
   localStorage.removeItem("activitesList");
+  localStorage.removeItem("existingActivitesList");
   localStorage.removeItem("nom_article");
   localStorage.removeItem("stock_article");
   localStorage.removeItem("prix_article");
   localStorage.removeItem("articlesList");
+  localStorage.removeItem("existingArticlesList");
 }
 
   watch(lastUserId, (v) => {
@@ -105,6 +113,12 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   watch(besoinService, (v) => localStorage.setItem("besoinService", JSON.stringify(v)), { deep: true });
   watch(visiblePublic, (v) => localStorage.setItem("visiblePublic", v));
   watch(activate, (v) => localStorage.setItem("activate", v));
+  watch(oneService, (v) => {
+    if (v) localStorage.setItem("oneService", JSON.stringify(v));
+    else localStorage.removeItem("oneService");
+  });
+  watch(existingActivitesList, (v) => localStorage.setItem("existingActivitesList", JSON.stringify(v)), { deep: true });
+  watch(existingArticlesList, (v) => localStorage.setItem("existingArticlesList", JSON.stringify(v)), { deep: true });
 
   watch(nom_activite, (v) => localStorage.setItem("nom_activite", v));
   watch(nb_participants, (v) => localStorage.setItem("nb_participants", v));
@@ -128,6 +142,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     lastUserId,
     selectedTypeId,
     selectedIndex, checkedItem, continueInscription,
+    oneService, existingActivitesList, existingArticlesList,
     nom, descri, mail, tel,
     nomService, descriService, besoinService,
     visiblePublic, activate,

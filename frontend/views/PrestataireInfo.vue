@@ -307,7 +307,8 @@ const {
   nom, descri, mail, tel,
   nomService, descriService, besoinService,
   visiblePublic, activate, continueInscription,
-  selectedIndex, checkedItem, selectedTypeId
+  selectedIndex, checkedItem, selectedTypeId,
+  existingActivitesList, existingArticlesList
 } = storeToRefs(prestataireInfoStore);
 
 
@@ -759,32 +760,53 @@ async function showOneService(id_service) {
     const res = await serviceStore.GetServiceByIdService(id_service);
     const s = res.data.service;
 
-    oneService.value = {
+    prestataireInfoStore.oneService = {
       id_service: s.id_service,
       nom_service: s.nom_service,
-
       titre_service: {
-        fr: s.titre_service?.fr?.texte ?? '',
-        en: s.titre_service?.en?.texte ?? ''
+        fr: s.titre_service?.fr ?? '',
+        en: s.titre_service?.en ?? ''
       },
-
       descriService: {
-        fr: s.descriService?.fr?.texte ?? '',
-        en: s.descriService?.en?.texte ?? ''
+        fr: s.descri_service?.fr ?? '',
+        en: s.descri_service?.en ?? ''
       },
-
       besoin: {
         fr: s.besoin?.fr ?? '',
         en: s.besoin?.en ?? ''
       },
-
-      prix: s.prix ?? 0,
-      nb_participants: s.nb_participants ?? 0,
       activate: s.activate ?? false,
       visible_public: s.visible_public ?? true,
     };
 
-    showService.value = true;
+    existingActivitesList.value = (res.data.activites || []).map(a => ({
+      nom_activite: a.nom_activite,
+      date_activite: a.date_activite?.split('T')[0] ?? '',
+      heure_activite: a.date_activite?.split('T')[1]?.slice(0, 5) ?? '',
+      nb_participant: a.nb_participant,
+      prix: a.prix_activite
+    }));
+
+    existingArticlesList.value = (res.data.articles || []).map(a => ({
+      nom_article: a.nom_article,
+      stock: a.stock,
+      prix: a.prix_article
+    }));
+
+    console.log("existingActivitesList:", JSON.stringify(existingActivitesList.value));
+    console.log("existingArticlesList:", JSON.stringify(existingArticlesList.value));
+
+    router.push({
+      name: "AddByService",
+      params: {
+        id_presta: prestaId.value,
+        id: id_service
+      },
+      query: {
+        isActivityService: isActivityService.value,
+        isShowingRecapService: true
+      }
+    });
   } catch (err) {
     console.error(err);
   }
@@ -799,6 +821,8 @@ async function showOneService(id_service) {
  * @param {Integer} id_presta - L'id du prestataire
 */
 async function getServiceByIdPrestataire(id_presta) {
+  if (!id_presta) return;
+
   const resServices = await serviceStore.GetServiceByIdPrestataire(id_presta);
 
   const prestaServices = resServices.data.services;

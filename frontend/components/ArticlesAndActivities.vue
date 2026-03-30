@@ -10,12 +10,12 @@
 
         <!-- Infos service -->
         <div class="recap_section">
-          <p><strong>Nom :</strong> {{ nomService }}</p>
+          <p><strong>Nom :</strong> {{ showOneServiceFromStore ? oneService?.nom_service : nomService }}</p>
           <p><strong>Description :</strong></p>
-          <div v-html="currentDescri"></div>
-          <p><strong>Besoin :</strong> {{ currentBesoin }}</p>
-          <p><strong>Visible :</strong> {{ visiblePublic ? "Oui" : "Non" }}</p>
-          <p><strong>Activé :</strong> {{ activate ? "Oui" : "Non" }}</p>
+          <div v-html="showOneServiceFromStore ? oneService?.descriService?.[locale].texte : currentDescri"></div>
+          <p><strong>Besoin :</strong> {{ showOneServiceFromStore ? oneService?.besoin?.[locale] : currentBesoin }}</p>
+          <p><strong>Visible :</strong> {{ (showOneServiceFromStore ? oneService?.visible_public : visiblePublic) ? "Oui" : "Non" }}</p>
+          <p><strong>Activé :</strong> {{ (showOneServiceFromStore ? oneService?.activate : activate) ? "Oui" : "Non" }}</p>
         </div>
 
         <!-- Activités -->
@@ -59,7 +59,7 @@
           <button class="btn_modal btn_refuser" @click="isShowingRecapService = false">
             Modifier
           </button>
-          <button class="btn_modal btn_valider" @click="addServiceToPrestataire()">
+          <button class="btn_modal btn_valider" @click="addServiceToPrestataire()" v-if="!showOneServiceFromStore">
             Confirmer
           </button>
         </div>
@@ -90,13 +90,13 @@
   <section>
     <div>
       <p v-if="isActivityService">
-        Ajoutez les activités proposées dans le cadre du service <span class="name_delete">{{ nomService }}</span>.
+        Ajoutez les activités proposées dans le cadre du service <span class="name_delete">{{ showOneServiceFromStore ? oneService?.nom_service : nomService }}</span>.
         Chaque
         activité peut avoir sa propre date, son horaire, son tarif et son nombre de participants.
       </p>
 
       <p v-else>
-        Ajoutez les articles disponibles à la vente pour le service <span class="name_delete">{{ nomService }}</span>.
+        Ajoutez les articles disponibles à la vente pour le service <span class="name_delete">{{ showOneServiceFromStore ? oneService?.nom_service : nomService }}</span>.
         Précisez le nom, le stock disponible et le prix de chaque article.
       </p>
     </div>
@@ -147,7 +147,7 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <div v-if="activitesList.length > 0" v-for="(item, index) in activitesList" :key="index" class="item_card">
+        <div v-if="(showOneServiceFromStore ? existingActivitesList : activitesList).length > 0" v-for="(item, index) in (showOneServiceFromStore ? existingActivitesList : activitesList)" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_activite }}</span>
             <button class="btn_remove_item" @click="activitesList.splice(index, 1)">&times;</button>
@@ -209,7 +209,7 @@
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
-        <div v-if="articlesList.length > 0" v-for="(item, index) in articlesList" :key="index" class="item_card">
+        <div v-if="(showOneServiceFromStore ? existingArticlesList : articlesList).length > 0" v-for="(item, index) in (showOneServiceFromStore ? existingArticlesList : articlesList)" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_article }}</span>
             <button class="btn_remove_item" @click="articlesList.splice(index, 1)">&times;</button>
@@ -274,6 +274,7 @@ const isGoingBack = ref(false);
 
 
 // ── Service ───────────────────────────────────
+const showOneServiceFromStore = ref(false);
 const currentDescri = computed({
   get() {
     return descriService.value[locale.value];
@@ -305,7 +306,8 @@ const alreadyAddedService = ref(false);
 const {
   nom, descri, mail, tel,
   nomService, descriService, besoinService,
-  visiblePublic, activate, articlesList, activitesList
+  visiblePublic, activate, articlesList, activitesList,
+  oneService, existingActivitesList, existingArticlesList
 } = storeToRefs(prestataireInfoStore);
 
 console.log("nomService : " + nomService.value)
@@ -370,6 +372,12 @@ onBeforeRouteLeave((to, from, next) => {
 
 onMounted(() => {
   newItemsList.value = createCloneOfItemsList(isActivityService.value);
+  showOneServiceFromStore.value = false;
+
+  if (route.query.isShowingRecapService === 'true') {
+    isShowingRecapService.value = true;
+    showOneServiceFromStore.value = true;
+  }
 });
 
 const closeMessage = () => {
@@ -511,7 +519,7 @@ function showRecapService() {
   isShowingRecapService.value = true;
 }
 /**
- * Crée les activités côté backend.
+ * Créé les activités côté backend.
  */
 async function addActivitesToService(idService) {
   for (let i = 0; i < activitesList.value.length; i++) {
@@ -527,7 +535,7 @@ async function addActivitesToService(idService) {
   }
 }
 /**
- * Crée les articles côté backend.
+ * Créé les articles côté backend.
  */
 async function addArticlesToService(idService) {
   for (let i = 0; i < articlesList.value.length; i++) {
