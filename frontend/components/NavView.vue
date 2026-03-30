@@ -473,11 +473,13 @@ a span {
 
   .routeur_logo,
   .optionNav,
-  .boutonNav:not(.connect){
+  .boutonNav:not(.connect),
+  .optionCenter{
     flex-direction: column;
     background-color: var(--primary-color);
     width: 100%;
     margin: 0;
+    gap: 0;
   }
 
   .routeur_logo:hover,
