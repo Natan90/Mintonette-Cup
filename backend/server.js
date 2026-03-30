@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-require('dotenv').config();
+require("dotenv").config();
 
 const passport = require("./config/passport");
 const authRoutes = require("./routes/utilisateur");
@@ -14,6 +14,7 @@ const equipesRoutes = require("./routes/equipe");
 const panierRoutes = require("./routes/panier");
 const mailRoutes = require("./routes/mail");
 const mailBoxRoutes = require("./routes/reception_box");
+const commentaireRoutes = require("./routes/commentaire");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,9 +24,8 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -44,7 +44,7 @@ app.use("/equipes", equipesRoutes);
 app.use("/panier", panierRoutes);
 app.use("/mail", mailRoutes);
 app.use("/mailbox", mailBoxRoutes);
-
+app.use("/commentaire", commentaireRoutes);
 
 // Swagger
 const swaggerUi = require("swagger-ui-express");
@@ -57,7 +57,7 @@ app.use(
     swaggerOptions: {
       tagsSorter: "alpha",
     },
-  })
+  }),
 );
 
 // Lancement du serveur

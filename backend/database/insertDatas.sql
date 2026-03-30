@@ -158,18 +158,30 @@ VALUES
     ('Achat de billets'),
     ('Remboursement');
 
-
 INSERT INTO 
 Commentaire (
+  nom_commentaire,
+  prenom_commentaire,
+  titre_commentaire,
   texte_commentaire, 
   note_commentaire,
   date_commentaire
   )
 VALUES (
+  'Martin',
+  'Lucas',
+  'Super',
   'Super événement avec de nombreuses équipes qui se disputent la victoire ! Je recommande vivement !!',
   5, 
   NOW() 
-);
+),
+(
+  'Durand',
+  'Emma',
+  'Amélioration possible',
+  'La queue pour les toilettes était trop longue ',
+  3,
+  NOW());
 
 INSERT INTO
     Mailbox_Message (

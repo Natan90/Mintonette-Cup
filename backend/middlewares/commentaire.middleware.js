@@ -1,10 +1,22 @@
 exports.validateCommentaire = (req, res, next) => {
-  const { texte_commentaire, note_commentaire, date_commentaire } = req.body;
+  const { titre_commentaire, texte_commentaire, note_commentaire } = req.body;
 
-  if (!texte_commentaire || !note_commentaire || !date_commentaire) {
+  if (!titre_commentaire || !texte_commentaire || !note_commentaire) {
     return res.status(400).json({
       error:
-        "Tous les champs (texte_commentaire, note_commentaire, date_commentaire) sont requis",
+        "Tous les champs (titre_commentaire, texte_commentaire, note_commentaire) sont requis",
+    });
+  }
+
+  const note = Number(note_commentaire);
+  if (
+    !Number.isFinite(note) ||
+    note < 0.5 ||
+    note > 5 ||
+    !Number.isInteger(note * 2)
+  ) {
+    return res.status(400).json({
+      error: "La note doit être comprise entre 0,5 et 5 par demi-point",
     });
   }
 

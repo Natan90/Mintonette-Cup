@@ -197,8 +197,11 @@ CREATE TABLE IF NOT EXISTS Organisateur(
 
 CREATE TABLE IF NOT EXISTS Commentaire (
   id_commentaire SERIAL PRIMARY KEY,
+  nom_commentaire VARCHAR(50),
+  prenom_commentaire VARCHAR(50),
+  titre_commentaire VARCHAR(500),
   texte_commentaire VARCHAR(500),
-  note_commentaire INT,
+  note_commentaire NUMERIC(2,1),
   date_commentaire DATE
 );
 
