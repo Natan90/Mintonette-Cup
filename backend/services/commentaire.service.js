@@ -9,6 +9,8 @@ async function getCommentaire() {
       c.prenom_commentaire,
       c.titre_commentaire,
       c.texte_commentaire,
+      c.reponse_commentaire,
+      c.date_reponse_commentaire,
       c.note_commentaire,
       c.date_commentaire
 
@@ -66,8 +68,42 @@ async function updateCommentaire(
   return result.rows[0];
 }
 
+async function replyCommentaire(id_commentaire, reponse) {
+  const result = await pool.query(
+    `UPDATE Commentaire
+       SET reponse_commentaire = $1,
+           date_reponse_commentaire = NOW()
+     WHERE id_commentaire = $2
+     RETURNING *`,
+    [reponse, id_commentaire],
+  );
+
+  if (result.rows.length === 0) {
+    throw { status: 404, message: "Commentaire non trouvé" };
+  }
+
+  return result.rows[0];
+}
+
+async function deleteCommentaire(id_commentaire) {
+  const result = await pool.query(
+    `DELETE FROM Commentaire
+     WHERE id_commentaire = $1
+     RETURNING *`,
+    [id_commentaire],
+  );
+
+  if (result.rows.length === 0) {
+    throw { status: 404, message: "Commentaire non trouvé" };
+  }
+
+  return result.rows[0];
+}
+
 module.exports = {
   getCommentaire,
   addCommentaire,
   updateCommentaire,
+  replyCommentaire,
+  deleteCommentaire,
 };

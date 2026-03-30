@@ -19,4 +19,16 @@ router.patch(
   commentaireController.updateCommentaire,
 );
 
+router.patch(
+  "/replyCommentaire/:id",
+  authMiddleware.authenticateToken,
+  commentaireController.replyCommentaire,
+);
+
+router.delete(
+  "/deleteCommentaire/:id",
+  authMiddleware.authenticateToken,
+  commentaireController.deleteCommentaire,
+);
+
 module.exports = router;

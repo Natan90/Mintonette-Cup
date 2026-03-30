@@ -89,6 +89,7 @@
               <p class="titreCommentaire">
                 {{ getCommentTitle(commentaire) }}
               </p>
+
             </div>
 
             <div class="actionsCommentaire">
@@ -122,6 +123,27 @@
           <p class="texteCommentaire">
             {{ commentaire.texte_commentaire || "Aucun texte de commentaire." }}
           </p>
+
+          <div v-if="commentaire.reponse_commentaire" class="reponseBloc">
+            <button
+              type="button"
+              class="boutonDeplierReponse"
+              :class="{ ouvert: openReplyId === commentaire.id_commentaire }"
+              @click="toggleReply(commentaire.id_commentaire)">
+              {{
+                openReplyId === commentaire.id_commentaire
+                  ? "Masquer la réponse de l'administration"
+                  : "Voir la réponse de l'administration"
+              }}
+            </button>
+
+            <div
+              v-if="openReplyId === commentaire.id_commentaire"
+              class="reponseCommentaire">
+              <p class="titreReponse">Réponse de l'administration</p>
+              <p class="texteReponse">{{ commentaire.reponse_commentaire }}</p>
+            </div>
+          </div>
         </article>
       </section>
     </section>
@@ -236,6 +258,7 @@ const formError = ref("");
 const noteFiltre = ref("all");
 const currentUser = ref(null);
 const editingCommentId = ref(null);
+const openReplyId = ref(null);
 const commentaireForm = ref({
   titre_commentaire: "",
   texte_commentaire: "",
@@ -347,6 +370,11 @@ function isOwnComment(commentaire) {
     normalizeText(currentUser.value.nom_utilisateur) ===
       normalizeText(commentaire.nom_commentaire)
   );
+}
+
+function toggleReply(idCommentaire) {
+  openReplyId.value =
+    openReplyId.value === idCommentaire ? null : idCommentaire;
 }
 
 async function toggleForm() {
@@ -765,6 +793,72 @@ async function submitCommentaire() {
 .texteCommentaire {
   margin: 0.9rem 0 0;
   line-height: 1.6;
+}
+
+.reponseBloc {
+  margin-top: 1rem;
+}
+
+.boutonDeplierReponse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid rgba(58, 111, 67, 0.22);
+  border-radius: 14px;
+  background: rgba(58, 111, 67, 0.08);
+  color: var(--primary-dark);
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.boutonDeplierReponse:hover {
+  transform: translateY(-1px);
+  background: rgba(58, 111, 67, 0.12);
+  border-color: rgba(58, 111, 67, 0.34);
+}
+
+.boutonDeplierReponse.ouvert {
+  color: var(--rose-hover);
+  background: rgba(232, 99, 122, 0.08);
+  border-color: rgba(232, 99, 122, 0.26);
+}
+
+.boutonDeplierReponse.ouvert:hover {
+  background: rgba(232, 99, 122, 0.12);
+  border-color: rgba(232, 99, 122, 0.38);
+}
+
+.reponseCommentaire {
+  margin-top: 0.75rem;
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+  background: rgba(58, 111, 67, 0.12);
+  border: 1px solid rgba(58, 111, 67, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.titreReponse {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-dark);
+}
+
+.texteReponse {
+  margin: 0.5rem 0 0;
+  line-height: 1.6;
+  color: #163524;
+  font-weight: 500;
 }
 
 .zoneFormulaire {

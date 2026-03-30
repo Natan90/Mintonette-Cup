@@ -201,6 +201,8 @@ CREATE TABLE IF NOT EXISTS Commentaire (
   prenom_commentaire VARCHAR(50),
   titre_commentaire VARCHAR(500),
   texte_commentaire VARCHAR(500),
+  reponse_commentaire TEXT,
+  date_reponse_commentaire TIMESTAMP,
   note_commentaire NUMERIC(2,1),
   date_commentaire DATE
 );

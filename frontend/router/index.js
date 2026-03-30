@@ -30,6 +30,7 @@ import Mailbox from "@/views/Mailbox.vue";
 import Remboursement from "@/views/Remboursement.vue";
 import ArticlesAndActivities from "@/components/ArticlesAndActivities.vue";
 import Commentaire from "@/views/Commentaire.vue";
+import AdminCommentaire from "@/views/Administrateur/AdminCommentaire.vue";
 
 const routes = [
   {
@@ -108,6 +109,12 @@ const routes = [
             path: "statistiques",
             name: "Statistiques",
             component: Statistiques,
+            meta: { requiresUserId: true },
+          },
+          {
+            path: "AdminCommentaire",
+            name: "AdminCommentaire",
+            component: AdminCommentaire,
             meta: { requiresUserId: true },
           },
         ],

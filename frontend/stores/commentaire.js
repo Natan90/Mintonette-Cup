@@ -4,6 +4,7 @@ import {
   getRequest,
   postRequest,
   patchRequest,
+  deleteRequest,
 } from "@/services/axios.service";
 
 export const useCommentaireStore = defineStore("commentaire", () => {
@@ -78,6 +79,29 @@ export const useCommentaireStore = defineStore("commentaire", () => {
     return response?.data;
   }
 
+  async function replyCommentaire(id_commentaire, reponse_commentaire) {
+    const response = await patchRequest(
+      `/commentaire/replyCommentaire/${id_commentaire}`,
+      {
+        reponse_commentaire,
+      },
+    );
+
+    await fetchCommentaires();
+
+    return response?.data;
+  }
+
+  async function deleteCommentaire(id_commentaire) {
+    const response = await deleteRequest(
+      `/commentaire/deleteCommentaire/${id_commentaire}`,
+    );
+
+    await fetchCommentaires();
+
+    return response?.data;
+  }
+
   return {
     commentaires,
     isLoading,
@@ -88,5 +112,7 @@ export const useCommentaireStore = defineStore("commentaire", () => {
     fetchCommentaires,
     addCommentaire,
     updateCommentaire,
+    replyCommentaire,
+    deleteCommentaire,
   };
 });

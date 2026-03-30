@@ -1,16 +1,18 @@
 <template>
   <div class="barre_menu">
-    <router-link v-for="(item, index) in menu" :key="index" :to="{ name: item.linkName, params: { lang: locale } }">
+    <router-link
+      v-for="(item, index) in menu"
+      :key="index"
+      :to="{ name: item.linkName, params: { lang: locale } }">
       {{ item.name }}
     </router-link>
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from "@/stores/user";
 
 const { locale } = useI18n();
 const userStore = useUserStore();
@@ -19,11 +21,10 @@ const menu = ref([
   { name: "Évènement", linkName: "Evenement" },
   { name: "Utilisateurs", linkName: "Utilisateurs" },
   { name: "Prestataire", linkName: "Prestataires" },
-  { name: "Statistiques", linkName: "Statistiques" }
+  { name: "Statistiques", linkName: "Statistiques" },
+  { name: "Commentaire", linkName: "AdminCommentaire" },
 ]);
 </script>
-
-
 
 <style scoped>
 .barre_menu {
@@ -35,5 +36,4 @@ const menu = ref([
   position: fixed;
   align-items: center;
 }
-
 </style>
