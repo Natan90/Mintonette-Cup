@@ -11,27 +11,39 @@
           class="boutonNav">
           <span class="pointer">Prestataire (mode public)</span>
         </router-link> -->
+
+        <div
+          v-if="!isInIndex"
+          @click="$router.push({ name: 'Home', params: { lang: locale } })"
+          class="boutonNav pointer"
+          id="accueil">
+          {{ $t("barreNav.accueil") }}
+        </div>
+
         <div
           v-if="isInIndex"
           @click="scrollToSection('Carte')"
-          class="boutonNav pointer">
+          class="boutonNav pointer"
+          id="carte">
           {{ $t("barreNav.carte") }}
         </div>
 
         <div
           v-if="isInIndex"
           @click="scrollToSection('Info')"
-          class="boutonNav pointer">
+          class="boutonNav pointer"
+          id="aPropos">
           {{ $t("barreNav.aPropos") }}
         </div>
         <div
           v-if="isInIndex"
           @click="scrollToSection('liste_prestataires')"
-          class="boutonNav pointer">
+          class="boutonNav pointer"
+          id="prestataire">
           {{ $t("barreNav.prestataire") }}
         </div>
 
-        <div @click="scrollToSection('footer')" class="boutonNav pointer">
+        <div @click="scrollToSection('footer')" class="boutonNav pointer" id="partenaire">
           {{ $t("barreNav.partenaire") }}
         </div>
         <!-- <router-link
@@ -94,50 +106,45 @@
         </div>
 
         <div class="optionsUser">
-          <router-link
+          <div
             v-if="userStore.userId"
-            :to="{
-              name: 'ShowAccount',
-              params: { lang: locale, userId: userStore.userId },
-            }"
+            @click="$router.push({ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } })"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.profil") }}</span>
-          </router-link>
-          <router-link
+          </div>
+
+          <div
             v-if="admin && userStore.userId && userStore.userId == 1"
-            :to="{ name: 'Evenement', params: { lang: locale } }"
+            @click="$router.push({ name: 'Evenement', params: { lang: locale } })"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.evenement") }}</span>
-          </router-link>
-          <router-link
+          </div>
+
+          <div
             v-if="utilisateur.ispresta"
-            :to="{
-              name: 'EditPrestataire',
-              params: { id: userStore.userId, lang: locale },
-            }"
+            @click="$router.push({ name: 'EditPrestataire', params: { id: userStore.userId, lang: locale } })"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.prestation") }}</span>
-          </router-link>
+          </div>
 
-          <router-link
+          <div
             v-if="userStore.userId != 1"
-            :to="{ name: 'Panier', params: { lang: locale } }"
+            @click="$router.push({ name: 'Panier', params: { lang: locale } })"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.panier") }}</span>
-          </router-link>
+          </div>
 
-          <router-link
+          <div
             v-if="userStore.userId != 1"
-            :to="{ name: 'MesBillets', params: { lang: locale } }"
+            @click="$router.push({ name: 'MesBillets', params: { lang: locale } })"
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.billet") }}</span>
-          </router-link>
-
+          </div>
           <div
             class="optionProfil optionProfil"
             :class="{ blueBar: !isInIndex }"
@@ -300,6 +307,7 @@ if (savedLang) locale.value = savedLang;
 </script>
 
 <style scoped>
+
 .barre-nav {
   padding: 0;
   color: white;
@@ -324,15 +332,14 @@ if (savedLang) locale.value = savedLang;
 .optionNav {
   display: flex;
   justify-content: space-between;
-  width: calc(100% - 100px);
+  width: 100%;
   height: 50%;
-  margin-left: 100px;
   font-weight: 500;
 }
 
 .optionCenter{
   display: flex;
-  width: 80%;
+  width: 90%;
   justify-content: center;
   gap: 40px;
 }
@@ -347,6 +354,7 @@ if (savedLang) locale.value = savedLang;
   display: flex;
   align-items: center; /* centrage vertical */
   justify-content: center; /* centrage horizontal */
+  text-align: center;
 
   height: 100%;
 }
@@ -372,6 +380,15 @@ a span {
   font-weight: 500;
 }
 
+.partieProfil {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 4px;
+  margin-right: 0.6em;
+}
+
 .partieprofil div {
   display: flex;
   align-items: center;
@@ -380,16 +397,8 @@ a span {
 .default {
   cursor: default;
   height: 100%;
-}
-
-.partieProfil {
-  height: 100%;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 4px;
-  margin-right: 0.6em;
-
+  align-items: center;
 }
 
 .userButtons {
@@ -481,23 +490,29 @@ a span {
 @media(max-width:1000px){
   .barre-nav{
     flex-direction: column;
+    height:fit-content;
   }
 
   .logo{
     margin: 0;
     object-fit: contain;
+    height: 40px;
   }
 
   .routeur_logo{
-    max-height: 100px;
     display: flex;
     justify-content: center;
+  }
+
+  #aPropos,#partenaire,#accueil{
+    display: none;
   }
 
   .routeur_logo,
   .optionNav,
   .boutonNav:not(.connect),
-  .optionCenter{
+  .optionCenter,
+  .optionProfil{
     flex-direction: column;
     background-color: var(--primary-color);
     width: 100%;
@@ -520,12 +535,30 @@ a span {
     padding-left: 10px;
   }
 
-  .partieProfil{
-    background-color: var(--primary-color);
-    justify-content: center;
-    width: 100%;
+  .optionsUser{
+    width: 100vw;
   }
 
+  .userButtons:hover {
+    .optionProfil {
+      height: auto;
+    }
+  }
+
+  .optionProfil {
+    display: block;
+    text-align: center;
+    font-size: 1em;
+
+    transform: none;
+  }
+
+  .profile-placeholder,.photoUser{
+    display: none;
+    height: 0;
+  }
+
+  /* Si déconnecté */
   .partieProfil:hover{
     transition: var(--transition-fast);
     background-color: var(--rose-logo);
