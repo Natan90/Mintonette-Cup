@@ -52,6 +52,11 @@
   --log-blob-1: linear-gradient(135deg, #fc9999, #e8637a);
   --log-blob-2: linear-gradient(135deg, #5a9966, #3a6f43);
 
+  --log-primary: #3a6f43;
+  --log-primary-light: #5a9966;
+  --log-primary-dark: #2a5232;
+  --log-card-bg: #fffaf8;
+
   /* Transitions */
   --transition-fast: 0.3s ease;
 

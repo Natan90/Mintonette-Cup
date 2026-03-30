@@ -218,22 +218,6 @@ const titre_service = ref("");
 const descri_service = ref("");
 const besoin_service = ref("");
 
-const closeModal = () => {
-  showService.value = false;
-};
-
-const closeMessageActivate = () => {
-  activate.value = false;
-};
-
-const closeMessageDesactivate = () => {
-  desactivate.value = false;
-};
-
-const closeMessageSuppr = () => {
-  deleting.value = false;
-};
-
 const onePresta = ref({
   nom_prestataire: "",
   descri_prestataire: "",
@@ -284,12 +268,36 @@ const servicesFiltres = computed(() => {
   return liste;
 });
 
+/**
+ * Masque le message de confirmation d’activation de service.
+*/
+const closeMessageActivate = () => {
+  activate.value = false;
+};
+/**
+ * Masque le message de confirmation de désactivation de service.
+*/
+const closeMessageDesactivate = () => {
+  desactivate.value = false;
+};
+/**
+ * Masque le message de suppression de service.
+*/
+const closeMessageSuppr = () => {
+  deleting.value = false;
+};
+
+/**
+ * Retourne à la page précédente enregistrée dans le store de navigation.
+*/
 function goBack() {
   if (navStore.previousRoute) {
     router.push(navStore.previousRoute);
   }
 }
-
+/**
+ * Redirige vers la page d’édition du prestataire courant.
+*/
 function goToEditPrestataire() {
   router.push({
     name: "EditPrestataire",
@@ -300,6 +308,9 @@ function goToEditPrestataire() {
 //==========================
 //= Async functions presta =
 //==========================
+/**
+ * Récupère les informations du prestataire ainsi que ses services associés.
+*/
 async function getValuesPrestataire() {
   try {
     const res = await prestataireStore.GetPrestataireById(idPresta);
@@ -311,18 +322,27 @@ async function getValuesPrestataire() {
     console.error("Erreur lors de la récupération des données :", err);
   }
 }
-
-
+/**
+ * Désactive le service du prestataire.
+ * 
+ * @param {Array} service - Le service à désactiver.
+ */
 function desactivatingService(service) {
   desactivate.value = true;
   actionsService(service);
 }
-
+/**
+ * Active le service du prestataire.
+ * 
+ * @param {Array} service - Le service à activer.
+ */
 function activateService(service) {
   activate.value = true;
   actionsService(service);
 }
-
+/**
+ * Active ou désactive un service et met à jour son état local.
+*/
 async function actionsService(service) {
   try {
     desactivateService.value = service;
@@ -338,8 +358,9 @@ async function actionsService(service) {
     console.error("Erreur lors de la récupération des données :", err);
   }
 }
-
-
+/**
+ * Ouvre la modale et récupère les détails complets d’un service.
+*/
 async function getOneService(service) {
   showService.value = true;
   try {
@@ -355,8 +376,9 @@ async function getOneService(service) {
     console.error(err);
   }
 }
-
-
+/**
+ * Ajoute un service au panier de l’utilisateur connecté.
+*/
 async function addService(service) {
   if (!userStore.userId) {
     console.error("Utilisateur non connecté !");
@@ -371,8 +393,9 @@ async function addService(service) {
     console.error("Erreur lors de l'ajout au panier :", err);
   }
 }
-
-
+/**
+ * Met à jour les champs affichés du service selon la langue sélectionnée.
+*/
 function updateDescription() {
   if (oneService.value) {
     const titre = oneService.value.titre_service;

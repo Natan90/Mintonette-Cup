@@ -24,6 +24,8 @@ DROP TABLE IF EXISTS Pays CASCADE;
 
 DROP TABLE IF EXISTS Zone CASCADE;
 
+DROP TABLE IF EXISTS Commentaire CASCADE;
+
 DROP TABLE IF EXISTS Organisateur CASCADE;
 
 DROP TABLE IF EXISTS Panier_Service CASCADE;
@@ -53,6 +55,7 @@ DROP TABLE IF EXISTS Utilisateur CASCADE;
 DROP TABLE IF EXISTS Evenement CASCADE;
 
 DROP TABLE IF EXISTS Terrain CASCADE;
+
 
 CREATE TABLE IF NOT EXISTS Terrain(
   id_terrain SERIAL PRIMARY KEY,
@@ -190,6 +193,13 @@ CREATE TABLE IF NOT EXISTS Pays(
 CREATE TABLE IF NOT EXISTS Organisateur(
   id_organisateur SERIAL PRIMARY KEY,
   id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur)
+);
+
+CREATE TABLE IF NOT EXISTS Commentaire (
+  id_commentaire SERIAL PRIMARY KEY,
+  texte_commentaire VARCHAR(500),
+  note_commentaire INT,
+  date_commentaire DATE
 );
 
 CREATE TABLE IF NOT EXISTS Equipe(

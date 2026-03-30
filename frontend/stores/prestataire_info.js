@@ -11,7 +11,6 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   const descri = ref(localStorage.getItem("descri") || "");
   const mail = ref(localStorage.getItem("mail") || "");
   const tel = ref(localStorage.getItem("tel") || "");
-  const isModalService = ref(localStorage.getItem("isModalService") === "true");
   const nomService = ref(localStorage.getItem("nomService") || "");
   const descriService = ref(JSON.parse(localStorage.getItem("descriService") || '{"fr":"","en":""}'));
   const besoinService = ref(JSON.parse(localStorage.getItem("besoinService") || '{"fr":"","en":""}'));
@@ -41,7 +40,6 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     descri.value = "";
     mail.value = "";
     tel.value = "";
-    isModalService.value = false;
     nomService.value = "";
     descriService.value = { fr: "", en: "" };
     besoinService.value = { fr: "", en: "" };
@@ -58,7 +56,6 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     localStorage.removeItem("descri");
     localStorage.removeItem("mail");
     localStorage.removeItem("tel");
-    localStorage.removeItem("isModalService");
     localStorage.removeItem("nomService");
     localStorage.removeItem("descriService");
     localStorage.removeItem("besoinService");
@@ -103,7 +100,6 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
   watch(descri, (v) => localStorage.setItem("descri", v));
   watch(mail, (v) => localStorage.setItem("mail", v));
   watch(tel, (v) => localStorage.setItem("tel", v));
-  watch(isModalService, (v) => localStorage.setItem("isModalService", v));
   watch(nomService, (v) => localStorage.setItem("nomService", v));
   watch(descriService, (v) => localStorage.setItem("descriService", JSON.stringify(v)), { deep: true });
   watch(besoinService, (v) => localStorage.setItem("besoinService", JSON.stringify(v)), { deep: true });
@@ -133,7 +129,7 @@ export const usePrestataireInfoStore = defineStore("prestataireInfo", () => {
     selectedTypeId,
     selectedIndex, checkedItem, continueInscription,
     nom, descri, mail, tel,
-    isModalService, nomService, descriService, besoinService,
+    nomService, descriService, besoinService,
     visiblePublic, activate,
     nom_activite, nb_participants, prix_activite, date_activite, heure_activite, activitesList, 
     nom_article, stock_article, prix_article, articlesList,

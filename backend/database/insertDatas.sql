@@ -158,6 +158,19 @@ VALUES
     ('Achat de billets'),
     ('Remboursement');
 
+
+INSERT INTO 
+Commentaire (
+  texte_commentaire, 
+  note_commentaire,
+  date_commentaire
+  )
+VALUES (
+  'Super événement avec de nombreuses équipes qui se disputent la victoire ! Je recommande vivement !!',
+  5, 
+  NOW() 
+);
+
 INSERT INTO
     Mailbox_Message (
         subject,

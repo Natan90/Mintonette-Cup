@@ -4,6 +4,19 @@ exports.generateToken = (user) => {
   return utilisateurService.generateToken(user);
 };
 
+exports.refreshToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const result = await utilisateurService.refreshToken(token);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+}
+
 exports.inscriptionUtilisateur = async (req, res) => {
   try {
     const result = await utilisateurService.inscriptionUtilisateur(req.body);

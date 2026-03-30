@@ -8,7 +8,7 @@
         <div class="service_lang">
           <button class="btn_lang" @click="changeDescriLang()">
             <span v-if="isFrench">🌐 Passer en anglais</span>
-            <span v-else>🌐 Go in French</span>
+            <span v-else>🌐 Switch to French</span>
           </button>
         </div>
 
@@ -306,8 +306,7 @@ const router = useRouter();
 const {
   nom, descri, mail, tel,
   nomService, descriService, besoinService,
-  visiblePublic, activate,
-  isModalService, continueInscription,
+  visiblePublic, activate, continueInscription,
   selectedIndex, checkedItem, selectedTypeId
 } = storeToRefs(prestataireInfoStore);
 
@@ -330,6 +329,7 @@ const isSubmitting = ref(false);
 const showLeaveDialog = ref(false);
 const pendingNavigation = ref(null);
 const allowLeave = ref(false);
+const isModalService = ref(false);
 
 // -- Services --
 const isActivityService = ref(false);
@@ -491,9 +491,19 @@ onMounted(async () => {
 });
 
 // ── UI & Modal ───────────────────────────────────
+/**
+ * Ferme le message d'information (erreur ou succès)
+ * affiché dans la modal de service.
+*/
 const closeMessage = () => {
   message.value = "";
 };
+/**
+ * Alterne la langue utilisée dans l’éditeur de description du service.
+ * 
+ * Permet de basculer entre le français et l’anglais
+ * pour éditer les champs multilingues du service.
+*/
 const changeDescriLang = () => {
   isFrench.value = !isFrench.value;
 };
@@ -505,7 +515,10 @@ function showModalByService() {
   );
   isActivityService.value = currentType?.is_activity ?? false;
 }
-
+/**
+ * Affiche la section d’inscription complète du prestataire
+ * et scroll automatiquement vers le formulaire.
+*/
 function showContinueInscription() {
   continueInscription_service.value = true;
 
@@ -516,7 +529,10 @@ function showContinueInscription() {
     }
   });
 }
-
+/**
+ * Masque la section d’inscription complète du prestataire
+ * et remonte vers le haut de la page.
+*/
 function hideContinueInscription() {
   continueInscription_service.value = false;
 
@@ -527,12 +543,18 @@ function hideContinueInscription() {
     }
   });
 }
-
+/**
+ * Annule la tentative de navigation hors de la page
+ * et ferme la boîte de dialogue de confirmation.
+*/
 function cancelLeave() {
   showLeaveDialog.value = false;
   pendingNavigation.value = null;
 }
-
+/**
+ * Confirme la sortie de la page malgré les modifications non sauvegardées.
+ * Nettoie le store puis redirige vers la route ciblée.
+*/
 function confirmLeave() {
   showLeaveDialog.value = false;
   prestataireInfoStore.clearStore();
@@ -544,8 +566,11 @@ function confirmLeave() {
   }
 }
 
-
 // ── Type prestataire ─────────────────────────────
+/**
+ * Sélectionne un type de prestataire dans la liste.
+ * Met à jour l’index et l’identifiant du type sélectionné.
+*/
 function selectTypePresta(index) {
   selectedIndex_presta.value = index;
 
@@ -554,17 +579,23 @@ function selectTypePresta(index) {
     selectedTypeId_presta.value = typeObj.id_type_prestataire;
   }
 }
-
+/**
+ * Gère la sélection d’une spécificité via checkbox/radio.
+*/
 function onCheckChange(event, item) {
   checkedItem_presta.value = event.target.checked ? [item] : [];
 }
-
+/**
+ * Vérifie si une spécificité est actuellement sélectionnée.
+*/
 function isChecked(item) {
   return checkedItem_presta.value.some(
     (i) => i.nom === item.nom
   );
 }
-
+/**
+ * Récupère les types de prestataires disponibles depuis l’API.
+*/
 async function getValuesTypePresta() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
@@ -573,7 +604,10 @@ async function getValuesTypePresta() {
     console.error(err);
   }
 }
-
+/**
+ * Récupère toutes les catégories de types de prestataires
+ * (animation, restauration, boutique).
+*/
 async function getValuesEveryType() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
@@ -585,12 +619,17 @@ async function getValuesEveryType() {
   }
 }
 
-
 // ── Services ─────────────────────────────────────
+/**
+ * Vérifie si la description et le besoin sont vides pour une langue donnée.
+*/
 function isLangEmpty(descri, besoin, lang) {
   return !descri[lang]?.trim() && !besoin[lang]?.trim();
 }
-
+/**
+ * Retourne un message d’erreur selon les langues manquantes
+ * dans la description et le besoin du service.
+*/
 function getMissingLangMessage() {
   const frEmpty = isLangEmpty(descriService.value, besoinService.value, "fr");
   const enEmpty = isLangEmpty(descriService.value, besoinService.value, "en");
@@ -600,7 +639,17 @@ function getMissingLangMessage() {
   if (enEmpty) return t("messagesServices.queFR");
   return null;
 }
-
+/**
+ * Ajoute un nouveau service au prestataire.
+ * 
+ * Étapes :
+ * - Vérifie que le nom du service est renseigné
+ * - Valide les champs multilingues (FR / EN)
+ * - Appelle l’API de création de service
+ * - Redirige vers la page d’édition du service créé
+ * 
+ * @async
+*/
 async function addServiceToPrestataire() {
   if (!nomService.value.trim()) {
     message.value = "Le nom du service est obligatoire.";
@@ -641,21 +690,41 @@ async function addServiceToPrestataire() {
     messageType.value = "error";
   }
 }
-
+/**
+ * Supprime un service de la liste locale affichée dans le formulaire.
+ * 
+ * Ne supprime pas en base de données,
+ * uniquement côté interface utilisateur.
+*/
 function removeServiceField(index) {
   services.value.splice(index, 1);
 }
-
+/**
+ * Active un service prestataire.
+ * 
+ * Modifie l’état du service côté backend via l’API
+ * puis met à jour l’interface locale.
+*/
 function activateService(service) {
   activate.value = true;
   actionsService(service);
 }
-
+/**
+ * Désactive un service prestataire.
+ * 
+ * Passe le service en état inactif via l’API
+ * puis met à jour l’interface locale.
+*/
 async function desactivatingService(service) {
   desactivate.value = true;
   actionsService(service);
 }
-
+/**
+ * Effectue l’action d’activation/désactivation d’un service.
+ * 
+ * Appelle l’API backend et inverse l’état `activate`
+ * dans la liste locale des services.
+*/
 async function actionsService(service) {
   try {
     const res = await serviceStore.ActivateService(service.id_service);
@@ -669,7 +738,20 @@ async function actionsService(service) {
     console.error("Erreur lors de la récupération des données :", err);
   }
 }
-
+/**
+ * Récupère et affiche les détails complets d’un service.
+ * 
+ * Charge les informations suivantes :
+ * - Nom
+ * - Titres multilingues
+ * - Description multilingue
+ * - Besoin
+ * - Prix
+ * - Nombre de participants
+ * - Statut actif / visible
+ * 
+ * @async
+*/
 async function showOneService(id_service) {
   try {
     const res = await serviceStore.GetServiceById(id_service);
@@ -708,6 +790,19 @@ async function showOneService(id_service) {
 
 
 // ── Prestataire ──────────────────────────────────
+/**
+ * Récupère les informations complètes d’un prestataire.
+ * 
+ * Charge :
+ * - Informations générales (nom, mail, téléphone, description)
+ * - Type de prestataire
+ * - Spécificités sélectionnées
+ * - Liste des services associés
+ * 
+ * Initialise également les champs du formulaire d’édition.
+ * 
+ * @async
+*/
 async function getValuesPrestataire() {
   if (!prestaId.value) return;
 
@@ -829,7 +924,19 @@ async function addPrestataire() {
     messageType.value = 'error';
   }
 }
-
+/**
+ * Met à jour les informations d’un prestataire existant.
+ * 
+ * Met à jour :
+ * - Informations personnelles
+ * - Type de prestataire
+ * - Spécificités
+ * - Services associés
+ * 
+ * Puis notifie l’administrateur par email.
+ * 
+ * @async
+*/
 async function updatePresta() {
   try {
     const servicesPayload = services.value.map(s => ({
@@ -871,6 +978,13 @@ async function updatePresta() {
 
 
 // ── Mail ─────────────────────────────────────────
+/**
+ * Envoie un message automatique à l’administrateur
+ * lors d’une création ou modification de prestataire.
+ * 
+ * @param isModif - true si modification, false si création
+ * @async
+*/
 async function sendMailToAdmin(isModif) {
   const path = isModif
     ? "mailToSend.modifPresta"
@@ -903,24 +1017,6 @@ async function sendMailToAdmin(isModif) {
 </script>
 
 <style scoped>
-.container,
-.prestataire_container,
-.button_container,
-.message_error {
-  --log-primary: #3a6f43;
-  --log-primary-light: #5a9966;
-  --log-primary-dark: #2a5232;
-  --log-rose: #e8637a;
-  --log-rose-hover: #c94d65;
-  --log-rose-pale: #ffd5d5;
-  --log-rose-medium: #fc9999;
-  --log-card-bg: #fffaf8;
-  --log-fond: #f9fafb;
-  --log-border: #ddd0cc;
-  --log-gradient-cta: linear-gradient(90deg, #3a6f43, #e8637a);
-  --log-gradient-input: linear-gradient(to right, #5a9966, #e8637a);
-}
-
 /* ── Conteneur principal ── */
 .container {
   display: flex;
@@ -1366,7 +1462,7 @@ input[type="radio"] {
 
 .btn_lang:hover {
   background: var(--log-primary);
-  color: #fff;
+  color: var(--rose-pale);
   border-color: var(--log-primary);
 }
 

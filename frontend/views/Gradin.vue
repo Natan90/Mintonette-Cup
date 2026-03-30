@@ -175,6 +175,19 @@ const globalTotalPrice = computed(() =>
   globalSelectedSeats.value.reduce((sum, seat) => sum + getSeatPrice(seat), 0),
 );
 
+onMounted(async () => {
+  await fetchMatches();
+  if (matches.value.length > 0) {
+    await selectMatch(matches.value[0]);
+  }
+});
+
+/**
+ * Formate l’heure d’un match en HH:MM (UTC)
+ * 
+ * @function getMatchTime
+ * @param {Object} match - Objet match contenant la date
+*/
 function getMatchTime(match) {
   const date = new Date(match.date_match);
   return `${date.getUTCHours().toString().padStart(2, "0")}:${date
@@ -182,13 +195,30 @@ function getMatchTime(match) {
     .toString()
     .padStart(2, "0")}`;
 }
-
+/**
+ * Calcule le prix d’un siège en fonction de sa colonne :
+ * - I, H, G → 25€
+ * - F, E, D → 18€
+ * - autres → 12€
+ * 
+ * @function getSeatPrice
+ * @param {Object} seat - Objet siège
+*/
 function getSeatPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
   return 12;
 }
-
+/**
+ * Récupère les sièges pour un match donné et met à jour leur état :
+ * - available : libre
+ * - reserved : réservé
+ * - owned : réservé par l’utilisateur
+ * - selected : sélectionné localement
+ * 
+ * @async
+ * @function fetchGradin
+*/
 async function fetchGradin() {
   const res = await gradinStore.GetGradinByMatchId(idMatch.value);
 
@@ -219,13 +249,28 @@ async function fetchGradin() {
   seatsByMatch.value[idMatch.value] = seatsForZone;
   seats.value = seatsByMatch.value[idMatch.value];
 }
-
+/**
+ * Récupère les matchs disponibles pour un terrain donné.
+ * Met à jour la liste des matchs (matches)
+ * 
+ * @async
+ * @function fetchMatches
+*/
 async function fetchMatches() {
   const res = await equipeStore.GetMatchById(terrainId);
 
   matches.value = res.data;
 }
-
+/**
+ * Sélectionne un match et initialise les données associées :
+ * - met à jour l’identifiant du match courant
+ * - reset les états visuels (hover, message succès)
+ * - charge les sièges si nécessaire
+ * 
+ * @async
+ * @function selectMatch
+ * @param {Object} match - Objet match sélectionné
+*/
 async function selectMatch(match) {
   idMatch.value = match.id_match;
   hoverIndex.value = null;
@@ -237,7 +282,14 @@ async function selectMatch(match) {
     seats.value = seatsByMatch.value[idMatch.value];
   }
 }
-
+/**
+ * Ajoute les sièges sélectionnés au panier utilisateur :
+ * - envoie chaque siège à l’API
+ * - affiche un message de confirmation
+ * 
+ * @async
+ * @function AddToCart
+*/
 async function AddToCart() {
   if (!globalSelectedSeats.value.length) return;
 
@@ -264,7 +316,14 @@ async function AddToCart() {
     console.error("Erreur lors de l'ajout au panier:", error);
   }
 }
-
+/**
+ * Réinitialise la sélection des sièges pour le match courant :
+ * - supprime les sièges du match courant du stockage global
+ * - met à jour le localStorage
+ * - restaure l’état visuel des sièges
+ * 
+ * @function resetSelection
+*/
 function resetSelection() {
   globalSelectedSeats.value = globalSelectedSeats.value.filter(
     (s) => s.matchId !== idMatch.value,
@@ -281,7 +340,15 @@ function resetSelection() {
     }
   });
 }
-
+/**
+ * Réinitialise toutes les sélections de sièges :
+ * - vide la sélection globale
+ * - remet tous les sièges en état "available"
+ * - met à jour le localStorage
+ * 
+ * @function resetAllSelection
+ * @returns {void}
+*/
 function resetAllSelection() {
   globalSelectedSeats.value = [];
   seats.value.forEach((seat) => {
@@ -289,14 +356,15 @@ function resetAllSelection() {
   });
   localStorage.setItem("selectedSeats", "[]");
 }
-
-onMounted(async () => {
-  await fetchMatches();
-  if (matches.value.length > 0) {
-    await selectMatch(matches.value[0]);
-  }
-});
-
+/**
+ * Met à jour l’état d’un siège lors d’un clic utilisateur :
+ * - sélectionne ou désélectionne le siège
+ * - empêche l’interaction si réservé ou possédé
+ * - synchronise avec la liste globale et le localStorage
+ * 
+ * @function UpdateSeatStatus
+ * @param {number} index - Index du siège dans la liste
+*/
 function UpdateSeatStatus(index) {
   const seat = seats.value[index];
   if (seat.state === "reserved" || seat.state === "owned") return;

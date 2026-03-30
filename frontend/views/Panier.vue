@@ -137,8 +137,18 @@ const services = computed(() => {
   return uniqueServices;
 });
 
-const prix = ref(0);
 
+onMounted(() => {
+  fetchPanier();
+});
+
+/**
+ * Traduit le nom d'une zone en fonction de la langue active.
+ * Nettoie la valeur brute (ex: "Zone A" → "a") puis cherche la traduction.
+ * 
+ * @param {string} rawZone - Nom brut de la zone
+ * @returns {string} Zone traduite ou valeur originale si non trouvée
+*/
 function translateZone(rawZone) {
   const normalized = String(rawZone || "")
     .replace(/^zone\s+/i, "")
@@ -148,11 +158,20 @@ function translateZone(rawZone) {
   const key = `zones.${normalized}`;
   return te(key) ? t(key) : rawZone;
 }
-
+/**
+ * Retourne la locale adaptée pour Intl selon la langue active.
+ * 
+ * @returns {string} Code locale (ex: "fr-FR" ou "en-GB")
+*/
 function getCurrentIntlLocale() {
   return locale.value === "en" ? "en-GB" : "fr-FR";
 }
-
+/**
+ * Formate une date de match en texte lisible.
+ * 
+ * @param {string|Date} matchDate - Date du match
+ * @returns {string} Date formatée (ex: "12 mars 2026")
+*/
 function formatMatchDate(matchDate) {
   return new Date(matchDate).toLocaleDateString(getCurrentIntlLocale(), {
     day: "numeric",
@@ -161,7 +180,12 @@ function formatMatchDate(matchDate) {
     timeZone: "UTC",
   });
 }
-
+/**
+ * Formate l'heure d'un match.
+ * 
+ * @param {string|Date} matchDate - Date du match
+ * @returns {string} Heure formatée (ex: "18:30")
+*/
 function formatMatchTime(matchDate) {
   return new Date(matchDate).toLocaleTimeString(getCurrentIntlLocale(), {
     hour: "2-digit",
@@ -169,7 +193,16 @@ function formatMatchTime(matchDate) {
     timeZone: "UTC",
   });
 }
-
+/**
+ * Calcule le prix d'un élément du panier.
+ * 
+ * - Si service → retourne prix unitaire
+ * - Si siège → calcule selon la colonne (zone tarifaire)
+ * 
+ * @param {Object} item - Élément (siège ou service)
+ * @param {boolean} isService - Indique si c'est un service
+ * @returns {number} Prix de l'élément
+*/
 function getItemPrice(item, isService) {
   if (item.nom_service && isService) {
     return item.prix_unitaire_service || 0;
@@ -196,7 +229,13 @@ const total = computed(() => {
   );
   return totalSieges + totalServices;
 });
-
+/**
+ * Récupère le panier de l'utilisateur connecté depuis l'API.
+ * 
+ * Met à jour la variable réactive `panier`.
+ * 
+ * @async
+*/
 async function fetchPanier() {
   try {
     const res = await panierStore.GetPanierByUser(userStore.userId);
@@ -205,31 +244,16 @@ async function fetchPanier() {
     console.error(err);
   }
 }
-
-async function pay() {
-  if (panier.value.length === 0) {
-    alert("Aucun siège dans le panier.");
-    return;
-  }
-
-  const confirmPay = confirm(`Voulez-vous payer ${total.value} euros ?`);
-  if (!confirmPay) return;
-
-  for (const seat of panier.value) {
-    await gradinStore.UpdateGradin({
-      numero_colonne: seat.numero_colonne,
-      numero_ligne: seat.numero_ligne,
-      zone: seat.zone,
-      est_reserve: true,
-      id_utilisateur: userStore.userId,
-    });
-  }
-
-  localStorage.removeItem("selectedSeats");
-
-  await fetchPanier();
-}
-
+/**
+ * Vide complètement le panier utilisateur.
+ * 
+ * - Demande confirmation
+ * - Libère les sièges côté backend
+ * - Supprime les éléments du panier
+ * - Recharge les données
+ * 
+ * @async
+*/
 async function reset() {
   if (panier.value.length === 0) {
     alert("Le panier est déjà vide");
@@ -261,14 +285,27 @@ async function reset() {
     alert("Erreur lors du vidage du panier");
   }
 }
-
+/**
+ * Redirige vers le gradin d'origine.
+ * 
+ * Utilise le paramètre `fromZone` passé dans l'URL.
+*/
 function backToBleacher() {
   router.push({
     name: "Gradin",
     params: { zone: fromZone.toLowerCase() },
   });
 }
-
+/**
+ * Lance le processus de paiement du panier.
+ * 
+ * - Vérifie si le panier est vide
+ * - Demande confirmation
+ * - Envoie les données au backend
+ * - Redirige vers la page "Mes billets"
+ * 
+ * @async
+*/
 async function goToCheckout() {
   if (panier.value.length === 0) {
     alert("Aucun article dans le panier.");
@@ -359,10 +396,6 @@ async function goToCheckout() {
   //   alert("Une erreur est survenue lors du paiement.");
   // }
 }
-
-onMounted(() => {
-  fetchPanier();
-});
 </script>
 
 <style scoped>

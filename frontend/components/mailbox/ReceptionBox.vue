@@ -84,6 +84,10 @@ onMounted(async () => {
   getMessagesById(userStore.userId);
 });
 
+/**
+ * Récupère tous les messages reçus ainsi que le nombre de messages non lus pour un utilisateur donné.
+ * @param {number} id_user - Identifiant de l'utilisateur
+ */
 async function getMessagesById(id_user) {
   try {
     const res = await mailBoxStore.getMessagesById(id_user);
@@ -94,7 +98,11 @@ async function getMessagesById(id_user) {
     console.error(err);
   }
 }
-
+/**
+ * Marque un message comme lu, recharge la liste des messages et récupère le détail du message sélectionné.
+ * Ouvre également la modal d'affichage du message.
+ * @param {number|string} id_message - Identifiant du message à mettre à jour
+ */
 async function updateMessageById(id_message) {
   isSelectedMessage.value = true;
   try {

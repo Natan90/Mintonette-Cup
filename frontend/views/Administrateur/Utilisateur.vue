@@ -127,15 +127,22 @@ const id_user = ref(0);
 const isDelete = ref(false);
 const deleting = ref(false);
 
+onMounted(() => {
+  getValuesUtilisateurs();
+  if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
+});
 
-const closeModal = () => {
-  isDelete.value = false;
-};
-
+/**
+ * Ferme le message de confirmation de suppression.
+*/
 const closeMessageSuppr = () => {
   deleting.value = false;
 };
-
+/**
+ * Redirige vers le profil utilisateur sélectionné
+ * et sauvegarde la route actuelle pour retour.
+ * @param {number|string} id_user - ID de l'utilisateur
+*/
 function showProfil(id_user) {
   navStore.previousRoute = route.fullPath;
   router.push({
@@ -146,7 +153,10 @@ function showProfil(id_user) {
     }
   });
 };
-
+/**
+ * Redirige vers la page de gestion des prestataires
+ * pour accepter une demande.
+*/
 function goToAcceptPrestataire() {
   router.push({
     name: 'Prestataires',
@@ -155,7 +165,10 @@ function goToAcceptPrestataire() {
     }
   })
 }
-
+/**
+ * Redirige vers la page de gestion des prestataires
+ * pour refuser ou retirer un statut prestataire.
+*/
 function goToRetirerPrestataire() {
   router.push({
     name: 'Prestataires',
@@ -164,16 +177,22 @@ function goToRetirerPrestataire() {
     }
   })
 }
-
-
+/**
+ * Ouvre la modal de suppression et sélectionne un utilisateur.
+ * @param {Object} user - Utilisateur sélectionné
+*/
 function ModalShow(user) {
   selectedUser.value = user;
   id_user.value = user.id_utilisateur;
 
   isDelete.value = true;
 };
-
-
+/**
+ * Retourne la liste des utilisateurs triée et filtrée selon :
+ * - ordre alphabétique (A-Z / Z-A)
+ * - statut prestataire (prestataire / non prestataire)
+ * @returns {Array} Liste filtrée des utilisateurs
+*/
 const utilisateursFiltres = computed(() => {
   let liste = [...utilisateurs.value];
 
@@ -201,16 +220,10 @@ const utilisateursFiltres = computed(() => {
 
   return liste;
 });
-
-
-
-onMounted(() => {
-  getValuesUtilisateurs();
-  if (!adminStore.typeTriUser) adminStore.typeTriUser = "az";
-});
-
-
-
+/**
+ * Récupère la liste des utilisateurs depuis l'API
+ * et met à jour le state local.
+*/
 async function getValuesUtilisateurs() {
   try {
     const res = await adminAPIStore.GetUtilisateurs();
@@ -221,9 +234,15 @@ async function getValuesUtilisateurs() {
     console.error("Erreur fetch utilisateurs:", err);
   }
 };
-
-
-
+/**
+ * Supprime un utilisateur :
+ * - Sauvegarde l'utilisateur supprimé
+ * - Appelle l'API de suppression
+ * - Met à jour la liste locale
+ * - Redirige vers la page utilisateurs
+ * - Affiche un message de confirmation
+ * @param {number|string} idUser - ID de l'utilisateur à supprimer
+*/
 async function deleteUtilisateur(idUser) {
   try {
     deletedUser.value = { ...selectedUser.value };

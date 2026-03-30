@@ -161,12 +161,7 @@ import { useAdminAPIStore } from "@/services/admin.service";
 import logo from "../images/logo.png";
 import logo_rose from "../images/logo_rose.png";
 
-const scrollToSection = (id) => {
-  const section = document.getElementById(id);
-  if (section) {
-    section.scrollIntoView({ behavior: "smooth" });
-  }
-};
+
 const { locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -182,8 +177,38 @@ const admin = ref(false);
 
 const isLoggedIn = computed(() => !!userStore.token || !!localStorage.getItem('jwt'));
 
+onMounted(() => {
+  loadProfilePhoto();
+  isadmin();
+});
 
-const loadProfilePhoto = async () => {
+watch(
+  () => route.name,
+  (newName) => {
+    isInIndex.value = newName === "Home";
+    if (newName === "Home" || newName === "ShowAccount") {
+      loadProfilePhoto();
+    }
+  }
+);
+
+/**
+* Fait défiler la page vers une section HTML en fonction de son ID.
+* @param {string} id - ID de l'élément HTML cible
+*/
+function scrollToSection(id) {
+  const section = document.getElementById(id);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
+};
+
+/**
+ * Charge la photo de profil de l'utilisateur connecté.
+ * - Si une photo existe : l'affiche en base64
+ * - Sinon : génère les initiales prénom + nom
+*/
+async function loadProfilePhoto() {
   if (userStore.isConnected) {
     try {
       const response = await adminAPIStore.GetCurrentUser();
@@ -203,7 +228,10 @@ const loadProfilePhoto = async () => {
   }
 };
 
-
+/**
+ * Vérifie si l'utilisateur (id 1) est administrateur.
+ * Met à jour la variable reactive admin.
+*/
 async function isadmin() {
   try {
     const res =await adminAPIStore.GetUtilisateurById(1);
@@ -213,28 +241,17 @@ async function isadmin() {
     console.log(err);
   }
 }
-
+/**
+ * Redirige l'utilisateur vers la page de boîte de réception (Mailbox).
+*/
 function goToReceptionBox() {
   router.push({
     name: "Mailbox"
   })
 }
-
-onMounted(() => {
-  loadProfilePhoto();
-  isadmin();
-});
-
-watch(
-  () => route.name,
-  (newName) => {
-    isInIndex.value = newName === "Home";
-    if (newName === "Home" || newName === "ShowAccount") {
-      loadProfilePhoto();
-    }
-  }
-);
-
+/**
+ * Déconnecte l'utilisateur et redirige vers la page Home.
+*/
 async function handleLogout() {
   try {
     userStore.logout();
@@ -244,7 +261,13 @@ async function handleLogout() {
   }
 }
 
-
+/**
+ * Change la langue de l'application.
+ * - Met à jour l'URL avec la nouvelle langue
+ * - Sauvegarde la langue dans le localStorage
+ * - Met à jour i18n
+ * @param {string} lang - Code langue (ex: 'fr', 'en')
+*/
 function changeLanguage(lang) {
   // Ça permet de garder déjà ce qu'il y a dans l'URL et d'ajouter la langue
   const newParams = { ...route.params, lang };
@@ -349,7 +372,7 @@ a span {
   font-weight: 500;
 }
 
-.partieProfil div {
+.partieprofil div {
   display: flex;
   align-items: center;
 }

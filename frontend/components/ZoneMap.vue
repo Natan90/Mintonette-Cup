@@ -179,7 +179,12 @@ onMounted(() => {
   loadPrestataires();
 });
 
+watch(loadPrestataires());
 
+/**
+ * Récupère la liste des zones depuis l'API admin
+ * et met à jour le state local `zones`.
+*/
 async function loadZones() {
   try {
     const res = await adminAPIStore.GetZones();
@@ -188,7 +193,10 @@ async function loadZones() {
     console.error("Détails:", err.response?.data || err.message);
   }
 }
-
+/**
+ * Récupère la liste des prestataires depuis l'API
+ * et met à jour le state local `prestataires`.
+*/
 async function loadPrestataires() {
   try {
     const res = await prestataireStore.GetPrestataires();
@@ -197,20 +205,30 @@ async function loadPrestataires() {
     console.error("Détails:", err.response?.data || err.message);
   }
 }
-watch(loadPrestataires);
+/**
+ * Ouvre la modal et sélectionne une zone donnée.
+ * @param {Object} zone - Zone sélectionnée
+*/
 function selectZone(zone) {
   selectedZone.value = zone;
   selectedPrestataire.value = null;
   showModal.value = true;
 }
-
+/**
+ * Ferme la modal et réinitialise les sélections.
+*/
 function closeModal() {
   showModal.value = false;
   selectedZone.value = null;
   selectedPrestataire.value = null;
 }
-
-
+/**
+ * Assigne une zone à un prestataire sélectionné :
+ * - Vérifie les valeurs sélectionnées
+ * - Appelle l'API d'attribution
+ * - Recharge les zones et prestataires
+ * - Ferme la modal
+*/
 async function assignZone() {
   if (!selectedPrestataire.value || !selectedZone.value) return;
 
@@ -233,7 +251,12 @@ async function assignZone() {
     }
   }
 }
-
+/**
+ * Libère une zone occupée par un prestataire :
+ * - Appelle l'API de désassignation
+ * - Recharge les données
+ * - Ferme la modal
+*/
 async function unassignZone() {
   if (!selectedZone.value?.prestataire) return;
 

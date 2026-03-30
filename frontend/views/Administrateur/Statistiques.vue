@@ -41,6 +41,12 @@ ChartJS.register(
 const { locale } = useI18n();
 const adminAPIStore = useAdminAPIStore();
 
+onMounted(() => {
+  barOptions.value = setBarChatOptions();
+  polarOptions.value = setPolarOptions();
+  getDashboardStats();
+});
+
 //==========================
 //======== BarChat =========
 //==========================
@@ -51,6 +57,13 @@ const barData = ref({
 
 const barOptions = ref({});
 
+/**
+ * Configure les options du graphique en barres :
+ * - Style général
+ * - Tooltip personnalisé
+ * - Axes avec format en pourcentage
+ * @returns {Object} Configuration Chart.js du bar chart
+*/
 const setBarChatOptions = () => ({
   maintainAspectRatio: false,
   //   aspectRatio: 0.8,
@@ -92,19 +105,25 @@ const polarData = ref({
 
 const polarOptions = ref({});
 
+/**
+ * Configure les options du graphique polar area :
+ * - Légende
+ * - Grille radiale
+ * @returns {Object} Configuration Chart.js du polar chart
+*/
 const setPolarOptions = () => ({
   maintainAspectRatio: false,
   plugins: { legend: { labels: { color: "#333" } } },
   scales: { r: { grid: { color: "#e0e0e0" } } },
 });
-
-onMounted(() => {
-  barOptions.value = setBarChatOptions();
-  polarOptions.value = setPolarOptions();
-  getDashboardStats();
-});
-
-
+/**
+ * Récupère les statistiques du dashboard :
+ * - Nombre total d'utilisateurs
+ * - Nombre de prestataires
+ * - Répartition des services par type
+ *
+ * Met à jour les données des graphiques (bar + polar).
+*/
 async function getDashboardStats() {
   try {
     const res = await adminAPIStore.GetStatistiques();

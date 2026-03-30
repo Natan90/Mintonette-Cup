@@ -34,7 +34,19 @@ onMounted(() => {
   getValuesEvenement();
 });
 
-
+/**
+ * Récupère les informations de l'événement depuis l'API.
+ * 
+ * - Nom de l'événement
+ * - Couleur du titre
+ * - Police utilisée
+ * - Image associée
+ * - Description multilingue
+ * 
+ * Met ensuite à jour la description selon la langue active.
+ * 
+ * @async
+*/
 async function getValuesEvenement() {
     try {
         const res = await adminAPIStore.GetEvenement();
@@ -49,9 +61,16 @@ async function getValuesEvenement() {
         console.error(err);
     }
 }
-
-
-
+/**
+ * Met à jour la description de l'événement
+ * en fonction de la langue sélectionnée.
+ * 
+ * Récupère :
+ * - le titre traduit
+ * - le texte traduit
+ *  
+ * Si aucune traduction n'existe → vide la description.
+*/
 function updateDescription() {
   if (evenement.value?.descri_evenement?.[locale.value]) {
     descri_evenement_texte.value =
