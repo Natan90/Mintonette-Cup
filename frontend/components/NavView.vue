@@ -384,9 +384,10 @@ a span {
   height: 100%;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  text-wrap: nowrap;
   gap: 4px;
   margin-right: 0.6em;
+  margin-left: 1em;
 }
 
 .partieprofil div {
@@ -564,6 +565,7 @@ a span {
     display: flex;
     justify-content: center;
     background-color: var(--primary-color);
+    margin: 0;
   }
 
   .partieProfil:hover{

@@ -553,8 +553,10 @@ input:checked + .slider:before {
 
 .content_slider {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 12px;
+  width: 100%;
 }
 
 .content_slider span {
@@ -764,6 +766,37 @@ input:checked + .slider:before {
   gap: 20px;
   padding: 32px;
   background: linear-gradient(to bottom, #3e3e3e, black);
+}
+
+@media (max-width:750px){
+
+  .content_slider {
+    margin-top: 15px;
+  }
+
+  .filtreEtListe{
+    flex-direction: column; 
+  }
+
+  .filtrePrestataire:first-child{
+    padding-top: 20px;
+  }
+
+  .filtrePrestataire{
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 0;
+    border-radius: 0;
+    position: static;
+  }
+
+  .listePrestataire {
+    width: 100%;
+    padding: 20px;
+    justify-content: center;
+    background: black;
+  }
 }
 
 .blocListePrestataire {
