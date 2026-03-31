@@ -54,7 +54,6 @@
           {{ message.nom_type_message }}
           <button class="action-button">
             <span>
-              <img src="/reply.svg" alt="reply" />
               <img src="/trash.svg" alt="trash" />
             </span>
           </button>

@@ -11,7 +11,7 @@
     </div>
   </div>
 </template>
-
+<!-- Changer le style ici pour l'affichage des message envoyé -->
 
 <script setup>
 import { onMounted, ref } from "vue";

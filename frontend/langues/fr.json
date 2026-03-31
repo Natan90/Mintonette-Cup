@@ -284,6 +284,14 @@
     "commentaire": {
       "subject": "Nouveau commentaire sur l'événement",
       "message": "Bonjour,<br><br>Un nouvel utilisateur a laissé un commentaire.<br><br>Détails :<br>- Nom : {nomUtilisateur}<br>- Email : {emailUtilisateur}<br><br><a href=\"{lienVersCommentaire}\">Voir les commentaires</a><br><br>Cordialement,<br>Votre plateforme"
+    },
+     "reponseCommentaire": {
+      "subject": "Réponse à votre commentaire",
+      "message": "Bonjour {nomUtilisateur},<br><br>l'administrateur à répondu à l'un de vos commentaire, n'hésitez pas à aller voir la réponse !"
+    },
+     "suppressionCommentaire": {
+      "subject": "Suppression de votre commentaire",
+      "message": "Bonjour {nomUtilisateur},<br><br> l'administrateur à supprimé l'un de vos commentaire. <br><br> Faites attention la prochaine fois s'il vous plaît..."
     }
   },
   "Panier": {

@@ -17,7 +17,14 @@ exports.addCommentaire = async (req, res) => {
     const { titre_commentaire, texte_commentaire, note_commentaire } = req.body;
     const utilisateur = req.user;
 
+    if (!utilisateur?.id_utilisateur) {
+      return res
+        .status(401)
+        .json({ error: "Vous devez être connecté pour commenter" });
+    }
+
     const result = await commentaireService.addCommentaire({
+      idUtilisateur: utilisateur.id_utilisateur,
       nom: utilisateur.nom_utilisateur,
       prenom: utilisateur.prenom_utilisateur,
       titre: titre_commentaire,
@@ -40,7 +47,16 @@ exports.updateCommentaire = async (req, res) => {
     const { titre_commentaire, texte_commentaire, note_commentaire } = req.body;
     const utilisateur = req.user;
 
+    if (!utilisateur?.id_utilisateur) {
+      return res
+        .status(401)
+        .json({
+          error: "Vous devez être connecté pour modifier un commentaire",
+        });
+    }
+
     const result = await commentaireService.updateCommentaire(id, {
+      idUtilisateur: utilisateur.id_utilisateur,
       nom: utilisateur.nom_utilisateur,
       prenom: utilisateur.prenom_utilisateur,
       titre: titre_commentaire,
@@ -81,12 +97,16 @@ exports.replyCommentaire = async (req, res) => {
 
 exports.deleteCommentaire = async (req, res) => {
   try {
-    if (!req.user?.isadmin) {
-      return res.status(403).json({ error: "Accès refusé" });
+    if (!req.user?.id_utilisateur) {
+      return res
+        .status(401)
+        .json({
+          error: "Vous devez être connecté pour supprimer un commentaire",
+        });
     }
 
     const { id } = req.params;
-    const result = await commentaireService.deleteCommentaire(id);
+    const result = await commentaireService.deleteCommentaire(id, req.user);
     return res.status(200).json(result);
   } catch (err) {
     console.error(err);

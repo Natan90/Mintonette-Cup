@@ -157,10 +157,13 @@ VALUES
     ('Demande pour modifier son profil prestataire'),
     ('Achat de billets'),
     ('Remboursement'),
-    ('Commentaire');
+    ('Commentaire'),
+    ('Réponse à un commentaire'),
+    ('Suppression d''un de vos commentaire');
 
 INSERT INTO 
 Commentaire (
+  id_utilisateur,
   nom_commentaire,
   prenom_commentaire,
   titre_commentaire,
@@ -169,6 +172,7 @@ Commentaire (
   date_commentaire
   )
 VALUES (
+  3,
   'Martin',
   'Lucas',
   'Super',
@@ -177,6 +181,7 @@ VALUES (
   NOW() 
 ),
 (
+  2,
   'Durand',
   'Emma',
   'Amélioration possible',

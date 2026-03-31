@@ -60,7 +60,7 @@
             <button
               class="btn delete"
               type="button"
-              @click="confirmDelete(commentaire.id_commentaire)">
+              @click="confirmDelete(commentaire)">
               Supprimer
             </button>
           </div>
@@ -103,16 +103,35 @@
 </template>
 
 <script setup>
+/* ********************
+        IMPORTS
+******************** */
 import { nextTick, onMounted, ref } from "vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
+import { useI18n } from "vue-i18n";
+
+/* ********************
+    PAGES IMPORTS
+******************** */
 import NavView from "@/components/NavView.vue";
+import { useAdminAPIStore } from "@/services/admin.service";
 import { useCommentaireStore } from "@/stores/commentaire";
+import { useMailBoxStore } from "@/services/reception_box.service";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+
+const adminAPIStore = useAdminAPIStore();
+const mailBoxStore = useMailBoxStore();
+const userStore = useUserStore();
+const { t } = useI18n();
+const router = useRouter();
 
 const commentaireStore = useCommentaireStore();
 
 const showReplyForm = ref(false);
 const replyFormRef = ref(null);
 const selectedCommentId = ref(null);
+const selectedComment = ref(null);
 const isSaving = ref(false);
 const replyMessage = ref("");
 const replyError = ref("");
@@ -142,6 +161,7 @@ function getStarClass(value, star) {
 
 async function openReply(commentaire) {
   selectedCommentId.value = commentaire.id_commentaire;
+  selectedComment.value = commentaire;
   replyForm.value.reponse_commentaire = commentaire.reponse_commentaire || "";
   replyMessage.value = "";
   replyError.value = "";
@@ -154,6 +174,7 @@ async function openReply(commentaire) {
 function closeReply() {
   showReplyForm.value = false;
   selectedCommentId.value = null;
+  selectedComment.value = null;
   replyForm.value.reponse_commentaire = "";
   replyMessage.value = "";
   replyError.value = "";
@@ -172,6 +193,8 @@ async function submitReply() {
       replyForm.value.reponse_commentaire,
     );
 
+    await sendMailToUserForResponse();
+
     replyMessage.value = "Réponse enregistrée.";
     await commentaireStore.fetchCommentaires();
   } catch (error) {
@@ -184,18 +207,70 @@ async function submitReply() {
   }
 }
 
-async function confirmDelete(id_commentaire) {
+async function confirmDelete(commentaire) {
   const ok = confirm("Supprimer ce commentaire ?");
   if (!ok) return;
 
+  selectedComment.value = commentaire;
+
   try {
-    await commentaireStore.deleteCommentaire(id_commentaire);
+    await commentaireStore.deleteCommentaire(commentaire.id_commentaire);
+    await sendMailToUserForDelete();
   } catch (error) {
     alert(
       error?.response?.data?.error ||
         error?.message ||
         "Impossible de supprimer le commentaire.",
     );
+  }
+}
+
+async function sendMailToUserForResponse() {
+  try {
+    if (!selectedComment.value?.id_utilisateur) {
+      throw new Error("Impossible de retrouver l'auteur du commentaire");
+    }
+
+    const subject = t("mailToSend.reponseCommentaire.subject");
+    const message = t("mailToSend.reponseCommentaire.message", {
+      nomUtilisateur: getAuthor(selectedComment.value),
+    });
+
+    const id_type_message = 6;
+
+    await mailBoxStore.sendMessageTo(userStore.userId, {
+      id_user_to: selectedComment.value.id_utilisateur,
+      subject,
+      message,
+      id_type_message,
+    });
+    // console.log("Mail bien envoyé");
+  } catch (err) {
+    console.error("Erreur lors de l'envoi de commentaire:", err);
+  }
+}
+async function sendMailToUserForDelete() {
+  try {
+    if (!selectedComment.value?.id_utilisateur) {
+      throw new Error("Impossible de retrouver l'auteur du commentaire");
+    }
+
+    const subject = t("mailToSend.suppressionCommentaire.subject");
+    const message = t("mailToSend.suppressionCommentaire.message", {
+      nomUtilisateur: getAuthor(selectedComment.value),
+    });
+
+    const id_type_message = 7;
+
+    await mailBoxStore.sendMessageTo(userStore.userId, {
+      id_user_to: selectedComment.value.id_utilisateur,
+      subject,
+      message,
+      id_type_message,
+    });
+    // console.log("Mail bien envoyé");
+  } catch (err) {
+    console.error("Erreur lors de l'envoi de commentaire:", err);
   }
 }
 </script>

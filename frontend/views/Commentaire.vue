@@ -98,9 +98,16 @@
               <button
                 v-if="isOwnComment(commentaire)"
                 type="button"
-                class="boutonModifier"
+                class="boutonModifier pointer"
                 @click="openEditForm(commentaire)">
                 Modifier
+              </button>
+              <button
+                v-if="isOwnComment(commentaire)"
+                type="button"
+                class="boutonSupprimer pointer"
+                @click="deleteCommentary(commentaire)">
+                Supprimer
               </button>
               <div class="noteCommentaire">
                 <span
@@ -376,6 +383,16 @@ function normalizeText(value) {
 function isOwnComment(commentaire) {
   if (!currentUser.value) return false;
 
+  if (
+    commentaire.id_utilisateur != null &&
+    currentUser.value.id_utilisateur != null
+  ) {
+    return (
+      Number(commentaire.id_utilisateur) ===
+      Number(currentUser.value.id_utilisateur)
+    );
+  }
+
   return (
     normalizeText(currentUser.value.prenom_utilisateur) ===
       normalizeText(commentaire.prenom_commentaire) &&
@@ -440,7 +457,30 @@ async function openEditForm(commentaire) {
   await nextTick();
   formRef.value?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+async function deleteCommentary(commentaire) {
+  const ok = window.confirm("Supprimer ce commentaire ?");
+  if (!ok) return;
 
+  formMessage.value = "";
+  formError.value = "";
+
+  try {
+    await commentaireStore.deleteCommentaire(commentaire.id_commentaire);
+
+    if (editingCommentId.value === commentaire.id_commentaire) {
+      cancelEditing();
+    }
+
+    if (openReplyId.value === commentaire.id_commentaire) {
+      openReplyId.value = null;
+    }
+  } catch (error) {
+    formError.value =
+      error?.response?.data?.error ||
+      error?.message ||
+      "Impossible de supprimer le commentaire.";
+  }
+}
 function cancelEditing() {
   resetCommentForm();
   showForm.value = false;
@@ -462,10 +502,10 @@ async function submitCommentaire() {
 
     if (editingCommentId.value) {
       await commentaireStore.updateCommentaire(editingCommentId.value, payload);
-      formMessage.value = "Votre commentaire a bien été modifié.";
+      // formMessage.value = "Votre commentaire a bien été modifié.";
     } else {
       await commentaireStore.addCommentaire(payload);
-      formMessage.value = "Votre commentaire a bien été ajouté.";
+      // formMessage.value = "Votre commentaire a bien été ajouté.";
     }
 
     resetCommentForm();
@@ -482,14 +522,14 @@ async function submitCommentaire() {
 
   async function fetchUserData() {
     try {
-      console.log("dans le fetch user data");
+      // console.log("dans le fetch user data");
       const response = await adminAPIStore.GetCurrentUser();
       userData.value = {
         prenom: response.data.prenom_utilisateur || "",
         nom: response.data.nom_utilisateur || "",
         email: response.data.mail_utilisateur || "",
       };
-      // console.log("a la fin du fetch user data");
+      // console.log("fin du fetch user data");
     } catch (err) {
       console.error("Erreur en récupérant les données utilisateur :", err);
     }
@@ -523,7 +563,6 @@ async function submitCommentaire() {
       console.error("Erreur lors de l'envoi de commentaire:", err);
     }
   }
-//  ###################################################Verifier que tous les autre type de truc marche####################################################################
   const lienVersCommentaire =
     window.location.origin +
     router.resolve({
@@ -823,7 +862,19 @@ async function submitCommentaire() {
   font: inherit;
   font-size: 0.8rem;
   font-weight: 700;
-  cursor: pointer;
+}
+.boutonSupprimer {
+  border: 1px solid rgba(232, 99, 122, 0.22);
+  border-radius: 999px;
+  background: #fb5656;
+  color: #fff;
+  padding: 0.45rem 0.8rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.boutonSupprimer:hover {
+  background: #f3b3b3;
 }
 
 .boutonModifier:hover,
