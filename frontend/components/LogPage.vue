@@ -28,7 +28,15 @@
 
     <div class="left-card" :class="{ moved: showRegister }">
       <div v-if="!showRegister">
+        
         <p class="title">{{ $t("user.connexion") }}</p>
+
+        <div class="button-right-media" :class="{ moved: showRegister }">
+          <button class="button_register" @click="moveCard">
+            {{ valueTexts.button }}
+          </button>
+        </div>
+        
 
         <div class="item input_item">
           <input :placeholder="$t('user.login')" v-model="login_utilisateur_connexion"
@@ -83,6 +91,12 @@
                   <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur"
                     @keyup.enter="getValuesInscription" />
                   <hr />
+                </div>
+
+                <div class="button-left-media" :class="{ moved: showRegister }">
+                  <button class="button_register" @click="moveCard">
+                    {{ valueTexts.button }}
+                  </button>
                 </div>
 
                 <div class="item">
@@ -932,6 +946,10 @@ input::placeholder {
   box-shadow: 0 3px 10px rgba(58, 111, 67, 0.2);
 }
 
+.button-right-media, .button-left-media{
+  display: none;
+}
+
 @keyframes draw-circle {
   to { stroke-dashoffset: 0; }
 }
@@ -943,18 +961,37 @@ input::placeholder {
 @media (max-width: 900px) {
   .page {
     flex-direction: column;
-    overflow: auto;
+    overflow-y: auto;
   }
 
   .page.moved{
     flex-direction: column;
   }
 
+  .button-right-media, .button-left-media{
+    display: block;
+    position:absolute;
+    top: 40px;
+  }
+
+  .button-right-media{
+    left: 70%;
+  }
+
+  .button-left-media{
+    left: 10%;
+  }
+
+  .button-left-media button, .button-right-media button{
+    background-color: var(--primary-color);
+    color: white;
+  }
+
   .left-side {
     display: none;
   }
 
-  /* Carte connexion — centrée normalement */
+  /* Carte connexion */
   .left-card, .left-card.moved {
     position: static;
     transform: none !important;
@@ -967,13 +1004,14 @@ input::placeholder {
     transform: none !important;
   }
 
-  /* Grille inscription en colonne */
   .grid {
     flex-direction: column;
     padding-top: 10px;
   }
 
-
+  .background-right, .background-right.moved {
+    display: none;
+  }
 
   .separator {
     width: 100%;
