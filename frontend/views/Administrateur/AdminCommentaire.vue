@@ -13,6 +13,10 @@
         </p>
       </header>
 
+      <p v-if="feedbackMessage" class="message feedback" :class="feedbackType">
+        {{ feedbackMessage }}
+      </p>
+
       <div v-if="commentaireStore.isLoading" class="state-box">
         Chargement des commentaires...
       </div>
@@ -74,7 +78,6 @@
             <h2>Répondre au commentaire</h2>
           </div>
 
-          <p v-if="replyMessage" class="message success">{{ replyMessage }}</p>
           <p v-if="replyError" class="message error">{{ replyError }}</p>
 
           <form class="reply-form" @submit.prevent="submitReply">
@@ -106,7 +109,7 @@
 /* ********************
         IMPORTS
 ******************** */
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useI18n } from "vue-i18n";
 
@@ -133,14 +136,22 @@ const replyFormRef = ref(null);
 const selectedCommentId = ref(null);
 const selectedComment = ref(null);
 const isSaving = ref(false);
-const replyMessage = ref("");
+const feedbackMessage = ref("");
+const feedbackType = ref("success");
 const replyError = ref("");
 const replyForm = ref({
   reponse_commentaire: "",
 });
+let feedbackTimeoutId = null;
 
 onMounted(() => {
   commentaireStore.fetchCommentaires();
+});
+
+onBeforeUnmount(() => {
+  if (feedbackTimeoutId) {
+    clearTimeout(feedbackTimeoutId);
+  }
 });
 
 function getAuthor(commentaire) {
@@ -163,7 +174,7 @@ async function openReply(commentaire) {
   selectedCommentId.value = commentaire.id_commentaire;
   selectedComment.value = commentaire;
   replyForm.value.reponse_commentaire = commentaire.reponse_commentaire || "";
-  replyMessage.value = "";
+  clearFeedbackMessage();
   replyError.value = "";
   showReplyForm.value = true;
 
@@ -171,12 +182,14 @@ async function openReply(commentaire) {
   replyFormRef.value?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function closeReply() {
+function closeReply(keepFeedback = false) {
   showReplyForm.value = false;
   selectedCommentId.value = null;
   selectedComment.value = null;
   replyForm.value.reponse_commentaire = "";
-  replyMessage.value = "";
+  if (!keepFeedback) {
+    clearFeedbackMessage();
+  }
   replyError.value = "";
 }
 
@@ -184,7 +197,7 @@ async function submitReply() {
   if (!selectedCommentId.value) return;
 
   isSaving.value = true;
-  replyMessage.value = "";
+  clearFeedbackMessage();
   replyError.value = "";
 
   try {
@@ -195,8 +208,9 @@ async function submitReply() {
 
     await sendMailToUserForResponse();
 
-    replyMessage.value = "Réponse enregistrée.";
+    showFeedbackMessage("Réponse enregistrée.");
     await commentaireStore.fetchCommentaires();
+    closeReply(true);
   } catch (error) {
     replyError.value =
       error?.response?.data?.error ||
@@ -212,10 +226,12 @@ async function confirmDelete(commentaire) {
   if (!ok) return;
 
   selectedComment.value = commentaire;
+  clearFeedbackMessage();
 
   try {
     await commentaireStore.deleteCommentaire(commentaire.id_commentaire);
     await sendMailToUserForDelete();
+    showFeedbackMessage("Commentaire supprimé.", "error");
   } catch (error) {
     alert(
       error?.response?.data?.error ||
@@ -244,7 +260,6 @@ async function sendMailToUserForResponse() {
       message,
       id_type_message,
     });
-    // console.log("Mail bien envoyé");
   } catch (err) {
     console.error("Erreur lors de l'envoi de commentaire:", err);
   }
@@ -268,10 +283,29 @@ async function sendMailToUserForDelete() {
       message,
       id_type_message,
     });
-    // console.log("Mail bien envoyé");
   } catch (err) {
     console.error("Erreur lors de l'envoi de commentaire:", err);
   }
+}
+
+function clearFeedbackMessage() {
+  if (feedbackTimeoutId) {
+    clearTimeout(feedbackTimeoutId);
+    feedbackTimeoutId = null;
+  }
+
+  feedbackMessage.value = "";
+}
+
+function showFeedbackMessage(message, type = "success") {
+  clearFeedbackMessage();
+  feedbackType.value = type;
+  feedbackMessage.value = message;
+
+  feedbackTimeoutId = window.setTimeout(() => {
+    feedbackMessage.value = "";
+    feedbackTimeoutId = null;
+  }, 2000);
 }
 </script>
 
@@ -442,6 +476,16 @@ async function sendMailToUserForDelete() {
   margin: 0 0 1rem;
   padding: 0.85rem 1rem;
   border-radius: 12px;
+}
+
+.feedback {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+  margin: 0;
+  max-width: min(420px, calc(100vw - 2rem));
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
 }
 
 .message.success {
