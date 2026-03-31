@@ -4,33 +4,33 @@
       <div class="mail_content">
         <div class="from_and_subject">
           <div class="item_mail">
-            <p class="bold">
-              De :
-            </p>
+            <p class="bold">De :</p>
             <p class="name_delete">
-              {{ messageSelected.prenom_utilisateur }} {{ messageSelected.nom_utilisateur }}
+              {{ messageSelected.prenom_utilisateur }}
+              {{ messageSelected.nom_utilisateur }}
             </p>
           </div>
           <div class="item_mail">
-            <p class="bold">
-              Objet :
-            </p>
+            <p class="bold">Objet :</p>
             <p class="name_delete">
               {{ messageSelected.subject }}
             </p>
           </div>
         </div>
         <div class="item_mail">
-          <p class="mail-text">
+          <!-- <p class="mail-text">
             {{ messageSelected.message }}
-          </p>
+          </p> -->
+          <div class="item_mail">
+            <p class="mail-text" v-html="messageSelected.message"></p>
+          </div>
         </div>
 
         <div class="container_button">
           <button class="action-button">
             <span>
-              <img src="/reply.svg" alt="reply">
-              <img src="/trash.svg" alt="trash">
+              <img src="/reply.svg" alt="reply" />
+              <img src="/trash.svg" alt="trash" />
             </span>
           </button>
         </div>
@@ -40,18 +40,22 @@
   <div>
     <p>
       Vous avez {{ nbMessageNotRead }}
-      {{ nbMessageNotRead > 1 ? 'messages' : 'message' }} non lus.
+      {{ nbMessageNotRead > 1 ? "messages" : "message" }} non lus.
     </p>
 
     <div v-if="messageReceived.length > 0">
-      <div v-for="message in messageReceived" :key="message.id_message"
+      <div
+        v-for="message in messageReceived"
+        :key="message.id_message"
         :style="{ fontWeight: message.read_at === null ? 'bold' : 'normal' }">
-        <span class="span-message pointer" @click="updateMessageById(message.id_message)">
+        <span
+          class="span-message pointer"
+          @click="updateMessageById(message.id_message)">
           {{ message.nom_type_message }}
           <button class="action-button">
             <span>
-              <img src="/reply.svg" alt="reply">
-              <img src="/trash.svg" alt="trash">
+              <img src="/reply.svg" alt="reply" />
+              <img src="/trash.svg" alt="trash" />
             </span>
           </button>
         </span>
@@ -63,8 +67,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script setup>
 import { onMounted, ref } from "vue";
@@ -111,14 +113,12 @@ async function updateMessageById(id_message) {
 
     const res = await mailBoxStore.getMessagesByIdMessage(id_message, true);
     messageSelected.value = res.data;
-    console.log(messageSelected.value)
+    console.log(messageSelected.value);
   } catch (err) {
     console.error(err);
   }
 }
 </script>
-
-
 
 <style scoped>
 .span-message {

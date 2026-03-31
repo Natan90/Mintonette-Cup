@@ -156,7 +156,8 @@ VALUES
     ('Demande pour devenir prestataire'),
     ('Demande pour modifier son profil prestataire'),
     ('Achat de billets'),
-    ('Remboursement');
+    ('Remboursement'),
+    ('Commentaire');
 
 INSERT INTO 
 Commentaire (

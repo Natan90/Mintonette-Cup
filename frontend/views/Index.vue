@@ -84,9 +84,13 @@
         </section>
       </section>
     </div>
-    <router-link :to="{ name: 'Commentaire' }">
-      <p>Venez noter l'événement </p>
-    </router-link>
+
+    <div class="commentaireContenaire">
+      <router-link class="commentaire" :to="{ name: 'Commentaire' }">
+        <p>Venez noter l'événement</p>
+      </router-link>
+    </div>
+
     <section
       v-if="
         userStore &&
@@ -279,10 +283,10 @@ watch(
 /**
  * Calcule la distance maximale de chute du ballon
  * en fonction de sa position et de l’ancre dans le DOM.
- * 
+ *
  * @function getMaxDrop
  * @returns {number} Distance maximale de chute en pixels
-*/
+ */
 const getMaxDrop = () => {
   if (!ancreBallon.value) return 1300;
   const ballonEl = document.getElementById("img_ballon");
@@ -298,9 +302,9 @@ const getMaxDrop = () => {
  * - applique une gravité progressive
  * - s’arrête à la position maximale
  * - déclenche ensuite le rebond
- * 
+ *
  * @function animateFall
-*/
+ */
 const animateFall = () => {
   const gravity = 1.5;
   const maxDrop = getMaxDrop();
@@ -328,9 +332,9 @@ const animateFall = () => {
  * - réduit progressivement les rebonds
  * - fixe la position finale et active l’état "stopped"
  * - positionne le message à côté du ballon
- * 
+ *
  * @function animateBounce
-*/
+ */
 const animateBounce = () => {
   const gravity = 0.6;
   const damping = 0.55;
@@ -380,9 +384,9 @@ const animateBounce = () => {
 /**
  * Affiche ou masque le ballon dans le DOM
  * en fonction de la variable showBalloon.
- * 
+ *
  * @function hideOrShowBalloon
-*/
+ */
 function hideOrShowBalloon() {
   const elt = document.getElementById("img_ballon");
 
@@ -401,10 +405,10 @@ const videoRef = ref(null);
  * - active le mode fullscreen
  * - gère la sortie fullscreen et la fin de vidéo
  * - réinitialise l’état après lecture
- * 
+ *
  * @async
  * @function playVideoFullscreen
-*/
+ */
 async function playVideoFullscreen() {
   showingBallon.value = true;
 
@@ -446,7 +450,7 @@ async function playVideoFullscreen() {
  * - masque/affiche la navbar selon la position
  * - affiche le ballon
  * - déclenche l’animation de chute une seule fois
- * 
+ *
  * @function handleScroll
  */
 const handleScroll = () => {
@@ -471,11 +475,11 @@ const CARDS_PER_ROW = 3;
 /**
  * Découpe le tableau d’informations en plusieurs lignes
  * selon le nombre de cartes par ligne.
- * 
+ *
  * @computed
  * @function chunkedArray
  * @returns {Array<Array<Object>>} Tableau structuré en lignes
-*/
+ */
 const chunkedArray = computed(() => {
   const arr = informationArray.value;
   const rows = [];
@@ -490,10 +494,10 @@ const chunkedArray = computed(() => {
  * - nom, couleur, image, police
  * - met à jour les variables d’affichage
  * - déclenche la mise à jour de la description
- * 
+ *
  * @async
  * @function getValuesEvenement
-*/
+ */
 async function getValuesEvenement() {
   try {
     const res = await adminAPIStore.GetEvenement();
@@ -511,9 +515,9 @@ async function getValuesEvenement() {
 /**
  * Met à jour la description de l’événement
  * en fonction de la langue sélectionnée.
- * 
+ *
  * @function updateDescription
-*/
+ */
 function updateDescription() {
   if (evenement.value?.descri_evenement?.[locale.value]) {
     descri_evenement_texte.value =
@@ -529,10 +533,10 @@ function updateDescription() {
  * - vérifie la présence d’un utilisateur
  * - appelle l’API pour récupérer ses données
  * - met à jour l’état local
- * 
+ *
  * @async
  * @function getValuesUser
-*/
+ */
 async function getValuesUser() {
   try {
     if (!userStore.userId) {
@@ -567,7 +571,14 @@ body::-webkit-scrollbar {
   transition: top 0.5s ease;
   z-index: 999;
 }
-
+.commentaireContenaire{
+  background-color: var(--rose-logo);
+}
+.commentaire {
+  color: var(--primary-color);
+  text-decoration: none;
+  text-align: center;
+}
 .image img {
   width: 100%;
   height: 100%;

@@ -230,24 +230,32 @@
 
 <script setup>
 /* ********************
-        IMPORTS 
+        IMPORTS
 ******************** */
 import { onMounted, computed, nextTick, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 
 /* ********************
-    PAGES IMPORTS 
+    PAGES IMPORTS
 ******************** */
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
 import { useCommentaireStore } from "@/stores/commentaire";
+import { useMailBoxStore } from "@/services/reception_box.service";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
 
-/* ******************** 
+/* ********************
     Commentaire Values
 ******************** */
 const commentaireStore = useCommentaireStore();
 const adminAPIStore = useAdminAPIStore();
+const mailBoxStore = useMailBoxStore();
+const userStore = useUserStore();
+const { t } = useI18n();
+const router = useRouter();
 const { commentaires } = storeToRefs(commentaireStore);
 const formRef = ref(null);
 const showForm = ref(false);
@@ -262,6 +270,11 @@ const commentaireForm = ref({
   titre_commentaire: "",
   texte_commentaire: "",
   note_commentaire: 5,
+});
+const userData = ref({
+  prenom: "",
+  nom: "",
+  email: "",
 });
 
 onMounted(() => {
@@ -457,6 +470,7 @@ async function submitCommentaire() {
 
     resetCommentForm();
     showForm.value = false;
+    sendMailToAdmin();
   } catch (error) {
     formError.value =
       error?.response?.data?.error ||
@@ -465,6 +479,56 @@ async function submitCommentaire() {
   } finally {
     isSubmitting.value = false;
   }
+
+  async function fetchUserData() {
+    try {
+      console.log("dans le fetch user data");
+      const response = await adminAPIStore.GetCurrentUser();
+      userData.value = {
+        prenom: response.data.prenom_utilisateur || "",
+        nom: response.data.nom_utilisateur || "",
+        email: response.data.mail_utilisateur || "",
+      };
+      // console.log("a la fin du fetch user data");
+    } catch (err) {
+      console.error("Erreur en récupérant les données utilisateur :", err);
+    }
+  }
+  async function sendMailToAdmin() {
+    try {
+      // console.log("ici");
+
+      await fetchUserData();
+      // console.log("et là");
+
+      const subject = t("mailToSend.commentaire.subject");
+      const message = t("mailToSend.commentaire.message", {
+        nomUtilisateur: userData.value.prenom + " " + userData.value.nom,
+        emailUtilisateur: userData.value.email,
+        lienVersCommentaire,
+      });
+
+      const id_admin = 1;
+      const id_type_message = 5;
+
+      await mailBoxStore.sendMessageTo(userStore.userId, {
+        id_user_to: id_admin,
+        subject,
+        message,
+        id_type_message,
+        is_html: true,
+      });
+      // console.log("Mail bien envoyé");
+    } catch (err) {
+      console.error("Erreur lors de l'envoi de commentaire:", err);
+    }
+  }
+//  ###################################################Verifier que tous les autre type de truc marche####################################################################
+  const lienVersCommentaire =
+    window.location.origin +
+    router.resolve({
+      name: "AdminCommentaire",
+    }).href;
 }
 </script>
 

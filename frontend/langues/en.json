@@ -280,6 +280,10 @@
     "demandeRemboursement": {
       "subject": "Ticket refund",
       "message": "Hello,\n\nA user is requesting a refund for {nbBillets} ticket(s).\n\nUser: {nomUtilisateur}\nEmail: {emailUtilisateur}\nReason: {raison}\n\nTicket details:\n{detailsBillets}\n\nTotal amount: {montantTotal} €\n\nPlease process this request as soon as possible.\n\nBest regards,\nMintonette Cup"
+    },
+    "commentaire": {
+      "subject": "New comment on the event",
+      "message": "Hello,\n\nA new user has left a comment on the event.\n\nDetails:\n- Name: {nomUtilisateur}\n- Email: {emailUtilisateur}\n\nPlease take a moment to review it.\n\nBest regards,\nYour platform"
     }
   },
   "Panier": {
@@ -294,7 +298,7 @@
     "viderPanier": "Empty the cart",
     "procederPayement": "Proceed to payment"
   },
-   "billet": {
+  "billet": {
     "mesBillets": "My billets",
     "aucunBillets": "You have no tickets booked.",
     "remboursement": "Get a refund",
