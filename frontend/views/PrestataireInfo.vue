@@ -133,7 +133,7 @@
           <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
             <!-- Bouton de sélection du type de prestataire -->
             <button class="button_type_presta pointer" @click="selectTypePresta(index)"
-              :disabled="continueInscription_service" :class="selectedIndex_presta === index ? 'button_selected' : ''">
+              :disabled="continueInscription_service" :class="selectedIndex === index ? 'button_selected' : ''">
               {{ item.nom_type_prestataire[locale] }}
             </button>
           </div>
@@ -146,7 +146,7 @@
             <span :style="{ color: 'var(--log-rose)' }">{{ selectedTypeLabel }}</span> ?
           </h1>
 
-          <table class="table_type_presta">
+          <table class="table_type_presta" @click="displayBlink()">
             <tbody>
               <!-- Liste des options possibles -->
               <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
@@ -179,8 +179,8 @@
     </div>
 
     <!-- Bouton retour vers la sélection du type -->
-    <div class="button_container" v-if="continueInscription_service && pathAdd">
-      <button @click.prevent="hideContinueInscription()">
+    <div class="button_container" v-if="continueInscription_service && pathAdd" id="retour_button">
+      <button @click.prevent="hideContinueInscription()" :class="{ blink: clickWhileContinue, errorBackground: clickWhileContinue }">
         {{ $t("prestataireInfo.btnRetour") }}
       </button>
     </div>
@@ -271,6 +271,10 @@
           </button>
         </div>
 
+        <div class="message_error" v-if="services.length === 0">
+          <p>Vous devez ajouter au moins un service pour finaliser votre inscription.</p>
+        </div>
+
         <!-- Bouton d'inscription (mode ajout) -->
         <div class="button_container" v-else>
           <button @click="addPrestataire()" :disabled="isSubmitting">
@@ -347,6 +351,7 @@ const showLeaveDialog = ref(false);
 const pendingNavigation = ref(null);
 const allowLeave = ref(false);
 const isModalService = ref(false);
+const clickWhileContinue = ref(false);
 
 // -- Services --
 const isActivityService = ref(false);
@@ -368,7 +373,6 @@ const descri_presta = ref("");
 const mail_presta = ref("");
 const tel_presta = ref(0);
 const continueInscription_service = ref(false);
-const selectedIndex_presta = ref(0);
 const checkedItem_presta = ref([]);
 const selectedTypeId_presta = ref(1);
 
@@ -424,7 +428,7 @@ const selectedItems = computed(() => {
   }
 });
 const selectedTypeLabel = computed(() => {
-  const typeObj = type_prestataire.value[selectedIndex_presta.value];
+  const typeObj = type_prestataire.value[selectedIndex.value];
   if (!typeObj) return "";
 
   return (
@@ -441,7 +445,6 @@ watch(descri_presta, (v) => { if (!isSyncing.value) descri.value = v; });
 watch(mail_presta, (v) => { if (!isSyncing.value) mail.value = v; });
 watch(tel_presta, (v) => { if (!isSyncing.value) tel.value = v; });
 watch(selectedTypeId_presta, (v) => { if (!isSyncing.value) selectedTypeId.value = v; });
-watch(selectedIndex_presta, (v) => { if (!isSyncing.value) selectedIndex.value = v; });
 watch(checkedItem_presta, (v) => { if (!isSyncing.value) checkedItem.value = v; }, { deep: true });
 watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscription.value = v; });
 
@@ -484,14 +487,12 @@ onMounted(async () => {
       mail_presta.value = mail.value;
       tel_presta.value = tel.value;
       selectedTypeId_presta.value = selectedTypeId.value || 1;
-      selectedIndex_presta.value = selectedIndex.value || 0;
       checkedItem_presta.value = Array.isArray(checkedItem.value) ? checkedItem.value : [];
       continueInscription_service.value = continueInscription.value;
     } else {
       isSyncing.value = true;
       prestataireInfoStore.clearStore();
       selectedTypeId_presta.value = 1;
-      selectedIndex_presta.value = 0;
       checkedItem_presta.value = [];
       continueInscription_service.value = false;
       nom_presta.value = "";
@@ -588,13 +589,28 @@ function confirmLeave() {
   }
 }
 
+function displayBlink() {
+  clickWhileContinue.value = true;
+  
+  nextTick(() => {
+    const btn = document.getElementById("retour_button");
+    if (btn) {
+      btn.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+
+  setTimeout(() => {
+    clickWhileContinue.value = false;
+  }, 1000);
+}
+
 // ── Type prestataire ─────────────────────────────
 /**
  * Sélectionne un type de prestataire dans la liste.
  * Met à jour l’index et l’identifiant du type sélectionné.
 */
 function selectTypePresta(index) {
-  selectedIndex_presta.value = index;
+  selectedIndex.value = index;
 
   const typeObj = type_prestataire.value[index];
   if (typeObj) {
@@ -605,7 +621,22 @@ function selectTypePresta(index) {
  * Gère la sélection d’une spécificité via checkbox/radio.
 */
 function onCheckChange(event, item) {
-  checkedItem_presta.value = event.target.checked ? [item] : [];
+  const isChecked = event.target.checked;
+
+  prestataireInfoStore.clearStore();
+
+  checkedItem_presta.value = [];
+  nom_presta.value = "";
+  descri_presta.value = "";
+  mail_presta.value = "";
+  tel_presta.value = "";
+
+  services.value = [];
+
+  // 3. Appliquer la nouvelle sélection
+  if (isChecked) {
+    checkedItem_presta.value = [item];
+  }
 }
 /**
  * Vérifie si une spécificité est actuellement sélectionnée.
@@ -727,7 +758,17 @@ function cancelDelete() {
   serviceDelete.value = [];
   deleteService.value = false;
 }
-
+/**
+ * Supprime le service en fonction de l'id du service sélectionné.
+ * 
+ * Étapes :
+ * - Supprime le service en backend et ses articles ou activités qui y correspondent
+ * - Reset le service sélectionné
+ * - Affiche le message
+ * - Appelle de nouveau la fonction pour afficher les services du prestataire
+ * 
+ * @async
+*/
 async function confirmDelete() {
   try {
     const res = await serviceStore.DeleteService(serviceDelete.value.id_service);
@@ -737,12 +778,9 @@ async function confirmDelete() {
 
     message.value = res.data.message;
     messageType.value = 'success';
+    
+    await getServiceByIdPrestataire(prestaId.value);
 
-    try {
-      await getServiceByIdPrestataire(prestaId.value);
-    } catch {
-      services.value = [];
-    }
   } catch (err) {
     console.error(err);
     message.value = err.message || "Erreur lors de la suppression";
@@ -928,7 +966,6 @@ async function getValuesPrestataire() {
     );
 
     if (indexType !== -1) {
-      selectedIndex_presta.value = indexType;
       selectedIndex.value = indexType;
 
       const typeObj = type_prestataire.value[indexType];
@@ -1660,5 +1697,18 @@ input[type="radio"] {
   display: flex;
   justify-content: center;
   padding-top: 4px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+.blink {
+  animation: blink 0.6s ease-in-out 3;
+}
+
+.errorBackground {
+  background-color: rgb(255, 0, 0, 0.5);
 }
 </style>
