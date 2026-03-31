@@ -87,3 +87,15 @@ exports.addActiviteByIdService = async(req, res) => {
     res.status(status).json({ error: err.message || "Erreur serveur" });
   }
 };
+
+exports.deleteServiceById = async(req, res) => {
+  try {
+    const id_service = req.params.id;
+    const result = await serviceService.deleteServiceById(id_service);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    res.status(status).json({ error: err.message || "Erreur serveur" });
+  }
+}

@@ -97,6 +97,22 @@
     </v-card>
   </v-dialog>
 
+  <v-dialog v-model="deleteService" max-width="450" class="confirmLeave">
+    <v-card title="Supprimer ce service ?">
+      <v-card-text>
+        Vous êtes sur le point de supprimer le service <span class="name_delete">{{ serviceDelete.nom_service }}</span>.
+        <br /><br />
+        Toutes les données associées seront définitivement perdues.
+        Cette action est <strong>irréversible</strong>.
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text="Annuler" @click="cancelDelete()"></v-btn>
+        <v-btn color="error" text="Supprimer" @click="confirmDelete()"></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 
   <section class="container">
     <div class="content_container">
@@ -234,7 +250,7 @@
               <button class="btn_desactivate" v-else-if="item.activate" @click="desactivatingService(item)">
                 Désactiver
               </button>
-              <button type="button" class="remove_btn pointer" @click="removeServiceField(index)">
+              <button type="button" class="remove_btn pointer" @click="removeServiceField(item)">
                 &times;
               </button>
             </div>
@@ -335,6 +351,9 @@ const isModalService = ref(false);
 // -- Services --
 const isActivityService = ref(false);
 const services = ref([]);
+const desactivate = ref(true);
+const deleteService = ref(false);
+const serviceDelete = ref([]);
 
 // -- Types prestataire --
 const type_prestataire = ref([]);
@@ -694,13 +713,41 @@ async function addServiceToPrestataire() {
   }
 }
 /**
- * Supprime un service de la liste locale affichée dans le formulaire.
- * 
- * Ne supprime pas en base de données,
- * uniquement côté interface utilisateur.
+ * Supprime un service de la liste affichée dans le formulaire.
 */
-function removeServiceField(index) {
-  services.value.splice(index, 1);
+function removeServiceField(item) {
+  deleteService.value = true;
+  serviceDelete.value = item;
+  console.log(serviceDelete.value)
+}
+/**
+ * Annule la suppression du service.
+*/
+function cancelDelete() {
+  serviceDelete.value = [];
+  deleteService.value = false;
+}
+
+async function confirmDelete() {
+  try {
+    const res = await serviceStore.DeleteService(serviceDelete.value.id_service);
+
+    deleteService.value = false;
+    serviceDelete.value = [];
+
+    message.value = res.data.message;
+    messageType.value = 'success';
+
+    try {
+      await getServiceByIdPrestataire(prestaId.value);
+    } catch {
+      services.value = [];
+    }
+  } catch (err) {
+    console.error(err);
+    message.value = err.message || "Erreur lors de la suppression";
+    messageType.value = 'error';
+  }
 }
 /**
  * Active un service prestataire.
@@ -718,7 +765,7 @@ function activateService(service) {
  * Passe le service en état inactif via l’API
  * puis met à jour l’interface locale.
 */
-async function desactivatingService(service) {
+function desactivatingService(service) {
   desactivate.value = true;
   actionsService(service);
 }
@@ -1189,7 +1236,7 @@ input[type="radio"] {
 /* ── Message d'erreur checkbox ── */
 .message_error {
   text-align: center;
-  color: var(--log-rose-hover);
+  color: var(--rose-hover);
   font-weight: 600;
   font-size: 0.95em;
   margin-top: 8px;
@@ -1380,7 +1427,7 @@ input[type="radio"] {
 
 /* Bouton Activer */
 .btn_activate {
-  background: var(--log-primary);
+  background: var(--primary-color);
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -1393,13 +1440,13 @@ input[type="radio"] {
 }
 
 .btn_activate:hover {
-  background: var(--log-primary-dark);
+  background: var(--primary-dark);
   transform: translateY(-1px);
 }
 
 /* Bouton Désactiver */
 .btn_desactivate {
-  background: var(--log-rose);
+  background: var(--rose);
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -1412,13 +1459,13 @@ input[type="radio"] {
 }
 
 .btn_desactivate:hover {
-  background: var(--log-rose-hover);
+  background: var(--rose-hover);
   transform: translateY(-1px);
 }
 
 /* Bouton supprimer */
 .remove_btn {
-  background: var(--log-rose);
+  background: rgb(255, 68, 68);
   color: white;
   border: none;
   padding: 8px 12px;
@@ -1430,7 +1477,7 @@ input[type="radio"] {
 }
 
 .remove_btn:hover {
-  background: var(--log-rose-hover);
+  background: red;
   transform: scale(1.1);
 }
 

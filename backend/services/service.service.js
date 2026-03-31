@@ -20,9 +20,6 @@ async function getServiceByIdPrestataire(id_presta) {
     [id_presta]
   );
 
-  if (serviceResult.rows.length === 0)
-    throw { status: 404, message: "Aucun service trouvé pour ce prestataire" };
-
   return {
     services: serviceResult.rows,
   };
@@ -168,6 +165,34 @@ async function addActiviteByIdService(id_service, activite) {
   }
 }
 
+async function deleteServiceById(id_service) {
+  const checkService = await pool.query(
+    `SELECT * FROM Services WHERE id_service = $1`,
+    [id_service]
+  );
+
+  if (checkService.rowCount === 0) {
+    throw { status: 404, message: "Service non trouvé" };
+  }
+
+  await pool.query(
+    `DELETE FROM Article WHERE service_id = $1`,
+    [id_service]
+  );
+
+  await pool.query(
+    `DELETE FROM Activite WHERE service_id = $1`,
+    [id_service]
+  );
+
+  await pool.query(
+    `DELETE FROM Services WHERE id_service = $1`,
+    [id_service]
+  );
+
+  return { message: "Service supprimé avec succès" };
+}
+
 module.exports = {
   getServices,
   getServiceByIdPrestataire,
@@ -176,4 +201,5 @@ module.exports = {
   createService,
   addArticleByIdService,
   addActiviteByIdService,
+  deleteServiceById,
 };

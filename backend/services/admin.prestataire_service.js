@@ -94,7 +94,7 @@ async function refuserPrestataireById(id_presta) {
 }
 
 async function deletePrestataireById(id_presta) {
-  await pool.query("DELETE FROM services WHERE prestataire_id = $1", [
+  await pool.query("DELETE FROM Services WHERE prestataire_id = $1", [
     id_presta,
   ]);
 

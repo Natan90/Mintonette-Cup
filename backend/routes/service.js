@@ -14,15 +14,18 @@ router.get("/show/prestataire/:id_presta", serviceMiddleware.validateServiceById
 router.get("/show/service/:id_service", serviceMiddleware.validateServiceByIdService, serviceController.getServiceByIdService);
 
 // PATCH activer / désactiver le service
-router.patch("/activate/:id", serviceMiddleware.validateActivateService, serviceController.activateServiceById);
+router.patch("/:id/activate", serviceMiddleware.validateActivateService, serviceController.activateServiceById);
 
 // POST créer un service
-router.post("/add/:id", authMiddleware.authenticateToken, serviceMiddleware.validateAddService , serviceController.addServiceById);
+router.post("/:id/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddService , serviceController.addServiceById);
+
+// DELETE supprimer un service
+router.delete("/:id/delete", authMiddleware.authenticateToken, serviceMiddleware.validateDeleteService , serviceController.deleteServiceById);
 
 // POST ajouter une activité
-router.post("/:id/activites/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddActiviteByIdService, serviceController.addActiviteByIdService);
+router.post("/activites/:id/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddActiviteByIdService, serviceController.addActiviteByIdService);
 
 // POST ajouter un article
-router.post("/:id/articles/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddArticleByIdService, serviceController.addArticleByIdService);
+router.post("/articles/:id/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddArticleByIdService, serviceController.addArticleByIdService);
 
 module.exports = router;
