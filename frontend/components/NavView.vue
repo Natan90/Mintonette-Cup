@@ -551,6 +551,7 @@ a span {
     text-align: center;
     font-size: 1em;
 
+    transition: background-color var(--transition-fast), color var(--transition-fast), text-indent var(--transition-fast);
     transform: none;
   }
 

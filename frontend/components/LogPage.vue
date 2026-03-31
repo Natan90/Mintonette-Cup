@@ -79,7 +79,6 @@
           <p class="title">{{ $t("user.inscription") }}</p>
           <div class="grid">
             <div class="container_left">
-              <div class="item both_size">
                 <div class="item">
                   <input :placeholder="$t('user.prenom')" v-model="prenom_utilisateur"
                     @keyup.enter="getValuesInscription" />
@@ -90,7 +89,7 @@
                   <input :placeholder="$t('user.nom')" v-model="nom_utilisateur" @keyup.enter="getValuesInscription" />
                   <hr />
                 </div>
-              </div>
+
 
               <div class="item">
                 <input :placeholder="$t('user.login')" v-model="login_utilisateur"
@@ -104,27 +103,28 @@
                 <hr />
               </div>
 
-              <div class="item">
-                <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur"
-                  @keyup.enter="getValuesInscription" />
-                <hr />
-              </div>
+
             </div>
 
             <div class="separator"></div>
 
             <div class="container_right">
-              <div class="item">
+              <div class="tel">
                 <input type="tel" pattern="^0[1-9][0-9]{8}$" v-model="tel_utilisateur"
                   :placeholder="$t('user.tel_utilisateur')" /><br /><br />
               </div>
 
-              <div class="item"></div>
+              <div class="item">
+                <input type="email" :placeholder="$t('user.mail')" v-model="mail_utilisateur"
+                  @keyup.enter="getValuesInscription" />
+                <hr />
+              </div>
+
 
               <div class="item_radio">
                 <div class="radio_group">
                   <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.homme')"
-                    :value="$t('user.typeSexe.homme')" name="sexe" />
+                    :value="$t('user.typeSexe.homme')" name="sexe" class="pointer"/>
                   <label :for="$t('user.typeSexe.homme')">{{
                     $t("user.typeSexe.homme")
                     }}</label>
@@ -132,7 +132,7 @@
 
                 <div class="radio_group">
                   <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.femme')"
-                    :value="$t('user.typeSexe.femme')" name="sexe" />
+                    :value="$t('user.typeSexe.femme')" name="sexe" class="pointer"/>
                   <label :for="$t('user.typeSexe.femme')">{{
                     $t("user.typeSexe.femme")
                     }}</label>
@@ -140,7 +140,7 @@
 
                 <div class="radio_group">
                   <input type="radio" v-model="sexe_utilisateur" :id="$t('user.typeSexe.autre')"
-                    :value="$t('user.typeSexe.autre')" name="sexe" />
+                    :value="$t('user.typeSexe.autre')" name="sexe" class="pointer"/>
                   <label :for="$t('user.typeSexe.autre')">{{
                     $t("user.typeSexe.autre")
                     }}</label>
@@ -592,6 +592,10 @@ async function connectUserWithToken(token) {
 }
 
 /* ── Champs ── */
+.tel{
+  height: 50px;
+}
+
 .item {
   position: relative;
   display: flex;
@@ -787,8 +791,14 @@ input::placeholder {
 }
 
 .container_right {
+  margin-top: 10px;
   width: 50%;
-  padding: 15px 0px 15px 15px;
+  height: 160px;
+  display: flex;
+
+
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .both_size {
@@ -807,7 +817,6 @@ input::placeholder {
   display: flex;
   align-items: center;
   gap: 5px;
-  white-space: nowrap;
 }
 
 .radio_group input[type="radio"] {
@@ -929,5 +938,52 @@ input::placeholder {
 
 @keyframes draw-check {
   to { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 900px) {
+  .page {
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .page.moved{
+    flex-direction: column;
+  }
+
+  .left-side {
+    display: none;
+  }
+
+  /* Carte connexion — centrée normalement */
+  .left-card, .left-card.moved {
+    position: static;
+    transform: none !important;
+    width: 90% !important;
+    margin: 40px auto;
+    transition: none;
+  }
+
+  .left-card:hover {
+    transform: none !important;
+  }
+
+  /* Grille inscription en colonne */
+  .grid {
+    flex-direction: column;
+    padding-top: 10px;
+  }
+
+
+
+  .separator {
+    width: 100%;
+    height: 2px;
+    margin: 15px 0;
+  }
+
+  .container_right {
+    width: 100%;
+    height: auto;
+  }
 }
 </style>
