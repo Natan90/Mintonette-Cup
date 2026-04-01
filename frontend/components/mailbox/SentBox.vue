@@ -24,45 +24,55 @@
         </div>
 
         <div class="container_button">
-          <button class="action-button">
+          <button
+            class="action-button"
+            type="button"
+            @click="deleteMessage(messageSelected.id_message)">
             <span>
-              <img
-                src="/trash.svg"
-                alt="trash"
-                @click="deleteMessage(message.id_message)" />
+              <img src="/trash.svg" alt="trash" />
             </span>
           </button>
         </div>
       </div>
     </template>
   </Modal>
-  <p v-if="messageSent.length == 1">
-    Vous avez envoyé {{ messageSent.length }} message
-  </p>
-  <p v-else-if="messageSent.length == 0">
-    Vous n'avez pas encore envoyé de messages.
-  </p>
-  <p v-else>Vous avez envoyé {{ messageSent.length }} messages</p>
-  <div>
-    <div v-if="messageSent.length > 0">
+
+  <div class="mailbox-shell">
+    <p
+      v-if="messageSent.length == 0"
+      class="mailbox-status mailbox-status--empty">
+      Vous n'avez pas encore envoyé de messages.
+    </p>
+    <p v-else class="mailbox-status">
+      Vous avez envoyé <b>{{ messageSent.length }}</b>
+      {{ messageSent.length > 1 ? "messages" : "message" }}
+    </p>
+
+    <div v-if="messageSent.length > 0" class="listMessageContainer">
       <div
         v-for="message in messageSent"
         :key="message.id_message"
-        :style="'normal'">
+        :class="['message-row']">
         <span
           class="span-message pointer"
           @click="updateMessageById(message.id_message)">
-          {{ message.nom_type_message }}
-          <button class="action-button">
+          <span class="message-label">
+            {{ message.nom_type_message }}
+          </span>
+          <button
+            class="action-button"
+            type="button"
+            @click.stop="deleteMessage(message.id_message)">
             <span>
-              <img
-                src="/trash.svg"
-                alt="trash"
-                @click.stop="deleteMessage(message.id_message)" />
+              <img src="/trash.svg" alt="trash" />
             </span>
           </button>
         </span>
       </div>
+    </div>
+
+    <div v-else class="mailbox-empty">
+      <p>Votre boîte d'envoi est vide.</p>
     </div>
   </div>
 </template>
@@ -130,21 +140,97 @@ async function deleteMessage(id_message) {
 </script>
 
 <style scoped>
+.mailbox-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mailbox-status {
+  margin: 0;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.mailbox-status--empty {
+  color: #71807a;
+}
+
+.listMessageContainer {
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--log-card-bg);
+  border: 1.5px solid var(--log-border);
+  box-shadow:
+    0 8px 20px rgba(58, 111, 67, 0.08),
+    0 2px 8px rgba(232, 99, 122, 0.04);
+}
+
+.message-row {
+  background: #ffffff;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-bottom: 1px solid rgba(221, 208, 204, 0.7);
+}
+
+.message-row:last-child {
+  border-bottom: none;
+}
+
+.message-row:hover {
+  background-color: #eef5ef;
+}
+
 .span-message {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--primary-dark);
+}
+
+.message-label {
+  font-weight: 500;
 }
 
 .action-button {
   border: none;
   text-decoration: none;
   background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rose-hover);
+}
+
+.action-button:hover {
+  transform: scale(1.08);
+  transition: transform 0.2s ease;
+}
+
+.action-button img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
 }
 
 .mail_content {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 28px;
+  padding: 24px;
+  background: var(--log-card-bg);
+  border-radius: 18px;
+  border: 1.5px solid var(--log-border);
+  box-shadow:
+    0 8px 30px rgba(58, 111, 67, 0.1),
+    0 2px 8px rgba(232, 99, 122, 0.06);
 }
 
 .item_mail {
@@ -164,8 +250,35 @@ async function deleteMessage(id_message) {
   justify-content: flex-end;
 }
 
+.container_button .action-button {
+  background: var(--rose-pale);
+  border-radius: 999px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(232, 99, 122, 0.12);
+}
+
+.container_button .action-button:hover {
+  background: #fde7ea;
+}
+
+.mailbox-empty {
+  background: var(--log-card-bg);
+  border: 1.5px dashed var(--log-border);
+  border-radius: 18px;
+  padding: 18px 20px;
+  color: #71807a;
+  box-shadow: 0 8px 20px rgba(58, 111, 67, 0.05);
+}
+
 .mail-text {
   text-align: left;
   white-space: pre-line;
+  color: #2a3d2e;
+}
+
+.mailText {
+  text-align: left;
+  white-space: pre-line;
+  color: #2a3d2e;
 }
 </style>

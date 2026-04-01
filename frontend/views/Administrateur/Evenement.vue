@@ -97,7 +97,6 @@
     </div>
   </div>
   </div>
-  <Footer></Footer>
 </template>
 
 <script setup>
@@ -106,7 +105,6 @@ import Editor from "@tinymce/tinymce-vue";
 
 import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import Footer from "@/components/Footer.vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useAdminAPIStore } from "@/services/admin.service.js";
 
