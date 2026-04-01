@@ -423,15 +423,12 @@ if (savedLang) locale.value = savedLang;
 .unreadBadge {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-width: 22px;
   height: 22px;
   padding: 0 7px;
   border-radius: 999px;
   background: var(--rose-hover);
   color: white;
   font-size: 0.8em;
-  font-weight: 700;
   line-height: 1;
 }
 
