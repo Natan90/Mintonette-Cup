@@ -31,8 +31,8 @@
     </template>
   </Modal>
 
-  <div class="back-arrow pointer" @click="router.push({ name: 'Prestataires', params: { lang: locale } })">
-    &#8592; {{ $t('bouton.retourListe') }}
+  <div class="back-arrow pointer" @click="goBack">
+    &#8592; {{ $t('bouton.retour') }}
   </div>  
   <div class="main_container">
     <div class="bloc_texte">
@@ -174,6 +174,7 @@
 </template>
 
 <script setup>
+import { useNavigationStore } from "@/stores/navigation";
 import { onMounted, ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import NavView from "@/components/NavView.vue";
@@ -188,6 +189,7 @@ import { useI18n } from "vue-i18n";
 
 
 const { locale } = useI18n();
+const navStore = useNavigationStore();
 const route = useRoute();
 const router = useRouter();
 const adminStore = useAdminStore();
@@ -286,6 +288,15 @@ const closeMessageDesactivate = () => {
 const closeMessageSuppr = () => {
   deleting.value = false;
 };
+
+/**
+ * Retourne à la page précédente enregistrée dans le store de navigation.
+*/
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 /**
  * Redirige vers la page d’édition du prestataire courant.

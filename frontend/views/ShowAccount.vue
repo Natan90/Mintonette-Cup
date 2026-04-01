@@ -1,6 +1,6 @@
 <template>
   <NavView></NavView>
-  <div class="back-arrow pointer" @click="router.push({ name: 'Utilisateurs', params: { lang: locale } })">
+  <div class="back-arrow pointer" @click="goBack">
     &#8592; {{ $t('bouton.retourListe') }}
   </div>    
   <div class="page">
@@ -93,6 +93,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useNavigationStore } from "@/stores/navigation";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
 import { useAdminAPIStore } from "@/services/admin.service";
@@ -110,6 +111,7 @@ const props = defineProps({
 const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
+const navStore = useNavigationStore();
 const adminAPIStore = useAdminAPIStore();
 
 const { t, locale } = useI18n();
@@ -139,6 +141,15 @@ onMounted(() => {
     console.error(err);
   }
 });
+
+/**
+ * Remonte à la page précédente enregistrée dans le store de navigation.
+*/
+function goBack() {
+  if (navStore.previousRoute) {
+    router.push(navStore.previousRoute);
+  }
+}
 
 /**
  * Récupère les informations de l’utilisateur connecté ou ciblé

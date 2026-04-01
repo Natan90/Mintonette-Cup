@@ -28,7 +28,7 @@
     "anonyme": "Anonymous"
   },
   "bouton": {
-    "retourListe": "Back to list"
+    "retour": "Back"
   },
   "zoneMap": {
     "planZones": "Service provider zone map",
