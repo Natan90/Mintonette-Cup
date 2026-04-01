@@ -1,4 +1,65 @@
 {
+  "adminStats": {
+    "barTitle": "User distribution (%)",
+    "barLabel": "% Providers vs Users",
+    "barLegend": "Providers (%)",
+    "polarTitle": "Services by category",
+    "polarLabel": "Number of services by category"
+  },
+  "adminCommentaire": {
+    "eyebrow": "Administration",
+    "title": "Comment management",
+    "subtitle": "Delete a comment or reply directly to users.",
+    "chargement": "Loading comments...",
+    "reponseSend": "Reply sent",
+    "replyEyebrow": "Admin reply",
+    "replyTitle": "Reply to comment",
+    "replyPlaceholder": "Write your reply here",
+    "btnAnnuler": "Cancel",
+    "btnEnvoyer": "Send reply",
+    "btnEnregistrement": "Saving...",
+    "btnRepondre": "Reply",
+    "btnSupprimer": "Delete",
+    "confirmSupprimer": "Delete this comment?",
+    "feedbackReponse": "Reply saved.",
+    "feedbackSupprimer": "Comment deleted.",
+    "erreurReponse": "Unable to save the reply.",
+    "erreurSupprimer": "Unable to delete the comment.",
+    "anonyme": "Anonymous"
+  },
+  "bouton": {
+    "retourListe": "Back to list"
+  },
+  "zoneMap": {
+    "planZones": "Service provider zone map",
+    "disponible": "Available",
+    "occupee": "Occupied",
+    "sansZone": "Providers without zone",
+    "chargement": "Loading zones...",
+    "chargementErreur": "If this message persists, check the console for errors",
+    "zoneGauche": "Left Provider Zone",
+    "zoneDroite": "Right Provider Zone",
+    "gymnase": "Gymnasium",
+    "modal": {
+      "occupeepar": "Currently occupied by:",
+      "liberer": "Free this zone",
+      "attribuer": "Assign to a provider:",
+      "aucunPresta": "⚠️ No provider available (all already have an assigned zone)",
+      "choisir": "-- Choose a provider --",
+      "btnAttribuer": "Assign"
+    }
+  },
+  "adminPrestataire": {
+    "listePrestataire": "List of service providers",
+    "carteZones": "Map of event zones"
+  },
+  "barreAdmin": {
+    "evenement": "Event",
+    "utilisateur": "Users",
+    "prestataire": "Service Providers",
+    "statistique": "Statistics",
+    "commentaire": "Comments"
+  },
   "barreNav": {
     "accueil": "Home",
     "carte": "Interactive Map",
@@ -166,14 +227,16 @@
       "typeImage": "(JPG, JPEG, PNG or WebP)",
       "choisirFichier": "Choose an Image",
       "choisirAutreFichier": "Choose another Image",
-      "descri": "Event Description"
+      "descri": "Event Description",
+      "reinitialiser": "Reset the event"
     },
     "bouton": {
       "btn_voir": "View",
       "btn_suppr": "Delete",
       "btn_valid": "Approve",
       "btn_refuser": "Reject",
-      "btn_retirer": "Remove"
+      "btn_retirer": "Remove",
+      "btn_reinitialiser": "Reset"
     },
     "tri": {
       "nom": "Sort by :",

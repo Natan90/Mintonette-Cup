@@ -61,10 +61,10 @@
 
         <div class="tabs-container">
             <button :class="['tab-button', { active: activeTab === 'table' }]" @click="activeTab = 'table'">
-                <span>📋</span> Liste des prestataires
+                <span>📋</span> {{ $t('adminPrestataire.listePrestataire') }}
             </button>
             <button :class="['tab-button', { active: activeTab === 'map' }]" @click="activeTab = 'map'">
-                <span>🗺️</span> Carte des zones
+                <span>🗺️</span> {{ $t('adminPrestataire.carteZones') }}
             </button>
         </div>
 
@@ -172,8 +172,7 @@ const selectedPresta = ref(null);
 const deletedPresta = ref(null);
 const refusedPresta = ref(null);
 
-const locale = useI18n();
-
+const { locale } = useI18n();
 
 const id_prestataire = ref(0);
 

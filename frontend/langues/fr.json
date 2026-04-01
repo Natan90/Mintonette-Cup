@@ -1,4 +1,65 @@
 {
+  "adminStats": {
+    "barTitle": "Répartition des utilisateurs (%)",
+    "barLabel": "% Prestataires vs Utilisateurs",
+    "barLegend": "Prestataires (%)",
+    "polarTitle": "Services par catégorie",
+    "polarLabel": "Nombre de services par catégorie"
+  },
+  "adminCommentaire": {
+    "eyebrow": "Administration",
+    "title": "Gestion des commentaires",
+    "subtitle": "Supprime un commentaire ou réponds directement aux utilisateurs.",
+    "chargement": "Chargement des commentaires...",
+    "reponseSend": "Réponse envoyée",
+    "replyEyebrow": "Réponse admin",
+    "replyTitle": "Répondre au commentaire",
+    "replyPlaceholder": "Écris ta réponse ici",
+    "btnAnnuler": "Annuler",
+    "btnEnvoyer": "Envoyer la réponse",
+    "btnEnregistrement": "Enregistrement...",
+    "btnRepondre": "Répondre",
+    "btnSupprimer": "Supprimer",
+    "confirmSupprimer": "Supprimer ce commentaire ?",
+    "feedbackReponse": "Réponse enregistrée.",
+    "feedbackSupprimer": "Commentaire supprimé.",
+    "erreurReponse": "Impossible d'enregistrer la réponse.",
+    "erreurSupprimer": "Impossible de supprimer le commentaire.",
+    "anonyme": "Anonyme"
+  },
+  "bouton": {
+    "retourListe": "Retour à la liste"
+  },
+  "zoneMap": {
+    "planZones": "Plan des zones prestataires",
+    "disponible": "Disponible",
+    "occupee": "Occupée",
+    "sansZone": "Prestataires sans zone",
+    "chargement": "Chargement des zones...",
+    "chargementErreur": "Si ce message persiste, vérifiez la console pour les erreurs",
+    "zoneGauche": "Zone Prestataire Gauche",
+    "zoneDroite": "Zone Prestataire Droite",
+    "gymnase": "Gymnase",
+    "modal": {
+      "occupeepar": "Actuellement occupée par :",
+      "liberer": "Libérer cette zone",
+      "attribuer": "Attribuer à un prestataire :",
+      "aucunPresta": "⚠️ Aucun prestataire disponible (tous ont déjà une zone attribuée)",
+      "choisir": "-- Choisir un prestataire --",
+      "btnAttribuer": "Attribuer"
+    }
+  },
+  "adminPrestataire": {
+    "listePrestataire": "Liste des prestataires",
+    "carteZones": "Carte des zones d'événements"
+  },
+  "barreAdmin": {
+    "evenement": "Évènements",
+    "utilisateur": "Utilisateurs",
+    "prestataire": "Prestataires",
+    "statistique": "Statistiques",
+    "commentaire": "Commentaires"
+  },
   "barreNav": {
     "accueil": "Accueil",
     "carte": "Carte interactive",
@@ -161,7 +222,8 @@
       "btn_suppr": "Supprimer",
       "btn_valid": "Valider",
       "btn_refuser": "Refuser",
-      "btn_retirer": "Retirer"
+      "btn_retirer": "Retirer",
+      "btn_reinitialiser": "Réinitialiser"
     },
     "tri": {
       "nom": "Trier par :",

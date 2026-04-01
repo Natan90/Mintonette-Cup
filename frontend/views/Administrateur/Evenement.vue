@@ -91,7 +91,7 @@
         </button>
 
         <button @click="resetLocalStorage" class="btn-reset" style="margin-left: 10px; background: #dc2626">
-          Réinitialiser l'événement
+          {{ $t("adminPage.evenement.reinitialiser") }}
         </button>
       </div>
     </div>

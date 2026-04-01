@@ -43,6 +43,7 @@
     color: #333;
     cursor: pointer;
     transition: color 0.3s ease;
+    box-shadow: none !important;
 }
 
 .modal-close:hover {

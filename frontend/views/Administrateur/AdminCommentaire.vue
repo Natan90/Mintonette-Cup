@@ -6,11 +6,9 @@
 
     <main class="main_content">
       <header class="page-header">
-        <p class="eyebrow">Administration</p>
-        <h1>Gestion des commentaires</h1>
-        <p class="subtitle">
-          Supprime un commentaire ou réponds directement aux utilisateurs.
-        </p>
+        <p class="eyebrow">{{ $t('adminCommentaire.eyebrow') }}</p>
+        <h1>{{ $t('adminCommentaire.title') }}</h1>
+        <p class="subtitle">{{ $t('adminCommentaire.subtitle') }}</p>
       </header>
 
       <p v-if="feedbackMessage" class="message feedback" :class="feedbackType">
@@ -18,7 +16,7 @@
       </p>
 
       <div v-if="commentaireStore.isLoading" class="state-box">
-        Chargement des commentaires...
+        {{ $t('adminCommentaire.chargement') }}
       </div>
 
       <div v-else-if="commentaireStore.error" class="state-box error">
@@ -50,7 +48,7 @@
           <p class="content">{{ commentaire.texte_commentaire }}</p>
 
           <div v-if="commentaire.reponse_commentaire" class="reply-box">
-            <p class="reply-label">Réponse envoyée</p>
+            <p class="reply-label">{{ $t('adminCommentaire.reponseSend') }}</p>
             <p class="reply-text">{{ commentaire.reponse_commentaire }}</p>
           </div>
 
@@ -59,13 +57,13 @@
               class="btn reply"
               type="button"
               @click="openReply(commentaire)">
-              Répondre
+              {{ $t('adminCommentaire.btnRepondre') }}
             </button>
             <button
               class="btn delete"
               type="button"
               @click="confirmDelete(commentaire)">
-              Supprimer
+              {{ $t('adminCommentaire.btnSupprimer') }}
             </button>
           </div>
         </article>
@@ -74,28 +72,28 @@
       <section v-if="showReplyForm" ref="replyFormRef" class="reply-panel">
         <div class="reply-card">
           <div class="reply-header">
-            <p class="eyebrow">Réponse admin</p>
-            <h2>Répondre au commentaire</h2>
+            <p class="eyebrow">{{ $t('adminCommentaire.replyEyebrow') }}</p>
+            <h2>{{ $t('adminCommentaire.replyTitle') }}</h2>
           </div>
 
           <p v-if="replyError" class="message error">{{ replyError }}</p>
 
           <form class="reply-form" @submit.prevent="submitReply">
             <label class="field">
-              <span>Réponse</span>
+              <span>{{ $t('adminCommentaire.replyTitle') }}</span>
               <textarea
                 v-model.trim="replyForm.reponse_commentaire"
                 rows="5"
-                placeholder="Écris ta réponse ici"
+                :placeholder="$t('adminCommentaire.replyPlaceholder')"
                 required></textarea>
             </label>
 
             <div class="reply-actions">
               <button class="btn cancel" type="button" @click="closeReply">
-                Annuler
+                {{ $t('adminCommentaire.btnAnnuler') }}
               </button>
               <button class="btn submit" type="submit" :disabled="isSaving">
-                {{ isSaving ? "Enregistrement..." : "Envoyer la réponse" }}
+                {{ isSaving ? $t('adminCommentaire.btnEnregistrement') : $t('adminCommentaire.btnEnvoyer') }}
               </button>
             </div>
           </form>
@@ -106,16 +104,9 @@
 </template>
 
 <script setup>
-/* ********************
-        IMPORTS
-******************** */
 import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import { useI18n } from "vue-i18n";
-
-/* ********************
-    PAGES IMPORTS
-******************** */
 import NavView from "@/components/NavView.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
 import { useCommentaireStore } from "@/stores/commentaire";
@@ -157,7 +148,7 @@ onBeforeUnmount(() => {
 function getAuthor(commentaire) {
   const prenom = commentaire.prenom_commentaire || "";
   const nom = commentaire.nom_commentaire || "";
-  return `${prenom} ${nom}`.trim() || "Anonyme";
+  return `${prenom} ${nom}`.trim() || t("adminCommentaire.anonyme");
 }
 
 function getStarClass(value, star) {
@@ -208,21 +199,21 @@ async function submitReply() {
 
     await sendMailToUserForResponse();
 
-    showFeedbackMessage("Réponse enregistrée.");
+    showFeedbackMessage(t("adminCommentaire.feedbackReponse"));
     await commentaireStore.fetchCommentaires();
     closeReply(true);
   } catch (error) {
     replyError.value =
       error?.response?.data?.error ||
       error?.message ||
-      "Impossible d'enregistrer la réponse.";
+      t("adminCommentaire.erreurReponse");
   } finally {
     isSaving.value = false;
   }
 }
 
 async function confirmDelete(commentaire) {
-  const ok = confirm("Supprimer ce commentaire ?");
+  const ok = confirm(t("adminCommentaire.confirmSupprimer"));
   if (!ok) return;
 
   selectedComment.value = commentaire;
@@ -231,12 +222,12 @@ async function confirmDelete(commentaire) {
   try {
     await commentaireStore.deleteCommentaire(commentaire.id_commentaire);
     await sendMailToUserForDelete();
-    showFeedbackMessage("Commentaire supprimé.", "error");
+    showFeedbackMessage(t("adminCommentaire.feedbackSupprimer"), "error");
   } catch (error) {
     alert(
       error?.response?.data?.error ||
         error?.message ||
-        "Impossible de supprimer le commentaire.",
+        t("adminCommentaire.erreurSupprimer"),
     );
   }
 }
@@ -264,6 +255,7 @@ async function sendMailToUserForResponse() {
     console.error("Erreur lors de l'envoi de commentaire:", err);
   }
 }
+
 async function sendMailToUserForDelete() {
   try {
     if (!selectedComment.value?.id_utilisateur) {
@@ -293,7 +285,6 @@ function clearFeedbackMessage() {
     clearTimeout(feedbackTimeoutId);
     feedbackTimeoutId = null;
   }
-
   feedbackMessage.value = "";
 }
 
@@ -351,6 +342,7 @@ function showFeedbackMessage(message, type = "success") {
 .admin-grid {
   display: grid;
   gap: 1rem;
+  width: 100%;
 }
 
 .comment-card,
@@ -366,6 +358,7 @@ function showFeedbackMessage(message, type = "success") {
 .comment-card {
   background: linear-gradient(180deg, #fff4f7 0%, #fffafc 100%);
   border-color: rgba(232, 99, 122, 0.32);
+  width: 100%;
 }
 
 .comment-head {
