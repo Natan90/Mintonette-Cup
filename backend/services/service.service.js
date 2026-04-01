@@ -219,6 +219,42 @@ async function deleteServiceById(id_service) {
   return { message: "Service supprimé avec succès" };
 }
 
+async function deleteArticleById(id_article) {
+  const checkArticle = await pool.query(
+    `SELECT * FROM Article WHERE id_article = $1`,
+    [id_article]
+  );
+
+  if (checkArticle.rowCount === 0) {
+    throw { status: 404, message: "Article non trouvé" };
+  }
+
+  await pool.query(
+    `DELETE FROM Article WHERE id_article = $1`,
+    [id_article]
+  );
+
+  return { message: "Article supprimé avec succès" };
+}
+
+async function deleteActiviteById(id_activite) {
+  const checkActivite = await pool.query(
+    `SELECT * FROM Activite WHERE id_activite = $1`,
+    [id_activite]
+  );
+
+  if (checkActivite.rowCount === 0) {
+    throw { status: 404, message: "Activité non trouvée" };
+  }
+
+  await pool.query(
+    `DELETE FROM Activite WHERE id_activite = $1`,
+    [id_activite]
+  );
+
+  return { message: "Activité supprimée avec succès" };
+}
+
 module.exports = {
   getServices,
   getServiceByIdPrestataire,
@@ -230,4 +266,6 @@ module.exports = {
   addArticleByIdService,
   addActiviteByIdService,
   deleteServiceById,
+  deleteArticleById,
+  deleteActiviteById,
 };

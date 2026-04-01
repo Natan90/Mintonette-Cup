@@ -623,17 +623,23 @@ function selectTypePresta(index) {
 function onCheckChange(event, item) {
   const isChecked = event.target.checked;
 
+  const savedTypeId = selectedTypeId_presta.value;
+  const savedIndex = selectedIndex.value;
+
   prestataireInfoStore.clearStore();
+
+  selectedTypeId_presta.value = savedTypeId;
+  selectedTypeId.value = savedTypeId;
+  selectedIndex.value = savedIndex;
+  selectedTypeId_presta.value = savedTypeId;
 
   checkedItem_presta.value = [];
   nom_presta.value = "";
   descri_presta.value = "";
   mail_presta.value = "";
   tel_presta.value = "";
-
   services.value = [];
 
-  // 3. Appliquer la nouvelle sélection
   if (isChecked) {
     checkedItem_presta.value = [item];
   }

@@ -58,6 +58,20 @@ export const useServiceStore = defineStore("service", () => {
     return deleteRequest(`/prestataire/service/${id_service}/delete`);
   }
 
+  async function DeleteArticle(id_article) {
+    if (!id_article) {
+      throw new Error("L'id de l'article est obligatoire");
+    }
+    return deleteRequest(`/prestataire/service/article/${id_article}/delete`);
+  }
+
+  async function DeleteActivite(id_activite) {
+    if (!id_activite) {
+      throw new Error("L'id de l'activite est obligatoire");
+    }
+    return deleteRequest(`/prestataire/service/activite/${id_activite}/delete`);
+  }
+
   async function AddArticles(id_service, data) {
     if (!id_service) {
       throw new Error("L'id du service est obligatoire");
@@ -85,6 +99,8 @@ export const useServiceStore = defineStore("service", () => {
     ActivateService,
     CreateService,
     DeleteService,
+    DeleteArticle,
+    DeleteActivite,
     AddArticles,
     AddActivites,
   };
