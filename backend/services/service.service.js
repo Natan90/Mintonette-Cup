@@ -77,6 +77,35 @@ async function getActiviteByIdService(id_service) {
   }
 }
 
+async function getArticleByIdArticle(id_article) {
+  const articleResult = await pool.query(
+    `SELECT * FROM Article WHERE id_article = $1`,
+    [id_article]
+  );
+
+  if (articleResult.rows.length === 0)
+    throw { status: 404, message: "Article non trouvé" };
+
+  return {
+    article: articleResult.rows[0],
+  }
+}
+
+async function getActiviteByIdActivite(id_activite) {
+  const activiteResult = await pool.query(
+    `SELECT * FROM Activite WHERE id_activite = $1`,
+    [id_activite]
+  );
+
+  if (activiteResult.rows.length === 0)
+    throw { status: 404, message: "Activité non trouvée" };
+
+
+  return {
+    activite: activiteResult.rows[0],
+  }
+}
+
 async function activateServiceById(id_service) {
   const result = await pool.query(
     `UPDATE Services
@@ -255,12 +284,65 @@ async function deleteActiviteById(id_activite) {
   return { message: "Activité supprimée avec succès" };
 }
 
+async function editActiviteById(id_activite, newActivite) {
+  const { nom, nb_participant, prix, date, heure } = newActivite;
+
+  const date_activite = `${date}T${heure}`;
+
+  const checkActivite = await pool.query(
+    `SELECT * FROM Activite WHERE id_activite = $1`,
+    [id_activite]
+  );
+
+  if (checkActivite.rowCount === 0) {
+    throw { status: 404, message: "Activité non trouvée" };
+  }
+
+  const result = await pool.query(
+    `UPDATE Activite SET nom_activite = $1, nb_participant = $2, prix_activite = $3, date_activite = $4
+    WHERE id_activite = $5
+    RETURNING *;`,
+    [nom, nb_participant, prix, date_activite, id_activite]
+  );
+
+  return {
+    message: "Activité modifiée avec succès",
+    article: result.rows[0],
+  }
+}
+
+async function editArticleById(id_article, newArticle) {
+  const { nom, stock, prix } = newArticle;
+  const checkArticle = await pool.query(
+    `SELECT * FROM Article WHERE id_article = $1`,
+    [id_article]
+  );
+
+  if (checkArticle.rowCount === 0) {
+    throw { status: 404, message: "Article non trouvé" };
+  }
+
+  const result = await pool.query(
+    `UPDATE Article SET nom_article = $1, stock = $2, prix_article = $3
+    WHERE id_article = $4
+    RETURNING *;`,
+    [nom, stock, prix, id_article]
+  );
+
+  return {
+    message: "Article modifié avec succès",
+    article: result.rows[0],
+  }
+}
+
 module.exports = {
   getServices,
   getServiceByIdPrestataire,
   getServiceByIdService,
   getArticleByIdService,
   getActiviteByIdService,
+  getArticleByIdArticle,
+  getActiviteByIdActivite,
   activateServiceById,
   createService,
   addArticleByIdService,
@@ -268,4 +350,6 @@ module.exports = {
   deleteServiceById,
   deleteArticleById,
   deleteActiviteById,
+  editActiviteById,
+  editArticleById,
 };

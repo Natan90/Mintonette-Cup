@@ -127,7 +127,8 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add pointer" @click="addActivitesToService()">+ Ajouter une activité</button>
+        <button class="btn_add pointer" @click="editActivite(currentActiviteId)" v-if="isEditing">Modifier cette activité</button>
+        <button class="btn_add pointer" @click="addActivitesToService()" v-else>+ Ajouter une activité</button>
       </div>
       <div v-if="message && !isShowingRecapService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -137,7 +138,7 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <div v-if="activitesList.length > 0" v-for="(item, index) in activitesList" :key="index" class="item_card">
+        <div v-if="activitesList.length > 0" v-for="(item, index) in activitesList" :key="index" class="item_card" @click="getActiviteByIdActivity(item.id_activite)">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_activite }}</span>
             <button class="btn_remove_item" @click="deleteActivite(item.id_activite)">&times;</button>
@@ -192,7 +193,8 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add pointer" @click="addArticlesToService()">+ Ajouter un article</button>
+        <button class="btn_add pointer" @click="editArticle(currentArticleId)" v-if="isEditing">Modifier cet article</button>
+        <button class="btn_add pointer" @click="addArticlesToService()" v-else>+ Ajouter un article</button>
       </div>
       <div v-if="message && !isShowingRecapService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -202,7 +204,7 @@
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
-        <div v-if="articlesList.length > 0" v-for="(item, index) in articlesList" :key="index" class="item_card">
+        <div v-if="articlesList.length > 0" v-for="(item, index) in articlesList" :key="index" class="item_card" @click="getArticleByIdArticle(item.id_article)">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_article }}</span>
             <button class="btn_remove_item" @click="deleteArticle(item.id_article)">&times;</button>
@@ -295,8 +297,6 @@ const hasChanged = computed(() => {
   return current.length > 0;
 });
 
-const alreadyAddedService = ref(false);
-
 const showRecapModal = computed({
   get() {
     return isShowingRecapService.value;
@@ -312,11 +312,9 @@ const showRecapModal = computed({
 
 // ── Store Refs ───────────────────────────────────
 const {
-  nom, descri, mail, tel,
   nomService, descriService, besoinService,
   visiblePublic, activate, articlesList, activitesList,
-  oneService, existingActivitesList, existingArticlesList,
-  alreadyClosed
+  oneService, alreadyClosed
 } = storeToRefs(prestataireInfoStore);
 
 console.log("nomService : " + nomService.value)
@@ -340,16 +338,19 @@ const hasData = computed(() => {
 });
 
 // Activite
+const isEditing = ref(false);
 const nom_activite = ref("");
 const nb_participants = ref(0);
 const prix_activite = ref(0);
 const date_activite = ref(null);
 const heure_activite = ref(null);
+const currentActiviteId = ref(null);
 
 // Article
 const nom_article = ref("");
 const stock_article = ref(0);
 const prix_article = ref(0);
+const currentArticleId = ref(null);
 
 
 // ── onBeforeRouteLeave ────────────────────────────────────
@@ -482,58 +483,42 @@ async function getValuesArticles(id_service) {
     console.error(err);
   }
 }
-/**
- * Supprime l'article avec son ID puis appelle de nouveau la fonction pour récupérer les données.
- * 
- * @async
- * @param {Integer} id-article - L'ID de l'article. 
- */
-async function deleteArticle(id_article) {
+async function getActiviteByIdActivity(id_activite) {
   try {
-    console.log(id_article);
-    const res = await serviceStore.DeleteArticle(id_article);
+    const res = await serviceStore.GetActiviteByIdActivite(id_activite);
+    
+    currentActiviteId.value = id_activite;
 
-    await getValuesArticles(id_service.value);
+    nom_activite.value = res.data.activite.nom_activite;
+    nb_participants.value = res.data.activite.nb_participant;
+    prix_activite.value = res.data.activite.prix_activite;
+    date_activite.value = res.data.activite.date_activite.slice(0, 10);
+    heure_activite.value = res.data.activite.date_activite.slice(11, 16);
 
-    message.value = res.data.message;
-    messageType.value = "success";
-
+    isEditing.value = true;
   } catch (err) {
-    message.value = err.message;
-    messageType.value = "error";
+    console.error(err);
   }
 }
-/**
- * Supprime l'activité avec son ID puis appelle de nouveau la fonction pour récupérer les données.
- * 
- * @async
- * @param {Integer} id_activite - L'ID de l'activité.
- */
-async function deleteActivite(id_activite) {
+async function getArticleByIdArticle(id_article) {
   try {
-    const res = await serviceStore.DeleteActivite(id_activite);
+    const res = await serviceStore.GetArticleByIdArticle(id_article);
 
-    await getValuesActivities(id_service.value);
+    currentArticleId.value = id_article;
 
-    message.value = res.data.message;
-    messageType.value = "success";
+    nom_article.value = res.data.article.nom_article;
+    stock_article.value = res.data.article.stock;
+    prix_article.value = res.data.article.prix_article;
 
+    isEditing.value = true;
   } catch (err) {
-    message.value = err.message;
-    messageType.value = "error";
+    console.error(err);
   }
-}
-
-
-// ── Services ──────────────────────────────────
-/**
- * Affiche la modal de récapitulatif du service avant validation finale.
- */
-function showRecapService() {
-  isShowingRecapService.value = true;
 }
 /**
  * Créé les activités côté backend.
+ * 
+ * @async
  */
 async function addActivitesToService() {
   if (!hasData.value) {
@@ -568,6 +553,8 @@ async function addActivitesToService() {
 }
 /**
  * Créé les articles côté backend.
+ * 
+ * @async
  */
 async function addArticlesToService() {
   if (!hasData.value) {
@@ -595,6 +582,114 @@ async function addArticlesToService() {
     message.value = err.message;
     messageType.value = "error";
   }
+}
+/**
+ * Modifie une activité en fonction de son ID.
+ * 
+ * @async
+ * @param {Integer} id_activite - L'ID de l'activité sélectionnée.
+ */
+async function editActivite(id_activite) {
+  try {
+    const res = await serviceStore.EditActiviteById(id_activite, {
+      nom: nom_activite.value,
+      nb_participant: nb_participants.value,
+      prix: prix_activite.value,
+      date: date_activite.value,
+      heure: heure_activite.value
+    });
+
+    await getValuesActivities(id_service.value);
+
+    isEditing.value = false;
+  } catch (err) {
+    console.error(err);
+  }
+}
+/**
+ * Modifie un article en fonction de son ID.
+ * 
+ * @async
+ * @param {Integer} id_article - L'ID de l'article sélectionné.
+ */
+async function editArticle(id_article) {
+  try {
+    const res = await serviceStore.EditArticleById(id_article, {
+      nom: nom_article.value,
+      stock: stock_article.value,
+      prix: prix_article.value
+    });
+
+    await getValuesArticles(id_service.value);
+
+    isEditing.value = false;
+  } catch (err) {
+    console.error(err);
+  }
+}
+/**
+ * Supprime l'article avec son ID puis appelle de nouveau la fonction pour récupérer les données.
+ * 
+ * @async
+ * @param {Integer} id-article - L'ID de l'article. 
+ */
+async function deleteArticle(id_article) {
+  try {
+    console.log(id_article);
+    const res = await serviceStore.DeleteArticle(id_article);
+
+    await getValuesArticles(id_service.value);
+
+    nom_article.value = "";
+    stock_article.value = 0;
+    prix_article.value = 0.00;
+
+    isEditing.value = false;
+
+    message.value = res.data.message;
+    messageType.value = "success";
+
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
+  }
+}
+/**
+ * Supprime l'activité avec son ID puis appelle de nouveau la fonction pour récupérer les données.
+ * 
+ * @async
+ * @param {Integer} id_activite - L'ID de l'activité.
+ */
+async function deleteActivite(id_activite) {
+  try {
+    const res = await serviceStore.DeleteActivite(id_activite);
+
+    await getValuesActivities(id_service.value);
+
+    nom_activite.value = "";
+    nb_participants.value = 0;
+    prix_activite.value = 0.00;
+    date_activite.value = "";
+    heure_activite.value = "";
+
+    isEditing.value = false;
+
+    message.value = res.data.message;
+    messageType.value = "success";
+
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
+  }
+}
+
+
+// ── Services ──────────────────────────────────
+/**
+ * Affiche la modal de récapitulatif du service avant validation finale.
+ */
+function showRecapService() {
+  isShowingRecapService.value = true;
 }
 </script>
 

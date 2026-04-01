@@ -1,56 +1,27 @@
-exports.validateServiceByIdService = (req, res, next) => {
-  const id_service = req.params.id_service;
+function validateParamId(paramName) {
+  return (req, res, next) => {
+    const value = req.params[paramName];
 
-  if (!id_service) {
-    return res.status(400).json({ error: "id_service est requis" });
-  }
+    if (!value) {
+      return res.status(400).json({ error: `${paramName} est requis` });
+    }
 
-  next();
+    if (isNaN(value)) {
+      return res.status(400).json({ error: `${paramName} doit être un nombre` });
+    }
+
+    next();
+  };
 }
 
-exports.validateServiceByIdPrestataire = (req, res, next) => {
-  const id_presta = req.params.id_presta;
+exports.validateActiviteById = validateParamId("id_activite");
+exports.validateArticleById = validateParamId("id_article");
+exports.validateArticleByIdService = validateParamId("id_service");
+exports.validateActiviteByIdService = validateParamId("id_service");
+exports.validateId = validateParamId("id");
+exports.validateServiceByIdService = validateParamId("id_service");
+exports.validateServiceByIdPrestataire = validateParamId("id_presta");
 
-  if (!id_presta) {
-    return res.status(400).json({ error: "id_presta est requis" });
-  }
-
-  next();
-}
-
-exports.validateArticleByIdService = (req, res, next) => {
-  const id_service = req.params.id_service;
-
-  if (!id_service) {
-    return res.status(400).json({ error: "id_service est requis" });
-  }
-
-  next();
-}
-
-exports.validateActiviteByIdService = (req, res, next) => {
-  const id_service = req.params.id_service;
-
-  if (!id_service) {
-    return res.status(400).json({ error: "id_service est requis" });
-  }
-
-  next();
-}
-
-exports.validateId = (req, res, next) => {
-  const id_service = req.params.id; 
-
-  if (!id_service) {
-    return res.status(400).json({ error: "id_service est requis" });
-  }
-
-  if (isNaN(id_service)) {
-    return res.status(400).json({ error: "id_service doit être un nombre" });
-  }
-
-  next();
-};
 
 exports.validateAddService = (req, res, next) => {
   const id_prestataire = req.params.id;
@@ -156,6 +127,66 @@ exports.validateAddActiviteByIdService = (req, res, next) => {
 
   if (!heure) {
     return res.status(400).json({ error: "heure est requise" });
+  }
+
+  next();
+};
+
+exports.validateEditActivite = (req, res, next) => {
+  const id_activite = req.params.id;
+  const { nom, nb_participant, prix, date, heure } = req.body;
+
+  if (!id_activite) {
+    return res.status(400).json({ error: "id_activite est requis" });
+  }
+  if (isNaN(id_activite)) {
+    return res.status(400).json({ error: "id_activite doit être un nombre" });
+  }
+
+  if (!nom || nom.trim() === "") {
+    return res.status(400).json({ error: "nom est requis" });
+  }
+
+  if (nb_participant === undefined || isNaN(nb_participant) || nb_participant < 1) {
+    return res.status(400).json({ error: "nb_participant invalide" });
+  }
+
+  if (prix === undefined || isNaN(prix) || prix < 0) {
+    return res.status(400).json({ error: "prix invalide" });
+  }
+
+  if (!date || isNaN(Date.parse(date))) {
+    return res.status(400).json({ error: "date invalide" });
+  }
+
+  if (!heure) {
+    return res.status(400).json({ error: "heure requise" });
+  }
+
+  next();
+};
+
+exports.validateEditArticle = (req, res, next) => {
+  const id_article = req.params.id;
+  const { nom, stock, prix } = req.body;
+
+  if (!id_article) {
+    return res.status(400).json({ error: "id_article est requis" });
+  }
+  if (isNaN(id_article)) {
+    return res.status(400).json({ error: "id_article doit être un nombre" });
+  }
+
+  if (!nom || nom.trim() === "") {
+    return res.status(400).json({ error: "nom est requis" });
+  }
+
+  if (stock === undefined || isNaN(stock) || stock < 0) {
+    return res.status(400).json({ error: "stock invalide" });
+  }
+
+  if (prix === undefined || isNaN(prix) || prix < 0) {
+    return res.status(400).json({ error: "prix invalide" });
   }
 
   next();

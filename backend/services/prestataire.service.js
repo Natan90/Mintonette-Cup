@@ -49,10 +49,21 @@ async function becomePrestataire(id_user, prestataire) {
     [id_user],
   );
 
+  const checkPrestaWaiting = await client.query(
+    "SELECT id_prestataire FROM Prestataire WHERE id_utilisateur = $1 AND waitingForAdmin = true",
+    [id_user],
+  );
+
   if (checkPresta.rows.length > 0) {
     await client.query("ROLLBACK");
 
-    throw { status: 409, message: "Vous êtes déjà prestataire" };
+    let message = "Vous êtes déjà prestataire";
+
+    if (checkPrestaWaiting.rows.length > 0) {
+      message = "Votre demande est en cours de validation"
+    }
+
+    throw { status: 409, message: message };
   }
 
   const result = await client.query(
@@ -65,40 +76,6 @@ async function becomePrestataire(id_user, prestataire) {
 
   const newPresta = result.rows[0];
 
-  if (Array.isArray(services) && services.length > 0) {
-    for (const service of services) {
-      const titre_service = {
-        fr: { texte: service.titre_service?.fr?.texte || "" },
-        en: { texte: service.titre_service?.en?.texte || "" },
-      };
-
-      const descri_service = {
-        fr: { texte: service.descri_service?.fr?.texte || "" },
-        en: { texte: service.descri_service?.en?.texte || "" },
-      };
-
-      const besoin = {
-        fr: service.besoin?.fr || "",
-        en: service.besoin?.en || "",
-      };
-
-      await client.query(
-        `INSERT INTO Services (nom_service, titre_service, descri_service, visible_public, besoin, prix, nb_participants, activate, prestataire_id)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, false, $8)`,
-        [
-          service.nom_service,
-          JSON.stringify(titre_service),
-          JSON.stringify(descri_service),
-          service.visible_public ?? true,
-          JSON.stringify(besoin),
-          service.prix ?? 0,
-          service.nb_participants ?? nb_participants,
-          newPresta.id_prestataire,
-        ],
-      );
-    }
-  }
-
   await client.query("COMMIT");
 
   return {
@@ -108,7 +85,7 @@ async function becomePrestataire(id_user, prestataire) {
 }
 
 async function updatePrestataire(id_user, prestataire) {
-  const { nom, descri, mail, tel, specificite, type, services } = prestataire;
+  const { nom, descri, mail, tel, specificite, type } = prestataire;
   const client = await pool.connect();
 
   await client.query("BEGIN");
@@ -124,8 +101,6 @@ async function updatePrestataire(id_user, prestataire) {
 
     throw { status: 409, message: "Vous n'êtes pas un prestataire" };
   }
-  const id_prestataire = checkPresta.rows[0].id_prestataire;
-
   const result = await client.query(
     `UPDATE Prestataire
         SET 
@@ -143,64 +118,6 @@ async function updatePrestataire(id_user, prestataire) {
     [nom, descri, mail, tel, JSON.stringify(specificite), type, id_user],
   );
 
-  if (Array.isArray(services)) {
-    for (const service of services) {
-      const titre_service = {
-        fr: { texte: service.titre_service?.fr?.texte || "" },
-        en: { texte: service.titre_service?.en?.texte || "" },
-      };
-      const descri_service = {
-        fr: { texte: service.descri_service?.fr?.texte || "" },
-        en: { texte: service.descri_service?.en?.texte || "" },
-      };
-      const besoin = {
-        fr: service.besoin?.fr || "",
-        en: service.besoin?.en || "",
-      };
-
-      if (service.id_service) {
-        await client.query(
-          `UPDATE Services
-              SET 
-                nom_service = $1,
-                titre_service = $2,
-                descri_service = $3,
-                besoin = $4,
-                visible_public = $5,
-                prix = $6,
-                nb_participants = $7
-              WHERE id_service = $8 AND prestataire_id = $9`,
-          [
-            service.nom_service,
-            JSON.stringify(titre_service),
-            JSON.stringify(descri_service),
-            JSON.stringify(besoin),
-            service.visible_public ?? true,
-            service.prix ?? 0,
-            service.nb_participants ?? nb_participants,
-            service.id_service,
-            id_prestataire,
-          ],
-        );
-      } else {
-        await client.query(
-          `INSERT INTO Services
-              (nom_service, titre_service, descri_service, besoin, visible_public, prix, nb_participants, activate, prestataire_id)
-              VALUES ($1, $2, $3, $4, $5, $6, $7, false, $8)`,
-          [
-            service.nom_service,
-            JSON.stringify(titre_service),
-            JSON.stringify(descri_service),
-            JSON.stringify(besoin),
-            service.visible_public ?? true,
-            service.prix ?? 0,
-            service.nb_participants ?? nb_participants,
-            id_prestataire,
-          ],
-        );
-      }
-    }
-  }
   const newPresta = result.rows[0];
 
   await client.query("COMMIT");

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { deleteRequest, getRequest, patchRequest, postRequest } from "./axios.service";
+import { deleteRequest, getRequest, patchRequest, postRequest, putRequest } from "./axios.service";
 
 export const useServiceStore = defineStore("service", () => {
 
@@ -33,6 +33,20 @@ export const useServiceStore = defineStore("service", () => {
       throw new Error("L'id du service est obligatoire");
     }
     return getRequest(`/prestataire/service/${id_service}/activite/show`);
+  }
+
+  async function GetArticleByIdArticle(id_article) {
+    if (!id_article) {
+      throw new Error("L'id de l'article est obligatoire");
+    }
+    return getRequest(`/prestataire/service/article/${id_article}/show`);
+  }
+
+  async function GetActiviteByIdActivite(id_activite) {
+    if (!id_activite) {
+      throw new Error("L'id de l'activité est obligatoire");
+    }
+    return getRequest(`/prestataire/service/activite/${id_activite}/show`);
   }
 
   async function ActivateService(id_service) {
@@ -90,12 +104,32 @@ export const useServiceStore = defineStore("service", () => {
     });
   }
 
+  async function EditArticleById(id_article, data) {
+    if (!id_article) {
+      throw new Error("L'id de l'article est obligatoire");
+    }
+    return putRequest(`/prestataire/service/article/${id_article}/edit`, {
+  ...data
+});
+  }
+
+  async function EditActiviteById(id_activite, data) {
+    if (!id_activite) {
+      throw new Error("L'id de l'activite est obligatoire");
+    }
+    return putRequest(`/prestataire/service/activite/${id_activite}/edit`, {
+      ...data
+    });
+  }
+
   return {
     GetServices,
     GetServiceByIdService,
     GetServiceByIdPrestataire,
     GetActiviteByIdService,
     GetArticleByIdService,
+    GetActiviteByIdActivite,
+    GetArticleByIdArticle,
     ActivateService,
     CreateService,
     DeleteService,
@@ -103,5 +137,7 @@ export const useServiceStore = defineStore("service", () => {
     DeleteActivite,
     AddArticles,
     AddActivites,
+    EditActiviteById,
+    EditArticleById,
   };
 });

@@ -7,9 +7,9 @@ exports.validatePrestataireById = (req, res, next) => {
 }
 
 exports.validateBecomePresta = (req, res, next) => {
-    const { nom, descri, mail, tel, specificite, type, services } = req.body;
+    const { nom, descri, mail, tel, specificite, type } = req.body;
 
-    if (!nom || !descri || !mail || !tel || !specificite || !type || !Array.isArray(services) || services.length === 0) {
+    if (!nom || !descri || !mail || !tel || !specificite || !type) {
         return res.status(400).json({ error: "Champs obligatoires manquants" });
     }
 
@@ -17,31 +17,11 @@ exports.validateBecomePresta = (req, res, next) => {
 };
 
 exports.validateUpdatePresta = (req, res, next) => {
-    const { nom, descri, mail, tel, specificite, type, services } = req.body;
+    const { nom, descri, mail, tel, specificite, type } = req.body;
 
     if (!nom || !descri || !mail || !tel || !specificite || !type) {
         return res.status(400).json({ error: "Champs obligatoires manquants" });
     }
-
-    if (services && !Array.isArray(services)) {
-        return res.status(400).json({ error: "Le champ 'services' doit être un tableau" });
-    }
-
-    if (services) {
-    for (const service of services) {
-      if (!service.nom_service) {
-        return res.status(400).json({ error: "Chaque service doit avoir un 'nom_service'" });
-      }
-
-      if (service.prix && typeof service.prix !== "number") {
-        return res.status(400).json({ error: "'prix' d'un service doit être un nombre" });
-      }
-
-      if (service.nb_participants && typeof service.nb_participants !== "number") {
-        return res.status(400).json({ error: "'nb_participants' d'un service doit être un nombre" });
-      }
-    }
-  }
 
     next();
 };

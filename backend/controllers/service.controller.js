@@ -64,6 +64,32 @@ exports.getActiviteByIdService = async (req, res) => {
   }
 };
 
+exports.getArticleByIdArticle = async (req, res) => {
+  try {
+    const id_article = req.params.id_article;
+    const result = await serviceService.getArticleByIdArticle(id_article);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
+
+exports.getActiviteByIdActivite = async (req, res) => {
+  try {
+    const id_activite = req.params.id_activite;
+    const result = await serviceService.getActiviteByIdActivite(id_activite);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
+
 exports.activateServiceById = async (req, res) => {
   try {
     const id_service = req.params.id;
@@ -142,6 +168,30 @@ exports.deleteActiviteById = async(req, res) => {
   try {
     const id_activite = req.params.id;
     const result = await serviceService.deleteActiviteById(id_activite);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    res.status(status).json({ error: err.message || "Erreur serveur" });
+  }
+}
+
+exports.editActiviteById = async(req, res) => {
+  try {
+    const id_activite = req.params.id;
+    const result = await serviceService.editActiviteById(id_activite, req.body);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    res.status(status).json({ error: err.message || "Erreur serveur" });
+  }
+}
+
+exports.editArticleById = async(req, res) => {
+  try {
+    const id_article = req.params.id;
+    const result = await serviceService.editArticleById(id_article, req.body);
     return res.status(200).json(result);
   } catch (err) {
     console.error(err);

@@ -264,6 +264,10 @@
           <span class="modal-close" @click="closeMessage">&times;</span>
         </div>
 
+        <div class="message_error" v-if="services.length === 0">
+          <p>Vous devez ajouter au moins un service pour finaliser votre inscription.</p>
+        </div>
+
         <!-- Bouton de modification (mode édition) -->
         <div class="button_container" v-if="!pathAdd">
           <button @click="updatePresta()" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
@@ -271,16 +275,13 @@
           </button>
         </div>
 
-        <div class="message_error" v-if="services.length === 0">
-          <p>Vous devez ajouter au moins un service pour finaliser votre inscription.</p>
-        </div>
-
         <!-- Bouton d'inscription (mode ajout) -->
         <div class="button_container" v-else>
-          <button @click="addPrestataire()" :disabled="isSubmitting">
-            {{ isSubmitting ? "En cours..." : $t("user.buttonInscription") }}
+          <button @click="addPrestataire()">
+            {{ $t("user.buttonInscription") }}
           </button>
         </div>
+        
       </div>
     </div>
   </section>
@@ -346,7 +347,6 @@ const getStoreValues = computed(() => {
 const message = ref("");
 const messageType = ref("success");
 const isFrench = ref(true);
-const isSubmitting = ref(false);
 const showLeaveDialog = ref(false);
 const pendingNavigation = ref(null);
 const allowLeave = ref(false);
@@ -449,29 +449,28 @@ watch(checkedItem_presta, (v) => { if (!isSyncing.value) checkedItem.value = v; 
 watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscription.value = v; });
 
 // ── onBeforeRouteLeave ────────────────────────────────────
-onBeforeRouteLeave((to, from, next) => {
-  if (allowLeave.value || to.name === "AddByService") {
-    next();
-    return;
-  }
+// onBeforeRouteLeave((to, from, next) => {
+//   if (allowLeave.value || to.name === "AddByService") {
+//     next();
+//     return;
+//   }
 
-  const hasData =
-    nom_presta.value ||
-    descri_presta.value ||
-    mail_presta.value ||
-    services.value.length > 0;
+//   const hasData =
+//     nom_presta.value ||
+//     descri_presta.value ||
+//     mail_presta.value ||
+//     services.value.length > 0;
 
-  if (!hasData) {
-    prestataireInfoStore.clearStore();
-    next();
-    return;
-  }
+//   if (!hasData) {
+//     prestataireInfoStore.clearStore();
+//     next();
+//     return;
+//   }
 
-  showLeaveDialog.value = true;
-  pendingNavigation.value = to;
+//   pendingNavigation.value = to;
 
-  next(false);
-});
+//   next(false);
+// });
 
 // ── onMounted ────────────────────────────────────
 onMounted(async () => {
@@ -610,11 +609,22 @@ function displayBlink() {
  * Met à jour l’index et l’identifiant du type sélectionné.
 */
 function selectTypePresta(index) {
+  if (selectedIndex.value !== index) {
+    checkedItem_presta.value = [];
+    checkedItem.value = [];
+    services.value = [];
+    nom_presta.value = "";
+    descri_presta.value = "";
+    mail_presta.value = "";
+    tel_presta.value = "";
+  }
+
   selectedIndex.value = index;
 
   const typeObj = type_prestataire.value[index];
   if (typeObj) {
     selectedTypeId_presta.value = typeObj.id_type_prestataire;
+    selectedTypeId.value = typeObj.id_type_prestataire;
   }
 }
 /**
@@ -922,6 +932,9 @@ async function getServiceByIdPrestataire(id_presta) {
       id_service: s.id_service,
       nom_service: s.nom_service,
       activate: s.activate || false,
+      visible_public: s.visible_public ?? true,
+      descri_service: s.descri_service || { fr: "", en: "" },
+      besoin: s.besoin || { fr: "", en: "" },
     }));
 }
 /**
@@ -1016,31 +1029,13 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
   try {
-    const servicesPayload = services.value.map(s => ({
-      nom_service: s.nom_service,
-      titre_service: {
-        fr: { texte: s.titre_service.fr },
-        en: { texte: s.titre_service.en }
-      },
-      descri_service: {
-        fr: { texte: s.descriService.fr },
-        en: { texte: s.descriService.en }
-      },
-      besoin: s.besoin,
-      prix: s.prix,
-      nb_participants: s.nb_participants,
-      activate: s.activate,
-      visible_public: s.visible_public
-    }));
-
     const res = await prestataireStore.BecomePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
       mail: mail_presta.value,
       tel: tel_presta.value,
       specificite: selectedNames.value,
-      type: Number(selectedTypeId_presta.value),
-      services: servicesPayload
+      type: Number(selectedTypeId_presta.value)
     });
 
     userStore.prestaId = res.data.id_prestataire;
@@ -1050,7 +1045,7 @@ async function addPrestataire() {
     message.value = res.data.message;
     messageType.value = "success";
   } catch (err) {
-    message.value = err.message;
+    message.value = err.response?.data?.error || err.message;
     messageType.value = 'error';
   }
 }
@@ -1069,23 +1064,6 @@ async function addPrestataire() {
 */
 async function updatePresta() {
   try {
-    const servicesPayload = services.value.map(s => ({
-      nom_service: s.nom_service,
-      titre_service: {
-        fr: { texte: s.titre_service.fr },
-        en: { texte: s.titre_service.en }
-      },
-      descri_service: {
-        fr: { texte: s.descriService.fr },
-        en: { texte: s.descriService.en }
-      },
-      besoin: s.besoin,
-      prix: s.prix,
-      nb_participants: s.nb_participants,
-      activate: s.activate,
-      visible_public: s.visible_public
-    }));
-
     const res = await prestataireStore.UpdatePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
@@ -1093,7 +1071,6 @@ async function updatePresta() {
       tel: tel_presta.value,
       specificite: selectedNames.value,
       type: Number(selectedTypeId_presta.value),
-      services: servicesPayload
     });
     message.value = res.data.message;
     messageType.value = "success";
@@ -1543,8 +1520,8 @@ input[type="radio"] {
 
 .message-error {
   background: #fff0f2;
-  color: var(--log-rose-hover);
-  border: 1.5px solid var(--log-rose-medium);
+  color: var(--rose-hover);
+  border: 1.5px solid var(--rose-medium);
 }
 
 .message .text {
@@ -1561,7 +1538,7 @@ input[type="radio"] {
 }
 
 .modal-close:hover {
-  color: var(--log-rose-hover);
+  color: var(--rose-hover);
 }
 
 /* ── Modal service : conteneur principal ── */
