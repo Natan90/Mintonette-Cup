@@ -2,6 +2,12 @@
   <NavView />
 
   <div class="pageContainer" v-if="selectedMatch">
+    <router-link
+      :to="{ name: 'Home', params: { lang: locale } }"
+      class="button homeButton">
+      ← Retour à l'accueil
+    </router-link>
+
     <div class="navMatch">
       <router-link
         :to="{
@@ -335,6 +341,8 @@ function getAge(player) {
 .pageContainer {
   max-width: 1200px;
   margin: auto;
+  position: relative;
+  padding-top: 52px;
 }
 
 .navMatch {
@@ -343,13 +351,36 @@ function getAge(player) {
 }
 
 .button {
-  background: #00167a;
+  background: var(--primary-color);
   color: white;
+  margin-top: 15px;
   padding: 10px 16px;
   border-radius: 6px;
   text-decoration: none;
   transition: 0.2s ease-in-out;
 }
+
+.button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(42, 82, 50, 0.18);
+}
+
+.homeButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 15px;
+  padding: 8px 12px;
+  font-size: 0.92rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  margin-left: -155px;
+}
+
 .matchSelector {
   display: flex;
   justify-content: center;
@@ -359,14 +390,14 @@ function getAge(player) {
   width: 250px;
   padding: 10px 18px;
   border-radius: 20px;
-  background-color: #e6e9f5;
-  color: #00167a;
+  background-color: var(--rose-pale);
+  color: var(--primary-dark);
   font-weight: 600;
   transition: 0.2s ease-in-out;
 }
 .matchTitle.active,
 .matchTitle:hover {
-  background-color: #00167a;
+  background-color: var(--rose-hover);
   color: white;
 }
 
@@ -377,7 +408,7 @@ function getAge(player) {
 
 .matchHeader span {
   margin: 0 10px;
-  color: #00167a;
+  color: var(--rose-hover);
 }
 .image {
   aspect-ratio: 16/9;
@@ -514,7 +545,7 @@ function getAge(player) {
 }
 
 .subPlayer h3 {
-  color: #00167a;
+  color: var(--primary-color);
   text-align: center;
 }
 

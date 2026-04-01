@@ -106,6 +106,23 @@ let standHoverStyle;
 let lastFeature = null;
 let label = null;
 
+const themeColors = {
+  roseStroke: "#c94d65",
+  roseFill: "rgba(252, 153, 153, 0.42)",
+  roseHoverStroke: "#b93f5a",
+  roseHoverFill: "rgba(214, 88, 112, 0.68)",
+  greenStroke: "#3a6f43",
+  greenFill: "rgba(90, 153, 102, 0.58)",
+  greenHoverStroke: "#2d5a35",
+  greenHoverFill: "rgba(58, 111, 67, 0.72)",
+  darkStroke: "#2a5232",
+  darkFill: "rgba(42, 82, 50, 0.34)",
+  blueStroke: "#5575cf",
+  blueFill: "rgba(77, 107, 214, 0.34)",
+  blueHoverStroke: "#3559b6",
+  blueHoverFill: "rgba(53, 89, 182, 0.56)",
+};
+
 const nom_prestataire = ref("");
 const prestataires = ref([]);
 
@@ -2012,52 +2029,52 @@ onMounted(() => {
 
   //Style hover et normal //Stroke c'est pour le contour
   hoverStyle = new Style({
-    stroke: new Stroke({ color: "#ffffff", width: 2 }),
-    fill: new Fill({ color: "rgba(0,22,122,0.3)" }),
+    stroke: new Stroke({ color: themeColors.blueHoverStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.blueHoverFill }),
   });
   defaultStyle = new Style({
-    stroke: new Stroke({ color: "#00167a", width: 2 }),
-    fill: new Fill({ color: "rgba(0,22,122,0.5)" }),
+    stroke: new Stroke({ color: themeColors.blueStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.blueFill }),
   });
   standStyle = new Style({
-    stroke: new Stroke({ color: "#000000", width: 2 }),
-    fill: new Fill({ color: "rgba(0,0,0,0.3)" }),
+    stroke: new Stroke({ color: themeColors.darkStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.darkFill }),
   });
   standHoverStyle = new Style({
-    stroke: new Stroke({ color: "#000000", width: 2 }),
-    fill: new Fill({ color: "rgba(0,0,0,0.5)" }),
+    stroke: new Stroke({ color: themeColors.darkStroke, width: 2 }),
+    fill: new Fill({ color: "rgba(42, 82, 50, 0.56)" }),
   });
   providerStyle = new Style({
-    stroke: new Stroke({ color: "#1F5E00", width: 2 }),
-    fill: new Fill({ color: "rgba(31,94,0,0.6)" }),
+    stroke: new Stroke({ color: themeColors.greenStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.greenFill }),
   });
   providerHoverStyle = new Style({
-    stroke: new Stroke({ color: "#2E8B00", width: 2 }),
-    fill: new Fill({ color: "rgba(68,172,16,0.7)" }),
+    stroke: new Stroke({ color: themeColors.greenHoverStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.greenHoverFill }),
   });
   generalStyle = new Style({
-    stroke: new Stroke({ color: "#CC3300", width: 2 }),
-    fill: new Fill({ color: "rgba(204,51,0,0.4)" }),
+    stroke: new Stroke({ color: themeColors.roseStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.roseFill }),
   });
   generalHoverStyle = new Style({
-    stroke: new Stroke({ color: "#FF6600", width: 2 }),
-    fill: new Fill({ color: "rgba(255,102,0,0.6)" }),
+    stroke: new Stroke({ color: themeColors.roseHoverStroke, width: 2 }),
+    fill: new Fill({ color: themeColors.roseHoverFill }),
   });
   restorationStyle = new Style({
-    stroke: new Stroke({ color: "#6d071a", width: 2 }),
-    fill: new Fill({ color: "rgba(124,21,41,0.7)" }),
+    stroke: new Stroke({ color: themeColors.roseHoverStroke, width: 2 }),
+    fill: new Fill({ color: "rgba(232, 99, 122, 0.56)" }),
   });
   restorationHoverStyle = new Style({
-    stroke: new Stroke({ color: "#8e273b", width: 2 }),
-    fill: new Fill({ color: "rgba(124,21,41,0.6)" }),
+    stroke: new Stroke({ color: themeColors.roseStroke, width: 2 }),
+    fill: new Fill({ color: "rgba(194, 77, 101, 0.68)" }),
   });
   animationlStyle = new Style({
-    stroke: new Stroke({ color: "#5a189a", width: 2 }),
-    fill: new Fill({ color: "rgba(90, 24, 154, 0.7)" }),
+    stroke: new Stroke({ color: "#8e5aa8", width: 2 }),
+    fill: new Fill({ color: "rgba(190, 153, 210, 0.56)" }),
   });
   animationlHoverStyle = new Style({
-    stroke: new Stroke({ color: "#9d4edd", width: 2 }),
-    fill: new Fill({ color: "rgba(157, 78, 221, 0.6)" }),
+    stroke: new Stroke({ color: "#b07ac9", width: 2 }),
+    fill: new Fill({ color: "rgba(170, 130, 200, 0.72)" }),
   });
 
   featuresList.forEach((f) => {
@@ -2163,11 +2180,14 @@ onMounted(() => {
 
       label.style.fontSize = "16px";
       label.style.padding = "2px 6px";
+      label.style.color = "#fff";
+      label.style.borderRadius = "6px";
+      label.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.15)";
 
       // Styles selon le type du backgroud lab
       if (searchFeature.get("type") === "stand") {
         searchFeature.setStyle(standHoverStyle);
-        label.style.backgroundColor = "#000000";
+        label.style.backgroundColor = "#24492d";
       } else if (searchFeature.get("type") === "service") {
         const zone = serviceLocation.value.find(
           (z) => z.id_zone === searchFeature.get("id"),
@@ -2176,27 +2196,27 @@ onMounted(() => {
         if (zone && zone.type_prestataire_key) {
           if (zone.type_prestataire_key === "restauration") {
             searchFeature.setStyle(restorationHoverStyle);
-            label.style.backgroundColor = "#800020";
+            label.style.backgroundColor = "#b53d5b";
           } else if (zone.type_prestataire_key === "animation") {
             searchFeature.setStyle(animationlHoverStyle);
-            label.style.backgroundColor = "#5a189a";
+            label.style.backgroundColor = "#7b4aa5";
           } else if (zone.type_prestataire_key === "boutique") {
             searchFeature.setStyle(providerHoverStyle);
-            label.style.backgroundColor = "#1F5E00";
+            label.style.backgroundColor = "#2f6f39";
           } else {
             searchFeature.setStyle(providerHoverStyle);
-            label.style.backgroundColor = "#1F5E00";
+            label.style.backgroundColor = "#2f6f39";
           }
         } else {
           searchFeature.setStyle(providerHoverStyle);
-          label.style.backgroundColor = "#1F5E00";
+          label.style.backgroundColor = "#2f6f39";
         }
       } else if (searchFeature.get("type") === "generalZone") {
         searchFeature.setStyle(generalHoverStyle);
-        label.style.backgroundColor = "#FF6600";
+        label.style.backgroundColor = "#b93f5a";
       } else {
         searchFeature.setStyle(hoverStyle);
-        label.style.backgroundColor = "#00167a";
+        label.style.backgroundColor = "#3559b6";
       }
 
       mapContainer.style.cursor = "pointer";
