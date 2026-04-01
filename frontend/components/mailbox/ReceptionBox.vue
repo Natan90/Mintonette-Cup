@@ -123,6 +123,7 @@ async function getMessagesById(id_user) {
 
     messageReceived.value = res.data.result.messageReceived;
     nbMessageNotRead.value = res.data.result.nbMessageNotRead;
+    mailBoxStore.setUnreadCount(nbMessageNotRead.value);
   } catch (err) {
     console.error(err);
   }

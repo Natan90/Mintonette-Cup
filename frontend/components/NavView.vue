@@ -80,8 +80,15 @@
           </div>
         </div>
 
-        <div @click="goToReceptionBox()" class="boutonNav pointer">
+        <div
+          @click="goToReceptionBox()"
+          class="boutonNav pointer receptionButton">
           {{ $t("barreNav.boiteReception") }}
+          <span
+            v-if="isLoggedIn && mailBoxStore.unreadCount > 0"
+            class="unreadBadge">
+            {{ mailBoxStore.unreadCount }}
+          </span>
         </div>
       </div>
 
@@ -187,6 +194,7 @@ import { useUserStore } from "@/stores/user.js";
 import { useRoute, useRouter } from "vue-router";
 import { useUtilisateurAuthStore } from "@/services/utilisateur.service.js";
 import { useAdminAPIStore } from "@/services/admin.service";
+import { useMailBoxStore } from "@/services/reception_box.service";
 
 import logo from "../images/logo.png";
 import logo_rose from "../images/logo_rose.png";
@@ -197,6 +205,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const userAuthStore = useUtilisateurAuthStore();
 const adminAPIStore = useAdminAPIStore();
+const mailBoxStore = useMailBoxStore();
 
 const isInIndex = ref(route.name === "Home");
 const userProfilePhoto = ref(null);
@@ -212,6 +221,27 @@ onMounted(() => {
   loadProfilePhoto();
   isadmin();
 });
+
+watch(
+  () => userStore.userId,
+  async (idUser) => {
+    if (!idUser || !isLoggedIn.value) {
+      mailBoxStore.setUnreadCount(0);
+      return;
+    }
+
+    try {
+      await mailBoxStore.refreshUnreadCount(idUser);
+    } catch (error) {
+      console.error(
+        "Erreur lors du chargement du nombre de messages non lus:",
+        error,
+      );
+      mailBoxStore.setUnreadCount(0);
+    }
+  },
+  { immediate: true },
+);
 
 watch(
   () => route.name,
@@ -384,6 +414,25 @@ if (savedLang) locale.value = savedLang;
 
 .boutonNav:hover {
   color: var(--rose-hover);
+}
+
+.receptionButton {
+  gap: 8px;
+}
+
+.unreadBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--rose-hover);
+  color: white;
+  font-size: 0.8em;
+  font-weight: 700;
+  line-height: 1;
 }
 
 a span {

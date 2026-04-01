@@ -1,13 +1,26 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 import { getRequest, postRequest } from "./axios.service";
 
 export const useMailBoxStore = defineStore("mailbox", () => {
+  const unreadCount = ref(0);
+
   async function getMessagesById(id_user) {
     if (!id_user) {
       throw new Error("L'id de l'utilisateur est obligatoire");
     }
 
     return getRequest(`/mailbox/message/${id_user}/received`);
+  }
+
+  async function refreshUnreadCount(id_user) {
+    const response = await getMessagesById(id_user);
+    unreadCount.value = response?.data?.result?.nbMessageNotRead ?? 0;
+    return unreadCount.value;
+  }
+
+  function setUnreadCount(value) {
+    unreadCount.value = Number(value) || 0;
   }
 
   async function getMessagesByIdMessage(id_message, isReceived) {
@@ -32,7 +45,7 @@ export const useMailBoxStore = defineStore("mailbox", () => {
       id_message,
     });
   }
-  
+
   async function removeMessageById(id_user, id_message) {
     if (!id_user) {
       throw new Error("L'id de l'utilisateur est obligatoire");
@@ -66,10 +79,13 @@ export const useMailBoxStore = defineStore("mailbox", () => {
   }
 
   return {
+    unreadCount,
     getMessagesById,
     getMessagesByIdMessage,
     updateMessageById,
     sendMessageTo,
     removeMessageById,
+    refreshUnreadCount,
+    setUnreadCount,
   };
 });
