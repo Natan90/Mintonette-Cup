@@ -1,6 +1,5 @@
 <template>
   <NavView></NavView>
-  <MenuAdmin></MenuAdmin>
   <Modal v-model="isDelete">
     <template #content>
       <p>
@@ -15,87 +14,85 @@
       {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
     </button>
     </template>
-    
   </Modal>
 
-  <div class="main_content">
-    <h1 class="page_title">
-      {{ $t('adminPage.user.title') }}
-    </h1>
-    <p class="backgroundBorderL page_subtitle">
-      {{ $t('adminPage.user.descri') }}
-    </p>
-    <div class="textAndFiltre">
-      <p class="nb_presta toValidate" v-if="utilisateurs.filter(p => p.ispresta).length > 0">
-        {{ $t('adminPage.user.nb_users', { count: utilisateurs.length, gotS: utilisateurs.length > 1 ? 's' : '' }) }}
+  <div class="admin-layout">
+    <MenuAdmin></MenuAdmin>
+    <div class="main_content">
+      <h1 class="page_title">
+        {{ $t('adminPage.user.title') }}
+      </h1>
+      <p class="backgroundBorderL page_subtitle">
+        {{ $t('adminPage.user.descri') }}
       </p>
-      <p class="nb_presta valid" v-else>
-        {{ $t('adminPage.user.nb_userVide') }}
-      </p>
-      <div class="filtre">
-        <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
-        <select id="triAlpha" v-model="adminStore.typeTriUser">
-          <option value="az">{{ $t('adminPage.tri.az') }}</option>
-          <option value="za">{{ $t('adminPage.tri.za') }}</option>
-          <option value="presta">{{ $t('adminPage.tri.presta') }}</option>
-          <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
-        </select>
+      <div class="textAndFiltre">
+        <p class="nb_presta toValidate" v-if="utilisateurs.filter(p => p.ispresta).length > 0">
+          {{ $t('adminPage.user.nb_users', { count: utilisateurs.length, gotS: utilisateurs.length > 1 ? 's' : '' }) }}
+        </p>
+        <p class="nb_presta valid" v-else>
+          {{ $t('adminPage.user.nb_userVide') }}
+        </p>
+        <div class="filtre">
+          <label for="triAlpha">{{ $t('adminPage.tri.nom') }}</label>
+          <select id="triAlpha" v-model="adminStore.typeTriUser">
+            <option value="az">{{ $t('adminPage.tri.az') }}</option>
+            <option value="za">{{ $t('adminPage.tri.za') }}</option>
+            <option value="presta">{{ $t('adminPage.tri.presta') }}</option>
+            <option value="nonPresta">{{ $t('adminPage.tri.nonPresta') }}</option>
+          </select>
+        </div>
       </div>
-    </div>
-    <p class="backgroundBorderL message suppr" v-if="deleting">
-      <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{
-        $t('adminPage.user.messageSuppr') }}
-      <span class="modal-close" @click="closeMessageSuppr">&times;</span>
-    </p>
-    <div class="all_data">
-      <table class="adminTable">
-        <thead>
-          <tr>
-            <th>{{ $t('user.nom') }}</th>
-            <th>{{ $t('user.prenom') }}</th>
-            <th>{{ $t('adminPage.prestataire.prestataire') }}</th>
-            <th>{{ $t('adminPage.prestataire.action') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in utilisateursFiltres" :key="item.id_utilisateur">
-            <td>
-              {{ item.nom_utilisateur }}
-            </td>
-            <td>
-              {{ item.prenom_utilisateur }}
-            </td>
-            <td>
-              <span :class="{
-                'badge-presta': item.ispresta,
-                'badge-non': !item.ispresta
-              }">
-                <span v-if="item.ispresta">✅</span>
-                <span v-else-if="item.waitingforadmin">⏳</span>
-                <span v-else>❌</span>
-              </span>
-            </td>
-            <td>
-              <button class="btn_info" @click="showProfil(item.id_utilisateur)">
-                {{ $t('adminPage.bouton.btn_voir') }}
-              </button>
-              <span v-if="item.ispresta">
-                <button class="btn_refuser" @click="goToRetirerPrestataire">
-                  {{ $t('adminPage.bouton.btn_retirer') }}
+      <p class="backgroundBorderL message suppr" v-if="deleting">
+        <span class="name_delete">{{ deletedUser.nom_utilisateur }} {{ deletedUser.prenom_utilisateur }}</span>{{
+          $t('adminPage.user.messageSuppr') }}
+        <span class="modal-close" @click="closeMessageSuppr">&times;</span>
+      </p>
+      <div class="all_data">
+        <table class="adminTable">
+          <thead>
+            <tr>
+              <th>{{ $t('user.nom') }}</th>
+              <th>{{ $t('user.prenom') }}</th>
+              <th>{{ $t('adminPage.prestataire.prestataire') }}</th>
+              <th>{{ $t('adminPage.prestataire.action') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in utilisateursFiltres" :key="item.id_utilisateur">
+              <td>{{ item.nom_utilisateur }}</td>
+              <td>{{ item.prenom_utilisateur }}</td>
+              <td>
+                <span :class="{
+                  'badge-presta': item.ispresta,
+                  'badge-non': !item.ispresta
+                }">
+                  <span v-if="item.ispresta">✅</span>
+                  <span v-else-if="item.waitingforadmin">⏳</span>
+                  <span v-else>❌</span>
+                </span>
+              </td>
+              <td>
+                <button class="btn_info" @click="showProfil(item.id_utilisateur)">
+                  {{ $t('adminPage.bouton.btn_voir') }}
                 </button>
-              </span>
-              <span v-else-if="item.waitingforadmin">
-                <button class="btn_valider" @click="goToAcceptPrestataire">
-                  {{ $t('adminPage.bouton.btn_valid') }}
+                <span v-if="item.ispresta">
+                  <button class="btn_refuser" @click="goToRetirerPrestataire">
+                    {{ $t('adminPage.bouton.btn_retirer') }}
+                  </button>
+                </span>
+                <span v-else-if="item.waitingforadmin">
+                  <button class="btn_valider" @click="goToAcceptPrestataire">
+                    {{ $t('adminPage.bouton.btn_valid') }}
+                  </button>
+                </span>
+                <button class="btn_supprimer" @click="ModalShow(item)">
+                  {{ $t('adminPage.bouton.btn_suppr') }}
                 </button>
-              </span>
-              <button class="btn_supprimer" @click="ModalShow(item)">
-                {{ $t('adminPage.bouton.btn_suppr') }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -261,11 +258,17 @@ async function deleteUtilisateur(idUser) {
 </script>
 
 <style scoped>
+.admin-layout{
+  height: fit-content;
+  display: flex;
+}
+
 .main_content {
-  margin-left: 250px;
-  padding: 30px;
-  background-color: #f5f7fa;
-  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
 }
 
 .page_title {
@@ -301,8 +304,6 @@ async function deleteUtilisateur(idUser) {
   color: #059669;
   background-color: #d1fae5;
 }
-
-
 
 .home-link {
   display: inline-flex;
@@ -380,4 +381,16 @@ async function deleteUtilisateur(idUser) {
 .btn-delete:hover {
   background-color: #c0392b;
 }
+
+@media(max-width: 1000px){
+  .admin-layout{
+    flex-direction: column;
+  }
+
+  .main_content{
+    padding-top: 0;
+    width: 100vw;
+  }
+}
+
 </style>

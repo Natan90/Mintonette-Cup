@@ -1,6 +1,7 @@
 <template>
   <NavView></NavView>
-  <MenuAdmin></MenuAdmin>
+  <div class="admin-layout">
+    <MenuAdmin></MenuAdmin>
   <div class="main_content">
     <div class="editor_container">
       <div class="preview_container" v-if="imagePreview">
@@ -14,6 +15,7 @@
         </div>
       </div>
 
+      <section class="options-titre">
       <div class="form_group">
         <label for="title">{{ $t("adminPage.evenement.nom") }}</label>
         <input type="text" id="title" v-model="title_evenement" placeholder="Ex: Mintonette Cup" />
@@ -65,6 +67,7 @@
                 </div> -->
         <br />
       </div>
+      </section>
 
       <div class="form_group">
         <label>Description de l'évènement</label>
@@ -92,6 +95,7 @@
         </button>
       </div>
     </div>
+  </div>
   </div>
   <Footer></Footer>
 </template>
@@ -271,8 +275,16 @@ function updateDescription() {
 </script>
 
 <style scoped>
+.admin-layout{
+  height: fit-content;
+  display: flex;
+}
+
 .main_content {
-  margin-left: 250px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
 }
 
 .preview_container {
@@ -327,6 +339,16 @@ function updateDescription() {
   justify-content: space-between;
 }
 
+.options-titre .form_group{
+    width:800px;
+    max-width: 100%;
+    align-items: center;
+}
+
+.form_group label{
+  text-indent: 10px;
+}
+
 .form_group button {
   margin-top: 8px;
   padding: 6px 12px;
@@ -337,6 +359,18 @@ function updateDescription() {
   transition: transform 0.2s ease;
 }
 
+.options-titre{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.options-titre .form_group {
+  flex: 1 1 300px;
+  width: 100%;
+}
+
 .btn_chooseFile {
   color: white;
   background-color: #1e40af;
@@ -345,4 +379,16 @@ function updateDescription() {
 .btn_chooseFile:hover {
   background-color: #1e3a8a;
 }
+
+@media(max-width: 1000px){
+  .admin-layout{
+    flex-direction: column;
+  }
+
+  .main_content{
+    padding-top: 0;
+    width: 100vw;
+  }
+}
+
 </style>

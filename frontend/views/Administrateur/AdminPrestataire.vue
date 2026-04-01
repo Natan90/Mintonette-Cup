@@ -1,6 +1,6 @@
 <template>
     <NavView></NavView>
-    <MenuAdmin></MenuAdmin>
+    
     <Modal v-model="isDelete">
         <template #content>
             <p>
@@ -15,10 +15,12 @@
                 {{ $t('adminPage.prestataire.modal.btn_confirmer') }}
             </button>
         </template>
-
     </Modal>
 
+    <section class="admin-layout">
+    <MenuAdmin></MenuAdmin>
     <div class="main_content">
+        
         <h1 class="page_title">
             {{ $t('adminPage.prestataire.title') }}
         </h1>
@@ -134,6 +136,7 @@
             <ZoneMap :key="zoneMapKey" />
         </div>
     </div>
+    </section>
 </template>
 
 
@@ -349,11 +352,18 @@ async function changePresta(newValue, idPresta) {
 
 
 <style scoped>
+.admin-layout{
+  height: fit-content;
+  display: flex;
+  width: 100%;
+}
+
 .main_content {
-    margin-left: 250px;
-    padding: 30px;
-    background-color: #f5f7fa;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
 }
 
 .tabs-container {
@@ -416,4 +426,16 @@ async function changePresta(newValue, idPresta) {
     color: #92400e;
     border: 1px solid #f59e0b;
 }
+
+@media(max-width: 1000px){
+  .admin-layout{
+    flex-direction: column;
+  }
+
+  .main_content{
+    padding-top: 0;
+    width: 100vw;
+  }
+}
+
 </style>

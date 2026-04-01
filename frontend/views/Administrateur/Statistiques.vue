@@ -1,11 +1,16 @@
 <template>
   <NavView />
-  <MenuAdmin />
-  <div class="main_content">
-    <Chart type="bar" :data="barData" :options="barOptions" />
-
-    <Chart type="polarArea" :data="polarData" :options="polarOptions" />
-  </div>
+  <section class="admin-layout">
+    <MenuAdmin />
+    <div class="main_content">
+      <div class="chart_wrapper">
+        <Chart type="bar" :data="barData" :options="barOptions" />
+      </div>
+      <div class="chart_wrapper">
+        <Chart type="polarArea" :data="polarData" :options="polarOptions" />
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -66,12 +71,17 @@ const barOptions = ref({});
 */
 const setBarChatOptions = () => ({
   maintainAspectRatio: false,
-  //   aspectRatio: 0.8,
   plugins: {
+    title: {
+      display: true,
+      text: "Répartition des utilisateurs (%)",
+      color: "#333",
+      font: { size: 16, weight: "bold" },
+      padding: { bottom: 20 },
+    },
     legend: {
-      labels: {
-        color: "#333",
-      },
+      position: "bottom",
+      labels: { color: "#333", padding: 20 },
     },
     tooltip: {
       callbacks: {
@@ -113,8 +123,25 @@ const polarOptions = ref({});
 */
 const setPolarOptions = () => ({
   maintainAspectRatio: false,
-  plugins: { legend: { labels: { color: "#333" } } },
-  scales: { r: { grid: { color: "#e0e0e0" } } },
+  plugins: {
+    title: {
+      display: true,
+      text: "Services par catégorie",
+      color: "#333",
+      font: { size: 16, weight: "bold" },
+      padding: { bottom: 20 },
+    },
+    legend: {
+      position: "bottom",
+      labels: { color: "#333", padding: 20 },
+    },
+  },
+  scales: {
+    r: {
+      grid: { color: "#e0e0e0" },
+      ticks: { display: false },
+    },
+  },
 });
 /**
  * Récupère les statistiques du dashboard :
@@ -174,9 +201,36 @@ async function getDashboardStats() {
 </script>
 
 <style scoped>
+.admin-layout{
+  height: fit-content;
+  display: flex;
+}
+
 .main_content {
-  margin-left: 250px;
-  height: 400px;
-  width: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  height: fit-content;
+  width: 100%;
+}
+
+.chart_wrapper {
+  width: 100%;
+  max-width: 600px;
+  height: 600px;
+  padding: 30px;
+}
+
+@media(max-width: 1000px){
+  .admin-layout{
+    flex-direction: column;
+  }
+
+  .main_content{
+    padding-top: 0;
+    width: 100vw;
+  }
 }
 </style>

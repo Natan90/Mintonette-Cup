@@ -4,7 +4,7 @@
   <div class="admin-layout">
     <MenuAdmin />
 
-    <main class="admin-content">
+    <main class="main_content">
       <header class="page-header">
         <p class="eyebrow">Administration</p>
         <h1>Gestion des commentaires</h1>
@@ -201,18 +201,19 @@ async function confirmDelete(id_commentaire) {
 </script>
 
 <style scoped>
-.admin-layout {
-  min-height: calc(100vh - 100px);
-  background: linear-gradient(
-    180deg,
-    rgba(58, 111, 67, 0.04),
-    rgba(232, 99, 122, 0.03)
-  );
+
+.admin-layout{
+  height: fit-content;
+  display: flex;
 }
 
-.admin-content {
-  margin-left: 250px;
-  padding: 2rem;
+.main_content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+  padding: 20px;
+  width: 100%;
 }
 
 .page-header {
@@ -394,5 +395,16 @@ async function confirmDelete(id_commentaire) {
   border-radius: 14px;
   padding: 0.9rem 1rem;
   font: inherit;
+}
+
+@media(max-width: 1000px){
+  .admin-layout{
+    flex-direction: column;
+  }
+
+  .main_content{
+    padding-top: 0;
+    width: 100vw;
+  }
 }
 </style>
