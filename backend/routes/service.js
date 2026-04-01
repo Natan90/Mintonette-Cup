@@ -13,6 +13,12 @@ router.get("/show/prestataire/:id_presta", serviceMiddleware.validateServiceById
 // GET service par id_service
 router.get("/show/service/:id_service", serviceMiddleware.validateServiceByIdService, serviceController.getServiceByIdService);
 
+// GET activite par id_service
+router.get("/:id_service/activite/show", serviceMiddleware.validateActiviteByIdService, serviceController.getActiviteByIdService);
+
+// GET article par id_service
+router.get("/:id_service/article/show", serviceMiddleware.validateArticleByIdService, serviceController.getArticleByIdService);
+
 // PATCH activer / désactiver le service
 router.patch("/:id/activate", serviceMiddleware.validateActivateService, serviceController.activateServiceById);
 

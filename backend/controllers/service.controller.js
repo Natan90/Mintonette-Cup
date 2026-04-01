@@ -38,6 +38,32 @@ exports.getServiceByIdPrestataire = async (req, res) => {
   }
 };
 
+exports.getArticleByIdService = async (req, res) => {
+  try {
+    const id_service = req.params.id_service;
+    const result = await serviceService.getArticleByIdService(id_service);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
+
+exports.getActiviteByIdService = async (req, res) => {
+  try {
+    const id_service = req.params.id_service;
+    const result = await serviceService.getActiviteByIdService(id_service);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
+
 exports.activateServiceById = async (req, res) => {
   try {
     const id_service = req.params.id;

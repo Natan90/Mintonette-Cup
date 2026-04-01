@@ -22,8 +22,8 @@
         <div v-if="isActivityService" class="recap_section">
           <h3>Activités</h3>
 
-          <div v-if="displayedItems.length > 0">
-            <div v-for="(item, index) in displayedItems" :key="index" class="recap_item">
+          <div v-if="activitesList.length > 0">
+            <div v-for="(item, index) in activitesList" :key="index" class="recap_item">
               <p><strong>{{ item.nom_activite }}</strong></p>
               <p>📅 {{ item.date_activite }} à {{ item.heure_activite }}</p>
               <p>👥 {{ item.nb_participant }} participants</p>
@@ -38,8 +38,8 @@
         <div v-else class="recap_section">
           <h3>Articles</h3>
 
-          <div v-if="displayedItems.length > 0">
-            <div v-for="(item, index) in displayedItems" :key="index" class="recap_item">
+          <div v-if="articlesList.length > 0">
+            <div v-for="(item, index) in articlesList" :key="index" class="recap_item">
               <p><strong>{{ item.nom_article }}</strong></p>
               <p>📦 Stock : {{ item.stock }}</p>
               <p>🪙 {{ item.prix }} €</p>
@@ -137,7 +137,7 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter une activité</button>
+        <button class="btn_add pointer" @click="addActivitesToService()">+ Ajouter une activité</button>
       </div>
       <div v-if="message && !isShowingRecapService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -147,10 +147,10 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <div v-if="displayedItems.length > 0" v-for="(item, index) in displayedItems" :key="index" class="item_card">
+        <div v-if="activitesList.length > 0" v-for="(item, index) in activitesList" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_activite }}</span>
-            <button class="btn_remove_item" @click="activitesList.splice(index, 1)">&times;</button>
+            <button class="btn_remove_item" @click="removeItem(index, 'activite')">&times;</button>
           </div>
           <div class="item_card_details">
             <span>📅 {{ item.date_activite }} à {{ item.heure_activite }}</span>
@@ -160,12 +160,15 @@
         </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
+      <div class="btn_container" v-if="hasChanged">
+        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
+      </div>
+      <!-- <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
-      </div>
+      </div> -->
       <div v-else class="already_added_banner">
         <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
         <div>
@@ -199,7 +202,7 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter un article</button>
+        <button class="btn_add pointer" @click="addArticlesToService()">+ Ajouter un article</button>
       </div>
       <div v-if="message && !isShowingRecapService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -209,10 +212,10 @@
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
-        <div v-if="displayedItems.length > 0" v-for="(item, index) in displayedItems" :key="index" class="item_card">
+        <div v-if="articlesList.length > 0" v-for="(item, index) in articlesList" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_article }}</span>
-            <button class="btn_remove_item" @click="articlesList.splice(index, 1)">&times;</button>
+            <button class="btn_remove_item" @click="removeItem(index, 'article')">&times;</button>
           </div>
           <div class="item_card_details">
             <span>📦 Stock : {{ item.stock }}</span>
@@ -221,15 +224,15 @@
         </div>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="showOneServiceFromStore">
+      <div class="btn_container" v-if="hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
       </div>
-      <div class="btn_container" v-else-if="!alreadyAddedService || hasChanged">
+      <!-- <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
-      </div>
+      </div> -->
       <div v-else class="already_added_banner">
         <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
         <div>
@@ -279,23 +282,17 @@ const isGoingBack = ref(false);
 // ── Service ───────────────────────────────────
 const showOneServiceFromStore = ref(false);
 
-const displayedItems = computed(() => {
-  if (showOneServiceFromStore.value) {
-    const existing = isActivityService.value
-      ? existingActivitesList.value
-      : existingArticlesList.value;
+// const displayedItems = computed(() => {
+//   const existing = isActivityService.value
+//     ? existingActivitesList.value
+//     : existingArticlesList.value;
 
-    const local = isActivityService.value
-      ? activitesList.value
-      : articlesList.value;
+//   const local = isActivityService.value
+//     ? activitesList.value
+//     : articlesList.value;
 
-    return [...existing, ...local];
-  }
-
-  return isActivityService.value
-    ? activitesList.value
-    : articlesList.value;
-});
+//   return [...existing, ...local];
+// });
 
 const currentDescri = computed({
   get() {
@@ -315,11 +312,9 @@ const currentBesoin = computed({
   },
 });
 
-const newItemsList = ref([]);
-
 const hasChanged = computed(() => {
   const current = isActivityService.value ? activitesList.value : articlesList.value;
-  return JSON.stringify(current) !== JSON.stringify(newItemsList.value);
+  return current.length > 0;
 });
 
 const alreadyAddedService = ref(false);
@@ -406,16 +401,15 @@ onBeforeRouteLeave((to, from, next) => {
   next(false);
 });
 
-onMounted(() => {
-  newItemsList.value = createCloneOfItemsList(isActivityService.value);
-  showOneServiceFromStore.value = false;
-
+onMounted(async () => {
   if (route.query.isShowingRecapService === 'true') {
     showOneServiceFromStore.value = true;
     if (!alreadyClosed.value) {
       isShowingRecapService.value = true;
     }
   }
+
+  await getValuesByIsActivity();
 });
 
 const closeMessage = () => {
@@ -494,65 +488,120 @@ function alreadyExists() {
  * @param {Boolean} isActivity - true si on ajoute des activités, false sinon 
  * @returns {Array} un clone du tableau
  */
-function createCloneOfItemsList(isActivity) {
-  let list = [];
-  if (showOneServiceFromStore.value) {
-    list = isActivity ? existingActivitesList.value : existingArticlesList.value;
-  } 
-  else {
-    list = isActivity ? activitesList.value : articlesList.value;
-  }
-  // const list = isActivity ? activitesList.value : articlesList.value;
-  return JSON.parse(JSON.stringify(list));
-}
+// function createCloneOfItemsList(isActivity) {
+//   let list = [];
+//   if (showOneServiceFromStore.value) {
+//     list = isActivity ? existingActivitesList.value : existingArticlesList.value;
+//   } 
+//   else {
+//     list = isActivity ? activitesList.value : articlesList.value;
+//   }
+//   // const list = isActivity ? activitesList.value : articlesList.value;
+//   return JSON.parse(JSON.stringify(list));
+// }
 /**
  * Ajoute une activité ou un article dans la liste locale après validation des champs.
  * Réinitialise ensuite les champs du formulaire et affiche un message de confirmation.
  */
-async function addInItemsList() {
-  if (!hasData.value) {
-    message.value = "Veuillez remplir tous les champs."
-    messageType.value = "error";
-    return;
+// async function addInItemsList() {
+//   if (!hasData.value) {
+//     message.value = "Veuillez remplir tous les champs."
+//     messageType.value = "error";
+//     return;
+//   }
+
+//   alreadyExists();
+
+//   if (isActivityService.value) {
+//     activitesList.value.push({
+//       nom_activite: nom_activite.value,
+//       date_activite: date_activite.value,
+//       heure_activite: heure_activite.value,
+//       nb_participant: Number(nb_participants.value),
+//       prix: Number(prix_activite.value)
+//     });
+
+//     nom_activite.value = "";
+//     nb_participants.value = 0;
+//     prix_activite.value = 0;
+//     date_activite.value = null;
+//     heure_activite.value = null;
+
+//     message.value = "Activité ajoutée.";
+//     messageType.value = "success";
+//   }
+//   else {
+//     articlesList.value.push({
+//       nom_article: nom_article.value,
+//       stock: Number(stock_article.value),
+//       prix: Number(prix_article.value)
+//     });
+
+//     nom_article.value = "";
+//     stock_article.value = 0;
+//     prix_article.value = 0;
+
+//     message.value = "Article ajouté.";
+//     messageType.value = "success";
+//   }
+
+//   // Create a clone to compare with previous tab
+//   // Put alreadyAddedService in computed
+// }
+
+async function getValuesByIsActivity() {
+  if (isActivityService.value) 
+    await getValuesActivities(id_service.value);
+  else 
+    await getValuesArticles(id_service.value);
+}
+
+async function getValuesActivities(id_service) {
+  try {
+    const res = await serviceStore.GetActiviteByIdService(id_service);
+    activitesList.value = res.data.activites.map(a => ({
+      nom_activite: a.nom_activite,
+      nb_participant: a.nb_participant,
+      prix: Number(a.prix_activite),
+      date_activite: a.date_activite?.slice(0, 10),
+      heure_activite: a.date_activite?.slice(11, 16),
+    }));
+    // activitesList.value = [];
+
+  } catch (err) {
+    console.error(err);
   }
+}
 
-  alreadyExists();
+async function getValuesArticles(id_service) {
+  try {
+    const res = await serviceStore.GetArticleByIdService(id_service);
+    articlesList.value = res.data.articles.map(a => ({
+      nom_article: a.nom_article,
+      stock: a.stock,
+      prix: Number(a.prix_article),
+    }));
+    // articlesList.value = [];
 
-  if (isActivityService.value) {
-    activitesList.value.push({
-      nom_activite: nom_activite.value,
-      date_activite: date_activite.value,
-      heure_activite: heure_activite.value,
-      nb_participant: Number(nb_participants.value),
-      prix: Number(prix_activite.value)
-    });
-
-    nom_activite.value = "";
-    nb_participants.value = 0;
-    prix_activite.value = 0;
-    date_activite.value = null;
-    heure_activite.value = null;
-
-    message.value = "Activité ajoutée.";
-    messageType.value = "success";
+  } catch (err) {
+    console.error(err);
   }
-  else {
-    articlesList.value.push({
-      nom_article: nom_article.value,
-      stock: Number(stock_article.value),
-      prix: Number(prix_article.value)
-    });
+}
 
-    nom_article.value = "";
-    stock_article.value = 0;
-    prix_article.value = 0;
+function removeItem(index, type) {
+  const existingCount = type === 'activite'
+    ? existingActivitesList.value.length
+    : existingArticlesList.value.length;
 
-    message.value = "Article ajouté.";
-    messageType.value = "success";
+  const localIndex = index - existingCount;
+
+  if (localIndex >= 0) {
+    if (type === 'activite') {
+      activitesList.value.splice(localIndex, 1);
+    } else {
+      articlesList.value.splice(localIndex, 1);
+    }
   }
-
-  // Create a clone to compare with previous tab
-  // Put alreadyAddedService in computed
 }
 
 
@@ -566,31 +615,65 @@ function showRecapService() {
 /**
  * Créé les activités côté backend.
  */
-async function addActivitesToService(idService) {
-  for (let i = 0; i < activitesList.value.length; i++) {
-    const elt = activitesList.value[i];
+async function addActivitesToService() {
+  if (!hasData.value) {
+    message.value = "Veuillez remplir tous les champs.";
+    messageType.value = "error";
+    return;
+  }
 
-    await serviceStore.AddActivites(idService, {
-      nom: elt.nom_activite,
-      nb_participant: Number(elt.nb_participant),
-      prix: Number(elt.prix),
-      date: elt.date_activite,
-      heure: elt.heure_activite
+  try {
+    const res = await serviceStore.AddActivites(id_service.value, {
+      nom: nom_activite.value,
+      nb_participant: Number(nb_participants.value),
+      prix: Number(prix_activite.value),
+      date: date_activite.value,
+      heure: heure_activite.value
     });
+
+    nom_activite.value = "";
+    nb_participants.value = 0;
+    prix_activite.value = 0;
+    date_activite.value = null;
+    heure_activite.value = null;
+
+    await getValuesActivities(id_service.value);
+
+    message.value = "Activité ajoutée.";
+    messageType.value = "success";
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
   }
 }
 /**
  * Créé les articles côté backend.
  */
-async function addArticlesToService(idService) {
-  for (let i = 0; i < articlesList.value.length; i++) {
-    const elt = articlesList.value[i];
+async function addArticlesToService() {
+  if (!hasData.value) {
+    message.value = "Veuillez remplir tous les champs.";
+    messageType.value = "error";
+    return;
+  }
 
-    await serviceStore.AddArticles(newServiceId, {
-      nom: elt.nom_article,
-      stock: Number(elt.stock),
-      prix: Number(elt.prix)
+  try {
+    const res = await serviceStore.AddArticles(id_service.value, {
+      nom: nom_article.value,
+      stock: Number(stock_article.value),
+      prix: Number(prix_article.value)
     });
+
+    nom_article.value = "";
+    stock_article.value = 0;
+    prix_article.value = 0;
+
+    await getValuesArticles(id_service.value);
+
+    message.value = "Article ajouté.";
+    messageType.value = "success";
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
   }
 }
 /**
@@ -599,15 +682,14 @@ async function addArticlesToService(idService) {
  */
 async function addServiceToPrestataire() {
   try {
-    if (isActivityService.value) {
-      addActivitesToService(id_service.value);
-    }
-    else {
-      addArticlesToService(id_service.value);
-    }
+    // if (isActivityService.value) {
+    //   await addActivitesToService(id_service.value);
+    // }
+    // else {
+    //   await addArticlesToService(id_service.value);
+    // }
 
     alreadyAddedService.value = true;
-    newItemsList.value = createCloneOfItemsList(isActivityService.value);
 
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";

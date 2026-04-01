@@ -34,21 +34,47 @@ async function getServiceByIdService(id_service) {
   if (serviceResult.rows.length === 0)
     throw { status: 404, message: "Service non trouvé" };
 
-  const articlesResult = await pool.query(
-    `SELECT * FROM Article WHERE service_id = $1`,
-    [id_service],
+  return {
+    service: serviceResult.rows[0],
+  };
+}
+
+async function getArticleByIdService(id_service) {
+  const checkService = await pool.query(
+    `SELECT * FROM Services WHERE id_service = $1`,
+    [id_service]
   );
 
-  const activitesResult = await pool.query(
-    `SELECT * FROM Activite WHERE service_id = $1`,
-    [id_service],
+  if (checkService.rows.length === 0)
+    throw { status: 404, message: "Service non trouvé" };
+
+  const articlesResult = await pool.query(
+    `SELECT * FROM Article WHERE service_id = $1;`,
+    [id_service]
   );
 
   return {
-    service: serviceResult.rows[0],
     articles: articlesResult.rows,
+  }
+}
+
+async function getActiviteByIdService(id_service) {
+  const checkService = await pool.query(
+    `SELECT * FROM Services WHERE id_service = $1`,
+    [id_service]
+  );
+
+  if (checkService.rows.length === 0)
+    throw { status: 404, message: "Service non trouvé" };
+
+  const activitesResult = await pool.query(
+    `SELECT * FROM Activite WHERE service_id = $1;`,
+    [id_service]
+  );
+
+  return {
     activites: activitesResult.rows,
-  };
+  }
 }
 
 async function activateServiceById(id_service) {
@@ -114,18 +140,18 @@ async function addArticleByIdService(id_service, article) {
     const result = await pool.query(
       `INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
     ($1, $2, $3, $4)
-    RETURNING id_article`,
+    RETURNING *`,
       [nom, stock, prix, id_service],
     );
 
     return {
-      id_article: result.rows[0].id_article,
+      article: result.rows[0],
       message: "Article ajouté avec succès",
       status: 201,
     };
   } else {
     return {
-      id_article: checkArticle.rows[0].id_article,
+      article: checkArticle.rows[0],
       message: "Cet article existe déjà",
       status: 200,
     };
@@ -147,18 +173,18 @@ async function addActiviteByIdService(id_service, activite) {
     const result = await pool.query(
       `INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES
     ($1, $2, $3, $4, $5)
-    RETURNING id_activite`,
+    RETURNING *`,
       [nom, nb_participant, prix, date_activite, id_service],
     );
 
     return {
-      id_activite: result.rows[0].id_activite,
+      activite: result.rows[0],
       message: "Activité ajoutée avec succès",
       status: 201,
     };
   } else {
     return {
-      id_activite: checkActivite.rows[0].id_activite,
+      activite: checkActivite.rows[0],
       message: "Cette activité existe déjà",
       status: 200,
     };
@@ -197,6 +223,8 @@ module.exports = {
   getServices,
   getServiceByIdPrestataire,
   getServiceByIdService,
+  getArticleByIdService,
+  getActiviteByIdService,
   activateServiceById,
   createService,
   addArticleByIdService,
