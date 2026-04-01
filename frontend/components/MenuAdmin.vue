@@ -16,16 +16,17 @@ import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const userStore = useUserStore();
 
-const menu = ref([
-  { name: "Évènement", linkName: "Evenement" },
-  { name: "Utilisateurs", linkName: "Utilisateurs" },
-  { name: "Prestataire", linkName: "Prestataires" },
-  { name: "Statistiques", linkName: "Statistiques" },
-  { name: "Commentaire", linkName: "AdminCommentaire" },
+const menu = computed(() => [
+  { name: t("barreAdmin.evenement"), linkName: "Evenement" },
+  { name: t("barreAdmin.utilisateur"), linkName: "Utilisateurs" },
+  { name: t("barreAdmin.prestataire"), linkName: "Prestataires" },
+  { name: t("barreAdmin.statistique"), linkName: "Statistiques" },
+  { name: t("barreAdmin.commentaire"), linkName: "AdminCommentaire" },
 ]);
+
 </script>
 
 <style scoped>

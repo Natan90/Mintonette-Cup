@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch} from "vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import NavView from "@/components/NavView.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
@@ -43,10 +43,16 @@ ChartJS.register(
   ArcElement
 );
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const adminAPIStore = useAdminAPIStore();
 
 onMounted(() => {
+  barOptions.value = setBarChatOptions();
+  polarOptions.value = setPolarOptions();
+  getDashboardStats();
+});
+
+watch(locale, () => {
   barOptions.value = setBarChatOptions();
   polarOptions.value = setPolarOptions();
   getDashboardStats();
@@ -74,7 +80,7 @@ const setBarChatOptions = () => ({
   plugins: {
     title: {
       display: true,
-      text: "Répartition des utilisateurs (%)",
+      text: t("adminStats.barTitle"),
       color: "#333",
       font: { size: 16, weight: "bold" },
       padding: { bottom: 20 },
@@ -126,7 +132,7 @@ const setPolarOptions = () => ({
   plugins: {
     title: {
       display: true,
-      text: "Services par catégorie",
+      text: t("adminStats.polarTitle"),
       color: "#333",
       font: { size: 16, weight: "bold" },
       padding: { bottom: 20 },
@@ -154,19 +160,17 @@ const setPolarOptions = () => ({
 async function getDashboardStats() {
   try {
     const res = await adminAPIStore.GetStatistiques();
-
     const { totalUsers, totalPrestataires, servicesByType } = res.data;
-
     const pourcentage =
       totalUsers > 0
         ? ((totalPrestataires / totalUsers) * 100).toFixed(1)
         : 0;
 
     barData.value = {
-      labels: ["Prestataires (%)"],
+      labels: [t("adminStats.barLegend")],
       datasets: [
         {
-          label: "% Prestataires vs Utilisateurs",
+          label: t("adminStats.barLabel"),
           data: [pourcentage],
           backgroundColor: ["lightgreen"],
         },
@@ -174,25 +178,22 @@ async function getDashboardStats() {
     };
 
     polarData.value = {
-  labels: servicesByType.map(
-    (s) => s.nom_type_prestataire[locale.value]
-  ),
-  datasets: [
-    {
-      label: "Nombre de services par catégorie",
-      data: servicesByType.map((s) => Number(s.nb_services)),
-      backgroundColor: [
-        "#7c3aed", // violet
-        "#ef4444", // rouge
-        "#22c55e", // vert
-        "#f97316", // orange
-        "#eab308", // jaune
+      labels: servicesByType.map((s) => s.nom_type_prestataire[locale.value]),
+      datasets: [
+        {
+          label: t("adminStats.polarLabel"),
+          data: servicesByType.map((s) => Number(s.nb_services)),
+          backgroundColor: [
+            "#7c3aed",
+            "#ef4444",
+            "#22c55e",
+            "#f97316",
+            "#eab308",
+          ],
+          borderWidth: 1,
+        },
       ],
-      borderWidth: 1,
-    },
-  ],
-};
-
+    };
   } catch (err) {
     console.error("Erreur dashboard stats:", err);
   }

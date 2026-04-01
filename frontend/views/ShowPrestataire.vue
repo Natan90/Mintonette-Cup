@@ -31,7 +31,9 @@
     </template>
   </Modal>
 
-  <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
+  <div class="back-arrow pointer" @click="goBack">
+    &#8592; {{ $t('bouton.retour') }}
+  </div>  
   <div class="main_container">
     <div class="bloc_texte">
       <h1 class="page_title">
@@ -172,9 +174,9 @@
 </template>
 
 <script setup>
+import { useNavigationStore } from "@/stores/navigation";
 import { onMounted, ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useNavigationStore } from "@/stores/navigation";
 import NavView from "@/components/NavView.vue";
 import Modal from "@/components/Modal.vue";
 import Footer from "@/components/Footer.vue";
@@ -187,9 +189,9 @@ import { useI18n } from "vue-i18n";
 
 
 const { locale } = useI18n();
+const navStore = useNavigationStore();
 const route = useRoute();
 const router = useRouter();
-const navStore = useNavigationStore();
 const adminStore = useAdminStore();
 const userStore = useUserStore();
 const prestataireStore = usePrestataireStore();
@@ -295,6 +297,7 @@ function goBack() {
     router.push(navStore.previousRoute);
   }
 }
+
 /**
  * Redirige vers la page d’édition du prestataire courant.
 */

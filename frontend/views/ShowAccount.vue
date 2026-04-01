@@ -1,6 +1,8 @@
 <template>
   <NavView></NavView>
-  <div class="back-arrow pointer" @click="goBack">&#8592; Retour</div>
+  <div class="back-arrow pointer" @click="goBack">
+    &#8592; {{ $t('bouton.retourListe') }}
+  </div>    
   <div class="page">
     <div class="formulaire">
       <div class="titre_formulaire">
@@ -91,9 +93,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useNavigationStore } from "@/stores/navigation";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
-import { useNavigationStore } from "@/stores/navigation";
 import { useAdminAPIStore } from "@/services/admin.service";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
@@ -148,6 +150,7 @@ function goBack() {
     router.push(navStore.previousRoute);
   }
 }
+
 /**
  * Récupère les informations de l’utilisateur connecté ou ciblé
  * et formate les données (notamment la date de création).

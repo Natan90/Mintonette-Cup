@@ -79,7 +79,7 @@ const informationArray = computed(() => [
 <style scoped>
 
 .pageInformation{
-    width: calc(100% - 4em);
+    width: calc(100%);
     
     display: flex;
     flex-direction: column;

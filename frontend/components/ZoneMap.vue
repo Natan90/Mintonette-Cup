@@ -2,83 +2,73 @@
   <Modal v-model="showModal">
     <template #content>
       <div class="modal-header">
-          <h3>Zone {{ selectedZone?.id_zone }}</h3>
-          <span class="modal-close" @click="closeModal">&times;</span>
+        <h3>Zone {{ selectedZone?.id_zone }}</h3>
+        <span class="modal-close" @click="closeModal">&times;</span>
+      </div>
+
+      <div class="modal-body">
+        <div v-if="selectedZone?.occupied" class="current-assignment">
+          <p>
+            <strong>{{ $t('zoneMap.modal.occupeepar') }}</strong><br />
+            {{ selectedZone.prestataire.nom_prestataire }}
+          </p>
+          <button @click="unassignZone" class="btn btn-warning">
+            {{ $t('zoneMap.modal.liberer') }}
+          </button>
         </div>
 
-        <div class="modal-body">
-          <div v-if="selectedZone?.occupied" class="current-assignment">
-            <p>
-              <strong>Actuellement occupée par :</strong><br />
-              {{ selectedZone.prestataire.nom_prestataire }}
-            </p>
-            <button @click="unassignZone" class="btn btn-warning">
-              Libérer cette zone
-            </button>
-          </div>
-
-          <div v-else class="assign-section">
-            <label for="prestaSelect">Attribuer à un prestataire :</label>
-            <p
-              v-if="availablePrestataires.length === 0"
-              style="
-                color: #f59e0b;
-                padding: 10px;
-                background: #fef3c7;
-                border-radius: 6px;
-              ">
-              ⚠️ Aucun prestataire disponible (tous ont déjà une zone attribuée)
-            </p>
-            <select v-else id="prestaSelect" v-model="selectedPrestataire">
-              <option :value="null">-- Choisir un prestataire --</option>
-              <option
-                v-for="presta in availablePrestataires"
-                :key="presta.id_prestataire"
-                :value="presta.id_prestataire">
-                {{ presta.nom_prestataire }} - {{ presta.prenom_utilisateur }}
-                {{ presta.nom_utilisateur }}
-              </option>
-            </select>
-            <button
-              v-if="availablePrestataires.length > 0"
-              @click="assignZone"
-              class="btn btn-primary"
-              :disabled="!selectedPrestataire">
-              Attribuer
-            </button>
-          </div>
+        <div v-else class="assign-section">
+          <label for="prestaSelect">{{ $t('zoneMap.modal.attribuer') }}</label>
+          <p v-if="availablePrestataires.length === 0" style="color: #f59e0b; padding: 10px; background: #fef3c7; border-radius: 6px;">
+            {{ $t('zoneMap.modal.aucunPresta') }}
+          </p>
+          <select v-else id="prestaSelect" v-model="selectedPrestataire">
+            <option :value="null">{{ $t('zoneMap.modal.choisir') }}</option>
+            <option
+              v-for="presta in availablePrestataires"
+              :key="presta.id_prestataire"
+              :value="presta.id_prestataire">
+              {{ presta.nom_prestataire }} - {{ presta.prenom_utilisateur }} {{ presta.nom_utilisateur }}
+            </option>
+          </select>
+          <button
+            v-if="availablePrestataires.length > 0"
+            @click="assignZone"
+            class="btn btn-primary"
+            :disabled="!selectedPrestataire">
+            {{ $t('zoneMap.modal.btnAttribuer') }}
+          </button>
         </div>
+      </div>
     </template>
   </Modal>
-  
+
   <div class="zone-map-container">
     <div class="map-header">
-      <h3>Plan des zones prestataires</h3>
+      <h3>{{ $t('zoneMap.planZones') }}</h3>
       <div class="legend">
         <span class="legend-item">
           <span class="legend-color available"></span>
-          Disponible ({{ zones.filter((z) => !z.occupied).length }})
+          {{ $t('zoneMap.disponible') }} ({{ zones.filter((z) => !z.occupied).length }})
         </span>
         <span class="legend-item">
           <span class="legend-color occupied"></span>
-          Occupée ({{ zones.filter((z) => z.occupied).length }})
+          {{ $t('zoneMap.occupee') }} ({{ zones.filter((z) => z.occupied).length }})
         </span>
         <span class="legend-item" style="color: #6b7280">
-          Prestataires sans zone: {{ availablePrestataires.length }}
+          {{ $t('zoneMap.sansZone') }}: {{ availablePrestataires.length }}
         </span>
       </div>
     </div>
 
     <div v-if="zones.length === 0" class="loading-message">
-      <p>Chargement des zones...</p>
-      <p style="font-size: 12px; color: #9ca3af">
-        Si ce message persiste, vérifiez la console pour les erreurs
-      </p>
+      <p>{{ $t('zoneMap.chargement') }}</p>
+      <p style="font-size: 12px; color: #9ca3af">{{ $t('zoneMap.chargementErreur') }}</p>
     </div>
 
     <div v-else class="zone-map">
       <div class="side-zone left-zone">
-        <div class="zone-label">Zone Prestataire Gauche</div>
+        <div class="zone-label">{{ $t('zoneMap.zoneGauche') }}</div>
         <div class="zones-grid">
           <div
             v-for="zone in leftZones"
@@ -95,7 +85,7 @@
 
       <div class="center-zone">
         <div class="gymnase">
-          <div class="zone-label">Gymnase</div>
+          <div class="zone-label">{{ $t('zoneMap.gymnase') }}</div>
           <div class="terrains">
             <div class="terrain">T1</div>
             <div class="terrain">T2</div>
@@ -106,7 +96,7 @@
       </div>
 
       <div class="side-zone right-zone">
-        <div class="zone-label">Zone Prestataire Droite</div>
+        <div class="zone-label">{{ $t('zoneMap.zoneDroite') }}</div>
         <div class="zones-grid">
           <div
             v-for="zone in rightZones"
@@ -129,7 +119,9 @@ import { ref, computed, onMounted, watch } from "vue";
 import Modal from "./Modal.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
 import { usePrestataireStore } from "@/services/prestataire.service";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const adminAPIStore = useAdminAPIStore();
 const prestataireStore = usePrestataireStore();
 const zones = ref([]);
@@ -515,6 +507,9 @@ async function unassignZone() {
   cursor: pointer;
   line-height: 1;
   transition: color 0.2s;
+  box-shadow: none !important;
+  background: none;
+  border: none;
 }
 
 .modal-close:hover {
