@@ -22,15 +22,13 @@
           <div class="itemMail">
             <p class="bold">{{ $t("boiteRecep.recu.objet") }}</p>
             <p class="name_delete">
-              {{ translateMailboxValue(messageSelected.subject) }}
+              {{ messageSelected.subject }}
             </p>
           </div>
         </div>
         <div class="itemMail">
           <div class="itemMail">
-            <p
-              class="mailText"
-              v-html="translateMailboxValue(messageSelected.message)"></p>
+            <p class="mailText" v-html="messageSelected.message"></p>
           </div>
         </div>
 
@@ -98,13 +96,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useAdminAPIStore } from "@/services/admin.service";
 import { useMailBoxStore } from "@/services/reception_box.service";
 import { useUserStore } from "@/stores/user";
 import Modal from "../Modal.vue";
 
 const mailBoxStore = useMailBoxStore();
-const adminAPIStore = useAdminAPIStore();
 const userStore = useUserStore();
 const { t } = useI18n();
 
@@ -112,35 +108,10 @@ const messageReceived = ref([]);
 const nbMessageNotRead = ref(0);
 const isSelectedMessage = ref(false);
 const messageSelected = ref([]);
-const currentUser = ref(null);
 
 onMounted(async () => {
-  await loadCurrentUser();
   getMessagesById(userStore.userId);
 });
-
-async function loadCurrentUser() {
-  try {
-    const response = await adminAPIStore.GetCurrentUser();
-    currentUser.value = response.data;
-  } catch {
-    currentUser.value = null;
-  }
-}
-
-function translateMailboxValue(value) {
-  if (typeof value !== "string" || !value.startsWith("mailToSend.")) {
-    return value;
-  }
-
-  return t(value, {
-    nomUtilisateur: currentUser.value
-      ? `${currentUser.value.prenom_utilisateur || ""} ${currentUser.value.nom_utilisateur || ""}`.trim()
-      : "",
-    emailUtilisateur: currentUser.value?.mail_utilisateur || "",
-    lienVersCommentaire: window.location.origin,
-  });
-}
 
 /**
  * Récupère tous les messages reçus ainsi que le nombre de messages non lus pour un utilisateur donné.
