@@ -25,11 +25,11 @@
         <hr class="hr">
         <div class="buttonMailboxContainer">
             <RouterLink :to="{ name: 'ReceptionBox' }" class="buttonMailbox">
-                Boîte de réception
+               <b> Boîte de réception</b>
             </RouterLink>
 
             <RouterLink :to="{ name: 'SentBox' }" class="buttonMailbox">
-                Message(s) envoyé(s)
+               <b> Message(s) envoyé(s)</b>
             </RouterLink>
         </div>
 

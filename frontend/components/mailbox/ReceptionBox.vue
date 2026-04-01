@@ -1,9 +1,9 @@
 <template>
   <Modal v-model="isSelectedMessage" :bigger="true">
     <template #content>
-      <div class="mail_content">
+      <div class="mailContent">
         <div class="from_and_subject">
-          <div class="item_mail">
+          <div class="itemMail">
             <p class="bold">De :</p>
             <p class="name_delete">
               <span
@@ -19,71 +19,74 @@
               </span>
             </p>
           </div>
-          <div class="item_mail">
+          <div class="itemMail">
             <p class="bold">Objet :</p>
             <p class="name_delete">
               {{ messageSelected.subject }}
             </p>
           </div>
         </div>
-        <div class="item_mail">
+        <div class="itemMail">
           <!-- <p class="mail-text">
             {{ messageSelected.message }}
           </p> -->
-          <div class="item_mail">
-            <p class="mail-text" v-html="messageSelected.message"></p>
+          <div class="itemMail">
+            <p class="mailText" v-html="messageSelected.message"></p>
           </div>
         </div>
 
-        <div class="container_button">
+        <div class="containerButton">
           <button
-            class="action-button"
+            class="buttonMailbox"
             type="button"
             @click="deleteMessage(messageSelected.id_message)">
             <span>
-              <img
-                src="/trash.svg"
-                alt="trash"
-                @click="deleteMessage(message.id_message)" />
+              <img src="/trash.svg" alt="trash" />
             </span>
           </button>
         </div>
       </div>
     </template>
   </Modal>
-  <div>
-    <p v-if="nbMessageNotRead == 0"></p>
-    <p v-else>
-      Vous avez {{ nbMessageNotRead }}
+
+  <div class="mailboxContainer">
+    <p
+      v-if="nbMessageNotRead == 0"
+      class="nbOfMessage nbOfMessageEmpty">
+      Aucun message non lu.
+    </p>
+    <p v-else class="nbOfMessage">
+      Vous avez <b>{{ nbMessageNotRead }}</b>
       {{ nbMessageNotRead > 1 ? "messages non lus." : "message non lu." }}
     </p>
 
-    <div v-if="messageReceived.length > 0">
+    <div v-if="messageReceived.length > 0" class="listMessageContainer">
       <div
         v-for="message in messageReceived"
         :key="message.id_message"
-        :style="{ fontWeight: message.read_at === null ? 'bold' : 'normal' }">
+        :class="[
+          'messageRow',
+          { 'messageRowUnread': message.read_at === null },
+        ]">
         <span
-          class="span-message pointer"
+          class="spanMessage pointer"
           @click="updateMessageById(message.id_message)">
-          {{ message.nom_type_message }}
+          <span class="messageLabel">
+            {{ message.nom_type_message }}
+          </span>
           <button
-            class="action-button"
+            class="buttonMailbox"
             type="button"
             @click.stop="deleteMessage(message.id_message)">
             <span>
-              <!-- @click.stop pour ne pas ouvrir le message en meme temps -->
-              <img
-                src="/trash.svg"
-                alt="trash"
-                @click.stop="deleteMessage(message.id_message)" />
+              <img src="/trash.svg" alt="trash" />
             </span>
           </button>
         </span>
       </div>
     </div>
 
-    <div v-else>
+    <div v-else class="emptyMailbox">
       <p>Votre boîte de réception est vide.</p>
     </div>
   </div>
@@ -156,42 +159,141 @@ async function updateMessageById(id_message) {
 </script>
 
 <style scoped>
-.span-message {
+.mailboxContainer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.action-button {
+.nbOfMessage {
+  margin: 0;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.nbOfMessageEmpty {
+  color: #71807a;
+}
+
+.listMessageContainer {
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--log-card-bg);
+  border: 1.5px solid var(--log-border);
+  box-shadow:
+    0 8px 20px rgba(58, 111, 67, 0.08),
+    0 2px 8px rgba(232, 99, 122, 0.04);
+}
+
+.messageRow {
+  background: #ffffff;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-bottom: 1px solid rgba(221, 208, 204, 0.7);
+}
+
+
+.messageRow:hover {
+  background-color: #eef5ef;
+}
+
+.messageRowUnread .messageLabel {
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.messageRowUnread {
+  border-left: 4px solid var(--rose-hover);
+}
+
+.spanMessage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--primary-dark);
+}
+
+.buttonMailbox {
   border: none;
   text-decoration: none;
   background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rose-hover);
 }
 
-.mail_content {
+.buttonMailbox:hover {
+  transform: scale(1.08);
+  transition: transform 0.2s ease;
+}
+
+.buttonMailbox img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+}
+
+.mailContent {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 28px;
+  padding: 24px;
+  background: var(--log-card-bg);
+  border-radius: 18px;
+  border: 1.5px solid var(--log-border);
+  box-shadow:
+    0 8px 30px rgba(58, 111, 67, 0.1),
+    0 2px 8px rgba(232, 99, 122, 0.06);
 }
 
-.item_mail {
+.itemMail {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 2px;
 }
 
-.item_mail p {
+.itemMail p {
   margin: 0;
 }
 
-.container_button {
+.containerButton {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.mail-text {
+.containerButton .buttonMailbox {
+  background: var(--rose-pale);
+  border-radius: 999px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(232, 99, 122, 0.12);
+}
+
+.containerButton .buttonMailbox:hover {
+  background: #fde7ea;
+}
+
+.emptyMailbox {
+  background: var(--log-card-bg);
+  border: 1.5px dashed var(--log-border);
+  border-radius: 18px;
+  padding: 18px 20px;
+  color: #71807a;
+  box-shadow: 0 8px 20px rgba(58, 111, 67, 0.05);
+}
+
+.mailText {
   text-align: left;
   white-space: pre-line;
+  color: #2a3d2e;
 }
 </style>

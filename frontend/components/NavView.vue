@@ -1,8 +1,13 @@
 <template>
   <nav class="barre-nav" :class="{ blueBar: !isInIndex }">
     <!-- Logo -->
-    <router-link :to="{ name: 'Home', params: { lang: locale } }" class="routeur_logo">
-      <img :src="isInIndex ? logo : logo_rose" class="logo pointer" alt="logo" />
+    <router-link
+      :to="{ name: 'Home', params: { lang: locale } }"
+      class="routeur_logo">
+      <img
+        :src="isInIndex ? logo : logo_rose"
+        class="logo pointer"
+        alt="logo" />
     </router-link>
 
     <div class="optionNav">
@@ -43,7 +48,11 @@
           {{ $t("barreNav.prestataire") }}
         </div>
 
-        <div @click="scrollToSection('footer')" class="boutonNav pointer" id="partenaire">
+        <div
+          v-if="isInIndex"
+          @click="scrollToSection('footer')"
+          class="boutonNav pointer"
+          id="partenaire">
           {{ $t("barreNav.partenaire") }}
         </div>
         <!-- <router-link
@@ -72,7 +81,7 @@
         </div>
 
         <div @click="goToReceptionBox()" class="boutonNav pointer">
-        {{ $t("barreNav.boiteReception") }}
+          {{ $t("barreNav.boiteReception") }}
         </div>
       </div>
 
@@ -108,7 +117,12 @@
         <div class="optionsUser">
           <div
             v-if="userStore.userId"
-            @click="$router.push({ name: 'ShowAccount', params: { lang: locale, userId: userStore.userId } })"
+            @click="
+              $router.push({
+                name: 'ShowAccount',
+                params: { lang: locale, userId: userStore.userId },
+              })
+            "
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.profil") }}</span>
@@ -116,7 +130,9 @@
 
           <div
             v-if="admin && userStore.userId && userStore.userId == 1"
-            @click="$router.push({ name: 'Evenement', params: { lang: locale } })"
+            @click="
+              $router.push({ name: 'Evenement', params: { lang: locale } })
+            "
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.evenement") }}</span>
@@ -124,7 +140,12 @@
 
           <div
             v-if="utilisateur.ispresta"
-            @click="$router.push({ name: 'EditPrestataire', params: { id: userStore.userId, lang: locale } })"
+            @click="
+              $router.push({
+                name: 'EditPrestataire',
+                params: { id: userStore.userId, lang: locale },
+              })
+            "
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.prestation") }}</span>
@@ -140,7 +161,9 @@
 
           <div
             v-if="userStore.userId != 1"
-            @click="$router.push({ name: 'MesBillets', params: { lang: locale } })"
+            @click="
+              $router.push({ name: 'MesBillets', params: { lang: locale } })
+            "
             class="optionProfil pointer"
             :class="{ blueBar: !isInIndex }">
             <span class="pointer">{{ $t("barreNav.profil.billet") }}</span>
@@ -168,7 +191,6 @@ import { useAdminAPIStore } from "@/services/admin.service";
 import logo from "../images/logo.png";
 import logo_rose from "../images/logo_rose.png";
 
-
 const { locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -182,7 +204,9 @@ const userInitials = ref("");
 const utilisateur = ref({});
 const admin = ref(false);
 
-const isLoggedIn = computed(() => !!userStore.token || !!localStorage.getItem('jwt'));
+const isLoggedIn = computed(
+  () => !!userStore.token || !!localStorage.getItem("jwt"),
+);
 
 onMounted(() => {
   loadProfilePhoto();
@@ -196,25 +220,25 @@ watch(
     if (newName === "Home" || newName === "ShowAccount") {
       loadProfilePhoto();
     }
-  }
+  },
 );
 
 /**
-* Fait défiler la page vers une section HTML en fonction de son ID.
-* @param {string} id - ID de l'élément HTML cible
-*/
+ * Fait défiler la page vers une section HTML en fonction de son ID.
+ * @param {string} id - ID de l'élément HTML cible
+ */
 function scrollToSection(id) {
   const section = document.getElementById(id);
   if (section) {
     section.scrollIntoView({ behavior: "smooth" });
   }
-};
+}
 
 /**
  * Charge la photo de profil de l'utilisateur connecté.
  * - Si une photo existe : l'affiche en base64
  * - Sinon : génère les initiales prénom + nom
-*/
+ */
 async function loadProfilePhoto() {
   if (userStore.isConnected) {
     try {
@@ -233,15 +257,15 @@ async function loadProfilePhoto() {
       console.error("Erreur lors du chargement du profil:", error);
     }
   }
-};
+}
 
 /**
  * Vérifie si l'utilisateur (id 1) est administrateur.
  * Met à jour la variable reactive admin.
-*/
+ */
 async function isadmin() {
   try {
-    const res =await adminAPIStore.GetUtilisateurById(1);
+    const res = await adminAPIStore.GetUtilisateurById(1);
 
     admin.value = res.data.isadmin;
   } catch (err) {
@@ -250,15 +274,15 @@ async function isadmin() {
 }
 /**
  * Redirige l'utilisateur vers la page de boîte de réception (Mailbox).
-*/
+ */
 function goToReceptionBox() {
   router.push({
-    name: "Mailbox"
-  })
+    name: "Mailbox",
+  });
 }
 /**
  * Déconnecte l'utilisateur et redirige vers la page Home.
-*/
+ */
 async function handleLogout() {
   try {
     userStore.logout();
@@ -274,7 +298,7 @@ async function handleLogout() {
  * - Sauvegarde la langue dans le localStorage
  * - Met à jour i18n
  * @param {string} lang - Code langue (ex: 'fr', 'en')
-*/
+ */
 function changeLanguage(lang) {
   // Ça permet de garder déjà ce qu'il y a dans l'URL et d'ajouter la langue
   const newParams = { ...route.params, lang };
@@ -307,7 +331,6 @@ if (savedLang) locale.value = savedLang;
 </script>
 
 <style scoped>
-
 .barre-nav {
   padding: 0;
   color: white;
@@ -337,7 +360,7 @@ if (savedLang) locale.value = savedLang;
   font-weight: 500;
 }
 
-.optionCenter{
+.optionCenter {
   display: flex;
   width: 90%;
   justify-content: center;
@@ -488,24 +511,26 @@ a span {
   transition: all 0.3s ease;
 }
 
-@media(max-width:1000px){
-  .barre-nav{
+@media (max-width: 1000px) {
+  .barre-nav {
     flex-direction: column;
-    height:fit-content;
+    height: fit-content;
   }
 
-  .logo{
+  .logo {
     margin: 0;
     object-fit: contain;
     height: 40px;
   }
 
-  .routeur_logo{
+  .routeur_logo {
     display: flex;
     justify-content: center;
   }
 
-  #aPropos,#partenaire,#accueil{
+  #aPropos,
+  #partenaire,
+  #accueil {
     display: none;
   }
 
@@ -513,7 +538,7 @@ a span {
   .optionNav,
   .boutonNav:not(.connect),
   .optionCenter,
-  .optionProfil{
+  .optionProfil {
     flex-direction: column;
     background-color: var(--primary-color);
     width: 100%;
@@ -522,21 +547,21 @@ a span {
   }
 
   .routeur_logo:hover,
-  .boutonNav:not(.connect):hover{
+  .boutonNav:not(.connect):hover {
     background-color: var(--rose-logo);
     color: black;
     transition: var(--transition-fast);
   }
 
-  .routeur_logo:hover{
+  .routeur_logo:hover {
     transform: scale(1.02);
-  }  
+  }
 
-  .boutonNav:not(.connect):hover{
+  .boutonNav:not(.connect):hover {
     padding-left: 10px;
   }
 
-  .optionsUser{
+  .optionsUser {
     width: 100%;
   }
 
@@ -551,17 +576,21 @@ a span {
     text-align: center;
     font-size: 1em;
 
-    transition: background-color var(--transition-fast), color var(--transition-fast), text-indent var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast),
+      text-indent var(--transition-fast);
     transform: none;
   }
 
-  .profile-placeholder,.photoUser{
+  .profile-placeholder,
+  .photoUser {
     display: none;
     height: 0;
   }
 
   /* Si déconnecté */
-  .partieProfil{
+  .partieProfil {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -569,26 +598,22 @@ a span {
     margin: 0;
   }
 
-  .partieProfil:hover{
+  .partieProfil:hover {
     transition: var(--transition-fast);
     background-color: var(--rose-logo);
     color: black;
-    span{
+    span {
       color: black;
     }
   }
 
-  .optionProfil{
+  .optionProfil {
     width: 100vw;
   }
 
-  .partieProfil span:hover{
+  .partieProfil span:hover {
     color: grey;
     transition: var(--transition-fast);
   }
-
-
 }
-
-
 </style>
