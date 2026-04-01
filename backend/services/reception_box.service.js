@@ -67,7 +67,10 @@ async function getMessagesByIdMessage(id_message, isReceived) {
   return message.rows[0];
 }
 
-async function sendMessageTo(id_user_from, { id_user_to, subject, message, id_type_message }) {
+async function sendMessageTo(
+  id_user_from,
+  { id_user_to, subject, message, id_type_message },
+) {
   const client = await pool.connect();
 
   try {
@@ -79,16 +82,15 @@ async function sendMessageTo(id_user_from, { id_user_to, subject, message, id_ty
       `INSERT INTO Mailbox_Message
       (subject, message, type_message_id, sender_id, recipient_id, sent_at)
       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [subject, message, id_type_message, id_user_from, id_user_to, now]
+      [subject, message, id_type_message, id_user_from, id_user_to, now],
     );
-    
+
     await client.query("COMMIT");
 
     return {
       result: result.rows[0],
-      message: "Message envoyé avec succès"
-    }
-
+      message: "Message envoyé avec succès",
+    };
   } catch (err) {
     await client.query("ROLLBACK");
     throw { status: 500, message: "Erreur serveur" };
@@ -121,9 +123,44 @@ async function updateMessageById(id_user, id_message) {
   }
 }
 
+async function deleteMessageById(id_user, id_message) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    await client.query(
+      `
+      UPDATE Mailbox_Message
+      SET 
+        is_deleted_by_recipient = CASE 
+          WHEN recipient_id = $1 THEN TRUE 
+          ELSE is_deleted_by_recipient 
+        END,
+        is_deleted_by_sender = CASE 
+          WHEN sender_id = $1 THEN TRUE 
+          ELSE is_deleted_by_sender 
+        END
+      WHERE id_message = $2
+      `,
+      [id_user, id_message],
+    );
+
+    await client.query("COMMIT");
+
+    return { message: "Message supprimé" };
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw { status: 500, message: "Erreur serveur" };
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   getMessagesById,
   sendMessageTo,
   updateMessageById,
   getMessagesByIdMessage,
+  deleteMessageById,
 };

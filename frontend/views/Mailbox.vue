@@ -22,13 +22,13 @@
                 $t('adminPage.prestataire.messageRefus') }}
             <span class="modal-close" @click="closeMessageRefus">&times;</span>
         </p>
-
-        <div class="button-container">
-            <RouterLink :to="{ name: 'ReceptionBox' }" class="btn">
+        <hr class="hr">
+        <div class="buttonMailboxContainer">
+            <RouterLink :to="{ name: 'ReceptionBox' }" class="buttonMailbox">
                 Boîte de réception
             </RouterLink>
 
-            <RouterLink :to="{ name: 'SentBox' }" class="btn">
+            <RouterLink :to="{ name: 'SentBox' }" class="buttonMailbox">
                 Message(s) envoyé(s)
             </RouterLink>
         </div>
@@ -63,5 +63,27 @@ const closeMessageRefus = () => {
     margin-left: 20px;
     padding: 30px;
     min-height: 100vh;
+}
+.buttonMailboxContainer{
+    display: flex;
+    justify-content: space-evenly;
+}
+.buttonMailbox{
+    text-decoration: none;
+    color: var(--primary-color);
+    background-color: var(--rose-pale);
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+.buttonMailbox.router-link-active,
+.buttonMailbox.router-link-exact-active,
+.buttonMailbox:hover {
+    background-color: var(--rose);
+    color: var( --rose-pale);
+}
+.hr{
+    margin-top: 40px;
+    margin-bottom: 15px;
 }
 </style>
