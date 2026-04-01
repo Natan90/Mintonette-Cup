@@ -24,7 +24,10 @@
         </div>
 
         <div class="container_button">
-          <button class="action-button" type="button" @click="deleteMessage(messageSelected.id_message)">
+          <button
+            class="action-button"
+            type="button"
+            @click="deleteMessage(messageSelected.id_message)">
             <span>
               <img src="/trash.svg" alt="trash" />
             </span>
@@ -35,7 +38,9 @@
   </Modal>
 
   <div class="mailbox-shell">
-    <p v-if="messageSent.length == 0" class="mailbox-status mailbox-status--empty">
+    <p
+      v-if="messageSent.length == 0"
+      class="mailbox-status mailbox-status--empty">
       Vous n'avez pas encore envoyé de messages.
     </p>
     <p v-else class="mailbox-status">
