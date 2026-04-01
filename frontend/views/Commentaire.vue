@@ -4,8 +4,8 @@
   <div class="conteneurCom">
     <header class="header">
       <div>
-        <p class="titre">Notes et commentaires</p>
-        <h1>Les avis des utilisateurs</h1>
+        <p class="titre">{{ $t("commentaire.petitTitre") }}</p>
+        <h1>{{ $t("commentaire.grandTitre") }}</h1>
       </div>
     </header>
 
@@ -13,7 +13,7 @@
       <!-- Coupe la page en deux  -->
       <aside class="panneauResume">
         <div class="carteResume carteMiseEnAvant">
-          <p class="titreCarte">Note moyenne</p>
+          <p class="titreCarte">{{ $t("commentaire.noteMoyenne") }}</p>
           <div class="ligneNote">
             <span class="noteMoyenne">{{ noteMoyenne.toFixed(1) }}</span>
             <div class="etoiles">
@@ -29,13 +29,15 @@
         </div>
 
         <div class="carteResume">
-          <p class="titreCarte">Répartition des notes</p>
+          <p class="titreCarte">{{ $t("commentaire.repartitionNote") }}</p>
           <button
             type="button"
             class="ligneRepartition ligneFiltre all"
             :class="{ active: noteFiltre === 'all' }"
             @click="noteFiltre = 'all'">
-            <span class="labelRepartition">Toutes les notes</span>
+            <span class="labelRepartition">{{
+              $t("commentaire.touteLesNotes")
+            }}</span>
             <div class="barreRepartition">
               <div
                 class="remplissageRepartition"
@@ -61,7 +63,11 @@
         </div>
 
         <button class="boutonAjouter" type="button" @click="toggleForm">
-          {{ showForm ? "Masquer le formulaire" : "Ajouter une note" }}
+          {{
+            showForm
+              ? $t("commentaire.masquerFormulaire")
+              : $t("commentaire.ajouterNote")
+          }}
         </button>
       </aside>
 
@@ -73,7 +79,7 @@
           {{ commentaireStore.error }}
         </div>
         <div v-else-if="!filteredCommentaires.length" class="etatMessage">
-          Aucun commentaire pour cette note.
+          {{ $t("commentaire.aucunCommentaire") }}
         </div>
 
         <article
@@ -92,22 +98,22 @@
             </div>
 
             <div class="actionsCommentaire">
-              <span v-if="isOwnComment(commentaire)" class="badgeAuteur"
-                >Vous</span
-              >
+              <span v-if="isOwnComment(commentaire)" class="badgeAuteur">{{
+                $t("commentaire.vous")
+              }}</span>
               <button
                 v-if="isOwnComment(commentaire)"
                 type="button"
                 class="boutonModifier pointer"
                 @click="openEditForm(commentaire)">
-                Modifier
+                {{ $t("commentaire.modifierCommentaire") }}
               </button>
               <button
                 v-if="isOwnComment(commentaire)"
                 type="button"
                 class="boutonSupprimer pointer"
                 @click="deleteCommentary(commentaire)">
-                Supprimer
+                {{ $t("commentaire.supprimerCommentaire") }}
               </button>
               <div class="noteCommentaire">
                 <span
@@ -138,15 +144,15 @@
               @click="toggleReply(commentaire.id_commentaire)">
               {{
                 openReplyId === commentaire.id_commentaire
-                  ? "Masquer la réponse de l'administration"
-                  : "Voir la réponse de l'administration"
+                  ? $t("commentaire.masquerReponseAdmin")
+                  : $t("commentaire.voirReponseAdmin")
               }}
             </button>
 
             <div
               v-if="openReplyId === commentaire.id_commentaire"
               class="reponseCommentaire">
-              <p class="titreReponse">Réponse de l'administration</p>
+              <p class="titreReponse">{{ $t("commentaire.reponseAdmin") }}</p>
               <p class="texteReponse">{{ commentaire.reponse_commentaire }}</p>
             </div>
           </div>
@@ -157,12 +163,12 @@
     <section v-if="showForm" ref="formRef" class="zoneFormulaire">
       <div class="carteFormulaire">
         <div class="enteteFormulaire">
-          <p class="titreCarte">Ajouter une note</p>
+          <p class="titreCarte">{{ $t("commentaire.ajouterNote") }}</p>
           <h2>
             {{
               editingCommentId
-                ? "Modifier mon commentaire"
-                : "Publier un commentaire"
+                ? $t("commentaire.modifierCom")
+                : $t("commentaire.publierCom")
             }}
           </h2>
         </div>
@@ -174,16 +180,16 @@
 
         <form class="formCommentaire" @submit.prevent="submitCommentaire">
           <label class="champFormulaire">
-            <span>Titre</span>
+            <span>{{ $t("commentaire.titre") }}</span>
             <input
               v-model.trim="commentaireForm.titre_commentaire"
               type="text"
-              placeholder="Ex: Très bonne organisation"
+              :placeholder="$t('commentaire.placeholderTitre')"
               required />
           </label>
 
           <div class="champFormulaire">
-            <span>Note</span>
+            <span>{{ $t("commentaire.note") }}</span>
             <div class="selectEtoiles">
               <button
                 v-for="star in 5"
@@ -196,17 +202,17 @@
               </button>
             </div>
             <small class="noteChoisie"
-              >Note choisie :
+              >{{ $t("commentaire.noteChoisie") }}
               {{ commentaireForm.note_commentaire.toFixed(1) }}/5</small
             >
           </div>
 
           <label class="champFormulaire">
-            <span>Texte</span>
+            <span>{{ $t("commentaire.texte") }}</span>
             <textarea
               v-model.trim="commentaireForm.texte_commentaire"
               rows="5"
-              placeholder="Décris ton expérience"
+              :placeholder="$t('commentaire.placeholderTexte')"
               required></textarea>
           </label>
 
@@ -223,8 +229,8 @@
               isSubmitting
                 ? "Envoi en cours..."
                 : editingCommentId
-                  ? "Modifier la note"
-                  : "Ajouter la note"
+                  ? $t("commentaire.modifierLaNote")
+                  : $t("commentaire.ajouterLaNote")
             }}
           </button>
         </form>

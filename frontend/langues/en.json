@@ -309,5 +309,69 @@
     "Heure": "Hour",
     "Prix": "Price",
     "Action": "Action"
+  },
+  "commentaire": {
+    "petitTitre": "Ratings and comments",
+    "grandTitre": "User reviews",
+    "noteMoyenne": "Average rating",
+    "repartitionNote": "Rating distribution",
+    "touteLesNotes": "All ratings",
+    "ajouterNote": "Add a rating",
+    "masquerFormulaire": "Hide form",
+    "aucunCommentaire": "No comments for this rating.",
+    "ajouterNoteTitre": "Add a rating",
+    "publierCommentaire": "Post a comment",
+    "titre": "Title",
+    "note": "Rating",
+    "noteChoisie": "Selected rating:",
+    "texte": "Text",
+    "vous": "You",
+    "modifierCommentaire": "Edit",
+    "supprimerCommentaire": "Delete",
+    "voirReponseAdmin": "View admin response",
+    "masquerReponseAdmin": "Hide admin response",
+    "reponseAdmin": "Admin response",
+    "modifierCom": "Edit my comment",
+    "publierCom": "Post a comment",
+    "placeholderTitre": "e.g. Very well organized",
+    "placeholderTexte": "Describe your experience",
+    "ajouterLaNote": "Add the rating",
+    "modifierLaNote": "Edit the rating"
+  },
+  "boiteRecep": {
+    "titre": "Inbox",
+    "texte": "Your inbox centralizes all messages received on the platform. It allows you to view requests sent by competition service providers, read new messages and easily track the progress of exchanges. This space makes it easy to manage conversations, helps you stay informed of ongoing requests and ensures a clear and organized follow-up of exchanges with service providers.",
+    "boiteReception": "Inbox",
+    "messageEnvoye": "Sent message(s)",
+    "recu": {
+      "de": "From:",
+      "objet": "Subject:",
+      "aucunNonLu": "No unread messages.",
+      "nonLuSingulier": "unread message.",
+      "nonLuPluriel": "unread messages.",
+      "vousAvez": "You have",
+      "boiteVide": "Your inbox is empty.",
+      "administrateur": "Administrator",
+      "supprimer": "Delete this message?"
+    },
+    "envoye": {
+      "de": "From:",
+      "objet": "Subject:",
+      "aucunMessage": "You haven't sent any messages yet.",
+      "vousAvezEnvoye": "You have sent",
+      "messageSingulier": "message",
+      "messagePluriel": "messages",
+      "boiteVide": "Your outbox is empty.",
+      "supprimer": "Delete this message?"
+    },
+    "types": {
+      "Demande pour devenir prestataire": "Request to become a service provider",
+      "Demande pour modifier son profil prestataire": "Request to update service provider profile",
+      "Achat de billets": "Ticket purchase",
+      "Remboursement": "Refund",
+      "Commentaire": "Comment",
+      "Réponse à un commentaire": "Reply to a comment",
+      "Suppression d'un de vos commentaire": "Deletion of one of your comments"
+    }
   }
 }

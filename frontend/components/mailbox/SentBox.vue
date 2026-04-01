@@ -4,22 +4,24 @@
       <div class="mail_content">
         <div class="from_and_subject">
           <div class="item_mail">
-            <p class="bold">De :</p>
+            <p class="bold">{{ $t("boiteRecep.envoye.de") }}</p>
             <p class="name_delete">
               {{ messageSelected.prenom_utilisateur }}
               {{ messageSelected.nom_utilisateur }}
             </p>
           </div>
           <div class="item_mail">
-            <p class="bold">Objet :</p>
+            <p class="bold">{{ $t("boiteRecep.envoye.objet") }}</p>
             <p class="name_delete">
-              {{ messageSelected.subject }}
+              {{ translateMailboxValue(messageSelected.subject) }}
             </p>
           </div>
         </div>
         <div class="item_mail">
           <div class="item_mail">
-            <p class="mail-text" v-html="messageSelected.message"></p>
+            <p
+              class="mail-text"
+              v-html="translateMailboxValue(messageSelected.message)"></p>
           </div>
         </div>
 
@@ -41,11 +43,16 @@
     <p
       v-if="messageSent.length == 0"
       class="mailbox-status mailbox-status--empty">
-      Vous n'avez pas encore envoyé de messages.
+      {{ $t("boiteRecep.envoye.aucunMessage") }}
     </p>
     <p v-else class="mailbox-status">
-      Vous avez envoyé <b>{{ messageSent.length }}</b>
-      {{ messageSent.length > 1 ? "messages" : "message" }}
+      {{ $t("boiteRecep.envoye.vousAvezEnvoye") }}
+      <b>{{ messageSent.length }}</b>
+      {{
+        messageSent.length > 1
+          ? $t("boiteRecep.envoye.messagePluriel")
+          : $t("boiteRecep.envoye.messageSingulier")
+      }}
     </p>
 
     <div v-if="messageSent.length > 0" class="listMessageContainer">
@@ -57,7 +64,12 @@
           class="span-message pointer"
           @click="updateMessageById(message.id_message)">
           <span class="message-label">
-            {{ message.nom_type_message }}
+            {{
+              $t(
+                "boiteRecep.types." + message.nom_type_message,
+                message.nom_type_message,
+              )
+            }}
           </span>
           <button
             class="action-button"
@@ -72,27 +84,56 @@
     </div>
 
     <div v-else class="mailbox-empty">
-      <p>Votre boîte d'envoi est vide.</p>
+      <p>{{ $t("boiteRecep.envoye.boiteVide") }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useAdminAPIStore } from "@/services/admin.service";
 import { useMailBoxStore } from "@/services/reception_box.service";
 import { useUserStore } from "@/stores/user";
 import Modal from "../Modal.vue";
 
 const mailBoxStore = useMailBoxStore();
+const adminAPIStore = useAdminAPIStore();
 const userStore = useUserStore();
+const { t } = useI18n();
 const isSelectedMessage = ref(false);
 const messageSelected = ref([]);
+const currentUser = ref(null);
 
 const messageSent = ref([]);
 
 onMounted(async () => {
+  await loadCurrentUser();
   getMessagesById(userStore.userId);
 });
+
+async function loadCurrentUser() {
+  try {
+    const response = await adminAPIStore.GetCurrentUser();
+    currentUser.value = response.data;
+  } catch {
+    currentUser.value = null;
+  }
+}
+
+function translateMailboxValue(value) {
+  if (typeof value !== "string" || !value.startsWith("mailToSend.")) {
+    return value;
+  }
+
+  return t(value, {
+    nomUtilisateur: currentUser.value
+      ? `${currentUser.value.prenom_utilisateur || ""} ${currentUser.value.nom_utilisateur || ""}`.trim()
+      : "",
+    emailUtilisateur: currentUser.value?.mail_utilisateur || "",
+    lienVersCommentaire: window.location.origin,
+  });
+}
 
 /**
  * Récupère les messages envoyés par un utilisateur et les stocke dans la liste locale.
@@ -124,7 +165,7 @@ async function updateMessageById(id_message) {
   }
 }
 async function deleteMessage(id_message) {
-  if (!confirm("Supprimer ce message ?")) return;
+  if (!confirm(t("boiteRecep.envoye.supprimer"))) return;
 
   try {
     await mailBoxStore.removeMessageById(userStore.userId, id_message);

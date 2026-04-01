@@ -4,14 +4,14 @@
       <div class="mailContent">
         <div class="from_and_subject">
           <div class="itemMail">
-            <p class="bold">De :</p>
+            <p class="bold">{{ $t("boiteRecep.recu.de") }}</p>
             <p class="name_delete">
               <span
                 v-if="
                   messageSelected.prenom_utilisateur === 'Alban' &&
                   messageSelected.nom_utilisateur === 'Robin'
                 ">
-                Administrateur
+                {{ $t("boiteRecep.recu.administrateur") }}
               </span>
               <span v-else>
                 {{ messageSelected.prenom_utilisateur }}
@@ -20,18 +20,17 @@
             </p>
           </div>
           <div class="itemMail">
-            <p class="bold">Objet :</p>
+            <p class="bold">{{ $t("boiteRecep.recu.objet") }}</p>
             <p class="name_delete">
-              {{ messageSelected.subject }}
+              {{ translateMailboxValue(messageSelected.subject) }}
             </p>
           </div>
         </div>
         <div class="itemMail">
-          <!-- <p class="mail-text">
-            {{ messageSelected.message }}
-          </p> -->
           <div class="itemMail">
-            <p class="mailText" v-html="messageSelected.message"></p>
+            <p
+              class="mailText"
+              v-html="translateMailboxValue(messageSelected.message)"></p>
           </div>
         </div>
 
@@ -50,29 +49,33 @@
   </Modal>
 
   <div class="mailboxContainer">
-    <p
-      v-if="nbMessageNotRead == 0"
-      class="nbOfMessage nbOfMessageEmpty">
-      Aucun message non lu.
+    <p v-if="nbMessageNotRead == 0" class="nbOfMessage nbOfMessageEmpty">
+      {{ $t("boiteRecep.recu.aucunNonLu") }}
     </p>
     <p v-else class="nbOfMessage">
-      Vous avez <b>{{ nbMessageNotRead }}</b>
-      {{ nbMessageNotRead > 1 ? "messages non lus." : "message non lu." }}
+      {{ $t("boiteRecep.recu.vousAvez") }} <b>{{ nbMessageNotRead }}</b>
+      {{
+        nbMessageNotRead > 1
+          ? $t("boiteRecep.recu.nonLuPluriel")
+          : $t("boiteRecep.recu.nonLuSingulier")
+      }}
     </p>
 
     <div v-if="messageReceived.length > 0" class="listMessageContainer">
       <div
         v-for="message in messageReceived"
         :key="message.id_message"
-        :class="[
-          'messageRow',
-          { 'messageRowUnread': message.read_at === null },
-        ]">
+        :class="['messageRow', { messageRowUnread: message.read_at === null }]">
         <span
           class="spanMessage pointer"
           @click="updateMessageById(message.id_message)">
           <span class="messageLabel">
-            {{ message.nom_type_message }}
+            {{
+              $t(
+                "boiteRecep.types." + message.nom_type_message,
+                message.nom_type_message,
+              )
+            }}
           </span>
           <button
             class="buttonMailbox"
@@ -87,28 +90,57 @@
     </div>
 
     <div v-else class="emptyMailbox">
-      <p>Votre boîte de réception est vide.</p>
+      <p>{{ $t("boiteRecep.recu.boiteVide") }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useAdminAPIStore } from "@/services/admin.service";
 import { useMailBoxStore } from "@/services/reception_box.service";
 import { useUserStore } from "@/stores/user";
 import Modal from "../Modal.vue";
 
 const mailBoxStore = useMailBoxStore();
+const adminAPIStore = useAdminAPIStore();
 const userStore = useUserStore();
+const { t } = useI18n();
 
 const messageReceived = ref([]);
 const nbMessageNotRead = ref(0);
 const isSelectedMessage = ref(false);
 const messageSelected = ref([]);
+const currentUser = ref(null);
 
 onMounted(async () => {
+  await loadCurrentUser();
   getMessagesById(userStore.userId);
 });
+
+async function loadCurrentUser() {
+  try {
+    const response = await adminAPIStore.GetCurrentUser();
+    currentUser.value = response.data;
+  } catch {
+    currentUser.value = null;
+  }
+}
+
+function translateMailboxValue(value) {
+  if (typeof value !== "string" || !value.startsWith("mailToSend.")) {
+    return value;
+  }
+
+  return t(value, {
+    nomUtilisateur: currentUser.value
+      ? `${currentUser.value.prenom_utilisateur || ""} ${currentUser.value.nom_utilisateur || ""}`.trim()
+      : "",
+    emailUtilisateur: currentUser.value?.mail_utilisateur || "",
+    lienVersCommentaire: window.location.origin,
+  });
+}
 
 /**
  * Récupère tous les messages reçus ainsi que le nombre de messages non lus pour un utilisateur donné.
@@ -125,7 +157,7 @@ async function getMessagesById(id_user) {
   }
 }
 async function deleteMessage(id_message) {
-  if (!confirm("Supprimer ce message ?")) return;
+  if (!confirm(t("boiteRecep.recu.supprimer"))) return;
 
   try {
     await mailBoxStore.removeMessageById(userStore.userId, id_message);
@@ -193,7 +225,6 @@ async function updateMessageById(id_message) {
     box-shadow 0.2s ease;
   border-bottom: 1px solid rgba(221, 208, 204, 0.7);
 }
-
 
 .messageRow:hover {
   background-color: #eef5ef;

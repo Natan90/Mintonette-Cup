@@ -232,30 +232,6 @@
   "filter": {
     "titleFilter": "Retrouvez les Prestataires de la Mintonette Cup 2026 !",
     "slider": {
-      "prestataire": "Prestataire",
-      "service": "Service"
-    },
-    "name": {
-      "title": "Nom",
-      "nameInput": "Nom de prestataire"
-    },
-    "categorie": {
-      "title": "Catégorie de service",
-      "all": "Tous"
-    },
-    "price": {
-      "title": "Prix",
-      "minPrice": "Prix min",
-      "maxPrice": "Prix max"
-    },
-    "button": {
-      "search": "Rechercher",
-      "reset": "Réinitialiser"
-    },
-    "description": "Description",
-    "info": {
-      "title": "Informations",
-      "capacite": "Capacité",
       "people": "pers.",
       "tarif": "Tarif",
       "service": "Services"
@@ -285,11 +261,11 @@
       "subject": "Nouveau commentaire sur l'événement",
       "message": "Bonjour,<br><br>Un nouvel utilisateur a laissé un commentaire.<br><br>Détails :<br>- Nom : {nomUtilisateur}<br>- Email : {emailUtilisateur}<br><br><a href=\"{lienVersCommentaire}\">Voir les commentaires</a><br><br>Cordialement,<br>Votre plateforme"
     },
-     "reponseCommentaire": {
+    "reponseCommentaire": {
       "subject": "Réponse à votre commentaire",
       "message": "Bonjour {nomUtilisateur},<br><br>l'administrateur à répondu à l'un de vos commentaire, n'hésitez pas à aller voir la réponse !"
     },
-     "suppressionCommentaire": {
+    "suppressionCommentaire": {
       "subject": "Suppression de votre commentaire",
       "message": "Bonjour {nomUtilisateur},<br><br> l'administrateur à supprimé l'un de vos commentaire. <br><br> Faites attention la prochaine fois s'il vous plaît..."
     }
@@ -317,5 +293,69 @@
     "Heure": "Heure",
     "Prix": "Prix",
     "Action": "Action"
+  },
+  "commentaire": {
+    "petitTitre": "Notes et commentaires",
+    "grandTitre": "Les avis des utilisateurs",
+    "noteMoyenne": "Note moyenne",
+    "repartitionNote": "Répartition des notes",
+    "touteLesNotes": "Toutes les notes",
+    "ajouterNote": "Ajouter une note",
+    "masquerFormulaire": "Masquer le formulaire",
+    "aucunCommentaire": "Aucun commentaire pour cette note.",
+    "ajouterNoteTitre": "Ajouter une note",
+    "publierCommentaire": "Publier un commentaire",
+    "titre": "Titre",
+    "note": "Note",
+    "noteChoisie": "Note choisie :",
+    "texte": "Texte",
+    "vous": "Vous",
+    "modifierCommentaire": "Modifier",
+    "supprimerCommentaire": "Supprimer",
+    "voirReponseAdmin": "Voir la réponse de l'administrateur",
+    "masquerReponseAdmin": "Masquer la réponse de l'administrateur",
+    "reponseAdmin": "Réponse de l'administrateur",
+    "modifierCom": "Modifier mon commentaire",
+    "publierCom": "Publier un commentaire",
+    "placeholderTitre": "Ex: Très bonne organisation",
+    "placeholderTexte": "Décris ton expérience",
+    "ajouterLaNote": "Ajouter la note",
+    "modifierLaNote": "Modifier la note"
+  },
+  "boiteRecep": {
+    "titre": "Boîte de réception",
+    "texte": "Votre boîte de réception centralise l'ensemble des messages reçus au sein de la plateforme. Elle vous permet de consulter les demandes envoyées par les prestataires de la compétition, de lire les nouveaux messages et de suivre l'évolution des échanges en toute simplicité. Cet espace facilite la gestion des conversations, vous aide à rester informé des demandes en cours et à assurer un suivi clair et organisé des échanges avec les prestataires.",
+    "boiteReception": "Boîte de réception",
+    "messageEnvoye": "Message(s) envoyé(s)",
+    "recu": {
+      "de": "De :",
+      "objet": "Objet :",
+      "aucunNonLu": "Aucun message non lu.",
+      "nonLuSingulier": "message non lu.",
+      "nonLuPluriel": "messages non lus.",
+      "vousAvez": "Vous avez",
+      "boiteVide": "Votre boîte de réception est vide.",
+      "administrateur": "Administrateur",
+      "supprimer": "Supprimer ce message ?"
+    },
+    "envoye": {
+      "de": "De :",
+      "objet": "Objet :",
+      "aucunMessage": "Vous n'avez pas encore envoyé de messages.",
+      "vousAvezEnvoye": "Vous avez envoyé",
+      "messageSingulier": "message",
+      "messagePluriel": "messages",
+      "boiteVide": "Votre boîte d'envoi est vide.",
+      "supprimer": "Supprimer ce message ?"
+    },
+    "types": {
+      "Demande pour devenir prestataire": "Demande pour devenir prestataire",
+      "Demande pour modifier son profil prestataire": "Demande pour modifier son profil prestataire",
+      "Achat de billets": "Achat de billets",
+      "Remboursement": "Remboursement",
+      "Commentaire": "Commentaire",
+      "Réponse à un commentaire": "Réponse à un commentaire",
+      "Suppression d'un de vos commentaire": "Suppression d'un de vos commentaire"
+    }
   }
 }

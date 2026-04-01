@@ -2,14 +2,10 @@
     <NavView></NavView>
     <div class="main_content">
         <h1 class="page_title">
-            Boîte de réception
+            {{ $t('boiteRecep.titre') }}
         </h1>
         <p class="backgroundBorderL page_subtitle">
-            Votre boîte de réception centralise l’ensemble des messages reçus au sein de la plateforme. Elle vous permet
-            de consulter les demandes envoyées par les prestataires de la compétition, de lire les nouveaux messages et
-            de suivre l’évolution des échanges en toute simplicité. Cet espace facilite la gestion des conversations,
-            vous aide à rester informé des demandes en cours et à assurer un suivi clair et organisé des échanges avec
-            les prestataires.
+            {{ $t('boiteRecep.texte') }}
         </p>
 
         <p class="backgroundBorderL message suppr" v-if="deleting">
@@ -25,11 +21,11 @@
         <hr class="hr">
         <div class="buttonMailboxContainer">
             <RouterLink :to="{ name: 'ReceptionBox' }" class="buttonMailbox">
-               <b> Boîte de réception</b>
+               <b>{{ $t('boiteRecep.boiteReception') }}</b>
             </RouterLink>
 
             <RouterLink :to="{ name: 'SentBox' }" class="buttonMailbox">
-               <b> Message(s) envoyé(s)</b>
+               <b>{{ $t('boiteRecep.messageEnvoye') }}</b>
             </RouterLink>
         </div>
 
@@ -38,14 +34,12 @@
     </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import NavView from '@/components/NavView.vue';
 
 const deleting = ref(false);
 const refusing = ref(false);
-
 
 const closeMessageSuppr = () => {
     deleting.value = false;
@@ -54,9 +48,7 @@ const closeMessageSuppr = () => {
 const closeMessageRefus = () => {
     refusing.value = false;
 };
-
 </script>
-
 
 <style scoped>
 .main_content {
@@ -80,7 +72,7 @@ const closeMessageRefus = () => {
 .buttonMailbox.router-link-exact-active,
 .buttonMailbox:hover {
     background-color: var(--rose);
-    color: var( --rose-pale);
+    color: var(--rose-pale);
 }
 .hr{
     margin-top: 40px;
