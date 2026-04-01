@@ -6,8 +6,17 @@
           <div class="item_mail">
             <p class="bold">De :</p>
             <p class="name_delete">
-              {{ messageSelected.prenom_utilisateur }}
-              {{ messageSelected.nom_utilisateur }}
+              <span
+                v-if="
+                  messageSelected.prenom_utilisateur === 'Alban' &&
+                  messageSelected.nom_utilisateur === 'Robin'
+                ">
+                Administrateur
+              </span>
+              <span v-else>
+                {{ messageSelected.prenom_utilisateur }}
+                {{ messageSelected.nom_utilisateur }}
+              </span>
             </p>
           </div>
           <div class="item_mail">
@@ -27,10 +36,15 @@
         </div>
 
         <div class="container_button">
-          <button class="action-button">
+          <button
+            class="action-button"
+            type="button"
+            @click="deleteMessage(messageSelected.id_message)">
             <span>
-              <img src="/reply.svg" alt="reply" />
-              <img src="/trash.svg" alt="trash" />
+              <img
+                src="/trash.svg"
+                alt="trash"
+                @click="deleteMessage(message.id_message)" />
             </span>
           </button>
         </div>
@@ -38,9 +52,10 @@
     </template>
   </Modal>
   <div>
-    <p>
+    <p v-if="nbMessageNotRead == 0"></p>
+    <p v-else>
       Vous avez {{ nbMessageNotRead }}
-      {{ nbMessageNotRead > 1 ? "messages" : "message" }} non lus.
+      {{ nbMessageNotRead > 1 ? "messages non lus." : "message non lu." }}
     </p>
 
     <div v-if="messageReceived.length > 0">
@@ -52,10 +67,16 @@
           class="span-message pointer"
           @click="updateMessageById(message.id_message)">
           {{ message.nom_type_message }}
-          <button class="action-button">
+          <button
+            class="action-button"
+            type="button"
+            @click.stop="deleteMessage(message.id_message)">
             <span>
-              <img src="/reply.svg" alt="reply" />
-              <img src="/trash.svg" alt="trash" />
+              <!-- @click.stop pour ne pas ouvrir le message en meme temps -->
+              <img
+                src="/trash.svg"
+                alt="trash"
+                @click.stop="deleteMessage(message.id_message)" />
             </span>
           </button>
         </span>
@@ -96,6 +117,20 @@ async function getMessagesById(id_user) {
 
     messageReceived.value = res.data.result.messageReceived;
     nbMessageNotRead.value = res.data.result.nbMessageNotRead;
+  } catch (err) {
+    console.error(err);
+  }
+}
+async function deleteMessage(id_message) {
+  if (!confirm("Supprimer ce message ?")) return;
+
+  try {
+    await mailBoxStore.removeMessageById(userStore.userId, id_message);
+    if (messageSelected.value?.id_message === id_message) {
+      isSelectedMessage.value = false;
+      messageSelected.value = [];
+    }
+    await getMessagesById(userStore.userId);
   } catch (err) {
     console.error(err);
   }

@@ -197,6 +197,7 @@ CREATE TABLE IF NOT EXISTS Organisateur(
 
 CREATE TABLE IF NOT EXISTS Commentaire (
   id_commentaire SERIAL PRIMARY KEY,
+  id_utilisateur INTEGER NOT NULL REFERENCES Utilisateur(id_utilisateur),
   nom_commentaire VARCHAR(50),
   prenom_commentaire VARCHAR(50),
   titre_commentaire VARCHAR(500),

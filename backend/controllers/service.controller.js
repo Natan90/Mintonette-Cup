@@ -38,6 +38,32 @@ exports.getServiceByIdPrestataire = async (req, res) => {
   }
 };
 
+exports.getArticleByIdService = async (req, res) => {
+  try {
+    const id_service = req.params.id;
+    const result = await serviceService.getArticleByIdService(id_service);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
+
+exports.getActiviteByIdService = async (req, res) => {
+  try {
+    const id_service = req.params.id;
+    const result = await serviceService.getActiviteByIdService(id_service);
+    return res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
+
 exports.activateServiceById = async (req, res) => {
   try {
     const id_service = req.params.id;
@@ -92,6 +118,30 @@ exports.deleteServiceById = async(req, res) => {
   try {
     const id_service = req.params.id;
     const result = await serviceService.deleteServiceById(id_service);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    res.status(status).json({ error: err.message || "Erreur serveur" });
+  }
+}
+
+exports.deleteArticleById = async(req, res) => {
+  try {
+    const id_article = req.params.id;
+    const result = await serviceService.deleteArticleById(id_article);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    res.status(status).json({ error: err.message || "Erreur serveur" });
+  }
+}
+
+exports.deleteActiviteById = async(req, res) => {
+  try {
+    const id_activite = req.params.id;
+    const result = await serviceService.deleteActiviteById(id_activite);
     return res.status(200).json(result);
   } catch (err) {
     console.error(err);

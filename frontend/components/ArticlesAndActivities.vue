@@ -22,8 +22,8 @@
         <div v-if="isActivityService" class="recap_section">
           <h3>Activités</h3>
 
-          <div v-if="displayedItems.length > 0">
-            <div v-for="(item, index) in displayedItems" :key="index" class="recap_item">
+          <div v-if="activitesList.length > 0">
+            <div v-for="(item, index) in activitesList" :key="index" class="recap_item">
               <p><strong>{{ item.nom_activite }}</strong></p>
               <p>📅 {{ item.date_activite }} à {{ item.heure_activite }}</p>
               <p>👥 {{ item.nb_participant }} participants</p>
@@ -38,8 +38,8 @@
         <div v-else class="recap_section">
           <h3>Articles</h3>
 
-          <div v-if="displayedItems.length > 0">
-            <div v-for="(item, index) in displayedItems" :key="index" class="recap_item">
+          <div v-if="articlesList.length > 0">
+            <div v-for="(item, index) in articlesList" :key="index" class="recap_item">
               <p><strong>{{ item.nom_article }}</strong></p>
               <p>📦 Stock : {{ item.stock }}</p>
               <p>🪙 {{ item.prix }} €</p>
@@ -54,16 +54,6 @@
           <span class="modal-close" @click="closeMessage()">&times;</span>
         </div>
 
-        <!-- Actions -->
-        <div class="recap_actions">
-          <button class="btn_modal btn_refuser" @click="isShowingRecapService = false">
-            Modifier
-          </button>
-          <button class="btn_modal btn_valider" @click="addServiceToPrestataire()" v-if="!showOneServiceFromStore">
-            Confirmer
-          </button>
-        </div>
-
       </div>
     </template>
   </Modal>
@@ -71,7 +61,7 @@
   <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave">
     <v-card title="Quitter la page ?">
       <v-card-text>
-        <span v-if="!hasData && !isGoingBack">
+        <span v-if="!isGoingBack">
           Vous n'avez ajouté aucune donnée. Le service créé précédemment sera <strong>perdu</strong> si vous quittez.
         </span>
         <span v-else-if="hasData">
@@ -137,7 +127,7 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter une activité</button>
+        <button class="btn_add pointer" @click="addActivitesToService()">+ Ajouter une activité</button>
       </div>
       <div v-if="message && !isShowingRecapService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -147,10 +137,10 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
-        <div v-if="displayedItems.length > 0" v-for="(item, index) in displayedItems" :key="index" class="item_card">
+        <div v-if="activitesList.length > 0" v-for="(item, index) in activitesList" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_activite }}</span>
-            <button class="btn_remove_item" @click="activitesList.splice(index, 1)">&times;</button>
+            <button class="btn_remove_item" @click="deleteActivite(item.id_activite)">&times;</button>
           </div>
           <div class="item_card_details">
             <span>📅 {{ item.date_activite }} à {{ item.heure_activite }}</span>
@@ -160,13 +150,16 @@
         </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
+      <div class="btn_container" v-if="hasChanged">
+        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
+      </div>
+      <!-- <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
-      </div>
-      <div v-else class="already_added_banner">
+      </div> -->
+      <div v-else-if="activitesList.length > 0" class="already_added_banner">
         <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
         <div>
           <p class="already_added_title">Service ajouté avec succès</p>
@@ -199,7 +192,7 @@
       </div>
 
       <div class="btn_container">
-        <button class="btn_add pointer" @click="addInItemsList()">+ Ajouter un article</button>
+        <button class="btn_add pointer" @click="addArticlesToService()">+ Ajouter un article</button>
       </div>
       <div v-if="message && !isShowingRecapService" class="message"
         :class="messageType === 'error' ? 'message-error' : 'message-success'">
@@ -209,10 +202,10 @@
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
-        <div v-if="displayedItems.length > 0" v-for="(item, index) in displayedItems" :key="index" class="item_card">
+        <div v-if="articlesList.length > 0" v-for="(item, index) in articlesList" :key="index" class="item_card">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_article }}</span>
-            <button class="btn_remove_item" @click="articlesList.splice(index, 1)">&times;</button>
+            <button class="btn_remove_item" @click="deleteArticle(item.id_article)">&times;</button>
           </div>
           <div class="item_card_details">
             <span>📦 Stock : {{ item.stock }}</span>
@@ -221,16 +214,16 @@
         </div>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="showOneServiceFromStore">
+      <div class="btn_container" v-if="hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
       </div>
-      <div class="btn_container" v-else-if="!alreadyAddedService || hasChanged">
+      <!-- <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
-      </div>
-      <div v-else class="already_added_banner">
+      </div> -->
+      <div v-else-if="articlesList.length > 0" class="already_added_banner">
         <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
         <div>
           <p class="already_added_title">Service ajouté avec succès</p>
@@ -279,24 +272,6 @@ const isGoingBack = ref(false);
 // ── Service ───────────────────────────────────
 const showOneServiceFromStore = ref(false);
 
-const displayedItems = computed(() => {
-  if (showOneServiceFromStore.value) {
-    const existing = isActivityService.value
-      ? existingActivitesList.value
-      : existingArticlesList.value;
-
-    const local = isActivityService.value
-      ? activitesList.value
-      : articlesList.value;
-
-    return [...existing, ...local];
-  }
-
-  return isActivityService.value
-    ? activitesList.value
-    : articlesList.value;
-});
-
 const currentDescri = computed({
   get() {
     return descriService.value[locale.value];
@@ -315,11 +290,9 @@ const currentBesoin = computed({
   },
 });
 
-const newItemsList = ref([]);
-
 const hasChanged = computed(() => {
   const current = isActivityService.value ? activitesList.value : articlesList.value;
-  return JSON.stringify(current) !== JSON.stringify(newItemsList.value);
+  return current.length > 0;
 });
 
 const alreadyAddedService = ref(false);
@@ -386,36 +359,33 @@ onBeforeRouteLeave((to, from, next) => {
     return;
   }
 
-  if (alreadyAddedService.value && !hasChanged.value) {
-    prestataireInfoStore.clearItemsStore();
-    allowLeave.value = true;
-    next();
-    return;
-  }
-
-  if (isGoingBack.value && !hasData.value && !hasChanged.value) {
+  if (isGoingBack.value) {
     prestataireInfoStore.clearItemsStore();
     next();
     return;
   }
 
-  if (!showLeaveDialog.value) {
-    pendingNavigation.value = to;
-    showLeaveDialog.value = true;
+  if (hasData.value) {
+    if (!showLeaveDialog.value) {
+      pendingNavigation.value = to;
+      showLeaveDialog.value = true;
+    }
+    next(false);
+    return;
   }
-  next(false);
+
+  next();
 });
 
-onMounted(() => {
-  newItemsList.value = createCloneOfItemsList(isActivityService.value);
-  showOneServiceFromStore.value = false;
-
+onMounted(async () => {
   if (route.query.isShowingRecapService === 'true') {
     showOneServiceFromStore.value = true;
     if (!alreadyClosed.value) {
       isShowingRecapService.value = true;
     }
   }
+
+  await getValuesByIsActivity();
 });
 
 const closeMessage = () => {
@@ -464,95 +434,94 @@ function goBack() {
 
 
 // ── Articles / Activités ──────────────────────────────────
-/**
- * Vérifie si une activité ou un article existe déjà dans la liste afin d'éviter les doublons.
- * @returns {boolean} true si l'élément existe déjà, sinon false
- */
-function alreadyExists() {
-  const normalize = (str) => (str || "").trim().toLowerCase();
-
-  if (isActivityService.value) {
-    return activitesList.value.some(item =>
-      normalize(item.nom_activite) === normalize(nom_activite.value) &&
-      item.date_activite === date_activite.value &&
-      item.heure_activite === heure_activite.value
-    );
-  }
-
-  else {
-    return articlesList.value.some(item =>
-      normalize(item.nom_article) === normalize(nom_article.value) &&
-      item.stock === Number(stock_article.value) &&
-      item.prix === Number(prix_article.value)
-    );
-  }
-
-  return false;
+async function getValuesByIsActivity() {
+  if (isActivityService.value) 
+    await getValuesActivities(id_service.value);
+  else 
+    await getValuesArticles(id_service.value);
 }
 /**
- * Créé un clone du tableau activitesList ou articlesList en fonction de isActivity
- * @param {Boolean} isActivity - true si on ajoute des activités, false sinon 
- * @returns {Array} un clone du tableau
+ * Récupère les données des activités correspondantes à l'ID du service.
+ * 
+ * @async
+ * @param {Integer} id_service - L'ID du service correpondant aux activités.
  */
-function createCloneOfItemsList(isActivity) {
-  let list = [];
-  if (showOneServiceFromStore.value) {
-    list = isActivity ? existingActivitesList.value : existingArticlesList.value;
-  } 
-  else {
-    list = isActivity ? activitesList.value : articlesList.value;
+async function getValuesActivities(id_service) {
+  try {
+    const res = await serviceStore.GetActiviteByIdService(id_service);
+    activitesList.value = res.data.activites.map(a => ({
+      id_activite: a.id_activite,
+      nom_activite: a.nom_activite,
+      nb_participant: a.nb_participant,
+      prix: Number(a.prix_activite),
+      date_activite: a.date_activite?.slice(0, 10),
+      heure_activite: a.date_activite?.slice(11, 16),
+    }));
+
+  } catch (err) {
+    console.error(err);
   }
-  // const list = isActivity ? activitesList.value : articlesList.value;
-  return JSON.parse(JSON.stringify(list));
 }
 /**
- * Ajoute une activité ou un article dans la liste locale après validation des champs.
- * Réinitialise ensuite les champs du formulaire et affiche un message de confirmation.
+ * Récupère les données des articles correspondantes à l'ID du service.
+ * 
+ * @async
+ * @param {Integer} id_service - L'ID du service correpondant aux articles.
  */
-async function addInItemsList() {
-  if (!hasData.value) {
-    message.value = "Veuillez remplir tous les champs."
+async function getValuesArticles(id_service) {
+  try {
+    const res = await serviceStore.GetArticleByIdService(id_service);
+    articlesList.value = res.data.articles.map(a => ({
+      id_article: a.id_article,
+      nom_article: a.nom_article,
+      stock: a.stock,
+      prix: Number(a.prix_article),
+    }));
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+/**
+ * Supprime l'article avec son ID puis appelle de nouveau la fonction pour récupérer les données.
+ * 
+ * @async
+ * @param {Integer} id-article - L'ID de l'article. 
+ */
+async function deleteArticle(id_article) {
+  try {
+    console.log(id_article);
+    const res = await serviceStore.DeleteArticle(id_article);
+
+    await getValuesArticles(id_service.value);
+
+    message.value = res.data.message;
+    messageType.value = "success";
+
+  } catch (err) {
+    message.value = err.message;
     messageType.value = "error";
-    return;
   }
+}
+/**
+ * Supprime l'activité avec son ID puis appelle de nouveau la fonction pour récupérer les données.
+ * 
+ * @async
+ * @param {Integer} id_activite - L'ID de l'activité.
+ */
+async function deleteActivite(id_activite) {
+  try {
+    const res = await serviceStore.DeleteActivite(id_activite);
 
-  alreadyExists();
+    await getValuesActivities(id_service.value);
 
-  if (isActivityService.value) {
-    activitesList.value.push({
-      nom_activite: nom_activite.value,
-      date_activite: date_activite.value,
-      heure_activite: heure_activite.value,
-      nb_participant: Number(nb_participants.value),
-      prix: Number(prix_activite.value)
-    });
-
-    nom_activite.value = "";
-    nb_participants.value = 0;
-    prix_activite.value = 0;
-    date_activite.value = null;
-    heure_activite.value = null;
-
-    message.value = "Activité ajoutée.";
+    message.value = res.data.message;
     messageType.value = "success";
+
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
   }
-  else {
-    articlesList.value.push({
-      nom_article: nom_article.value,
-      stock: Number(stock_article.value),
-      prix: Number(prix_article.value)
-    });
-
-    nom_article.value = "";
-    stock_article.value = 0;
-    prix_article.value = 0;
-
-    message.value = "Article ajouté.";
-    messageType.value = "success";
-  }
-
-  // Create a clone to compare with previous tab
-  // Put alreadyAddedService in computed
 }
 
 
@@ -566,52 +535,62 @@ function showRecapService() {
 /**
  * Créé les activités côté backend.
  */
-async function addActivitesToService(idService) {
-  for (let i = 0; i < activitesList.value.length; i++) {
-    const elt = activitesList.value[i];
+async function addActivitesToService() {
+  if (!hasData.value) {
+    message.value = "Veuillez remplir tous les champs.";
+    messageType.value = "error";
+    return;
+  }
 
-    await serviceStore.AddActivites(idService, {
-      nom: elt.nom_activite,
-      nb_participant: Number(elt.nb_participant),
-      prix: Number(elt.prix),
-      date: elt.date_activite,
-      heure: elt.heure_activite
+  try {
+    const res = await serviceStore.AddActivites(id_service.value, {
+      nom: nom_activite.value,
+      nb_participant: Number(nb_participants.value),
+      prix: Number(prix_activite.value),
+      date: date_activite.value,
+      heure: heure_activite.value
     });
+
+    nom_activite.value = "";
+    nb_participants.value = 0;
+    prix_activite.value = 0;
+    date_activite.value = null;
+    heure_activite.value = null;
+
+    await getValuesActivities(id_service.value);
+
+    message.value = "Activité ajoutée.";
+    messageType.value = "success";
+  } catch (err) {
+    message.value = err.message;
+    messageType.value = "error";
   }
 }
 /**
  * Créé les articles côté backend.
  */
-async function addArticlesToService(idService) {
-  for (let i = 0; i < articlesList.value.length; i++) {
-    const elt = articlesList.value[i];
-
-    await serviceStore.AddArticles(newServiceId, {
-      nom: elt.nom_article,
-      stock: Number(elt.stock),
-      prix: Number(elt.prix)
-    });
+async function addArticlesToService() {
+  if (!hasData.value) {
+    message.value = "Veuillez remplir tous les champs.";
+    messageType.value = "error";
+    return;
   }
-}
-/**
- * Crée le service côté backend.
- * Affiche un message de succès ou d'erreur selon le résultat de l'opération.
- */
-async function addServiceToPrestataire() {
+
   try {
-    if (isActivityService.value) {
-      addActivitesToService(id_service.value);
-    }
-    else {
-      addArticlesToService(id_service.value);
-    }
+    const res = await serviceStore.AddArticles(id_service.value, {
+      nom: nom_article.value,
+      stock: Number(stock_article.value),
+      prix: Number(prix_article.value)
+    });
 
-    alreadyAddedService.value = true;
-    newItemsList.value = createCloneOfItemsList(isActivityService.value);
+    nom_article.value = "";
+    stock_article.value = 0;
+    prix_article.value = 0;
 
-    message.value = "Service ajouté avec succès !";
+    await getValuesArticles(id_service.value);
+
+    message.value = "Article ajouté.";
     messageType.value = "success";
-
   } catch (err) {
     message.value = err.message;
     messageType.value = "error";

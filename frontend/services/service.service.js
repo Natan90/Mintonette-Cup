@@ -21,6 +21,20 @@ export const useServiceStore = defineStore("service", () => {
     return getRequest(`/prestataire/service/show/prestataire/${id_presta}`);
   }
 
+  async function GetArticleByIdService(id_service) {
+    if (!id_service) {
+      throw new Error("L'id du service est obligatoire");
+    }
+    return getRequest(`/prestataire/service/${id_service}/article/show`);
+  }
+
+  async function GetActiviteByIdService(id_service) {
+    if (!id_service) {
+      throw new Error("L'id du service est obligatoire");
+    }
+    return getRequest(`/prestataire/service/${id_service}/activite/show`);
+  }
+
   async function ActivateService(id_service) {
     if (!id_service) {
       throw new Error("L'id du service est obligatoire");
@@ -42,6 +56,20 @@ export const useServiceStore = defineStore("service", () => {
       throw new Error("L'id du service est obligatoire");
     }
     return deleteRequest(`/prestataire/service/${id_service}/delete`);
+  }
+
+  async function DeleteArticle(id_article) {
+    if (!id_article) {
+      throw new Error("L'id de l'article est obligatoire");
+    }
+    return deleteRequest(`/prestataire/service/article/${id_article}/delete`);
+  }
+
+  async function DeleteActivite(id_activite) {
+    if (!id_activite) {
+      throw new Error("L'id de l'activite est obligatoire");
+    }
+    return deleteRequest(`/prestataire/service/activite/${id_activite}/delete`);
   }
 
   async function AddArticles(id_service, data) {
@@ -66,9 +94,13 @@ export const useServiceStore = defineStore("service", () => {
     GetServices,
     GetServiceByIdService,
     GetServiceByIdPrestataire,
+    GetActiviteByIdService,
+    GetArticleByIdService,
     ActivateService,
     CreateService,
     DeleteService,
+    DeleteArticle,
+    DeleteActivite,
     AddArticles,
     AddActivites,
   };

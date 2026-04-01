@@ -13,19 +13,32 @@ router.get("/show/prestataire/:id_presta", serviceMiddleware.validateServiceById
 // GET service par id_service
 router.get("/show/service/:id_service", serviceMiddleware.validateServiceByIdService, serviceController.getServiceByIdService);
 
+// GET activite par id_service
+router.get("/:id/activite/show", serviceMiddleware.validateId, serviceController.getActiviteByIdService);
+
+// GET article par id_service
+router.get("/:id/article/show", serviceMiddleware.validateId, serviceController.getArticleByIdService);
+
 // PATCH activer / désactiver le service
-router.patch("/:id/activate", serviceMiddleware.validateActivateService, serviceController.activateServiceById);
+router.patch("/:id/activate", authMiddleware.authenticateToken, serviceMiddleware.validateId, serviceController.activateServiceById);
 
 // POST créer un service
 router.post("/:id/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddService , serviceController.addServiceById);
-
-// DELETE supprimer un service
-router.delete("/:id/delete", authMiddleware.authenticateToken, serviceMiddleware.validateDeleteService , serviceController.deleteServiceById);
 
 // POST ajouter une activité
 router.post("/activites/:id/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddActiviteByIdService, serviceController.addActiviteByIdService);
 
 // POST ajouter un article
 router.post("/articles/:id/add", authMiddleware.authenticateToken, serviceMiddleware.validateAddArticleByIdService, serviceController.addArticleByIdService);
+
+// DELETE supprimer un service
+router.delete("/:id/delete", authMiddleware.authenticateToken, serviceMiddleware.validateId , serviceController.deleteServiceById);
+
+// DELETE supprimer un article
+router.delete("/article/:id/delete", authMiddleware.authenticateToken, serviceMiddleware.validateId , serviceController.deleteArticleById);
+
+// DELETE supprimer une activite
+router.delete("/activite/:id/delete", authMiddleware.authenticateToken, serviceMiddleware.validateId , serviceController.deleteActiviteById);
+
 
 module.exports = router;

@@ -283,7 +283,7 @@
     },
     "commentaire": {
       "subject": "New comment on the event",
-      "message": "Hello,\n\nA new user has left a comment on the event.\n\nDetails:\n- Name: {nomUtilisateur}\n- Email: {emailUtilisateur}\n\nPlease take a moment to review it.\n\nBest regards,\nYour platform"
+      "message": "Hello,<br><br>A new user has left a comment.<br><br>Details:<br>- Name: {nomUtilisateur}<br>- Email: {emailUtilisateur}<br><br><a href=\"{lienVersCommentaire}\">View comments</a><br><br>Best regards,<br>Your platform"
     }
   },
   "Panier": {

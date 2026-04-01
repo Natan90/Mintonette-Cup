@@ -18,7 +18,27 @@ exports.validateServiceByIdPrestataire = (req, res, next) => {
   next();
 }
 
-exports.validateActivateService = (req, res, next) => {
+exports.validateArticleByIdService = (req, res, next) => {
+  const id_service = req.params.id_service;
+
+  if (!id_service) {
+    return res.status(400).json({ error: "id_service est requis" });
+  }
+
+  next();
+}
+
+exports.validateActiviteByIdService = (req, res, next) => {
+  const id_service = req.params.id_service;
+
+  if (!id_service) {
+    return res.status(400).json({ error: "id_service est requis" });
+  }
+
+  next();
+}
+
+exports.validateId = (req, res, next) => {
   const id_service = req.params.id; 
 
   if (!id_service) {
@@ -140,16 +160,3 @@ exports.validateAddActiviteByIdService = (req, res, next) => {
 
   next();
 };
-
-exports.validateDeleteService = (req, res, next) => {
-  const id_service = req.params.id;
-
-  if (!id_service) {
-    return res.status(400).json({ error: "id_service est requis" });
-  }
-  if (isNaN(id_service)) {
-    return res.status(400).json({ error: "id_service doit être un nombre" });
-  }
-
-  next();
-}

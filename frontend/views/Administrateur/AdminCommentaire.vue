@@ -13,6 +13,10 @@
         </p>
       </header>
 
+      <p v-if="feedbackMessage" class="message feedback" :class="feedbackType">
+        {{ feedbackMessage }}
+      </p>
+
       <div v-if="commentaireStore.isLoading" class="state-box">
         Chargement des commentaires...
       </div>
@@ -60,7 +64,7 @@
             <button
               class="btn delete"
               type="button"
-              @click="confirmDelete(commentaire.id_commentaire)">
+              @click="confirmDelete(commentaire)">
               Supprimer
             </button>
           </div>
@@ -74,7 +78,6 @@
             <h2>Répondre au commentaire</h2>
           </div>
 
-          <p v-if="replyMessage" class="message success">{{ replyMessage }}</p>
           <p v-if="replyError" class="message error">{{ replyError }}</p>
 
           <form class="reply-form" @submit.prevent="submitReply">
@@ -103,25 +106,52 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref } from "vue";
+/* ********************
+        IMPORTS
+******************** */
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
+import { useI18n } from "vue-i18n";
+
+/* ********************
+    PAGES IMPORTS
+******************** */
 import NavView from "@/components/NavView.vue";
+import { useAdminAPIStore } from "@/services/admin.service";
 import { useCommentaireStore } from "@/stores/commentaire";
+import { useMailBoxStore } from "@/services/reception_box.service";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+
+const adminAPIStore = useAdminAPIStore();
+const mailBoxStore = useMailBoxStore();
+const userStore = useUserStore();
+const { t } = useI18n();
+const router = useRouter();
 
 const commentaireStore = useCommentaireStore();
 
 const showReplyForm = ref(false);
 const replyFormRef = ref(null);
 const selectedCommentId = ref(null);
+const selectedComment = ref(null);
 const isSaving = ref(false);
-const replyMessage = ref("");
+const feedbackMessage = ref("");
+const feedbackType = ref("success");
 const replyError = ref("");
 const replyForm = ref({
   reponse_commentaire: "",
 });
+let feedbackTimeoutId = null;
 
 onMounted(() => {
   commentaireStore.fetchCommentaires();
+});
+
+onBeforeUnmount(() => {
+  if (feedbackTimeoutId) {
+    clearTimeout(feedbackTimeoutId);
+  }
 });
 
 function getAuthor(commentaire) {
@@ -142,8 +172,9 @@ function getStarClass(value, star) {
 
 async function openReply(commentaire) {
   selectedCommentId.value = commentaire.id_commentaire;
+  selectedComment.value = commentaire;
   replyForm.value.reponse_commentaire = commentaire.reponse_commentaire || "";
-  replyMessage.value = "";
+  clearFeedbackMessage();
   replyError.value = "";
   showReplyForm.value = true;
 
@@ -151,11 +182,14 @@ async function openReply(commentaire) {
   replyFormRef.value?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function closeReply() {
+function closeReply(keepFeedback = false) {
   showReplyForm.value = false;
   selectedCommentId.value = null;
+  selectedComment.value = null;
   replyForm.value.reponse_commentaire = "";
-  replyMessage.value = "";
+  if (!keepFeedback) {
+    clearFeedbackMessage();
+  }
   replyError.value = "";
 }
 
@@ -163,7 +197,7 @@ async function submitReply() {
   if (!selectedCommentId.value) return;
 
   isSaving.value = true;
-  replyMessage.value = "";
+  clearFeedbackMessage();
   replyError.value = "";
 
   try {
@@ -172,8 +206,11 @@ async function submitReply() {
       replyForm.value.reponse_commentaire,
     );
 
-    replyMessage.value = "Réponse enregistrée.";
+    await sendMailToUserForResponse();
+
+    showFeedbackMessage("Réponse enregistrée.");
     await commentaireStore.fetchCommentaires();
+    closeReply(true);
   } catch (error) {
     replyError.value =
       error?.response?.data?.error ||
@@ -184,12 +221,17 @@ async function submitReply() {
   }
 }
 
-async function confirmDelete(id_commentaire) {
+async function confirmDelete(commentaire) {
   const ok = confirm("Supprimer ce commentaire ?");
   if (!ok) return;
 
+  selectedComment.value = commentaire;
+  clearFeedbackMessage();
+
   try {
-    await commentaireStore.deleteCommentaire(id_commentaire);
+    await commentaireStore.deleteCommentaire(commentaire.id_commentaire);
+    await sendMailToUserForDelete();
+    showFeedbackMessage("Commentaire supprimé.", "error");
   } catch (error) {
     alert(
       error?.response?.data?.error ||
@@ -197,6 +239,73 @@ async function confirmDelete(id_commentaire) {
         "Impossible de supprimer le commentaire.",
     );
   }
+}
+
+async function sendMailToUserForResponse() {
+  try {
+    if (!selectedComment.value?.id_utilisateur) {
+      throw new Error("Impossible de retrouver l'auteur du commentaire");
+    }
+
+    const subject = t("mailToSend.reponseCommentaire.subject");
+    const message = t("mailToSend.reponseCommentaire.message", {
+      nomUtilisateur: getAuthor(selectedComment.value),
+    });
+
+    const id_type_message = 6;
+
+    await mailBoxStore.sendMessageTo(userStore.userId, {
+      id_user_to: selectedComment.value.id_utilisateur,
+      subject,
+      message,
+      id_type_message,
+    });
+  } catch (err) {
+    console.error("Erreur lors de l'envoi de commentaire:", err);
+  }
+}
+async function sendMailToUserForDelete() {
+  try {
+    if (!selectedComment.value?.id_utilisateur) {
+      throw new Error("Impossible de retrouver l'auteur du commentaire");
+    }
+
+    const subject = t("mailToSend.suppressionCommentaire.subject");
+    const message = t("mailToSend.suppressionCommentaire.message", {
+      nomUtilisateur: getAuthor(selectedComment.value),
+    });
+
+    const id_type_message = 7;
+
+    await mailBoxStore.sendMessageTo(userStore.userId, {
+      id_user_to: selectedComment.value.id_utilisateur,
+      subject,
+      message,
+      id_type_message,
+    });
+  } catch (err) {
+    console.error("Erreur lors de l'envoi de commentaire:", err);
+  }
+}
+
+function clearFeedbackMessage() {
+  if (feedbackTimeoutId) {
+    clearTimeout(feedbackTimeoutId);
+    feedbackTimeoutId = null;
+  }
+
+  feedbackMessage.value = "";
+}
+
+function showFeedbackMessage(message, type = "success") {
+  clearFeedbackMessage();
+  feedbackType.value = type;
+  feedbackMessage.value = message;
+
+  feedbackTimeoutId = window.setTimeout(() => {
+    feedbackMessage.value = "";
+    feedbackTimeoutId = null;
+  }, 2000);
 }
 </script>
 
@@ -368,6 +477,16 @@ async function confirmDelete(id_commentaire) {
   margin: 0 0 1rem;
   padding: 0.85rem 1rem;
   border-radius: 12px;
+}
+
+.feedback {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+  margin: 0;
+  max-width: min(420px, calc(100vw - 2rem));
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
 }
 
 .message.success {

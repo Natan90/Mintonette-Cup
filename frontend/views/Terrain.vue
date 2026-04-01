@@ -6,7 +6,7 @@
       <router-link
         :to="{
           name: 'Terrain',
-          params: { lang: lang.value, id: terrainId - 1 || 4 },
+          params: { lang, id: terrainId - 1 || 4 },
         }"
         class="button">
         ⬅ Terrain précédent
@@ -15,7 +15,7 @@
       <router-link
         :to="{
           name: 'Terrain',
-          params: { lang: lang.value, id: (terrainId % 4) + 1 },
+          params: { lang, id: (terrainId % 4) + 1 },
         }"
         class="button">
         Terrain suivant ➡
@@ -166,7 +166,6 @@
     Réserver votre billet dès à présent
   </router-link>
 
-  >
   <Footer></Footer>
 </template>
 
@@ -212,7 +211,6 @@ const matchTime = computed(() => {
   return `${hours}:${minutes}`;
 });
 
-
 onMounted(() => {
   fetchPlayers();
   fetchMatches();
@@ -224,7 +222,7 @@ watch(terrainId, () => {
 
 /**
  * Récupère la liste des joueurs pour tous les matchs du terrain sélectionné.
-*/
+ */
 async function fetchPlayers() {
   const res = await equipeStore.GetPlayer();
 
@@ -233,7 +231,7 @@ async function fetchPlayers() {
 /**
  * Récupère les matchs associés au terrain courant.
  * Réinitialise également l’index du match sélectionné.
-*/
+ */
 async function fetchMatches() {
   const res = await equipeStore.GetMatchById(terrainId.value);
   matches.value = res.data;
@@ -245,7 +243,7 @@ async function fetchMatches() {
  *
  * @param teamId - Identifiant de l’équipe
  * @param side - Côté du terrain ("left" ou "right")
-*/
+ */
 function getMajorPlayers(teamId, side) {
   const teamPlayers = players.value.filter((p) => p.id_equipe === teamId);
 
@@ -305,7 +303,7 @@ function getMajorPlayers(teamId, side) {
  * Retourne la liste des joueurs remplaçants d’une équipe.
  *
  * @param teamId - Identifiant de l’équipe
-*/
+ */
 function getSubstitutes(teamId) {
   return players.value.filter((p) => p.id_equipe === teamId).slice(6);
 }
@@ -315,7 +313,7 @@ function getSubstitutes(teamId) {
  *
  * @param player - Joueur sélectionné
  * @param side - Côté d’affichage ("left" ou "right")
-*/
+ */
 function moreInfo(player, side) {
   selectedPlayer.value = player;
   cardSide.value = side;
@@ -324,7 +322,7 @@ function moreInfo(player, side) {
  * Calcule l’âge d’un joueur à partir de sa date de naissance.
  *
  * @param player - Objet joueur contenant `date_naissance_joueur`
-*/
+ */
 function getAge(player) {
   return (
     new Date().getFullYear() -

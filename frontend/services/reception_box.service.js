@@ -16,7 +16,7 @@ export const useMailBoxStore = defineStore("mailbox", () => {
     }
 
     return getRequest(`/mailbox/message/${id_message}/select`, {
-      params: { isReceived }
+      params: { isReceived },
     });
   }
 
@@ -29,11 +29,26 @@ export const useMailBoxStore = defineStore("mailbox", () => {
     }
 
     return postRequest(`/mailbox/message/${id_user}/read`, {
-      id_message
-    })
+      id_message,
+    });
   }
+  
+  async function removeMessageById(id_user, id_message) {
+    if (!id_user) {
+      throw new Error("L'id de l'utilisateur est obligatoire");
+    }
+    if (!id_message) {
+      throw new Error("L'id du message est obligatoire");
+    }
 
-  async function sendMessageTo(id_user_from, { id_user_to, subject, message, id_type_message }) {
+    return postRequest(`/mailbox/message/${id_user}/delete`, {
+      id_message,
+    });
+  }
+  async function sendMessageTo(
+    id_user_from,
+    { id_user_to, subject, message, id_type_message },
+  ) {
     if (!id_user_from) {
       throw new Error("L'id de l'utilisateur est obligatoire");
     }
@@ -44,16 +59,17 @@ export const useMailBoxStore = defineStore("mailbox", () => {
 
     return postRequest(`/mailbox/message/${id_user_from}/send`, {
       id_user_to: id_user_to,
-      subject: subject, 
+      subject: subject,
       message: message,
       id_type_message: id_type_message,
-    })
+    });
   }
 
   return {
     getMessagesById,
     getMessagesByIdMessage,
     updateMessageById,
-    sendMessageTo
+    sendMessageTo,
+    removeMessageById,
   };
 });
