@@ -30,8 +30,7 @@
   <div class="page">
     <div class="formulaire">
       <div class="titre_formulaire">
-        <h1>{{ $t("account.modifyAccount") }}</h1>
-        <router-link to="/" class="croix pointer">&times;</router-link>
+        <h1>{{ isOwnAccount ? $t("account.modifyAccount") : $t("account.modifyAccountAdmin") }}</h1>        <router-link to="/" class="croix pointer">&times;</router-link>
       </div>
 
       <div v-if="loading" class="loading">
@@ -128,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
@@ -162,6 +161,10 @@ const isSending = ref(false);
 const success = ref(false);
 
 const userId = Number(route.params.userId);
+
+const isOwnAccount = computed(() => {
+  return Number(userId) === Number(userStore.userId);
+});
 
 const formData = ref({
   prenom: "",
@@ -213,8 +216,8 @@ async function GetUtilisateurById() {
   }
 
   try {
-    const response = await amdinAPIStore.GetUtilisateurById(userStore.userId);
-
+    const response = await amdinAPIStore.GetUtilisateurById(userId);
+    
     formData.value = {
       prenom: response.data.prenom_utilisateur || '',
       nom: response.data.nom_utilisateur || '',
@@ -294,7 +297,7 @@ const updateUserInfo = async () => {
       });
     }
 
-    const response = await utilisateurAuthStore.UpdateUtilisateur(userStore.userId, {
+    const response = await utilisateurAuthStore.UpdateUtilisateur(userId, {
       prenom: formData.value.prenom,
       nom: formData.value.nom,
       login: formData.value.login,

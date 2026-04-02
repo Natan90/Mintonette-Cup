@@ -121,6 +121,10 @@
     "buttonConnexion": "Se connecter"
   },
   "account": {
+    "modifyAccountAdmin": "Modifier le compte",
+    "viewCartAdmin": "Voir le panier",
+    "deleteAccountAdmin": "Supprimer le compte",
+    "accountDetails": "Détails du compte",
     "modifyAccount": "Modifier mon compte",
     "myAccount": "Mon compte",
     "modify": "Modifier",
@@ -138,7 +142,7 @@
     "saving": "Enregistrement...",
     "loading": "Chargement des données...",
     "requiredFields": "Veuillez remplir tous les champs obligatoires",
-    "updateSuccess": "Vos informations ont été mises à jour avec succès !",
+    "updateSuccess": "Informations mises à jour avec succès !",
     "updateError": "Une erreur est survenue lors de la mise à jour",
     "errorLoading": "Erreur lors du chargement des données",
     "emailAlreadyUsed": "Cet email est déjà utilisé",

@@ -6,7 +6,7 @@
   <div class="page">
     <div class="formulaire">
       <div class="titre_formulaire">
-        <h1>{{ $t("account.myAccount") }}</h1>
+        <h1>{{ isOwnAccount ? $t("account.myAccount") : $t("account.accountDetails") }}</h1>
         <router-link to="/" class="croix pointer">&times;</router-link>
       </div>
 
@@ -70,14 +70,14 @@
           <router-link
             :to="{ name: 'Panier', params: { lang: t.value } }"
             class="pointer">
-            {{ $t("account.viewCart") }}
+            {{ isOwnAccount ? $t("account.viewCart") : $t("account.viewCartAdmin") }}
           </router-link>
           <button
             @click="deleteAccount(userData.id_user)"
             class="pointer delete-btn"
             :disabled="isDeleting">
             {{
-              isDeleting ? $t("account.deleting") : $t("account.deleteAccount")
+              isDeleting ? $t("account.deleting") : isOwnAccount ? $t("account.deleteAccount") : $t("account.deleteAccountAdmin")
             }}
           </button>
           <router-link :to="{ name: 'Home', params: { lang: t.value } }">
@@ -132,6 +132,10 @@ const formattedDate = computed(() => {
   });
 });
 
+const isOwnAccount = computed(() => {
+  return Number(props.userId) === Number(userStore.userId);
+});
+
 const userData = ref({
   id_user: "",
   prenom: "",
@@ -144,9 +148,7 @@ const userData = ref({
 
 onMounted(() => {
   try {
-    const userId = props.userId || userStore.userId;
-    console.log("Loading user with ID:", userId);
-    getValuesUtilisateurs(userId);
+    getValuesUtilisateurs();
   } catch (err) {
     console.error(err);
   }
@@ -167,8 +169,8 @@ function goBack() {
 */
 async function getValuesUtilisateurs() {
   try {
-    const response = await adminAPIStore.GetCurrentUser();
-    console.log('User data received:', response.data);
+    const userId = props.userId || userStore.userId;
+    const response = await adminAPIStore.GetUtilisateurById(userId); // ← changer ici
 
     rawDate.value = response.data.date_creation_utilisateur || '';
 
@@ -182,7 +184,6 @@ async function getValuesUtilisateurs() {
       sexe: response.data.sexe_utilisateur || ''
     };
 
-    console.log('User data updated:', userData.value);
   } catch (error) {
     console.error('Erreur lors de la récupération des données :', error);
     message.value = t('account.errorLoading');
