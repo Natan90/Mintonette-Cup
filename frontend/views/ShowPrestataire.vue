@@ -2,14 +2,15 @@
   <NavView />
   <Modal v-model="showService" :bigger="true">
     <template #content>
-      <div class="bloc_texte service_details">
-        <div v-if="isActivityService" class="service_items_list">
+      <div
+        class="show-prestataire__block-text show-prestataire__service-details">
+        <div v-if="isActivityService" class="show-prestataire__items-list">
           <h3>Activités</h3>
           <div v-if="activitesList.length > 0">
             <div
               v-for="(item, index) in activitesList"
               :key="index"
-              class="service_item_card">
+              class="show-prestataire__service-card">
               <p>
                 <strong>{{ item.nom_activite }}</strong>
               </p>
@@ -26,13 +27,13 @@
         </div>
 
         <!-- Articles -->
-        <div v-else class="service_items_list">
+        <div v-else class="show-prestataire__items-list">
           <h3>Articles</h3>
           <div v-if="articlesList.length > 0">
             <div
               v-for="(item, index) in articlesList"
               :key="index"
-              class="service_item_card">
+              class="show-prestataire__service-card">
               <p>
                 <strong>{{ item.nom_article }}</strong>
               </p>
@@ -46,12 +47,13 @@
     </template>
   </Modal>
 
-  <div class="back-arrow pointer" @click="goBack">
+  <div class="show-prestataire__back pointer" @click="goBack">
     &#8592; {{ $t("bouton.retour") }}
   </div>
-  <div class="main_container"><br><br>
-    <div class="bloc_texte">
-      <h1 class="page_title">
+  <div class="show-prestataire__main">
+    <br /><br />
+    <div class="show-prestataire__block-text">
+      <h1 class="show-prestataire__title">
         {{ $t("adminPage.prestataire.service.title") }}
       </h1>
       <p
@@ -60,12 +62,12 @@
             nom_prestataire: onePresta.nom_prestataire,
           })
         "
-        class="backgroundBorderL page_subtitle"></p>
+        class="show-prestataire__glass show-prestataire__subtitle"></p>
     </div>
 
-    <div class="textAndFiltre paddingSides">
+    <div class="show-prestataire__filter-row show-prestataire__section-padding">
       <p
-        class="nb_presta valid"
+        class="show-prestataire__counter show-prestataire__counter--valid"
         v-if="services.filter((p) => p.activate).length > 0">
         {{
           $t("adminPage.prestataire.service.nb_services", {
@@ -74,10 +76,12 @@
           })
         }}
       </p>
-      <p class="nb_presta toValidate" v-else>
+      <p
+        class="show-prestataire__counter show-prestataire__counter--pending"
+        v-else>
         {{ $t("adminPage.prestataire.service.nb_servicesVide") }}
       </p>
-      <div class="filtre">
+      <div class="show-prestataire__sort-filter">
         <label for="triAlpha">{{ $t("adminPage.tri.nom") }}</label>
         <select id="triAlpha" v-model="adminStore.services">
           <option value="az">{{ $t("adminPage.tri.az") }}</option>
@@ -89,44 +93,60 @@
         </select>
       </div>
     </div>
-    <div class="backgroundBorderL message valid" v-if="activate">
+    <div
+      class="show-prestataire__glass show-prestataire__notice show-prestataire__notice--valid"
+      v-if="activate">
       <p
         v-html="
           $t('adminPage.prestataire.service.messageActiver', {
             nomService: desactivateService?.nom_service,
           })
         "></p>
-      <span class="modal-close" @click="closeMessageActivate">&times;</span>
+      <span class="show-prestataire__notice-close" @click="closeMessageActivate"
+        >&times;</span
+      >
     </div>
 
-    <div class="backgroundBorderL message refus" v-else-if="desactivate">
+    <div
+      class="show-prestataire__glass show-prestataire__notice show-prestataire__notice--refus"
+      v-else-if="desactivate">
       <p
         v-html="
           $t('adminPage.prestataire.service.messageDesactiver', {
             nomService: desactivateService?.nom_service,
           })
         "></p>
-      <span class="modal-close" @click="closeMessageDesactivate">&times;</span>
+      <span
+        class="show-prestataire__notice-close"
+        @click="closeMessageDesactivate"
+        >&times;</span
+      >
     </div>
 
-    <div class="backgroundBorderL message suppr" v-else-if="deleting">
+    <div
+      class="show-prestataire__glass show-prestataire__notice show-prestataire__notice--suppr"
+      v-else-if="deleting">
       <p
         v-html="
           $t('adminPage.prestataire.service.messageSuppr', {
             nomService: desactivateService?.nom_service,
           })
         "></p>
-      <span class="modal-close" @click="closeMessageSuppr">&times;</span>
+      <span class="show-prestataire__notice-close" @click="closeMessageSuppr"
+        >&times;</span
+      >
     </div>
 
     <section>
-      <div class="container_admin">
-        <div class="container_cards">
-          <p class="title_presta">{{ onePresta.nom_prestataire }}</p>
+      <div class="show-prestataire__layout">
+        <div class="show-prestataire__card">
+          <p class="show-prestataire__name">{{ onePresta.nom_prestataire }}</p>
           <!-- <img src=""> -->
-          <div class="description" v-html="onePresta.descri_prestataire"></div>
-          <div class="contact_presta">
-            <p class="contact_title"><b>Contact</b></p>
+          <div
+            class="show-prestataire__description"
+            v-html="onePresta.descri_prestataire"></div>
+          <div class="show-prestataire__contact">
+            <p class="show-prestataire__contact-title"><b>Contact</b></p>
             <p>{{ onePresta.mail_prestataire }}</p>
             <p>{{ onePresta.tel_prestataire }}</p>
           </div>
@@ -135,7 +155,7 @@
           </p>
         </div>
         <div>
-          <div class="services_container">
+          <div class="show-prestataire__services">
             <p>
               <b>
                 {{
@@ -149,19 +169,25 @@
               <li
                 v-for="(item, index) in servicesFiltres"
                 :key="index"
-                class="service_item"
+                class="show-prestataire__service-item"
                 style="padding-bottom: 10px">
-                <div class="serviceWithButtons">
+                <div class="show-prestataire__service-row">
                   {{ item.nom_service }}
-                  <span v-if="item.activate" class="active-icon" title="Actif"
+                  <span
+                    v-if="item.activate"
+                    class="show-prestataire__status-active"
+                    title="Actif"
                     >&#10003;</span
                   >
-                  <span v-else class="inactive-icon" title="Inactif"
+                  <span
+                    v-else
+                    class="show-prestataire__status-inactive"
+                    title="Inactif"
                     >&#10007;</span
                   >
-                  <span class="diff_button">
+                  <span class="show-prestataire__actions">
                     <button
-                      class="btn_info"
+                      class="show-prestataire__btn-info"
                       @click="
                         getValuesArticlesOrActivitesByIdService(
                           item.id_service,
@@ -172,7 +198,7 @@
                     </button>
                     <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
                     <button
-                      class="btn_activate"
+                      class="show-prestataire__btn-activate"
                       v-if="
                         !item.activate &&
                         userStore.isConnected &&
@@ -182,7 +208,7 @@
                       Activer
                     </button>
                     <button
-                      class="btn_desactivate"
+                      class="show-prestataire__btn-disable"
                       v-else-if="
                         item.activate &&
                         userStore.isConnected &&
@@ -192,7 +218,7 @@
                       Désactiver
                     </button>
                     <button
-                      class="btn_supprimer"
+                      class="show-prestataire__btn-delete"
                       v-if="
                         userStore.isConnected && userStore.prestaId == idPresta
                       ">
@@ -209,6 +235,7 @@
 
     <div>
       <button
+        class="show-prestataire__edit-button"
         @click="goToEditPrestataire"
         v-if="
           userStore.isConnected &&
@@ -490,11 +517,9 @@ function updateDescription() {
   }
 }
 </script>
-<!-- main_container"> -->
-    <!-- <div class="bloc_texte"> -->
-      <!-- <h1 class="page_title -->
+
 <style>
-.main_container {
+.show-prestataire__main {
   min-height: 100vh;
   padding: 32px 0 48px;
   background:
@@ -508,7 +533,7 @@ function updateDescription() {
   margin-top: -67px;
 }
 
-.back-arrow {
+.show-prestataire__back {
   margin: 18px 0 0 32px;
   width: fit-content;
   padding: 10px 14px;
@@ -522,19 +547,19 @@ function updateDescription() {
     background 0.2s ease;
 }
 
-.back-arrow:hover {
+.show-prestataire__back:hover {
   transform: translateX(-2px);
   border-color: rgba(232, 80, 130, 0.28);
   background: rgba(255, 255, 255, 0.1);
 }
 
-.bloc_texte {
+.show-prestataire__block-text {
   display: flex;
   flex-direction: column;
   padding: 0 32px;
 }
 
-.page_title {
+.show-prestataire__title {
   margin: 16px 0 10px;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
@@ -543,31 +568,31 @@ function updateDescription() {
   color: #f8f8f8;
 }
 
-.page_subtitle,
-.message,
-.nb_presta,
-.services_container,
-.container_cards,
-.service_items_list,
-.service_item_card {
+.show-prestataire__subtitle,
+.show-prestataire__notice,
+.show-prestataire__counter,
+.show-prestataire__services,
+.show-prestataire__card,
+.show-prestataire__items-list,
+.show-prestataire__service-card {
   box-sizing: border-box;
 }
 
-.backgroundBorderL {
+.show-prestataire__glass {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(10px);
   border-radius: 18px;
 }
 
-.page_subtitle {
+.show-prestataire__subtitle {
   margin: 0;
   padding: 18px 20px;
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.7;
 }
 
-.textAndFiltre {
+.show-prestataire__filter-row {
   display: flex;
   align-items: end;
   justify-content: space-between;
@@ -575,26 +600,26 @@ function updateDescription() {
   margin: 24px 32px 18px;
 }
 
-.nb_presta {
+.show-prestataire__counter {
   margin: 0;
   padding: 12px 16px;
   border-radius: 14px;
   font-weight: 700;
 }
 
-.nb_presta.valid {
+.show-prestataire__counter--valid {
   color: #fff;
   background: rgba(90, 153, 102, 0.14);
   border: 1px solid rgba(90, 153, 102, 0.28);
 }
 
-.nb_presta.toValidate {
+.show-prestataire__counter--pending {
   color: rgba(255, 255, 255, 0.8);
   background: rgba(232, 80, 130, 0.12);
   border: 1px solid rgba(232, 80, 130, 0.22);
 }
 
-.filtre {
+.show-prestataire__sort-filter {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -604,13 +629,13 @@ function updateDescription() {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.filtre label {
+.show-prestataire__sort-filter label {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
-.filtre select {
+.show-prestataire__sort-filter select {
   min-width: 170px;
   padding: 10px 14px;
   border-radius: 12px;
@@ -620,11 +645,11 @@ function updateDescription() {
   outline: none;
 }
 
-.filtre select:focus {
+.show-prestataire__sort-filter select:focus {
   border-color: rgba(232, 80, 130, 0.35);
 }
 
-.message {
+.show-prestataire__notice {
   margin: 0 32px 16px;
   padding: 14px 18px;
   border-radius: 16px;
@@ -634,29 +659,29 @@ function updateDescription() {
   gap: 16px;
 }
 
-.message.valid {
+.show-prestataire__notice--valid {
   background: rgba(90, 153, 102, 0.12);
   border: 1px solid rgba(90, 153, 102, 0.22);
 }
 
-.message.refus {
+.show-prestataire__notice--refus {
   background: rgba(232, 80, 130, 0.1);
   border: 1px solid rgba(232, 80, 130, 0.18);
 }
 
-.message.suppr {
+.show-prestataire__notice--suppr {
   background: rgba(255, 180, 0, 0.1);
   border: 1px solid rgba(255, 180, 0, 0.18);
 }
 
-.modal-close {
+.show-prestataire__notice-close {
   cursor: pointer;
   font-size: 1.2rem;
   line-height: 1;
   color: rgba(255, 255, 255, 0.72);
 }
 
-.container_admin {
+.show-prestataire__layout {
   display: grid;
   grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
   gap: 28px;
@@ -664,8 +689,8 @@ function updateDescription() {
   align-items: start;
 }
 
-.container_cards,
-.services_container {
+.show-prestataire__card,
+.show-prestataire__services {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
@@ -673,11 +698,11 @@ function updateDescription() {
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
 }
 
-.container_cards {
+.show-prestataire__card {
   padding: 24px;
 }
 
-.title_presta {
+.show-prestataire__name {
   margin: 0 0 16px;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 800;
@@ -685,13 +710,13 @@ function updateDescription() {
   color: #f8f8f8;
 }
 
-.description {
+.show-prestataire__description {
   margin: 18px 0;
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.7;
 }
 
-.contact_presta {
+.show-prestataire__contact {
   margin-top: 18px;
   padding: 16px 18px;
   border-radius: 16px;
@@ -699,26 +724,26 @@ function updateDescription() {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.contact_title {
+.show-prestataire__contact-title {
   margin: 0 0 8px;
 }
 
-.container_cards > p:last-child {
+.show-prestataire__card > p:last-child {
   margin: 16px 0 0;
   color: rgba(255, 255, 255, 0.68);
 }
 
-.services_container {
+.show-prestataire__services {
   padding: 22px;
 }
 
-.services_container > p {
+.show-prestataire__services > p {
   margin: 0 0 18px;
   font-size: 1.05rem;
   color: rgba(255, 255, 255, 0.78);
 }
 
-.services_container ul {
+.show-prestataire__services ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -726,11 +751,11 @@ function updateDescription() {
   gap: 12px;
 }
 
-.service_item {
+.show-prestataire__service-item {
   padding: 0 !important;
 }
 
-.serviceWithButtons {
+.show-prestataire__service-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -741,7 +766,7 @@ function updateDescription() {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.diff_button {
+.show-prestataire__actions {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -749,11 +774,11 @@ function updateDescription() {
   justify-content: flex-end;
 }
 
-.btn_info,
-.btn_activate,
-.btn_desactivate,
-.btn_supprimer,
-.container_admin button:last-child {
+.show-prestataire__btn-info,
+.show-prestataire__btn-activate,
+.show-prestataire__btn-disable,
+.show-prestataire__btn-delete,
+.show-prestataire__edit-button {
   border: none;
   border-radius: 999px;
   padding: 9px 14px;
@@ -766,130 +791,130 @@ function updateDescription() {
     background 0.2s ease;
 }
 
-.btn_info,
-.container_admin button:last-child {
+.show-prestataire__btn-info,
+.show-prestataire__edit-button {
   background: linear-gradient(90deg, var(--primary-color), var(--rose));
   color: #fff;
   box-shadow: 0 10px 22px rgba(58, 111, 67, 0.24);
 }
 
-.btn_activate {
+.show-prestataire__btn-activate {
   background: rgba(90, 153, 102, 0.16);
   color: #2a5232;
   border: 1px solid rgba(90, 153, 102, 0.28);
 }
 
-.btn_desactivate {
+.show-prestataire__btn-disable {
   background: rgba(232, 80, 130, 0.16);
   color: #8c2f4f;
   border: 1px solid rgba(232, 80, 130, 0.26);
 }
 
-.btn_supprimer {
+.show-prestataire__btn-delete {
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn_info:hover,
-.btn_activate:hover,
-.btn_desactivate:hover,
-.btn_supprimer:hover,
-.container_admin button:last-child:hover {
+.show-prestataire__btn-info:hover,
+.show-prestataire__btn-activate:hover,
+.show-prestataire__btn-disable:hover,
+.show-prestataire__btn-delete:hover,
+.show-prestataire__edit-button:hover {
   transform: translateY(-1px);
 }
 
-.btn_info:hover,
-.container_admin button:last-child:hover {
+.show-prestataire__btn-info:hover,
+.show-prestataire__edit-button:hover {
   box-shadow: 0 14px 28px rgba(58, 111, 67, 0.32);
 }
 
-.service_items_list {
+.show-prestataire__items-list {
   display: grid;
   gap: 14px;
   padding: 6px 2px 2px;
 }
 
-.service_items_list h3 {
+.show-prestataire__items-list h3 {
   margin: 0 0 12px;
   font-size: 1.3rem;
 }
 
-.service_item_card {
+.show-prestataire__service-card {
   padding: 16px 18px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.service_item_card p {
+.show-prestataire__service-card p {
   margin: 6px 0;
   color: rgba(255, 255, 255, 0.76);
 }
 
-.service_item_card strong {
+.show-prestataire__service-card strong {
   color: #f8f8f8;
 }
 
-span[title="Actif"] {
+.show-prestataire__status-active {
   color: #7ed38d;
   font-weight: 700;
   margin-left: 4px;
 }
 
-span[title="Inactif"] {
+.show-prestataire__status-inactive {
   color: #ff8b8b;
   font-weight: 700;
   margin-left: 4px;
 }
 
-.paddingSides {
+.show-prestataire__section-padding {
   padding-left: 32px;
   padding-right: 32px;
 }
 
 @media (max-width: 900px) {
-  .container_admin {
+  .show-prestataire__layout {
     grid-template-columns: 1fr;
   }
 
-  .textAndFiltre {
+  .show-prestataire__filter-row {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .filtre {
+  .show-prestataire__sort-filter {
     justify-content: space-between;
   }
 }
 
 @media (max-width: 750px) {
-  .main_container {
+  .show-prestataire__main {
     padding-top: 18px;
   }
 
-  .back-arrow,
-  .bloc_texte,
-  .textAndFiltre,
-  .container_admin,
-  .message {
+  .show-prestataire__back,
+  .show-prestataire__block-text,
+  .show-prestataire__filter-row,
+  .show-prestataire__layout,
+  .show-prestataire__notice {
     margin-left: 16px;
     margin-right: 16px;
     padding-left: 0;
     padding-right: 0;
   }
 
-  .container_cards,
-  .services_container {
+  .show-prestataire__card,
+  .show-prestataire__services {
     padding: 18px;
   }
 
-  .serviceWithButtons {
+  .show-prestataire__service-row {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .diff_button {
+  .show-prestataire__actions {
     justify-content: flex-start;
   }
 }
