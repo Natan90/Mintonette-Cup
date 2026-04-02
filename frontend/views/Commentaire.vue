@@ -582,12 +582,8 @@ async function submitCommentaire() {
       await fetchUserData();
       // console.log("et là");
 
-      const subject = t("mailToSend.commentaire.subject");
-      const message = t("mailToSend.commentaire.message", {
-        nomUtilisateur: userData.value.prenom + " " + userData.value.nom,
-        emailUtilisateur: userData.value.email,
-        lienVersCommentaire,
-      });
+      const subject = "Nouveau commentaire sur l'événement";
+      const message = `Bonjour,<br><br>Un nouvel utilisateur a laissé un commentaire.<br><br>Détails :<br>- Nom : ${userData.value.prenom} ${userData.value.nom}<br>- Email : ${userData.value.email}<br><br><a href="${lienVersCommentaire}">Voir les commentaires</a><br><br>Cordialement,<br>Votre plateforme`;
 
       const id_admin = 1;
       const id_type_message = 5;

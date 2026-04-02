@@ -267,15 +267,8 @@ async function sendMailToAdmin() {
     const raisonTexte =
       raisonsTraduction[raisonRemboursement.value] || raisonRemboursement.value;
 
-    const subject = t("mailToSend.demandeRemboursement.subject");
-    const message = t("mailToSend.demandeRemboursement.message", {
-      nbBillets: selectedBillets.value.length,
-      nomUtilisateur: userData.value.prenom + " " + userData.value.nom,
-      emailUtilisateur: userData.value.email,
-      raison: raisonTexte,
-      detailsBillets: detailsBillets,
-      montantTotal: montantTotal,
-    });
+    const subject = "Remboursement de billet(s)";
+    const message = `Bonjour,<br><br>Je vous informe du remboursement de ${selectedBillets.value.length} billet(s).<br><br>Email : ${userData.value.email}<br>Raison : ${raisonTexte}<br><br>Détails des billets :<br>${detailsBillets.replace(/\n/g, "<br>")}<br><br>Montant total : ${montantTotal} €<br><br>Cordialement,<br>${userData.value.prenom} ${userData.value.nom}`;
 
     const id_admin = 1;
     const id_type_message = 4;

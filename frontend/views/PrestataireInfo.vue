@@ -1089,19 +1089,13 @@ async function updatePresta() {
  * @async
 */
 async function sendMailToAdmin(isModif) {
-  const path = isModif
-    ? "mailToSend.modifPresta"
-    : "mailToSend.demandePresta";
+  const subject = isModif
+    ? "Modification d'un prestataire"
+    : "Nouvelle demande de prestataire";
 
-  const subject = t(`${path}.subject`);
-
-  const messageText = t(`${path}.message`, {
-    nom: nom.value,
-    email: mail.value,
-    telephone: tel.value,
-    type: selectedType.value,
-    specificite: selectedNames.value.join(", ")
-  });
+  const messageText = isModif
+    ? `Bonjour,<br><br>Un prestataire a modifié ses informations.<br><br>Nom du prestataire : ${nom.value}<br>Email : ${mail.value}<br>Téléphone : ${tel.value}<br>Type : ${selectedType.value}<br>Spécificité : ${selectedNames.value.join(", ")}<br><br>Merci de vérifier les modifications effectuées.<br><br>Cordialement,<br>Mintonette Cup`
+    : `Bonjour,<br><br>Une nouvelle demande de prestataire vient d'être soumise.<br><br>Nom du prestataire : ${nom.value}<br>Email : ${mail.value}<br>Téléphone : ${tel.value}<br>Type : ${selectedType.value}<br>Spécificité : ${selectedNames.value.join(", ")}<br><br>Merci de vérifier et valider cette demande depuis l'espace administrateur.<br><br>Cordialement,<br>Mintonette Cup`;
 
   const id_admin = 1;
   let id_type_message = isModif ? 2 : 1;
