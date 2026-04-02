@@ -436,5 +436,19 @@
       "Réponse à un commentaire": "Reply to a comment",
       "Suppression d'un de vos commentaire": "Deletion of one of your comments"
     }
+  },
+  "terrain": {
+    "retourAccueil": "Back to Home",
+    "terrainSuivant": "Next Field",
+    "terrainPrecedent": "Previous Field",
+    "terrain": "Field",
+    "heure": "Time",
+    "coach": "Coach",
+    "remplacants": "Substitutes",
+    "reserverBillet": "Book your ticket now",
+    "taille": "Height",
+    "age": "Age",
+    "poste": "Position",
+    "ans": "Years old"
   }
 }

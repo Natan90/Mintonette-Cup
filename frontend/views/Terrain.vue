@@ -5,9 +5,8 @@
     <router-link
       :to="{ name: 'Home', params: { lang: locale } }"
       class="button homeButton">
-      ← Retour à l'accueil
+      ← {{ $t("terrain.retourAccueil") }}
     </router-link>
-
     <div class="navMatch">
       <router-link
         :to="{
@@ -15,7 +14,7 @@
           params: { lang, id: terrainId - 1 || 4 },
         }"
         class="button">
-        ⬅ Terrain précédent
+        ⬅ {{ $t("terrain.terrainPrecedent") }}
       </router-link>
 
       <router-link
@@ -24,12 +23,12 @@
           params: { lang, id: (terrainId % 4) + 1 },
         }"
         class="button">
-        Terrain suivant ➡
+        {{ $t("terrain.terrainSuivant") }} ➡
       </router-link>
     </div>
 
     <div class="matchHeader">
-      <h2>Mintonette Cup – Terrain {{ terrainId }}</h2>
+      <h2>Mintonette Cup – {{ $t("terrain.terrain") }} {{ terrainId }}</h2>
     </div>
 
     <div class="matchSelector">
@@ -48,7 +47,7 @@
         <span>VS</span>
         {{ selectedMatch.team2_country }}
       </h3>
-      <p class="matchTime">Heure : {{ matchTime }}</p>
+      <p class="matchTime">{{ $t("terrain.heure") }} : {{ matchTime }}</p>
     </div>
 
     <div class="terrainConteneur">
@@ -75,7 +74,7 @@
                 @click.stop="moreInfo(player, 'right')" />
 
               <span class="name">
-                {{ player.prenom_joueur }} {{ player.nom_joueur }}
+                {{ player.prenom_joueur }} {{ player.nom_joueur }} 
               </span>
             </div>
           </div>
@@ -106,11 +105,20 @@
         <div v-if="selectedPlayer" class="playerCard" :class="cardSide">
           <h4>
             {{ selectedPlayer.prenom_joueur }}
-            {{ selectedPlayer.nom_joueur }}
+            {{ selectedPlayer.nom_joueur }} ({{(selectedPlayer.pays)}})
           </h4>
-          <p><strong>Poste :</strong> {{ selectedPlayer.poste }}</p>
-          <p><strong>Âge :</strong> {{ getAge(selectedPlayer) }} ans</p>
-          <p><strong>Taille :</strong> {{ selectedPlayer.taille * 100 }} cm</p>
+          <p>
+            <strong>{{ $t("terrain.poste") }}:</strong>
+            {{ selectedPlayer.poste }}
+          </p>
+          <p>
+            <strong>{{ $t("terrain.age") }} :</strong>
+            {{ getAge(selectedPlayer) }} {{ $t("terrain.ans") }}
+          </p>
+          <p>
+            <strong>{{ $t("terrain.taille") }} :</strong>
+            {{ selectedPlayer.taille * 100 }} cm
+          </p>
         </div>
       </div>
 
@@ -120,10 +128,10 @@
         <div class="subPlayer">
           <h3>{{ selectedMatch.team1_country }}</h3>
           <p>
-            Coach :
+            {{ $t("terrain.coach") }} :
             <b>{{ selectedMatch.team1_coach }}</b>
           </p>
-          <h4>Remplaçants</h4>
+          <h4>{{ $t("terrain.remplacants") }}</h4>
           <ul>
             <li
               v-for="player in getSubstitutes(selectedMatch.team1_id)"
@@ -139,7 +147,7 @@
             Coach :
             <b>{{ selectedMatch.team2_coach }}</b>
           </p>
-          <h4>Remplaçants</h4>
+          <h4>{{ $t("terrain.remplacants") }}</h4>
           <ul>
             <li
               v-for="player in getSubstitutes(selectedMatch.team2_id)"
@@ -169,7 +177,7 @@
           }
     "
     class="button">
-    Réserver votre billet dès à présent
+    {{ $t("terrain.reserverBillet") }}
   </router-link>
 
   <Footer></Footer>
@@ -185,7 +193,9 @@ import Footer from "@/components/Footer.vue";
 import { useEquipeStore } from "@/services/equipe.service";
 import logPage from "@/components/LogPage.vue";
 import { useUserStore } from "@/stores/user";
+import { useI18n } from "vue-i18n";
 
+const { t, locale } = useI18n();
 const terrainToZone = {
   1: "nord",
   2: "est",
@@ -345,6 +355,19 @@ function getAge(player) {
   padding-top: 52px;
 }
 
+.terrainConteneur {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.terrainLayout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .navMatch {
   display: flex;
   justify-content: space-between;
@@ -385,15 +408,17 @@ function getAge(player) {
   display: flex;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 .matchTitle {
-  width: 250px;
-  padding: 10px 18px;
-  border-radius: 20px;
+  width: min(250px, calc(50% - 5px));
+  padding: 8px 14px;
+  border-radius: 16px;
   background-color: var(--rose-pale);
   color: var(--primary-dark);
   font-weight: 600;
   transition: 0.2s ease-in-out;
+  box-sizing: border-box;
 }
 .matchTitle.active,
 .matchTitle:hover {
@@ -438,8 +463,10 @@ function getAge(player) {
 }
 
 .player {
-  width: 100px;
-  height: 100px;
+  width: 6vw;
+  height: 6vw;
+  max-width: 100px;
+  max-height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -447,8 +474,9 @@ function getAge(player) {
 }
 
 .player img {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .leftTeam .poste4 {
@@ -515,21 +543,23 @@ function getAge(player) {
 }
 
 .playerCard {
-  position: absolute;
-  top: 70%;
-  width: 230px;
+  position: static;
+  width: 100%;
   background: transparent;
+  margin-top: 6px;
   padding: 14px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .playerCard.right {
-  right: 0%;
+  left: auto;
+  right: auto;
 }
 
 .playerCard.left {
-  left: 2%;
+  left: auto;
+  right: auto;
 }
 
 .subsContainer {
@@ -555,5 +585,173 @@ function getAge(player) {
 }
 .subPlayer li:hover {
   font-weight: 500;
+}
+
+@media (max-width: 1100px) {
+  .homeButton {
+    margin-left: 0;
+  }
+
+  .matchSelector {
+    flex-wrap: wrap;
+  }
+
+  .matchTitle {
+    width: min(250px, calc(50% - 5px));
+  }
+
+  .rightTeam,
+  .leftTeam {
+    column-gap: 72px;
+    row-gap: 24px;
+  }
+
+  .rightTeam {
+    right: 12%;
+  }
+
+  .leftTeam {
+    left: 12%;
+  }
+
+  .playerCard {
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 780px) {
+  .pageContainer {
+    width: min(100%, calc(100% - 1rem));
+    padding-top: 44px;
+  }
+
+  .navMatch {
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .matchHeader h2,
+  .matchHeader h3 {
+    font-size: 1.2rem;
+  }
+
+  .matchSelector {
+    gap: 8px;
+  }
+
+  .matchTitle {
+    width: calc(50% - 4px);
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 0.88rem;
+    border-radius: 14px;
+  }
+
+  .image {
+    aspect-ratio: auto;
+    min-height: 520px;
+    background-size: cover;
+  }
+
+  .rightTeam,
+  .leftTeam {
+    top: 50%;
+    transform: translateY(-50%) scale(0.82);
+    column-gap: 42px;
+    row-gap: 18px;
+  }
+
+  .rightTeam {
+    right: 2%;
+  }
+
+  .leftTeam {
+    left: 2%;
+  }
+
+  .player {
+    width: 72px;
+    height: auto;
+  }
+
+  .player img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .player .name {
+    font-size: 10px;
+    line-height: 1.1;
+  }
+
+  .playerCard {
+    box-sizing: border-box;
+  }
+
+  .subsContainer {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .pageContainer {
+    width: min(100%, calc(100% - 0.75rem));
+    padding-top: 38px;
+  }
+
+  .matchSelector {
+    gap: 6px;
+  }
+
+  .matchTitle {
+    width: 100%;
+    font-size: 0.86rem;
+    padding: 8px 10px;
+  }
+
+  .button {
+    padding: 9px 12px;
+    font-size: 0.92rem;
+  }
+
+  .image {
+    min-height: 420px;
+  }
+
+  .rightTeam,
+  .leftTeam {
+    column-gap: 24px;
+    row-gap: 14px;
+    transform: translateY(-50%) scale(0.68);
+  }
+
+  .player {
+    width: 64px;
+  }
+
+  .player img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .player .name {
+    font-size: 9px;
+  }
+
+  .subPlayer {
+    padding: 14px;
+  }
+
+  .subPlayer h3,
+  .subPlayer h4 {
+    margin: 0.25rem 0;
+  }
 }
 </style>
