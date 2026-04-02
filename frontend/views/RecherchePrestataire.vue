@@ -94,19 +94,6 @@
         </div>
 
         <div class="boutonsFiltre">
-          <button class="btn-search pointer" type="submit">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              width="16"
-              height="16">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            {{ $t("filter.button.search") }}
-          </button>
           <button class="btn-reset pointer" type="button" @click="resetFilters">
             {{ $t("filter.button.reset") }}
           </button>
@@ -233,7 +220,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import { useI18n } from "vue-i18n";
@@ -249,13 +236,24 @@ const prestataireStore = usePrestataireStore();
 const typePrestataireStore = useTypePrestataireStore();
 const { t, locale } = useI18n();
 
+const props = defineProps({
+  isEmbedded: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const isServiceView = ref(false);
-watch(isServiceView, (newValue) => {
+watch(isServiceView, () => {
   try {
     filters.value.prixMin = null;
     filters.value.prixMax = null;
-
-    searchPrestataires();
+    // Recharge les bonnes données selon la vue
+    if (isServiceView.value) {
+      getValuesServices();
+    } else {
+      getValuesPrestataire();
+    }
   } catch (err) {
     console.error(err);
   }
@@ -269,7 +267,7 @@ const filters = ref({
   prixMax: route.query.prixMax || null,
 });
 
-const appliedFilters = ref({
+const appliedFilters = reactive({
   nom: "",
   category: 0,
   prixMin: null,
@@ -279,35 +277,19 @@ const appliedFilters = ref({
 const prestatairesFiltres = computed(() => {
   return prestataires.value
     .filter((p) => !p.waitingforadmin)
-
     .filter((p) => {
-      if (!appliedFilters.value.nom) return true;
-
+      if (!filters.value.nom) return true;
       const nom = isServiceView.value ? p.nom_service : p.nom_prestataire;
-
-      return nom
-        ?.toLowerCase()
-        .includes(appliedFilters.value.nom.toLowerCase());
+      return nom?.toLowerCase().includes(filters.value.nom.toLowerCase());
     })
-
     .filter((p) => {
-      if (!appliedFilters.value.category || appliedFilters.value.category === 0)
-        return true;
-
-      return (
-        Number(p.id_type_prestataire) === Number(appliedFilters.value.category)
-      );
+      if (!filters.value.category || filters.value.category === 0) return true;
+      return Number(p.type_prestataire_id) === Number(filters.value.category);
     })
-
     .filter((p) => {
       if (!isServiceView.value) return true;
-
-      if (appliedFilters.value.prixMin && p.prix < appliedFilters.value.prixMin)
-        return false;
-
-      if (appliedFilters.value.prixMax && p.prix > appliedFilters.value.prixMax)
-        return false;
-
+      if (filters.value.prixMin && p.prix < filters.value.prixMin) return false;
+      if (filters.value.prixMax && p.prix > filters.value.prixMax) return false;
       return true;
     });
 });
@@ -317,7 +299,8 @@ onMounted(() => {
     getValuesTypePrestataire();
 
     if (Object.keys(route.query).length > 0) {
-      searchPrestataires();
+      // Charge d'abord les données, puis applique les filtres
+      getValuesPrestataire().then(() => searchPrestataires());
     } else {
       getValuesPrestataire();
     }
@@ -337,9 +320,20 @@ function resetFilters() {
     prixMax: null,
   };
 
-  appliedFilters.value = { ...filters.value };
+  appliedFilters.nom = "";
+  appliedFilters.category = 0;
+  appliedFilters.prixMin = null;
+  appliedFilters.prixMax = null;
 
-  router.push({ path: "/", query: {}, hash: "#liste_prestataires" });
+  if (!props.isEmbedded) {
+    router.push({
+      name: "RecherchePresta",
+      params: { ...route.params },
+      query: {},
+      hash: "#liste_prestataires",
+    });
+  }
+
   getValuesPrestataire();
 }
 /**
@@ -355,6 +349,7 @@ function goToSpecificPrestataire(idPresta) {
   router.push({
     name: "ShowPrestataire",
     params: {
+      lang: route.params.lang,
       id: idPresta,
     },
   });
@@ -369,11 +364,9 @@ function goToSpecificPrestataire(idPresta) {
 async function getValuesServices() {
   try {
     const res = await serviceStore.GetServices();
-    // Vérifier que res.data est un tableau
-    if (res && res.data && Array.isArray(res.data)) {
+    if (res && res.data && Array.isArray(res.data.services)) {
       prestataires.value = res.data.services;
     } else {
-      console.error("Les données reçues ne sont pas un tableau:", res);
       prestataires.value = [];
     }
   } catch (err) {
@@ -408,6 +401,7 @@ async function getValuesTypePrestataire() {
     // Vérifier que res.data.result est un tableau
     if (res && res.data && res.data.result && Array.isArray(res.data.result)) {
       type_prestataire.value = res.data.result;
+      console.log(type_prestataire.value[0])
     } else {
       console.error("Les données reçues ne sont pas valides:", res);
       type_prestataire.value = [];
@@ -421,23 +415,19 @@ async function getValuesTypePrestataire() {
  * Applique les filtres de recherche et met à jour l’URL avec les paramètres sélectionnés.
 */
 async function searchPrestataires() {
-  appliedFilters.value = {
-    nom: filters.value.nom,
-    category: filters.value.category,
-    prixMin: filters.value.prixMin,
-    prixMax: filters.value.prixMax,
-  };
-
-  router.push({
-    path: "/",
-    query: {
-      nom: filters.value.nom || undefined,
-      category: filters.value.category || undefined,
-      prixMin: filters.value.prixMin || undefined,
-      prixMax: filters.value.prixMax || undefined,
-    },
-    hash: "#liste_prestataires",
-  });
+  if (!props.isEmbedded) {
+    router.push({
+      name: "RecherchePresta",
+      params: { ...route.params },
+      query: {
+        nom: filters.value.nom || undefined,
+        category: filters.value.category || undefined,
+        prixMin: filters.value.prixMin || undefined,
+        prixMax: filters.value.prixMax || undefined,
+      },
+      hash: "#liste_prestataires",
+    });
+  }
 }
 </script>
 
@@ -712,32 +702,6 @@ input:checked + .slider:before {
   flex-direction: column;
   gap: 10px;
   padding-top: 4px;
-}
-
-.btn-search {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 11px 20px;
-  background: var(--rose-logo);
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.88rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  box-shadow: 0 4px 16px rgba(232, 80, 130, 0.35);
-}
-
-.btn-search:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(232, 80, 130, 0.5);
 }
 
 .btn-reset {

@@ -291,16 +291,42 @@
     "est": "Est",
     "ouest": "Ouest"
   },
-  "filter": {
-    "titleFilter": "Retrouvez les Prestataires de la Mintonette Cup 2026 !",
-    "slider": {
-      "people": "pers.",
-      "tarif": "Tarif",
-      "service": "Services"
-    },
-    "contact": "Contacts",
-    "more": "En savoir plus"
+"filter": {
+  "titleFilter": "Retrouvez les Prestataires de la Mintonette Cup 2026 !",
+  "slider": {
+    "prestataire": "Prestataires",
+    "service": "Services",
+    "people": "pers.",
+    "tarif": "Tarif"
   },
+  "name": {
+    "title": "Nom",
+    "nameInput": "Rechercher par nom..."
+  },
+  "categorie": {
+    "title": "Catégorie",
+    "all": "Toutes"
+  },
+  "price": {
+    "title": "Prix",
+    "minPrice": "Min",
+    "maxPrice": "Max"
+  },
+  "button": {
+    "search": "Rechercher",
+    "reset": "Réinitialiser"
+  },
+  "description": "Description",
+  "info": {
+    "title": "Informations",
+    "service": "Services",
+    "tarif": "Tarif",
+    "capacite": "Capacité",
+    "people": "pers."
+  },
+  "contact": "Contacts",
+  "more": "En savoir plus"
+},
   "messagesServices": {
     "aucuneLangues": "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?",
     "queFR": "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?",
