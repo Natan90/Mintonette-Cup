@@ -1,7 +1,17 @@
 const pool = require("../database/db");
 
 async function getServices() {
-  const servicesResult = await pool.query(`SELECT * FROM Services`);
+  const servicesResult = await pool.query(`
+    SELECT 
+      s.*,
+      p.*,
+      t.*
+    FROM Services s
+    JOIN Prestataire p
+    ON s.prestataire_id = p.id_prestataire
+    JOIN Type_prestataire t
+    ON p.type_prestataire_id = t.id_type_prestataire
+    `);
 
   const articlesResult = await pool.query(`SELECT * FROM Article`);
 
@@ -41,7 +51,7 @@ async function getServiceByIdService(id_service) {
 
 async function getArticleByIdService(id_service) {
   const checkService = await pool.query(
-    `SELECT * FROM Services WHERE id_service = $1`,
+    `SELECT * FROM Services WHERE id_service = $1;`,
     [id_service]
   );
 
@@ -49,7 +59,12 @@ async function getArticleByIdService(id_service) {
     throw { status: 404, message: "Service non trouvé" };
 
   const articlesResult = await pool.query(
-    `SELECT * FROM Article WHERE service_id = $1;`,
+    `SELECT   
+      a.*,
+      COUNT(a.id_article) AS nb_article 
+    FROM Article a 
+    WHERE service_id = $1
+    GROUP BY a.id_article;`,
     [id_service]
   );
 
@@ -60,7 +75,7 @@ async function getArticleByIdService(id_service) {
 
 async function getActiviteByIdService(id_service) {
   const checkService = await pool.query(
-    `SELECT * FROM Services WHERE id_service = $1`,
+    `SELECT * FROM Services WHERE id_service = $1;`,
     [id_service]
   );
 
@@ -68,7 +83,12 @@ async function getActiviteByIdService(id_service) {
     throw { status: 404, message: "Service non trouvé" };
 
   const activitesResult = await pool.query(
-    `SELECT * FROM Activite WHERE service_id = $1;`,
+    `SELECT 
+      a.*,
+      COUNT(a.id_activite) AS nb_activite
+    FROM Activite a
+    WHERE service_id = $1
+    GROUP BY a.id_activite`,
     [id_service]
   );
 

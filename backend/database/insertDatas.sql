@@ -242,28 +242,25 @@ VALUES
     ('Articles créatifs / personnalisables');
 
 INSERT INTO
-    Type_prestataire (nom_type_prestataire, is_activity)
+    Type_prestataire (nom_type_prestataire)
 VALUES
     (
         '{
         "fr": "Animation",
         "en": "Activity"
-      }',
-        true
+      }'
     ),
     (
         '{
         "fr": "Boutique",
         "en": "Shop"
-      }',
-        false
+      }'
     ),
     (
         '{
         "fr": "Restauration",
         "en": "Food"
-      }',
-        false
+      }'
     );
 
 INSERT INTO
@@ -319,7 +316,7 @@ VALUES
 
 
 INSERT INTO Services 
-      (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
+      (nom_service, descri_service, visible_public, besoin, activate, is_activity, prestataire_id) VALUES
       (
         'Animation musicale sur scène',
         '{
@@ -332,6 +329,7 @@ INSERT INTO Services
           "en": "Stage and sound system required"
         }',
         false,
+        true,
         2
       ),
 
@@ -346,6 +344,7 @@ INSERT INTO Services
           "fr": "Système audio requis",
           "en": "Audio system required"
         }',
+        true,
         true,
         2
       ),
@@ -362,6 +361,7 @@ INSERT INTO Services
           "en": "Secure area required"
         }',
         false,
+        true,
         2
       ),
 
@@ -376,6 +376,7 @@ INSERT INTO Services
           "fr": "Espace clos obligatoire",
           "en": "Enclosed area required"
         }',
+        true,
         true,
         2
       ),
@@ -392,6 +393,7 @@ INSERT INTO Services
           "en": "Flat surface required"
         }',
         false,
+        false,
         3
       ),
 
@@ -406,6 +408,7 @@ INSERT INTO Services
           "fr": "Accès électrique requis",
           "en": "Power access required"
         }',
+        false,
         false,
         3
       ),
@@ -422,6 +425,7 @@ INSERT INTO Services
           "en": "Covered stand recommended"
         }',
         false,
+        false,
         3
       ),
 
@@ -437,6 +441,7 @@ INSERT INTO Services
           "en": "Covered space required"
         }',
         true,
+        false,
         3
       );
 

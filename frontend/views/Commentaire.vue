@@ -255,7 +255,7 @@ import { useI18n } from "vue-i18n";
 import NavView from "@/components/NavView.vue";
 import Footer from "@/components/Footer.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
-import { useCommentaireStore } from "@/stores/commentaire";
+import { useCommentaireStore } from "@/services/commentaire";
 import { useMailBoxStore } from "@/services/reception_box.service";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
