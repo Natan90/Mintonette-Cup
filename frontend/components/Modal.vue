@@ -2,7 +2,6 @@
   <div v-if="modelValue" class="modal-backdrop">
     <div class="modal-content" :class="{ bigger: bigger, medium: medium }">
       <span class="modal-close" @click="close">&times;</span>
-      <div v-if="modelValue" class="modal-backdrop" @click.self="close"></div>
       <slot name="content"></slot>
     </div>
   </div>  

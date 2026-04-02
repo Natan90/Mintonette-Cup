@@ -287,12 +287,6 @@
       }
     }
   },
-  "gradin": {
-    "siegeDispo": "Siège disponible",
-    "siegeReserv": "Siège réservé",
-    "siegeproprio": "Siège acheté par vous",
-    "siegeSelec": "Siège sélectionné"
-  },
   "zones": {
     "nord": "Nord",
     "sud": "Sud",
@@ -467,5 +461,15 @@
     "age" :"Âge",
     "poste": "Poste",
     "ans": "Ans"
+  },
+  "gradin":{
+    "retourAccueil":"Retour à l'accueil",
+    "gradin": "Gradin",
+    "matchSurTerrain":"Matchs sur ce terrain",
+    "reservation": "Réservation de place",
+    "siegeDispo": "Siège disponible",
+    "siegeReserv": "Siège réservé",
+    "siegeproprio": "Siège acheté par vous",
+    "siegeSelec": "Siège sélectionné"
   }
 }

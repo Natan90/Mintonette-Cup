@@ -3,30 +3,31 @@
   <Modal v-model="showService" :bigger="true">
     <template #content>
       <div class="bloc_texte service_details">
-        <h1 class="page_title" v-html="titre_service"></h1>
-
-        <p class="service_description" v-html="descri_service"></p>
-
-        <div class="service_besoin" v-if="!oneService.visible_public">
-          <h3>Besoin</h3>
-          <p v-html="besoin_service"></p>
+        <div v-if="isActivityService" class="service_items_list">
+          <h3>Activités</h3>
+          <div v-if="activitesList.length > 0">
+            <div v-for="(item, index) in activitesList" :key="index" class="service_item_card">
+              <p><strong>{{ item.nom_activite }}</strong></p>
+              <p>📅 {{ item.date_activite?.slice(0, 10) }} à {{ item.date_activite?.slice(11, 16) }}</p>
+              <p>👥 {{ item.nb_participant }} participants max</p>
+              <p>💰 {{ item.prix_activite }} €</p>
+            </div>
+          </div>
+          <p v-else>Aucune activité disponible.</p>
         </div>
 
-        <div class="service_infos">
-          <div class="info_item">
-            <span class="info_label">Prix</span>
-            <span class="info_value">{{ oneService.prix }} €</span>
+        <!-- Articles -->
+        <div v-else class="service_items_list">
+          <h3>Articles</h3>
+          <div v-if="articlesList.length > 0">
+            <div v-for="(item, index) in articlesList" :key="index" class="service_item_card">
+              <p><strong>{{ item.nom_article }}</strong></p>
+              <p>📦 Stock : {{ item.stock }}</p>
+              <p>💰 {{ item.prix_article }} €</p>
+            </div>
           </div>
-
-          <div class="info_item">
-            <span class="info_label">Participants max</span>
-            <span class="info_value">{{ oneService.nb_participants }}</span>
-          </div>
+          <p v-else>Aucun article disponible.</p>
         </div>
-        <!-- Bouton S'inscrire uniquement pour les services des autres prestataires -->
-        <button v-if="!(userStore.isConnected && userStore.prestaId == idPresta)" @click="addService(oneService)">
-          S'inscrire
-        </button>
       </div>
     </template>
   </Modal>
@@ -127,7 +128,7 @@
                   <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
                   <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
                   <span class="diff_button">
-                    <button class="btn_info" @click="getOneService(item)">
+                    <button class="btn_info" @click="getValuesArticlesOrActivitesByIdService(item.id_service, isActivityService)">
                       Voir
                     </button>
                     <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
@@ -175,7 +176,7 @@
 
 <script setup>
 import { useNavigationStore } from "@/stores/navigation";
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch, onActivated } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import NavView from "@/components/NavView.vue";
 import Modal from "@/components/Modal.vue";
@@ -216,6 +217,8 @@ const oneService = ref({
   visible_public: true,
 });
 
+const isActivityService = ref(false);
+
 const titre_service = ref("");
 const descri_service = ref("");
 const besoin_service = ref("");
@@ -228,6 +231,8 @@ const onePresta = ref({
   prenom_utilisateur: "",
   nom_utilisateur: "",
 });
+const articlesList = ref([]);
+const activitesList = ref([]);
 
 const services = ref([]);
 const idPresta = computed(() => route.params.id);
@@ -315,14 +320,46 @@ function goToEditPrestataire() {
  * Récupère les informations du prestataire ainsi que ses services associés.
 */
 async function getValuesPrestataireById(id_presta) {
-  try {
-    const res = await prestataireStore.GetPrestataireById(id_presta);
+  try { 
+    const res = await prestataireStore.GetPrestataireByIdPrestataire(id_presta);
     onePresta.value = res.data.prestataire;
+    isActivityService.value = res.data.prestataire.is_activity ?? false;
 
-    console.log("onePresta : " + JSON.stringify(onePresta.value));
-    const resServices = await serviceStore.GetServiceByIdPrestataire(id_presta);
+    const id_user = res.data.prestataire.id_utilisateur;
 
+    const resServices = await serviceStore.GetServiceByIdPrestataire(id_user);
     services.value = resServices.data.services;
+
+  } catch (err) {
+    console.error("Erreur lors de la récupération des données :", err);
+  }
+}
+async function getValuesArticlesOrActivitesByIdService(id_service, isActivityService) {
+  showService.value = true;
+  try { 
+    let res = null;
+    if (isActivityService) {
+      res = await serviceStore.GetActiviteByIdService(id_service);
+      console.log(res.data.activites);
+      activitesList.value = res.data.activites.map(a => ({
+        id_activite: a.id_activite,
+        nom_activite: a.nom_activite,
+        nb_participant: a.nb_participant,
+        prix: Number(a.prix_activite),
+        date_activite: a.date_activite?.slice(0, 10),
+        heure_activite: a.date_activite?.slice(11, 16),
+      }));
+    } 
+    else {
+      res = await serviceStore.GetArticleByIdService(id_service);
+      console.log(res.data.articles);
+      articlesList.value = res.data.articles.map(a => ({
+        id_article: a.id_article,
+        nom_article: a.nom_article,
+        stock: a.stock,
+        prix: Number(a.prix_article),
+      }));
+    }
 
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);

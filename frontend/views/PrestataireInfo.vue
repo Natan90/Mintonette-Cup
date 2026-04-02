@@ -277,7 +277,7 @@
 
         <!-- Bouton d'inscription (mode ajout) -->
         <div class="button_container" v-else>
-          <button @click="addPrestataire()">
+          <button @click="addPrestataire()" :disabled="alreadyAdded">
             {{ $t("user.buttonInscription") }}
           </button>
         </div>
@@ -352,6 +352,7 @@ const pendingNavigation = ref(null);
 const allowLeave = ref(false);
 const isModalService = ref(false);
 const clickWhileContinue = ref(false);
+const alreadyAdded = ref(false);
 
 // -- Services --
 const isActivityService = ref(false);
@@ -449,28 +450,15 @@ watch(checkedItem_presta, (v) => { if (!isSyncing.value) checkedItem.value = v; 
 watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscription.value = v; });
 
 // ── onBeforeRouteLeave ────────────────────────────────────
-// onBeforeRouteLeave((to, from, next) => {
-//   if (allowLeave.value || to.name === "AddByService") {
-//     next();
-//     return;
-//   }
+onBeforeRouteLeave((to, from, next) => {
+  if (to.name !== "AddByService") {
+    prestataireInfoStore.clearStore();
+    next();
+    return;
+  }
 
-//   const hasData =
-//     nom_presta.value ||
-//     descri_presta.value ||
-//     mail_presta.value ||
-//     services.value.length > 0;
-
-//   if (!hasData) {
-//     prestataireInfoStore.clearStore();
-//     next();
-//     return;
-//   }
-
-//   pendingNavigation.value = to;
-
-//   next(false);
-// });
+  next();
+});
 
 // ── onMounted ────────────────────────────────────
 onMounted(async () => {
@@ -741,7 +729,9 @@ async function addServiceToPrestataire() {
       visible_public: Boolean(visiblePublic.value),
     });
 
-    const newServiceId = res.data.id_service;
+    const newServiceId = res.data.service.id_service;
+
+    console.log(JSON.stringify(res.data.service))
 
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";
@@ -954,12 +944,12 @@ async function getValuesPrestataire() {
   if (!prestaId.value) return;
 
   try {
-    const res = await prestataireStore.GetPrestataireById(userStore.userId);
+    const res = await prestataireStore.GetPrestataireByIdUtilisateur(userStore.userId);
     console.log("res.data complet :", res.data);
 
     const presta = res.data.prestataire;
 
-    getServiceByIdPrestataire(prestaId.value);
+    await getServiceByIdPrestataire(prestaId.value);
 
     if (!presta) {
       console.error("Prestataire non trouvé :", prestaId.value);
@@ -1029,6 +1019,11 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
   try {
+    if (services.value.length === 0) {
+      message.value = "Vous ne pouvez pas devenir prestataire sans proposer de service.";
+      messageType.value = "error";
+      return;
+    }
     const res = await prestataireStore.BecomePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
@@ -1038,11 +1033,12 @@ async function addPrestataire() {
       type: Number(selectedTypeId_presta.value)
     });
 
+    alreadyAdded.value = true;
     userStore.prestaId = res.data.id_prestataire;
 
     await sendMailToAdmin(false);
 
-    message.value = res.data.message;
+    message.value = "Votre demande de prestation a été ajoutée avec succès et est en attente de validation.";
     messageType.value = "success";
   } catch (err) {
     message.value = err.response?.data?.error || err.message;

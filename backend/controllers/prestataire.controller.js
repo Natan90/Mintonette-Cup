@@ -12,21 +12,26 @@ exports.getPrestataire = async (req, res) => {
   }
 };
 
-exports.getPrestataireById = async (req, res) => {
+exports.getPrestataireByIdPrestataire = async (req, res) => {
   try {
-    const id_presta = req.params.id;
+    const id_presta = req.params.id_presta;
 
-    // if (type === "utilisateur") {
-    //   const result = await prestataireService.getPrestataireByIdUser(id);
-    //   return res.status(201).json(result);
-    // }
-
-    // if (type === "prestataire") {
-    const result = await prestataireService.getPrestataireById(id_presta);
+    const result = await prestataireService.getPrestataireByIdPrestataire(id_presta);
     return res.status(201).json(result);
-    // }
+  } catch (err) {
+    console.error(err);
+    const status = err.status || 500;
+    const message = err.message || "Erreur serveur";
+    res.status(status).json({ error: message });
+  }
+};
 
-    // return res.status(400).json({ error: "Type invalide" });
+exports.getPrestataireByIdUtilisateur = async (req, res) => {
+  try {
+    const id_user = req.params.id_user;
+
+    const result = await prestataireService.getPrestataireByIdUtilisateur(id_user);
+    return res.status(201).json(result);
   } catch (err) {
     console.error(err);
     const status = err.status || 500;
