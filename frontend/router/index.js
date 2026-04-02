@@ -81,6 +81,13 @@ const routes = [
             props: true,
             meta: { requiresUserId: true },
           },
+          {
+            path: ":id_presta/edit/service/:id",
+            name: "EditByService",
+            component: ArticlesAndActivities,
+            props: true,
+            meta: { requiresUserId: true },
+          },
         ],
       },
       {

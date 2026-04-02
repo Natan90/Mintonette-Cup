@@ -149,6 +149,9 @@
 
       <!-- Liste des activités ajoutées -->
       <div class="items_list">
+        <p class="list_hint" v-if="activitesList.length > 0">
+          Cliquez sur une activité pour la modifier.
+        </p>
         <div v-if="activitesList.length > 0" v-for="(item, index) in activitesList" :key="index" class="item_card" @click="getActiviteByIdActivity(item.id_activite)">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_activite }}</span>
@@ -217,6 +220,9 @@
 
       <!-- Liste des articles ajoutés -->
       <div class="items_list">
+        <p class="list_hint" v-if="articlesList.length > 0">
+          Cliquez sur un article pour le modifier.
+        </p>
         <div v-if="articlesList.length > 0" v-for="(item, index) in articlesList" :key="index" class="item_card" @click="getArticleByIdArticle(item.id_article)">
           <div class="item_card_header">
             <span class="item_name">{{ item.nom_article }}</span>
@@ -390,16 +396,8 @@ onBeforeRouteLeave((to, from, next) => {
 
   if (isGoingBack.value) {
     prestataireInfoStore.clearItemsStore();
-    next();
-    return;
   }
-
-  if (!showLeaveDialog.value) {
-    pendingNavigation.value = to;
-    showLeaveDialog.value = true;
-  }
-
-  next(false);
+  next();
 });
 
 onMounted(async () => {
@@ -461,6 +459,7 @@ function goBack() {
 
 // ── Articles / Activités ──────────────────────────────────
 async function getValuesByIsActivity() {
+  console.log("isActivityService", isActivityService.value)
   if (isActivityService.value) 
     await getValuesActivities(id_service.value);
   else 
@@ -475,6 +474,7 @@ async function getValuesByIsActivity() {
 async function getValuesActivities(id_service) {
   try {
     const res = await serviceStore.GetActiviteByIdService(id_service);
+    console.log(res.data.activites);
     activitesList.value = res.data.activites.map(a => ({
       id_activite: a.id_activite,
       nom_activite: a.nom_activite,
@@ -888,6 +888,18 @@ function showRecapService() {
   margin-top: 4px;
   border-top: 1.5px dashed var(--log-border);
   padding-top: 16px;
+}
+
+.list_hint {
+  font-size: 0.82em;
+  color: var(--primary-light);
+  font-style: italic;
+  text-align: center;
+  margin: 0 0 10px 0;
+  padding: 6px 12px;
+  background: #f0f7f1;
+  border-radius: 8px;
+  border: 1px dashed var(--primary-light);
 }
 
 .list_empty {

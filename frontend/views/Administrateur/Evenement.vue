@@ -71,7 +71,7 @@
 
       <div class="form_group">
         <label>Description de l'évènement</label>
-        <Editor v-model="descri_evenement" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
+        <Editor v-model="descri_evenement" api-key="jcf821cdswfhl8pedi7pvc3e0plaedjg1lidgfi6d5kvww7a" :init="{
           height: 450,
           menubar: false,
           plugins: 'lists link image table media code preview anchor',

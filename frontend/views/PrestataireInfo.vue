@@ -36,7 +36,7 @@
           <label>Description du service</label>
           <Editor
             v-model="currentDescri"
-            api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
+            api-key="jcf821cdswfhl8pedi7pvc3e0plaedjg1lidgfi6d5kvww7a"
             :init="{
               height: 200,
               menubar: false,
@@ -270,7 +270,7 @@
           </label>
           <Editor
             v-model="descri_presta"
-            api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
+            api-key="jcf821cdswfhl8pedi7pvc3e0plaedjg1lidgfi6d5kvww7a"
             :init="{
               height: 600,
               menubar: false,
@@ -1078,13 +1078,13 @@ async function showOneService(id_service) {
     );
 
     router.push({
-      name: "AddByService",
+      name: "EditByService",
       params: {
-        id_presta: prestaId.value,
+        id_presta: s.prestataire_id,
         id: id_service,
       },
       query: {
-        isActivityService: isActivityService.value,
+        isActivityService: s.is_activity,
         isShowingRecapService: true,
       },
     });
