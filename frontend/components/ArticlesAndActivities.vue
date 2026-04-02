@@ -61,18 +61,29 @@
   <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave">
     <v-card title="Quitter la page ?">
       <v-card-text>
-        <span v-if="!isGoingBack">
-          Vous n'avez ajouté aucune donnée. Le service créé précédemment sera <strong>perdu</strong> si vous quittez.
+        <span v-if="(isActivityService ? activitesList : articlesList).length === 0">
+          Vous devez ajouter au moins 
+          <strong>{{ isActivityService ? 'une activité' : 'un article' }}</strong> 
+          avant de quitter cette page.
         </span>
         <span v-else-if="hasData">
-          Vous avez des modifications <strong>non sauvegardées</strong>. Si vous quittez cette page, toutes vos données
-          seront perdues.
+          Vous avez des modifications <strong>non sauvegardées</strong>. 
+          Si vous quittez cette page, toutes vos données seront perdues.
+        </span>
+        <span v-else>
+          Vous n'avez ajouté aucune donnée. Voulez-vous quand même quitter cette page ?
         </span>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text="Rester sur la page" @click="cancelLeave()"></v-btn>
-        <v-btn color="error" text="Quitter quand même" @click="confirmLeave()"></v-btn>
+        <!-- Bouton "Quitter" masqué si liste vide -->
+        <v-btn 
+          v-if="(isActivityService ? activitesList : articlesList).length > 0"
+          color="error" 
+          text="Quitter quand même" 
+          @click="confirmLeave()">
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -160,7 +171,6 @@
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div> -->
       <div v-if="activitesList.length > 0" class="already_added_banner">
-        <p class="already_added_return">Retournez à la page précédente pour vous inscrire.</p>
         <div class="already_added_info">
           <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
           <div>
@@ -228,7 +238,6 @@
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div> -->
       <div v-if="activitesList.length > 0" class="already_added_banner">
-        <p class="already_added_return">Retournez à la page précédente pour vous inscrire.</p>
         <div class="already_added_info">
           <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
           <div>
@@ -367,13 +376,10 @@ onBeforeRouteLeave((to, from, next) => {
     return;
   }
 
-  if (isGoingBack.value) {
-    prestataireInfoStore.clearItemsStore();
-    next();
-    return;
-  }
+  const list = isActivityService.value ? activitesList.value : articlesList.value;
+  const isEmpty = list.length === 0;
 
-  if (hasData.value) {
+  if (isEmpty) {
     if (!showLeaveDialog.value) {
       pendingNavigation.value = to;
       showLeaveDialog.value = true;
@@ -382,7 +388,18 @@ onBeforeRouteLeave((to, from, next) => {
     return;
   }
 
-  next();
+  if (isGoingBack.value) {
+    prestataireInfoStore.clearItemsStore();
+    next();
+    return;
+  }
+
+  if (!showLeaveDialog.value) {
+    pendingNavigation.value = to;
+    showLeaveDialog.value = true;
+  }
+
+  next(false);
 });
 
 onMounted(async () => {
@@ -425,7 +442,7 @@ function confirmLeave() {
   pendingNavigation.value = null;
 
   if (target) {
-    navStore.previousRoute = route.fullPath;
+    navStore.previousRoute = route.name;
     router.push(target);
   }
 }
@@ -435,6 +452,7 @@ function confirmLeave() {
 function goBack() {
   isGoingBack.value = true;
   const target = navStore.previousRoute;
+  navStore.previousRoute = route.name;
   if (target) {
     router.push(target);
   }
@@ -953,14 +971,6 @@ function showRecapService() {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-
-.already_added_return {
-  font-size: 0.9em;
-  color: #5a7a5e;
-  font-style: italic;
-  margin: 0;
-  text-align: center;
 }
 
 .already_added_icon {

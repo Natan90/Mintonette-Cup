@@ -93,7 +93,7 @@
 
         <!-- Message erreur -->
         <div
-          v-if="message && showService && messageType === 'error'"
+          v-if="message && isModalService && messageType === 'error'"
           class="message"
           :class="
             messageType === 'error' ? 'message-error' : 'message-success'
@@ -306,7 +306,7 @@
             placeholder="0123456789" />
         </div>
 
-        <!-- <div class="form_group">
+        <div class="form_group">
           <div class="ajout_services">
             <label>{{
               $t("prestataireInfo.services", {
@@ -317,7 +317,6 @@
               + Ajouter
             </button>
           </div>
-
           <div class="service_input">
             <div
               v-for="(item, index) in services"
@@ -350,7 +349,7 @@
               </button>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <!-- Message de succès ou d'erreur après action -->
         <div
@@ -374,7 +373,7 @@
         </div>
 
         <!-- Bouton d'inscription (mode ajout) -->
-        <div class="button_container" v-else>
+        <div class="button_container" v-else-if="pathAdd">
           <button @click="addPrestataire()" :disabled="alreadyAdded">
             {{ $t("user.buttonInscription") }}
           </button>
@@ -465,6 +464,7 @@ const services = ref([]);
 const desactivate = ref(true);
 const deleteService = ref(false);
 const serviceDelete = ref([]);
+const showServicesBlock = ref(false);
 
 // -- Types prestataire --
 const type_prestataire = ref([]);
@@ -573,12 +573,14 @@ watch(continueInscription_service, (v) => {
 
 // ── onBeforeRouteLeave ────────────────────────────────────
 onBeforeRouteLeave((to, from, next) => {
-  if (to.name !== "AddByService") {
-    prestataireInfoStore.clearStore();
+  if (to.name === "AddByService" || getStoreValues.value) {
     next();
     return;
   }
 
+  prestataireInfoStore.clearStore();
+  userStore.prestaId = null;
+  alreadyAdded.value = false;
   next();
 });
 
@@ -587,18 +589,20 @@ onMounted(async () => {
   try {
     await getValuesTypePresta();
     await getValuesEveryType();
-    await getServiceByIdPrestataire(prestaId.value);
-
+    await getServiceByIdPrestataire(userStore.prestaId || prestaId.value);
+    
     if (getStoreValues.value) {
+      prestataireInfoStore.comingFromAddByService = false;
       nom_presta.value = nom.value;
       descri_presta.value = descri.value;
       mail_presta.value = mail.value;
       tel_presta.value = tel.value;
       selectedTypeId_presta.value = selectedTypeId.value || 1;
       checkedItem_presta.value = Array.isArray(checkedItem.value)
-        ? checkedItem.value
-        : [];
+      ? checkedItem.value
+      : [];
       continueInscription_service.value = continueInscription.value;
+
     } else {
       isSyncing.value = true;
       prestataireInfoStore.clearStore();
@@ -652,7 +656,7 @@ async function deletePrestaIfNoService() {
       await adminStore.DeletePrestataire(userStore.prestaId);
       userStore.prestaId = null;
       alreadyAdded.value = false;
-      message.value = "Inscription annulée.";
+      message.value = "Vous n'avez pas ajouté de service, veuillez recommencer.";
       messageType.value = "error";
     }
   } catch (err) {
@@ -676,7 +680,29 @@ const changeDescriLang = () => {
   isFrench.value = !isFrench.value;
 };
 
-function showModalByService() {
+async function showModalByService() {
+  if (pathAdd.value && !alreadyAdded.value) {
+    try {
+      const res = await prestataireStore.BecomePrestataire(userStore.userId, {
+        nom: nom_presta.value,
+        descri: descri_presta.value,
+        mail: mail_presta.value,
+        tel: tel_presta.value,
+        specificite: selectedNames.value,
+        type: Number(selectedTypeId_presta.value),
+      });
+
+      const newPrestaId = res.data.user.id_prestataire;
+      userStore.prestaId = newPrestaId;
+      alreadyAdded.value = true;
+
+    } catch (err) {
+      message.value = err.response?.data?.error || err.message;
+      messageType.value = "error";
+      return;
+    }
+  }
+
   isModalService.value = true;
   const currentType = type_prestataire.value.find(
     (t) => t.id_type_prestataire === selectedTypeId_presta.value,
@@ -881,6 +907,8 @@ async function addServiceToPrestataire() {
       visible_public: Boolean(visiblePublic.value),
     });
 
+    console.log(res.data.service);
+
     const newServiceId = res.data.service.id_service;
     isModalService.value = false;
 
@@ -1073,6 +1101,7 @@ async function showOneService(id_service) {
  * @param {Integer} id_presta - L'id du prestataire
  */
 async function getServiceByIdPrestataire(id_presta) {
+
   if (!id_presta) return;
 
   const resServices = await serviceStore.GetServiceByIdPrestataire(id_presta);
@@ -1194,6 +1223,7 @@ async function addPrestataire() {
     const newPrestaId = res.data.user.id_prestataire;
     userStore.prestaId = newPrestaId;
     alreadyAdded.value = true;
+    showServicesBlock.value = true;
     
     await sendMailToAdmin(false);
 
