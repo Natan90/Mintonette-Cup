@@ -28,7 +28,9 @@
     "anonyme": "Anonyme"
   },
   "bouton": {
-    "retour": "Retour"
+    "retour": "Retour",
+    "annuler": "Annuler",
+    "confirmer": "Confirmer"
   },
   "zoneMap": {
     "planZones": "Plan des zones prestataires",

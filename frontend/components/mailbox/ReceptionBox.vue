@@ -1,4 +1,17 @@
 <template>
+  <v-dialog v-model="isConfirmOpen" max-width="500">
+    <v-card :title="$t('boiteRecep.recu.supprimer')">
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn :text="$t('bouton.annuler')" @click="cancelDelete"></v-btn>
+        <v-btn
+          color="error"
+          :text="$t('bouton.confirmer')"
+          @click="confirmDelete"></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
   <Modal v-model="isSelectedMessage" :bigger="true">
     <template #content>
       <div class="mailContent">
@@ -36,7 +49,7 @@
           <button
             class="buttonMailbox"
             type="button"
-            @click="deleteMessage(messageSelected.id_message)">
+            @click="askDeleteMessage(messageSelected.id_message)">
             <span>
               <img src="/trash.svg" alt="trash" />
             </span>
@@ -78,7 +91,7 @@
           <button
             class="buttonMailbox"
             type="button"
-            @click.stop="deleteMessage(message.id_message)">
+            @click.stop="askDeleteMessage(message.id_message)">
             <span>
               <img src="/trash.svg" alt="trash" />
             </span>
@@ -95,19 +108,20 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useMailBoxStore } from "@/services/reception_box.service";
 import { useUserStore } from "@/stores/user";
 import Modal from "../Modal.vue";
 
 const mailBoxStore = useMailBoxStore();
 const userStore = useUserStore();
-const { t } = useI18n();
 
 const messageReceived = ref([]);
 const nbMessageNotRead = ref(0);
 const isSelectedMessage = ref(false);
 const messageSelected = ref([]);
+const isConfirmOpen = ref(false);
+const pendingDeleteId = ref(null);
+const shouldReopenMessage = ref(false);
 
 onMounted(async () => {
   getMessagesById(userStore.userId);
@@ -129,13 +143,43 @@ async function getMessagesById(id_user) {
   }
 }
 /**
- * Supprime un message après confirmation utilisateur.
- * Si le message supprimé est actuellement sélectionné, la sélection est réinitialisée.
- * Recharge ensuite la liste des messages.
+ * Ouvre le modal de confirmation et mémorise le message à supprimer.
+ * Si le message est actuellement ouvert, on le referme temporairement.
  * @param {number|string} id_message - Identifiant du message à supprimer
  */
-async function deleteMessage(id_message) {
-  if (!confirm(t("boiteRecep.recu.supprimer"))) return;
+function askDeleteMessage(id_message) {
+  pendingDeleteId.value = id_message;
+  shouldReopenMessage.value =
+    isSelectedMessage.value && messageSelected.value?.id_message === id_message;
+  isSelectedMessage.value = false;
+  isConfirmOpen.value = true;
+}
+
+/**
+ * Annule la suppression et rouvre le message si nécessaire.
+ */
+function cancelDelete() {
+  isConfirmOpen.value = false;
+
+  if (shouldReopenMessage.value) {
+    isSelectedMessage.value = true;
+  }
+
+  pendingDeleteId.value = null;
+  shouldReopenMessage.value = false;
+}
+
+/**
+ * Confirme la suppression du message sélectionné.
+ */
+async function confirmDelete() {
+  isConfirmOpen.value = false;
+
+  const id_message = pendingDeleteId.value;
+  pendingDeleteId.value = null;
+  shouldReopenMessage.value = false;
+
+  if (!id_message) return;
 
   try {
     await mailBoxStore.removeMessageById(userStore.userId, id_message);
