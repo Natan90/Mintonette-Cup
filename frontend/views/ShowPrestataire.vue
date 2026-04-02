@@ -230,7 +230,7 @@ const onePresta = ref({
 });
 
 const services = ref([]);
-const idPresta = route.params.id;
+const idPresta = computed(() => route.params.id);
 
 watch(
   () => locale.value,
@@ -239,8 +239,8 @@ watch(
   },
 );
 
-onMounted(() => {
-  getValuesPrestataire(idPresta);
+onMounted(async () => {
+  await getValuesPrestataireById(idPresta.value);
   if (!adminStore.services) adminStore.services = "az";
 });
 
@@ -304,7 +304,7 @@ function goBack() {
 function goToEditPrestataire() {
   router.push({
     name: "EditPrestataire",
-    params: { id: idPresta },
+    params: { id: idPresta.value },
   });
 }
 
@@ -314,12 +314,15 @@ function goToEditPrestataire() {
 /**
  * Récupère les informations du prestataire ainsi que ses services associés.
 */
-async function getValuesPrestataire() {
+async function getValuesPrestataireById(id_presta) {
   try {
-    const res = await prestataireStore.GetPrestataireById(idPresta);
+    const res = await prestataireStore.GetPrestataireById(id_presta);
     onePresta.value = res.data.prestataire;
 
-    services.value = res.data.services;
+    console.log("onePresta : " + JSON.stringify(onePresta.value));
+    const resServices = await serviceStore.GetServiceByIdPrestataire(id_presta);
+
+    services.value = resServices.data.services;
 
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
