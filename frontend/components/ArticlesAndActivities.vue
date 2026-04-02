@@ -151,21 +151,24 @@
         </div>
         <p class="list_empty" v-else>Aucune activité ajoutée pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="hasChanged">
-        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
-      </div>
+      <!-- <div class="btn_container" v-if="hasChanged">
+      </div> -->
       <!-- <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div> -->
-      <div v-else-if="activitesList.length > 0" class="already_added_banner">
-        <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
-        <div>
-          <p class="already_added_title">Service ajouté avec succès</p>
-          <p class="already_added_sub">Ce service a déjà été enregistré.</p>
+      <div v-if="activitesList.length > 0" class="already_added_banner">
+        <p class="already_added_return">Retournez à la page précédente pour vous inscrire.</p>
+        <div class="already_added_info">
+          <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
+          <div>
+            <p class="already_added_title">Service ajouté avec succès</p>
+            <p class="already_added_sub">Ce service a déjà été enregistré.</p>
+          </div>
         </div>
+        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
       </div>
       
     </div>
@@ -216,21 +219,24 @@
         </div>
         <p class="list_empty" v-else>Aucun article ajouté pour l'instant.</p>
       </div>
-      <div class="btn_container" v-if="hasChanged">
-        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
-      </div>
+      <!-- <div class="btn_container" v-if="hasChanged">
+      </div> -->
       <!-- <div class="btn_container" v-if="!alreadyAddedService || hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Ajouter ce service</button>
       </div>
       <div class="btn_container" v-else-if="alreadyAddedService && hasChanged">
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div> -->
-      <div v-else-if="articlesList.length > 0" class="already_added_banner">
-        <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
-        <div>
-          <p class="already_added_title">Service ajouté avec succès</p>
-          <p class="already_added_sub">Ce service a déjà été enregistré.</p>
+      <div v-if="activitesList.length > 0" class="already_added_banner">
+        <p class="already_added_return">Retournez à la page précédente pour vous inscrire.</p>
+        <div class="already_added_info">
+          <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
+          <div>
+            <p class="already_added_title">Service ajouté avec succès</p>
+            <p class="already_added_sub">Ce service a déjà été enregistré.</p>
+          </div>
         </div>
+        <button class="btn_service_submit" @click="showRecapService()">Voir ce service</button>
       </div>
     </div>
 
@@ -536,6 +542,9 @@ async function addActivitesToService() {
       heure: heure_activite.value
     });
 
+    console.log(JSON.stringify(res.data.activite))
+    
+
     nom_activite.value = "";
     nb_participants.value = 0;
     prix_activite.value = 0;
@@ -569,6 +578,9 @@ async function addArticlesToService() {
       stock: Number(stock_article.value),
       prix: Number(prix_article.value)
     });
+
+    console.log(JSON.stringify(res.data.article))
+
 
     nom_article.value = "";
     stock_article.value = 0;
@@ -926,7 +938,7 @@ function showRecapService() {
 
 .already_added_banner {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 14px;
   background: linear-gradient(135deg, #edf7ef, #f5fcf6);
   border: 1.5px solid #a8d9b0;
@@ -934,6 +946,20 @@ function showRecapService() {
   padding: 16px 20px;
   margin-top: 8px;
   box-shadow: 0 4px 14px rgba(58, 111, 67, 0.1);
+}
+
+.already_added_info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.already_added_return {
+  font-size: 0.9em;
+  color: #5a7a5e;
+  font-style: italic;
+  margin: 0;
+  text-align: center;
 }
 
 .already_added_icon {

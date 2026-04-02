@@ -7,8 +7,11 @@ const authMiddleware = require("../middlewares/auth.middleware");
 // GET prestataire
 router.get("/show", prestataireController.getPrestataire);
 
-// GET prestataire par type (utilisateur ou prestataire)
-router.get("/show/:id", prestataireMiddleware.validatePrestataireById, prestataireController.getPrestataireById);
+// GET prestataire par id_presta
+router.get("/show/:id_presta", prestataireMiddleware.validatePrestataireByIdPrestataire, prestataireController.getPrestataireByIdPrestataire);
+
+// GET prestataire par id_user
+router.get("/show/:id_user", prestataireMiddleware.validatePrestataireByIdUtilisateur, prestataireController.getPrestataireByIdUtilisateur);
 
 // POST devenir prestataire
 router.post("/becomePrestataire/:id", authMiddleware.authenticateToken, prestataireMiddleware.validateBecomePresta, prestataireController.becomePrestataire);

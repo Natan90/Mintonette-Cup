@@ -21,7 +21,33 @@ async function getPrestataire() {
   return result.rows;
 }
 
-async function getPrestataireById(id_presta) {
+async function getPrestataireByIdPrestataire(id_presta) {
+  const resultPresta = await pool.query(
+    `SELECT 
+        p.*,
+        u.prenom_utilisateur,
+        u.id_utilisateur,
+        u.nom_utilisateur,
+        u.login_utilisateur,
+        u.mail_utilisateur,
+        u.tel_utilisateur,
+        u.sexe_utilisateur,
+        u.ispresta,
+        u.isadmin,
+        t.is_activity
+     FROM Prestataire p
+     JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
+     JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
+     WHERE P.id_prestataire = $1`,
+    [id_presta]
+  );
+
+  return {
+    prestataire : resultPresta.rows[0]
+  };
+}
+
+async function getPrestataireByIdUtilisateur(id_user) {
   const resultPresta = await pool.query(
     `SELECT 
         p.*,
@@ -35,8 +61,8 @@ async function getPrestataireById(id_presta) {
         u.isadmin
      FROM Prestataire p
      JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
-     WHERE P.id_prestataire = $1`,
-    [id_presta]
+     WHERE P.id_utilisateur = $1`,
+    [id_user]
   );
 
   return {
@@ -136,7 +162,8 @@ async function updatePrestataire(id_user, prestataire) {
 
 module.exports = {
   getPrestataire,
-  getPrestataireById,
+  getPrestataireByIdPrestataire,
+  getPrestataireByIdUtilisateur,
   becomePrestataire,
   updatePrestataire,
 };

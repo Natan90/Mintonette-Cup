@@ -321,66 +321,6 @@ VALUES
 INSERT INTO Services 
       (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
       (
-        'Stand de burgers sur place',
-        '{
-          "fr": { "texte": "Profitez d''un <b>stand de burgers préparés sur place</b> avec des produits frais et savoureux.<br>Une solution idéale pour offrir une <b>restauration rapide et conviviale</b>." },
-          "en": { "texte": "Enjoy a <b>freshly prepared burger stand</b> with quality ingredients.<br>An ideal solution for <b>quick and friendly catering</b>." }
-        }',
-        true,
-        '{
-          "fr": "Accès à une prise électrique et un espace de 6m² minimum",
-          "en": "Access to a power outlet and minimum 6m² space"
-        }',
-        true,
-        1
-      ),
-
-      (
-        'Service de boissons fraîches',
-        '{
-          "fr": { "texte": "Un <b>service de boissons fraîches</b> pour désaltérer vos invités tout au long de la journée." },
-          "en": { "texte": "A <b>cold drinks service</b> to keep your guests refreshed all day long." }
-        }',
-        true,
-        '{
-          "fr": "Point d''eau requis à proximité",
-          "en": "Nearby water access required"
-        }',
-        false,
-        1
-      ),
-
-      (
-        'Restauration rapide événementielle',
-        '{
-          "fr": { "texte": "Une solution de <b>restauration rapide pensée pour l''événementiel</b>, efficace même lors de fortes affluences." },
-          "en": { "texte": "A <b>fast food catering solution designed for events</b>, even during high attendance." }
-        }',
-        false,
-        '{
-          "fr": "Zone de cuisson autorisée obligatoire",
-          "en": "Authorized cooking area required"
-        }',
-        false,
-        1
-      ),
-
-      (
-        'Snacking sucré et salé',
-        '{
-          "fr": { "texte": "Un large choix de <b>snacks sucrés et salés</b> pour satisfaire toutes les envies." },
-          "en": { "texte": "A wide selection of <b>sweet and savory snacks</b> for all tastes." }
-        }',
-        true,
-        '{
-          "fr": "Table de service requise",
-          "en": "Service table required"
-        }',
-        true,
-        1
-      ),
-
-      (
         'Animation musicale sur scène',
         '{
           "fr": { "texte": "Une <b>animation musicale live</b> pour créer une ambiance festive et dynamique." },
@@ -502,16 +442,16 @@ INSERT INTO Services
 
 
 INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
-      ('Maillot Mintonette Cup 2026', 150, 49.99, 9),
-      ('Short de volley officiel', 100, 29.99, 9),
-      ('Casquette Mintonette Cup', 200, 19.99, 9),
-      ('Écharpe supporter', 300, 14.99, 9),
-      ('Ballon de volley officiel', 50, 39.99, 9),
-      ('Sac à dos Mintonette Cup', 80, 34.99, 9),
-      ('Bouteille isotherme logo MC', 120, 24.99, 9),
-      ('Porte-clés Mintonette Cup', 500, 4.99, 9),
-      ('Poster officiel du tournoi', 250, 9.99, 9),
-      ('Pack supporter (maillot + écharpe)', 60, 59.99, 9),
+      ('Maillot Mintonette Cup 2026', 150, 49.99, 8),
+      ('Short de volley officiel', 100, 29.99, 8),
+      ('Casquette Mintonette Cup', 200, 19.99, 8),
+      ('Écharpe supporter', 300, 14.99, 8),
+      ('Ballon de volley officiel', 50, 39.99, 8),
+      ('Sac à dos Mintonette Cup', 80, 34.99, 8),
+      ('Bouteille isotherme logo MC', 120, 24.99, 8),
+      ('Porte-clés Mintonette Cup', 500, 4.99, 8),
+      ('Poster officiel du tournoi', 250, 9.99, 8),
+      ('Pack supporter (maillot + écharpe)', 60, 59.99, 8),
       ('Burger Classic', 200, 8.50, 1),
       ('Burger Double Cheese', 200, 10.50, 1),
       ('Menu Burger + Frites', 150, 13.00, 1),

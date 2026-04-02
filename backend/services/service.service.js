@@ -133,7 +133,7 @@ async function createService(id_presta, service) {
     const insertService = await pool.query(
       `INSERT INTO Services (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
       ($1, $2, $3, $4, $5, $6)
-      RETURNING id_service`,
+      RETURNING *`,
       [
         nom_service,
         descri_service,
@@ -145,12 +145,12 @@ async function createService(id_presta, service) {
     );
 
     return {
-      id_service: insertService.rows[0].id_service,
-      message: "Service crée avec succès (back)",
+      service: insertService.rows[0],
+      message: "Service crée avec succès",
     };
   } else {
     return {
-      id_service: checkService.rows[0].id_service,
+      service: checkService.rows[0],
       message: "Ce service existe déjà",
     };
   }

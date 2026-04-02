@@ -7,11 +7,18 @@ export const usePrestataireStore = defineStore("prestataire", () => {
     return getRequest("/prestataire/show");
   }
 
-  async function GetPrestataireById(id_presta) {
+  async function GetPrestataireByIdPrestataire(id_presta) {
     if (!id_presta) {
       throw new Error("L'id du prestataire est obligatoire");
     }
     return getRequest(`/prestataire/show/${id_presta}`);
+  }
+
+  async function GetPrestataireByIdUtilisateur(id_user) {
+    if (!id_user) {
+      throw new Error("L'id de l'utilisateur est obligatoire");
+    }
+    return getRequest(`/prestataire/show/${id_user}`);
   }
 
   async function BecomePrestataire(id_user, data) {
@@ -32,7 +39,8 @@ export const usePrestataireStore = defineStore("prestataire", () => {
 
   return {
     GetPrestataires,
-    GetPrestataireById,
+    GetPrestataireByIdPrestataire,
+    GetPrestataireByIdUtilisateur,
     BecomePrestataire,
     UpdatePrestataire,
   };
