@@ -82,7 +82,8 @@
 
         <div
           @click="goToReceptionBox()"
-          class="boutonNav pointer receptionButton">
+          class="boutonNav pointer">
+          <div class="receptionButton">
           {{ $t("barreNav.boiteReception") }}
           <span
             v-if="
@@ -99,6 +100,7 @@
             9+
           </span>
           <span v-else> </span>
+          </div>
         </div>
       </div>
 
@@ -343,7 +345,7 @@ function changeLanguage(lang) {
   // Ça permet de garder déjà ce qu'il y a dans l'URL et d'ajouter la langue
   const newParams = { ...route.params, lang };
   router.push({
-    name: router.name,
+    name: route.name,
     params: newParams,
     query: route.query,
     hash: route.hash,

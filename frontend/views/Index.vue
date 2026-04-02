@@ -138,8 +138,7 @@
       </div>
     </section>
 
-    <RecherchePrestataire id="liste_prestataires"></RecherchePrestataire>
-
+    <RecherchePrestataire id="liste_prestataires" :isEmbedded="true" />
     <Footer></Footer>
   </div>
 </template>
