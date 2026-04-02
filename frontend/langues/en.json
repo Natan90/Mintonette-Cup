@@ -450,5 +450,11 @@
     "age": "Age",
     "poste": "Position",
     "ans": "Years old"
+  },
+  "gradin": {
+    "retourAccueil": "Back to Home",
+    "gradin": "Grandstand",
+    "matchSurTerrain": "Matches on this court",
+    "reservation": "Seat reservation"
   }
 }

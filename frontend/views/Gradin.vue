@@ -6,14 +6,14 @@
       <router-link
         :to="{ name: 'Home', params: { lang: locale } }"
         class="button homeButton">
-        ← Retour à l'accueil
+        ← {{ $t("gradin.retourAccueil") }}
       </router-link>
       <div class="matchHeader">
-        <h2>Mintonette Cup – Gradin {{ zone.toUpperCase() }}</h2>
+        <h2>Mintonette Cup – {{ $t("gradin.gradin") }} {{ zone.toUpperCase() }}</h2>
       </div>
 
       <section v-if="matches.length">
-        <h3 class="sectionTitle">Matchs sur ce terrain</h3>
+        <h3 class="sectionTitle">{{ $t("gradin.matchSurTerrain") }}</h3>
 
         <div class="matchSelector">
           <button
@@ -39,7 +39,7 @@
           <p>{{ $t("gradin.siegeSelec") }}</p>
         </div>
         <div v-if="idMatch" class="matchHeader">
-          <h3>Réservation de place</h3>
+          <h3>{{ $t("gradin.reservation") }}</h3>
         </div>
 
         <div class="layout" v-if="idMatch">
@@ -147,7 +147,9 @@ import { useNavigationStore } from "@/stores/navigation";
 import { useGradinStore } from "@/services/gradin.service";
 import { usePanierStore } from "@/services/panier.service";
 import { useEquipeStore } from "@/services/equipe.service";
+import { useI18n } from "vue-i18n";
 
+const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const zone = route.params.zone;
@@ -669,7 +671,6 @@ onMounted(() => {
   font-weight: 600;
   animation: slideIn 0.3s ease-out;
 }
-
 
 .homeButton {
   position: absolute;
