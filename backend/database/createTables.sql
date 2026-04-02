@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS Services(
   visible_public BOOLEAN DEFAULT TRUE,
   besoin JSONB,
   activate BOOLEAN,
-  is_activity BOOLEAN,
+  is_activity BOOLEAN DEFAULT FALSE,
   prestataire_id INTEGER NOT NULL REFERENCES Prestataire(id_prestataire)
 );
 

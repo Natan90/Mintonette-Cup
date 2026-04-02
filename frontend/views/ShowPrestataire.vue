@@ -10,8 +10,9 @@
               <p><strong>{{ item.nom_activite }}</strong></p>
               <p>📅 {{ item.date_activite?.slice(0, 10) }} à {{ item.date_activite?.slice(11, 16) }}</p>
               <p>👥 {{ item.nb_participant }} participants max</p>
-              <p>💰 {{ item.prix_activite }} €</p>
+              <p>💰 {{ item.prix }} € / u</p>
             </div>
+            <button>Réserver une activité</button>
           </div>
           <p v-else>Aucune activité disponible.</p>
         </div>
@@ -23,7 +24,7 @@
             <div v-for="(item, index) in articlesList" :key="index" class="service_item_card">
               <p><strong>{{ item.nom_article }}</strong></p>
               <p>📦 Stock : {{ item.stock }}</p>
-              <p>💰 {{ item.prix_article }} €</p>
+              <p>💰 {{ item.prix }} € / u</p>
             </div>
           </div>
           <p v-else>Aucun article disponible.</p>
@@ -325,9 +326,9 @@ async function getValuesPrestataireById(id_presta) {
     onePresta.value = res.data.prestataire;
     isActivityService.value = res.data.prestataire.is_activity ?? false;
 
-    const id_user = res.data.prestataire.id_utilisateur;
+    const id_prestataire = res.data.prestataire.id_prestataire;
 
-    const resServices = await serviceStore.GetServiceByIdPrestataire(id_user);
+    const resServices = await serviceStore.GetServiceByIdPrestataire(id_prestataire);
     services.value = resServices.data.services;
 
   } catch (err) {
@@ -399,24 +400,6 @@ async function actionsService(service) {
 
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
-  }
-}
-/**
- * Ouvre la modale et récupère les détails complets d’un service.
-*/
-async function getOneService(service) {
-  showService.value = true;
-  try {
-    const res = await serviceStore.GetServiceByIdService(service.id_service)
-    oneService.value = res.data.service;
-    console.log("Res.data", res.data);
-
-    console.log(oneService)
-
-    updateDescription();
-
-  } catch (err) {
-    console.error(err);
   }
 }
 /**

@@ -184,7 +184,7 @@
           <div
             class="boutonListe"
             @click="
-              goToSpecificPrestataire(item.id_prestataire || item.id_service)
+              goToSpecificPrestataire((isServiceViewFilter ? item.prestataire_id : item.id_prestataire))
             ">
             <span class="pointer">
               {{ $t("filter.more") }}
@@ -342,6 +342,7 @@ async function resetFilters() {
  * tout en sauvegardant la route actuelle dans le store de navigation.
 */
 function goToSpecificPrestataire(idPresta) {
+  console.log(idPresta)
   navStore.previousRoute = {
     path: route.path,
     query: route.query,
@@ -371,19 +372,23 @@ async function getValuesServices() {
     const activites = res.data.activites;
 
     prestataires.value = services.map(service => {
-      const serviceArticles = articles.filter(
-        a => Number(a.service_id) === Number(service.id_service)
-      );
+      const serviceArticles = service.is_activity === false
+  ? articles.filter(
+      a => Number(a.service_id) === Number(service.id_service)
+    )
+  : [];
 
-      const serviceActivites = activites.filter(
-        a => Number(a.service_id) === Number(service.id_service)
-      );
-
+const serviceActivites = service.is_activity === true
+  ? activites.filter(
+      a => Number(a.service_id) === Number(service.id_service)
+    )
+  : [];
+      
       return {
         ...service,
         articles: serviceArticles,
         activites: serviceActivites,
-        is_activity: serviceActivites.length > 0
+        is_activity: service.is_activity
       };
     });
 
