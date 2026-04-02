@@ -433,6 +433,11 @@ function setNote(event, star) {
   commentaireForm.value.note_commentaire = clickOnLeftHalf ? star - 0.5 : star;
 }
 
+/**
+ * Charge les informations de l'utilisateur connecté
+ * et les stocke dans `currentUser`.
+ * En cas d'erreur, la valeur est mise à null.
+ */
 async function loadCurrentUser() {
   try {
     const response = await adminAPIStore.GetCurrentUser();
@@ -441,14 +446,21 @@ async function loadCurrentUser() {
     currentUser.value = null;
   }
 }
-
+/**
+ * Réinitialise les champs du formulaire de commentaire
+ * et désactive le mode édition.
+ */
 function resetCommentForm() {
   commentaireForm.value.titre_commentaire = "";
   commentaireForm.value.texte_commentaire = "";
   commentaireForm.value.note_commentaire = 5;
   editingCommentId.value = null;
 }
-
+/**
+ * Ouvre le formulaire en mode édition et pré-remplit
+ * les champs avec les données du commentaire sélectionné.
+ * @param {Object} commentaire - Commentaire à modifier
+ */
 async function openEditForm(commentaire) {
   editingCommentId.value = commentaire.id_commentaire;
   commentaireForm.value.titre_commentaire = commentaire.titre_commentaire || "";
@@ -463,6 +475,11 @@ async function openEditForm(commentaire) {
   await nextTick();
   formRef.value?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+/**
+ * Supprime un commentaire après confirmation utilisateur.
+ * Réinitialise l'édition si le commentaire supprimé est en cours de modification.
+ * @param {Object} commentaire - Commentaire à supprimer
+ */
 async function deleteCommentary(commentaire) {
   const ok = window.confirm("Supprimer ce commentaire ?");
   if (!ok) return;
@@ -487,6 +504,11 @@ async function deleteCommentary(commentaire) {
       "Impossible de supprimer le commentaire.";
   }
 }
+
+/**
+ * Annule l'édition, réinitialise le formulaire
+ * et ferme l'affichage du formulaire.
+ */
 function cancelEditing() {
   resetCommentForm();
   showForm.value = false;
@@ -494,6 +516,10 @@ function cancelEditing() {
   formError.value = "";
 }
 
+/**
+ * Envoie un nouveau commentaire ou met à jour un existant.
+ * Réinitialise le formulaire puis déclenche l'envoi d'un mail à l'admin.
+ */
 async function submitCommentaire() {
   isSubmitting.value = true;
   formMessage.value = "";
@@ -526,6 +552,10 @@ async function submitCommentaire() {
     isSubmitting.value = false;
   }
 
+  /**
+   * Récupère les informations de l'utilisateur courant
+   * nécessaires pour la construction du mail.
+   */
   async function fetchUserData() {
     try {
       // console.log("dans le fetch user data");
@@ -540,6 +570,11 @@ async function submitCommentaire() {
       console.error("Erreur en récupérant les données utilisateur :", err);
     }
   }
+
+  /**
+   * Envoie un mail à l'administrateur après ajout ou modification d'un commentaire.
+   * Construit dynamiquement le contenu avec les informations utilisateur.
+   */
   async function sendMailToAdmin() {
     try {
       // console.log("ici");

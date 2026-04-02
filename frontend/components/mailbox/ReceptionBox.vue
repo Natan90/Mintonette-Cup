@@ -128,6 +128,12 @@ async function getMessagesById(id_user) {
     console.error(err);
   }
 }
+/**
+ * Supprime un message après confirmation utilisateur.
+ * Si le message supprimé est actuellement sélectionné, la sélection est réinitialisée.
+ * Recharge ensuite la liste des messages.
+ * @param {number|string} id_message - Identifiant du message à supprimer
+ */
 async function deleteMessage(id_message) {
   if (!confirm(t("boiteRecep.recu.supprimer"))) return;
 
@@ -142,10 +148,11 @@ async function deleteMessage(id_message) {
     console.error(err);
   }
 }
+
 /**
- * Marque un message comme lu, recharge la liste des messages et récupère le détail du message sélectionné.
- * Ouvre également la modal d'affichage du message.
- * @param {number|string} id_message - Identifiant du message à mettre à jour
+ * Marque un message comme lu, recharge la liste des messages,
+ * récupère les détails du message sélectionné et ouvre la modal associée.
+ * @param {number|string} id_message - Identifiant du message à mettre à jour et afficher
  */
 async function updateMessageById(id_message) {
   isSelectedMessage.value = true;

@@ -112,6 +112,11 @@ onMounted(async () => {
   getMessagesById(userStore.userId);
 });
 
+/**
+ * Charge les informations de l'utilisateur actuellement connecté
+ * et les stocke dans la variable réactive `currentUser`.
+ * En cas d'erreur, la valeur est réinitialisée à null.
+ */
 async function loadCurrentUser() {
   try {
     const response = await adminAPIStore.GetCurrentUser();
@@ -121,36 +126,22 @@ async function loadCurrentUser() {
   }
 }
 
-function translateMailboxValue(value) {
-  if (typeof value !== "string" || !value.startsWith("mailToSend.")) {
-    return value;
-  }
-
-  return t(value, {
-    nomUtilisateur: currentUser.value
-      ? `${currentUser.value.prenom_utilisateur || ""} ${currentUser.value.nom_utilisateur || ""}`.trim()
-      : "",
-    emailUtilisateur: currentUser.value?.mail_utilisateur || "",
-    lienVersCommentaire: window.location.origin,
-  });
-}
-
 /**
- * Récupère les messages envoyés par un utilisateur et les stocke dans la liste locale.
- * @param {number|string} id_user - Identifiant de l'utilisateur
+ * Récupère tous les messages reçus ainsi que le nombre de messages non lus pour un utilisateur donné.
+ * @param {number} id_user - Identifiant de l'utilisateur
  */
 async function getMessagesById(id_user) {
   try {
     const res = await mailBoxStore.getMessagesById(id_user);
-
     messageSent.value = res.data.result.messageSent;
   } catch (err) {}
 }
 
 /**
- * Marque un message comme lu, recharge la liste des messages et récupère le détail du message sélectionné.
- * Ouvre également la modal d'affichage du message.
- * @param {number|string} id_message - Identifiant du message à mettre à jour
+ * Marque un message comme lu, recharge la liste des messages envoyés
+ * et récupère le détail du message sélectionné.
+ * Ouvre la modal d'affichage du message.
+ * @param {number|string} id_message - Identifiant du message à mettre à jour et afficher
  */
 async function updateMessageById(id_message) {
   isSelectedMessage.value = true;
@@ -164,6 +155,13 @@ async function updateMessageById(id_message) {
     console.error(err);
   }
 }
+
+/**
+ * Supprime un message envoyé après confirmation utilisateur.
+ * Si le message supprimé est actuellement sélectionné, la sélection est réinitialisée.
+ * Recharge ensuite la liste des messages envoyés.
+ * @param {number|string} id_message - Identifiant du message à supprimer
+ */
 async function deleteMessage(id_message) {
   if (!confirm(t("boiteRecep.envoye.supprimer"))) return;
 
