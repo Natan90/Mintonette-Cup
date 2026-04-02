@@ -323,6 +323,7 @@ watch(isServiceViewFilter, async () => {
   try {
     // Recharge les bonnes données selon la vue
     if (isServiceViewFilter.value) {
+      id_type_serviceFilter.value = "all";
       await getValuesServices();
     } else {
       await getValuesPrestataire();
