@@ -219,7 +219,7 @@ async function getDashboardStats() {
 
 .chart_wrapper {
   width: 100%;
-  max-width: 600px;
+  max-width: none;
   height: 600px;
   padding: 30px;
 }

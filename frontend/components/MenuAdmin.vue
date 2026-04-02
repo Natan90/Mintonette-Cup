@@ -7,10 +7,7 @@
         :to="{ name: item.linkName, params: { lang: locale } }"
         custom
         v-slot="{ href, navigate, isActive }">
-        <a
-          :href="href"
-          @click="navigate"
-          :class="{ 'menu-active': isActive }">
+        <a :href="href" @click="navigate" :class="{ 'menu-active': isActive }">
           {{ item.name }}
         </a>
       </router-link>
@@ -31,7 +28,6 @@ const menu = computed(() => [
   { name: t("barreAdmin.statistique"), linkName: "Statistiques" },
   { name: t("barreAdmin.commentaire"), linkName: "AdminCommentaire" },
 ]);
-
 </script>
 
 <style scoped>
@@ -50,7 +46,7 @@ const menu = computed(() => [
   background-color: var(--rose-logo);
 }
 
-.bloc_boutons{
+.bloc_boutons {
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -58,7 +54,7 @@ const menu = computed(() => [
   gap: 30px;
 }
 
-a{
+a {
   font-size: large;
   font-weight: bold;
   color: var(--primary-color);
@@ -66,14 +62,14 @@ a{
   padding-right: 8px;
 }
 
-a:hover{
+a:hover {
   padding-right: 0;
   text-indent: 4px;
-  transition:  var(--transition-fast);
-  border-left: 4px solid var(--primary-color); 
+  transition: var(--transition-fast);
+  border-left: 4px solid var(--primary-color);
 }
 
-.menu-active{
+.menu-active {
   padding-right: 0;
   text-indent: 4px;
   text-decoration: underline;
@@ -81,9 +77,8 @@ a:hover{
   text-underline-offset: 6px;
 }
 
-@media(max-width: 1000px){
-  
-  .barre_menu{
+@media (max-width: 1000px) {
+  .barre_menu {
     height: auto;
     position: relative;
     max-width: none;
@@ -91,7 +86,7 @@ a:hover{
     padding: 20px 0;
   }
 
-  .bloc_boutons{
+  .bloc_boutons {
     width: 100vw;
     justify-content: space-evenly;
     flex-direction: row;
@@ -100,28 +95,26 @@ a:hover{
     gap: 20px;
   }
 
-  a{
+  a {
     text-indent: 0;
     padding: 3px 0;
   }
 
-  a:hover{
+  a:hover {
     padding-right: 0;
     text-indent: 0;
-    transition:  var(--transition-fast);
+    transition: var(--transition-fast);
     border-left: none;
     padding-bottom: 0;
     border-bottom: 3px solid var(--primary-color);
   }
 
-  .menu-active{
+  .menu-active {
     padding-right: 0;
     text-indent: 0;
     text-decoration: underline;
     text-decoration-thickness: 3px;
     text-underline-offset: 6px;
   }
-
 }
-
 </style>

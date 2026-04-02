@@ -238,10 +238,9 @@ async function sendMailToUserForResponse() {
       throw new Error("Impossible de retrouver l'auteur du commentaire");
     }
 
-    const subject = t("mailToSend.reponseCommentaire.subject");
-    const message = t("mailToSend.reponseCommentaire.message", {
-      nomUtilisateur: getAuthor(selectedComment.value),
-    });
+    const nomUtilisateur = getAuthor(selectedComment.value);
+    const subject = "Réponse à votre commentaire";
+    const message = `Bonjour ${nomUtilisateur},<br><br>L'administrateur a répondu à l'un de vos commentaires. N'hésitez pas à aller voir la réponse !`;
 
     const id_type_message = 6;
 
@@ -262,10 +261,9 @@ async function sendMailToUserForDelete() {
       throw new Error("Impossible de retrouver l'auteur du commentaire");
     }
 
-    const subject = t("mailToSend.suppressionCommentaire.subject");
-    const message = t("mailToSend.suppressionCommentaire.message", {
-      nomUtilisateur: getAuthor(selectedComment.value),
-    });
+    const nomUtilisateur = getAuthor(selectedComment.value);
+    const subject = "Suppression de votre commentaire";
+    const message = `Bonjour ${nomUtilisateur},<br><br>L'administrateur a supprimé l'un de vos commentaires.<br><br>Faites attention la prochaine fois, s'il vous plaît...`;
 
     const id_type_message = 7;
 
@@ -464,6 +462,11 @@ function showFeedbackMessage(message, type = "success") {
 
 .reply-panel {
   margin-top: 2rem;
+  width: 100%;
+}
+
+.reply-card {
+  width: 100%;
 }
 
 .message {
@@ -501,7 +504,7 @@ function showFeedbackMessage(message, type = "success") {
 
 .field textarea {
   width: 100%;
-  min-height: 140px;
+  min-height: 220px;
   resize: vertical;
   border: 1px solid rgba(58, 111, 67, 0.18);
   border-radius: 14px;
