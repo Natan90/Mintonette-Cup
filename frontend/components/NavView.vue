@@ -85,10 +85,20 @@
           class="boutonNav pointer receptionButton">
           {{ $t("barreNav.boiteReception") }}
           <span
-            v-if="isLoggedIn && mailBoxStore.unreadCount > 0"
-            class="unreadBadge">
+            v-if="
+              isLoggedIn &&
+              mailBoxStore.unreadCount > 0 &&
+              mailBoxStore.unreadCount < 10
+            "
+            class="nbMailNonLu">
             {{ mailBoxStore.unreadCount }}
           </span>
+          <span
+            v-else-if="isLoggedIn && mailBoxStore.unreadCount >= 9"
+            class="nbMailNonLu">
+            9+
+          </span>
+          <span v-else> </span>
         </div>
       </div>
 
@@ -405,8 +415,8 @@ if (savedLang) locale.value = savedLang;
 
 .boutonNav {
   display: flex;
-  align-items: center; /* centrage vertical */
-  justify-content: center; /* centrage horizontal */
+  align-items: center;
+  justify-content: center;
   text-align: center;
 
   height: 100%;
@@ -420,7 +430,7 @@ if (savedLang) locale.value = savedLang;
   gap: 8px;
 }
 
-.unreadBadge {
+.nbMailNonLu {
   display: inline-flex;
   align-items: center;
   height: 22px;
