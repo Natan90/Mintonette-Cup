@@ -4,6 +4,10 @@ async function getServices() {
   const servicesResult = await pool.query(`
     SELECT 
       s.*,
+      CASE
+        WHEN t.is_activity = TRUE THEN TRUE
+        ELSE s.is_activity
+      END AS service_is_activity,
       p.*,
       t.*
     FROM Services s
@@ -27,7 +31,7 @@ async function getServices() {
 async function getServiceByIdPrestataire(id_presta) {
   const serviceResult = await pool.query(
     `SELECT * FROM Services WHERE prestataire_id = $1`,
-    [id_presta]
+    [id_presta],
   );
 
   return {
@@ -52,7 +56,7 @@ async function getServiceByIdService(id_service) {
 async function getArticleByIdService(id_service) {
   const checkService = await pool.query(
     `SELECT * FROM Services WHERE id_service = $1;`,
-    [id_service]
+    [id_service],
   );
 
   if (checkService.rows.length === 0)
@@ -65,18 +69,18 @@ async function getArticleByIdService(id_service) {
     FROM Article a 
     WHERE service_id = $1
     GROUP BY a.id_article;`,
-    [id_service]
+    [id_service],
   );
 
   return {
     articles: articlesResult.rows,
-  }
+  };
 }
 
 async function getActiviteByIdService(id_service) {
   const checkService = await pool.query(
     `SELECT * FROM Services WHERE id_service = $1;`,
-    [id_service]
+    [id_service],
   );
 
   if (checkService.rows.length === 0)
@@ -89,18 +93,18 @@ async function getActiviteByIdService(id_service) {
     FROM Activite a
     WHERE service_id = $1
     GROUP BY a.id_activite`,
-    [id_service]
+    [id_service],
   );
 
   return {
     activites: activitesResult.rows,
-  }
+  };
 }
 
 async function getArticleByIdArticle(id_article) {
   const articleResult = await pool.query(
     `SELECT * FROM Article WHERE id_article = $1`,
-    [id_article]
+    [id_article],
   );
 
   if (articleResult.rows.length === 0)
@@ -108,22 +112,21 @@ async function getArticleByIdArticle(id_article) {
 
   return {
     article: articleResult.rows[0],
-  }
+  };
 }
 
 async function getActiviteByIdActivite(id_activite) {
   const activiteResult = await pool.query(
     `SELECT * FROM Activite WHERE id_activite = $1`,
-    [id_activite]
+    [id_activite],
   );
 
   if (activiteResult.rows.length === 0)
     throw { status: 404, message: "Activité non trouvée" };
 
-
   return {
     activite: activiteResult.rows[0],
-  }
+  };
 }
 
 async function activateServiceById(id_service) {
@@ -143,6 +146,20 @@ async function createService(id_presta, service) {
   const { nom_service, descri_service, besoin, activate, visible_public } =
     service;
 
+  const prestataireTypeResult = await pool.query(
+    `SELECT t.is_activity
+     FROM Prestataire p
+     JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
+     WHERE p.id_prestataire = $1`,
+    [id_presta],
+  );
+
+  if (prestataireTypeResult.rows.length === 0) {
+    throw { status: 404, message: "Prestataire non trouvé" };
+  }
+
+  const isActivity = prestataireTypeResult.rows[0].is_activity === true;
+
   const checkService = await pool.query(
     `SELECT * FROM Services
     WHERE prestataire_id = $1 AND nom_service = $2`,
@@ -151,8 +168,8 @@ async function createService(id_presta, service) {
 
   if (checkService.rows.length === 0) {
     const insertService = await pool.query(
-      `INSERT INTO Services (nom_service, descri_service, visible_public, besoin, activate, prestataire_id) VALUES
-      ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO Services (nom_service, descri_service, visible_public, besoin, activate, is_activity, prestataire_id) VALUES
+      ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *`,
       [
         nom_service,
@@ -160,6 +177,7 @@ async function createService(id_presta, service) {
         visible_public,
         besoin,
         activate,
+        isActivity,
         id_presta,
       ],
     );
@@ -243,27 +261,18 @@ async function addActiviteByIdService(id_service, activite) {
 async function deleteServiceById(id_service) {
   const checkService = await pool.query(
     `SELECT * FROM Services WHERE id_service = $1`,
-    [id_service]
+    [id_service],
   );
 
   if (checkService.rowCount === 0) {
     throw { status: 404, message: "Service non trouvé" };
   }
 
-  await pool.query(
-    `DELETE FROM Article WHERE service_id = $1`,
-    [id_service]
-  );
+  await pool.query(`DELETE FROM Article WHERE service_id = $1`, [id_service]);
 
-  await pool.query(
-    `DELETE FROM Activite WHERE service_id = $1`,
-    [id_service]
-  );
+  await pool.query(`DELETE FROM Activite WHERE service_id = $1`, [id_service]);
 
-  await pool.query(
-    `DELETE FROM Services WHERE id_service = $1`,
-    [id_service]
-  );
+  await pool.query(`DELETE FROM Services WHERE id_service = $1`, [id_service]);
 
   return { message: "Service supprimé avec succès" };
 }
@@ -271,17 +280,14 @@ async function deleteServiceById(id_service) {
 async function deleteArticleById(id_article) {
   const checkArticle = await pool.query(
     `SELECT * FROM Article WHERE id_article = $1`,
-    [id_article]
+    [id_article],
   );
 
   if (checkArticle.rowCount === 0) {
     throw { status: 404, message: "Article non trouvé" };
   }
 
-  await pool.query(
-    `DELETE FROM Article WHERE id_article = $1`,
-    [id_article]
-  );
+  await pool.query(`DELETE FROM Article WHERE id_article = $1`, [id_article]);
 
   return { message: "Article supprimé avec succès" };
 }
@@ -289,17 +295,16 @@ async function deleteArticleById(id_article) {
 async function deleteActiviteById(id_activite) {
   const checkActivite = await pool.query(
     `SELECT * FROM Activite WHERE id_activite = $1`,
-    [id_activite]
+    [id_activite],
   );
 
   if (checkActivite.rowCount === 0) {
     throw { status: 404, message: "Activité non trouvée" };
   }
 
-  await pool.query(
-    `DELETE FROM Activite WHERE id_activite = $1`,
-    [id_activite]
-  );
+  await pool.query(`DELETE FROM Activite WHERE id_activite = $1`, [
+    id_activite,
+  ]);
 
   return { message: "Activité supprimée avec succès" };
 }
@@ -311,7 +316,7 @@ async function editActiviteById(id_activite, newActivite) {
 
   const checkActivite = await pool.query(
     `SELECT * FROM Activite WHERE id_activite = $1`,
-    [id_activite]
+    [id_activite],
   );
 
   if (checkActivite.rowCount === 0) {
@@ -322,20 +327,20 @@ async function editActiviteById(id_activite, newActivite) {
     `UPDATE Activite SET nom_activite = $1, nb_participant = $2, prix_activite = $3, date_activite = $4
     WHERE id_activite = $5
     RETURNING *;`,
-    [nom, nb_participant, prix, date_activite, id_activite]
+    [nom, nb_participant, prix, date_activite, id_activite],
   );
 
   return {
     message: "Activité modifiée avec succès",
     article: result.rows[0],
-  }
+  };
 }
 
 async function editArticleById(id_article, newArticle) {
   const { nom, stock, prix } = newArticle;
   const checkArticle = await pool.query(
     `SELECT * FROM Article WHERE id_article = $1`,
-    [id_article]
+    [id_article],
   );
 
   if (checkArticle.rowCount === 0) {
@@ -346,13 +351,13 @@ async function editArticleById(id_article, newArticle) {
     `UPDATE Article SET nom_article = $1, stock = $2, prix_article = $3
     WHERE id_article = $4
     RETURNING *;`,
-    [nom, stock, prix, id_article]
+    [nom, stock, prix, id_article],
   );
 
   return {
     message: "Article modifié avec succès",
     article: result.rows[0],
-  }
+  };
 }
 
 module.exports = {

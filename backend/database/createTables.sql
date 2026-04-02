@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS Type_restauration(
 CREATE TABLE IF NOT EXISTS Type_prestataire(
   id_type_prestataire SERIAL PRIMARY KEY,
   nom_type_prestataire JSONB,
-  is_activity BOOLEAN
+  is_activity BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS Prestataire(

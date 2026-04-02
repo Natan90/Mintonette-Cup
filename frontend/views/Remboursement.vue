@@ -151,7 +151,7 @@ onMounted(() => {
 
 /**
  * Sélectionne ou désélectionne tous les billets affichés dans la liste.
-*/
+ */
 function toggleSelectAll() {
   if (allSelected.value) {
     selectedBillets.value = [];
@@ -161,7 +161,7 @@ function toggleSelectAll() {
 }
 /**
  * Retourne le prix d’un billet en fonction de la colonne de la place.
-*/
+ */
 function getPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
@@ -169,7 +169,7 @@ function getPrice(seat) {
 }
 /**
  * Formate une date de match au format lisible français (jour/mois/année).
-*/
+ */
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString("fr-FR", {
@@ -181,7 +181,7 @@ function formatDate(dateString) {
 /**
  * Gère la demande de remboursement :
  * vérifie les champs, envoie un mail à l’admin, puis lance le remboursement.
-*/
+ */
 async function askReimbursementAndSendMailToAdmin() {
   if (!raisonRemboursement.value) {
     alert("Veuillez sélectionner une raison de remboursement");
@@ -210,7 +210,7 @@ async function askReimbursementAndSendMailToAdmin() {
 /**
  * Traite le remboursement des billets sélectionnés :
  * libère les places et supprime les billets du panier utilisateur.
-*/
+ */
 async function askReimbursement() {
   try {
     for (const seat of selectedBillets.value) {
@@ -245,7 +245,7 @@ async function askReimbursement() {
 }
 /**
  * Construit et envoie un mail à l’administrateur contenant les détails du remboursement demandé.
-*/
+ */
 async function sendMailToAdmin() {
   try {
     let detailsBillets = "";
@@ -291,7 +291,7 @@ async function sendMailToAdmin() {
 }
 /**
  * Récupère la liste des billets réservés par l’utilisateur connecté.
-*/
+ */
 async function fetchBillets() {
   if (!userStore.userId) return;
   error.value = null;
@@ -305,7 +305,7 @@ async function fetchBillets() {
 }
 /**
  * Récupère les informations de l’utilisateur connecté (nom, prénom, email).
-*/
+ */
 async function fetchUserData() {
   try {
     const response = await adminAPIStore.GetCurrentUser();

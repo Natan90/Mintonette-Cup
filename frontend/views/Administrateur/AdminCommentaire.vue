@@ -6,9 +6,9 @@
 
     <main class="main_content">
       <header class="page-header">
-        <p class="eyebrow">{{ $t('adminCommentaire.eyebrow') }}</p>
-        <h1>{{ $t('adminCommentaire.title') }}</h1>
-        <p class="subtitle">{{ $t('adminCommentaire.subtitle') }}</p>
+        <p class="eyebrow">{{ $t("adminCommentaire.eyebrow") }}</p>
+        <h1>{{ $t("adminCommentaire.title") }}</h1>
+        <p class="subtitle">{{ $t("adminCommentaire.subtitle") }}</p>
       </header>
 
       <p v-if="feedbackMessage" class="message feedback" :class="feedbackType">
@@ -16,7 +16,7 @@
       </p>
 
       <div v-if="commentaireStore.isLoading" class="state-box">
-        {{ $t('adminCommentaire.chargement') }}
+        {{ $t("adminCommentaire.chargement") }}
       </div>
 
       <div v-else-if="commentaireStore.error" class="state-box error">
@@ -48,7 +48,7 @@
           <p class="content">{{ commentaire.texte_commentaire }}</p>
 
           <div v-if="commentaire.reponse_commentaire" class="reply-box">
-            <p class="reply-label">{{ $t('adminCommentaire.reponseSend') }}</p>
+            <p class="reply-label">{{ $t("adminCommentaire.reponseSend") }}</p>
             <p class="reply-text">{{ commentaire.reponse_commentaire }}</p>
           </div>
 
@@ -57,13 +57,13 @@
               class="btn reply"
               type="button"
               @click="openReply(commentaire)">
-              {{ $t('adminCommentaire.btnRepondre') }}
+              {{ $t("adminCommentaire.btnRepondre") }}
             </button>
             <button
               class="btn delete"
               type="button"
               @click="confirmDelete(commentaire)">
-              {{ $t('adminCommentaire.btnSupprimer') }}
+              {{ $t("adminCommentaire.btnSupprimer") }}
             </button>
           </div>
         </article>
@@ -72,15 +72,15 @@
       <section v-if="showReplyForm" ref="replyFormRef" class="reply-panel">
         <div class="reply-card">
           <div class="reply-header">
-            <p class="eyebrow">{{ $t('adminCommentaire.replyEyebrow') }}</p>
-            <h2>{{ $t('adminCommentaire.replyTitle') }}</h2>
+            <p class="eyebrow">{{ $t("adminCommentaire.replyEyebrow") }}</p>
+            <h2>{{ $t("adminCommentaire.replyTitle") }}</h2>
           </div>
 
           <p v-if="replyError" class="message error">{{ replyError }}</p>
 
           <form class="reply-form" @submit.prevent="submitReply">
             <label class="field">
-              <span>{{ $t('adminCommentaire.replyTitle') }}</span>
+              <span>{{ $t("adminCommentaire.replyTitle") }}</span>
               <textarea
                 v-model.trim="replyForm.reponse_commentaire"
                 rows="5"
@@ -90,10 +90,14 @@
 
             <div class="reply-actions">
               <button class="btn cancel" type="button" @click="closeReply">
-                {{ $t('adminCommentaire.btnAnnuler') }}
+                {{ $t("adminCommentaire.btnAnnuler") }}
               </button>
               <button class="btn submit" type="submit" :disabled="isSaving">
-                {{ isSaving ? $t('adminCommentaire.btnEnregistrement') : $t('adminCommentaire.btnEnvoyer') }}
+                {{
+                  isSaving
+                    ? $t("adminCommentaire.btnEnregistrement")
+                    : $t("adminCommentaire.btnEnvoyer")
+                }}
               </button>
             </div>
           </form>
@@ -299,8 +303,7 @@ function showFeedbackMessage(message, type = "success") {
 </script>
 
 <style scoped>
-
-.admin-layout{
+.admin-layout {
   height: fit-content;
   display: flex;
 }
@@ -512,12 +515,12 @@ function showFeedbackMessage(message, type = "success") {
   font: inherit;
 }
 
-@media(max-width: 1000px){
-  .admin-layout{
+@media (max-width: 1000px) {
+  .admin-layout {
     flex-direction: column;
   }
 
-  .main_content{
+  .main_content {
     padding-top: 0;
     width: 100vw;
   }

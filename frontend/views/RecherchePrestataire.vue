@@ -77,16 +77,34 @@
           <div class="blocFiltre">
             <span class="filtre-label">Type de service</span>
             <div class="radio-group">
-              <label class="radio-item pointer" :class="{ selected: id_type_serviceFilter === 'all' }">
-                <input type="radio" name="typeService" value="all" v-model="id_type_serviceFilter" />
+              <label
+                class="radio-item pointer"
+                :class="{ selected: id_type_serviceFilter === 'all' }">
+                <input
+                  type="radio"
+                  name="typeService"
+                  value="all"
+                  v-model="id_type_serviceFilter" />
                 <span>Tous</span>
               </label>
-              <label class="radio-item pointer" :class="{ selected: id_type_serviceFilter === 'activity' }">
-                <input type="radio" name="typeService" value="activity" v-model="id_type_serviceFilter" />
+              <label
+                class="radio-item pointer"
+                :class="{ selected: id_type_serviceFilter === 'activity' }">
+                <input
+                  type="radio"
+                  name="typeService"
+                  value="activity"
+                  v-model="id_type_serviceFilter" />
                 <span> Activités</span>
               </label>
-              <label class="radio-item pointer" :class="{ selected: id_type_serviceFilter === 'article' }">
-                <input type="radio" name="typeService" value="article" v-model="id_type_serviceFilter" />
+              <label
+                class="radio-item pointer"
+                :class="{ selected: id_type_serviceFilter === 'article' }">
+                <input
+                  type="radio"
+                  name="typeService"
+                  value="article"
+                  v-model="id_type_serviceFilter" />
                 <span> Articles</span>
               </label>
             </div>
@@ -94,7 +112,10 @@
         </div>
 
         <div class="boutonsFiltre">
-          <button class="btn-reset pointer" type="button" @click="resetFilters()">
+          <button
+            class="btn-reset pointer"
+            type="button"
+            @click="resetFilters()">
             {{ $t("filter.button.reset") }}
           </button>
         </div>
@@ -124,7 +145,7 @@
           <div class="blocBasPrestataire">
             <div class="infosPrestataire">
               <span class="section-label">{{ $t("filter.info.title") }}</span>
-              <span v-if="!isServiceViewFilter">
+              <div v-if="!isServiceViewFilter" class="info-line">
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -137,37 +158,81 @@
                 </svg>
                 {{ $t("filter.info.service") }} :
                 <strong>{{ item.nb_services }}</strong>
-              </span>
-              <span v-else>
-                <span v-if="item.is_activity">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polygon points="12,8 15,10 14,13.5 10,13.5 9,10" stroke="currentColor" fill="currentColor"/>
-                    <line x1="12" y1="8" x2="10.5" y2="3"/>
-                    <line x1="15" y1="10" x2="19.5" y2="8"/>
-                    <line x1="14" y1="13.5" x2="17" y2="17.5"/>
-                    <line x1="10" y1="13.5" x2="7" y2="17.5"/>
-                    <line x1="9" y1="10" x2="4.5" y2="8"/>
+              </div>
+
+              <div
+                v-else-if="item.service_is_activity"
+                class="info-line info-line--stacked">
+                <div class="info-line-title">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    width="13"
+                    height="13">
+                    <circle cx="12" cy="12" r="10" />
+                    <polygon
+                      points="12,8 15,10 14,13.5 10,13.5 9,10"
+                      stroke="currentColor"
+                      fill="currentColor" />
+                    <line x1="12" y1="8" x2="10.5" y2="3" />
+                    <line x1="15" y1="10" x2="19.5" y2="8" />
+                    <line x1="14" y1="13.5" x2="17" y2="17.5" />
+                    <line x1="10" y1="13.5" x2="7" y2="17.5" />
+                    <line x1="9" y1="10" x2="4.5" y2="8" />
                   </svg>
-                  <strong> Activité(s) :</strong>
-                    <span v-for="(activite, index) in item.activites.slice(0, 2)" :key="index" class="item-list-row">
-                      <span>{{ activite.nom_activite }}</span>
-                    </span>
-                    <span v-if="item.activites.length > 2" class="item-list-row item-list-more">...</span>
+                  <strong>Activité(s) :</strong>
+                </div>
+                <div
+                  v-if="item.activites && item.activites.length"
+                  class="info-items">
+                  <span
+                    v-for="(activite, index) in item.activites.slice(0, 2)"
+                    :key="index"
+                    class="item-list-row">
+                    {{ activite.nom_activite }}
                   </span>
-                <span v-else>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                  <span
+                    v-if="item.activites.length > 2"
+                    class="item-list-row item-list-more"
+                    >...</span
+                  >
+                </div>
+              </div>
+
+              <div v-else class="info-line info-line--stacked">
+                <div class="info-line-title">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    width="13"
+                    height="13">
+                    <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
                   </svg>
-                  <strong> Article(s) :</strong>
-                    <span v-for="(article, index) in item.articles.slice(0, 2)" :key="index" class="item-list-row">
-                      <span>{{ article.nom_article }}</span>
-                    </span>
-                    <span v-if="item.articles.length > 2" class="item-list-row item-list-more">...</span>
+                  <strong>Article(s) :</strong>
+                </div>
+                <div
+                  v-if="item.articles && item.articles.length"
+                  class="info-items">
+                  <span
+                    v-for="(article, index) in item.articles.slice(0, 2)"
+                    :key="index"
+                    class="item-list-row">
+                    {{ article.nom_article }}
                   </span>
-              </span>
+                  <span
+                    v-if="item.articles.length > 2"
+                    class="item-list-row item-list-more"
+                    >...</span
+                  >
+                </div>
+              </div>
             </div>
 
             <div class="contactPrestataire" v-if="!isServiceViewFilter">
@@ -184,7 +249,9 @@
           <div
             class="boutonListe"
             @click="
-              goToSpecificPrestataire((isServiceViewFilter ? item.prestataire_id : item.id_prestataire))
+              goToSpecificPrestataire(
+                isServiceViewFilter ? item.prestataire_id : item.id_prestataire,
+              )
             ">
             <span class="pointer">
               {{ $t("filter.more") }}
@@ -252,7 +319,6 @@ const {
   id_type_serviceFilter,
 } = storeToRefs(filtreStore);
 
-
 watch(isServiceViewFilter, async () => {
   try {
     // Recharge les bonnes données selon la vue
@@ -288,13 +354,13 @@ const prestatairesFiltres = computed(() => {
     })
     .filter((p) => {
       if (!isServiceViewFilter.value) return true;
-      if (filters.value.isActivity === 'all') return true;
+      if (filters.value.isActivity === "all") return true;
 
-      if (filters.value.isActivity === 'activity')
-        return p.is_activity === true;
+      if (filters.value.isActivity === "activity")
+        return p.service_is_activity === true;
 
-      if (filters.value.isActivity === 'article')
-        return p.is_activity === false;
+      if (filters.value.isActivity === "article")
+        return p.service_is_activity === false;
 
       return true;
     });
@@ -313,7 +379,6 @@ onMounted(async () => {
       } else {
         await getValuesPrestataire();
       }
-      
     }
   } catch (err) {
     console.error(err);
@@ -322,7 +387,7 @@ onMounted(async () => {
 
 /**
  * Réinitialise les filtres de recherche et recharge la liste complète des prestataires.
-*/
+ */
 async function resetFilters() {
   filtreStore.clearStore();
 
@@ -340,9 +405,9 @@ async function resetFilters() {
 /**
  * Redirige vers la page de détail d’un prestataire ou d’un service
  * tout en sauvegardant la route actuelle dans le store de navigation.
-*/
+ */
 function goToSpecificPrestataire(idPresta) {
-  console.log(idPresta)
+  console.log(idPresta);
   navStore.previousRoute = {
     path: route.path,
     query: route.query,
@@ -362,7 +427,7 @@ function goToSpecificPrestataire(idPresta) {
 //=========================
 /**
  * Récupère la liste des services depuis l’API et met à jour la liste locale des prestataires.
-*/
+ */
 async function getValuesServices() {
   try {
     const res = await serviceStore.GetServices();
@@ -371,27 +436,22 @@ async function getValuesServices() {
     const articles = res.data.articles;
     const activites = res.data.activites;
 
-    prestataires.value = services.map(service => {
-      const serviceArticles = service.is_activity === false
-  ? articles.filter(
-      a => Number(a.service_id) === Number(service.id_service)
-    )
-  : [];
+    prestataires.value = services.map((service) => {
+      const serviceArticles = articles.filter(
+        (a) => Number(a.service_id) === Number(service.id_service),
+      );
 
-const serviceActivites = service.is_activity === true
-  ? activites.filter(
-      a => Number(a.service_id) === Number(service.id_service)
-    )
-  : [];
-      
+      const serviceActivites = activites.filter(
+        (a) => Number(a.service_id) === Number(service.id_service),
+      );
+
       return {
         ...service,
         articles: serviceArticles,
         activites: serviceActivites,
-        is_activity: service.is_activity
+        is_activity: service.service_is_activity,
       };
     });
-
   } catch (err) {
     console.error(err);
     prestataires.value = [];
@@ -399,7 +459,7 @@ const serviceActivites = service.is_activity === true
 }
 /**
  * Récupère la liste des prestataires depuis l’API et met à jour la liste locale.
-*/
+ */
 async function getValuesPrestataire() {
   try {
     const res = await prestataireStore.GetPrestataires();
@@ -417,14 +477,14 @@ async function getValuesPrestataire() {
 }
 /**
  * Récupère la liste des types de prestataires depuis l’API.
-*/
+ */
 async function getValuesTypePrestataire() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
     // Vérifier que res.data.result est un tableau
     if (res && res.data && res.data.result && Array.isArray(res.data.result)) {
       type_prestataire.value = res.data.result;
-      console.log(type_prestataire.value[0])
+      console.log(type_prestataire.value[0]);
     } else {
       console.error("Les données reçues ne sont pas valides:", res);
       type_prestataire.value = [];
@@ -436,7 +496,7 @@ async function getValuesTypePrestataire() {
 }
 /**
  * Applique les filtres de recherche et met à jour l’URL avec les paramètres sélectionnés.
-*/
+ */
 async function searchPrestataires() {
   if (!props.isEmbedded) {
     router.push({
@@ -453,35 +513,9 @@ async function searchPrestataires() {
 </script>
 
 <style scoped>
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 26px;
-  flex-shrink: 0;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.15);
-  transition: 0.3s;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 4px;
   bottom: 3px;
   background: #fff;
   transition: 0.3s;
@@ -750,21 +784,20 @@ input:checked + .slider:before {
   background: linear-gradient(to bottom, #3e3e3e, black);
 }
 
-@media (max-width:750px){
-
+@media (max-width: 750px) {
   .content_slider {
     margin-top: 15px;
   }
 
-  .filtreEtListe{
-    flex-direction: column; 
+  .filtreEtListe {
+    flex-direction: column;
   }
 
-  .filtrePrestataire:first-child{
+  .filtrePrestataire:first-child {
     padding-top: 20px;
   }
 
-  .filtrePrestataire{
+  .filtrePrestataire {
     align-items: center;
     width: 100%;
     justify-content: space-evenly;
@@ -869,6 +902,7 @@ input:checked + .slider:before {
   color: rgba(255, 255, 255, 0.65);
   line-height: 1.55;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -908,6 +942,17 @@ input:checked + .slider:before {
 .infosPrestataire span:not(:first-child) strong,
 .infosPrestataire span strong {
   color: #fff;
+}
+
+.info-line,
+.info-line-title,
+.info-items,
+.item-list-row {
+  color: #fff;
+}
+
+.item-list-more {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .boutonListe {

@@ -3,7 +3,6 @@
   <Modal v-model="isModalService" :bigger="true">
     <template #content>
       <div class="service_details">
-
         <!-- Langue -->
         <div class="service_lang">
           <button class="btn_lang" @click="changeDescriLang()">
@@ -15,19 +14,26 @@
         <!-- Nom du service -->
         <div class="service_form_group">
           <label for="nom_service">Nom du service</label>
-          <input class="service_input_text" v-model="nomService" id="nom_service" />
+          <input
+            class="service_input_text"
+            v-model="nomService"
+            id="nom_service" />
         </div>
 
         <!-- Description -->
         <div class="service_form_group">
           <label>Description du service</label>
-          <Editor v-model="currentDescri" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
-            height: 200,
-            menubar: false,
-            plugins: 'lists link image table media code preview anchor',
-            toolbar: 'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-            branding: false,
-          }" />
+          <Editor
+            v-model="currentDescri"
+            api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
+            :init="{
+              height: 200,
+              menubar: false,
+              plugins: 'lists link image table media code preview anchor',
+              toolbar:
+                'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+              branding: false,
+            }" />
         </div>
 
         <!-- Besoin -->
@@ -40,9 +46,17 @@
         <div class="service_form_group">
           <div>
             <label>Visible :</label>
-            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="true" />
+            <input
+              type="radio"
+              class="service_input_text"
+              v-model="visiblePublic"
+              :value="true" />
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="visiblePublic" :value="false" />
+            <input
+              type="radio"
+              class="service_input_text"
+              v-model="visiblePublic"
+              :value="false" />
             <label>Non</label>
           </div>
         </div>
@@ -51,18 +65,28 @@
         <div class="service_form_group">
           <div>
             <label>Actif :</label>
-            <input type="radio" class="service_input_text" v-model="activate" :value="true" />
+            <input
+              type="radio"
+              class="service_input_text"
+              v-model="activate"
+              :value="true" />
             <label>Oui</label>
-            <input type="radio" class="service_input_text" v-model="activate" :value="false" />
+            <input
+              type="radio"
+              class="service_input_text"
+              v-model="activate"
+              :value="false" />
             <label>Non</label>
           </div>
         </div>
 
-
-
         <!-- Message erreur -->
-        <div v-if="message && showService && messageType === 'error'" class="message"
-          :class="messageType === 'error' ? 'message-error' : 'message-success'">
+        <div
+          v-if="message && showService && messageType === 'error'"
+          class="message"
+          :class="
+            messageType === 'error' ? 'message-error' : 'message-success'
+          ">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
         </div>
@@ -71,15 +95,10 @@
         <div class="service_submit">
           <button class="btn_service_submit" @click="addServiceToPrestataire()">
             ✓ Ajouter vos
-            <span v-if="isActivityService">
-              activités
-            </span>
-            <span v-else>
-              articles
-            </span>
+            <span v-if="isActivityService"> activités </span>
+            <span v-else> articles </span>
           </button>
         </div>
-
       </div>
     </template>
   </Modal>
@@ -87,12 +106,16 @@
   <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave">
     <v-card title="Quitter la page ?">
       <v-card-text>
-        Vous avez des modifications <strong>non sauvegardées</strong>. Si vous quittez cette page, toutes vos données seront perdues.
+        Vous avez des modifications <strong>non sauvegardées</strong>. Si vous
+        quittez cette page, toutes vos données seront perdues.
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text="Rester sur la page" @click="cancelLeave()"></v-btn>
-        <v-btn color="error" text="Quitter quand même" @click="confirmLeave()"></v-btn>
+        <v-btn
+          color="error"
+          text="Quitter quand même"
+          @click="confirmLeave()"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -100,10 +123,11 @@
   <v-dialog v-model="deleteService" max-width="450" class="confirmLeave">
     <v-card title="Supprimer ce service ?">
       <v-card-text>
-        Vous êtes sur le point de supprimer le service <span class="name_delete">{{ serviceDelete.nom_service }}</span>.
-        <br /><br />
-        Toutes les données associées seront définitivement perdues.
-        Cette action est <strong>irréversible</strong>.
+        Vous êtes sur le point de supprimer le service
+        <span class="name_delete">{{ serviceDelete.nom_service }}</span
+        >. <br /><br />
+        Toutes les données associées seront définitivement perdues. Cette action
+        est <strong>irréversible</strong>.
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -112,7 +136,6 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 
   <section class="container">
     <div class="content_container">
@@ -130,10 +153,17 @@
 
         <!-- Liste des types de prestataires disponibles -->
         <div class="type_prestataire">
-          <div v-for="(item, index) in type_prestataire" :key="index" class="boite_type_presta" :id="`p-${index}`">
+          <div
+            v-for="(item, index) in type_prestataire"
+            :key="index"
+            class="boite_type_presta"
+            :id="`p-${index}`">
             <!-- Bouton de sélection du type de prestataire -->
-            <button class="button_type_presta pointer" @click="selectTypePresta(index)"
-              :disabled="continueInscription_service" :class="selectedIndex === index ? 'button_selected' : ''">
+            <button
+              class="button_type_presta pointer"
+              @click="selectTypePresta(index)"
+              :disabled="continueInscription_service"
+              :class="selectedIndex === index ? 'button_selected' : ''">
               {{ item.nom_type_prestataire[locale] }}
             </button>
           </div>
@@ -143,17 +173,28 @@
         <div v-if="selectedType" class="container_table">
           <h1>
             {{ $t("prestataireInfo.type") }}
-            <span :style="{ color: 'var(--log-rose)' }">{{ selectedTypeLabel }}</span> ?
+            <span :style="{ color: 'var(--log-rose)' }">{{
+              selectedTypeLabel
+            }}</span>
+            ?
           </h1>
 
           <table class="table_type_presta" @click="displayBlink()">
             <tbody>
               <!-- Liste des options possibles -->
-              <tr v-for="(item, index) in selectedItems" :key="index" class="table-row">
+              <tr
+                v-for="(item, index) in selectedItems"
+                :key="index"
+                class="table-row">
                 <td>
                   <!-- Bouton radio -->
-                  <input type="radio" :id="`item-${index}`" :value="index" @change="onCheckChange($event, item)"
-                    :checked="isChecked(item)" :disabled="continueInscription_service" />
+                  <input
+                    type="radio"
+                    :id="`item-${index}`"
+                    :value="index"
+                    @change="onCheckChange($event, item)"
+                    :checked="isChecked(item)"
+                    :disabled="continueInscription_service" />
                   <label :for="`item-${index}`">
                     {{ item.nom }}
                   </label>
@@ -171,22 +212,37 @@
     </div>
 
     <!-- Bouton pour continuer l'inscription (uniquement en mode ajout) -->
-    <div class="button_container" v-if="!continueInscription_service && pathAdd">
-      <button @click.prevent="showContinueInscription()" :disabled="!isSelectionValid"
+    <div
+      class="button_container"
+      v-if="!continueInscription_service && pathAdd">
+      <button
+        @click.prevent="showContinueInscription()"
+        :disabled="!isSelectionValid"
         :class="{ disabled: !isSelectionValid }">
         {{ $t("prestataireInfo.btnContinueInscription") }}
       </button>
     </div>
 
     <!-- Bouton retour vers la sélection du type -->
-    <div class="button_container" v-if="continueInscription_service && pathAdd" id="retour_button">
-      <button @click.prevent="hideContinueInscription()" :class="{ blink: clickWhileContinue, errorBackground: clickWhileContinue }">
+    <div
+      class="button_container"
+      v-if="continueInscription_service && pathAdd"
+      id="retour_button">
+      <button
+        @click.prevent="hideContinueInscription()"
+        :class="{
+          blink: clickWhileContinue,
+          errorBackground: clickWhileContinue,
+        }">
         {{ $t("prestataireInfo.btnRetour") }}
       </button>
     </div>
 
     <!-- Formulaire de création / modification du prestataire -->
-    <div class="prestataire_container" v-if="continueInscription_service || !pathAdd" id="presta_container">
+    <div
+      class="prestataire_container"
+      v-if="continueInscription_service || !pathAdd"
+      id="presta_container">
       <div class="editor_container">
         <!-- Champ : nom du prestataire -->
         <div class="form_group">
@@ -201,14 +257,17 @@
           <label>
             {{ $t("prestataireInfo.formulaire.descri") }}
           </label>
-          <Editor v-model="descri_presta" api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls" :init="{
-            height: 600,
-            menubar: false,
-            plugins: 'lists link image table media code preview anchor',
-            toolbar:
-              'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-            branding: false,
-          }" />
+          <Editor
+            v-model="descri_presta"
+            api-key="8ul0fktth8jre7f3tbbkgp44wmfl27dksyj9mkbt7ddl13ls"
+            :init="{
+              height: 600,
+              menubar: false,
+              plugins: 'lists link image table media code preview anchor',
+              toolbar:
+                'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+              branding: false,
+            }" />
         </div>
 
         <!-- Champ : email de contact -->
@@ -216,7 +275,11 @@
           <label for="contact">
             {{ $t("user.mail") }}
           </label>
-          <input type="text" id="contact" v-model="mail_presta" placeholder="mail@example.com" />
+          <input
+            type="text"
+            id="contact"
+            v-model="mail_presta"
+            placeholder="mail@example.com" />
         </div>
 
         <!-- Champ : téléphone -->
@@ -224,7 +287,12 @@
           <label for="contact">
             {{ $t("user.tel_utilisateur") }}
           </label>
-          <input type="tel" id="contact" v-model="tel_presta" pattern="^0[1-9][0-9]{8}$" placeholder="0123456789" />
+          <input
+            type="tel"
+            id="contact"
+            v-model="tel_presta"
+            pattern="^0[1-9][0-9]{8}$"
+            placeholder="0123456789" />
         </div>
 
         <div class="form_group">
@@ -234,23 +302,39 @@
                 gotS: services.length > 1 ? "s" : "",
               })
             }}</label>
-            <button @click="showModalByService()" class="pointer">+ Ajouter</button>
+            <button @click="showModalByService()" class="pointer">
+              + Ajouter
+            </button>
           </div>
 
           <div class="service_input">
-            <div v-for="(item, index) in services" :key="index" class="service_row">
+            <div
+              v-for="(item, index) in services"
+              :key="index"
+              class="service_row">
               <button @click="showOneService(item.id_service)">
                 {{ item.nom_service }}
               </button>
-              <span v-if="item.activate" class="active-icon" title="Actif">&#10003;</span>
+              <span v-if="item.activate" class="active-icon" title="Actif"
+                >&#10003;</span
+              >
               <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
-              <button class="btn_activate" v-if="!item.activate" @click="activateService(item)">
+              <button
+                class="btn_activate"
+                v-if="!item.activate"
+                @click="activateService(item)">
                 Activer
               </button>
-              <button class="btn_desactivate" v-else-if="item.activate" @click="desactivatingService(item)">
+              <button
+                class="btn_desactivate"
+                v-else-if="item.activate"
+                @click="desactivatingService(item)">
                 Désactiver
               </button>
-              <button type="button" class="remove_btn pointer" @click="removeServiceField(item)">
+              <button
+                type="button"
+                class="remove_btn pointer"
+                @click="removeServiceField(item)">
                 &times;
               </button>
             </div>
@@ -258,19 +342,29 @@
         </div>
 
         <!-- Message de succès ou d'erreur après action -->
-        <div v-if="message && !isModalService" class="message"
-          :class="messageType === 'error' ? 'message-error' : 'message-success'">
+        <div
+          v-if="message && !isModalService"
+          class="message"
+          :class="
+            messageType === 'error' ? 'message-error' : 'message-success'
+          ">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
         </div>
 
         <div class="message_error" v-if="services.length === 0">
-          <p>Vous devez ajouter au moins un service pour finaliser votre inscription.</p>
+          <p>
+            Vous devez ajouter au moins un service pour finaliser votre
+            inscription.
+          </p>
         </div>
 
         <!-- Bouton de modification (mode édition) -->
         <div class="button_container" v-if="!pathAdd">
-          <button @click="updatePresta()" :disabled="!isSelectionValid" :class="{ disabled: !isSelectionValid }">
+          <button
+            @click="updatePresta()"
+            :disabled="!isSelectionValid"
+            :class="{ disabled: !isSelectionValid }">
             {{ $t("prestataireInfo.formulaire.btnModifier") }}
           </button>
         </div>
@@ -281,11 +375,9 @@
             {{ $t("user.buttonInscription") }}
           </button>
         </div>
-        
       </div>
     </div>
   </section>
-
 
   <!-- Pied de page -->
   <Footer></Footer>
@@ -309,7 +401,6 @@ import { useNavigationStore } from "@/stores/navigation";
 import { usePrestataireInfoStore } from "@/stores/prestataire_info";
 import { storeToRefs } from "pinia";
 
-
 // ── Stores & Router ──────────────────────────────
 const { t, locale } = useI18n();
 const userStore = useUserStore();
@@ -322,25 +413,33 @@ const navStore = useNavigationStore();
 const route = useRoute();
 const router = useRouter();
 
-
 // ── Store Refs ───────────────────────────────────
 const {
-  nom, descri, mail, tel,
-  nomService, descriService, besoinService,
-  visiblePublic, activate, continueInscription,
-  selectedIndex, checkedItem, selectedTypeId,
-  existingActivitesList, existingArticlesList
+  nom,
+  descri,
+  mail,
+  tel,
+  nomService,
+  descriService,
+  besoinService,
+  visiblePublic,
+  activate,
+  continueInscription,
+  selectedIndex,
+  checkedItem,
+  selectedTypeId,
+  existingActivitesList,
+  existingArticlesList,
 } = storeToRefs(prestataireInfoStore);
-
 
 // ── Routes ───────────────────────────────────────
 const prestaId = computed(() => route.params.id);
 const pathAdd = computed(() => route.name === "AddPrestataire");
 const getStoreValues = computed(() => {
-  const isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+  const isReload =
+    performance.getEntriesByType("navigation")[0]?.type === "reload";
   return navStore.previousRoute === "AddByService" || isReload;
 });
-
 
 // ── Refs locaux ──────────────────────────────────
 // -- UI --
@@ -368,7 +467,7 @@ const type_restauration = ref([]);
 const type_boutique = ref([]);
 const selectedType = ref("animation");
 
-// -- Valeurs de l'utilisateur -- 
+// -- Valeurs de l'utilisateur --
 const nom_presta = ref("");
 const descri_presta = ref("");
 const mail_presta = ref("");
@@ -377,10 +476,9 @@ const continueInscription_service = ref(false);
 const checkedItem_presta = ref([]);
 const selectedTypeId_presta = ref(1);
 
-
 // ── Computed ─────────────────────────────────────
 const selectedNames = computed(() =>
-  checkedItem_presta.value.map((item) => item.nom)
+  checkedItem_presta.value.map((item) => item.nom),
 );
 const isSelectionValid = computed(() => {
   return checkedItem_presta.value.length == 1;
@@ -413,15 +511,15 @@ const currentBesoin = computed({
 const selectedItems = computed(() => {
   switch (selectedTypeId_presta.value) {
     case 1:
-      return type_animation.value.map(item => ({
+      return type_animation.value.map((item) => ({
         nom: item.nom_type_animation,
       }));
     case 2:
-      return type_boutique.value.map(item => ({
+      return type_boutique.value.map((item) => ({
         nom: item.nom_type_boutique,
       }));
     case 3:
-      return type_restauration.value.map(item => ({
+      return type_restauration.value.map((item) => ({
         nom: item.nom_type_restauration,
       }));
     default:
@@ -441,13 +539,31 @@ const selectedTypeLabel = computed(() => {
 // ── Watch ────────────────────────────────────
 const isSyncing = ref(false);
 
-watch(nom_presta, (v) => { if (!isSyncing.value) nom.value = v; });
-watch(descri_presta, (v) => { if (!isSyncing.value) descri.value = v; });
-watch(mail_presta, (v) => { if (!isSyncing.value) mail.value = v; });
-watch(tel_presta, (v) => { if (!isSyncing.value) tel.value = v; });
-watch(selectedTypeId_presta, (v) => { if (!isSyncing.value) selectedTypeId.value = v; });
-watch(checkedItem_presta, (v) => { if (!isSyncing.value) checkedItem.value = v; }, { deep: true });
-watch(continueInscription_service, (v) => { if (!isSyncing.value) continueInscription.value = v; });
+watch(nom_presta, (v) => {
+  if (!isSyncing.value) nom.value = v;
+});
+watch(descri_presta, (v) => {
+  if (!isSyncing.value) descri.value = v;
+});
+watch(mail_presta, (v) => {
+  if (!isSyncing.value) mail.value = v;
+});
+watch(tel_presta, (v) => {
+  if (!isSyncing.value) tel.value = v;
+});
+watch(selectedTypeId_presta, (v) => {
+  if (!isSyncing.value) selectedTypeId.value = v;
+});
+watch(
+  checkedItem_presta,
+  (v) => {
+    if (!isSyncing.value) checkedItem.value = v;
+  },
+  { deep: true },
+);
+watch(continueInscription_service, (v) => {
+  if (!isSyncing.value) continueInscription.value = v;
+});
 
 // ── onBeforeRouteLeave ────────────────────────────────────
 onBeforeRouteLeave((to, from, next) => {
@@ -467,14 +583,15 @@ onMounted(async () => {
     await getValuesEveryType();
     await getServiceByIdPrestataire(prestaId.value);
 
-
     if (getStoreValues.value) {
       nom_presta.value = nom.value;
       descri_presta.value = descri.value;
       mail_presta.value = mail.value;
       tel_presta.value = tel.value;
       selectedTypeId_presta.value = selectedTypeId.value || 1;
-      checkedItem_presta.value = Array.isArray(checkedItem.value) ? checkedItem.value : [];
+      checkedItem_presta.value = Array.isArray(checkedItem.value)
+        ? checkedItem.value
+        : [];
       continueInscription_service.value = continueInscription.value;
     } else {
       isSyncing.value = true;
@@ -494,7 +611,6 @@ onMounted(async () => {
         await getValuesPrestataire();
       }
     }
-
   } catch (err) {
     console.error(err);
   }
@@ -504,16 +620,16 @@ onMounted(async () => {
 /**
  * Ferme le message d'information (erreur ou succès)
  * affiché dans la modal de service.
-*/
+ */
 const closeMessage = () => {
   message.value = "";
 };
 /**
  * Alterne la langue utilisée dans l’éditeur de description du service.
- * 
+ *
  * Permet de basculer entre le français et l’anglais
  * pour éditer les champs multilingues du service.
-*/
+ */
 const changeDescriLang = () => {
   isFrench.value = !isFrench.value;
 };
@@ -521,14 +637,14 @@ const changeDescriLang = () => {
 function showModalByService() {
   isModalService.value = true;
   const currentType = type_prestataire.value.find(
-    (t) => t.id_type_prestataire === selectedTypeId_presta.value
+    (t) => t.id_type_prestataire === selectedTypeId_presta.value,
   );
   isActivityService.value = currentType?.is_activity ?? false;
 }
 /**
  * Affiche la section d’inscription complète du prestataire
  * et scroll automatiquement vers le formulaire.
-*/
+ */
 function showContinueInscription() {
   continueInscription_service.value = true;
 
@@ -542,7 +658,7 @@ function showContinueInscription() {
 /**
  * Masque la section d’inscription complète du prestataire
  * et remonte vers le haut de la page.
-*/
+ */
 function hideContinueInscription() {
   continueInscription_service.value = false;
 
@@ -556,7 +672,7 @@ function hideContinueInscription() {
 /**
  * Annule la tentative de navigation hors de la page
  * et ferme la boîte de dialogue de confirmation.
-*/
+ */
 function cancelLeave() {
   showLeaveDialog.value = false;
   pendingNavigation.value = null;
@@ -564,7 +680,7 @@ function cancelLeave() {
 /**
  * Confirme la sortie de la page malgré les modifications non sauvegardées.
  * Nettoie le store puis redirige vers la route ciblée.
-*/
+ */
 function confirmLeave() {
   showLeaveDialog.value = false;
   prestataireInfoStore.clearStore();
@@ -578,7 +694,7 @@ function confirmLeave() {
 
 function displayBlink() {
   clickWhileContinue.value = true;
-  
+
   nextTick(() => {
     const btn = document.getElementById("retour_button");
     if (btn) {
@@ -595,7 +711,7 @@ function displayBlink() {
 /**
  * Sélectionne un type de prestataire dans la liste.
  * Met à jour l’index et l’identifiant du type sélectionné.
-*/
+ */
 function selectTypePresta(index) {
   if (selectedIndex.value !== index) {
     checkedItem_presta.value = [];
@@ -617,7 +733,7 @@ function selectTypePresta(index) {
 }
 /**
  * Gère la sélection d’une spécificité via checkbox/radio.
-*/
+ */
 function onCheckChange(event, item) {
   const isChecked = event.target.checked;
 
@@ -644,15 +760,13 @@ function onCheckChange(event, item) {
 }
 /**
  * Vérifie si une spécificité est actuellement sélectionnée.
-*/
+ */
 function isChecked(item) {
-  return checkedItem_presta.value.some(
-    (i) => i.nom === item.nom
-  );
+  return checkedItem_presta.value.some((i) => i.nom === item.nom);
 }
 /**
  * Récupère les types de prestataires disponibles depuis l’API.
-*/
+ */
 async function getValuesTypePresta() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
@@ -664,7 +778,7 @@ async function getValuesTypePresta() {
 /**
  * Récupère toutes les catégories de types de prestataires
  * (animation, restauration, boutique).
-*/
+ */
 async function getValuesEveryType() {
   try {
     const res = await typePrestataireStore.GetTypePrestataires();
@@ -679,14 +793,14 @@ async function getValuesEveryType() {
 // ── Services ─────────────────────────────────────
 /**
  * Vérifie si la description et le besoin sont vides pour une langue donnée.
-*/
+ */
 function isLangEmpty(descri, besoin, lang) {
   return !descri[lang]?.trim() && !besoin[lang]?.trim();
 }
 /**
  * Retourne un message d’erreur selon les langues manquantes
  * dans la description et le besoin du service.
-*/
+ */
 function getMissingLangMessage() {
   const frEmpty = isLangEmpty(descriService.value, besoinService.value, "fr");
   const enEmpty = isLangEmpty(descriService.value, besoinService.value, "en");
@@ -698,15 +812,15 @@ function getMissingLangMessage() {
 }
 /**
  * Ajoute un nouveau service au prestataire.
- * 
+ *
  * Étapes :
  * - Vérifie que le nom du service est renseigné
  * - Valide les champs multilingues (FR / EN)
  * - Appelle l’API de création de service
  * - Redirige vers la page d’édition du service créé
- * 
+ *
  * @async
-*/
+ */
 async function addServiceToPrestataire() {
   if (!nomService.value.trim()) {
     message.value = "Le nom du service est obligatoire.";
@@ -731,18 +845,18 @@ async function addServiceToPrestataire() {
 
     const newServiceId = res.data.service.id_service;
 
-    console.log(JSON.stringify(res.data.service))
+    console.log(JSON.stringify(res.data.service));
 
     message.value = "Service ajouté avec succès !";
     messageType.value = "success";
 
     router.push({
       name: "AddByService",
-      params: { 
+      params: {
         id_presta: prestaId.value,
-        id: newServiceId
-       },
-      query: { isActivityService: isActivityService.value }
+        id: newServiceId,
+      },
+      query: { isActivityService: isActivityService.value },
     });
   } catch (err) {
     message.value = err.message;
@@ -751,90 +865,92 @@ async function addServiceToPrestataire() {
 }
 /**
  * Supprime un service de la liste affichée dans le formulaire.
-*/
+ */
 function removeServiceField(item) {
   deleteService.value = true;
   serviceDelete.value = item;
-  console.log(serviceDelete.value)
+  console.log(serviceDelete.value);
 }
 /**
  * Annule la suppression du service.
-*/
+ */
 function cancelDelete() {
   serviceDelete.value = [];
   deleteService.value = false;
 }
 /**
  * Supprime le service en fonction de l'id du service sélectionné.
- * 
+ *
  * Étapes :
  * - Supprime le service en backend et ses articles ou activités qui y correspondent
  * - Reset le service sélectionné
  * - Affiche le message
  * - Appelle de nouveau la fonction pour afficher les services du prestataire
- * 
+ *
  * @async
-*/
+ */
 async function confirmDelete() {
   try {
-    const res = await serviceStore.DeleteService(serviceDelete.value.id_service);
+    const res = await serviceStore.DeleteService(
+      serviceDelete.value.id_service,
+    );
 
     deleteService.value = false;
     serviceDelete.value = [];
 
     message.value = res.data.message;
-    messageType.value = 'success';
-    
-    await getServiceByIdPrestataire(prestaId.value);
+    messageType.value = "success";
 
+    await getServiceByIdPrestataire(prestaId.value);
   } catch (err) {
     console.error(err);
     message.value = err.message || "Erreur lors de la suppression";
-    messageType.value = 'error';
+    messageType.value = "error";
   }
 }
 /**
  * Active un service prestataire.
- * 
+ *
  * Modifie l’état du service côté backend via l’API
  * puis met à jour l’interface locale.
-*/
+ */
 function activateService(service) {
   activate.value = true;
   actionsService(service);
 }
 /**
  * Désactive un service prestataire.
- * 
+ *
  * Passe le service en état inactif via l’API
  * puis met à jour l’interface locale.
-*/
+ */
 function desactivatingService(service) {
   desactivate.value = true;
   actionsService(service);
 }
 /**
  * Effectue l’action d’activation/désactivation d’un service.
- * 
+ *
  * Appelle l’API backend et inverse l’état `activate`
  * dans la liste locale des services.
-*/
+ */
 async function actionsService(service) {
   try {
     const res = await serviceStore.ActivateService(service.id_service);
 
-    const index = services.value.findIndex(s => s.id_service === service.id_service);
+    const index = services.value.findIndex(
+      (s) => s.id_service === service.id_service,
+    );
     if (index !== -1) {
       services.value[index].activate = !services.value[index].activate;
     }
-
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
   }
 }
 /**
  * Récupère et affiche les détails complets d’un service.
- * 
+ *
  * Charge les informations suivantes :
  * - Nom
  * - Titres multilingues
@@ -843,9 +959,9 @@ async function actionsService(service) {
  * - Prix
  * - Nombre de participants
  * - Statut actif / visible
- * 
+ *
  * @async
-*/
+ */
 async function showOneService(id_service) {
   try {
     const res = await serviceStore.GetServiceByIdService(id_service);
@@ -855,62 +971,67 @@ async function showOneService(id_service) {
       id_service: s.id_service,
       nom_service: s.nom_service,
       titre_service: {
-        fr: s.titre_service?.fr ?? '',
-        en: s.titre_service?.en ?? ''
+        fr: s.titre_service?.fr ?? "",
+        en: s.titre_service?.en ?? "",
       },
       descriService: {
-        fr: s.descri_service?.fr ?? '',
-        en: s.descri_service?.en ?? ''
+        fr: s.descri_service?.fr ?? "",
+        en: s.descri_service?.en ?? "",
       },
       besoin: {
-        fr: s.besoin?.fr ?? '',
-        en: s.besoin?.en ?? ''
+        fr: s.besoin?.fr ?? "",
+        en: s.besoin?.en ?? "",
       },
       activate: s.activate ?? false,
       visible_public: s.visible_public ?? true,
     };
 
-    existingActivitesList.value = (res.data.activites || []).map(a => ({
+    existingActivitesList.value = (res.data.activites || []).map((a) => ({
       nom_activite: a.nom_activite,
-      date_activite: a.date_activite?.split('T')[0] ?? '',
-      heure_activite: a.date_activite?.split('T')[1]?.slice(0, 5) ?? '',
+      date_activite: a.date_activite?.split("T")[0] ?? "",
+      heure_activite: a.date_activite?.split("T")[1]?.slice(0, 5) ?? "",
       nb_participant: a.nb_participant,
-      prix: a.prix_activite
+      prix: a.prix_activite,
     }));
 
-    existingArticlesList.value = (res.data.articles || []).map(a => ({
+    existingArticlesList.value = (res.data.articles || []).map((a) => ({
       nom_article: a.nom_article,
       stock: a.stock,
-      prix: a.prix_article
+      prix: a.prix_article,
     }));
 
-    console.log("existingActivitesList:", JSON.stringify(existingActivitesList.value));
-    console.log("existingArticlesList:", JSON.stringify(existingArticlesList.value));
+    console.log(
+      "existingActivitesList:",
+      JSON.stringify(existingActivitesList.value),
+    );
+    console.log(
+      "existingArticlesList:",
+      JSON.stringify(existingArticlesList.value),
+    );
 
     router.push({
       name: "AddByService",
       params: {
         id_presta: prestaId.value,
-        id: id_service
+        id: id_service,
       },
       query: {
         isActivityService: isActivityService.value,
-        isShowingRecapService: true
-      }
+        isShowingRecapService: true,
+      },
     });
   } catch (err) {
     console.error(err);
   }
 }
 
-
 // ── Prestataire ──────────────────────────────────
 /**
  * Récupère les informations complètes des services d'un prestataire
- * 
+ *
  * @async
  * @param {Integer} id_presta - L'id du prestataire
-*/
+ */
 async function getServiceByIdPrestataire(id_presta) {
   if (!id_presta) return;
 
@@ -919,32 +1040,34 @@ async function getServiceByIdPrestataire(id_presta) {
   const prestaServices = resServices.data.services;
 
   services.value = prestaServices.map((s) => ({
-      id_service: s.id_service,
-      nom_service: s.nom_service,
-      activate: s.activate || false,
-      visible_public: s.visible_public ?? true,
-      descri_service: s.descri_service || { fr: "", en: "" },
-      besoin: s.besoin || { fr: "", en: "" },
-    }));
+    id_service: s.id_service,
+    nom_service: s.nom_service,
+    activate: s.activate || false,
+    visible_public: s.visible_public ?? true,
+    descri_service: s.descri_service || { fr: "", en: "" },
+    besoin: s.besoin || { fr: "", en: "" },
+  }));
 }
 /**
  * Récupère les informations complètes d’un prestataire.
- * 
+ *
  * Charge :
  * - Informations générales (nom, mail, téléphone, description)
  * - Type de prestataire
  * - Spécificités sélectionnées
  * - Liste des services associés
- * 
+ *
  * Initialise également les champs du formulaire d’édition.
- * 
+ *
  * @async
-*/
+ */
 async function getValuesPrestataire() {
   if (!prestaId.value) return;
 
   try {
-    const res = await prestataireStore.GetPrestataireByIdUtilisateur(userStore.userId);
+    const res = await prestataireStore.GetPrestataireByIdUtilisateur(
+      userStore.userId,
+    );
     console.log("res.data complet :", res.data);
 
     const presta = res.data.prestataire;
@@ -971,7 +1094,7 @@ async function getValuesPrestataire() {
     const indexType = type_prestataire.value.findIndex(
       (t) =>
         t.id_type_prestataire ===
-        (presta.id_type_prestataire || presta.type_prestataire_id)
+        (presta.id_type_prestataire || presta.type_prestataire_id),
     );
 
     if (indexType !== -1) {
@@ -1005,13 +1128,12 @@ async function getValuesPrestataire() {
     }
 
     const index = selectedItems.value.findIndex(
-      (item) => item.nom.trim().toLowerCase() === spec.toLowerCase()
+      (item) => item.nom.trim().toLowerCase() === spec.toLowerCase(),
     );
 
-    checkedItem_presta.value = index !== -1 ? [{ nom: selectedItems.value[index].nom, index }] : [];
+    checkedItem_presta.value =
+      index !== -1 ? [{ nom: selectedItems.value[index].nom, index }] : [];
     checkedItem.value = checkedItem_presta.value;
-
-    
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
   }
@@ -1020,7 +1142,8 @@ async function getValuesPrestataire() {
 async function addPrestataire() {
   try {
     if (services.value.length === 0) {
-      message.value = "Vous ne pouvez pas devenir prestataire sans proposer de service.";
+      message.value =
+        "Vous ne pouvez pas devenir prestataire sans proposer de service.";
       messageType.value = "error";
       return;
     }
@@ -1030,7 +1153,7 @@ async function addPrestataire() {
       mail: mail_presta.value,
       tel: tel_presta.value,
       specificite: selectedNames.value,
-      type: Number(selectedTypeId_presta.value)
+      type: Number(selectedTypeId_presta.value),
     });
 
     alreadyAdded.value = true;
@@ -1038,26 +1161,27 @@ async function addPrestataire() {
 
     await sendMailToAdmin(false);
 
-    message.value = "Votre demande de prestation a été ajoutée avec succès et est en attente de validation.";
+    message.value =
+      "Votre demande de prestation a été ajoutée avec succès et est en attente de validation.";
     messageType.value = "success";
   } catch (err) {
     message.value = err.response?.data?.error || err.message;
-    messageType.value = 'error';
+    messageType.value = "error";
   }
 }
 /**
  * Met à jour les informations d’un prestataire existant.
- * 
+ *
  * Met à jour :
  * - Informations personnelles
  * - Type de prestataire
  * - Spécificités
  * - Services associés
- * 
+ *
  * Puis notifie l’administrateur par email.
- * 
+ *
  * @async
-*/
+ */
 async function updatePresta() {
   try {
     const res = await prestataireStore.UpdatePrestataire(userStore.userId, {
@@ -1072,22 +1196,20 @@ async function updatePresta() {
     messageType.value = "success";
 
     await sendMailToAdmin(true);
-
   } catch (err) {
     message.value = err.message;
-    messageType.value = 'error';
+    messageType.value = "error";
   }
 }
-
 
 // ── Mail ─────────────────────────────────────────
 /**
  * Envoie un message automatique à l’administrateur
  * lors d’une création ou modification de prestataire.
- * 
+ *
  * @param isModif - true si modification, false si création
  * @async
-*/
+ */
 async function sendMailToAdmin(isModif) {
   const subject = isModif
     ? "Modification d'un prestataire"
@@ -1104,9 +1226,8 @@ async function sendMailToAdmin(isModif) {
       id_user_to: id_admin,
       subject,
       message: messageText,
-      id_type_message
+      id_type_message,
     });
-
   } catch (err) {
     console.error(err);
   }
@@ -1210,7 +1331,9 @@ async function sendMailToAdmin(isModif) {
   background: var(--log-card-bg);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(58, 111, 67, 0.1), 0 2px 8px rgba(232, 99, 122, 0.06);
+  box-shadow:
+    0 8px 25px rgba(58, 111, 67, 0.1),
+    0 2px 8px rgba(232, 99, 122, 0.06);
 }
 
 .table_type_presta td {
@@ -1329,7 +1452,9 @@ input[type="radio"] {
   background: var(--log-card-bg);
   color: #2a3d2e;
   font-size: 15px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .form_group input:focus,
@@ -1404,7 +1529,7 @@ input[type="radio"] {
   box-shadow: 0 4px 14px rgba(58, 111, 67, 0.1);
 }
 
-.service_row>button:first-child {
+.service_row > button:first-child {
   flex: 1;
   background: transparent;
   border: none;
@@ -1417,7 +1542,7 @@ input[type="radio"] {
   transition: color 0.2s;
 }
 
-.service_row>button:first-child:hover {
+.service_row > button:first-child:hover {
   color: var(--log-primary-dark);
   text-decoration: underline;
 }
@@ -1586,7 +1711,9 @@ input[type="radio"] {
   color: #2a3d2e;
   font-size: 15px;
   box-sizing: border-box;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .service_input_text:focus {
@@ -1604,7 +1731,9 @@ input[type="radio"] {
   color: #2a3d2e;
   font-size: 15px;
   box-sizing: border-box;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .service_input_number:focus {
@@ -1673,8 +1802,13 @@ input[type="radio"] {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.2; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
 }
 
 .blink {

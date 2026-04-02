@@ -242,25 +242,28 @@ VALUES
     ('Articles créatifs / personnalisables');
 
 INSERT INTO
-    Type_prestataire (nom_type_prestataire)
+    Type_prestataire (nom_type_prestataire, is_activity)
 VALUES
     (
         '{
         "fr": "Animation",
         "en": "Activity"
-      }'
+      }',
+        TRUE
     ),
     (
         '{
         "fr": "Boutique",
         "en": "Shop"
-      }'
+      }',
+        FALSE
     ),
     (
         '{
         "fr": "Restauration",
         "en": "Food"
-      }'
+      }',
+        FALSE
     );
 
 INSERT INTO
@@ -447,42 +450,52 @@ INSERT INTO Services
 
 
 INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
-      ('Maillot Mintonette Cup 2026', 150, 49.99, 8),
-      ('Short de volley officiel', 100, 29.99, 8),
-      ('Casquette Mintonette Cup', 200, 19.99, 8),
-      ('Écharpe supporter', 300, 14.99, 8),
-      ('Ballon de volley officiel', 50, 39.99, 8),
-      ('Sac à dos Mintonette Cup', 80, 34.99, 8),
-      ('Bouteille isotherme logo MC', 120, 24.99, 8),
-      ('Porte-clés Mintonette Cup', 500, 4.99, 8),
-      ('Poster officiel du tournoi', 250, 9.99, 8),
-      ('Pack supporter (maillot + écharpe)', 60, 59.99, 8),
-      ('Burger Classic', 200, 8.50, 1),
-      ('Burger Double Cheese', 200, 10.50, 1),
-      ('Menu Burger + Frites', 150, 13.00, 1),
-      ('Frites maison', 300, 3.50, 1),
-      ('Eau minérale 50cl', 500, 1.50, 2),
-      ('Soda 33cl', 400, 2.50, 2),
-      ('Jus de fruit 25cl', 300, 2.00, 2),
-      ('Smoothie du jour', 100, 4.50, 2),
-      ('Hot-dog', 250, 5.00, 3),
-      ('Wrap poulet', 200, 7.50, 3),
-      ('Salade César', 150, 8.00, 3),
-      ('Sandwich jambon-fromage', 200, 5.50, 3),
-      ('Sachet de chips', 400, 2.00, 4),
-      ('Barre chocolatée', 350, 1.50, 4),
-      ('Madeleine individuelle', 300, 1.00, 4),
-      ('Mix apéritif 100g', 250, 3.00, 4);
+  ('Maillot Mintonette Cup 2026', 150, 49.99, 5),
+  ('Short de volley officiel', 100, 29.99, 5),
+  ('Casquette Mintonette Cup', 200, 19.99, 6),
+  ('Écharpe supporter', 300, 14.99, 6),
+  ('Ballon de volley officiel', 50, 39.99, 7),
+  ('Sac à dos Mintonette Cup', 80, 34.99, 7),
+  ('Bouteille isotherme logo MC', 120, 24.99, 8),
+  ('Porte-clés Mintonette Cup', 500, 4.99, 8),
+  ('Poster officiel du tournoi', 250, 9.99, 5),
+  ('Pack supporter (maillot + écharpe)', 60, 59.99, 6),
+  ('T-shirt collector', 180, 24.00, 7),
+  ('Sticker pack supporter', 600, 6.00, 8),
+  ('Burger Classic', 200, 8.50, 1),
+  ('Burger Double Cheese', 200, 10.50, 1),
+  ('Menu Burger + Frites', 150, 13.00, 1),
+  ('Frites maison', 300, 3.50, 1),
+  ('Eau minérale 50cl', 500, 1.50, 2),
+  ('Soda 33cl', 400, 2.50, 2),
+  ('Jus de fruit 25cl', 300, 2.00, 2),
+  ('Smoothie du jour', 100, 4.50, 2),
+  ('Hot-dog', 250, 5.00, 3),
+  ('Wrap poulet', 200, 7.50, 3),
+  ('Salade César', 150, 8.00, 3),
+  ('Sandwich jambon-fromage', 200, 5.50, 3),
+  ('Sachet de chips', 400, 2.00, 4),
+  ('Barre chocolatée', 350, 1.50, 4),
+  ('Madeleine individuelle', 300, 1.00, 4),
+  ('Mix apéritif 100g', 250, 3.00, 4);
 
 
 INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES
-      ('Initiation au volley-ball', 12, 15.00, '2026-07-15T10:00:00', 7),
-      ('Tournoi 3x3 amateur', 24, 10.00, '2026-07-15T14:00:00', 7),
-      ('Séance de dédicaces joueurs', 30, 25.00, '2026-07-16T11:00:00', 8),
-      ('Atelier smash avec coach', 8, 20.00, '2026-07-16T15:00:00', 7),
-      ('Photo avec le trophée', 1, 5.00, '2026-07-15T09:00:00', 8),
-      ('Quiz volley géant', 50, 0.00, '2026-07-17T18:00:00', 6),
-      ('Parcours de réception ballon', 6, 12.00, '2026-07-17T10:00:00', 7);
+  ('Set musical live', 20, 18.00, '2026-07-15T10:00:00', 1),
+  ('Rencontre avec les musiciens', 15, 0.00, '2026-07-15T12:00:00', 1),
+  ('Animation micro en direct', 25, 12.00, '2026-07-15T11:00:00', 2),
+  ('Défilé et interaction public', 40, 8.00, '2026-07-15T16:00:00', 2),
+  ('Jeu participatif géant', 50, 0.00, '2026-07-16T09:00:00', 3),
+  ('Challenge rapide sur scène', 30, 6.00, '2026-07-16T13:00:00', 3),
+  ('Atelier enfants créatif', 12, 10.00, '2026-07-17T09:00:00', 4),
+  ('Mini spectacle encadré', 18, 14.00, '2026-07-17T15:00:00', 4),
+  ('Initiation au volley-ball', 12, 15.00, '2026-07-15T10:00:00', 7),
+  ('Tournoi 3x3 amateur', 24, 10.00, '2026-07-15T14:00:00', 7),
+  ('Séance de dédicaces joueurs', 30, 25.00, '2026-07-16T11:00:00', 8),
+  ('Atelier smash avec coach', 8, 20.00, '2026-07-16T15:00:00', 7),
+  ('Photo avec le trophée', 1, 5.00, '2026-07-15T09:00:00', 8),
+  ('Quiz volley géant', 50, 0.00, '2026-07-17T18:00:00', 6),
+  ('Parcours de réception ballon', 6, 12.00, '2026-07-17T10:00:00', 7);
 
 
 INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES

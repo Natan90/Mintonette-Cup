@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch} from "vue";
+import { ref, onMounted, watch } from "vue";
 import MenuAdmin from "@/components/MenuAdmin.vue";
 import NavView from "@/components/NavView.vue";
 import { useAdminAPIStore } from "@/services/admin.service";
@@ -40,7 +40,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   RadialLinearScale,
-  ArcElement
+  ArcElement,
 );
 
 const { locale, t } = useI18n();
@@ -74,7 +74,7 @@ const barOptions = ref({});
  * - Tooltip personnalisé
  * - Axes avec format en pourcentage
  * @returns {Object} Configuration Chart.js du bar chart
-*/
+ */
 const setBarChatOptions = () => ({
   maintainAspectRatio: false,
   plugins: {
@@ -126,7 +126,7 @@ const polarOptions = ref({});
  * - Légende
  * - Grille radiale
  * @returns {Object} Configuration Chart.js du polar chart
-*/
+ */
 const setPolarOptions = () => ({
   maintainAspectRatio: false,
   plugins: {
@@ -156,15 +156,13 @@ const setPolarOptions = () => ({
  * - Répartition des services par type
  *
  * Met à jour les données des graphiques (bar + polar).
-*/
+ */
 async function getDashboardStats() {
   try {
     const res = await adminAPIStore.GetStatistiques();
     const { totalUsers, totalPrestataires, servicesByType } = res.data;
     const pourcentage =
-      totalUsers > 0
-        ? ((totalPrestataires / totalUsers) * 100).toFixed(1)
-        : 0;
+      totalUsers > 0 ? ((totalPrestataires / totalUsers) * 100).toFixed(1) : 0;
 
     barData.value = {
       labels: [t("adminStats.barLegend")],
@@ -198,11 +196,10 @@ async function getDashboardStats() {
     console.error("Erreur dashboard stats:", err);
   }
 }
-
 </script>
 
 <style scoped>
-.admin-layout{
+.admin-layout {
   height: fit-content;
   display: flex;
 }
@@ -224,12 +221,12 @@ async function getDashboardStats() {
   padding: 30px;
 }
 
-@media(max-width: 1000px){
-  .admin-layout{
+@media (max-width: 1000px) {
+  .admin-layout {
     flex-direction: column;
   }
 
-  .main_content{
+  .main_content {
     padding-top: 0;
     width: 100vw;
   }
