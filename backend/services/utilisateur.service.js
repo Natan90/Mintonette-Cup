@@ -1,10 +1,10 @@
 const pool = require("../database/db");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const MAX_ATTEMPTS = 3; // Nombre de tentatives maximum de connexion
 const WINDOW_MINUTES = 5; // Intervalle de temps en minutes pour les tentatives
-
+const WELCOME_MESSAGE_TYPE = "Bienvenue";
 
 // Fonction pour générer un JWT
 function generateToken(user) {
@@ -12,12 +12,79 @@ function generateToken(user) {
     throw new Error("Utilisateur invalide pour générer le token");
   }
 
-  return jwt.sign(
-    { userId: user.id_utilisateur },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.TOKEN_EXPIRE }
+  return jwt.sign({ userId: user.id_utilisateur }, process.env.JWT_SECRET, {
+    expiresIn: process.env.TOKEN_EXPIRE,
+  });
+}
+
+async function getWelcomeMessageTypeId(executor) {
+  const result = await executor.query(
+    `SELECT id_type_message
+     FROM Type_Message
+     WHERE nom_type_message = $1
+     LIMIT 1`,
+    [WELCOME_MESSAGE_TYPE],
   );
-};
+
+  if (result.rows.length > 0) {
+    return result.rows[0].id_type_message;
+  }
+
+  const insertResult = await executor.query(
+    `INSERT INTO Type_Message (nom_type_message)
+     VALUES ($1)
+     RETURNING id_type_message`,
+    [WELCOME_MESSAGE_TYPE],
+  );
+
+  return insertResult.rows[0].id_type_message;
+}
+
+async function getSystemSenderId(executor) {
+  const adminResult = await executor.query(
+    `SELECT id_utilisateur
+     FROM Utilisateur
+     WHERE isadmin = TRUE
+     ORDER BY id_utilisateur ASC
+     LIMIT 1`,
+  );
+
+  if (adminResult.rows.length > 0) {
+    return adminResult.rows[0].id_utilisateur;
+  }
+
+  const fallbackResult = await executor.query(
+    `SELECT id_utilisateur
+     FROM Utilisateur
+     ORDER BY id_utilisateur ASC
+     LIMIT 1`,
+  );
+
+  if (fallbackResult.rows.length > 0) {
+    return fallbackResult.rows[0].id_utilisateur;
+  }
+
+  throw { status: 500, message: "Expéditeur système introuvable" };
+}
+
+async function sendWelcomeMessage(executor, recipientId, prenom) {
+  const typeMessageId = await getWelcomeMessageTypeId(executor);
+  const senderId = await getSystemSenderId(executor);
+  const greeting = prenom ? `Bonjour ${prenom}` : "Bonjour";
+
+  await executor.query(
+    `INSERT INTO Mailbox_Message
+     (subject, message, type_message_id, sender_id, recipient_id)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [
+      "Bienvenue sur la Mintonette Cup",
+      `${greeting}, votre compte a bien été créé. Vous pouvez maintenant utiliser votre espace personnel.`,
+      typeMessageId,
+      senderId,
+      recipientId,
+    ],
+  );
+}
 
 async function refreshToken(token) {
   if (!token) {
@@ -29,7 +96,7 @@ async function refreshToken(token) {
 
     const result = await pool.query(
       `SELECT id_utilisateur FROM Utilisateur WHERE id_utilisateur = $1`,
-      [payload.userId]
+      [payload.userId],
     );
 
     if (result.rows.length === 0) {
@@ -39,7 +106,6 @@ async function refreshToken(token) {
     const newToken = generateToken({ id_utilisateur: payload.userId });
 
     return { token: newToken };
-
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       throw { status: 401, message: "Token expiré" };
@@ -76,11 +142,17 @@ async function inscriptionUtilisateur(utilisateur) {
       `INSERT INTO Utilisateur 
             (nom_utilisateur, prenom_utilisateur, login_utilisateur, mdp_utilisateur, mail_utilisateur, tel_utilisateur, sexe_utilisateur) VALUES
             ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING id_utilisateur`,
+            RETURNING id_utilisateur, prenom_utilisateur`,
       [nom, prenom, login, passwordHash, mail, tel_utilisateur, sexe],
     );
 
     const newUser = result.rows[0];
+
+    await sendWelcomeMessage(
+      client,
+      newUser.id_utilisateur,
+      newUser.prenom_utilisateur,
+    );
 
     const token = generateToken(newUser);
 
@@ -91,13 +163,14 @@ async function inscriptionUtilisateur(utilisateur) {
     return {
       message: "Compte créé avec succès",
       user: {
-        _id: newUser.id_utilisateur,
-        mail: newUser.mail_utilisateur,
-        nom: newUser.nom_utilisateur,
-        prenom: newUser.prenom_utilisateur
+        id: newUser.id_utilisateur,
+        id_utilisateur: newUser.id_utilisateur,
+        mail: mail,
+        nom: nom,
+        prenom: prenom,
       },
       token,
-      expiresIn: process.env.JWT_EXPIRES_IN || '1h'
+      expiresIn: process.env.JWT_EXPIRES_IN || "1h",
     };
   } catch (err) {
     await client.query("ROLLBACK");
@@ -212,7 +285,7 @@ async function connexionUtilisateur(utilisateur) {
         prenom: user.prenom_utilisateur,
       },
       token,
-      expiresIn: process.env.JWT_EXPIRES_IN || '1h'
+      expiresIn: process.env.JWT_EXPIRES_IN || "1h",
     };
   } catch (err) {
     await client.query("ROLLBACK");
@@ -263,10 +336,12 @@ async function updateNombreConnexion(client, attempt, login, now) {
     status = nbTentatives >= MAX_ATTEMPTS ? 429 : 401;
   }
 
-  const message = nbTentatives >= MAX_ATTEMPTS ? "Compte temporairement bloqué" : "Login ou mot de passe incorrect";
+  const message =
+    nbTentatives >= MAX_ATTEMPTS
+      ? "Compte temporairement bloqué"
+      : "Login ou mot de passe incorrect";
   throw { status, message };
 }
-
 
 async function updateUtilisateur(id_user, utilisateur) {
   const { nom, prenom, mail, tel_utilisateur, login, sexe, photo_profil } =
@@ -348,7 +423,7 @@ async function resetPassword(token, newPassword) {
     `SELECT * FROM Utilisateur
      WHERE reset_token = $1
      AND reset_token_expire > NOW()`,
-    [token]
+    [token],
   );
 
   if (result.rows.length === 0) {
@@ -364,16 +439,16 @@ async function resetPassword(token, newPassword) {
          reset_token = NULL,
          reset_token_expire = NULL
      WHERE id_utilisateur = $2`,
-    [hash, userId]
+    [hash, userId],
   );
 
-  return{ message: "Mot de passe réinitialisé" };
+  return { message: "Mot de passe réinitialisé" };
 }
 
 async function findUserByGoogleId(googleId) {
   const result = await pool.query(
-    'SELECT * FROM Utilisateur WHERE google_id = $1',
-    [googleId]
+    "SELECT * FROM Utilisateur WHERE google_id = $1",
+    [googleId],
   );
   return result.rows[0];
 }
@@ -381,16 +456,16 @@ async function findUserByGoogleId(googleId) {
 // Trouver un utilisateur par email
 async function findUserByEmail(email) {
   const result = await pool.query(
-    'SELECT * FROM Utilisateur WHERE mail_utilisateur = $1',
-    [email.toLowerCase()]
+    "SELECT * FROM Utilisateur WHERE mail_utilisateur = $1",
+    [email.toLowerCase()],
   );
   return result.rows[0];
 }
 
 // Créer un utilisateur depuis Google
 async function createUserFromGoogle({ googleId, email, name, picture }) {
-  const [prenom, ...nomParts] = name.split(' ');
-  const nom = nomParts.join(' ') || null;
+  const [prenom, ...nomParts] = name.split(" ");
+  const nom = nomParts.join(" ") || null;
 
   const result = await pool.query(
     `
@@ -399,13 +474,18 @@ async function createUserFromGoogle({ googleId, email, name, picture }) {
     VALUES ($1, $2, $3, $4, 'google')
     RETURNING *
     `,
-    [
-      prenom,
-      nom,
-      email ? email.toLowerCase() : null,
-      googleId
-    ]
+    [prenom, nom, email ? email.toLowerCase() : null, googleId],
   );
+
+  try {
+    await sendWelcomeMessage(
+      pool,
+      result.rows[0].id_utilisateur,
+      result.rows[0].prenom_utilisateur,
+    );
+  } catch (err) {
+    console.error("Impossible d'ajouter le message de bienvenue :", err);
+  }
 
   return result.rows[0];
 }
@@ -415,13 +495,12 @@ async function updateUserGoogleId(userId, googleId) {
   try {
     await client.query(
       `UPDATE Utilisateur SET google_id = $1, provider = 'google' WHERE id_utilisateur = $2`,
-      [googleId, userId]
+      [googleId, userId],
     );
   } finally {
     client.release();
   }
 }
-
 
 module.exports = {
   generateToken,
@@ -433,5 +512,5 @@ module.exports = {
   findUserByGoogleId,
   findUserByEmail,
   createUserFromGoogle,
-  updateUserGoogleId
+  updateUserGoogleId,
 };

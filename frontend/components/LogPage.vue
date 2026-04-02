@@ -270,6 +270,10 @@ const sexe_utilisateur = ref("");
 const message = ref("");
 const connexion = ref(false);
 const inscription = ref(false);
+
+function getUserIdFromResponse(user) {
+  return user?.id ?? user?.id_utilisateur ?? user?._id ?? null;
+}
 const userId = ref(0);
 
 const router = useRouter();
@@ -297,16 +301,12 @@ const closeModal = () => {
 };
 /**
  * Affiche la modal de confirmation après connexion ou inscription.
- * Ferme automatiquement la modal après 2 secondes si ce n’est pas une inscription.
- * @param {boolean} isInscription - Indique si l’action provient d’une inscription
  */
-function ModalShow(isInscription) {
+function ModalShow() {
   showModal.value = true;
-  if (!isInscription) {
-    setTimeout(() => {
-      closeModal();
-    }, 2000);
-  }
+  setTimeout(() => {
+    closeModal();
+  }, 2000);
 }
 /**
  * Redirige l'utilisateur vers la page d'ajout de prestataire avec son ID utilisateur.
@@ -375,12 +375,12 @@ async function getValuesConnexion() {
       mdp: mdp_utilisateur_connexion.value,
     });
 
-    userStore.setUser(res.data.user.id);
+    const connectedUserId = getUserIdFromResponse(res.data.user);
+    userStore.setUser(connectedUserId);
     userStore.setRole(res.data.user.role || "user");
     userStore.setToken(res.data.token);
     userId.value = userStore.userId;
-    // message.value = `Utilisateur connecté avec l'ID : ${res.data.user.id}`;
-    message.value = `Bienvenue sur la plateforme officielle de la Mintonette Cup`;
+    message.value = `Bon retour parmi nous sur la plateforme officielle de la Mintonette Cup !`;
     connexion.value = true;
 
     if (connexion.value) {
@@ -426,10 +426,12 @@ async function getValuesInscription() {
       sexe: sexe_utilisateur.value,
     });
     if (res.data && res.data.user) {
-      userStore.setUser(res.data.user.id);
+      const createdUserId = getUserIdFromResponse(res.data.user);
+      userStore.setUser(createdUserId);
       userStore.setRole(res.data.user.role || "user");
       userStore.setToken(res.data.token);
-      message.value = `Utilisateur créé avec l'ID : ${res.data.user.id}`;
+      message.value = `Bienvenue sur la plateforme officielle de la Mintonette Cup`;
+
       inscription.value = true;
     } else {
       message.value =
@@ -438,7 +440,7 @@ async function getValuesInscription() {
     }
 
     if (inscription.value) {
-      ModalShow(true);
+      ModalShow();
     }
   } catch (err) {
     console.log(err.data.error);
@@ -497,7 +499,9 @@ async function connectUserWithToken(token) {
   const res = await adminAPIStore.GetCurrentUser(token);
   console.log("Résultat GetCurrentUser :", res);
 
-  userStore.setUser(res.data.id_utilisateur);
+  userStore.setUser(
+    res.data.id_utilisateur ?? res.data.id ?? res.data.user?.id,
+  );
   userStore.setRole(res.data.isadmin ? "admin" : "user");
 
   userStore.stopAuthenticating();

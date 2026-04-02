@@ -159,7 +159,8 @@ VALUES
     ('Remboursement'),
     ('Commentaire'),
     ('Réponse à un commentaire'),
-    ('Suppression d''un de vos commentaire');
+  ('Suppression d''un de vos commentaire'),
+  ('Bienvenue');
 
 INSERT INTO 
 Commentaire (
