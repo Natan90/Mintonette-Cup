@@ -28,7 +28,9 @@
     "anonyme": "Anonymous"
   },
   "bouton": {
-    "retour": "Back"
+    "retour": "Back",
+    "annuler": "Cancel",
+    "confirmer": "Confirm"
   },
   "zoneMap": {
     "planZones": "Service provider zone map",

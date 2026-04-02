@@ -3,10 +3,10 @@
     <v-card :title="$t('boiteRecep.envoye.supprimer')">
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :text="$t('commun.annuler')" @click="cancelDelete"></v-btn>
+        <v-btn :text="$t('bouton.annuler')" @click="cancelDelete"></v-btn>
         <v-btn
           color="error"
-          :text="$t('commun.confirmer')"
+          :text="$t('bouton.confirmer')"
           @click="confirmDelete"></v-btn>
       </v-card-actions>
     </v-card>
