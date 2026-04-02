@@ -513,9 +513,35 @@ async function searchPrestataires() {
 </script>
 
 <style scoped>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+  transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .slider:before {
   position: absolute;
   content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
   bottom: 3px;
   background: #fff;
   transition: 0.3s;
