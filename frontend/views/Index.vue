@@ -5,6 +5,7 @@
     <div class="all">
       <div class="image">
         <img
+          v-if="showBallon"
           src="../images/ballon.png"
           alt="ballon"
           id="img_ballon"
@@ -25,7 +26,7 @@
 
       <!-- <PresentationMintonette class="presentationMint"></PresentationMintonette> -->
       <div
-        v-if="isBallonStopped"
+        v-if="isBallonStopped && showBallon"
         class="message-ballon"
         :style="[
           messageBallonStyle,
@@ -239,6 +240,7 @@ const showBalloon = ref(false);
 const ancreBallon = ref(null);
 const isBallonStopped = ref(false);
 const showingBallon = ref(false);
+const showBallon = ref(window.innerWidth > 1000);
 
 let animationFrame = null;
 
@@ -252,6 +254,7 @@ const messageBallonStyle = computed(() => ({
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", hideOrShowBalloon);
   hideOrShowBalloon();
   getValuesEvenement();
   getValuesUser();
@@ -264,6 +267,7 @@ onActivated(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", hideOrShowBalloon);
 });
 
 watch(
@@ -381,13 +385,11 @@ const animateBounce = () => {
  * @function hideOrShowBalloon
  */
 function hideOrShowBalloon() {
-  const elt = document.getElementById("img_ballon");
-
-  if (showBalloon.value) {
-    elt.style.display = "block";
-  } else {
-    elt.style.display = "none";
+  if (window.innerWidth <= 1000) {
+    showBallon.value = false;
+    return;
   }
+  showBallon.value = true;
 }
 
 const videoRef = ref(null);

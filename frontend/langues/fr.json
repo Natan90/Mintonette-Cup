@@ -153,7 +153,11 @@
       "securite": "Sécurité du compte",
       "textMail": "Un mail de confirmation va être envoyé à :",
       "confirmer": "Confirmer l'envoi",
-      "annuler": "Annuler"
+      "annuler": "Annuler",
+      "erreurEmail": "Veuillez remplir votre email",
+      "erreurEmailInvalide": "Veuillez saisir une adresse e-mail valide",
+      "emailEnvoye": "Un e-mail de réinitialisation a été envoyé",
+      "erreurEnvoi": "Erreur lors de l'envoi de l'e-mail"
     }
   },
   "burgerStand": {
