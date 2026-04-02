@@ -385,11 +385,13 @@ const animateBounce = () => {
  * @function hideOrShowBalloon
  */
 function hideOrShowBalloon() {
-  if (window.innerWidth <= 1000) {
-    showBallon.value = false;
-    return;
+  const elt = document.getElementById("img_ballon");
+
+  if (showBalloon.value) {
+    elt.style.display = "block";
+  } else {
+    elt.style.display = "none";
   }
-  showBallon.value = true;
 }
 
 const videoRef = ref(null);
@@ -566,7 +568,6 @@ body::-webkit-scrollbar {
   transition: top 0.5s ease;
   z-index: 999;
 }
-
 
 .image img {
   width: 100%;
