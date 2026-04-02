@@ -1,6 +1,5 @@
 <template>
   <footer>
-
     <section class="remerciement" id="footer">
       <span>{{ $t("footer.remerciement") }}</span>
       <div class="logos">
@@ -9,7 +8,11 @@
         </span>
       </div>
     </section>
-
+    <div class="commentaireContenaire">
+      <router-link class="commentaire" :to="{ name: 'Commentaire' }">
+        <p>Venez noter l'évènement</p>
+      </router-link>
+    </div>
     <section class="groupes">
       <div class="groupe" v-for="(item, index) in footerArray" :key="index">
         <span>{{ item.title }}</span>
@@ -125,6 +128,36 @@ footer {
 .reseaux img:hover {
   opacity: 1;
   transition: var(--transition-fast);
+}
+.commentaireContenaire {
+  background-color: black;
+  text-align: center;
+  margin-top: -35px;
+  padding-bottom: 15px;
+}
+
+.commentaire {
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: relative;
+  display: inline-block;
+}
+
+.commentaire::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+  width: 0%;
+  height: 2px;
+  background-color: var(--rose-hover);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.commentaire:hover::after {
+  width: 110%;
 }
 </style>
 

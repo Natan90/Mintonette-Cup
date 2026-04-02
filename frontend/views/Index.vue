@@ -85,12 +85,6 @@
       </section>
     </div>
 
-    <div class="commentaireContenaire">
-      <router-link class="commentaire" :to="{ name: 'Commentaire' }">
-        <p>Venez noter l'événement</p>
-      </router-link>
-    </div>
-
     <section
       v-if="
         userStore &&
@@ -570,14 +564,8 @@ body::-webkit-scrollbar {
   transition: top 0.5s ease;
   z-index: 999;
 }
-.commentaireContenaire{
-  background-color: var(--rose-logo);
-}
-.commentaire {
-  color: var(--primary-color);
-  text-decoration: none;
-  text-align: center;
-}
+
+
 .image img {
   width: 100%;
   height: 100%;

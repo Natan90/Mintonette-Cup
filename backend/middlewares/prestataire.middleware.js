@@ -4,6 +4,8 @@ exports.validatePrestataireById = (req, res, next) => {
   if (!id_user) {
     return res.status(400).json({ error: "L'id de l'utilisateur est obligatoire" });
   }
+
+  next();
 }
 
 exports.validateBecomePresta = (req, res, next) => {

@@ -445,5 +445,19 @@
       "Réponse à un commentaire": "Réponse à un commentaire",
       "Suppression d'un de vos commentaire": "Suppression d'un de vos commentaire"
     }
+  },
+  "terrain": {
+    "retourAccueil": "Retour à l'accueil",
+    "terrainSuivant": "Terrain suivant",
+    "terrainPrecedent": "Terrain précédent",
+    "terrain": "Terrain",
+    "heure" : "Heure",
+    "coach": "Coach",
+    "remplacants": "Remplacants",
+    "reserverBillet": "Réserver votre billet dès à présent",
+    "taille": "Taille",
+    "age" :"Âge",
+    "poste": "Poste",
+    "ans": "Ans"
   }
 }
