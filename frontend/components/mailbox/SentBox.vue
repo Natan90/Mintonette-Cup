@@ -130,6 +130,7 @@ async function loadCurrentUser() {
  * Récupère tous les messages reçus ainsi que le nombre de messages non lus pour un utilisateur donné.
  * @param {number} id_user - Identifiant de l'utilisateur
  */
+
 async function getMessagesById(id_user) {
   try {
     const res = await mailBoxStore.getMessagesById(id_user);
