@@ -304,42 +304,42 @@
       }
     }
   },
-"filter": {
-  "titleFilter": "Find the Service Providers of the Mintonette Cup 2026!",
-  "slider": {
-    "prestataire": "Providers",
-    "service": "Services",
-    "people": "pers.",
-    "tarif": "Rate"
+  "filter": {
+    "titleFilter": "Find the Service Providers of the Mintonette Cup 2026!",
+    "slider": {
+      "prestataire": "Providers",
+      "service": "Services",
+      "people": "pers.",
+      "tarif": "Rate"
+    },
+    "name": {
+      "title": "Name",
+      "nameInput": "Search by name..."
+    },
+    "categorie": {
+      "title": "Category",
+      "all": "All"
+    },
+    "price": {
+      "title": "Price",
+      "minPrice": "Min",
+      "maxPrice": "Max"
+    },
+    "button": {
+      "search": "Search",
+      "reset": "Reset"
+    },
+    "description": "Description",
+    "info": {
+      "title": "Information",
+      "service": "Services",
+      "tarif": "Rate",
+      "capacite": "Capacity",
+      "people": "pers."
+    },
+    "contact": "Contacts",
+    "more": "Learn more"
   },
-  "name": {
-    "title": "Name",
-    "nameInput": "Search by name..."
-  },
-  "categorie": {
-    "title": "Category",
-    "all": "All"
-  },
-  "price": {
-    "title": "Price",
-    "minPrice": "Min",
-    "maxPrice": "Max"
-  },
-  "button": {
-    "search": "Search",
-    "reset": "Reset"
-  },
-  "description": "Description",
-  "info": {
-    "title": "Information",
-    "service": "Services",
-    "tarif": "Rate",
-    "capacite": "Capacity",
-    "people": "pers."
-  },
-  "contact": "Contacts",
-  "more": "Learn more"
-},
   "messagesServices": {
     "aucuneLangues": "Neither the French nor the English versions are filled in.\n\nDo you want to continue anyway?",
     "queFR": "The English version of the service is not filled in.\n\nDo you want to continue?",
@@ -466,13 +466,19 @@
     "ans": "Years old"
   },
   "gradin": {
-    "retourAccueil": "Back to Home",
-    "gradin": "Grandstand",
-    "matchSurTerrain": "Matches on this court",
+    "retourAccueil": "Back to home",
+    "gradin": "Stand",
+    "matchSurTerrain": "Matches on this field",
     "reservation": "Seat reservation",
     "siegeDispo": "Available seat",
     "siegeReserv": "Reserved seat",
     "siegeproprio": "Seat purchased by you",
-    "siegeSelec": "Selected seat "
+    "siegeSelec": "Selected seat ",
+    "siegesSelec": "Selected seats",
+    "ajoutPanier": "Add to cart",
+    "accederPanier": "Go to your cart",
+    "reinitialiserSelec": "Reset selection for this match",
+    "reinitialiserSelecTotal": "Reset all selections",
+    "bienAjoute": "These items have been successfully added to your cart"
   }
 }

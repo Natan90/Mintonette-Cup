@@ -480,6 +480,12 @@
     "siegeDispo": "Siège disponible",
     "siegeReserv": "Siège réservé",
     "siegeproprio": "Siège acheté par vous",
-    "siegeSelec": "Siège sélectionné"
+    "siegeSelec": "Siège sélectionné",
+    "siegesSelec": "Sièges sélectionnés ",
+    "ajoutPanier": "Ajouter au panier",
+    "accederPanier": "Accéder à votre panier",
+    "reinitialiserSelec" : "Réinitialiser la sélection pour ce match",
+    "reinitialiserSelecTotal": "Réinitialiser la sélection totale",
+    "bienAjoute": "Vous avez bien ajouté ces articles dans votre panier"
   }
 }

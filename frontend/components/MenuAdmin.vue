@@ -4,20 +4,25 @@
       <router-link
         v-for="(item, index) in menu"
         :key="index"
-        :to="{ name: item.linkName, params: { lang: locale } }">
-        {{ item.name }}
+        :to="{ name: item.linkName, params: { lang: locale } }"
+        custom
+        v-slot="{ href, navigate, isActive }">
+        <a
+          :href="href"
+          @click="navigate"
+          :class="{ 'menu-active': isActive }">
+          {{ item.name }}
+        </a>
       </router-link>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useUserStore } from "@/stores/user";
 
 const { locale, t } = useI18n();
-const userStore = useUserStore();
 
 const menu = computed(() => [
   { name: t("barreAdmin.evenement"), linkName: "Evenement" },
@@ -68,6 +73,14 @@ a:hover{
   border-left: 4px solid var(--primary-color); 
 }
 
+.menu-active{
+  padding-right: 0;
+  text-indent: 4px;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+
 @media(max-width: 1000px){
   
   .barre_menu{
@@ -99,6 +112,14 @@ a:hover{
     border-left: none;
     padding-bottom: 0;
     border-bottom: 3px solid var(--primary-color);
+  }
+
+  .menu-active{
+    padding-right: 0;
+    text-indent: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
   }
 
 }

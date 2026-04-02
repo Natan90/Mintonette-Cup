@@ -9,7 +9,9 @@
         ← {{ $t("gradin.retourAccueil") }}
       </router-link>
       <div class="matchHeader">
-        <h2>Mintonette Cup – {{ $t("gradin.gradin") }} {{ zone.toUpperCase() }}</h2>
+        <h2>
+          Mintonette Cup – {{ $t("gradin.gradin") }} {{ zone.toUpperCase() }}
+        </h2>
       </div>
 
       <section v-if="matches.length">
@@ -80,7 +82,9 @@
           </div>
 
           <div class="SeatInfo" v-if="globalSelectedSeats.length">
-            <h3>Sièges sélectionnés ({{ globalSelectedSeats.length }})</h3>
+            <h3>
+              {{ $t("gradin.siegesSelec") }} ({{ globalSelectedSeats.length }})
+            </h3>
             <ul>
               <li
                 v-for="seat in globalSelectedSeats"
@@ -106,16 +110,16 @@
             </p>
             <div class="buttonContainer">
               <button class="button" @click="AddToCart">
-                <b>Ajouter au panier </b>
+                <b>{{ $t("gradin.ajoutPanier") }} </b>
               </button>
 
               <router-link :to="{ name: 'Panier' }">
                 <button class="button basket">
-                  <b>Accéder à votre panier</b>
+                  <b>{{ $t("gradin.accederPanier") }}</b>
                 </button>
               </router-link>
               <button class="button reset" @click="resetSelection">
-                <b>Réinitialiser la sélection pour ce match</b>
+                <b>{{ $t("gradin.reinitialiserSelec") }}</b>
               </button>
             </div>
           </div>
@@ -123,12 +127,12 @@
         <div v-if="globalSelectedSeats.length">
           <div class="buttonContainer" v-if="idMatch">
             <button class="button resetButton" @click="resetAllSelection">
-              <b>Réinitialiser la sélection totale </b>
+              <b>{{ $t("gradin.reinitialiserSelecTotal") }}</b>
             </button>
           </div>
         </div>
         <div v-if="estAjoute" class="successMessage">
-          ✓ Vous avez bien ajouté ces articles dans votre panier
+          ✓ {{ $t("gradin.bienAjoute") }}
         </div>
       </section>
     </div>
@@ -507,6 +511,9 @@ onMounted(() => {
   color: #cbd5e0;
 }
 .buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   align-items: center;
 }
 .layout {
