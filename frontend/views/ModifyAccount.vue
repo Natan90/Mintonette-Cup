@@ -3,10 +3,10 @@
   <Modal v-model="showModal" :medium="true">
     <template #content>
       <div class="password-modal">
-        <h2>Sécurité du compte</h2>
+        <h2>{{ $t("account.changermdp.securite") }}</h2>
 
         <p>
-          Un mail de confirmation va être envoyé à :
+          {{ $t("account.changermdp.textMail") }}
           <span>{{ formData.mail }}</span>
         </p>
 
@@ -18,10 +18,10 @@
 
         <div class="modal-actions" v-if="!success">
           <button class="btn-cancel" @click="showModal = false">
-            Annuler
+            {{ $t("account.changermdp.annuler") }}
           </button>
           <button class="btn-confirm" @click="sendEmail(formData.mail)">
-            Confirmer l’envoi
+            {{ $t("account.changermdp.confirmer") }}
           </button>
         </div>
       </div>
@@ -111,7 +111,7 @@
 
           <div class="boutons">
             <button type="button" class="pointer btn-password" @click="() => { showModal = true; resetModalState(); }">
-              Changer mot de passe
+              {{ $t("account.changermdp.bouton") }}
             </button>
             <button class="pointer" type="submit" :disabled="isSubmitting">
               {{ isSubmitting ? $t("account.saving") : $t("account.save") }}

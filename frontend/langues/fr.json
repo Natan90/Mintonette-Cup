@@ -141,7 +141,14 @@
     "updateSuccess": "Vos informations ont été mises à jour avec succès !",
     "updateError": "Une erreur est survenue lors de la mise à jour",
     "errorLoading": "Erreur lors du chargement des données",
-    "emailAlreadyUsed": "Cet email est déjà utilisé"
+    "emailAlreadyUsed": "Cet email est déjà utilisé",
+    "changermdp": {
+      "bouton": "Changer le mot de passe",
+      "securite": "Sécurité du compte",
+      "textMail": "Un mail de confirmation va être envoyé à :",
+      "confirmer": "Confirmer l'envoi",
+      "annuler": "Annuler"
+    }
   },
   "burgerStand": {
     "title": "Stand de Burger",
@@ -179,6 +186,7 @@
   },
   "footer": {
     "remerciement": "AVEC LA COLLABORATION ET UN GRAND MERCI À :",
+    "noter": "Venez noter l'évènement !",
     "titlePrestataire": "PRESTATAIRES",
     "infoPrestataire1": "À propos",
     "infoPrestataire2": "Services",

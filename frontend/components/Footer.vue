@@ -8,9 +8,11 @@
         </span>
       </div>
     </section>
-    <div class="commentaireContenaire">
+    <div 
+      v-if="route.name !== 'Commentaire'"
+      class="commentaireContenaire">
       <router-link class="commentaire" :to="{ name: 'Commentaire' }">
-        <p>Venez noter l'évènement</p>
+        <p>{{ $t("footer.noter") }}</p>
       </router-link>
     </div>
     <section class="groupes">
@@ -37,6 +39,84 @@
     </section>
   </footer>
 </template>
+
+<script setup>
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+/* ********************
+    IMAGES IMPORTS 
+******************** */
+import logoHerault from "../images/logo_herault.png";
+import logoMontpellier from "../images/logo_montpellier.png";
+import logoVNL from "../images/logo_vnl.jpg";
+import logoFederationVolley from "../images/federation_volley.png";
+
+import iconYoutube from "../images/icon_youtube.png";
+import iconInstagram from "../images/icon_instagram.png";
+import iconX from "../images/icon_x.png";
+import iconFacebook from "../images/icon_facebook.png";
+
+const { t } = useI18n();
+
+const imgRemerciement = computed(() => [
+  {
+    image: logoHerault,
+  },
+  {
+    image: logoMontpellier,
+  },
+  {
+    image: logoVNL,
+  },
+  {
+    image: logoFederationVolley,
+  },
+]);
+
+const imgReseaux = computed(() => [
+  {
+    image: iconYoutube,
+  },
+  {
+    image: iconInstagram,
+  },
+  {
+    image: iconX,
+  },
+  {
+    image: iconFacebook,
+  },
+]);
+
+const footerArray = computed(() => [
+  {
+    title: t("footer.titlePrestataire"),
+    options: [
+      { option: t("footer.infoPrestataire1") },
+      { option: t("footer.infoPrestataire2") },
+    ],
+  },
+  {
+    title: t("footer.titleProduit"),
+    options: [
+      { option: t("footer.infoProduit1") },
+      { option: t("footer.infoProduit2") },
+    ],
+  },
+  {
+    title: t("footer.titleContact"),
+    options: [
+      { option: t("footer.infoContact1") },
+      { option: t("footer.infoContact2") },
+      { option: t("footer.infoContact3") },
+    ],
+  },
+]);
+</script>
 
 <style scoped>
 footer {
@@ -160,78 +240,3 @@ footer {
   width: 110%;
 }
 </style>
-
-<script setup>
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
-
-/* ********************
-    IMAGES IMPORTS 
-******************** */
-import logoHerault from "../images/logo_herault.png";
-import logoMontpellier from "../images/logo_montpellier.png";
-import logoVNL from "../images/logo_vnl.jpg";
-import logoFederationVolley from "../images/federation_volley.png";
-
-import iconYoutube from "../images/icon_youtube.png";
-import iconInstagram from "../images/icon_instagram.png";
-import iconX from "../images/icon_x.png";
-import iconFacebook from "../images/icon_facebook.png";
-
-const { t } = useI18n();
-
-const imgRemerciement = computed(() => [
-  {
-    image: logoHerault,
-  },
-  {
-    image: logoMontpellier,
-  },
-  {
-    image: logoVNL,
-  },
-  {
-    image: logoFederationVolley,
-  },
-]);
-
-const imgReseaux = computed(() => [
-  {
-    image: iconYoutube,
-  },
-  {
-    image: iconInstagram,
-  },
-  {
-    image: iconX,
-  },
-  {
-    image: iconFacebook,
-  },
-]);
-
-const footerArray = computed(() => [
-  {
-    title: t("footer.titlePrestataire"),
-    options: [
-      { option: t("footer.infoPrestataire1") },
-      { option: t("footer.infoPrestataire2") },
-    ],
-  },
-  {
-    title: t("footer.titleProduit"),
-    options: [
-      { option: t("footer.infoProduit1") },
-      { option: t("footer.infoProduit2") },
-    ],
-  },
-  {
-    title: t("footer.titleContact"),
-    options: [
-      { option: t("footer.infoContact1") },
-      { option: t("footer.infoContact2") },
-      { option: t("footer.infoContact3") },
-    ],
-  },
-]);
-</script>

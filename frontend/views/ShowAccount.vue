@@ -1,7 +1,7 @@
 <template>
   <NavView></NavView>
   <div class="back-arrow pointer" @click="goBack">
-    &#8592; {{ $t('bouton.retourListe') }}
+    &#8592; {{ $t('bouton.retour') }}
   </div>    
   <div class="page">
     <div class="formulaire">
@@ -50,7 +50,7 @@
         <div class="created-at-info">
           <p>
             {{ $t("account.createdAt") }} :
-            <strong>{{ userData.createdAt || "N/A" }}</strong>
+            <strong>{{ formattedDate || "N/A" }}</strong>
           </p>
         </div>
 
@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useNavigationStore } from "@/stores/navigation";
 import { useUserStore } from "@/stores/user";
@@ -120,6 +120,17 @@ const loading = ref(true);
 const message = ref("");
 const messageType = ref("");
 const isDeleting = ref(false);
+const rawDate = ref('');
+
+const formattedDate = computed(() => {
+  if (!rawDate.value) return '';
+  const date = new Date(rawDate.value);
+  return date.toLocaleDateString(locale.value, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+});
 
 const userData = ref({
   id_user: "",
@@ -128,8 +139,7 @@ const userData = ref({
   login: "",
   mail: "",
   tel_utilisateur: "",
-  sexe: "",
-  createdAt: "",
+  sexe: ""
 });
 
 onMounted(() => {
@@ -160,15 +170,7 @@ async function getValuesUtilisateurs() {
     const response = await adminAPIStore.GetCurrentUser();
     console.log('User data received:', response.data);
 
-    let formattedDate = '';
-    if (response.data.date_creation_utilisateur) {
-      const date = new Date(response.data.date_creation_utilisateur);
-      formattedDate = date.toLocaleDateString('fr-FR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    }
+    rawDate.value = response.data.date_creation_utilisateur || '';
 
     userData.value = {
       id_user: response.data.id_utilisateur || '',
@@ -177,8 +179,7 @@ async function getValuesUtilisateurs() {
       login: response.data.login_utilisateur || '',
       mail: response.data.mail_utilisateur || '',
       tel_utilisateur: response.data.tel_utilisateur || '',
-      sexe: response.data.sexe_utilisateur || '',
-      createdAt: formattedDate
+      sexe: response.data.sexe_utilisateur || ''
     };
 
     console.log('User data updated:', userData.value);

@@ -141,7 +141,14 @@
     "updateSuccess": "Your information has been successfully updated!",
     "updateError": "An error occurred while updating",
     "errorLoading": "Error loading data",
-    "emailAlreadyUsed": "This email is already in use"
+    "emailAlreadyUsed": "This email is already in use",
+    "changermdp": {
+      "bouton": "Change password",
+      "securite": "Account security",
+      "textMail": "A confirmation email will be sent to:",
+      "confirmer": "Confirm sending",
+      "annuler": "Cancel"
+    }
   },
   "burgerStand": {
     "title": "Burger Stand",
@@ -191,6 +198,7 @@
   },
   "footer": {
     "remerciement": "WITH THE COLLABORATION AND A BIG THANK YOU TO :",
+    "noter": "Come note the event !",
     "titlePrestataire": "SERVICE PROVIDERS",
     "infoPrestataire1": "About",
     "infoPrestataire2": "Services",
