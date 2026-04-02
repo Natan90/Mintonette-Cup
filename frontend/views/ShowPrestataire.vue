@@ -318,17 +318,20 @@ function goToEditPrestataire() {
 //= Async functions presta =
 //==========================
 /**
- * Récupère les informations du prestataire ainsi que ses services associés.
+ * Récupère les informations du prèestataire ainsi que ses services associés.
 */
 async function getValuesPrestataireById(id_presta) {
   try { 
     const res = await prestataireStore.GetPrestataireByIdPrestataire(id_presta);
+    console.log("prestataire:", JSON.stringify(res.data)); 
     onePresta.value = res.data.prestataire;
     isActivityService.value = res.data.prestataire.is_activity ?? false;
 
     const id_prestataire = res.data.prestataire.id_prestataire;
+     console.log("id_prestataire utilisé:", id_prestataire); 
 
     const resServices = await serviceStore.GetServiceByIdPrestataire(id_prestataire);
+    console.log("services:", JSON.stringify(resServices.data));
     services.value = resServices.data.services;
 
   } catch (err) {

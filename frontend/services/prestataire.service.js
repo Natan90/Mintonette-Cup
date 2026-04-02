@@ -18,7 +18,7 @@ export const usePrestataireStore = defineStore("prestataire", () => {
     if (!id_user) {
       throw new Error("L'id de l'utilisateur est obligatoire");
     }
-    return getRequest(`/prestataire/show/${id_user}`);
+    return getRequest(`/prestataire/show/utilisateur/${id_user}`);
   }
 
   async function BecomePrestataire(id_user, data) {

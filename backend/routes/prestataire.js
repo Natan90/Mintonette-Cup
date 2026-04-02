@@ -41,7 +41,7 @@ router.get("/show/:id_presta", prestataireMiddleware.validatePrestataireByIdPres
 // GET prestataire par id_user
 /**
  * @swagger
- * /show/{id_user}:
+ * /show/utilisateur/{id_user}:
  *   get:
  *     summary: Récupère un prestataire par id utilisateur
  *     tags: [Prestataire]
@@ -57,7 +57,7 @@ router.get("/show/:id_presta", prestataireMiddleware.validatePrestataireByIdPres
  *       404:
  *         description: Prestataire non trouvé
  */
-router.get("/show/:id_user", prestataireMiddleware.validatePrestataireByIdUtilisateur, prestataireController.getPrestataireByIdUtilisateur);
+router.get("/show/utilisateur/:id_user", prestataireMiddleware.validatePrestataireByIdUtilisateur, prestataireController.getPrestataireByIdUtilisateur);
 
 // POST devenir prestataire
 /**

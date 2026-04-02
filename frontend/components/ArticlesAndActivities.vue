@@ -267,6 +267,7 @@ const prestataireInfoStore = usePrestataireInfoStore();
 const isActivityService = computed(() => route.query.isActivityService === 'true');
 const id_presta = computed(() => route.params.id_presta);
 const id_service = computed(() => route.params.id);
+const isAddMode = computed(() => !id_service.value || route.query.isAddMode === 'true');
 
 const message = ref("");
 const messageType = ref("success");

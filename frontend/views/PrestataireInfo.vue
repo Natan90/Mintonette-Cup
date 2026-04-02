@@ -1,8 +1,12 @@
 <template>
   <NavView id="nav_bar"></NavView>
-  <Modal v-model="isModalService" :bigger="true">
+  <Modal 
+    :model-value="isModalService" 
+    @update:model-value="onModalClose" 
+    :bigger="true">
     <template #content>
       <div class="service_details">
+        
         <!-- Langue -->
         <div class="service_lang">
           <button class="btn_lang" @click="changeDescriLang()">
@@ -10,6 +14,13 @@
             <span v-else>🌐 Switch to French</span>
           </button>
         </div>
+
+        <div class="message_error" v-if="services.length === 0">
+          <p>
+            Vous devez ajouter au moins un service pour finaliser votre inscription.
+          </p>
+        </div>
+
 
         <!-- Nom du service -->
         <div class="service_form_group">
@@ -103,7 +114,7 @@
     </template>
   </Modal>
 
-  <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave">
+  <v-dialog v-model="showLeaveDialog" max-width="500" class="confirmLeave" :z-index="99999">
     <v-card title="Quitter la page ?">
       <v-card-text>
         Vous avez des modifications <strong>non sauvegardées</strong>. Si vous
@@ -295,7 +306,7 @@
             placeholder="0123456789" />
         </div>
 
-        <div class="form_group">
+        <!-- <div class="form_group">
           <div class="ajout_services">
             <label>{{
               $t("prestataireInfo.services", {
@@ -321,13 +332,13 @@
               <span v-else class="inactive-icon" title="Inactif">&#10007;</span>
               <button
                 class="btn_activate"
-                v-if="!item.activate"
+                v-if="!item.activate && !pathAdd"
                 @click="activateService(item)">
                 Activer
               </button>
               <button
                 class="btn_desactivate"
-                v-else-if="item.activate"
+                v-else-if="item.activate && !pathAdd"
                 @click="desactivatingService(item)">
                 Désactiver
               </button>
@@ -339,7 +350,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Message de succès ou d'erreur après action -->
         <div
@@ -350,13 +361,6 @@
           ">
           <span class="text">{{ message }}</span>
           <span class="modal-close" @click="closeMessage">&times;</span>
-        </div>
-
-        <div class="message_error" v-if="services.length === 0">
-          <p>
-            Vous devez ajouter au moins un service pour finaliser votre
-            inscription.
-          </p>
         </div>
 
         <!-- Bouton de modification (mode édition) -->
@@ -400,6 +404,7 @@ import { useMailBoxStore } from "@/services/reception_box.service";
 import { useNavigationStore } from "@/stores/navigation";
 import { usePrestataireInfoStore } from "@/stores/prestataire_info";
 import { storeToRefs } from "pinia";
+import { useAdminAPIStore } from "@/services/admin.service";
 
 // ── Stores & Router ──────────────────────────────
 const { t, locale } = useI18n();
@@ -409,6 +414,7 @@ const prestataireStore = usePrestataireStore();
 const typePrestataireStore = useTypePrestataireStore();
 const mailBoxStore = useMailBoxStore();
 const prestataireInfoStore = usePrestataireInfoStore();
+const adminStore = useAdminAPIStore();
 const navStore = useNavigationStore();
 const route = useRoute();
 const router = useRouter();
@@ -617,6 +623,42 @@ onMounted(async () => {
 });
 
 // ── UI & Modal ───────────────────────────────────
+function onModalClose(val) {
+  if (!val && pathAdd.value && alreadyAdded.value) {
+    const hasModalData = 
+      nomService.value?.trim() !== "" ||
+      descriService.value?.fr?.trim() !== "" ||
+      descriService.value?.en?.trim() !== "" ||
+      besoinService.value?.fr?.trim() !== "" ||
+      besoinService.value?.en?.trim() !== "";
+
+    if (hasModalData) {
+      showLeaveDialog.value = true;
+      return;
+    }
+    isModalService.value = false;
+    deletePrestaIfNoService();
+    return;
+  }
+  isModalService.value = val;
+}
+
+async function deletePrestaIfNoService() {
+  try {
+    const resServices = await serviceStore.GetServiceByIdPrestataire(userStore.prestaId);
+    const hasServices = resServices.data.services.length > 0;
+
+    if (!hasServices) {
+      await adminStore.DeletePrestataire(userStore.prestaId);
+      userStore.prestaId = null;
+      alreadyAdded.value = false;
+      message.value = "Inscription annulée.";
+      messageType.value = "error";
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 /**
  * Ferme le message d'information (erreur ou succès)
  * affiché dans la modal de service.
@@ -675,21 +717,15 @@ function hideContinueInscription() {
  */
 function cancelLeave() {
   showLeaveDialog.value = false;
-  pendingNavigation.value = null;
 }
 /**
  * Confirme la sortie de la page malgré les modifications non sauvegardées.
  * Nettoie le store puis redirige vers la route ciblée.
  */
-function confirmLeave() {
+async function confirmLeave() {
   showLeaveDialog.value = false;
-  prestataireInfoStore.clearStore();
-  allowLeave.value = true;
-
-  if (pendingNavigation.value) {
-    router.push(pendingNavigation.value);
-    pendingNavigation.value = null;
-  }
+  isModalService.value = false;
+  await deletePrestaIfNoService();
 }
 
 function displayBlink() {
@@ -835,7 +871,9 @@ async function addServiceToPrestataire() {
   }
 
   try {
-    const res = await serviceStore.CreateService(prestaId.value, {
+    const idToUse = pathAdd.value ? userStore.prestaId : prestaId.value;
+
+    const res = await serviceStore.CreateService(idToUse, {
       nom_service: nomService.value,
       descri_service: descriService.value,
       besoin: besoinService.value,
@@ -844,20 +882,17 @@ async function addServiceToPrestataire() {
     });
 
     const newServiceId = res.data.service.id_service;
-
-    console.log(JSON.stringify(res.data.service));
-
-    message.value = "Service ajouté avec succès !";
-    messageType.value = "success";
+    isModalService.value = false;
 
     router.push({
       name: "AddByService",
       params: {
-        id_presta: prestaId.value,
+        id_presta: idToUse,
         id: newServiceId,
       },
       query: { isActivityService: isActivityService.value },
     });
+
   } catch (err) {
     message.value = err.message;
     messageType.value = "error";
@@ -867,9 +902,14 @@ async function addServiceToPrestataire() {
  * Supprime un service de la liste affichée dans le formulaire.
  */
 function removeServiceField(item) {
-  deleteService.value = true;
-  serviceDelete.value = item;
-  console.log(serviceDelete.value);
+  if (pathAdd.value) {
+    services.value = services.value.filter(
+      (s) => s.nom_service !== item.nom_service
+    );
+  } else {
+    deleteService.value = true;
+    serviceDelete.value = item;
+  }
 }
 /**
  * Annule la suppression du service.
@@ -1141,12 +1181,7 @@ async function getValuesPrestataire() {
 
 async function addPrestataire() {
   try {
-    if (services.value.length === 0) {
-      message.value =
-        "Vous ne pouvez pas devenir prestataire sans proposer de service.";
-      messageType.value = "error";
-      return;
-    }
+    // 
     const res = await prestataireStore.BecomePrestataire(userStore.userId, {
       nom: nom_presta.value,
       descri: descri_presta.value,
@@ -1156,14 +1191,17 @@ async function addPrestataire() {
       type: Number(selectedTypeId_presta.value),
     });
 
+    const newPrestaId = res.data.user.id_prestataire;
+    userStore.prestaId = newPrestaId;
     alreadyAdded.value = true;
-    userStore.prestaId = res.data.id_prestataire;
-
+    
     await sendMailToAdmin(false);
 
     message.value =
       "Votre demande de prestation a été ajoutée avec succès et est en attente de validation.";
     messageType.value = "success";
+
+    showModalByService();
   } catch (err) {
     message.value = err.response?.data?.error || err.message;
     messageType.value = "error";
