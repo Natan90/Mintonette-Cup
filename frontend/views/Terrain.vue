@@ -74,7 +74,7 @@
                 @click.stop="moreInfo(player, 'right')" />
 
               <span class="name">
-                {{ player.prenom_joueur }} {{ player.nom_joueur }} 
+                {{ player.prenom_joueur }} {{ player.nom_joueur }}
               </span>
             </div>
           </div>
@@ -105,7 +105,7 @@
         <div v-if="selectedPlayer" class="playerCard" :class="cardSide">
           <h4>
             {{ selectedPlayer.prenom_joueur }}
-            {{ selectedPlayer.nom_joueur }} ({{(selectedPlayer.pays)}})
+            {{ selectedPlayer.nom_joueur }} ({{ selectedPlayer.pays }})
           </h4>
           <p>
             <strong>{{ $t("terrain.poste") }}:</strong>
@@ -176,7 +176,7 @@
             },
           }
     "
-    class="button">
+    class="button buttonReserver">
     {{ $t("terrain.reserverBillet") }}
   </router-link>
 
@@ -551,7 +551,12 @@ function getAge(player) {
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
-
+.buttonReserver {
+  display: block;
+  width: 200px;
+  margin: 24px auto 10px;
+  text-align: center;
+}
 .playerCard.right {
   left: auto;
   right: auto;

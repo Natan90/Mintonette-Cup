@@ -367,6 +367,8 @@ async function changePresta(newValue, idPresta) {
 
 .tabs-container {
     display: flex;
+    width: 100%;
+    justify-content: flex-start;
     gap: 10px;
     margin-bottom: 20px;
     border-bottom: 2px solid #e5e7eb;
