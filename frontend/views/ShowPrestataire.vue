@@ -6,50 +6,100 @@
         <div v-if="isActivityService" class="show-prestataire__items-list">
           <h3>Activités</h3>
           <div v-if="activitesList.length > 0">
-            <div v-for="(item, index) in activitesList" :key="index" class="showPrestaActiviteCard"
-              :class="{ 'showPrestaActiviteCardSelected': selectedActivites.includes(item.id_activite) }"
+            <div
+              v-for="(item, index) in activitesList"
+              :key="index"
+              class="showPrestaActiviteCard"
+              :class="{
+                showPrestaActiviteCardSelected: selectedActivites.includes(
+                  item.id_activite,
+                ),
+              }"
               @click="toggleActivite(item.id_activite)">
               <label class="showPrestaCheckboxLabel">
                 <span class="showPrestaCheckboxCustom">
                   <svg viewBox="0 0 10 8" fill="none">
-                    <polyline points="1,4 4,7 9,1" stroke="#fff" stroke-width="1.8" stroke-linecap="round"
+                    <polyline
+                      points="1,4 4,7 9,1"
+                      stroke="#fff"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
                       stroke-linejoin="round" />
                   </svg>
                 </span>
                 <div class="showPrestaActiviteInfo">
                   <strong>{{ item.nom_activite }}</strong>
                   <span>
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      style="vertical-align: -2px; margin-right: 4px">
                       <rect x="2" y="3" width="12" height="11" rx="2" />
                       <line x1="5" y1="1" x2="5" y2="5" />
                       <line x1="11" y1="1" x2="11" y2="5" />
                       <line x1="2" y1="7" x2="14" y2="7" />
                     </svg>
-                    {{ item.date_activite }} à {{ item.heure_activite }}</span>
+                    {{ item.date_activite }} à {{ item.heure_activite }}</span
+                  >
                   <span>
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      style="vertical-align: -2px; margin-right: 4px">
                       <circle cx="8" cy="5" r="3" />
                       <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" />
                     </svg>
                     {{ item.nb_participant }} participants max ·
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round"
-                      style="vertical-align:-2px;margin-right:4px;margin-left:4px">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      style="
+                        vertical-align: -2px;
+                        margin-right: 4px;
+                        margin-left: 4px;
+                      ">
                       <circle cx="8" cy="8" r="6" />
                       <path d="M8 5v3l2 2" />
-                    </svg> {{ item.prix }} € / u</span>
+                    </svg>
+                    {{ item.prix }} € / u</span
+                  >
                 </div>
               </label>
             </div>
 
             <div class="showPrestaReserverFooter">
-              <span class="showPrestaReserverCount" v-if="selectedActivites.length > 0">
-                {{ selectedActivites.length }} sélectionnée{{ selectedActivites.length > 1 ? 's' : '' }}
+              <span
+                class="showPrestaReserverCount"
+                v-if="selectedActivites.length > 0">
+                {{ selectedActivites.length }} sélectionnée{{
+                  selectedActivites.length > 1 ? "s" : ""
+                }}
               </span>
-              <button class="presta-btn-reserver" :disabled="selectedActivites.length === 0"
-                :class="{ 'presta-btn-reserver-disabled': selectedActivites.length === 0 }"
+              <button
+                class="presta-btn-reserver"
+                :disabled="selectedActivites.length === 0"
+                :class="{
+                  'presta-btn-reserver-disabled':
+                    selectedActivites.length === 0,
+                }"
                 @click="reserverActivitesSelectionnees">
                 <div class="presta-btn-reserver-inner">
                   <div class="presta-btn-reserver-icon">
@@ -58,12 +108,22 @@
                       <line x1="5" y1="1" x2="5" y2="5" />
                       <line x1="11" y1="1" x2="11" y2="5" />
                       <line x1="2" y1="7" x2="14" y2="7" />
-                      <circle cx="8" cy="11" r="1.2" fill="#fff" stroke="none" />
+                      <circle
+                        cx="8"
+                        cy="11"
+                        r="1.2"
+                        fill="#fff"
+                        stroke="none" />
                     </svg>
                   </div>
                   <div class="presta-btn-reserver-text">
-                    <span class="presta-btn-reserver-label">{{ activitesList.length }} activité(s) disponible(s)</span>
-                    <span class="presta-btn-reserver-main">Réserver la sélection</span>
+                    <span class="presta-btn-reserver-label"
+                      >{{ activitesList.length }} activité(s)
+                      disponible(s)</span
+                    >
+                    <span class="presta-btn-reserver-main"
+                      >Réserver la sélection</span
+                    >
                   </div>
                   <span class="presta-btn-reserver-arrow">→</span>
                 </div>
@@ -75,19 +135,44 @@
         <div v-else class="show-prestataire__items-list">
           <h3>Articles</h3>
           <div v-if="articlesList.length > 0">
-            <div v-for="(item, index) in articlesList" :key="index" class="show-prestataire__service-card">
-              <p><strong>{{ item.nom_article }}</strong></p>
-              <p><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+            <div
+              v-for="(item, index) in articlesList"
+              :key="index"
+              class="show-prestataire__service-card">
+              <p>
+                <strong>{{ item.nom_article }}</strong>
+              </p>
+              <p>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  style="vertical-align: -2px; margin-right: 4px">
                   <path d="M2 2h2l2.4 7h5.2l1.8-5H5" />
                   <circle cx="7" cy="13" r="1" />
-                  <circle cx="12" cy="13" r="1" />
-                </svg>Stock : {{ item.stock }}</p>
-              <p><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                  <circle cx="12" cy="13" r="1" /></svg
+                >Stock : {{ item.stock }}
+              </p>
+              <p>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  style="vertical-align: -2px; margin-right: 4px">
                   <circle cx="8" cy="8" r="6" />
-                  <path d="M8 5v3l2 2" />
-                </svg>{{ item.prix }} € / u</p>
+                  <path d="M8 5v3l2 2" /></svg
+                >{{ item.prix }} € / u
+              </p>
             </div>
           </div>
           <p v-else>Aucun article disponible.</p>
@@ -105,14 +190,19 @@
       <h1 class="showPrestaTitre">
         {{ $t("adminPage.prestataire.service.title") }}
       </h1>
-      <p v-html="$t('adminPage.prestataire.service.descri', {
-        nom_prestataire: onePresta.nom_prestataire,
-      })
-        " class="showPrestaCarte showPrestaSousTitre"></p>
+      <p
+        v-html="
+          $t('adminPage.prestataire.service.descri', {
+            nom_prestataire: onePresta.nom_prestataire,
+          })
+        "
+        class="showPrestaCarte showPrestaSousTitre"></p>
     </div>
 
     <div class="showPrestaServiceRow showPrestaSectionPadding">
-      <p class="showPrestaNbService showPrestaNbServiceValid" v-if="services.filter((p) => p.activate).length > 0">
+      <p
+        class="showPrestaNbService showPrestaNbServiceValid"
+        v-if="services.filter((p) => p.activate).length > 0">
         {{
           $t("adminPage.prestataire.service.nb_services", {
             count: services.filter((p) => p.activate).length,
@@ -135,28 +225,46 @@
         </select>
       </div>
     </div>
-    <div class="show-prestataire__glass showPrestaNotificationValid" v-if="activate">
-      <p v-html="$t('adminPage.prestataire.service.messageActiver', {
-        nomService: desactivateService?.nom_service,
-      })
+    <div
+      class="show-prestataire__glass showPrestaNotificationValid"
+      v-if="activate">
+      <p
+        v-html="
+          $t('adminPage.prestataire.service.messageActiver', {
+            nomService: desactivateService?.nom_service,
+          })
         "></p>
-      <span class="showPrestaNoticeClose" @click="closeMessageActivate">&times;</span>
+      <span class="showPrestaNoticeClose" @click="closeMessageActivate"
+        >&times;</span
+      >
     </div>
 
-    <div class="show-prestataire__glass showPrestaNotificationRefus" v-else-if="desactivate">
-      <p v-html="$t('adminPage.prestataire.service.messageDesactiver', {
-        nomService: desactivateService?.nom_service,
-      })
+    <div
+      class="show-prestataire__glass showPrestaNotificationRefus"
+      v-else-if="desactivate">
+      <p
+        v-html="
+          $t('adminPage.prestataire.service.messageDesactiver', {
+            nomService: desactivateService?.nom_service,
+          })
         "></p>
-      <span class="showPrestaNoticeClose" @click="closeMessageDesactivate">&times;</span>
+      <span class="showPrestaNoticeClose" @click="closeMessageDesactivate"
+        >&times;</span
+      >
     </div>
 
-    <div class="show-prestataire__glass showPrestaNotificationSuppr" v-else-if="deleting">
-      <p v-html="$t('adminPage.prestataire.service.messageSuppr', {
-        nomService: desactivateService?.nom_service,
-      })
+    <div
+      class="show-prestataire__glass showPrestaNotificationSuppr"
+      v-else-if="deleting">
+      <p
+        v-html="
+          $t('adminPage.prestataire.service.messageSuppr', {
+            nomService: desactivateService?.nom_service,
+          })
         "></p>
-      <span class="showPrestaNoticeClose" @click="closeMessageSuppr">&times;</span>
+      <span class="showPrestaNoticeClose" @click="closeMessageSuppr"
+        >&times;</span
+      >
     </div>
 
     <section>
@@ -164,7 +272,9 @@
         <div class="show-prestataire__card">
           <p class="show-prestataire__name">{{ onePresta.nom_prestataire }}</p>
           <!-- <img src=""> -->
-          <div class="show-prestataire__description" v-html="onePresta.descri_prestataire"></div>
+          <div
+            class="show-prestataire__description"
+            v-html="onePresta.descri_prestataire"></div>
           <div class="show-prestataire__contact">
             <p class="show-prestataire__contact-title"><b>Contact</b></p>
             <p>{{ onePresta.mail_prestataire }}</p>
@@ -186,39 +296,62 @@
               </b>
             </p>
             <ul>
-              <li v-for="(item, index) in servicesFiltres" :key="index" class="show-prestataire__service-item"
+              <li
+                v-for="(item, index) in servicesFiltres"
+                :key="index"
+                class="show-prestataire__service-item"
                 style="padding-bottom: 10px">
                 <div class="show-prestataire__service-row">
                   {{ item.nom_service }}
-                  <span v-if="item.activate" class="show-prestataire__status-active" title="Actif">&#10003;</span>
-                  <span v-else class="show-prestataire__status-inactive" title="Inactif">&#10007;</span>
+                  <span
+                    v-if="item.activate"
+                    class="show-prestataire__status-active"
+                    title="Actif"
+                    >&#10003;</span
+                  >
+                  <span
+                    v-else
+                    class="show-prestataire__status-inactive"
+                    title="Inactif"
+                    >&#10007;</span
+                  >
                   <span class="show-prestataire__actions">
-                    <button class="show-prestataire__btn-info" @click="
-                      getValuesArticlesOrActivitesByIdService(
-                        item.id_service,
-                        isActivityService,
-                      )
+                    <button
+                      class="show-prestataire__btn-info"
+                      @click="
+                        getValuesArticlesOrActivitesByIdService(
+                          item.id_service,
+                          isActivityService,
+                        )
                       ">
                       Voir
                     </button>
                     <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
-                    <button class="show-prestataire__btn-activate" v-if="
-                      !item.activate &&
-                      userStore.isConnected &&
-                      userStore.prestaId == idPresta
-                    " @click="activateService(item)">
+                    <button
+                      class="show-prestataire__btn-activate"
+                      v-if="
+                        !item.activate &&
+                        userStore.isConnected &&
+                        userStore.prestaId == idPresta
+                      "
+                      @click="activateService(item)">
                       Activer
                     </button>
-                    <button class="show-prestataire__btn-disable" v-else-if="
-                      item.activate &&
-                      userStore.isConnected &&
-                      userStore.prestaId == idPresta
-                    " @click="desactivatingService(item)">
+                    <button
+                      class="show-prestataire__btn-disable"
+                      v-else-if="
+                        item.activate &&
+                        userStore.isConnected &&
+                        userStore.prestaId == idPresta
+                      "
+                      @click="desactivatingService(item)">
                       Désactiver
                     </button>
-                    <button class="show-prestataire__btn-delete" v-if="
-                      userStore.isConnected && userStore.prestaId == idPresta
-                    ">
+                    <button
+                      class="show-prestataire__btn-delete"
+                      v-if="
+                        userStore.isConnected && userStore.prestaId == idPresta
+                      ">
                       Supprimer
                     </button>
                   </span>
@@ -231,11 +364,14 @@
     </section>
 
     <div>
-      <button class="show-prestataire__edit-button" @click="goToEditPrestataire" v-if="
-        userStore.isConnected &&
-        onePresta.ispresta &&
-        userStore.prestaId === idPresta
-      ">
+      <button
+        class="show-prestataire__edit-button"
+        @click="goToEditPrestataire"
+        v-if="
+          userStore.isConnected &&
+          onePresta.ispresta &&
+          userStore.prestaId === idPresta
+        ">
         Modifier mon profil
       </button>
     </div>
@@ -345,7 +481,6 @@ const servicesFiltres = computed(() => {
   return liste;
 });
 
-
 /**
  * Masque le message de confirmation d’activation de service.
  */
@@ -424,7 +559,7 @@ async function getValuesArticlesOrActivitesByIdService(
           id_activite: a.id_activite,
           nom_activite: a.nom_activite,
           nb_participant: a.nb_participant,
-          prix: a.prix_activite != null ? Number(a.prix_activite) : '—',
+          prix: a.prix_activite != null ? Number(a.prix_activite) : "—",
           date_activite: a.date_activite?.slice(0, 10),
           heure_activite: a.date_activite?.slice(11, 16),
         }));
@@ -436,7 +571,7 @@ async function getValuesArticlesOrActivitesByIdService(
           id_article: a.id_article,
           nom_article: a.nom_article,
           stock: a.stock,
-          prix: a.prix_article != null ? Number(a.prix_article) : '—',
+          prix: a.prix_article != null ? Number(a.prix_article) : "—",
         }));
     }
   } catch (err) {
@@ -445,9 +580,9 @@ async function getValuesArticlesOrActivitesByIdService(
 }
 
 function toggleActivite(id) {
-  const i = selectedActivites.value.indexOf(id)
-  if (i === -1) selectedActivites.value.push(id)
-  else selectedActivites.value.splice(i, 1)
+  const i = selectedActivites.value.indexOf(id);
+  if (i === -1) selectedActivites.value.push(id);
+  else selectedActivites.value.splice(i, 1);
 }
 /**
  * Désactive le service du prestataire.
@@ -491,7 +626,11 @@ async function actionsService(service) {
  */
 async function reserverActivitesSelectionnees() {
   if (!userStore.userId) {
-    console.error("Utilisateur non connecté !");
+    navStore.previousRoute = route.fullPath;
+    router.push({
+      name: "Connexion_utilisateur",
+      params: { lang: route.params.lang },
+    });
     return;
   }
 
@@ -776,7 +915,7 @@ function updateDescription() {
   font-size: 0.92rem;
 }
 
-.show-prestataire__card>p:last-child {
+.show-prestataire__card > p:last-child {
   margin: 16px 0 0;
   color: #9ab09e;
   font-size: 0.88rem;
@@ -787,7 +926,7 @@ function updateDescription() {
   padding: 24px;
 }
 
-.show-prestataire__services>p {
+.show-prestataire__services > p {
   margin: 0 0 16px;
   font-size: 0.82rem;
   color: #7a9a7e;

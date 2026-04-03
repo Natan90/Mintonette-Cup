@@ -1332,7 +1332,7 @@ INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, id_utilisateur, zo
     ('C', 5,  FALSE, NULL, 'NORD', 1), ('C', 6,  FALSE, NULL, 'NORD', 1), ('C', 7,  FALSE, NULL, 'NORD', 1), ('C', 8,  FALSE, NULL, 'NORD', 1),
     ('C', 9,  FALSE, NULL, 'NORD', 1), ('C', 10,  FALSE, NULL, 'NORD', 1), ('C', 11,  FALSE, NULL, 'NORD', 1), ('C', 12,  FALSE, NULL, 'NORD', 1),
 
-    ('D', 1,  FALSE, NULL, 'NORD', 1), ('D', 2,  FALSE, NULL, 'NORD', 1), ('D', 3,  FALSE, NULL, 'NORD', 1), ('D', 4,  FALSE, NULL, 'NORD', 1),
+    ('D', 1,  FALSE, NULL, 'NORD', 1), ('D', 2,  TRUE, 2, 'NORD', 1), ('D', 3,  TRUE, 2, 'NORD', 1), ('D', 4,  FALSE, NULL, 'NORD', 1),
     ('D', 5,  FALSE, NULL, 'NORD', 1), ('D', 6,  FALSE, NULL, 'NORD', 1), ('D', 7,  FALSE, NULL, 'NORD', 1), ('D', 8,  FALSE, NULL, 'NORD', 1),
     ('D', 9,  FALSE, NULL, 'NORD', 1), ('D', 10,  FALSE, NULL, 'NORD', 1), ('D', 11,  FALSE, NULL, 'NORD', 1), ('D', 12,  FALSE, NULL, 'NORD', 1),
 
@@ -1344,17 +1344,17 @@ INSERT INTO Siege (numero_colonne, numero_ligne, est_reserve, id_utilisateur, zo
     ('F', 5,  FALSE, NULL, 'NORD', 1), ('F', 6,  FALSE, NULL, 'NORD', 1), ('F', 7,  FALSE, NULL, 'NORD', 1), ('F', 8,  FALSE, NULL, 'NORD', 1),
     ('F', 9,  FALSE, NULL, 'NORD', 1), ('F', 10,  FALSE, NULL, 'NORD', 1), ('F', 11,  FALSE, NULL, 'NORD', 1), ('F', 12,  FALSE, NULL, 'NORD', 1),
 
-    ('G', 1,  FALSE, NULL, 'NORD', 1), ('G', 2,  FALSE, NULL, 'NORD', 1), ('G', 3,  FALSE, NULL, 'NORD', 1), ('G', 4,  FALSE, NULL, 'NORD', 1),
+    ('G', 1,  TRUE, 3, 'NORD', 1), ('G', 2,  FALSE, NULL, 'NORD', 1), ('G', 3,  FALSE, NULL, 'NORD', 1), ('G', 4,  FALSE, NULL, 'NORD', 1),
     ('G', 5,  FALSE, NULL, 'NORD', 1), ('G', 6,  FALSE, NULL, 'NORD', 1), ('G', 7,  FALSE, NULL, 'NORD', 1), ('G', 8,  FALSE, NULL, 'NORD', 1),
     ('G', 9,  FALSE, NULL, 'NORD', 1), ('G', 10,  FALSE, NULL, 'NORD', 1), ('G', 11,  FALSE, NULL, 'NORD', 1), ('G', 12,  FALSE, NULL, 'NORD', 1),
 
-    ('H', 1,  FALSE, NULL, 'NORD', 1), ('H', 2,  FALSE, NULL, 'NORD', 1), ('H', 3,  FALSE, NULL, 'NORD', 1), ('H', 4,  FALSE, NULL, 'NORD', 1),
-    ('H', 5,  FALSE, NULL, 'NORD', 1), ('H', 6,  FALSE, NULL, 'NORD', 1), ('H', 7,  FALSE, NULL, 'NORD', 1), ('H', 8,  FALSE, NULL, 'NORD', 1),
+    ('H', 1,  FALSE, NULL, 'NORD', 1), ('H', 2,  TRUE, 5, 'NORD', 1), ('H', 3,  TRUE, 5, 'NORD', 1), ('H', 4,  TRUE, 5, 'NORD', 1),
+    ('H', 5,  TRUE, 5, 'NORD', 1), ('H', 6,  FALSE, NULL, 'NORD', 1), ('H', 7,  FALSE, NULL, 'NORD', 1), ('H', 8,  FALSE, NULL, 'NORD', 1),
     ('H', 9,  FALSE, NULL, 'NORD', 1), ('H', 10,  FALSE, NULL, 'NORD', 1), ('H', 11,  FALSE, NULL, 'NORD', 1), ('H', 12,  FALSE, NULL, 'NORD', 1),
 
     ('I', 1,  FALSE, NULL, 'NORD', 1), ('I', 2,  FALSE, NULL, 'NORD', 1), ('I', 3,  FALSE, NULL, 'NORD', 1), ('I', 4,  FALSE, NULL, 'NORD', 1),
 
-    ('A', 1, FALSE,  NULL, 'NORD', 2), ('A', 2,  FALSE, NULL, 'NORD', 2), ('A', 3,  FALSE, NULL, 'NORD', 2),
+    ('A', 1, FALSE,  NULL, 'NORD', 2), ('A', 2,  TRUE, 4, 'NORD', 2), ('A', 3,  FALSE, NULL, 'NORD', 2),
     ('A', 4, FALSE,  NULL, 'NORD', 2), ('A', 5,  FALSE, NULL, 'NORD', 2), ('A', 6,  FALSE, NULL, 'NORD', 2),
     ('A', 7, FALSE,  NULL, 'NORD', 2), ('A', 8,  FALSE, NULL, 'NORD', 2), ('A', 9,  FALSE, NULL, 'NORD', 2),
     ('A', 10, FALSE,  NULL, 'NORD', 2), ('A', 11,  FALSE, NULL, 'NORD', 2), ('A', 12,  FALSE, NULL, 'NORD', 2),
