@@ -288,6 +288,8 @@ async function loadProfilePhoto() {
 
       const userData = response.data;
 
+      utilisateur.value = userData;
+
       if (userData.photo_profil_utilisateur) {
         userProfilePhoto.value = `data:image/jpeg;base64,${userData.photo_profil_utilisateur}`;
       } else {
