@@ -148,6 +148,17 @@ VALUES
         'M',
         FALSE,
         FALSE
+    ),
+    (
+      'Jonathan',
+      'Richard',
+      'jonar',
+      '$2b$10$hBRCM9Nq2agXSrdrL/l5Y.CdkZejoPdTRd7hwA5M6AkjcgLzRIQ3q',
+      'alban.choulet1@gmail.com',
+      '0651245798',
+      'M',
+      FALSE,
+      FALSE
     );
 
 INSERT INTO

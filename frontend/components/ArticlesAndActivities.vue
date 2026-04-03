@@ -88,6 +88,23 @@
     </v-card>
   </v-dialog>
 
+  <v-dialog v-model="showAbandonDialog" max-width="500">
+  <v-card title="Abandonner ce service ?">
+    <v-card-text>
+      Vous êtes sur le point de <strong>supprimer définitivement</strong> ce service 
+      ainsi que toutes ses 
+      <span v-if="isActivityService">activités</span>
+      <span v-else>articles</span> 
+      associés. Cette action est <strong>irréversible</strong>.
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn text="Annuler" @click="showAbandonDialog = false"></v-btn>
+      <v-btn color="error" text="Supprimer" @click="abandonService()"></v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
   <section>
     <div>
       <p v-if="isActivityService">
@@ -102,6 +119,12 @@
       </p>
     </div>
   </section>
+
+  <div class="abandon_banner">
+  <button class="btn_abandon pointer" @click="showAbandonDialog = true">
+    🗑 Abandonner et supprimer ce service
+  </button>
+</div>
 
   <div class="page_wrapper">
     <!-- Bloc Activité -->
@@ -244,6 +267,7 @@
         <button class="btn_service_submit" @click="showRecapService()">+ Modifier ce service</button>
       </div> -->
       <div v-if="activitesList.length > 0" class="already_added_banner">
+        
         <div class="already_added_info">
           <span class="already_added_icon"><img src="../images/logo_valid.svg"></span>
           <div>
@@ -270,6 +294,8 @@ import { useNavigationStore } from '@/stores/navigation';
 import { usePrestataireInfoStore } from '@/stores/prestataire_info';
 import { storeToRefs } from "pinia";
 import Footer from './Footer.vue';
+import { useAdminAPIStore } from '@/services/admin.service';
+import { useUserStore } from '@/stores/user';
 
 
 const { t, locale } = useI18n();
@@ -278,6 +304,8 @@ const router = useRouter();
 const serviceStore = useServiceStore();
 const navStore = useNavigationStore();
 const prestataireInfoStore = usePrestataireInfoStore();
+const adminStore = useAdminAPIStore();
+const userStore = useUserStore();
 
 const isActivityService = computed(() => route.query.isActivityService === 'true');
 const id_presta = computed(() => route.params.id_presta);
@@ -291,6 +319,7 @@ const showLeaveDialog = ref(false);
 const allowLeave = ref(false);
 const isShowingRecapService = ref(false);
 const isGoingBack = ref(false);
+const showAbandonDialog = ref(false);
 
 
 // ── Service ───────────────────────────────────
@@ -717,6 +746,35 @@ async function deleteActivite(id_activite) {
 
 // ── Services ──────────────────────────────────
 /**
+ * Abandonne le service en cours :
+ * supprime tous les articles/activités, puis le service lui-même,
+ * puis redirige vers la page prestataire.
+ * 
+ * @async
+ */
+async function abandonService() {
+  try {
+    showAbandonDialog.value = false;
+
+    // deleteServiceById supprime déjà articles + activités + service
+    // Pas besoin de supprimer les items un par un avant
+    await serviceStore.DeleteService(id_service.value);
+
+    await adminStore.DeletePrestataire(userStore.prestaId);
+
+    // Vider le store
+    prestataireInfoStore.clearStore();
+
+    allowLeave.value = true;
+    router.push({ name: "Home" });
+
+  } catch (err) {
+    console.error("Erreur abandonService:", err);
+    message.value = err?.message || "Erreur lors de la suppression.";
+    messageType.value = "error";
+  }
+}
+/**
  * Affiche la modal de récapitulatif du service avant validation finale.
  */
 function showRecapService() {
@@ -1001,5 +1059,35 @@ function showRecapService() {
   font-size: 0.85em;
   color: #5a7a5e;
   margin: 0;
+}
+
+.abandon_banner {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.btn_abandon {
+  background: transparent;
+  border: 1.5px solid #e8637a;
+  color: #e8637a;
+  font-weight: 600;
+  font-size: 0.85em;
+  padding: 9px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn_abandon:hover {
+  background: #fff0f2;
+  border-color: #c94d65;
+  color: #c94d65;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(232, 99, 122, 0.2);
+}
+
+.btn_abandon:active {
+  transform: translateY(1px);
 }
 </style>
