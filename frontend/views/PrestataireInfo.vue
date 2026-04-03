@@ -925,6 +925,8 @@ async function addServiceToPrestataire() {
     const newServiceId = resService.data.service.id_service;
     isModalService.value = false;
 
+    await sendMailToAdmin(false);
+
     router.push({
       name: "AddByService",
       params: {

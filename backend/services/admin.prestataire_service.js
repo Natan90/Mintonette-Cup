@@ -94,29 +94,53 @@ async function refuserPrestataireById(id_presta) {
 }
 
 async function deletePrestataireById(id_presta) {
-  await pool.query("DELETE FROM Services WHERE prestataire_id = $1", [
-    id_presta,
-  ]);
+  const client = await pool.connect();
 
-  const result = await pool.query(
-    "DELETE FROM Prestataire WHERE id_prestataire = $1 RETURNING *",
-    [id_presta],
-  );
-  if (result.rows.length === 0) {
-    throw { status: 404, message: "Prestataire non trouvé" };
+  try {
+    await client.query("BEGIN");
+
+    const servicesResult = await client.query(
+      `SELECT id_service FROM Services WHERE prestataire_id = $1`,
+      [id_presta]
+    );
+    const serviceIds = servicesResult.rows.map(r => r.id_service);
+
+    if (serviceIds.length > 0) {
+      await client.query(`DELETE FROM Article WHERE service_id = ANY($1)`, [serviceIds]);
+      await client.query(`DELETE FROM Activite WHERE service_id = ANY($1)`, [serviceIds]);
+      await client.query(`DELETE FROM Panier_Service WHERE service_id = ANY($1)`, [serviceIds]);
+      await client.query(`DELETE FROM Commande_Service WHERE service_id = ANY($1)`, [serviceIds]);
+
+      await client.query(`DELETE FROM Services WHERE id_service = ANY($1)`, [serviceIds]);
+    }
+
+    const result = await client.query(
+      `DELETE FROM Prestataire WHERE id_prestataire = $1 RETURNING *`,
+      [id_presta]
+    );
+
+    if (result.rows.length === 0) {
+      throw { status: 404, message: "Prestataire non trouvé" };
+    }
+
+    await client.query(
+      `UPDATE Utilisateur SET ispresta = FALSE WHERE id_utilisateur = $1`,
+      [result.rows[0].id_utilisateur]
+    );
+
+    await client.query("COMMIT");
+
+    return {
+      message: "Prestataire supprimé et utilisateur mis à jour",
+      prestataire: result.rows[0],
+    };
+
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
   }
-
-  const idUtilisateur = result.rows[0].id_utilisateur;
-
-  await pool.query(
-    "UPDATE Utilisateur SET ispresta = FALSE WHERE id_utilisateur = $1",
-    [idUtilisateur],
-  );
-
-  return {
-    message: "Prestataire supprimé et utilisateur mis à jour",
-    prestataire: result.rows[0],
-  };
 }
 
 
