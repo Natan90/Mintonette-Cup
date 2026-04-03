@@ -64,10 +64,10 @@
   },
   "barreNav": {
     "accueil": "Accueil",
-    "carte": "Carte interactive",
+    "terrain": "Nos terrains",
     "prestataire": "Prestataire",
     "aPropos": "À propos",
-    "partenaire": "Nos partenaires",
+    "note": "Notation",
     "boiteReception": "Boite de Réception",
     "profil": {
       "prestation": "Mes Prestations",

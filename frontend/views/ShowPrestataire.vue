@@ -2,8 +2,7 @@
   <NavView />
   <Modal v-model="showService" :bigger="true">
     <template #content>
-      <div
-        class="show-prestataire__block-text show-prestataire__service-details">
+      <div class="showPrestaTexte showPrestaServiceDetail">
         <div v-if="isActivityService" class="show-prestataire__items-list">
           <h3>Activités</h3>
           <div v-if="activitesList.length > 0">
@@ -47,13 +46,13 @@
     </template>
   </Modal>
 
-  <div class="show-prestataire__back pointer" @click="goBack">
+  <div class="showPrestaBoutonRetour pointer" @click="goBack">
     &#8592; {{ $t("bouton.retour") }}
   </div>
-  <div class="show-prestataire__main">
+  <div class="showPrestaMain">
     <br /><br />
-    <div class="show-prestataire__block-text">
-      <h1 class="show-prestataire__title">
+    <div class="showPrestaTexte">
+      <h1 class="showPrestaTitre">
         {{ $t("adminPage.prestataire.service.title") }}
       </h1>
       <p
@@ -62,12 +61,12 @@
             nom_prestataire: onePresta.nom_prestataire,
           })
         "
-        class="show-prestataire__glass show-prestataire__subtitle"></p>
+        class="showPrestaCarte showPrestaSousTitre"></p>
     </div>
 
-    <div class="show-prestataire__filter-row show-prestataire__section-padding">
+    <div class="showPrestaServiceRow showPrestaSectionPadding">
       <p
-        class="show-prestataire__counter show-prestataire__counter--valid"
+        class="showPrestaNbService showPrestaNbServiceValid"
         v-if="services.filter((p) => p.activate).length > 0">
         {{
           $t("adminPage.prestataire.service.nb_services", {
@@ -76,12 +75,10 @@
           })
         }}
       </p>
-      <p
-        class="show-prestataire__counter show-prestataire__counter--pending"
-        v-else>
+      <p class="showPrestaNbService showPrestaNbServicePending" v-else>
         {{ $t("adminPage.prestataire.service.nb_servicesVide") }}
       </p>
-      <div class="show-prestataire__sort-filter">
+      <div class="showPrestaFiltreResultat">
         <label for="triAlpha">{{ $t("adminPage.tri.nom") }}</label>
         <select id="triAlpha" v-model="adminStore.services">
           <option value="az">{{ $t("adminPage.tri.az") }}</option>
@@ -94,7 +91,7 @@
       </div>
     </div>
     <div
-      class="show-prestataire__glass show-prestataire__notice show-prestataire__notice--valid"
+      class="show-prestataire__glass showPrestaNotificationValid"
       v-if="activate">
       <p
         v-html="
@@ -102,13 +99,13 @@
             nomService: desactivateService?.nom_service,
           })
         "></p>
-      <span class="show-prestataire__notice-close" @click="closeMessageActivate"
+      <span class="showPrestaNoticeClose" @click="closeMessageActivate"
         >&times;</span
       >
     </div>
 
     <div
-      class="show-prestataire__glass show-prestataire__notice show-prestataire__notice--refus"
+      class="show-prestataire__glass showPrestaNotificationRefus"
       v-else-if="desactivate">
       <p
         v-html="
@@ -116,15 +113,13 @@
             nomService: desactivateService?.nom_service,
           })
         "></p>
-      <span
-        class="show-prestataire__notice-close"
-        @click="closeMessageDesactivate"
+      <span class="showPrestaNoticeClose" @click="closeMessageDesactivate"
         >&times;</span
       >
     </div>
 
     <div
-      class="show-prestataire__glass show-prestataire__notice show-prestataire__notice--suppr"
+      class="show-prestataire__glass showPrestaNotificationSuppr"
       v-else-if="deleting">
       <p
         v-html="
@@ -132,7 +127,7 @@
             nomService: desactivateService?.nom_service,
           })
         "></p>
-      <span class="show-prestataire__notice-close" @click="closeMessageSuppr"
+      <span class="showPrestaNoticeClose" @click="closeMessageSuppr"
         >&times;</span
       >
     </div>
@@ -520,7 +515,7 @@ function updateDescription() {
 
 <style>
 /* ── Main ── */
-.show-prestataire__main {
+.showPrestaMain {
   min-height: 100vh;
   padding: 32px 0 64px;
   background: var(--log-fond);
@@ -529,7 +524,7 @@ function updateDescription() {
 }
 
 /* ── Retour ── */
-.show-prestataire__back {
+.showPrestaBoutonRetour {
   margin: 22px 0 0 36px;
   width: fit-content;
   padding: 9px 18px;
@@ -540,23 +535,26 @@ function updateDescription() {
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.2px;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.show-prestataire__back:hover {
+.showPrestaBoutonRetour:hover {
   transform: translateX(-3px);
   background: rgba(90, 153, 102, 0.15);
   border-color: var(--primary-light);
 }
 
 /* ── Bloc texte ── */
-.show-prestataire__block-text {
+.showPrestaTexte {
   display: flex;
   flex-direction: column;
   padding: 0 36px;
 }
 
-.show-prestataire__title {
+.showPrestaTitre {
   margin: 20px 0 12px;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
@@ -568,14 +566,13 @@ function updateDescription() {
   background-clip: text;
 }
 
-/* ── Glass utilitaire ── */
-.show-prestataire__glass {
+.showPrestaCarte {
   border: 1px solid var(--log-border);
   background: var(--log-card-bg);
   border-radius: 20px;
 }
 
-.show-prestataire__subtitle {
+.showPrestaSousTitre {
   margin: 0;
   padding: 18px 22px;
   color: #5a7a5e;
@@ -583,8 +580,7 @@ function updateDescription() {
   font-size: 0.97rem;
 }
 
-/* ── Filtre / tri ── */
-.show-prestataire__filter-row {
+.showPrestaServiceRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -592,7 +588,7 @@ function updateDescription() {
   margin: 28px 36px 20px;
 }
 
-.show-prestataire__counter {
+.showPrestaNbService {
   margin: 0;
   padding: 11px 18px;
   border-radius: 14px;
@@ -600,19 +596,19 @@ function updateDescription() {
   font-size: 0.9rem;
 }
 
-.show-prestataire__counter--valid {
+.showPrestaNbServiceValid {
   color: var(--primary-dark);
   background: rgba(90, 153, 102, 0.1);
   border: 1px solid rgba(90, 153, 102, 0.25);
 }
 
-.show-prestataire__counter--pending {
+.showPrestaNbServicePending {
   color: var(--rose-hover);
   background: rgba(232, 99, 122, 0.08);
   border: 1px solid rgba(232, 99, 122, 0.2);
 }
 
-.show-prestataire__sort-filter {
+.showPrestaFiltreResultat {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -622,14 +618,14 @@ function updateDescription() {
   border: 1px solid var(--log-border);
 }
 
-.show-prestataire__sort-filter label {
+.showPrestaFiltreResultat label {
   color: #7a9a7e;
   font-size: 0.82rem;
   font-weight: 600;
   white-space: nowrap;
 }
 
-.show-prestataire__sort-filter select {
+.showPrestaFiltreResultat select {
   min-width: 160px;
   padding: 8px 12px;
   border-radius: 10px;
@@ -639,16 +635,20 @@ function updateDescription() {
   font-size: 0.88rem;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.show-prestataire__sort-filter select:focus {
+.showPrestaFiltreResultat select:focus {
   border-color: var(--primary-light);
   box-shadow: 0 0 0 3px rgba(90, 153, 102, 0.12);
 }
 
 /* ── Notices ── */
-.show-prestataire__notice {
+.showPrestaNotificationValid,
+.showPrestaNotificationRefus,
+.showPrestaNotificationSuppr {
   margin: 0 36px 18px;
   padding: 14px 20px;
   border-radius: 16px;
@@ -660,25 +660,25 @@ function updateDescription() {
   line-height: 1.6;
 }
 
-.show-prestataire__notice--valid {
+.showPrestaNotificationValid {
   background: rgba(90, 153, 102, 0.08);
   border: 1px solid rgba(90, 153, 102, 0.22);
   color: var(--primary-dark);
 }
 
-.show-prestataire__notice--refus {
+.showPrestaNotificationRefus {
   background: rgba(232, 99, 122, 0.07);
   border: 1px solid rgba(232, 99, 122, 0.2);
   color: var(--rose-hover);
 }
 
-.show-prestataire__notice--suppr {
+.showPrestaNotificationSuppr {
   background: rgba(255, 180, 0, 0.07);
   border: 1px solid rgba(255, 180, 0, 0.2);
   color: #b07800;
 }
 
-.show-prestataire__notice-close {
+.showPrestaNoticeClose {
   cursor: pointer;
   font-size: 1.25rem;
   line-height: 1;
@@ -687,7 +687,7 @@ function updateDescription() {
   flex-shrink: 0;
 }
 
-.show-prestataire__notice-close:hover {
+.showPrestaNoticeClose:hover {
   color: var(--rose-hover);
 }
 
@@ -706,14 +706,20 @@ function updateDescription() {
   background: var(--log-card-bg);
   border: 1.5px solid var(--log-border);
   border-radius: 22px;
-  box-shadow: 0 8px 30px rgba(58, 111, 67, 0.08), 0 2px 8px rgba(232, 99, 122, 0.05);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow:
+    0 8px 30px rgba(58, 111, 67, 0.08),
+    0 2px 8px rgba(232, 99, 122, 0.05);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .show-prestataire__card:hover,
 .show-prestataire__services:hover {
   border-color: var(--primary-very-light);
-  box-shadow: 0 12px 36px rgba(58, 111, 67, 0.13), 0 2px 10px rgba(232, 99, 122, 0.07);
+  box-shadow:
+    0 12px 36px rgba(58, 111, 67, 0.13),
+    0 2px 10px rgba(232, 99, 122, 0.07);
 }
 
 .show-prestataire__card {
@@ -802,7 +808,10 @@ function updateDescription() {
   font-size: 0.93rem;
   font-weight: 600;
   color: var(--primary-dark);
-  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .show-prestataire__service-row:hover {
@@ -845,7 +854,10 @@ function updateDescription() {
   font-weight: 700;
   cursor: pointer;
   letter-spacing: 0.2px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 
 .show-prestataire__btn-info {
@@ -911,7 +923,7 @@ function updateDescription() {
 }
 
 /* ── Modal items ── */
-.show-prestataire__service-details {
+.showPrestaServiceDetail {
   padding: 4px 2px;
 }
 
@@ -948,7 +960,7 @@ function updateDescription() {
 }
 
 /* ── Section padding ── */
-.show-prestataire__section-padding {
+.showPrestaSectionPadding {
   padding-left: 36px;
   padding-right: 36px;
 }
@@ -959,26 +971,28 @@ function updateDescription() {
     grid-template-columns: 1fr;
   }
 
-  .show-prestataire__filter-row {
+  .showPrestaServiceRow {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .show-prestataire__sort-filter {
+  .showPrestaFiltreResultat {
     justify-content: space-between;
   }
 }
 
 @media (max-width: 750px) {
-  .show-prestataire__main {
+  .showPrestaMain {
     padding-top: 18px;
   }
 
-  .show-prestataire__back,
-  .show-prestataire__block-text,
-  .show-prestataire__filter-row,
+  .showPrestaBoutonRetour,
+  .showPrestaTexte,
+  .showPrestaSectionPadding,
   .show-prestataire__layout,
-  .show-prestataire__notice {
+  .showPrestaNotificationValid,
+  .showPrestaNotificationRefus,
+  .showPrestaNotificationSuppr {
     margin-left: 16px;
     margin-right: 16px;
     padding-left: 0;

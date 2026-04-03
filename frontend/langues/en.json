@@ -64,10 +64,10 @@
   },
   "barreNav": {
     "accueil": "Home",
-    "carte": "Interactive Map",
+    "terrain": "Our courts",
     "prestataire": "Service Providers",
     "aPropos": "About",
-    "partenaire": "Our Partners",
+    "note": "Rating",
     "boiteReception": "Inbox",
     "profil": {
       "prestation": "My Services",

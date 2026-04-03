@@ -30,7 +30,7 @@
           @click="scrollToSection('Carte')"
           class="boutonNav pointer"
           id="carte">
-          {{ $t("barreNav.carte") }}
+          {{ $t("barreNav.terrain") }}
         </div>
 
         <div
@@ -53,7 +53,7 @@
           @click="scrollToSection('footer')"
           class="boutonNav pointer"
           id="partenaire">
-          {{ $t("barreNav.partenaire") }}
+          {{ $t("barreNav.note") }}
         </div>
         <!-- <router-link
           v-if="utilisateur.ispresta"
@@ -65,20 +65,7 @@
           <span class="pointer">Edit Prestataire (mode presta)</span>
         </router-link> -->
 
-        <div class="langue">
-          <div
-            v-if="locale === 'en'"
-            @click="changeLanguage('fr')"
-            class="boutonNav pointer">
-            <span>French</span>
-          </div>
-          <div
-            v-else-if="locale === 'fr'"
-            @click="changeLanguage('en')"
-            class="boutonNav pointer">
-            <span>Anglais</span>
-          </div>
-        </div>
+       
 
         <div
           @click="goToReceptionBox()"
@@ -100,6 +87,20 @@
             9+
           </span>
           <span v-else> </span>
+          </div>
+        </div>
+         <div class="langue">
+          <div
+            v-if="locale === 'en'"
+            @click="changeLanguage('fr')"
+            class="boutonNav pointer">
+            <span>French</span>
+          </div>
+          <div
+            v-else-if="locale === 'fr'"
+            @click="changeLanguage('en')"
+            class="boutonNav pointer">
+            <span>Anglais</span>
           </div>
         </div>
       </div>
