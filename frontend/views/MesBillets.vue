@@ -24,7 +24,6 @@
                 <th>{{ $t("billet.Date") }}</th>
                 <th>{{ $t("billet.Heure") }}</th>
                 <th>{{ $t("billet.Prix") }}</th>
-                <th>{{ $t("billet.Action") }}</th>
               </tr>
             </thead>
             <tbody>
@@ -47,9 +46,7 @@
                   <span v-else>—</span>
                 </td>
                 <td>{{ getPrice(b) }} €</td>
-                <td>
-                  <button @click="goToMatch(b.match_id)">Voir plus</button>
-                </td>
+               
               </tr>
             </tbody>
           </table>
@@ -106,7 +103,7 @@ onMounted(() => {
  * @param {Object} seat - Objet représentant un siège
  * @param {string} seat.numero_colonne - Lettre de la colonne
  * @returns {number} Prix du billet en euros
-*/
+ */
 function getPrice(seat) {
   if (["I", "H", "G"].includes(seat.numero_colonne)) return 25;
   if (["F", "E", "D"].includes(seat.numero_colonne)) return 18;
@@ -122,7 +119,7 @@ function getPrice(seat) {
  *
  * @param {string} dateString - Date au format ISO
  * @returns {string} Date formatée selon la locale
-*/
+ */
 function formatDate(dateString) {
   const date = new Date(dateString);
   const currentLocale = locale.value === "en" ? "en-GB" : "fr-FR";
@@ -141,7 +138,7 @@ function formatDate(dateString) {
  *
  * @param {number|string} idTerrain - Identifiant du terrain
  * @param {number|string} idMatch - Identifiant du match
-*/
+ */
 function goToMatch(idTerrain, idMatch) {
   if (!idMatch) {
     console.log("Je suis dans le if de goToMatch");
@@ -158,7 +155,7 @@ function goToMatch(idTerrain, idMatch) {
  * - Gère les erreurs d’appel API
  *
  * @async
-*/
+ */
 async function fetchBillets() {
   if (!userStore.userId) return;
   error.value = null;
@@ -203,5 +200,29 @@ async function fetchBillets() {
 
 .error {
   color: red;
+}
+
+.btn-checkout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3a6f43 0%, #2a5232 100%);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(42, 82, 50, 0.18);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(42, 82, 50, 0.26);
+  filter: brightness(1.05);
 }
 </style>

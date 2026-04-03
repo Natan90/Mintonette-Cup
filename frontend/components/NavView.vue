@@ -65,32 +65,30 @@
           <span class="pointer">Edit Prestataire (mode presta)</span>
         </router-link> -->
 
-       
-
         <div
-          v-if="isConnected"
+          v-if="isLoggedIn"
           @click="goToReceptionBox()"
           class="boutonNav pointer">
           <div class="receptionButton">
-          {{ $t("barreNav.boiteReception") }}
-          <span
-            v-if="
-              isLoggedIn &&
-              mailBoxStore.unreadCount > 0 &&
-              mailBoxStore.unreadCount < 10
-            "
-            class="nbMailNonLu">
-            {{ mailBoxStore.unreadCount }}
-          </span>
-          <span
-            v-else-if="isLoggedIn && mailBoxStore.unreadCount >= 9"
-            class="nbMailNonLu">
-            9+
-          </span>
-          <span v-else> </span>
+            {{ $t("barreNav.boiteReception") }}
+            <span
+              v-if="
+                isLoggedIn &&
+                mailBoxStore.unreadCount > 0 &&
+                mailBoxStore.unreadCount < 10
+              "
+              class="nbMailNonLu">
+              {{ mailBoxStore.unreadCount }}
+            </span>
+            <span
+              v-else-if="isLoggedIn && mailBoxStore.unreadCount >= 9"
+              class="nbMailNonLu">
+              9+
+            </span>
+            <span v-else> </span>
           </div>
         </div>
-         <div class="langue">
+        <div class="langue">
           <div
             v-if="locale === 'en'"
             @click="changeLanguage('fr')"
@@ -560,7 +558,11 @@ a span {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--rose-logo) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--rose-logo) 100%
+  );
   color: white;
   display: flex;
   align-items: center;
