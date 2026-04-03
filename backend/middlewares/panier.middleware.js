@@ -2,10 +2,10 @@ exports.validateAdd = (req, res, next) => {
   const id_user = req.params.id;
   const { type } = req.body;
 
-  if (!type || !["siege", "service"].includes(type)) {
+  if (!type || !["siege", "activite"].includes(type)) {
     return res
       .status(400)
-      .json({ error: "Type invalide, doit être 'siege' ou 'service'" });
+      .json({ error: "Type invalide, doit être 'siege' ou 'activite'" });
   }
 
   if (!id_user) {
@@ -19,15 +19,12 @@ exports.validateAdd = (req, res, next) => {
     }
   }
 
-  if (type === "service") {
-    const { service_id, quantite } = req.body;
-    if (!service_id) {
+  if (type === "activite") {
+    const { id_activite } = req.body;
+    if (!id_activite) {
       return res
         .status(400)
-        .json({ error: "service_id requis pour un service" });
-    }
-    if (quantite && typeof quantite !== "number") {
-      return res.status(400).json({ error: "quantite doit être un nombre" });
+        .json({ error: "id_activite requis pour une activité" });
     }
   }
 

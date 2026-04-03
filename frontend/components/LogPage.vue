@@ -443,13 +443,14 @@ async function getValuesInscription() {
       ModalShow();
     }
   } catch (err) {
-    console.log(err.data.error);
-    if (err && err.data && err.data.error) {
+    console.error("Erreur inscription :", err);
+    if (err?.data?.error) {
       message.value = err.data.error;
+    } else if (err?.response?.data?.error) {
+      message.value = err.response.data.error;
     } else {
       message.value = "Erreur serveur : impossible de s'inscrire.";
     }
-    console.error("Erreur connexion :", err);
   }
 }
 /**

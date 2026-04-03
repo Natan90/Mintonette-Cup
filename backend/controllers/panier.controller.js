@@ -30,12 +30,11 @@ exports.addPanier = async (req, res) => {
       return res.status(201).json(result);
     }
 
-    if (type === "service") {
-      const { service_id, quantite } = req.body;
-      const result = await panierService.addService(
+    if (type === "activite") {
+      const { id_activite } = req.body;
+      const result = await panierService.addActivite(
         id_user,
-        service_id,
-        quantite,
+        id_activite
       );
       return res.status(201).json(result);
     }

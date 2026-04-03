@@ -6,38 +6,88 @@
         <div v-if="isActivityService" class="show-prestataire__items-list">
           <h3>Activités</h3>
           <div v-if="activitesList.length > 0">
-            <div
-              v-for="(item, index) in activitesList"
-              :key="index"
-              class="show-prestataire__service-card">
-              <p>
-                <strong>{{ item.nom_activite }}</strong>
-              </p>
-              <p>
-                📅 {{ item.date_activite?.slice(0, 10) }} à
-                {{ item.date_activite?.slice(11, 16) }}
-              </p>
-              <p>👥 {{ item.nb_participant }} participants max</p>
-              <p>💰 {{ item.prix }} € / u</p>
+            <div v-for="(item, index) in activitesList" :key="index" class="showPrestaActiviteCard"
+              :class="{ 'showPrestaActiviteCardSelected': selectedActivites.includes(item.id_activite) }"
+              @click="toggleActivite(item.id_activite)">
+              <label class="showPrestaCheckboxLabel">
+                <span class="showPrestaCheckboxCustom">
+                  <svg viewBox="0 0 10 8" fill="none">
+                    <polyline points="1,4 4,7 9,1" stroke="#fff" stroke-width="1.8" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <div class="showPrestaActiviteInfo">
+                  <strong>{{ item.nom_activite }}</strong>
+                  <span>
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                      <rect x="2" y="3" width="12" height="11" rx="2" />
+                      <line x1="5" y1="1" x2="5" y2="5" />
+                      <line x1="11" y1="1" x2="11" y2="5" />
+                      <line x1="2" y1="7" x2="14" y2="7" />
+                    </svg>
+                    {{ item.date_activite }} à {{ item.heure_activite }}</span>
+                  <span>
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                      <circle cx="8" cy="5" r="3" />
+                      <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+                    </svg>
+                    {{ item.nb_participant }} participants max ·
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"
+                      style="vertical-align:-2px;margin-right:4px;margin-left:4px">
+                      <circle cx="8" cy="8" r="6" />
+                      <path d="M8 5v3l2 2" />
+                    </svg> {{ item.prix }} € / u</span>
+                </div>
+              </label>
             </div>
-            <button>Réserver une activité</button>
+
+            <div class="showPrestaReserverFooter">
+              <span class="showPrestaReserverCount" v-if="selectedActivites.length > 0">
+                {{ selectedActivites.length }} sélectionnée{{ selectedActivites.length > 1 ? 's' : '' }}
+              </span>
+              <button class="presta-btn-reserver" :disabled="selectedActivites.length === 0"
+                :class="{ 'presta-btn-reserver-disabled': selectedActivites.length === 0 }"
+                @click="reserverActivitesSelectionnees">
+                <div class="presta-btn-reserver-inner">
+                  <div class="presta-btn-reserver-icon">
+                    <svg viewBox="0 0 16 16">
+                      <rect x="2" y="3" width="12" height="11" rx="2" />
+                      <line x1="5" y1="1" x2="5" y2="5" />
+                      <line x1="11" y1="1" x2="11" y2="5" />
+                      <line x1="2" y1="7" x2="14" y2="7" />
+                      <circle cx="8" cy="11" r="1.2" fill="#fff" stroke="none" />
+                    </svg>
+                  </div>
+                  <div class="presta-btn-reserver-text">
+                    <span class="presta-btn-reserver-label">{{ activitesList.length }} activité(s) disponible(s)</span>
+                    <span class="presta-btn-reserver-main">Réserver la sélection</span>
+                  </div>
+                  <span class="presta-btn-reserver-arrow">→</span>
+                </div>
+              </button>
+            </div>
           </div>
           <p v-else>Aucune activité disponible.</p>
         </div>
-
-        <!-- Articles -->
         <div v-else class="show-prestataire__items-list">
           <h3>Articles</h3>
           <div v-if="articlesList.length > 0">
-            <div
-              v-for="(item, index) in articlesList"
-              :key="index"
-              class="show-prestataire__service-card">
-              <p>
-                <strong>{{ item.nom_article }}</strong>
-              </p>
-              <p>📦 Stock : {{ item.stock }}</p>
-              <p>💰 {{ item.prix }} € / u</p>
+            <div v-for="(item, index) in articlesList" :key="index" class="show-prestataire__service-card">
+              <p><strong>{{ item.nom_article }}</strong></p>
+              <p><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                  <path d="M2 2h2l2.4 7h5.2l1.8-5H5" />
+                  <circle cx="7" cy="13" r="1" />
+                  <circle cx="12" cy="13" r="1" />
+                </svg>Stock : {{ item.stock }}</p>
+              <p><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px">
+                  <circle cx="8" cy="8" r="6" />
+                  <path d="M8 5v3l2 2" />
+                </svg>{{ item.prix }} € / u</p>
             </div>
           </div>
           <p v-else>Aucun article disponible.</p>
@@ -55,19 +105,14 @@
       <h1 class="showPrestaTitre">
         {{ $t("adminPage.prestataire.service.title") }}
       </h1>
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.descri', {
-            nom_prestataire: onePresta.nom_prestataire,
-          })
-        "
-        class="showPrestaCarte showPrestaSousTitre"></p>
+      <p v-html="$t('adminPage.prestataire.service.descri', {
+        nom_prestataire: onePresta.nom_prestataire,
+      })
+        " class="showPrestaCarte showPrestaSousTitre"></p>
     </div>
 
     <div class="showPrestaServiceRow showPrestaSectionPadding">
-      <p
-        class="showPrestaNbService showPrestaNbServiceValid"
-        v-if="services.filter((p) => p.activate).length > 0">
+      <p class="showPrestaNbService showPrestaNbServiceValid" v-if="services.filter((p) => p.activate).length > 0">
         {{
           $t("adminPage.prestataire.service.nb_services", {
             count: services.filter((p) => p.activate).length,
@@ -90,46 +135,28 @@
         </select>
       </div>
     </div>
-    <div
-      class="show-prestataire__glass showPrestaNotificationValid"
-      v-if="activate">
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.messageActiver', {
-            nomService: desactivateService?.nom_service,
-          })
+    <div class="show-prestataire__glass showPrestaNotificationValid" v-if="activate">
+      <p v-html="$t('adminPage.prestataire.service.messageActiver', {
+        nomService: desactivateService?.nom_service,
+      })
         "></p>
-      <span class="showPrestaNoticeClose" @click="closeMessageActivate"
-        >&times;</span
-      >
+      <span class="showPrestaNoticeClose" @click="closeMessageActivate">&times;</span>
     </div>
 
-    <div
-      class="show-prestataire__glass showPrestaNotificationRefus"
-      v-else-if="desactivate">
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.messageDesactiver', {
-            nomService: desactivateService?.nom_service,
-          })
+    <div class="show-prestataire__glass showPrestaNotificationRefus" v-else-if="desactivate">
+      <p v-html="$t('adminPage.prestataire.service.messageDesactiver', {
+        nomService: desactivateService?.nom_service,
+      })
         "></p>
-      <span class="showPrestaNoticeClose" @click="closeMessageDesactivate"
-        >&times;</span
-      >
+      <span class="showPrestaNoticeClose" @click="closeMessageDesactivate">&times;</span>
     </div>
 
-    <div
-      class="show-prestataire__glass showPrestaNotificationSuppr"
-      v-else-if="deleting">
-      <p
-        v-html="
-          $t('adminPage.prestataire.service.messageSuppr', {
-            nomService: desactivateService?.nom_service,
-          })
+    <div class="show-prestataire__glass showPrestaNotificationSuppr" v-else-if="deleting">
+      <p v-html="$t('adminPage.prestataire.service.messageSuppr', {
+        nomService: desactivateService?.nom_service,
+      })
         "></p>
-      <span class="showPrestaNoticeClose" @click="closeMessageSuppr"
-        >&times;</span
-      >
+      <span class="showPrestaNoticeClose" @click="closeMessageSuppr">&times;</span>
     </div>
 
     <section>
@@ -137,9 +164,7 @@
         <div class="show-prestataire__card">
           <p class="show-prestataire__name">{{ onePresta.nom_prestataire }}</p>
           <!-- <img src=""> -->
-          <div
-            class="show-prestataire__description"
-            v-html="onePresta.descri_prestataire"></div>
+          <div class="show-prestataire__description" v-html="onePresta.descri_prestataire"></div>
           <div class="show-prestataire__contact">
             <p class="show-prestataire__contact-title"><b>Contact</b></p>
             <p>{{ onePresta.mail_prestataire }}</p>
@@ -161,62 +186,39 @@
               </b>
             </p>
             <ul>
-              <li
-                v-for="(item, index) in servicesFiltres"
-                :key="index"
-                class="show-prestataire__service-item"
+              <li v-for="(item, index) in servicesFiltres" :key="index" class="show-prestataire__service-item"
                 style="padding-bottom: 10px">
                 <div class="show-prestataire__service-row">
                   {{ item.nom_service }}
-                  <span
-                    v-if="item.activate"
-                    class="show-prestataire__status-active"
-                    title="Actif"
-                    >&#10003;</span
-                  >
-                  <span
-                    v-else
-                    class="show-prestataire__status-inactive"
-                    title="Inactif"
-                    >&#10007;</span
-                  >
+                  <span v-if="item.activate" class="show-prestataire__status-active" title="Actif">&#10003;</span>
+                  <span v-else class="show-prestataire__status-inactive" title="Inactif">&#10007;</span>
                   <span class="show-prestataire__actions">
-                    <button
-                      class="show-prestataire__btn-info"
-                      @click="
-                        getValuesArticlesOrActivitesByIdService(
-                          item.id_service,
-                          isActivityService,
-                        )
+                    <button class="show-prestataire__btn-info" @click="
+                      getValuesArticlesOrActivitesByIdService(
+                        item.id_service,
+                        isActivityService,
+                      )
                       ">
                       Voir
                     </button>
                     <!-- Boutons d'activation/désactivation uniquement pour le propriétaire -->
-                    <button
-                      class="show-prestataire__btn-activate"
-                      v-if="
-                        !item.activate &&
-                        userStore.isConnected &&
-                        userStore.prestaId == idPresta
-                      "
-                      @click="activateService(item)">
+                    <button class="show-prestataire__btn-activate" v-if="
+                      !item.activate &&
+                      userStore.isConnected &&
+                      userStore.prestaId == idPresta
+                    " @click="activateService(item)">
                       Activer
                     </button>
-                    <button
-                      class="show-prestataire__btn-disable"
-                      v-else-if="
-                        item.activate &&
-                        userStore.isConnected &&
-                        userStore.prestaId == idPresta
-                      "
-                      @click="desactivatingService(item)">
+                    <button class="show-prestataire__btn-disable" v-else-if="
+                      item.activate &&
+                      userStore.isConnected &&
+                      userStore.prestaId == idPresta
+                    " @click="desactivatingService(item)">
                       Désactiver
                     </button>
-                    <button
-                      class="show-prestataire__btn-delete"
-                      v-if="
-                        userStore.isConnected && userStore.prestaId == idPresta
-                      ">
+                    <button class="show-prestataire__btn-delete" v-if="
+                      userStore.isConnected && userStore.prestaId == idPresta
+                    ">
                       Supprimer
                     </button>
                   </span>
@@ -229,14 +231,11 @@
     </section>
 
     <div>
-      <button
-        class="show-prestataire__edit-button"
-        @click="goToEditPrestataire"
-        v-if="
-          userStore.isConnected &&
-          onePresta.ispresta &&
-          userStore.prestaId === idPresta
-        ">
+      <button class="show-prestataire__edit-button" @click="goToEditPrestataire" v-if="
+        userStore.isConnected &&
+        onePresta.ispresta &&
+        userStore.prestaId === idPresta
+      ">
         Modifier mon profil
       </button>
     </div>
@@ -288,6 +287,7 @@ const oneService = ref({
 });
 
 const isActivityService = ref(false);
+const selectedActivites = ref([]);
 
 const titre_service = ref("");
 const descri_service = ref("");
@@ -344,6 +344,7 @@ const servicesFiltres = computed(() => {
 
   return liste;
 });
+
 
 /**
  * Masque le message de confirmation d’activation de service.
@@ -412,32 +413,41 @@ async function getValuesArticlesOrActivitesByIdService(
   isActivityService,
 ) {
   showService.value = true;
+  selectedActivites.value = [];
   try {
     let res = null;
     if (isActivityService) {
       res = await serviceStore.GetActiviteByIdService(id_service);
-      console.log(res.data.activites);
-      activitesList.value = res.data.activites.map((a) => ({
-        id_activite: a.id_activite,
-        nom_activite: a.nom_activite,
-        nb_participant: a.nb_participant,
-        prix: Number(a.prix_activite),
-        date_activite: a.date_activite?.slice(0, 10),
-        heure_activite: a.date_activite?.slice(11, 16),
-      }));
+      activitesList.value = res.data.activites
+        .filter((a) => a.nb_participant > 0)
+        .map((a) => ({
+          id_activite: a.id_activite,
+          nom_activite: a.nom_activite,
+          nb_participant: a.nb_participant,
+          prix: a.prix_activite != null ? Number(a.prix_activite) : '—',
+          date_activite: a.date_activite?.slice(0, 10),
+          heure_activite: a.date_activite?.slice(11, 16),
+        }));
     } else {
       res = await serviceStore.GetArticleByIdService(id_service);
-      console.log(res.data.articles);
-      articlesList.value = res.data.articles.map((a) => ({
-        id_article: a.id_article,
-        nom_article: a.nom_article,
-        stock: a.stock,
-        prix: Number(a.prix_article),
-      }));
+      articlesList.value = res.data.articles
+        .filter((a) => a.stock > 0)
+        .map((a) => ({
+          id_article: a.id_article,
+          nom_article: a.nom_article,
+          stock: a.stock,
+          prix: a.prix_article != null ? Number(a.prix_article) : '—',
+        }));
     }
   } catch (err) {
     console.error("Erreur lors de la récupération des données :", err);
   }
+}
+
+function toggleActivite(id) {
+  const i = selectedActivites.value.indexOf(id)
+  if (i === -1) selectedActivites.value.push(id)
+  else selectedActivites.value.splice(i, 1)
 }
 /**
  * Désactive le service du prestataire.
@@ -479,19 +489,22 @@ async function actionsService(service) {
 /**
  * Ajoute un service au panier de l’utilisateur connecté.
  */
-async function addService(service) {
+async function reserverActivitesSelectionnees() {
   if (!userStore.userId) {
     console.error("Utilisateur non connecté !");
     return;
   }
 
   try {
-    const res = await panierStore.AddToPanier(
-      "service",
-      service,
-      userStore.userId,
-    );
+    for (const id_activite of selectedActivites.value) {
+      await panierStore.AddToPanier(
+        "activite",
+        { id_activite },
+        userStore.userId,
+      );
+    }
 
+    selectedActivites.value = [];
     showService.value = false;
   } catch (err) {
     console.error("Erreur lors de l'ajout au panier :", err);
@@ -763,7 +776,7 @@ function updateDescription() {
   font-size: 0.92rem;
 }
 
-.show-prestataire__card > p:last-child {
+.show-prestataire__card>p:last-child {
   margin: 16px 0 0;
   color: #9ab09e;
   font-size: 0.88rem;
@@ -774,7 +787,7 @@ function updateDescription() {
   padding: 24px;
 }
 
-.show-prestataire__services > p {
+.show-prestataire__services>p {
   margin: 0 0 16px;
   font-size: 0.82rem;
   color: #7a9a7e;
@@ -963,6 +976,217 @@ function updateDescription() {
 .showPrestaSectionPadding {
   padding-left: 36px;
   padding-right: 36px;
+}
+
+/* ── Bouton réserver ── */
+.presta-btn-reserver {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  margin-top: 20px;
+  border: none;
+  border-radius: 14px;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+}
+
+.presta-btn-reserver-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px 12px 14px;
+  border-radius: 14px;
+  background: var(--primary-light);
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.presta-btn-reserver:hover .presta-btn-reserver-inner {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.presta-btn-reserver:active .presta-btn-reserver-inner {
+  transform: scale(0.97) translateY(0);
+}
+
+.presta-btn-reserver-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+}
+
+.presta-btn-reserver:hover .presta-btn-reserver-icon {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.presta-btn-reserver-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.presta-btn-reserver-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.presta-btn-reserver-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.presta-btn-reserver-main {
+  font-size: 0.92rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.presta-btn-reserver-arrow {
+  margin-left: 4px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.18s ease;
+}
+
+.presta-btn-reserver:hover .presta-btn-reserver-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Carte activité sélectionnable ── */
+.showPrestaActiviteCard {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(90, 153, 102, 0.05);
+  border: 1.5px solid rgba(90, 153, 102, 0.15);
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.showPrestaActiviteCard:hover {
+  background: rgba(90, 153, 102, 0.09);
+  border-color: var(--primary-light);
+}
+
+.showPrestaActiviteCardSelected {
+  background: rgba(90, 153, 102, 0.12);
+  border-color: var(--primary-light);
+}
+
+/* ── Label checkbox ── */
+.showPrestaCheckboxLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* ── Input natif caché ── */
+.showPrestaCheckboxInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ── Checkbox custom ── */
+.showPrestaCheckboxCustom {
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(90, 153, 102, 0.4);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.showPrestaCheckboxCustom svg {
+  width: 10px;
+  height: 8px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.showPrestaActiviteCardSelected .showPrestaCheckboxCustom {
+  background: var(--primary-light);
+  border-color: var(--primary-light);
+}
+
+.showPrestaActiviteCardSelected .showPrestaCheckboxCustom svg {
+  opacity: 1;
+}
+
+/* ── Infos activité ── */
+.showPrestaActiviteInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.showPrestaActiviteInfo strong {
+  color: var(--primary-dark);
+  font-size: 0.95rem;
+}
+
+.showPrestaActiviteInfo span {
+  color: #5a7a5e;
+  font-size: 0.85rem;
+}
+
+/* ── Footer réserver ── */
+.showPrestaReserverFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.showPrestaReserverCount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: rgba(90, 153, 102, 0.1);
+  border: 1px solid rgba(90, 153, 102, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* ── État désactivé du bouton ── */
+.presta-btn-reserver-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* ── Responsive ── */

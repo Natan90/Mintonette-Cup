@@ -316,7 +316,15 @@ VALUES
         4,
         2,
         4
-    );
+    ),
+    ('PhotoEvent', 'Service de photographie et vidéographie professionnelle pour événements',
+     'contact@photoevent.com', '0134567890', false, 'Photo et vidéo', true, 5, 2, 7),
+    ('GreenFood', 'Restauration bio et végétarienne pour événements sportifs',
+     'contact@greenfood.com', '0145678901', false, 'Restauration saine', true, 6, 3, 12),
+    ('KidZone', 'Spécialiste des animations et espaces dédiés aux enfants',
+     'contact@kidzone.com', '0156789012', false, 'Animation enfants', true, 7, 1, 3),
+    ('TechStage', 'Prestataire son, lumière et scénographie événementielle',
+     'contact@techstage.com', '0167890123', false, 'Technique scénique', true, 8, 1, 1);
 
 
 INSERT INTO Services 
@@ -447,7 +455,97 @@ INSERT INTO Services
         true,
         false,
         3
-      );
+      ),
+      (
+        'Reportage photo événementiel',
+        '{
+          "fr": { "texte": "Un <b>photographe professionnel</b> pour immortaliser chaque moment clé de votre événement." },
+          "en": { "texte": "A <b>professional photographer</b> to capture every key moment of your event." }
+        }',
+        true,
+        '{"fr": "Accréditation presse requise", "en": "Press accreditation required"}',
+        true, false, 4
+    ),
+    (
+        'Captation vidéo et montage',
+        '{
+          "fr": { "texte": "Une équipe vidéo pour un <b>rendu professionnel</b> de votre événement, du tournage au montage." },
+          "en": { "texte": "A video crew for a <b>professional rendering</b> of your event, from shooting to editing." }
+        }',
+        true,
+        '{"fr": "Accès à toutes les zones requis", "en": "Access to all areas required"}',
+        true, false, 4
+    ),
+    (
+        'Snack bar bio et végétarien',
+        '{
+          "fr": { "texte": "Des <b>collations saines et savoureuses</b> issues de l''agriculture biologique." },
+          "en": { "texte": "<b>Healthy and tasty snacks</b> from organic farming." }
+        }',
+        true,
+        '{"fr": "Espace réfrigéré requis", "en": "Refrigerated space required"}',
+        true, false, 5
+    ),
+    (
+        'Espace kids sécurisé',
+        '{
+          "fr": { "texte": "Un <b>espace dédié aux enfants</b> avec animations, jeux et encadrement professionnel." },
+          "en": { "texte": "A <b>dedicated kids area</b> with activities, games and professional supervision." }
+        }',
+        true,
+        '{"fr": "Espace clôturé obligatoire", "en": "Fenced area required"}',
+        true, true, 6
+    ),
+    (
+        'Sonorisation et éclairage scène',
+        '{
+          "fr": { "texte": "Une <b>installation technique complète</b> pour une scène professionnelle et immersive." },
+          "en": { "texte": "A <b>complete technical setup</b> for a professional and immersive stage." }
+        }',
+        true,
+        '{"fr": "Alimentation électrique 32A requise", "en": "32A power supply required"}',
+        false, false, 7
+    ),
+    (
+        'Burgers et sandwichs',
+        '{
+          "fr": { "texte": "Des <b>burgers et sandwichs maison</b> préparés sur place pour régaler vos convives." },
+          "en": { "texte": "<b>Homemade burgers and sandwiches</b> prepared on-site to delight your guests." }
+        }',
+        true,
+        '{"fr": "Branchement électrique et eau requis", "en": "Electricity and water connection required"}',
+        true, false, 1
+    ),
+    (
+        'Boissons et rafraîchissements',
+        '{
+          "fr": { "texte": "Une sélection de <b>boissons fraîches</b> pour se désaltérer tout au long de l''événement." },
+          "en": { "texte": "A selection of <b>cold drinks</b> to stay refreshed throughout the event." }
+        }',
+        true,
+        '{"fr": "Espace réfrigéré requis", "en": "Refrigerated space required"}',
+        true, false, 1
+    ),
+    (
+        'Snacks et encas',
+        '{
+          "fr": { "texte": "Des <b>encas rapides et gourmands</b> pour les petites faims entre deux matchs." },
+          "en": { "texte": "<b>Quick and tasty snacks</b> for hunger pangs between matches." }
+        }',
+        true,
+        '{"fr": "Stand couvert recommandé", "en": "Covered stand recommended"}',
+        true, false, 1
+    ),
+    (
+        'Formules sucrées et desserts',
+        '{
+          "fr": { "texte": "Des <b>douceurs et desserts</b> pour terminer le repas sur une note gourmande." },
+          "en": { "texte": "<b>Sweets and desserts</b> to end the meal on a delicious note." }
+        }',
+        true,
+        '{"fr": "Espace de stockage frais requis", "en": "Cool storage space required"}',
+        true, false, 1
+    );
 
 
 INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
@@ -478,7 +576,50 @@ INSERT INTO Article (nom_article, stock, prix_article, service_id) VALUES
   ('Sachet de chips', 400, 2.00, 4),
   ('Barre chocolatée', 350, 1.50, 4),
   ('Madeleine individuelle', 300, 1.00, 4),
-  ('Mix apéritif 100g', 250, 3.00, 4);
+  ('Mix apéritif 100g', 250, 3.00, 4),
+  ('Tirage photo souvenir A5', 300, 8.00, 9),
+    ('Clé USB souvenir avec photos', 100, 15.00, 10),
+    ('Bowl quinoa légumes', 150, 9.50, 11),
+    ('Smoothie détox', 200, 5.50, 11),
+    ('Barre de céréales bio', 400, 2.50, 11),
+    ('Trousse créative enfant', 120, 7.00, 12),
+    ('Kit maquillage enfant', 80, 12.00, 12),
+    ('Ballon mousse enfant', 250, 3.50, 12),
+    ('Câble jack 6m', 30, 19.99, 13),
+    ('Lot piles AA x8', 100, 6.99, 13),
+    -- Burgers et sandwichs (service_id = 14)
+    ('Burger Classic',          200, 8.50,  14),
+    ('Burger Double Cheese',    180, 10.50, 14),
+    ('Burger Végétarien',       100, 9.00,  14),
+    ('Menu Burger + Frites',    150, 13.00, 14),
+    ('Sandwich jambon-fromage', 200, 5.50,  14),
+    ('Wrap poulet grillé',      160, 7.50,  14),
+    ('Frites maison',           300, 3.50,  14),
+    ('Hot-dog',                 250, 5.00,  14),
+
+    -- Boissons et rafraîchissements (service_id = 15)
+    ('Eau minérale 50cl',       500, 1.50,  15),
+    ('Soda 33cl',               400, 2.50,  15),
+    ('Jus de fruit 25cl',       300, 2.00,  15),
+    ('Smoothie du jour',        100, 4.50,  15),
+    ('Ice tea 50cl',            250, 2.50,  15),
+    ('Café expresso',           200, 2.00,  15),
+
+    -- Snacks et encas (service_id = 16)
+    ('Sachet de chips',         400, 2.00,  16),
+    ('Barre chocolatée',        350, 1.50,  16),
+    ('Madeleine individuelle',  300, 1.00,  16),
+    ('Mix apéritif 100g',       250, 3.00,  16),
+    ('Salade César',            150, 8.00,  16),
+    ('Salade de fruits',        120, 4.50,  16),
+
+    -- Formules sucrées et desserts (service_id = 17)
+    ('Crêpe nature',            200, 3.00,  17),
+    ('Crêpe Nutella',           200, 3.50,  17),
+    ('Gaufre sucre',            180, 3.00,  17),
+    ('Gaufre chantilly',        150, 4.00,  17),
+    ('Coupe de glace 2 boules', 200, 4.50,  17),
+    ('Brownie maison',          250, 2.50,  17);
 
 
 INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite, service_id) VALUES
@@ -496,7 +637,17 @@ INSERT INTO Activite (nom_activite, nb_participant, prix_activite, date_activite
   ('Atelier smash avec coach', 8, 20.00, '2026-07-16T15:00:00', 7),
   ('Photo avec le trophée', 1, 5.00, '2026-07-15T09:00:00', 8),
   ('Quiz volley géant', 50, 0.00, '2026-07-17T18:00:00', 6),
-  ('Parcours de réception ballon', 6, 12.00, '2026-07-17T10:00:00', 7);
+  ('Parcours de réception ballon', 6, 12.00, '2026-07-17T10:00:00', 7),
+  ('Séance portrait individuel', 1, 20.00, '2026-07-15T10:00:00', 9),
+    ('Photo de groupe équipe', 10, 35.00, '2026-07-15T17:00:00', 9),
+    ('Projection live des temps forts', 200, 0.00, '2026-07-16T20:00:00', 10),
+    ('Atelier cuisine saine', 12, 8.00, '2026-07-16T12:00:00', 11),
+    ('Dégustation produits bio', 30, 0.00, '2026-07-17T11:00:00', 11),
+    ('Chasse au trésor kids', 15, 6.00, '2026-07-15T10:30:00', 12),
+    ('Maquillage artistique enfants', 1, 8.00, '2026-07-15T14:00:00', 12),
+    ('Spectacle de magie kids', 40, 5.00, '2026-07-16T16:00:00', 12),
+    ('Initiation DJ pour ados', 8, 18.00, '2026-07-17T14:00:00', 13),
+    ('Visite technique coulisses scène', 15, 10.00, '2026-07-17T09:00:00', 13);
 
 
 INSERT INTO Pays (nom_pays, couleur_maillot, nom_mascotte, qualifie, id_utilisateur) VALUES

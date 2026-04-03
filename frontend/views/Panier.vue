@@ -43,8 +43,8 @@
           :key="'service-' + index"
           class="item">
           <p>
-            Service : {{ service.nom_service
-            }}<span style="color: red"> x{{ service.quantite_service }}</span>
+            Service : {{ service.nom_service }}
+            <!-- <span style="color: red"> x{{ service.quantite_service }}</span> -->
           </p>
           <p style="color: red; font-weight: 700">
             {{ getItemPrice(service, true) }} €
@@ -138,8 +138,8 @@ const services = computed(() => {
 });
 
 
-onMounted(() => {
-  fetchPanier();
+onMounted(async () => {
+  await fetchPanier();
 });
 
 /**
@@ -205,7 +205,7 @@ function formatMatchTime(matchDate) {
 */
 function getItemPrice(item, isService) {
   if (item.nom_service && isService) {
-    return item.prix_unitaire_service || 0;
+    return item.prix_unitaire || 0;
   }
 
   if (item.numero_colonne && !isService) {
@@ -219,16 +219,15 @@ function getItemPrice(item, isService) {
 
 const total = computed(() => {
   const totalSieges = sieges.value.reduce(
-    (sum, seat) => sum + getItemPrice(seat, false),
-    0,
-  );
+    (sum, seat) => sum + getItemPrice(seat, false), 0
+  )
   const totalServices = services.value.reduce(
     (sum, service) =>
-      sum + getItemPrice(service, true) * (service.quantite_service || 1),
-    0,
-  );
-  return totalSieges + totalServices;
-});
+      sum + getItemPrice(service, true) * (service.quantite_service ?? service.quantite ?? 1),
+    0
+  )
+  return totalSieges + totalServices
+})
 /**
  * Récupère le panier de l'utilisateur connecté depuis l'API.
  * 

@@ -68,7 +68,7 @@ async function addSiege(id_user, matchId, numero_colonne, numero_ligne, zone) {
   return { id_panier };
 }
 
-async function addService(id_user, service_id, quantite = 1) {
+async function addActivite(id_user, id_activite) {
   const panierRes = await pool.query(
     `SELECT id_panier FROM Panier WHERE utilisateur_id = $1 AND actif = true`,
     [id_user],
@@ -85,26 +85,50 @@ async function addService(id_user, service_id, quantite = 1) {
     id_panier = panierRes.rows[0].id_panier;
   }
 
+  const activiteRes = await pool.query(
+    `SELECT nb_participant FROM Activite WHERE id_activite = $1`,
+    [id_activite],
+  );
+
+  if (activiteRes.rows.length === 0) {
+    throw { status: 404, message: "Activité introuvable" };
+  }
+
+  if (activiteRes.rows[0].nb_participant <= 0) {
+    throw { status: 400, message: "Plus de places disponibles pour cette activité" };
+  }
+
   const serviceRes = await pool.query(
+    `SELECT service_id, prix_activite FROM Activite WHERE id_activite = $1`,
+    [id_activite],
+  );
+
+  const { service_id, prix_activite } = serviceRes.rows[0];
+
+  const existRes = await pool.query(
     `SELECT quantite FROM Panier_Service WHERE id_panier = $1 AND service_id = $2`,
     [id_panier, service_id],
   );
 
-  if (serviceRes.rows.length === 0) {
+  if (existRes.rows.length === 0) {
     await pool.query(
       `INSERT INTO Panier_Service (id_panier, service_id, quantite, prix_unitaire)
-       VALUES ($1, $2, $3, (SELECT prix FROM Services WHERE id_service = $2))`,
-      [id_panier, service_id, quantite],
+       VALUES ($1, $2, 1, $3)`,
+      [id_panier, service_id, prix_activite],
     );
   } else {
-    const nouvelleQuantite = serviceRes.rows[0].quantite + quantite;
     await pool.query(
-      `UPDATE Panier_Service 
-      SET quantite = $1 
-      WHERE id_panier = $2 AND service_id = $3`,
-      [nouvelleQuantite, id_panier, service_id],
+      `UPDATE Panier_Service SET quantite = quantite + 1
+       WHERE id_panier = $1 AND service_id = $2`,
+      [id_panier, service_id],
     );
   }
+
+  await pool.query(
+    `UPDATE Activite SET nb_participant = nb_participant - 1
+     WHERE id_activite = $1`,
+    [id_activite],
+  );
 
   return { id_panier };
 }
@@ -351,7 +375,7 @@ async function deleteBillet(
 module.exports = {
   getPanierByUser,
   addSiege,
-  addService,
+  addActivite,
   removeSiege,
   removeService,
   payPanier,
