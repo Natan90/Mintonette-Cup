@@ -2,57 +2,76 @@
   <NavView></NavView>
   <div class="admin-layout">
     <MenuAdmin></MenuAdmin>
-  <div class="main_content">
-    <div class="editor_container">
-      <div class="preview_container" v-if="imagePreview">
-        <div class="image_preview_with_text">
-          <img v-if="imagePreview" :src="imagePreview" alt="Aperçu de l'image" />
-          <div class="texte_sur_image">
-            <h2 :style="{ color: colorTitle, fontFamily: selectedFont }">
-              {{ title_evenement }}
-            </h2>
+    <div class="main_content">
+      <div class="editor_container">
+        <div class="preview_container" v-if="imagePreview">
+          <div class="image_preview_with_text">
+            <img
+              v-if="imagePreview"
+              :src="imagePreview"
+              alt="Aperçu de l'image" />
+            <div class="texte_sur_image">
+              <h2 :style="{ color: colorTitle, fontFamily: selectedFont }">
+                {{ title_evenement }}
+              </h2>
+            </div>
           </div>
         </div>
-      </div>
 
-      <section class="options-titre">
-      <div class="form_group">
-        <label for="title">{{ $t("adminPage.evenement.nom") }}</label>
-        <input type="text" id="title" v-model="title_evenement" placeholder="Ex: Mintonette Cup" />
-      </div>
-      <div class="form_group">
-        <label for="color">{{ $t("adminPage.evenement.couleur") }}</label>
-        <input type="color" id="color" v-model="colorTitle" />
-      </div>
-      <div class="form_group">
-        <label for="police">{{ $t("adminPage.evenement.police") }}</label>
-        <select id="police" v-model="selectedFont">
-          <option v-for="(font, index) in fonts" :key="index" :value="font" :style="{ fontFamily: font }">
-            {{ font }}
-          </option>
-        </select>
-      </div>
+        <section class="options-titre">
+          <div class="form_group">
+            <label for="title">{{ $t("adminPage.evenement.nom") }}</label>
+            <input
+              type="text"
+              id="title"
+              v-model="title_evenement"
+              placeholder="Ex: Mintonette Cup" />
+          </div>
+          <div class="form_group">
+            <label for="color">{{ $t("adminPage.evenement.couleur") }}</label>
+            <input type="color" id="color" v-model="colorTitle" />
+          </div>
+          <div class="form_group">
+            <label for="police">{{ $t("adminPage.evenement.police") }}</label>
+            <select id="police" v-model="selectedFont">
+              <option
+                v-for="(font, index) in fonts"
+                :key="index"
+                :value="font"
+                :style="{ fontFamily: font }">
+                {{ font }}
+              </option>
+            </select>
+          </div>
 
-      <div class="form_group">
-        <div class="chooseFile">
-          <label for="image">{{
-            $t("adminPage.evenement.imageCouverture")
-            }}</label>
-          <span class="label_hint">{{
-            $t("adminPage.evenement.typeImage")
-            }}</span>
-          <input type="file" ref="fileInput" id="fileInput" @change="onFileChange" accept=".jpg,.jpeg,.png,.webp"
-            hidden />
-          <button type="button" class="btn_chooseFile" @click="triggerFileSelect">
-            {{
-              !imagePreview
-                ? $t("adminPage.evenement.choisirFichier")
-                : $t("adminPage.evenement.choisirAutreFichier")
-            }}
-          </button>
-        </div>
+          <div class="form_group">
+            <div class="chooseFile">
+              <label for="image">{{
+                $t("adminPage.evenement.imageCouverture")
+              }}</label>
+              <span class="label_hint">{{
+                $t("adminPage.evenement.typeImage")
+              }}</span>
+              <input
+                type="file"
+                ref="fileInput"
+                id="fileInput"
+                @change="onFileChange"
+                accept=".jpg,.jpeg,.png,.webp"
+                hidden />
+              <button
+                type="button"
+                class="btn_chooseFile"
+                @click="triggerFileSelect">
+                {{
+                  !imagePreview
+                    ? $t("adminPage.evenement.choisirFichier")
+                    : $t("adminPage.evenement.choisirAutreFichier")
+                }}
+              </button>
+            </div>
 
-        <!-- <div class="container_button">
+            <!-- <div class="container_button">
                     <button v-if="imagePreview && !showPreview" type="button" class="btn_show_preview pointer"
                         @click="showImagePreview">
                         {{ $t('adminPage.evenement.button.voir') }}
@@ -65,37 +84,48 @@
                         {{ $t('adminPage.evenement.button.supprimer') }}
                     </button>
                 </div> -->
-        <br />
-      </div>
-      </section>
+            <br />
+          </div>
+        </section>
 
-      <div class="form_group">
-        <label>Description de l'évènement</label>
-        <Editor v-model="descri_evenement" api-key="jcf821cdswfhl8pedi7pvc3e0plaedjg1lidgfi6d5kvww7a" :init="{
-          height: 450,
-          menubar: false,
-          plugins: 'lists link image table media code preview anchor',
-          toolbar:
-            'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
-          branding: false,
-        }" />
-      </div>
+        <div class="form_group">
+          <label>Description de l'évènement</label>
+          <Editor
+            v-model="descri_evenement"
+            api-key="jcf821cdswfhl8pedi7pvc3e0plaedjg1lidgfi6d5kvww7a"
+            :init="{
+              height: 450,
+              menubar: false,
+              plugins: 'lists link image table media code preview anchor',
+              toolbar:
+                'undo redo | bold italic underline | bullist numlist | link | table hr | preview code',
+              branding: false,
+            }" />
+        </div>
 
-      <div v-if="message" class="message" :class="messageType === 'error' ? 'message-error' : 'message-success'">
-        <span class="text">{{ message }}</span>
-      </div>
+        <div
+          v-if="message"
+          class="message"
+          :class="
+            messageType === 'error' ? 'message-error' : 'message-success'
+          ">
+          <span class="text">{{ message }}</span>
+        </div>
 
-      <div class="button_container">
-        <button @click="updateEvent" class="btn-primary">
-          {{ $t("prestataireInfo.formulaire.btnModifier") }}
-        </button>
+        <div class="button_container">
+          <button @click="updateEvent" class="btn-primary">
+            {{ $t("prestataireInfo.formulaire.btnModifier") }}
+          </button>
 
-        <button @click="resetEvent" class="btn-reset" style="margin-left: 10px; background: #dc2626">
-          {{ $t("adminPage.evenement.reinitialiser") }}
-        </button>
+          <button
+            @click="resetEvent"
+            class="btn-reset"
+            style="margin-left: 10px; background: #dc2626">
+            {{ $t("adminPage.evenement.reinitialiser") }}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -155,7 +185,7 @@ watch(
   () => locale.value,
   (newLang) => {
     updateDescription();
-  }
+  },
 );
 
 onMounted(() => {
@@ -168,7 +198,7 @@ onMounted(() => {
 
 /**
  * Ouvre le sélecteur de fichier pour importer une image.
-*/
+ */
 function triggerFileSelect() {
   fileInput.value.click();
 }
@@ -178,7 +208,7 @@ function triggerFileSelect() {
  * - Génère un aperçu en base64
  * - Réinitialise les valeurs si aucun fichier
  * @param {Event} event - Événement de sélection de fichier
-*/
+ */
 function onFileChange(event) {
   const file = event.target.files[0];
   if (!file) {
@@ -198,8 +228,6 @@ function onFileChange(event) {
   reader.readAsDataURL(file);
 }
 
-
-
 //=========================
 //= Async functions event =
 //=========================
@@ -211,7 +239,7 @@ function onFileChange(event) {
  * - Image
  * - Description
  * Met à jour les valeurs locales du formulaire.
-*/
+ */
 async function getValuesEvenement() {
   try {
     const res = await adminAPIStore.GetEvenement();
@@ -268,7 +296,7 @@ function resetEvent() {
  * - Police
  * - Image
  * Affiche un message de succès ou d'erreur.
-*/
+ */
 async function updateEvent() {
   try {
     const res = await adminAPIStore.UpdateEvenement({
@@ -277,7 +305,7 @@ async function updateEvent() {
       descri_en: descri_evenement.value,
       color: colorTitle.value,
       font: selectedFont.value,
-      image: imagePreview.value
+      image: imagePreview.value,
     });
     message.value = res.data.message;
     messageType.value = "success";
@@ -287,13 +315,13 @@ async function updateEvent() {
     } else {
       message.value = "Erreur inconnue";
     }
-    messageType.value = 'error';
+    messageType.value = "error";
   }
 }
 /**
  * Met à jour la description de l'événement
  * en fonction de la langue sélectionnée.
-*/
+ */
 function updateDescription() {
   if (evenementData.value?.descri_evenement?.[locale.value]) {
     descri_evenement.value =
@@ -305,7 +333,7 @@ function updateDescription() {
 </script>
 
 <style scoped>
-.admin-layout{
+.admin-layout {
   height: fit-content;
   display: flex;
 }
@@ -369,13 +397,13 @@ function updateDescription() {
   justify-content: space-between;
 }
 
-.options-titre .form_group{
-    width:800px;
-    max-width: 100%;
-    align-items: center;
+.options-titre .form_group {
+  width: 800px;
+  max-width: 100%;
+  align-items: center;
 }
 
-.form_group label{
+.form_group label {
   text-indent: 10px;
 }
 
@@ -389,8 +417,8 @@ function updateDescription() {
   transition: transform 0.2s ease;
 }
 
-.options-titre{
-  display:flex;
+.options-titre {
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 30px;
@@ -410,15 +438,14 @@ function updateDescription() {
   background-color: #1e3a8a;
 }
 
-@media(max-width: 1000px){
-  .admin-layout{
+@media (max-width: 1000px) {
+  .admin-layout {
     flex-direction: column;
   }
 
-  .main_content{
+  .main_content {
     padding-top: 0;
     width: 100vw;
   }
 }
-
 </style>
