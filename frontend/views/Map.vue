@@ -2452,8 +2452,8 @@ body::-webkit-scrollbar {
   margin-left: 5px;
   border: none;
   border-radius: 8px;
-  background: #e0e7ff;
-  color: #00167a;
+  background: var(--primary-very-light);
+  color: var(--primary-color);
   font-weight: 600;
   font-size: 14px;
   transition: all 0.25s ease;
@@ -2461,7 +2461,7 @@ body::-webkit-scrollbar {
 }
 
 .SwitchButton:hover {
-  background: #00167a;
+  background:var(--primary-color);
   color: #fff;
   transform: translateY(-2px);
 }
