@@ -123,17 +123,23 @@
       <p class="showPrestaNbService showPrestaNbServicePending" v-else>
         {{ $t("adminPage.prestataire.service.nb_servicesVide") }}
       </p>
-      <div class="showPrestaFiltreResultat">
-        <label for="triAlpha">{{ $t("adminPage.tri.nom") }}</label>
-        <select id="triAlpha" v-model="adminStore.services">
-          <option value="az">{{ $t("adminPage.tri.az") }}</option>
-          <option value="za">{{ $t("adminPage.tri.za") }}</option>
-          <option value="activer">{{ $t("adminPage.tri.activeFirst") }}</option>
-          <option value="desactiver">
-            {{ $t("adminPage.tri.inactiveFirst") }}
-          </option>
-        </select>
-      </div>
+      <div class="showPrestaFiltreResultat" v-if="userStore.prestaId == idPresta">
+  <label for="triAlpha">{{ $t("adminPage.tri.nom") }}</label>
+  <select id="triAlpha" v-model="adminStore.services">
+    <option value="az">{{ $t("adminPage.tri.az") }}</option>
+    <option value="za">{{ $t("adminPage.tri.za") }}</option>
+    <option value="activer">{{ $t("adminPage.tri.activeFirst") }}</option>
+    <option value="desactiver">{{ $t("adminPage.tri.inactiveFirst") }}</option>
+  </select>
+</div>
+
+<div class="showPrestaFiltreResultat" v-else>
+  <label for="triAlpha">{{ $t("adminPage.tri.nom") }}</label>
+  <select id="triAlpha" v-model="adminStore.services">
+    <option value="az">{{ $t("adminPage.tri.az") }}</option>
+    <option value="za">{{ $t("adminPage.tri.za") }}</option>
+  </select>
+</div>
     </div>
     <div class="show-prestataire__glass showPrestaNotificationValid" v-if="activate">
       <p v-html="$t('adminPage.prestataire.service.messageActiver', {
@@ -322,7 +328,11 @@ onMounted(async () => {
 const servicesFiltres = computed(() => {
   let liste = [...services.value];
 
-  // Tri alphabétique
+  // Si l'utilisateur n'est pas le prestataire propriétaire, on n'affiche que les services activés
+  if (userStore.prestaId !== idPresta.value) {
+    liste = liste.filter((s) => s.activate);
+  }
+
   liste.sort((a, b) => {
     if (adminStore.services === "activer") {
       if (a.activate && !b.activate) return -1;

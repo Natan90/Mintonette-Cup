@@ -682,25 +682,26 @@ const changeDescriLang = () => {
 
 async function showModalByService() {
   if (pathAdd.value && !alreadyAdded.value) {
-    try {
-      const res = await prestataireStore.BecomePrestataire(userStore.userId, {
-        nom: nom_presta.value,
-        descri: descri_presta.value,
-        mail: mail_presta.value,
-        tel: tel_presta.value,
-        specificite: selectedNames.value,
-        type: Number(selectedTypeId_presta.value),
-      });
+    alreadyAdded.value = true;
+    // try {
+    //   const res = await prestataireStore.BecomePrestataire(userStore.userId, {
+    //     nom: nom_presta.value,
+    //     descri: descri_presta.value,
+    //     mail: mail_presta.value,
+    //     tel: tel_presta.value,
+    //     specificite: selectedNames.value,
+    //     type: Number(selectedTypeId_presta.value),
+    //   });
 
-      const newPrestaId = res.data.user.id_prestataire;
-      userStore.prestaId = newPrestaId;
-      alreadyAdded.value = true;
+    //   const newPrestaId = res.data.user.id_prestataire;
+    //   userStore.prestaId = newPrestaId;
+    //   alreadyAdded.value = true;
 
-    } catch (err) {
-      message.value = err.response?.data?.error || err.message;
-      messageType.value = "error";
-      return;
-    }
+    // } catch (err) {
+    //   message.value = err.response?.data?.error || err.message;
+    //   messageType.value = "error";
+    //   return;
+    // }
   }
 
   isModalService.value = true;
@@ -897,9 +898,21 @@ async function addServiceToPrestataire() {
   }
 
   try {
+    const res = await prestataireStore.BecomePrestataire(userStore.userId, {
+        nom: nom_presta.value,
+        descri: descri_presta.value,
+        mail: mail_presta.value,
+        tel: tel_presta.value,
+        specificite: selectedNames.value,
+        type: Number(selectedTypeId_presta.value),
+      });
+
+      const newPrestaId = res.data.user.id_prestataire;
+      userStore.prestaId = newPrestaId;
+      alreadyAdded.value = true;
     const idToUse = pathAdd.value ? userStore.prestaId : prestaId.value;
 
-    const res = await serviceStore.CreateService(idToUse, {
+    const resService = await serviceStore.CreateService(idToUse, {
       nom_service: nomService.value,
       descri_service: descriService.value,
       besoin: besoinService.value,
@@ -907,9 +920,9 @@ async function addServiceToPrestataire() {
       visible_public: Boolean(visiblePublic.value),
     });
 
-    console.log(res.data.service);
+    console.log(resService.data.service);
 
-    const newServiceId = res.data.service.id_service;
+    const newServiceId = resService.data.service.id_service;
     isModalService.value = false;
 
     router.push({
@@ -1050,7 +1063,7 @@ async function showOneService(id_service) {
         fr: s.besoin?.fr ?? "",
         en: s.besoin?.en ?? "",
       },
-      activate: s.activate ?? false,
+      activate: s.activate ?? true,
       visible_public: s.visible_public ?? true,
     };
 
@@ -1111,7 +1124,7 @@ async function getServiceByIdPrestataire(id_presta) {
   services.value = prestaServices.map((s) => ({
     id_service: s.id_service,
     nom_service: s.nom_service,
-    activate: s.activate || false,
+    activate: s.activate || true,
     visible_public: s.visible_public ?? true,
     descri_service: s.descri_service || { fr: "", en: "" },
     besoin: s.besoin || { fr: "", en: "" },

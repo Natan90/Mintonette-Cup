@@ -34,7 +34,7 @@ async function getPrestataireByIdPrestataire(id_presta) {
     u.sexe_utilisateur,
     u.ispresta,
     u.isadmin,
-    t.is_activity                          -- ✅ depuis le type, pas les services
+    t.is_activity
 FROM Prestataire p
 JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur
 JOIN Type_prestataire t ON p.type_prestataire_id = t.id_type_prestataire
