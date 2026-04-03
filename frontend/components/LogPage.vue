@@ -387,12 +387,19 @@ async function getValuesConnexion() {
       ModalShow(false);
     }
   } catch (err) {
-    console.log(err.data.error);
-    if (err && err.data && err.data.error) {
-      message.value = err.data.error;
-      if (message.value === "Compte temporairement bloqué") {
+    const apiMessage =
+      err?.response?.data?.error ||
+      err?.response?.data?.message ||
+      err?.data?.error ||
+      err?.data?.message;
+
+    if (apiMessage) {
+      message.value = apiMessage;
+      if (apiMessage === "Compte temporairement bloqué") {
         mailStore.ResetPassword(login_utilisateur_connexion.value);
       }
+    } else if (err?.response?.status === 401) {
+      message.value = "Identifiant ou mot de passe incorrect.";
     } else {
       message.value = "Erreur serveur : impossible de se connecter.";
     }
