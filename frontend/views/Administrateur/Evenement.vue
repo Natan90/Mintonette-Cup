@@ -90,7 +90,7 @@
           {{ $t("prestataireInfo.formulaire.btnModifier") }}
         </button>
 
-        <button @click="resetLocalStorage" class="btn-reset" style="margin-left: 10px; background: #dc2626">
+        <button @click="resetEvent" class="btn-reset" style="margin-left: 10px; background: #dc2626">
           {{ $t("adminPage.evenement.reinitialiser") }}
         </button>
       </div>
@@ -117,6 +117,23 @@ const colorTitle = ref("");
 const imageFile = ref(null);
 const descri_evenement = ref("");
 const imagePreview = ref(null);
+
+const defaultEvenementData = {
+  nom_evenement: "Mintonette Cup",
+  color_title: "#ffffff",
+  text_font: "Meie Script",
+  image_evenement: "/photo_fond.png",
+  descri_evenement: {
+    fr: {
+      texte:
+        "Le grand <b>tournoi de Volley mondial</b> Mintonette Cup arrive <b>à Montpellier</b> ! Notre troisième édition s''annonce folle.<br>Vous êtes <b>adèpte de volley-ball</b>, aimez suivre de <b>grands évenements sportifs</b> qui regroupent <b>passionnés</b> et <b>bonne ambiance</b> ? <b>La Mintonnette Cup vous attend !</b><br>Au programmes : des <b>matchs époustouflants</b>, un <b>public de folie</b> et une <b>ambiance débordante</b>.<br>On vous attends dans les gradins !<br>",
+    },
+    en: {
+      texte:
+        "The great <b>world Volleyball tournament</b> Mintonette Cup is coming <b>to Montpellier</b>! Our third edition promises to be amazing.<br>Are you a <b>sports enthusiast</b>, do you love following <b>major sporting events</b> that bring together <b>passionate fans</b> and <b>a great atmosphere</b>? <b>The Mintonette Cup awaits you !</b><br>On the agenda: <b>thrilling matches</b>, an <b>amazing audience</b> and a <b>bustling atmosphere</b>.<br>We look forward to seeing you in the stands !<br>",
+    },
+  },
+};
 
 const fileInput = ref(null);
 const fileName = ref("");
@@ -211,22 +228,37 @@ async function getValuesEvenement() {
   }
 }
 
+/**
+ * Réinitialise l'événement aux valeurs d'origine définies dans le seed.
+ */
+function resetEvent() {
+  const shouldReset = confirm(
+    "Voulez-vous réinitialiser l'événement avec les données d'origine ?",
+  );
 
-// function resetLocalStorage() {
-//   if (
-//     confirm(
-//       "Voulez-vous réinitialiser l'événement avec les données d'origine ?"
-//     )
-//   ) {
-//     localData.reset("evenements");
-//     getValuesEvenement();
-//     message.value = "Événement réinitialisé avec succès";
-//     messageType.value = "success";
-//     setTimeout(() => {
-//       message.value = "";
-//     }, 3000);
-//   }
-// }
+  if (!shouldReset) return;
+
+  const resetData = structuredClone(defaultEvenementData);
+  evenementData.value = resetData;
+  title_evenement.value = resetData.nom_evenement;
+  colorTitle.value = resetData.color_title;
+  selectedFont.value = resetData.text_font;
+  imagePreview.value = resetData.image_evenement;
+  imageFile.value = null;
+  fileName.value = "";
+
+  if (fileInput.value) {
+    fileInput.value.value = "";
+  }
+
+  updateDescription();
+  message.value = "Événement réinitialisé avec succès";
+  messageType.value = "success";
+
+  setTimeout(() => {
+    message.value = "";
+  }, 3000);
+}
 
 /**
  * Met à jour l'événement via l'API :

@@ -46,6 +46,7 @@
                     <option value="attente">{{ $t('adminPage.tri.attente') }}</option>
                     <option value="valide">{{ $t('adminPage.tri.valide') }}</option>
                 </select>
+                
             </div>
         </div>
         <p class="backgroundBorderL message suppr" v-if="deleting">
@@ -272,6 +273,22 @@ async function getPrestataires() {
     }
 }
 /**
+ * Réinitialise l'état de la vue prestataires.
+ */
+async function resetTriPresta() {
+    adminStore.typeTriPresta = "az";
+    isDelete.value = false;
+    deleting.value = false;
+    refusing.value = false;
+    selectedPresta.value = null;
+    deletedPresta.value = null;
+    refusedPresta.value = null;
+    activeTab.value = "table";
+
+    await getPrestataires();
+    zoneMapKey.value++;
+}
+/**
  * Valide un prestataire :
  * - Met à jour son statut utilisateur
  * - Recharge la liste des prestataires
@@ -402,6 +419,22 @@ async function changePresta(newValue, idPresta) {
     color: #00167a;
     border-bottom-color: #00167a;
     background: #e0e7ff;
+}
+
+.btn_reset_filtre {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #e0e7ff;
+    color: #00167a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn_reset_filtre:hover {
+    background: #c7d2fe;
+    transform: translateY(-1px);
 }
 
 .map-view {

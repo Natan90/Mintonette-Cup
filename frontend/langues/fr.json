@@ -233,7 +233,8 @@
       "typeImage": "(JPG, JPEG, PNG ou WebP)",
       "choisirFichier": "Choisir une image",
       "choisirAutreFichier": "Choisir une autre image",
-      "descri": "Description de l'évènement"
+      "descri": "Description de l'évènement",
+      "reinitialiser": "Réinitialiser"
     },
     "bouton": {
       "btn_voir": "Aller voir",
@@ -303,42 +304,42 @@
     "est": "Est",
     "ouest": "Ouest"
   },
-"filter": {
-  "titleFilter": "Retrouvez les Prestataires de la Mintonette Cup 2026 !",
-  "slider": {
-    "prestataire": "Prestataires",
-    "service": "Services",
-    "people": "pers.",
-    "tarif": "Tarif"
+  "filter": {
+    "titleFilter": "Retrouvez les Prestataires de la Mintonette Cup 2026 !",
+    "slider": {
+      "prestataire": "Prestataires",
+      "service": "Services",
+      "people": "pers.",
+      "tarif": "Tarif"
+    },
+    "name": {
+      "title": "Nom",
+      "nameInput": "Rechercher par nom..."
+    },
+    "categorie": {
+      "title": "Catégorie",
+      "all": "Toutes"
+    },
+    "price": {
+      "title": "Prix",
+      "minPrice": "Min",
+      "maxPrice": "Max"
+    },
+    "button": {
+      "search": "Rechercher",
+      "reset": "Réinitialiser"
+    },
+    "description": "Description",
+    "info": {
+      "title": "Informations",
+      "service": "Services",
+      "tarif": "Tarif",
+      "capacite": "Capacité",
+      "people": "pers."
+    },
+    "contact": "Contacts",
+    "more": "En savoir plus"
   },
-  "name": {
-    "title": "Nom",
-    "nameInput": "Rechercher par nom..."
-  },
-  "categorie": {
-    "title": "Catégorie",
-    "all": "Toutes"
-  },
-  "price": {
-    "title": "Prix",
-    "minPrice": "Min",
-    "maxPrice": "Max"
-  },
-  "button": {
-    "search": "Rechercher",
-    "reset": "Réinitialiser"
-  },
-  "description": "Description",
-  "info": {
-    "title": "Informations",
-    "service": "Services",
-    "tarif": "Tarif",
-    "capacite": "Capacité",
-    "people": "pers."
-  },
-  "contact": "Contacts",
-  "more": "En savoir plus"
-},
   "messagesServices": {
     "aucuneLangues": "Les versions française et anglaise ne sont pas remplies.\n\nSouhaitez-vous continuer quand même ?",
     "queFR": "La version anglaise du service n’est pas remplie.\n\nSouhaitez-vous continuer ?",
@@ -463,19 +464,19 @@
     "terrainSuivant": "Terrain suivant",
     "terrainPrecedent": "Terrain précédent",
     "terrain": "Terrain",
-    "heure" : "Heure",
+    "heure": "Heure",
     "coach": "Coach",
     "remplacants": "Remplacants",
     "reserverBillet": "Réserver votre billet dès à présent",
     "taille": "Taille",
-    "age" :"Âge",
+    "age": "Âge",
     "poste": "Poste",
     "ans": "Ans"
   },
-  "gradin":{
-    "retourAccueil":"Retour à l'accueil",
+  "gradin": {
+    "retourAccueil": "Retour à l'accueil",
     "gradin": "Gradin",
-    "matchSurTerrain":"Matchs sur ce terrain",
+    "matchSurTerrain": "Matchs sur ce terrain",
     "reservation": "Réservation de place",
     "siegeDispo": "Siège disponible",
     "siegeReserv": "Siège réservé",
@@ -484,7 +485,7 @@
     "siegesSelec": "Sièges sélectionnés ",
     "ajoutPanier": "Ajouter au panier",
     "accederPanier": "Accéder à votre panier",
-    "reinitialiserSelec" : "Réinitialiser la sélection pour ce match",
+    "reinitialiserSelec": "Réinitialiser la sélection pour ce match",
     "reinitialiserSelecTotal": "Réinitialiser la sélection totale",
     "bienAjoute": "Vous avez bien ajouté ces articles dans votre panier"
   }
