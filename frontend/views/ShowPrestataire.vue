@@ -213,7 +213,7 @@
       <p class="showPrestaNbService showPrestaNbServicePending" v-else>
         {{ $t("adminPage.prestataire.service.nb_servicesVide") }}
       </p>
-      <div class="showPrestaFiltreResultat" v-if="userStore.prestaId == idPresta">
+      <div class="showPrestaFiltreResultat" v-if="(userStore.prestaId == idPresta || userStore.userId === 1)">
   <label for="triAlpha">{{ $t("adminPage.tri.nom") }}</label>
   <select id="triAlpha" v-model="adminStore.services">
     <option value="az">{{ $t("adminPage.tri.az") }}</option>
@@ -338,7 +338,7 @@
                       v-if="
                         !item.activate &&
                         userStore.isConnected &&
-                        userStore.prestaId == idPresta
+                        (userStore.prestaId == idPresta || userStore.userId === 1)
                       "
                       @click="activateService(item)">
                       Activer
@@ -348,7 +348,7 @@
                       v-else-if="
                         item.activate &&
                         userStore.isConnected &&
-                        userStore.prestaId == idPresta
+                        (userStore.prestaId == idPresta || userStore.userId === 1)
                       "
                       @click="desactivatingService(item)">
                       Désactiver
@@ -464,8 +464,11 @@ onMounted(async () => {
 const servicesFiltres = computed(() => {
   let liste = [...services.value];
 
-  // Si l'utilisateur n'est pas le prestataire propriétaire, on n'affiche que les services activés
-  if (userStore.prestaId !== idPresta.value) {
+  // Afficher tous les services uniquement pour le prestataire propriétaire ou l'admin (id 1)
+  const isOwner = userStore.prestaId == idPresta.value;
+  const isAdmin = userStore.userId === 1;
+
+  if (!isOwner && !isAdmin) {
     liste = liste.filter((s) => s.activate);
   }
 
@@ -474,17 +477,13 @@ const servicesFiltres = computed(() => {
       if (a.activate && !b.activate) return -1;
       if (!a.activate && b.activate) return 1;
     }
-
     if (adminStore.services === "desactiver") {
       if (a.activate && !b.activate) return 1;
       if (!a.activate && b.activate) return -1;
     }
-
     const nomA = a.nom_service?.toLowerCase() || "";
     const nomB = b.nom_service?.toLowerCase() || "";
-
     if (adminStore.services === "za") return nomB.localeCompare(nomA);
-
     return nomA.localeCompare(nomB);
   });
 

@@ -5,7 +5,7 @@
       <p>
       {{ $t('adminPage.user.modal.confirmation') }}
       <span class="name_delete background_name">
-        {{ selectedUser?.nom_utilisateur }}
+        {{ selectedUser?.nom_utilisateur }} {{ selectedUser?.prenom_utilisateur }}
       </span>
       ?
     </p>

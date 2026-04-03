@@ -302,7 +302,7 @@ VALUES
         true,
         2,
         3,
-        1
+        25
     ),
     (
         'AnimEvent',
